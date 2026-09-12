@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-e2e-stage1-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 90,
+  "command": "set -euo pipefail\nset -a\n. \"$HOME/.config/omega/omega-mcp.env\"\nset +a\npython3 - <<'PY'\nimport json, os, urllib.request\nurl='http://127.0.0.1:8789/mcp'\ntoken=os.environ['OMEGA_MCP_TOKEN']\ndef rpc(obj):\n    data=json.dumps(obj,separators=(',',':')).encode()\n    req=urllib.request.Request(url,data=data,method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json','Accept':'application/json, text/event-stream'})\n    with urllib.request.urlopen(req,timeout=10) as r: return json.loads(r.read().decode())\ninit=rpc({'jsonrpc':'2.0','id':'init-e2e','method':'initialize','params':{'protocolVersion':'2025-03-26','capabilities':{},'clientInfo':{'name':'omega-e2e','version':'1'}}})\ntools=rpc({'jsonrpc':'2.0','id':'list-e2e','method':'tools/list','params':{}})\ncall=rpc({'jsonrpc':'2.0','id':'gabriel-status-e2e','method':'tools/call','params':{'name':'omega_status','arguments':{'person':'gabriel','wait_seconds':0}}})\nnames=[t['name'] for t in tools['result']['tools']]\npayload=call['result']['structuredContent']\nprint(json.dumps({'server':init['result']['serverInfo']['name'],'tools':names,'status_stage':{'state':payload.get('state'),'command_id':payload.get('command_id'),'machine_id':payload.get('machine_id'),'owner':payload.get('owner')}},separators=(',',':')))\nassert init['result']['serverInfo']['name']=='omega-frankenstein-bridge'\nassert 'omega_status' in names and 'omega_execute' in names\nassert payload.get('state')=='PENDING'\nassert payload.get('machine_id')=='ai-core-node' and payload.get('owner')=='gabriel'\nPY"
+}

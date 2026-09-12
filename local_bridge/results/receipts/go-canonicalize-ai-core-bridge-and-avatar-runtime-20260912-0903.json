@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-canonicalize-ai-core-bridge-and-avatar-runtime-20260912-0903",
+  "command_sha256": "59d4178bf3e6a7678a3718817530dbdabae72eded025cb36e693f354197a2712",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:05:20.939170+00:00",
+  "finished_at": "2026-09-12T02:05:21.490231+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "d988ebbfc51f8d63555067f80d2ebe882b4f7036b1f0dc405697f885dfe29376",
+  "stderr_sha256": "acd9ca81111da82260738e0cebf591cbb507f4be5e31e4e51c04749322b871a4",
+  "stdout_tail": "=== BEFORE ===\nactive\nactive\n=== STOP LEGACY GENERIC-BRANCH DAEMON ===\n=== AFTER ===\nlegacy=inactive\ncanonical=active\n=== PIDS ===\n959674 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py\n3075838 bash -lc set -euo pipefail echo '=== BEFORE ===' systemctl --user is-active clay-local-bridge.service 2>/dev/null || true systemctl --user is-active frankenstein-local-bridge.service 2>/dev/null || true echo '=== STOP LEGACY GENERIC-BRANCH DAEMON ===' systemctl --user disable --now clay-local-bridge.service echo '=== AFTER ===' printf 'legacy='; systemctl --user is-active clay-local-bridge.service 2>/dev/null || true printf 'canonical='; systemctl --user is-active frankenstein-local-bridge.service echo '=== PIDS ===' pgrep -af 'local_bridge.*daemon.py|clay-local-bridge/bin/daemon.py' || true echo '=== AVATAR SERVICE ===' systemctl --user is-active frankenstein-buehne.service LIVE=/home/ai-core-node/.claude/star/visual/buehne.html printf 'filesystem_sha256='; sha256sum \"$LIVE\" | awk '{print $1}' TMP=$(mktemp) trap 'rm -f \"$TMP\"' EXIT curl -fsS -H 'Cache-Control: no-cache' http://127.0.0.1:8788/ -o \"$TMP\" printf 'http_sha256='; sha256sum \"$TMP\" | awk '{print $1}' printf 'http_bytes='; wc -c < \"$TMP\" printf 'shadow_marker_count='; grep -c 'go-eye-shadow' \"$TMP\" || true printf 'canonical_eye_builder_refs='; grep -cE 'augen_blink|blinzeln\\(' \"$TMP\" || true echo 'SCOPE=REAL_HOST_BRIDGE_CANONICALIZATION_AND_READ_ONLY_AVATAR_RUNTIME_HEALTH'\n=== AVATAR SERVICE ===\nactive\nfilesystem_sha256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nhttp_sha256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nhttp_bytes=113616\nshadow_marker_count=0\ncanonical_eye_builder_refs=14\nSCOPE=REAL_HOST_BRIDGE_CANONICALIZATION_AND_READ_ONLY_AVATAR_RUNTIME_HEALTH\n",
+  "stderr_tail": "Removed \"/home/ai-core-node/.config/systemd/user/default.target.wants/clay-local-bridge.service\".\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

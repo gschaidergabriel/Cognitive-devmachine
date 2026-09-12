@@ -1,0 +1,18 @@
+=== BEFORE ===
+active
+active
+=== STOP LEGACY GENERIC-BRANCH DAEMON ===
+=== AFTER ===
+legacy=inactive
+canonical=active
+=== PIDS ===
+959674 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+3075838 bash -lc set -euo pipefail echo '=== BEFORE ===' systemctl --user is-active clay-local-bridge.service 2>/dev/null || true systemctl --user is-active frankenstein-local-bridge.service 2>/dev/null || true echo '=== STOP LEGACY GENERIC-BRANCH DAEMON ===' systemctl --user disable --now clay-local-bridge.service echo '=== AFTER ===' printf 'legacy='; systemctl --user is-active clay-local-bridge.service 2>/dev/null || true printf 'canonical='; systemctl --user is-active frankenstein-local-bridge.service echo '=== PIDS ===' pgrep -af 'local_bridge.*daemon.py|clay-local-bridge/bin/daemon.py' || true echo '=== AVATAR SERVICE ===' systemctl --user is-active frankenstein-buehne.service LIVE=/home/ai-core-node/.claude/star/visual/buehne.html printf 'filesystem_sha256='; sha256sum "$LIVE" | awk '{print $1}' TMP=$(mktemp) trap 'rm -f "$TMP"' EXIT curl -fsS -H 'Cache-Control: no-cache' http://127.0.0.1:8788/ -o "$TMP" printf 'http_sha256='; sha256sum "$TMP" | awk '{print $1}' printf 'http_bytes='; wc -c < "$TMP" printf 'shadow_marker_count='; grep -c 'go-eye-shadow' "$TMP" || true printf 'canonical_eye_builder_refs='; grep -cE 'augen_blink|blinzeln\(' "$TMP" || true echo 'SCOPE=REAL_HOST_BRIDGE_CANONICALIZATION_AND_READ_ONLY_AVATAR_RUNTIME_HEALTH'
+=== AVATAR SERVICE ===
+active
+filesystem_sha256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+http_sha256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+http_bytes=113616
+shadow_marker_count=0
+canonical_eye_builder_refs=14
+SCOPE=REAL_HOST_BRIDGE_CANONICALIZATION_AND_READ_ONLY_AVATAR_RUNTIME_HEALTH

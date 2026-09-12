@@ -1,0 +1,74 @@
+SUBJECT
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+8910a0e634019d54bec6556f7d0adf248992bff42091ef016b082cd2d0b8e4a3  koerper_rgba/koerper_zero.png
+BODY_DOM_LINES
+111:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+129:     anderes. Loesung: #kopf-canvas ist eine per JS (kopfCanvasAnpassen(),
+146:  #kopf-canvas{position:absolute;pointer-events:none;filter:drop-shadow(4px 7px 10px rgba(0,0,0,0.28))}
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+152:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+156:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+161:     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+165:  #kopf-dreh{transform-origin:50% 58.59%}
+166:  #koerper-dreh{transform-origin:50% 100%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+168:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+171:  #koerper-schicht{z-index:1}
+172:  #kopf-schicht{z-index:2}
+178:     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+179:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+183:  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+185:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+188:     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+189:     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+190:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+191:  #koerper-schicht2{opacity:0}
+193:     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+194:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+202:     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+203:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+207:  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+218:     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+272:     Alle vier Prozent gelten relativ zu #kopf-canvas (der vollen Leinwand),
+288:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+292:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+387:        <!-- ⭐⭐ 2026-09-11 #kopf-canvas: siehe CSS-Kommentar oben ("KOPF-LEINWAND").
+390:             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+395:        <div id="kopf-canvas">
+396:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+397:          <div id="kopf-dreh">
+398:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+402:                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+403:                 wie #koerper-schicht/#koerper-schicht2. -->
+404:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+408:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+415:                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+724:// mit kurzem Crossfade zwischen #kopf-schicht/#kopf-schicht2 dorthin, haelt,
+738:let kopfRollAktiv = false;   // false: #kopf-schicht sichtbar, true: #kopf-schicht2
+757:  const ein = kopfRollAktiv ? "kopf-schicht" : "kopf-schicht2";
+758:  const aus = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+783:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+796://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+897:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+931:// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+936:// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+937:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+1515:// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+1516:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1541:  const kc = $("kopf-canvas");
+1625:// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+1663:  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+1664:  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+1672:  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+1703:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1705:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1717:let atmenAktivSchicht = "koerper-schicht";
+1719:  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+SCOPE=READ_ONLY_EXACT_BODY_DOM

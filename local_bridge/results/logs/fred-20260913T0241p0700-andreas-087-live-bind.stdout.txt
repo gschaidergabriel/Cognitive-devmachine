@@ -1,0 +1,39 @@
+PRE head=5b06f6c40eefb9b2bb058c8117f8705cdff50a6a pid=319869 epoch=Tue 2026-09-08 12:04:36 CEST
+Aktualisiere 5b06f6c..2f9fa10
+Fast-forward
+ .../semantic-state-fence-installer-selftest.yml    |  25 ++
+ .../workflows/volatile-state-rescue-selftest.yml   |  26 ++
+ log/2026-09-13-086-live-startschutz-installer.md   |  70 +++
+ werkzeug/entityos-vm-semantic-cutover.conf         |  21 +
+ werkzeug/fluechtig-startschutz-installieren.sh     | 108 +++++
+ ...luechtig-startschutz-installieren_selbsttest.sh |  93 ++++
+ werkzeug/fluechtig-zustand-sichern.py              | 498 +++++++++++++++++++++
+ werkzeug/fluechtig-zustand-sichern_selbsttest.py   | 177 ++++++++
+ werkzeug/semantic-state-cutover.py                 | 473 +++++++++++++++++++
+ werkzeug/semantic-state-cutover_selbsttest.py      |  79 ++++
+ werkzeug/semantic-state-schutz-installieren.sh     | 135 ++++++
+ ...emantic-state-schutz-installieren_selbsttest.sh | 176 ++++++++
+ 12 files changed, 1881 insertions(+)
+ create mode 100644 .github/workflows/semantic-state-fence-installer-selftest.yml
+ create mode 100644 .github/workflows/volatile-state-rescue-selftest.yml
+ create mode 100644 log/2026-09-13-086-live-startschutz-installer.md
+ create mode 100644 werkzeug/entityos-vm-semantic-cutover.conf
+ create mode 100644 werkzeug/fluechtig-startschutz-installieren.sh
+ create mode 100644 werkzeug/fluechtig-startschutz-installieren_selbsttest.sh
+ create mode 100644 werkzeug/fluechtig-zustand-sichern.py
+ create mode 100644 werkzeug/fluechtig-zustand-sichern_selbsttest.py
+ create mode 100644 werkzeug/semantic-state-cutover.py
+ create mode 100644 werkzeug/semantic-state-cutover_selbsttest.py
+ create mode 100755 werkzeug/semantic-state-schutz-installieren.sh
+ create mode 100755 werkzeug/semantic-state-schutz-installieren_selbsttest.sh
+SUBJEKT host=andreas-MACO caller=andreas unit=entityos-vm.service mainpid=319869 active_enter=Tue 2026-09-08 12:04:36 CEST
+INSTALLIERT holding_sha256=794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0 cutover_sha256=eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f holding_conf_sha256=8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e cutover_conf_sha256=01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d
+EPOCH_UNVERAENDERT mainpid=319869 active_enter=Tue 2026-09-08 12:04:36 CEST
+CUTOVER_CONDITION_RC=255
+MIGRATION_AUTHORITY=0
+RESTART_AUTHORIZED=0
+KEIN_RESTART=1
+POST head=2f9fa1004ab140eb312302f799bf2e6165c4aff6 state=active pid=319869 epoch=Tue 2026-09-08 12:04:36 CEST
+NO_VM_STOP=1
+NO_VM_RESTART=1
+NO_MIGRATION=1

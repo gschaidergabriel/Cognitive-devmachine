@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-voice-action-inspect-syntax-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -eu; WT=/tmp/frankenstein-voice-final-gpt56sol-20260912-1708; test -d \"$WT/.git\" -o -f \"$WT/.git\"; echo HEAD=$(git -C \"$WT\" rev-parse HEAD); echo '--- lines 82-110 ---'; nl -ba \"$WT/scripts/voice_full_runtime.py\" | sed -n '82,110p'; echo '--- changed files ---'; git -C \"$WT\" status --short; echo '--- diffstat ---'; git -C \"$WT\" diff --stat",
+  "cwd": "/tmp/frankenstein-voice-final-gpt56sol-20260912-1708",
+  "timeout_seconds": 120
+}

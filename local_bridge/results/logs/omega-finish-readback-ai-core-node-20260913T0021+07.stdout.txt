@@ -1,0 +1,102 @@
+===HOST===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-13T00:21:48+07:00
+===REPOS===
+REPO=/home/ai-core-node/frankenstein-repo
+main
+dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+DIRTY=2
+REPO=/home/ai-core-node/frankenstein-2.0
+effect-authority/canonical-transport-20260907
+cc18318d136a8a8d33ef01f3e9c98e639c127415
+DIRTY=411
+===SERVICES===
+UNIT=frankenstein-gespraechsmodus.service
+active
+{ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+UNIT=frankenstein-chatgpt-client.service
+active
+{ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 20:36:51 +07] ; stop_time=[n/a] ; pid=3687487 ; code=(null) ; status=0/0 }
+UNIT=frankenstein-buehne.service
+active
+{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_singleton_entry.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+UNIT=frankenstein-local-bridge.service
+active
+{ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+===DROPINS===
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+===OMEGA_STATUS===
+NO_FRANK_OMEGA
+===PROCESSES===
+1632280 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+2291395 bash -lc set -u; echo '===HOST==='; hostname; id -un; date -Is; echo '===REPOS==='; for d in /home/ai-core-node/frankenstein /home/ai-core-node/frankenstein-repo /home/ai-core-node/frankenstein-2.0; do if [ -d "$d/.git" ]; then echo "REPO=$d"; git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || true; git -C "$d" rev-parse HEAD 2>/dev/null || true; printf 'DIRTY='; git -C "$d" status --porcelain=v1 2>/dev/null | wc -l; fi; done; echo '===SERVICES==='; for u in frankenstein-gespraechsmodus.service frankenstein-chatgpt-client.service frankenstein-buehne.service frankenstein-local-bridge.service; do echo "UNIT=$u"; systemctl --user is-active "$u" 2>/dev/null || true; systemctl --user show "$u" -p ExecStart --value 2>/dev/null || true; done; echo '===DROPINS==='; systemctl --user cat frankenstein-gespraechsmodus.service 2>/dev/null | tail -120 || true; systemctl --user cat frankenstein-chatgpt-client.service 2>/dev/null | tail -120 || true; echo '===OMEGA_STATUS==='; if command -v frank-omega >/dev/null 2>&1; then frank-omega status || true; else echo NO_FRANK_OMEGA; fi; echo '===PROCESSES==='; pgrep -af 'voice_777_runtime|voice_host_777_live_client|voice_full_runtime|gespraechsmodus|buehne_daemon' || true
+3687487 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py

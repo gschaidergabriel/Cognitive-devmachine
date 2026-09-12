@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000-frankgrid10-organ-upgrade-recover-zombie-20260912-1133",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; BASE=/workspace/frankgrid10-organ; OLD=$(cat \"$BASE/run/organ-daemon.pid\" 2>/dev/null || true); echo OLD_PID=$OLD; STATE=MISSING; if [ -n \"$OLD\" ] && [ -r \"/proc/$OLD/stat\" ]; then STATE=$(awk '{print $3}' \"/proc/$OLD/stat\"); fi; echo OLD_STATE=$STATE; if [ \"$STATE\" != Z ] && [ \"$STATE\" != MISSING ]; then echo OLD_PROCESS_STILL_EXECUTING >&2; ps -o pid,ppid,stat,etimes,cmd -p \"$OLD\" >&2 || true; exit 72; fi; test -z \"$(find \"$BASE/ipc/processing\" -maxdepth 1 -type f -name '*.json' -print -quit)\"; test -z \"$(find \"$BASE/ipc/inbox\" -maxdepth 1 -type f -name '*.json' -print -quit)\"; test -f \"$BASE/code/organ_daemon.py.new\"; python3 -m py_compile \"$BASE/code/organ_daemon.py.new\"; NEWSHA=$(sha256sum \"$BASE/code/organ_daemon.py.new\"|awk '{print $1}'); mv \"$BASE/code/organ_daemon.py.new\" \"$BASE/code/organ_daemon.py\"; : > \"$BASE/logs/organ-daemon.log\"; nohup setsid python3 \"$BASE/code/organ_daemon.py\" --poll 0.5 >>\"$BASE/logs/organ-daemon.log\" 2>&1 < /dev/null & PID=$!; echo \"$PID\" > \"$BASE/run/organ-daemon.pid\"; sleep 3; kill -0 \"$PID\"; NEWSTATE=$(awk '{print $3}' \"/proc/$PID/stat\"); test \"$NEWSTATE\" != Z; echo DAEMON_SOURCE_SHA256=$NEWSHA; echo NEW_PID=$PID; echo NEW_STATE=$NEWSTATE; cat \"$BASE/run/heartbeat.json\"; echo IDENTITY; cat \"$BASE/identity/identity.json\"; echo CURRENT_EPOCH; cat \"$BASE/identity/current_epoch.json\"; echo LOG_TAIL; tail -50 \"$BASE/logs/organ-daemon.log\" || true; echo FRANKGRID10_IDENTITY_RESOURCE_RECOVERY_PASS"
+}

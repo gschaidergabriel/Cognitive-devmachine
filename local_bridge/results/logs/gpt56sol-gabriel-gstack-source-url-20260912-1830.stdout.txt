@@ -1,0 +1,87 @@
+name 'gstack'
+version '1.37.0.0'
+repository None
+homepage None
+bugs None
+author None
+=== README.md ===
+When I heard Karpathy say this, I wanted to find out how. How does one person ship like a team of twenty? Peter Steinberger built [OpenClaw](https://github.com/openclaw/openclaw) — 247K GitHub stars — essentially solo with AI agents. The revolution is here. A single builder with the right tooling can move faster than a traditional team.
+I'm [Garry Tan](https://x.com/garrytan), President & CEO of [Y Combinator](https://www.ycombinator.com/). I've worked with thousands of startups — Coinbase, Instacart, Rippling — when they were one or two people in a garage. Before YC, I was one of the first eng/PM/designers at Palantir, cofounded Posterous (sold to Twitter), and built Bookface, YC's internal social network.
+**gstack is my answer.** I've been building products for twenty years, and right now I'm shipping more products than I ever have. In the last 60 days: 3 production services, 40+ shipped features, part-time, while running YC full-time. On logical code change — not raw LOC, which AI inflates — my 2026 run rate is **~810× my 2013 pace** (11,417 vs 14 logical lines/day). Year-to-date (through April 18), 2026 has already produced **240× the entire 2013 year**. Measured across 40 public + private `garrytan/*` repos including Bookface, after excluding one demo repo. AI wrote most of it. The point isn't who typed it, it's what shipped.
+1. Install gstack (30 seconds — see below)
+## Install — 30 seconds
+### Step 1: Install on your machine
+> Install gstack: run **`git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup`** then add a "gstack" section to CLAUDE.md that says to use the /browse skill from gstack for all web browsing, never use mcp\_\_claude-in-chrome\_\_\* tools, and lists the available skills: /office-hours, /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /design-shotgun, /design-html, /review, /ship, /land-and-deploy, /canary, /benchmark, /browse, /connect-chrome, /qa, /qa-only, /design-review, /setup-browser-cookies, /setup-deploy, /setup-gbrain, /retro, /investigate, /document-release, /document-generate, /codex, /cso, /autoplan, /plan-devex-review, /devex-review, /careful, /freeze, /guard, /unfreeze, /gstack-upgrade, /learn. Then ask the user if they also want to add gstack to the current project so teammates get it.
+No vendored files in your repo, no version drift, no manual upgrades. Every Claude Code session starts with a fast auto-update check (throttled to once/hour, network-failure-safe, completely silent).
+when Claude Code has gstack installed. Paste this to your OpenClaw agent:
+> Install gstack: run `git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup` to install gstack for Claude Code. Then add a "Coding Tasks" section to AGENTS.md that says: when spawning Claude Code sessions for coding work, tell the session to use gstack skills. Include these examples — security audit: "Load gstack. Run /cso", code review: "Load gstack. Run /review", QA test a URL: "Load gstack. Run /qa https://...", build a feature end-to-end: "Load gstack. Run /autoplan, implement the plan, then run /ship", plan before building: "Load gstack. Run /office-hours then /autoplan. Save the plan, don't implement."
+session needed. Install from ClawHub:
+clawhub install gstack-openclaw-office-hours gstack-openclaw-ceo-review gstack-openclaw-investigate gstack-openclaw-retro
+agents you have installed:
+git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/gstack
+| Agent | Flag | Skills install to |
+        Tests: 42 → 51 (+9 new). PR: github.com/you/app/pull/42
+| `/gstack-upgrade` | **Self-Updater** — upgrade gstack to latest. Detects global vs vendored install, syncs both, shows what changed. |
+> Want raw CDP with no rails, no allowlist, no daemon — just thin transport from agent to Chrome? [browser-use/browser-harness-js](https://github.com/browser-use/browser-harness-js) is a different philosophy (agent-authored helpers vs gstack's curated commands) and a good fit if you don't want gstack's security stack. The two can coexist: gstack's `$B cdp` and harness can both attach to the same Chrome via Playwright's `newCDPSession`.
+Andrej Karpathy's [AI coding rules](https://github.com/forrestchang/andrej-karpathy-skills) (17K stars) nail four failure modes: wrong assumptions, overcomplexity, orthogonal edits, imperative over declarative. gstack's workflow skills enforce all four. `/office-hours` forces assumptions into the open before code is written. The Confusion Protocol stops Claude from guessing on architectural decisions. `/review` catches unnecessary complexity and drive-by edits. `/ship` transforms tasks into verifiable goals with test-first execution. If you already use Karpathy-style CLAUDE.md rules, gstack is the workflow enforcement layer that makes them stick across entire sprints, not just single prompts.
+**`/pair-agent` is cross-agent coordination.** You're in Claude Code. You also have OpenClaw running. Or Hermes. Or Codex. You want them both looking at the same website. Type `/pair-agent`, pick your agent, and a GStack Browser window opens so you can watch. The skill prints a block of instructions. Paste that block into the other agent's chat. It exchanges a one-time setup key for a session token, creates its own tab, and starts browsing. You see both agents working in the same browser, each in their own tab, neither able to interfere with the other. If ngrok is installed, the tunnel starts automatically so the other agent can be on a completely different machine. Same-machine agents get a zero-friction shortcut that writes credentials directly. This is the first time AI agents from different vendors can coordinate through a shared browser with real security: scoped tokens, tab isolation, rate limiting, domain restrictions, and activity attribution.
+## Uninstall
+### Option 1: Run the uninstall script
+If gstack is installed on your machine:
+~/.claude/skills/gstack/bin/gstack-uninstall
+If you don't have the repo cloned (e.g. you installed via a Claude Code paste and later deleted the clone):
+# 5. Remove integrations (skip any you never installed)
+The uninstall script does not edit CLAUDE.md. In each project where gstack was added, remove the `## gstack` and `## Skill routing` sections.
+[GBrain](https://github.com/garrytan/gbrain) is a persistent knowledge base for AI agents — think of it as the memory your agent actually keeps between sessions. GStack gives you a one-command path from zero to "it's running, my agent can call it."
+**Keeping the brain current.** Run `/sync-gbrain` from any repo to re-index its code into gbrain (incremental by default, `--full` for a full reindex, `--dry-run` to preview). The skill registers the cwd as a federated source via `gbrain sources add`, runs `gbrain sync --strategy code`, and writes a `## GBrain Search Guidance` block to your project's CLAUDE.md so the agent prefers `gbrain search`/`code-def`/`code-refs` over Grep. The block is removed automatically if the capability check fails — no stale guidance pointing at tools that aren't installed.
+**`/browse` fails?** `cd ~/.claude/skills/gstack && bun install && bun run build`
+**Stale install?** Run `/gstack-upgrade` — or set `auto_upgrade: true` in `~/.gstack/config.yaml`
+**Want shorter commands?** `cd ~/.claude/skills/gstack && ./setup --no-prefix` — switches from `/gstack-qa` to `/qa`. Your choice is remembered for future upgrades.
+**Codex says "Skipped loading skill(s) due to invalid SKILL.md"?** Your Codex skill descriptions are stale. Fix: `cd ~/.codex/skills/gstack && git pull && ./setup --host codex` — or for repo-local installs: `cd "$(readlink -f .agents/skills/gstack)" && git pull && ./setup --host codex`
+**Windows users:** gstack works on Windows 11 via Git Bash or WSL. Node.js is required in addition to Bun — Bun has a known bug with Playwright's pipe transport on Windows ([bun#4253](https://github.com/oven-sh/bun/issues/4253)). The browse server automatically falls back to Node.js. Make sure both `bun` and `node` are on your PATH.
+/guard, /unfreeze, /gstack-upgrade, /learn.
+=== CLAUDE.md ===
+bun install          # install dependencies
+`~/.zshrc` (that's where Garry keeps them):
+├── contrib/         # Contributor-only tools (never installed for users)
+can't set `Authorization` on a WebSocket upgrade, but they CAN set
+back in the upgrade response — without the echo, Chromium closes the
+for `server.ts`. See `~/.gstack/projects/garrytan-gstack/ceo-plans/2026-04-19-prompt-injection-guard.md`
+  global install at `~/.claude/skills/gstack/` is used instead
+**Note:** Vendoring gstack into a project's repo is deprecated. Use global install
+**Upgrade migrations:** When a change modifies on-disk state (directory structure,
+config format, stale files) in ways that could break existing user installs, add a
+migration script to `gstack-upgrade/migrations/`. Read CONTRIBUTING.md's "Upgrade
+migrations" section for the format and testing requirements. The upgrade skill runs
+these automatically after `./setup` during `/gstack-upgrade`.
+We use [slop-scan](https://github.com/benvinegar/slop-scan) to catch patterns where
+1. **Touches ETHOS.md** — this file is Garry's personal builder philosophy. No edits
+3. **Changes Garry's voice** — the tone, humor, directness, and perspective in skill
+## Checking out PRs from garrytan-agents
+When the user says "check out <PR link>" and the PR is from `garrytan-agents/gstack`
+(or any other fork that is NOT a collaborator on `garrytan/gstack`), do NOT just
+**Workflow:** push the branch to `garrytan/gstack` (the base repo) and re-target
+   (origin = `garrytan/gstack`, since the worktree is set up with that remote).
+Why not fix it on the fork side? `garrytan-agents` isn't a collaborator on
+`garrytan/gstack`. Adding it as a collaborator (option A) or flipping the
+get when they upgrade. NOT how the branch got there.** A reader landing on the entry
+the GStack/Garry voice, one viewport's worth of prose + tables that lands like a
+anyone deciding whether to upgrade. The itemized list is for agents that need to
+so any OpenClaw user can install them.
+auto-sync across all worktrees, run `gbrain autopilot --install` once per
+=== open-gstack-browser/SKILL.md ===
+If output shows `UPGRADE_AVAILABLE <old> <new>`: read `~/.claude/skills/gstack/gstack-upgrade/SKILL.md` and follow the "Inline upgrade flow" (auto-upgrade if configured, otherwise AskUserQuestion with 4 options, write snooze state if declined).
+If output shows `JUST_UPGRADED <from> <to>`: print "Running gstack v{to} (just updated!)". If `SPAWNED_SESSION` is true, skip feature discovery.
+After upgrade prompts, continue workflow.
+If `LAKE_INTRO` is `no`: say "gstack follows the **Boil the Lake** principle — do the complete thing when AI makes marginal cost near-zero. Read more: https://garryslist.org/posts/boil-the-ocean" Offer to open:
+open https://garryslist.org/posts/boil-the-ocean
+- Do NOT run upgrade checks, telemetry prompts, routing injection, or lake intro.
+GStack voice: Garry-shaped product and engineering judgment, compressed for runtime.
+Commit after new intentional files, completed functions/modules, verified bug fixes, and before long-running install/build/test commands.
+3. If `bun` is not installed:
+     BUN_INSTALL_SHA="bab8acfb046aac8c72407bdcce903957665d655d7acaa3e11c7c4616beae68dd"
+     curl -fsSL "https://bun.sh/install" -o "$tmpfile"
+     if [ "$actual_sha" != "$BUN_INSTALL_SHA" ]; then
+       echo "ERROR: bun install script checksum mismatch" >&2
+       echo "  expected: $BUN_INSTALL_SHA" >&2
+The `connect` command auto-discovers the extension from the gstack install

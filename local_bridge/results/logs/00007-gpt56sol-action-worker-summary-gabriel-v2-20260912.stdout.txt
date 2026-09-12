@@ -1,0 +1,16 @@
+HOST=ai-core-node-projekt-frankenstein USER=ai-core-node
+EXEC claude=MISSING
+EXEC codex=/usr/local/bin/codex
+EXEC opencode=MISSING
+EXEC aider=MISSING
+EXEC goose=MISSING
+EXEC gemini=MISSING
+EXEC ollama=/usr/local/bin/ollama
+VERSION codex=codex-cli 0.146.0
+VERSION ollama=Warning: could not connect to a running Ollama instance
+CHATGPT_CLIENT=active
+VOICE_SERVICE=active
+MainPID=1170123
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 17:14:33 +07] ; stop_time=[n/a] ; pid=1170123 ; code=(null) ; status=0/0 }
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node LOCAL_BRIDGE_OWNER=gabriel FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+SUMMARY_PASS

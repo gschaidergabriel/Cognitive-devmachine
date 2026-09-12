@@ -1,0 +1,110 @@
+===IDENTITY===
+andreas-MACO
+andreas
+2026-09-12T19:35:02+02:00
+===VM===
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MainPID=319869
+===MACHINECTL===
+systemd 259 (259.5-0ubuntu3.4)
+machinectl [OPTIONS...] COMMAND ...
+
+Send control commands to or query the virtual machine and container
+registration manager.
+
+Machine Commands:
+  list                        List running VMs and containers
+  status NAME...              Show VM/container details
+  show [NAME...]              Show properties of one or more VMs/containers
+  start NAME...               Start container as a service
+  login [NAME]                Get a login prompt in a container or on the
+                              local host
+  shell [[USER@]NAME [COMMAND...]]
+                              Invoke a shell (or other command) in a container
+                              or on the local host
+  enable NAME...              Enable automatic container start at boot
+  disable NAME...             Disable automatic container start at boot
+  poweroff NAME...            Power off one or more containers
+  reboot NAME...              Reboot one or more containers
+  terminate NAME...           Terminate one or more VMs/containers
+  kill NAME...                Send signal to processes of a VM/container
+  copy-to NAME PATH [PATH]    Copy files from the host to a container
+  copy-from NAME PATH [PATH]  Copy files from a container to the host
+  bind NAME PATH [PATH]       Bind mount a path from the host into a container
+
+Image Commands:
+  list-images                 Show available container and VM images
+  image-status [NAME...]      Show image details
+  show-image [NAME...]        Show properties of image
+  edit NAME|FILE...           Edit settings of one or more VMs/containers
+  cat NAME|FILE...            Show settings of one or more VMs/containers
+  clone NAME NAME             Clone an image
+  rename NAME NAME            Rename an image
+  read-only NAME [BOOL]       Mark or unmark image read-only
+  remove NAME...              Remove an image
+  set-limit [NAME] BYTES      Set image or pool size limit (disk quota)
+  clean                       Remove hidden (or all) images
+
+Options:
+  -h --help                   Show this help
+     --version                Show package version
+     --no-pager               Do not pipe output into a pager
+     --no-legend              Do not show the headers and footers
+     --no-ask-password        Do not ask for system passwords
+  -H --host=[USER@]HOST       Operate on remote host
+  -M --machine=CONTAINER      Operate on local container
+     --system                 Connect to system machine manager
+     --user                   Connect to user machine manager
+  -p --property=NAME          Show only properties by this name
+     --value                  When showing properties, only print the value
+  -P NAME                     Equivalent to --value --property=NAME
+  -q --quiet                  Suppress output
+  -a --all                    Show all properties, including empty ones
+  -l --full                   Do not ellipsize output
+     --kill-whom=WHOM         Whom to send signal to
+  -s --signal=SIGNAL          Which signal to send
+     --uid=USER               Specify user ID to invoke shell as
+  -E --setenv=VAR[=VALUE]     Add an environment variable for shell
+     --read-only              Create read-only bind mount or clone
+     --mkdir                  Create directory before bind mounting, if missing
+  -n --lines=INTEGER          Number of journal entries to show
+     --max-addresses=INTEGER  Number of internet addresses to show at most
+  -o --output=STRING          Change journal output mode (short, short-precise,
+                               short-iso, short-iso-precise, short-full,
+                               short-monotonic, short-unix, short-delta,
+                               json, json-pretty, json-sse, json-seq, cat,
+                               verbose, export, with-unit)
+     --force                  Replace target file when copying, if necessary
+     --now                    Start or power off container after enabling or
+                              disabling it
+     --runner=RUNNER          Select between nspawn and vmspawn as the runner
+  -V                          Short for --runner=vmspawn
+
+See the machinectl(1) man page for details.
+===OPENERS_CGROUP===
+PID:1351332
+/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-puls.service
+PID:3795508
+/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-denker.service
+PID:4027470
+/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-welt.service
+PID:4034911
+/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/grid_autonomie.py 300 dauer 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-grid-autonomie.service
+===SERVICES===
+  frankenstein-chatgpt-client.service loaded active running FranKenstein Persistent Browserless ChatGPT Context Client (Andreas)
+  frankenstein-cortex.service         loaded active running FranKenstein Cortex
+  frankenstein-denker.service         loaded active running FranKenstein Denker — er denkt, auch wenn niemand da ist
+  frankenstein-grid-autonomie.service loaded active running FranKenstein Grid-Autonomie
+  frankenstein-immunsystem.service    loaded active running FranKenstein Immunsystem
+  frankenstein-puls.service           loaded active running FranKenstein Puls (Andreas) -- fortlaufende Kognition, auch ohne Gespraech
+  frankenstein-welt.service           loaded active running FranKenstein Weltmodell
+===DURABLE_TARGET===
+/var/lib/entityos/data directory andreas:andreas 755
+/var/lib/entityos/data/volatile-state-rescue|root:root|700
+/var/lib/entityos/data/volatile-state-rescue/omega-20260913T0032-b4235e7e|root:root|700
+PREFLIGHT_ONLY_NO_MUTATION=1

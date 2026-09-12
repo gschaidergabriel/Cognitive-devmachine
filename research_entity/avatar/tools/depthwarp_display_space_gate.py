@@ -28,8 +28,10 @@ def build(root,r,eye,amp):
  a=base[:,:,3].astype(np.float32)/255; gx=cv2.Sobel(a,cv2.CV_32F,1,0,ksize=3);gy=cv2.Sobel(a,cv2.CV_32F,0,1,ksize=3); grad=np.sqrt(gx*gx+gy*gy)
  yy,xx=np.mgrid[0:a.shape[0],0:a.shape[1]].astype(np.float32); ell=((xx-eye[0])/220)**2+((yy-eye[1])/125)**2
  gate=ss(.70,.97,a)*(1-ss(.015,.10,grad))*ss(1.,1.55,ell)
- dx=amp*depth*gate
- mapx=xx-dx; mapy=yy
+ dx=(amp*depth*gate).astype(np.float32,copy=False)
+ # OpenCV 4.13 requires split remap maps to be CV_32FC1. Eye-anchor math can
+ # otherwise promote the gate/map to float64 even though xx/yy start float32.
+ mapx=(xx-dx).astype(np.float32,copy=False); mapy=yy.astype(np.float32,copy=False)
  rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
  out=np.dstack([rgb,base[:,:,3]])
  return base,out,gate,dx
@@ -61,5 +63,5 @@ def main():
    by[str(amp)].append({'alpha_exact':bool(np.array_equal(bd[:,:,3],wd[:,:,3])),'active_frac':float(active.mean()),'changed_gt1_active':float((mx[active]>1).mean()) if active.any() else 0,'changed_gt3_active':float((mx[active]>3).mean()) if active.any() else 0,'rgb_mae_active':float(diff[active].mean()) if active.any() else 0,'rgb_p99_active':float(np.quantile(diff[active],.99)) if active.any() else 0,'lap_ratio':(lap(g1,opaque)+1e-9)/(lap(g0,opaque)+1e-9),'eye_shift_px':float(math.hypot(px,py)),'eye_resp':pr,'max_shift_display_from_field':float(np.max(np.abs(dxd))*sx),'p95_shift_display':float(np.quantile(np.abs(dxd[active]),.95)*sx) if active.any() else 0})
  print('DEPTHWARP_DISPLAY_SPACE_GATE/v1',args.width,args.height)
  for amp in AMPS:
-  R=by[str(amp)];print('AMP',amp,json.dumps({'all_alpha_exact':all(x['alpha_exact'] for x in R),'active_frac_min':min(x['active_frac'] for x in R),'changed_gt1_active_min':min(x['changed_gt1_active'] for x in R),'changed_gt3_active_min':min(x['changed_gt3_active'] for x in R),'rgb_mae_active_range':[min(x['rgb_mae_active'] for x in R),max(x['rgb_mae_active'] for x in R)],'rgb_p99_active_max':max(x['rgb_p99_active'] for x in R),'lap_ratio_range':[min(x['lap_ratio'] for x in R),max(x['lap_ratio'] for x in R)],'eye_shift_px_max':max(x['eye_shift_px'] for x in R),'eye_resp_min':min(x['eye_resp'] for x in R),'max_shift_display':max(x['max_shift_display_from_field'] for x in R),'p95_shift_display_max':max(x['p95_shift_display'] for x in R)},sort_keys=True))
+  R=by[str(amp)];print('AMP',amp,json.dumps({'all_alpha_exact':all(x['alpha_exact'] for x in R),'active_frac_min':min(x['active_frac'] for x in R),'changed_gt1_active_min':min(x['changed_gt1_active'] for x in R),'changed_gt3_active_min':min(x['changed_gt3_active'] for x in R),'rgb_mae_active_range':[min(x['rgb_mae_active'] for x in R),max(x['rgb_mae_active'] for x in R)],'rgb_p99_active_max':max(x['rgb_p99_active'] for x in R),'lap_ratio_range':[min(x['lap_ratio'] for x in R),max(x['lap_ratio'] for x in R)],'eye_shift_px_max':max(x['eye_shift_px'] for x in R),'eye_resp_min':min(x['eye_resp'] for x in R),'max_shift_display':max(x['max_shift_display_from_field'] for x in R),'p95_shift_display_max':max(x['p95_shift_display_from_field'] if 'p95_shift_display_from_field' in x else x['p95_shift_display'] for x in R)},sort_keys=True))
 if __name__=='__main__':main()

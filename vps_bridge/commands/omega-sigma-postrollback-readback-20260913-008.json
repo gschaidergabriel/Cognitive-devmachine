@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-sigma-postrollback-readback-20260913-008",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\npython3 - <<'PY'\nimport json, pathlib, sqlite3, os\nr=pathlib.Path('/workspace/omega_runtime'); state=r/'state'; db=r/'data'/'omega_unified.db'\nout={'current':str((r/'current').resolve()),'lock':(state/'omega-supervisor.lock').read_text().strip() if (state/'omega-supervisor.lock').exists() else None}\nif (state/'SUPERVISOR_STATUS.json').exists(): out['status']=json.loads((state/'SUPERVISOR_STATUS.json').read_text())\nif db.exists():\n c=sqlite3.connect(f'file:{db}?mode=ro',uri=True); c.row_factory=sqlite3.Row\n try:\n  if c.execute(\"select 1 from sqlite_master where type='table' and name='relay_ledger'\").fetchone():\n   out['relay_states']={r['state']:r['n'] for r in c.execute('select state,count(*) n from relay_ledger group by state')}\n   out['active_relay']=[dict(x) for x in c.execute(\"select effect_id,organ_id,state,updated_at from relay_ledger where state in ('DISPATCHING','UNKNOWN') order by updated_at\")]\n finally: c.close()\nprint(json.dumps(out,sort_keys=True))\nPY\necho '---PS---'\nps -eo pid,ppid,stat,lstart,args | grep -E 'omega\\.(supervisor|supervisor_outer|assembly|grid_runtime_v3|relay_entrypoint|spool_bridge_relay_parallel|spool_receipt_reconciler|telemetry_daemon|master_bridge_carrier)' | grep -v grep || true\n"
+}

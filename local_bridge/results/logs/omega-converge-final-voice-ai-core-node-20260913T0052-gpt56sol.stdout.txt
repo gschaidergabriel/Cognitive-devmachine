@@ -1,0 +1,168 @@
+VOICE_EFFECTIVE_AFTER_DISABLE={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+===OMEGA_INSTALL===
+OMEGA 777 organs composed under the existing FINAL Voice authority.
+
+Canonical entry point:
+  /home/ai-core-node/.local/bin/omega status
+  /home/ai-core-node/.local/bin/omega selftest
+  /home/ai-core-node/.local/bin/omega terminal
+  /home/ai-core-node/.local/bin/omega voice
+
+Bound product tree:
+  destination:        /home/ai-core-node/.local/lib/frankenstein-voice-final
+  final Voice policy: /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+  final policy sha:   56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee
+  canonical identity:/home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/frankenstein_identity_assembly.py
+  canonical base:     /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+  SELF:               OMEGA
+  body/runtime:       FranKenstein 2.0
+  acoustic authority: omega_arm_bus / existing UnifiedDB configuration
+  presentation floor: existing omega_organ_activity lease surface
+  compatibility:      /home/ai-core-node/.local/bin/frank-omega
+
+Voice ExecStart preserved exactly:
+  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+Prepared ChatGPT-client wrapper:
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted.
+The updated organs become active in Voice only at an independently admitted,
+host-safe lifecycle boundary. Do not restart merely to activate this source.
+===OMEGA_SELFTEST===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+===OMEGA_STATUS===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "repo_root": "/home/ai-core-node/.local/lib/frankenstein-voice-final",
+  "installed_runtime": {
+    "stern_path": "/home/ai-core-node/.claude/star/stern.py",
+    "present": true,
+    "sha256": "0d5b7764cebe8c9e4f3ce2a697ae390c0c1b5cde99ac051eb662260735c808a1",
+    "note": "live authority requires current host/owner binding and receipts; file presence is not runtime credit"
+  },
+  "organs": {
+    "identity": {
+      "role": "canonical SELF/person/host projection",
+      "source_path": "scripts/frankenstein_identity_assembly.py",
+      "present": true,
+      "sha256": "a4c0f2c519906ac3efaa5ade29e2c2af038d059e0844d252f7eaa788a304717c"
+    },
+    "state": {
+      "role": "canonical UnifiedDB/runtime/effect integration source",
+      "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "present": true,
+      "sha256": "33aeb4a72308b7f3c056e7ac66339378bc6da48ba43ec308eac33e26e462b55b"
+    },
+    "grid": {
+      "role": "canonical GRID10 turn-loop lineage",
+      "source_path": "scripts/f2wp1207_grid10_turn_loop.py",
+      "present": true,
+      "sha256": "a8b352b12aa10d81ca961ae3d85b4d126b2228f20d94fc6f13a14bdcd1df1b81"
+    },
+    "titan": {
+      "role": "person-scoped TITAN/UnifiedDB retrieval",
+      "source_path": "scripts/f2wp1207_titan_mc.py",
+      "present": true,
+      "sha256": "91af69d7a1ba2f9bc27cb8ace4697f89542a23f2a3370d02f2641496a8d15ee0"
+    },
+    "arm_bus": {
+      "role": "same-SELF multi-arm projection + acoustic lease",
+      "source_path": "scripts/omega_arm_bus.py",
+      "present": true,
+      "sha256": "27b657a93e3c449378aaec321b9f9330f44468acd63af2e2c5d22c4cd0df98ef"
+    },
+    "presentation_floor": {
+      "role": "ephemeral presentation arbitration",
+      "source_path": "scripts/omega_organ_activity.py",
+      "present": true,
+      "sha256": "1094c5cab706bdd9f43699d7cb5601b7c5bdc524af8a4d3976fedbd8327996bd"
+    },
+    "terminal": {
+      "role": "OMEGA terminal organ",
+      "source_path": "scripts/frank_terminal_777.py",
+      "present": true,
+      "sha256": "d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e"
+    },
+    "voice": {
+      "role": "OMEGA Realtime compatibility entrypoint",
+      "source_path": "scripts/voice_777_runtime.py",
+      "present": true,
+      "sha256": "4b32ce4e02dea6e8484be3b39d8e05fc047536734e1976b9ec398df1d7a91286"
+    },
+    "omni": {
+      "role": "persistent ChatGPT/OMNI host-client organ",
+      "source_path": "scripts/voice_host_777_live_client.py",
+      "present": true,
+      "sha256": "d798cb2121c17bf74411ab842efc416c8dbab0306770b543117fb38ef44f45e6"
+    }
+  },
+  "invariants": [
+    "one SELF: OMEGA",
+    "FranKenstein 2.0 is runtime/body, not a competing SELF",
+    "no new database or memory authority",
+    "no second GRID/GWT turn loop",
+    "no second productive watcher",
+    "no host effect authority inferred from identity or memory",
+    "Gabriel/ai-core-node and Andreas/andreas-maco provenance stays separate",
+    "VM/avatar lifecycle boundaries remain independently gated"
+  ]
+}
+===ACTIVE_CONFIG===
+MainPID=2407635
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+MainPID=2407631
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+===PRESERVED_OLD_OVERRIDES===
+d46ac96ff3a2a809a7206022ee96e81fee0637b41d01ba7bec3e87ca75a393bf  /home/ai-core-node/.local/state/frankenstein/disabled-systemd-dropins/omega-convergence-20260913T0052/95-omega-777-organ-floor.conf
+d46ac96ff3a2a809a7206022ee96e81fee0637b41d01ba7bec3e87ca75a393bf  /home/ai-core-node/.local/state/frankenstein/disabled-systemd-dropins/omega-convergence-20260913T0052/99-omega-777-organ-floor.conf
+COMPOSITION_CONVERGED_PASS

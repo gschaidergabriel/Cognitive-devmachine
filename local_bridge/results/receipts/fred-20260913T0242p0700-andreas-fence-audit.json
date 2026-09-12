@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0242p0700-andreas-fence-audit",
+  "command_sha256": "82b6f43a1139456c5bd249488def8a3960dc6c41c4a601358c2255ee61edfed7",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:35:59.723551+00:00",
+  "finished_at": "2026-09-12T19:35:59.984231+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "07444ccbfe7c37299480bfb1d5e836b66716c45969e190b93e8ce0d285cc8353",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "IDENTITY host=andreas-MACO user=andreas\nSELF_INTEGRATION_BEGIN\nHEAD=2f9fa1004ab140eb312302f799bf2e6165c4aff6\nSTATUS_BEGIN\nSTATUS_END\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  werkzeug/fluechtig-vor-start-pruefen.sh\neebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  werkzeug/semantic-state-cutover.py\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  werkzeug/entityos-vm-volatile-state-guard.conf\n01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  werkzeug/entityos-vm-semantic-cutover.conf\n31204c6b24ce5d067b68ea4b313feaa4fbcc541d3acb7bf04e4e4952efb83113  werkzeug/semantic-state-schutz-installieren.sh\nSELF_INTEGRATION_END\nINSTALLED_BEGIN\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh\neebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  /usr/local/libexec/entityos/semantic-state-cutover.py\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\n01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nSYSTEMD_BEGIN\nActiveState=active\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST\nMainPID=319869\nExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nSYSTEMD_END\nSEMANTIC_SOURCE_PRESENCE_BEGIN\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db bytes=483328 mtime=2026-09-12 21:32:34.356361295 +0200\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db bytes=24576 mtime=2026-09-12 02:09:26.719139082 +0200\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db bytes=532480 mtime=2026-09-12 21:35:45.187539760 +0200\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db bytes=36864 mtime=2026-09-10 08:34:38.506411274 +0200\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db bytes=327680 mtime=2026-09-12 19:47:45.585996113 +0200\nPRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910 bytes=4096 mtime=2026-09-10 12:33:59.431612696 +0200\nSEMANTIC_SOURCE_PRESENCE_END\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

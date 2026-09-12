@@ -1,0 +1,31 @@
+IDENTITY host=andreas-MACO user=andreas
+SELF_INTEGRATION_BEGIN
+HEAD=2f9fa1004ab140eb312302f799bf2e6165c4aff6
+STATUS_BEGIN
+STATUS_END
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  werkzeug/fluechtig-vor-start-pruefen.sh
+eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  werkzeug/semantic-state-cutover.py
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  werkzeug/entityos-vm-volatile-state-guard.conf
+01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  werkzeug/entityos-vm-semantic-cutover.conf
+31204c6b24ce5d067b68ea4b313feaa4fbcc541d3acb7bf04e4e4952efb83113  werkzeug/semantic-state-schutz-installieren.sh
+SELF_INTEGRATION_END
+INSTALLED_BEGIN
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  /usr/local/libexec/entityos/semantic-state-cutover.py
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+SYSTEMD_BEGIN
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+SYSTEMD_END
+SEMANTIC_SOURCE_PRESENCE_BEGIN
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db bytes=483328 mtime=2026-09-12 21:32:34.356361295 +0200
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db bytes=24576 mtime=2026-09-12 02:09:26.719139082 +0200
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db bytes=532480 mtime=2026-09-12 21:35:45.187539760 +0200
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db bytes=36864 mtime=2026-09-10 08:34:38.506411274 +0200
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db bytes=327680 mtime=2026-09-12 19:47:45.585996113 +0200
+PRESENT /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910 bytes=4096 mtime=2026-09-10 12:33:59.431612696 +0200
+SEMANTIC_SOURCE_PRESENCE_END

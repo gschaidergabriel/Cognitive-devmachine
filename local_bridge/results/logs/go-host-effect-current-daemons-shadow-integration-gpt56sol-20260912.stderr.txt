@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/local_bridge/shadow_current_daemons_integration.py", line 188, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/local_bridge/shadow_current_daemons_integration.py", line 150, in main
+    fr = execute_guarded(fence=fence, raw_command=raw(fs), holder="frank-shadow", body=daemon_body(frank,"frank"), verifier=readback_file(frank_out,b"frank"))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/local_bridge/bridge_effect_adapter.py", line 184, in execute_guarded
+    body_result = body(spec)
+                  ^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/local_bridge/shadow_current_daemons_integration.py", line 67, in body
+    proc, _meta = module.operate(spec)
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/live-copies/frank_daemon.py", line 164, in operate
+    return op_exec(str(s["command"]), str(s.get("cwd", "")), timeout), {}
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/live-copies/frank_daemon.py", line 118, in op_exec
+    return subprocess.run(["bash", "-lc", cmd], cwd=workdir, capture_output=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/usr/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/runtime/home-frank'

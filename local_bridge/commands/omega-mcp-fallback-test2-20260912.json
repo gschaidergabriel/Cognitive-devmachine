@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-mcp-fallback-test2-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; D=$(mktemp -d /tmp/omega-mcp-fallback-test2.XXXXXX); trap 'rm -rf -- \"$D\"' EXIT; export GIT_SSH_COMMAND='ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts'; git clone -q git@github.com:gschaidergabriel/clay-global-research-entity.git \"$D/repo\"; cd \"$D/repo\"; git checkout -q chatgpt/omega-mcp-fallback-stack-20260912; echo HEAD=$(git rev-parse HEAD); python3 -m py_compile tools/omega_chatgpt_mcp.py tools/omega_chatgpt_mcp_fallback.py tools/omega_local_effect_adapter.py tools/omega_grid_relay.py; bash -n tools/install_omega_chatgpt_mcp_ai_core.sh; pytest -q tests/test_omega_chatgpt_mcp.py tests/test_omega_mcp_fallback.py"
+}

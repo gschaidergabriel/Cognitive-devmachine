@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega777-product-tree-v2-andreas-41ab4d9-20260913T0108ICT",
+  "command_sha256": "83579af327b33806507a7fd85d317866b5dc1a1f0df54c56d3dacd8d91fbddbd",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:42:40.687807+00:00",
+  "finished_at": "2026-09-12T17:42:45.794071+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "4634c2ac4d8ab052b254982189979a36411ef1bb6ab4bb54e91e717ec5f5f771",
+  "stderr_sha256": "64c8342fcdae2e7f3b45a6926c260612ebb3d5791f102e865bfaf6421ef0c453",
+  "stdout_tail": "PASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": false,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is composition only; durable state stays in the existing runtime\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is an entry point, not another resident authority\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "Klone nach '/tmp/omega777-product-v2.4Dd9Og/repo' \u2026\nVon github-frankenstein:gschaidergabriel/frankenstein\n * branch            41ab4d9f596d58e9e64598b67ea2eb09a6792429 -> FETCH_HEAD\nHEAD ist jetzt bei 41ab4d9 777: regress exact final product-tree composition\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

@@ -1,0 +1,61 @@
+===PATCHED_INSPECT===
+{
+  "current_binds": [
+    "--bind=/var/lib/entityos/data:/var/lib/entityos/data",
+    "--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts",
+    "--bind=/run/user/1000:/run/user/1000",
+    "--bind=/tmp/.X11-unix:/tmp/.X11-unix"
+  ],
+  "discovered_semantic_dbs": [
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db"
+  ],
+  "layout": {
+    "config": "/etc/entityos/entityos.conf",
+    "data_dir": "/var/lib/entityos/data",
+    "durable_root": "/var/lib/entityos/data/semantic-state",
+    "manifest": "/var/lib/entityos/data/semantic-state/CUTOVER.json",
+    "rootfs_run": "/var/lib/entityos/rootfs-run",
+    "service": "entityos-vm.service"
+  },
+  "manifest_present": false,
+  "populated_sources": [
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db"
+  ],
+  "required_binds": [
+    "--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero",
+    "--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank"
+  ],
+  "schema": "ENTITYOS_SEMANTIC_CUTOVER/v1",
+  "unmapped_semantic_dbs": []
+}
+===PATCHED_CONDITION_EXPECT_BLOCK===
+CONDITION_RC:255
+===PROTECTED_TREE_FILES===
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db|479232
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db|24576
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db-shm|32768
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db-wal|0
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db|458752
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db|36864
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db-shm|32768
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db-wal|0
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db|249856
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db-shm|32768
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910|4096
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910-shm|32768
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910-wal|0
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db-wal|4124152
+===VM_INVARIANT===
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MainPID=319869
+LIVE_INSPECT_PASS

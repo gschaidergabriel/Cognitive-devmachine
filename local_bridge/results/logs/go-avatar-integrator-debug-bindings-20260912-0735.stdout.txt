@@ -1,0 +1,266 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+1103-function _koerperSonderausdruckVersuchen(pool, versuch){
+1104-  versuch = versuch || 0;
+1105-  if(_sonderLaeuft){
+1106-    // Krise wird nicht stillschweigend fallengelassen, nur kurz verzoegert,
+1107-    // bis die laufende Sequenz (z.B. ein Emote-Ausdruck) fertig ist --
+1108-    // KEIN hartes Unterbrechen einer schon laufenden Animation.
+1109-    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1110-    return;
+1111-  }
+1112-  const istDoppelt = pool === KOERPER_SONDERAUSDRUCK_DOPPELT;
+1113-  let wahl = pool[Math.floor(Math.random() * pool.length)];
+1114-  _letzterKoerperSonderausdruckTs = Date.now();
+1115-  _letzterSonderausdruckTs = Date.now();
+1116-  _letzterSonderausdruckAusdruck = wahl[1];
+1117:  sonderausdruckZeigen(wahl[0], wahl[1], _haltenMsNachTempo(1400));
+1118-  if(istDoppelt){
+1119-    // Extra-Pause NUR nach der demonic-Stufe: die geteilte Uhr wird
+1120-    // zusaetzlich in die Zukunft gesetzt, damit auch Emote-Ausdruecke
+1121-    // danach deutlich laenger warten als die normalen 45s.
+1122-    _letzterSonderausdruckTs = Date.now() + 30000;
+1123-  }
+1124-}
+1125-
+1126-// Aus statusHolen() bei jedem Poll (alle 3s) mit den Rohwerten gefuettert.
+1127-function koerperzustandPruefen(swapVollAnteil, ramFreiAnteil){
+1128-  const swapKritisch = typeof swapVollAnteil === "number" && swapVollAnteil >= SWAP_KRITISCH_ANTEIL_JS;
+1129-  const ramKritisch = typeof ramFreiAnteil === "number" && ramFreiAnteil <= RAM_KRITISCH_ANTEIL_JS;
+1130-  const stufe = (swapKritisch && ramKritisch) ? 2 : (swapKritisch || ramKritisch) ? 1 : 0;
+1131-  const uebergangHoeher = stufe > _koerperStufeVorher; // NUR beim Uebergang, nicht dauerhaft im Zustand
+1132-  _koerperStufeVorher = stufe;
+1133-  if(!uebergangHoeher) return;
+1134-  if(Date.now() - _letzterKoerperSonderausdruckTs < KOERPER_SONDERAUSDRUCK_ABKLINGZEIT_MS) return;
+1135-  _koerperSonderausdruckVersuchen(stufe === 2 ? KOERPER_SONDERAUSDRUCK_DOPPELT : KOERPER_SONDERAUSDRUCK_EINFACH);
+1136-}
+1137-
+1138-// Unabhaengige Achse: ueberraschung > 0.7 -> anime_fassungslos. Eigene
+1139-// Hysterese (Rueckfall erst unter 0.5), damit es an der 0.7-Grenze nicht bei
+1140-// jedem Poll neu zittert.
+1141-function ueberraschungAchsePruefen(ueberraschung){
+1142-  if(typeof ueberraschung !== "number") return;
+1143-  if(ueberraschung > 0.7 && !_ueberraschungAusgeloest){
+1144-    _ueberraschungAusgeloest = true;
+1145-    if(!_sonderLaeuft && Date.now() - _letzterSonderausdruckTs >= SONDERAUSDRUCK_ABKLINGZEIT_MS){
+1146-      _letzterSonderausdruckTs = Date.now();
+1147-      _letzterSonderausdruckAusdruck = "anime_fassungslos";
+1148:      sonderausdruckZeigen("anime_90s", "anime_fassungslos", _haltenMsNachTempo(1400));
+1149-    }
+1150-  } else if(ueberraschung < 0.5){
+1151-    _ueberraschungAusgeloest = false;
+1152-  }
+1153-}
+1154-
+1155-// 1) BLINZELN -- offen->halb->zu->halb->offen, jede Stufe 40-60ms (gesamt
+1156-// <200ms), unregelmaessiger Abstand 3-8s + Jitter, gelegentlich Doppelschlag.
+1157-// ⚠️ LECK-FIX (2026-09-11): blinzeln() rief FRUEHER am Ende IMMER
+1158-// blinzelWeiterPlanen() auf -- auch wenn der Aufruf selbst nur der einmalige
+1159-// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1160-// Doppelschlag (12% Chance pro Zyklus) hat dadurch eine ZWEITE, komplett
+1161-// eigenstaendige, sich selbst fortpflanzende Blinzel-Kette gestartet, die nie
+1162-// wieder aufhoerte. Erwarteter Nachwuchs pro Kette: 1 (Selbstfortsetzung) +
+1163-// 0.12 (neue Kette) = 1.12 > 1 -- ein Galton-Watson-Verzweigungsprozess,
+1164-// die Zahl lebender Ketten waechst exponentiell. Per Simulation bestaetigt:
+1165-// 2732 blinzeln()-Aufrufe in 5 virtuellen Minuten statt der ~55 einer
+1166-// gesunden Einzelkette (~50x). Fix: Parameter zeitplanNeu unterscheidet
+1167-// "planmaessige Kette" von "einmaliger Bonus" -- nur planmaessige Ketten
+1168-// duerfen sich selbst fortsetzen und neu verzweigen.
+1169-// ⭐ 2026-09-11 Asymmetrie: ein echtes Lid faellt schnell zu und geht
+1170-// langsamer wieder auf (Gabriel woertlich: "uncanny in jeder Hinsicht" --
+1171-// gleich lange Zu- und Aufphasen sind einer der klassischen Maschinen-Tells).
+1172-// Schliessen (halb1+zu-Haltezeit) zusammen ~65-100ms, Oeffnen (halb2) allein
+1173-// ~130-170ms -- grobe Zielwerte ~80ms zu / ~150ms auf, mit Streuung gegen
+1174-// Gleichfoermigkeit.
+1175-function blinzelDauerSchliessen(){ return 15 + Math.random()*5; }
+1176-function blinzelDauerGeschlossenHalten(){ return 30 + Math.random()*20; }
+1177-function blinzelDauerOeffnen(){ return 40 + Math.random()*12; }
+1178-// ⭐⭐ 2026-09-11 (Animations-Agent) ECHTES BLINZELN: statt nur einer
+1179-// Zustands-Phasen-Meldung spielt blinzeln() jetzt die 12 fotografierten
+1180-// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1181-// geschlossen -> 11 offen, 00 und 11 identisch = Loop-Punkt) als echtes
+1182-// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1183-// Frames 00-08 SCHLIESSEN (deshalb 9 kurze Schritte), 09-11 OEFFNEN (3
+--
+1633-// bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+1634-// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+1635-// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+1636-// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+1637-// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+1638-// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+1639-// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+1640-// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1641:// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+1642-// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+1643-// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+1644-// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1645-// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+1646-// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+1647-// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+1648-// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+1649-// angefasst.
+1650-let _atmenTransform = "scale(1)";
+1651-let _atmenFilter = "saturate(1.05) brightness(1)";
+1652-function atmen(){
+1653-  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+1654-  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+1655-  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+1656-  const skala = 1 + auf * 0.012;
+1657-  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+1658-  const transform = `scale(${skala})`;
+1659-  const filter = `saturate(1.05) brightness(${helligkeit})`;
+1660-  _atmenTransform = transform;
+1661-  _atmenFilter = filter;
+1662-  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+1663-  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+1664-  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+1665-  $(kopfSichtbar).style.transform = transform;
+1666-  $(kopfSichtbar).style.filter = filter;
+1667-  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+1668-  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+1669-  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+1670-  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+1671-  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+1672-  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+1673-  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+1674-  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+1675-  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+1676-  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+--
+1681-  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+1682-  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+1683-  // beim Kopf oben.
+1684-  $(atmenAktivSchicht).style.transform = transform;
+1685-  $(atmenAktivSchicht).style.filter = filter;
+1686-  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+1687-  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+1688-  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+1689:  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+1690-  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+1691-  if(_sonderLaeuft){
+1692-    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+1693-    $(ausdruckSichtbar).style.transform = transform;
+1694-    $(ausdruckSichtbar).style.filter = filter;
+1695-  }
+1696-}
+1697-
+1698-// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+1699-// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+1700-// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+1701-// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+1702-// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+1703-// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1704-// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+1705-// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1706-// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+1707-// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+1708-// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+1709-// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+1710-// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+1711-const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+1712-  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+1713-ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+1714-const ATMEN_MS_PRO_BILD = 330;
+1715-let atmenIndex = 0;
+1716-let atmenLetzterWechsel = 0;
+1717-let atmenAktivSchicht = "koerper-schicht";
+1718-function koerperCrossfade(src){
+1719-  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+1720-  $(naechsteSchicht).src = src;
+1721-  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+1722:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1723-  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+1724-  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+1725-  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+1726-  $(naechsteSchicht).style.transform = _atmenTransform;
+1727-  $(naechsteSchicht).style.filter = _atmenFilter;
+1728-  $(naechsteSchicht).style.opacity = 1;
+1729-  $(atmenAktivSchicht).style.opacity = 0;
+1730-  atmenAktivSchicht = naechsteSchicht;
+1731-}
+1732-// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+1733-// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+1734-// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+1735-// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+1736-// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+1737-// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+1738-// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+1739-// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+1740-// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+1741-const KOERPER_AKTIONEN = [
+1742-  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1743-      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+1744-  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1745-      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+1746-  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+1747-      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+1748-      `/koerper_rgba/lehnen/${n}.png`) },
+1749-  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+1750-      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+1751-      "gewicht_-05","gewicht_+00"].map(n =>
+1752-      `/koerper_rgba/gewicht/${n}.png`) },
+1753-  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+1754-      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+1755-      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+1756-      `/koerper_rgba/schulterdrehung/${n}.png`) }
+1757-];
+--
+1953-// ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+1954-// laufenden Fenster (xdotool), weil Chrome ohne Debug-Port laeuft und es
+1955-// keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+1956-// triggern. Keine UX-Funktion: nur Tasten, die niemand drueckt. 'b' loest
+1957-// EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+1958-// der Doppelschlag, kein Extra-Strang), 'k' eine kleine Kopfneigung mit
+1959-// Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+1960-// Sonderausdruck aus den drei emote-Pools.
+1961:window.addEventListener("keydown", (e) => {
+1962-  if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+1963-  else if(e.key === "k"){
+1964-    e.preventDefault();
+1965-    if(!kopfRollSchritte && !_sonderLaeuft){
+1966-      kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+1967-      kopfRollSequenzZu(15, () => setTimeout(() => {
+1968-        kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+1969-      }, 1400));
+1970-    }
+1971-  }
+1972-  else if(e.key === "x"){
+1973-    e.preventDefault();
+1974-    const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+1975-    const wahl = alle[Math.floor(Math.random()*alle.length)];
+1976:    sonderausdruckZeigen(wahl[0], wahl[1]);
+1977-  }
+1978-});
+1979-
+1980-// ── Permanenter Reload-Weg (Gabriel/Koordinator 2026-09-07: der Daemon
+1981-// startete Chrome ohne --remote-debugging-port, es gab also KEINEN Weg,
+1982-// eine Dateiaenderung ins laufende Fenster zu bekommen ausser manuellem
+1983-// xdotool ctrl+r. Ab jetzt merkt die Seite selbst, wenn buehne.html sich
+1984-// geaendert hat, und laedt sich automatisch neu -- kein Handgriff mehr
+1985-// noetig, kein Debugging-Port noetig, rein clientseitig.
+1986-let _startMtime = null;
+1987-async function _reloadWaechter(){
+1988-  try{
+1989-    const r = await fetch("/api/mtime", {cache:"no-store"});
+1990-    const d = await r.json();
+1991-    if(_startMtime === null){ _startMtime = d.mtime; return; }
+1992-    if(d.mtime && d.mtime !== _startMtime){ location.reload(); }
+1993-  }catch(e){}
+1994-}
+1995-setInterval(_reloadWaechter, 2000);
+1996-_reloadWaechter();
+1997-</script>
+1998-  <!-- ⭐ 2026-09-11 (Koordinator): globaler Filmlook -- gemeinsames Korn,
+1999-       gemeinsame Farbabstimmung, Vignette. Liegt BEWUSST in einer eigenen
+2000-       Datei und nicht hier: diese Seite wird gerade von einem anderen
+2001-       Agenten umgebaut, zwei Agenten in einer Datei kollidieren. Der
+2002-       Zweck des Looks ist, die getrennt erzeugten Ebenen (Kopf, Koerper,
+2003-       Mund, Augen, Hintergrund) wie EINE Aufnahme wirken zu lassen.
+2004-       Abschalten: Datei filmlook.js leeren -- die Seite laeuft ohne. -->
+2005-  <script src="/filmlook.js"></script>
+2006-</body>
+2007-</html>
+===TOOLS===
+/usr/bin/google-chrome
+selenium False
+websocket True
+PIL True

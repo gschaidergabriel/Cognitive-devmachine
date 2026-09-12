@@ -1,0 +1,40 @@
+TIME
+2026-09-12T07:28:11+07:00
+SERVICE
+MainPID=1632280
+ExecMainStartTimestamp=Sat 2026-09-12 07:25:08 +07
+ControlGroup=/user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-buehne.service
+LISTENER
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess
+LISTEN 0      5          127.0.0.1:8788      0.0.0.0:*    users:(("python3",pid=1632280,fd=3))
+DAEMONS
+1632280 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+1633051 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+1672441 bash -lc set -u; echo TIME; date -Is; echo SERVICE; systemctl --user show frankenstein-buehne.service -p MainPID -p ControlGroup -p ExecMainStartTimestamp; echo LISTENER; ss -ltnp 'sport = :8788' 2>&1 || true; echo DAEMONS; pgrep -af 'buehne_daemon.py|8788' || true; echo TREE; MAIN=$(systemctl --user show frankenstein-buehne.service -p MainPID --value); ps -eo pid,ppid,lstart,stat,args | awk -v m="$MAIN" '$1==m || $2==m || /buehne_daemon.py/ || /8788/ {print}'; echo CWD_ENV; for p in $(pgrep -f 'buehne_daemon.py' || true); do echo PID=$p; readlink -f /proc/$p/cwd 2>/dev/null || true; tr '\0' '\n' </proc/$p/environ 2>/dev/null | grep -E '^(PWD|HOME|DISPLAY|XAUTHORITY)=' || true; done; echo CURL_HEADERS; curl -fsSI http://127.0.0.1:8788/augen_blink/blink_000.png || true
+TREE
+1632280    2339 Sat Sep 12 07:25:08 2026 Ssl  /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+1633051 1632280 Sat Sep 12 07:25:09 2026 Ssl  /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+1672441  959674 Sat Sep 12 07:28:11 2026 S    bash -lc set -u; echo TIME; date -Is; echo SERVICE; systemctl --user show frankenstein-buehne.service -p MainPID -p ControlGroup -p ExecMainStartTimestamp; echo LISTENER; ss -ltnp 'sport = :8788' 2>&1 || true; echo DAEMONS; pgrep -af 'buehne_daemon.py|8788' || true; echo TREE; MAIN=$(systemctl --user show frankenstein-buehne.service -p MainPID --value); ps -eo pid,ppid,lstart,stat,args | awk -v m="$MAIN" '$1==m || $2==m || /buehne_daemon.py/ || /8788/ {print}'; echo CWD_ENV; for p in $(pgrep -f 'buehne_daemon.py' || true); do echo PID=$p; readlink -f /proc/$p/cwd 2>/dev/null || true; tr '\0' '\n' </proc/$p/environ 2>/dev/null | grep -E '^(PWD|HOME|DISPLAY|XAUTHORITY)=' || true; done; echo CURL_HEADERS; curl -fsSI http://127.0.0.1:8788/augen_blink/blink_000.png || true
+1672455 1672441 Sat Sep 12 07:28:11 2026 S    awk -v m=1632280 $1==m || $2==m || /buehne_daemon.py/ || /8788/ {print}
+CWD_ENV
+PID=1632280
+/home/ai-core-node
+HOME=/home/ai-core-node
+DISPLAY=:0
+PWD=/home/ai-core-node
+XAUTHORITY=/home/ai-core-node/.Xauthority
+PID=1672441
+/home/ai-core-node/.claude/star/visual
+HOME=/home/ai-core-node
+DISPLAY=:0
+PWD=/home/ai-core-node
+XAUTHORITY=/home/ai-core-node/.Xauthority
+PID=1672457
+CURL_HEADERS
+HTTP/1.0 501 Unsupported method ('HEAD')
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Sat, 12 Sep 2026 00:28:11 GMT
+Connection: close
+Content-Type: text/html;charset=utf-8
+Content-Length: 357
+

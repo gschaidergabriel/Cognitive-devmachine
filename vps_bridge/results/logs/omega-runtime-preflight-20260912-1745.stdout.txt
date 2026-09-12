@@ -1,0 +1,29 @@
+=== OMEGA RUNTIME PREFLIGHT ===
+2026-09-12T10:39:00Z
+
+-- oMEGA private repo read --
+fatal: could not read Username for 'https://github.com': No such device or address
+
+-- research bridge refs --
+fatal: could not read Username for 'https://github.com': No such device or address
+
+-- runtime tools --
+python3            /usr/bin/python3
+git                /usr/bin/git
+sqlite3            /usr/bin/sqlite3
+systemctl          /usr/bin/systemctl
+loginctl           /usr/bin/loginctl
+dbus-run-session   /usr/bin/dbus-run-session
+Xvfb               MISSING
+weston             MISSING
+startxfce4         MISSING
+openbox            MISSING
+chromium           MISSING
+firefox            MISSING
+
+-- init / supervisors --
+    PID COMMAND         COMMAND
+      1 sleep           sleep infinity
+/usr/bin/tmux
+
+=== END ===

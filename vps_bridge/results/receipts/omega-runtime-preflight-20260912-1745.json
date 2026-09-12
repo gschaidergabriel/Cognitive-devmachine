@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-runtime-preflight-20260912-1745",
+  "command_sha256": "167e419c8896fe71c7ab0dfcefea22d152c4ea2722f864bfd8dd84e74c02fb16",
+  "started_at": "2026-09-12T10:39:00.031448+00:00",
+  "finished_at": "2026-09-12T10:39:00.813842+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "0d84fee71b826aed3213b7aabc725523dc9d4a4651375e0bb729ba45fc4041be",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== OMEGA RUNTIME PREFLIGHT ===\n2026-09-12T10:39:00Z\n\n-- oMEGA private repo read --\nfatal: could not read Username for 'https://github.com': No such device or address\n\n-- research bridge refs --\nfatal: could not read Username for 'https://github.com': No such device or address\n\n-- runtime tools --\npython3            /usr/bin/python3\ngit                /usr/bin/git\nsqlite3            /usr/bin/sqlite3\nsystemctl          /usr/bin/systemctl\nloginctl           /usr/bin/loginctl\ndbus-run-session   /usr/bin/dbus-run-session\nXvfb               MISSING\nweston             MISSING\nstartxfce4         MISSING\nopenbox            MISSING\nchromium           MISSING\nfirefox            MISSING\n\n-- init / supervisors --\n    PID COMMAND         COMMAND\n      1 sleep           sleep infinity\n/usr/bin/tmux\n\n=== END ===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

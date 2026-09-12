@@ -1,0 +1,61 @@
+CANDIDATE_COMMIT=87d7e0a9510d18f4f6a879b0eb1ff4ba2a0b25c6
+LIVE_SHA=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+-25->-20 legacy_mismatch=(3.0, 1.5, 6.0) atomic_mismatch=(0.0, 0.0, 0.0)
+-20->-15 legacy_mismatch=(3.0, 3.6000000000000014, 4.199999999999999) atomic_mismatch=(0.0, 0.0, 0.0)
+-15->-10 legacy_mismatch=(3.0, 4.5, 3.0) atomic_mismatch=(0.0, 0.0, 0.0)
+-10-> -5 legacy_mismatch=(3.0, 4.199999999999999, 0.6) atomic_mismatch=(0.0, 0.0, 0.0)
+ -5-> +0 legacy_mismatch=(3.0, 5.699999999999999, 0.6) atomic_mismatch=(0.0, 0.0, 0.0)
+ +0-> +5 legacy_mismatch=(3.0, 6.3, 17.4) atomic_mismatch=(0.0, 0.0, 0.0)
+ +5->+10 legacy_mismatch=(3.0, 6.899999999999999, 15.899999999999999) atomic_mismatch=(0.0, 0.0, 0.0)
++10->+15 legacy_mismatch=(3.0, 7.800000000000001, 13.200000000000003) atomic_mismatch=(0.0, 0.0, 0.0)
++15->+20 legacy_mismatch=(3.0, 7.5, 11.700000000000003) atomic_mismatch=(0.0, 0.0, 0.0)
++20->+25 legacy_mismatch=(3.0, 9.0, 9.0) atomic_mismatch=(0.0, 0.0, 0.0)
+PASS: atomic candidate has zero temporal registration error at every 5-degree photo step
+SOURCE_SHA256=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+OUTPUT_SHA256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+OUTPUT=/var/tmp/avatar-roll-atomic-9RvgVo/buehne.atomic.html
+PATCH_SCOPE=ROLL_PHOTO_TO_EYE_OVERLAY_ATOMIC_GEOMETRY_ONLY
+===PATCH_SNIPPET===
+869-  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870-  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871-  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872-  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874-  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875-  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876-  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877-  kopfRollAusgleichDeg = kopfRollWert;
+878-  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879-  augenOffsetDx = zielOffset.dx;
+880-  augenOffsetDy = zielOffset.dy;
+881-  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882-  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+883-  $("augen-blink").style.transform =
+884-    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+885-}
+===LIVE_UNCHANGED===
+87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645  /home/ai-core-node/.claude/star/visual/buehne.html
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  /home/ai-core-node/.claude/star/visual/filmlook.js
+===DIAGNOSTIC_KEYS===
+  1958	// Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+  1959	// Sonderausdruck aus den drei emote-Pools.
+  1960	window.addEventListener("keydown", (e) => {
+  1961	  if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+  1962	  else if(e.key === "k"){
+  1963	    e.preventDefault();
+  1964	    if(!kopfRollSchritte && !_sonderLaeuft){
+  1965	      kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+  1966	      kopfRollSequenzZu(15, () => setTimeout(() => {
+  1967	        kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+  1968	      }, 1400));
+  1969	    }
+  1970	  }
+  1971	  else if(e.key === "x"){
+  1972	    e.preventDefault();
+  1973	    const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+  1974	    const wahl = alle[Math.floor(Math.random()*alle.length)];
+  1975	    sonderausdruckZeigen(wahl[0], wahl[1]);
+  1976	  }
+  1977	});
+  1978	
+DRYRUN_OK=1

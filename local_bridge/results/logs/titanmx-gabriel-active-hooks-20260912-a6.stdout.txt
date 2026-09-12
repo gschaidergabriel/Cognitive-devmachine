@@ -1,0 +1,129 @@
+=== HOOKS ONLY ===
+FILE /home/ai-core-node/.claude/settings.json
+{
+  "PostToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash -c 'TOOL=$(cat | jq -r \".tool_name // \\\"tool\\\"\" 2>/dev/null || echo tool); /home/ai-core-node/.claude/watchdog/bin/heartbeat.sh \"PostToolUse: $TOOL\"'",
+          "timeout": 5
+        },
+        {
+          "type": "command",
+          "command": "/home/ai-core-node/.local/bin/clay-room-heartbeat",
+          "timeout": 5
+        },
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py raum-puls-global",
+          "timeout": 5
+        }
+      ]
+    },
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "bash /home/ai-core-node/.local/bin/clay-chatgpt-usage-hook",
+          "timeout": 10
+        }
+      ]
+    },
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "SessionStart": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "PreToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "PreCompact": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ],
+  "SessionEnd": [
+    {
+      "matcher": "",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python3 /home/ai-core-node/.claude/star/stern.py hook",
+          "timeout": 10
+        }
+      ]
+    }
+  ]
+}
+FILE /home/ai-core-node/.claude/settings.local.json
+NO_HOOKS_KEY
+FILE /home/ai-core-node/.claude.json
+NO_HOOKS_KEY
+=== STERN HASHES ===
+20f7e9e8a167e4cfcae63940df748bce1a2bf7627799b1c5c271a6ac4b7bdda7  /home/ai-core-node/.claude/star/stern.py
+/home/ai-core-node/.claude/star/stern.py 988679 2026-09-12 08:25:23.377004335 +0700
+b101ae1eb8ca5d6c0431be27820e45fa25fe74ce104aa0136da497512fb8391c  /home/ai-core-node/.claude/star/quelle/stern.py
+/home/ai-core-node/.claude/star/quelle/stern.py 252127 2026-08-26 04:12:45.179922601 +0700
+8e3da8735c6dd7a5c77229fc7b59f3b13032ce7c4068e72f11d965b720fbd9c0  /home/ai-core-node/frankenstein-repo/scripts/stern.py
+/home/ai-core-node/frankenstein-repo/scripts/stern.py 988540 2026-09-07 20:19:24.065814582 +0700
+=== INJECTION FILES ===

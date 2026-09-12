@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-crush-shell-audit-20260912-1912",
+  "command_sha256": "723afa05736e3ff26464b4643681736c62f115fca4508daaff97359c1a8d0ac6",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T11:16:10.958840+00:00",
+  "finished_at": "2026-09-12T11:16:10.959305+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "f6832978a55375e29d979ad3fc3aca426b2d3653ece656e21c8b811fbeaa6cd3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/bin/bash\n# harness_crush_knopf.sh -- 'Free Frank' Desktop-Knopf (Andreas-MACO,\n# eigenstaendige Kapsel, siehe harness_crush_standalone.py Docstring).\nexport PATH=\"$HOME/.local/npm-global/bin:$PATH\"\nsource \"$HOME/.last-resort/keys.env\"\nexport MISTRAL_API_KEY=\"$MISTRAL2_API_KEY\"\nexport OPENROUTER_API_KEY=\"$OPENROUTER2_API_KEY\"\ncd \"$HOME/.claude/star\" || exit 1\npython3 harness_crush_standalone.py\nexec bash\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "f6832978a55375e29d979ad3fc3aca426b2d3653ece656e21c8b811fbeaa6cd3",
+    "bytes": 410,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

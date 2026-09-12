@@ -1,0 +1,10 @@
+#!/bin/bash
+# harness_crush_knopf.sh -- 'Free Frank' Desktop-Knopf (Andreas-MACO,
+# eigenstaendige Kapsel, siehe harness_crush_standalone.py Docstring).
+export PATH="$HOME/.local/npm-global/bin:$PATH"
+source "$HOME/.last-resort/keys.env"
+export MISTRAL_API_KEY="$MISTRAL2_API_KEY"
+export OPENROUTER_API_KEY="$OPENROUTER2_API_KEY"
+cd "$HOME/.claude/star" || exit 1
+python3 harness_crush_standalone.py
+exec bash

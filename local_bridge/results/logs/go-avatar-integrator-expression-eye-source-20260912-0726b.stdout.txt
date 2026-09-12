@@ -1,0 +1,198 @@
+SHA256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+COUNT function sonderausdruckZeigen=1
+COUNT function sonderausdruckStoppen=0
+COUNT pupillen-glow=12
+COUNT augen-blink=12
+COUNT _sonderLaeuft=14
+---BLOCK 423---
+00415:                  wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+00416:                  (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+00417:                  Flicken stur an der Null-Grad-Stelle stehen, waehrend das Kopf-
+00418:                  foto darunter tatsaechlich gekippt war -- die harte Rechteckkante
+00419:                  des Flickens schnitt sichtbar durch die schraege Stirn/Wange =
+00420:                  genau der "zweite Kopf, der durchscheint". Fix: beide jetzt HIER
+00421:                  drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+00422:                  (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+00423:             <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+00424:             <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+00425:             <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+00426:           </div>
+00427:         </div>
+00428:         <canvas id="regen"></canvas>
+00429:         <div id="farbschicht"></div>
+00430:         <div id="wasserlinie"></div>
+00431:         <div id="vignette"></div>
+00432:       </div>
+00433:     </div>
+00434:   </div>
+00435:   <div id="chat">
+00436:     <div id="chat-kopf"><span>Chat</span><span id="chat-status">verbunden</span></div>
+00437:     <div id="chat-zeilen"></div>
+00438:     <div id="dropzone">Datei hier reinziehen, um sie abzulegen</div>
+00439:     <div id="eingabe-zeile">
+00440:       <input id="eingabe" placeholder="Nachricht (nur Buehnen-Chat, nicht der Sprachmodus)" maxlength="2000">
+00441:       <button id="senden">Senden</button>
+00442:     </div>
+00443:     <div id="hinweis">
+00444:       Ehrlich: getippte Nachrichten hier gehen NICHT an FranKensteins echten
+00445:       Sprachmodus, nur in diesen Chat. "1 Zuschauer" ist keine Messung, nur
+00446:       eine feste Angabe.
+00447:     </div>
+00448:   </div>
+00449: </div>
+00450: <script>
+00451: "use strict";
+00452: const $ = (id) => document.getElementById(id);
+00453: const chatZeilen = $("chat-zeilen");
+00454: let cursor = "";
+00455: 
+00456: // Name+Nachricht in EINER Zeile (<span> statt <div>) -- das war ueber zwei
+00457: // Nachtraege hinweg der meistgenannte Einzelpunkt ("das schafft sofort den
+00458: // Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+00459: // wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+00460: // (Gabriel, 4. Nachtrag 2026-09-11).
+00461: // Emoji NICHT als Overlay ueber der Buehne (Gabrielskorrektur 2026-09-11:
+00462: // "smileys nur im chat sichtbar") -- haengt am Ende des Chattexts, ganz
+00463: // normaler Teil der Zeile, kein Extra-Element, keine Animation.
+00464: // Deckel gegen unbegrenztes DOM-Wachstum (2026-09-11): das Fenster laeuft
+00465: // als Dauerbetrieb, chatHolen() feuert alle 1,5 s. Ohne Deckel bleibt JEDE
+00466: // je empfangene Zeile fuer immer im DOM -- bei einem Fenster, das Tage offen
+00467: // steht, wird daraus ein Leck, das niemand mehr einer Ursache zuordnen kann.
+00468: // 400 Zeilen sind mehr als in den Chatbereich passen und mehr, als jemand
+00469: // zurueckscrollt; aeltere fallen vorne raus (Livestream-Logik, kein Archiv --
+00470: // der vollstaendige Verlauf liegt ohnehin beim Daemon, /api/chat?since=0).
+00471: const CHAT_MAX_ZEILEN = 400;
+00472: function zeileAnhaengen(z){
+00473:   const amBoden = (chatZeilen.scrollHeight - chatZeilen.scrollTop - chatZeilen.clientHeight) < 24;
+00474:   const div = document.createElement("div");
+00475:   div.className = "zeile " + (z.art || "frage");
+00476:   const wer = document.createElement("span");
+00477:   wer.className = "wer";
+---BLOCK 424---
+00416:                  (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+00417:                  Flicken stur an der Null-Grad-Stelle stehen, waehrend das Kopf-
+00418:                  foto darunter tatsaechlich gekippt war -- die harte Rechteckkante
+00419:                  des Flickens schnitt sichtbar durch die schraege Stirn/Wange =
+00420:                  genau der "zweite Kopf, der durchscheint". Fix: beide jetzt HIER
+00421:                  drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+00422:                  (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+00423:             <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+00424:             <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+00425:             <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+00426:           </div>
+00427:         </div>
+00428:         <canvas id="regen"></canvas>
+00429:         <div id="farbschicht"></div>
+00430:         <div id="wasserlinie"></div>
+00431:         <div id="vignette"></div>
+00432:       </div>
+00433:     </div>
+00434:   </div>
+00435:   <div id="chat">
+00436:     <div id="chat-kopf"><span>Chat</span><span id="chat-status">verbunden</span></div>
+00437:     <div id="chat-zeilen"></div>
+00438:     <div id="dropzone">Datei hier reinziehen, um sie abzulegen</div>
+00439:     <div id="eingabe-zeile">
+00440:       <input id="eingabe" placeholder="Nachricht (nur Buehnen-Chat, nicht der Sprachmodus)" maxlength="2000">
+00441:       <button id="senden">Senden</button>
+00442:     </div>
+00443:     <div id="hinweis">
+00444:       Ehrlich: getippte Nachrichten hier gehen NICHT an FranKensteins echten
+00445:       Sprachmodus, nur in diesen Chat. "1 Zuschauer" ist keine Messung, nur
+00446:       eine feste Angabe.
+00447:     </div>
+00448:   </div>
+00449: </div>
+00450: <script>
+00451: "use strict";
+00452: const $ = (id) => document.getElementById(id);
+00453: const chatZeilen = $("chat-zeilen");
+00454: let cursor = "";
+00455: 
+00456: // Name+Nachricht in EINER Zeile (<span> statt <div>) -- das war ueber zwei
+00457: // Nachtraege hinweg der meistgenannte Einzelpunkt ("das schafft sofort den
+00458: // Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+00459: // wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+00460: // (Gabriel, 4. Nachtrag 2026-09-11).
+00461: // Emoji NICHT als Overlay ueber der Buehne (Gabrielskorrektur 2026-09-11:
+00462: // "smileys nur im chat sichtbar") -- haengt am Ende des Chattexts, ganz
+00463: // normaler Teil der Zeile, kein Extra-Element, keine Animation.
+00464: // Deckel gegen unbegrenztes DOM-Wachstum (2026-09-11): das Fenster laeuft
+00465: // als Dauerbetrieb, chatHolen() feuert alle 1,5 s. Ohne Deckel bleibt JEDE
+00466: // je empfangene Zeile fuer immer im DOM -- bei einem Fenster, das Tage offen
+00467: // steht, wird daraus ein Leck, das niemand mehr einer Ursache zuordnen kann.
+00468: // 400 Zeilen sind mehr als in den Chatbereich passen und mehr, als jemand
+00469: // zurueckscrollt; aeltere fallen vorne raus (Livestream-Logik, kein Archiv --
+00470: // der vollstaendige Verlauf liegt ohnehin beim Daemon, /api/chat?since=0).
+00471: const CHAT_MAX_ZEILEN = 400;
+00472: function zeileAnhaengen(z){
+00473:   const amBoden = (chatZeilen.scrollHeight - chatZeilen.scrollTop - chatZeilen.clientHeight) < 24;
+00474:   const div = document.createElement("div");
+00475:   div.className = "zeile " + (z.art || "frage");
+00476:   const wer = document.createElement("span");
+00477:   wer.className = "wer";
+00478:   wer.textContent = z.wer + ":";
+---BLOCK 944---
+00936: // wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+00937: // #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+00938: // tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+00939: // (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+00940: // Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+00941: // sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+00942: let ausdruckAktiv = 1;
+00943: let _sonderLaeuft = false;
+00944: function sonderausdruckZeigen(register, ausdruck, haltenMs){
+00945:   if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+00946:   haltenMs = haltenMs || 1400;
+00947:   _sonderLaeuft = true;
+00948:   $("mund-effekt").style.opacity = "0";
+00949:   const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+00950:   const wechsel = (neu, mitSchwung) => {
+00951:     const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+00952:     const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+00953:     if(sichtbar.getAttribute("src") === neu) return;
+00954:     versteckt.src = neu;
+00955:     // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+00956:     // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+00957:     // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+00958:     // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+00959:     versteckt.style.transform = _atmenTransform;
+00960:     versteckt.style.filter = _atmenFilter;
+00961:     versteckt.style.opacity = "1";
+00962:     sichtbar.style.opacity = "0";
+00963:     ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+00964:     if(mitSchwung){
+00965:       const rahmen = $("gesicht-rahmen");
+00966:       rahmen.classList.remove("pose-wechsel");
+00967:       requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+00968:       setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+00969:     }
+00970:   };
+00971:   const sauber = () => {
+00972:     $("ausdruck-schicht").style.opacity = "0";
+00973:     $("ausdruck-schicht2").style.opacity = "0";
+00974:     $("mund-effekt").style.opacity = "1";
+00975:     if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+00976:     _sonderLaeuft = false;
+00977:     gesichtNeuZeichnen(true);
+00978:   };
+00979:   let stufe = 0;
+00980:   wechsel(stufeSrc(0), true);
+00981:   const hoch = () => {
+00982:     stufe++;
+00983:     wechsel(stufeSrc(stufe), false);
+00984:     if(stufe < 6) setTimeout(hoch, 90);
+00985:     else setTimeout(runter, haltenMs);
+00986:   };
+00987:   const runter = () => {
+00988:     stufe--;
+00989:     wechsel(stufeSrc(stufe), false);
+00990:     if(stufe > 0) setTimeout(runter, 90);
+00991:     else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+00992:   };
+00993:   setTimeout(hoch, 90);
+00994: }
+00995: window.sonderausdruckZeigen = sonderausdruckZeigen;
+00996: 
+00997: // ⭐ 2026-09-11 Auftragsteil E (Animations-Agent): Sonderausdruck aus einem
+00998: // ECHTEN, schon gemessenen Signal ableiten statt aus Stichwoertern zu raten.

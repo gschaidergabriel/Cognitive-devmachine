@@ -1,0 +1,28 @@
+===STATUS===
+## main...origin/main [ahead 3, behind 15]
+?? scripts/openai_api_key.local
+===AHEAD===
+dd755a6 Repo-Doku: CRUSH.md fuer den Free-Pool-Terminal-Harness
+ec6fce0 4B-Abstraktionsschicht (Liebe/Tod/Verlust) als TypedEntry-Achsen anschliessen
+f5c42d6 Modellwechsel verwirft die Kalibrierung der drei Modellachsen
+===BEHIND===
+52ceef6 Terminal: make ChatGPT a first-class Frankenstein organ
+3dd4a4b merge main into canonical Frank terminal organ candidate
+61d09dd test: enforce exact-URL targeted ChatGPT harvest
+08eca4c terminal: bind replies to own ChatGPT conversation URL
+e4c9808 policy: prefer local harness; allow Free Swarm fallback
+190b3b0 harness: fix real-repo audit range and exact path matching
+1eef7ec test: cover Frank terminal canonical lifecycle and harvest semantics
+eaa08d1 terminal: install single frank entrypoint over canonical runtime
+7ae62b9 terminal: add canonical Frank ChatGPT organ REPL
+45041d4 avatar pointer: make finished rig bundle canonical for all workers
+f13cb1f avatar: surface permanent singleton owner law at installer entrypoint
+de228d4 avatar pointer: enforce permanent single production Chrome policy
+c8a55b4 Fix: previous commit accidentally emptied these 4 files (blob() picked up stale relative paths after a shell cwd reset). Restore real content with the pointer wiring intended in that commit.
+1f888ea Wire the avatar/coordination pointer into the routes agents actually read first (00_READ_THIS_FIRST, 01_ROUTES.json, CHATGPT_WEB/00_DO_THIS, bridge-kit/README)
+9aac6ed Add avatar/coordination pointer: this repo is not where live handoffs live, clay-global-research-entity is (fixes ChatGPT GO-GATE-0 repo confusion)
+===PROCESSES===
+154111 bash -lc cd /home/ai-core-node/frankenstein-repo && git fetch origin --prune >/tmp/fetch.out 2>/tmp/fetch.err; echo '===STATUS==='; git status --short --branch; echo '===AHEAD==='; git log --oneline origin/main..main; echo '===BEHIND==='; git log --oneline main..origin/main | head -20; echo '===PROCESSES==='; pgrep -af 'realtime_gespraech|gespraechsmodus|frank_voice|visual_cortex|presence_bridge|capture_worker' || true; echo '===BRIDGE==='; systemctl --user is-active frankenstein-local-bridge.service || true
+3333824 /usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+===BRIDGE===
+active

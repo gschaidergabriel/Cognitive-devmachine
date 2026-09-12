@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-0000-gpt56sol-presence-preflight-20260912-02",
+  "command_sha256": "e46317aa156bb8c21e99ff0b7d28c2cbf5d91f66756d970c2213744e07f28884",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T08:56:00.011787+00:00",
+  "finished_at": "2026-09-12T08:56:02.431851+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "491dfcef2d85e36fcb810a4f066077aecefd8f662efec786edc525038e197d3f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===STATUS===\n## main...origin/main [ahead 3, behind 15]\n?? scripts/openai_api_key.local\n===AHEAD===\ndd755a6 Repo-Doku: CRUSH.md fuer den Free-Pool-Terminal-Harness\nec6fce0 4B-Abstraktionsschicht (Liebe/Tod/Verlust) als TypedEntry-Achsen anschliessen\nf5c42d6 Modellwechsel verwirft die Kalibrierung der drei Modellachsen\n===BEHIND===\n52ceef6 Terminal: make ChatGPT a first-class Frankenstein organ\n3dd4a4b merge main into canonical Frank terminal organ candidate\n61d09dd test: enforce exact-URL targeted ChatGPT harvest\n08eca4c terminal: bind replies to own ChatGPT conversation URL\ne4c9808 policy: prefer local harness; allow Free Swarm fallback\n190b3b0 harness: fix real-repo audit range and exact path matching\n1eef7ec test: cover Frank terminal canonical lifecycle and harvest semantics\neaa08d1 terminal: install single frank entrypoint over canonical runtime\n7ae62b9 terminal: add canonical Frank ChatGPT organ REPL\n45041d4 avatar pointer: make finished rig bundle canonical for all workers\nf13cb1f avatar: surface permanent singleton owner law at installer entrypoint\nde228d4 avatar pointer: enforce permanent single production Chrome policy\nc8a55b4 Fix: previous commit accidentally emptied these 4 files (blob() picked up stale relative paths after a shell cwd reset). Restore real content with the pointer wiring intended in that commit.\n1f888ea Wire the avatar/coordination pointer into the routes agents actually read first (00_READ_THIS_FIRST, 01_ROUTES.json, CHATGPT_WEB/00_DO_THIS, bridge-kit/README)\n9aac6ed Add avatar/coordination pointer: this repo is not where live handoffs live, clay-global-research-entity is (fixes ChatGPT GO-GATE-0 repo confusion)\n===PROCESSES===\n154111 bash -lc cd /home/ai-core-node/frankenstein-repo && git fetch origin --prune >/tmp/fetch.out 2>/tmp/fetch.err; echo '===STATUS==='; git status --short --branch; echo '===AHEAD==='; git log --oneline origin/main..main; echo '===BEHIND==='; git log --oneline main..origin/main | head -20; echo '===PROCESSES==='; pgrep -af 'realtime_gespraech|gespraechsmodus|frank_voice|visual_cortex|presence_bridge|capture_worker' || true; echo '===BRIDGE==='; systemctl --user is-active frankenstein-local-bridge.service || true\n3333824 /usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener\n===BRIDGE===\nactive\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-deploy-preflight-20260912-1335z-02",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 seimensch-vps 'echo ===TOOLS===; command -v python3 || true; command -v git || true; command -v sqlite3 || true; command -v tmux || true; python3 --version 2>&1 || true; git --version 2>&1 || true; echo ===RESOURCES===; nproc; free -h; echo ===WORKSPACE===; ls -ld /workspace 2>/dev/null || echo MISSING_WORKSPACE'",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60
+}

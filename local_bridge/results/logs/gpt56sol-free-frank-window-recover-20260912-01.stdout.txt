@@ -1,0 +1,18 @@
+cool_pid=355944
+=== process ===
+    PID    PPID STAT                  STARTED CMD
+ 355944 1532239 Sl   Sat Sep 12 11:05:51 2026 /usr/bin/cool-retro-term -T Free Frank -e /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+=== wmctrl all ===
+0x03600010 -1 355944 200  200  1024 768  cool-retro-term.cool-retro-term  ai-core-node-projekt-frankenstein crush ~/frankenstein-repo
+=== xdotool pid/name ===
+Defaulting to search window name, class, and classname
+xdotool: Unknown command: %@
+Run 'xdotool help' if you want a command list
+=== xwin tree ===
+     0x3600012 "cool-retro-term": ()  1x1+0+0  +0+0
+     0x3e00001 "cool-retro-term": ("cool-retro-term" "Cool-retro-term")  10x10+10+10  +10+10
+     0x3600004 "Qt Selection Owner for cool-retro-term": ()  3x3+0+0  +0+0
+     0x3600010 "crush ~/frankenstein-repo": ("cool-retro-term" "cool-retro-term")  1024x768+100+100  +100+100
+=== try activate exact existing window ===
+window_id=56623120
+ACTIVATED_EXISTING=1

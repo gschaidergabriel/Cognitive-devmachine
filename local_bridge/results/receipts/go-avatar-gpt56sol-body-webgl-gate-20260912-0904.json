@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-body-webgl-gate-20260912-0904",
+  "command_sha256": "7f3951b872478623782c95889335274dc8886fad19ef9ebf9b6f9d7d4a9bb698",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T01:00:57.764260+00:00",
+  "finished_at": "2026-09-12T01:01:01.453225+00:00",
+  "status": "FAIL",
+  "exit_code": 2,
+  "op": "exec",
+  "stdout_sha256": "06774edf69ba5d0f4164c9b808f99a3a1fc1337ef3d335507a9199fbdd54af10",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "LIVE_BEFORE\n18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html\n5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py\n179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js\nactive\nc94537f155d80f0bfd5e6a654df3e4b4c88952a984a900643b1015b061b40e06  /tmp/go_avatar_body_webgl_gate_20260912_0904.py\n{\"rc\": 0, \"status\": \"ERROR\", \"stderr_tail\": \"\", \"stdout_tail\": \"l(619/SH*CH),mx=0,mae=0,n=0;/* readPixels bottom-up */for(let y=CH-yb;y<CH-yt;y++)for(let x=x0;x<x1;x++){let p=(y*CW+x)*4;for(let q=0;q<4;q++){let d=Math.abs(a[p+q]-b[p+q]);mx=Math.max(mx,d);mae+=d;n++}}return {max_delta:mx,mae:mae/Math.max(1,n),box:[x0,yt,x1,yb]}}\\nlet im=new Image();im.onload=()=>{let tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,1);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,0);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);\\n gl.disable(gl.BLEND);draw(K(0,0));gl.finish();let z=pix();draw(K(3.675,1));gl.finish();let v=pix();let m=metrics(z,v),n=neckDelta(z,v);\\n let loops=900,t0=performance.now();for(let i=0;i<loops;i++){draw(K(i/60,1));gl.finish()}let ms=(performance.now()-t0)/loops;\\n let out={schema:'BODY_WEBGL_GATE/v1',canvas:[CW,CH],source:[SW,SH],source_to_css:SCALE,grid:[xs.length,ys.length],vertices:verts.length/2,triangles:inds.length/3,peak_t:3.675,metrics:m,neck:n,forced_finish_ms_per_frame:ms,forced_finish_fps_equiv:1000/ms,scope:'SCRATCH_REAL_CHROME_NO_LIVE_MUTATION'};document.body.innerText='RESULT_JSON '+JSON.stringify(out)\\n};im.onerror=()=>{document.body.innerText='ERROR image'};im.src=TEX;\\n</script></body></html>\\n\"}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

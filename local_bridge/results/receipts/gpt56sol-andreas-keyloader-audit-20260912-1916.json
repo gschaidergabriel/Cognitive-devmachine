@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-keyloader-audit-20260912-1916",
+  "command_sha256": "ca746c6374c839f41959b4647bda48422916dea656794f0f86837aa108f75632",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T11:18:29.379792+00:00",
+  "finished_at": "2026-09-12T11:18:29.610524+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a6ab2a0419e34d824306fdd1cf37a1ff2e37cafe11e1d7b426202e3a6d65399c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== _alle_api_keys_laden ===\ndef _alle_api_keys_laden():\n    \"\"\"PHASE 49 (Punkt 2, /model-Wechsel): laedt die Schluessel FUER ALLE\n    MODELL_MAP-Eintraege in os.environ, nicht nur fuer das Startmodell.\n    Ohne das wuerde ein '/model <anderer-provider>'-Wechsel MITTEN in der\n    Aider-Sitzung an einer fehlenden Env-Var scheitern -- Aider selbst\n    wechselt das Modellobjekt anstandslos per SwitchCoder (siehe\n    aider/commands.py cmd_model), aber der API-Key fuer den NEUEN Provider\n    war bisher nie gesetzt, weil visible_run() nur den Key des\n    Start-Modells lud. Gibt {modell_id: bool(key_gesetzt)} zurueck (fuer\n    Diagnose/Log, NIE den Schluesselwert selbst).\"\"\"\n    ergebnis = {}\n    for mid, minfo in MODELL_MAP.items():\n        wert = _api_key_laden(mid)\n        if wert:\n            os.environ[minfo[\"env_var\"]] = wert\n        ergebnis[mid] = bool(wert)\n    return ergebnis\n\n=== _waehle_modell ===\ndef _waehle_modell():\n    \"\"\"Gibt (modell_id, hinweis_text) zurueck, oder (None, fehlergrund).\"\"\"\n    geladene_keys = {mid: bool(_h._api_key_laden(mid)) for mid in _h.MODELL_MAP}\n    if not any(geladene_keys.values()):\n        return None, \"kein einziger Free-Pool-API-Schluessel in ~/.last-resort/keys.env gefunden\"\n\n    try:\n        viable_pool_tiers = set(_pw.viable_tiers())\n        exhausted = _pw.all_exhausted()\n    except Exception as e:\n        viable_pool_tiers, exhausted = set(), False\n        print(f\"Warnung: pool_wache-Status nicht lesbar ({e}) -- waehle rein nach vorhandenem Schluessel.\",\n              file=sys.stderr)\n\n    # Kaskaden-Reihenfolge = MODELL_MAP-Insertion-Reihenfolge (Python 3.7+\n    # Dicts sind ordnungserhaltend) -- keine eigene Sortierung erfunden.\n    kandidaten = list(_h.MODELL_MAP.items())\n\n    # 1) viable + voll\n    for mid, info in kandidaten:\n        tier = _h._MODELL_ZU_POOL_TIER.get(mid)\n        if geladene_keys.get(mid) and tier in viable_pool_tiers and info[\"berechtigung\"] == \"voll\":\n            return mid, f\"gewaehlt: {mid} (viable, volle Editierrechte)\"\n\n    # 2) irgendein viable\n    for mid, info in kandidaten:\n        tier = _h._MODELL_ZU_POOL_TIER.get(mid)\n        if geladene_keys.get(mid) and tier in viable_pool_tiers:\n            return mid, f\"gewaehlt: {mid} (viable, ask-only -- kein volles Modell aktuell frei)\"\n\n    # 3) irgendein Schluessel vorhanden, auch wenn pool_wache Cooldown meldet\n    for mid, info in kandidaten:\n        if geladene_keys.get(mid):\n            return mid, (f\"gewaehlt: {mid} (WARNUNG: pool_wache meldet moeglichen Cooldown/\"\n                          f\"unbekannten Zustand -- Schluessel ist trotzdem vorhanden)\")\n\n    grund = \"alle Tiers erschoepft (Cooldown)\" if exhausted else \"kein nutzbares Modell gefunden\"\n    return None, grund\n\nMODEL_MAP\ngroq-gptoss {'env_var': 'GROQ_API_KEY'}\nnvidia-nemotron {'env_var': 'NVIDIA_NIM_API_KEY'}\nmistral-small {'env_var': 'MISTRAL_API_KEY'}\nopenrouter-deepseek {'env_var': 'OPENROUTER_API_KEY'}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

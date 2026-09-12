@@ -1,0 +1,64 @@
+=== _alle_api_keys_laden ===
+def _alle_api_keys_laden():
+    """PHASE 49 (Punkt 2, /model-Wechsel): laedt die Schluessel FUER ALLE
+    MODELL_MAP-Eintraege in os.environ, nicht nur fuer das Startmodell.
+    Ohne das wuerde ein '/model <anderer-provider>'-Wechsel MITTEN in der
+    Aider-Sitzung an einer fehlenden Env-Var scheitern -- Aider selbst
+    wechselt das Modellobjekt anstandslos per SwitchCoder (siehe
+    aider/commands.py cmd_model), aber der API-Key fuer den NEUEN Provider
+    war bisher nie gesetzt, weil visible_run() nur den Key des
+    Start-Modells lud. Gibt {modell_id: bool(key_gesetzt)} zurueck (fuer
+    Diagnose/Log, NIE den Schluesselwert selbst)."""
+    ergebnis = {}
+    for mid, minfo in MODELL_MAP.items():
+        wert = _api_key_laden(mid)
+        if wert:
+            os.environ[minfo["env_var"]] = wert
+        ergebnis[mid] = bool(wert)
+    return ergebnis
+
+=== _waehle_modell ===
+def _waehle_modell():
+    """Gibt (modell_id, hinweis_text) zurueck, oder (None, fehlergrund)."""
+    geladene_keys = {mid: bool(_h._api_key_laden(mid)) for mid in _h.MODELL_MAP}
+    if not any(geladene_keys.values()):
+        return None, "kein einziger Free-Pool-API-Schluessel in ~/.last-resort/keys.env gefunden"
+
+    try:
+        viable_pool_tiers = set(_pw.viable_tiers())
+        exhausted = _pw.all_exhausted()
+    except Exception as e:
+        viable_pool_tiers, exhausted = set(), False
+        print(f"Warnung: pool_wache-Status nicht lesbar ({e}) -- waehle rein nach vorhandenem Schluessel.",
+              file=sys.stderr)
+
+    # Kaskaden-Reihenfolge = MODELL_MAP-Insertion-Reihenfolge (Python 3.7+
+    # Dicts sind ordnungserhaltend) -- keine eigene Sortierung erfunden.
+    kandidaten = list(_h.MODELL_MAP.items())
+
+    # 1) viable + voll
+    for mid, info in kandidaten:
+        tier = _h._MODELL_ZU_POOL_TIER.get(mid)
+        if geladene_keys.get(mid) and tier in viable_pool_tiers and info["berechtigung"] == "voll":
+            return mid, f"gewaehlt: {mid} (viable, volle Editierrechte)"
+
+    # 2) irgendein viable
+    for mid, info in kandidaten:
+        tier = _h._MODELL_ZU_POOL_TIER.get(mid)
+        if geladene_keys.get(mid) and tier in viable_pool_tiers:
+            return mid, f"gewaehlt: {mid} (viable, ask-only -- kein volles Modell aktuell frei)"
+
+    # 3) irgendein Schluessel vorhanden, auch wenn pool_wache Cooldown meldet
+    for mid, info in kandidaten:
+        if geladene_keys.get(mid):
+            return mid, (f"gewaehlt: {mid} (WARNUNG: pool_wache meldet moeglichen Cooldown/"
+                          f"unbekannten Zustand -- Schluessel ist trotzdem vorhanden)")
+
+    grund = "alle Tiers erschoepft (Cooldown)" if exhausted else "kein nutzbares Modell gefunden"
+    return None, grund
+
+MODEL_MAP
+groq-gptoss {'env_var': 'GROQ_API_KEY'}
+nvidia-nemotron {'env_var': 'NVIDIA_NIM_API_KEY'}
+mistral-small {'env_var': 'MISTRAL_API_KEY'}
+openrouter-deepseek {'env_var': 'OPENROUTER_API_KEY'}

@@ -1,5 +1,11 @@
 # Clay — fastest current-state entrypoint
 
+## OWNER TRIGGER — `777` / OMEGA ABSOLUTE REENTRY
+
+On an exact `777`, read **`research_entity/coordination/OMEGA_777_TRIGGER_CONTRACT.md`** and execute its current-state convergence algorithm: refresh authority/heads/claims/receipts, bind exact owner+machine+runtime subjects, avoid duplicate systems/work, execute the strongest currently admitted nonduplicate gate, verify exact readback, then re-resolve and continue until a real authority/tool/evidence blocker is reached.
+
+`777` is the meta-reentry/convergence trigger. It does not create a new entity, state-sync mechanism, watcher, turn loop or provider authority, and it does not replace the existing `999` OMEGA/Realtime/voice path.
+
 ## HARD OWNER LAW — AVATAR SINGLETON / SCREEN 2
 
 Before any Avatar/browser work, read **`research_entity/coordination/AVATAR_SINGLETON_POLICY.md`**.

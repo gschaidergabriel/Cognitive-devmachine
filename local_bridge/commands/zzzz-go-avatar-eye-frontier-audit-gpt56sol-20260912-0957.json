@@ -1,0 +1,11 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "zzzz-go-avatar-eye-frontier-audit-gpt56sol-20260912-0957",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "effect_class": "READ_ONLY_PLUS_SCRATCH_OUTPUT",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; echo HOST=$(hostname); echo USER=$(whoami); date -Is; LIVE=buehne.html; CAND=.go_evidence/eye_semantic_shadow2_20260912_0807/buehne.shadow.html; echo LIVE_SHA256=$(sha256sum \"$LIVE\"|awk '{print $1}'); if [ -f \"$CAND\" ]; then echo CANDIDATE_SHA256=$(sha256sum \"$CAND\"|awk '{print $1}'); echo CANDIDATE_EXISTS=1; grep -n -m2 'go-eye-shadow\|v5-exact-live-sites' \"$CAND\" || true; else echo CANDIDATE_EXISTS=0; fi; echo SERVICE=$(systemctl --user is-active frankenstein-buehne.service || true); echo HTTP_SHA256=$(curl -fsS http://127.0.0.1:8788/ | sha256sum | awk '{print $1}'); echo EVIDENCE_DIR_BEGIN; find .go_evidence/eye_semantic_shadow2_20260912_0807 -maxdepth 1 -type f -printf '%f %s bytes\\n' 2>/dev/null | sort || true; echo EVIDENCE_DIR_END; for f in .go_evidence/eye_semantic_shadow2_20260912_0807/*.json; do [ -f \"$f\" ] || continue; echo JSON_FILE=$f; cat \"$f\"; done; echo EYE_FRONTIER_AUDIT=PASS"
+}

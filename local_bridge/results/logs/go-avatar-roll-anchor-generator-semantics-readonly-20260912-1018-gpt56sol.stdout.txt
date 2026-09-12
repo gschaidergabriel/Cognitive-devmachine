@@ -1,0 +1,344 @@
+=== IDENTITY ===
+2026-09-12T10:16:54,058692536+07:00
+ai-core-node-projekt-frankenstein
+ai-core-node
+=== HASHES ===
+37d3768e440ba003774169823cd449015983597a3fea4a965c9d1a4312837ab0  /home/ai-core-node/.claude/star/visual/rig2/messen_augenanker_exakt.py
+4b3280dbf1acf72af377229ef5eadc798a9b48e2939ab1ca96b86c4e976bb8cb  /home/ai-core-node/.claude/star/visual/rig2/augen_anker_exakt.json
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+=== GENERATOR SOURCE ===
+#!/usr/bin/env python3
+"""messen_augenanker_exakt.py -- EXAKTE (nicht gemessene/geschaetzte) Position
+des Augen-Ankers pro Rollwinkel, per Reproduktion derselben PIL-Transform, die
+docs/build_rig_v2.py fuer die Kopf-Rollposen benutzt hat
+(transform_crop_about_anchor: rotate(angle=-roll, expand=True) um die
+Bildmitte, dann bottom-center-Pin auf den Anker (768,600)).
+
+Statt die Bilder zu vergleichen (Template-Matching, ungenau bei starker
+Verzerrung), wird ein einzelner Marker-Punkt an der bekannten Augen-Anker-
+Position durch EXAKT dieselbe Transformation geschickt wie das Kopfbild
+selbst -- das Ergebnis ist geometrisch exakt, kein Schaetzwert.
+"""
+import json
+import os
+
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+KOPF_MASTER = os.path.join(VISUAL, "kopf", "master", "kopf_zero_mit_augen.png")
+MANIFEST = os.path.join(VISUAL, "manifest.json")
+AUSGABE = os.path.join(VISUAL, "augen_anker_exakt.json")
+
+HEAD_ANCHOR = (768, 600)  # aus manifest.json head_neck_anchor
+
+
+def transform_crop_about_anchor(canvas_1536x1024, head_bbox, angle=0.0, anchor=HEAD_ANCHOR):
+    """1:1 Nachbau von build_rig_v2.py's transform_crop_about_anchor, aber mit
+    dem EXPLIZIT bekannten head_bbox statt Auto-Detektion -- fuer den echten
+    Kopf ist das identisch (dessen Alpha-bbox IST head_bbox), fuer den
+    Marker-Layer (fast leer bis auf einen Punkt) muss die Crop-Box explizit
+    vorgegeben werden, sonst croppt PIL auf den fast-leeren Inhalt statt auf
+    dieselbe Region wie beim echten Kopf."""
+    crop = canvas_1536x1024.crop(head_bbox)
+    if angle:
+        crop = crop.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True)
+    x = round(anchor[0] - crop.width / 2)
+    y = round(anchor[1] - crop.height)
+    out = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    out.alpha_composite(crop, (x, y))
+    return out
+
+
+def main():
+    with open(MANIFEST, encoding="utf-8") as f:
+        manifest = json.load(f)
+    eyes_glow_anchor = None
+    for a in manifest["assets"]:
+        if a["path"] == "augen/gaze/rotglow_tracking_master.png":
+            eyes_glow_anchor = (a["anchor"]["x"], a["anchor"]["y"])
+    if eyes_glow_anchor is None:
+        raise RuntimeError("augen/gaze/rotglow_tracking_master.png nicht im Manifest gefunden")
+    print("Augen-Anker (roll=0, aus Manifest):", eyes_glow_anchor)
+
+    head = Image.open(KOPF_MASTER).convert("RGBA")
+    head_bbox = head.getchannel("A").getbbox()
+    bx0, by0, bx1, by1 = head_bbox
+    print("Kopf-Crop-Box (roll=0):", head_bbox, "Groesse:", (bx1 - bx0, by1 - by0))
+
+    # Marker: volle 1536x1024-Leinwand (wie das echte roll=0-Kopfbild), ein
+    # 5x5-Punkt an der ABSOLUTEN Augen-Anker-Position auf dieser Leinwand --
+    # exakt analog dazu, wie der echte Kopf-Layer auf derselben Leinwand liegt.
+    marker = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    for dx in range(-2, 3):
+        for dy in range(-2, 3):
+            xx, yy = eyes_glow_anchor[0] + dx, eyes_glow_anchor[1] + dy
+            marker.putpixel((xx, yy), (255, 0, 0, 255))
+
+    ergebnis = {}
+    for roll in range(-25, 26, 5):
+        out = transform_crop_about_anchor(marker, head_bbox, angle=-roll, anchor=HEAD_ANCHOR)
+        bbox_out = out.getchannel("A").getbbox()
+        if bbox_out is None:
+            raise RuntimeError(f"Marker bei roll={roll} verschwunden -- Transform-Fehler")
+        cx = (bbox_out[0] + bbox_out[2]) / 2
+        cy = (bbox_out[1] + bbox_out[3]) / 2
+        dx = cx - eyes_glow_anchor[0]
+        dy = cy - eyes_glow_anchor[1]
+        ergebnis[str(roll)] = {"dx_px": round(dx, 2), "dy_px": round(dy, 2)}
+        print(f"roll={roll:+3d}  dx={dx:+7.2f}px  dy={dy:+7.2f}px")
+
+    with open(AUSGABE, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "quelle": "messen_augenanker_exakt.py -- exakte Reproduktion der Erzeugungs-Transform, kein Schaetzwert",
+                "head_anchor": {"x": HEAD_ANCHOR[0], "y": HEAD_ANCHOR[1]},
+                "augen_anker_roll0": {"x": eyes_glow_anchor[0], "y": eyes_glow_anchor[1]},
+                "werte": ergebnis,
+            },
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
+    print("\ngespeichert:", AUSGABE)
+
+
+if __name__ == "__main__":
+    main()
+=== GENERATED METADATA ===
+{
+  "quelle": "messen_augenanker_exakt.py -- exakte Reproduktion der Erzeugungs-Transform, kein Schaetzwert",
+  "head_anchor": {
+    "x": 768,
+    "y": 600
+  },
+  "augen_anker_roll0": {
+    "x": 610,
+    "y": 207
+  },
+  "werte": {
+    "-25": {
+      "dx_px": -32.5,
+      "dy_px": 22.0
+    },
+    "-20": {
+      "dx_px": -30.0,
+      "dy_px": 12.0
+    },
+    "-15": {
+      "dx_px": -24.0,
+      "dy_px": 5.0
+    },
+    "-10": {
+      "dx_px": -16.5,
+      "dy_px": 0.0
+    },
+    "-5": {
+      "dx_px": -9.5,
+      "dy_px": -1.0
+    },
+    "0": {
+      "dx_px": 0.5,
+      "dy_px": 0.5
+    },
+    "5": {
+      "dx_px": 10.5,
+      "dy_px": -29.0
+    },
+    "10": {
+      "dx_px": 22.0,
+      "dy_px": -55.5
+    },
+    "15": {
+      "dx_px": 35.0,
+      "dy_px": -77.5
+    },
+    "20": {
+      "dx_px": 47.5,
+      "dy_px": -97.0
+    },
+    "25": {
+      "dx_px": 62.5,
+      "dy_px": -112.0
+    }
+  }
+}=== LIVE ROLL TABLE + TRANSFORM BLOCK ===
+821-//       Ziel (kopfRollWert, ohne Abzug) zulaeuft.
+822-let kopfRollAusgleichDeg = 0;
+823-// ⭐⭐⭐ 2026-09-12 VIERTE INSTANZ DERSELBEN FEHLERKLASSE, JETZT WIRKLICH
+824-// BEHOBEN (Koordinator-Befund + FRANK_AVATAR_RIG_V2/docs/build_rig_v2.py
+825-// gelesen statt weiter hand-gefittet): die drei vorherigen Fixes
+826-// (Halsnaht/Geisterkopf/Stirn-Luecke) korrigierten nur die ROTATION des
+827-// Augen-Flickens. Der eigentliche Rest-Fehler war eine fehlende
+828-// TRANSLATION: kopf/roll/*.png entstehen laut Erzeugungsskript per
+829-// transform_crop_about_anchor() -- Kopf wird um seine EIGENE Bildmitte
+830-// rotiert (PIL rotate(expand=True)), danach wird die neue, GROESSERE
+831-// Bounding-Box unten-mittig auf den festen Halsanker (768,600) gepinnt.
+832-// Das ist KEINE Rotation um einen festen externen Punkt (das waere ein
+833-// reines CSS rotate() um transform-origin) -- es ist "rotiere um die
+834-// eigene Mitte, dann verschiebe die neue Box". Ein Punkt, der (wie der
+835-// Augen-Anker bei 610,207) weit oben im Kopf-Crop sitzt, bewegt sich
+836-// dadurch NICHT auf einem Kreisbogen um (768,600), sondern auf einem
+837-// deutlich asymmetrischen Pfad. Exakt nachgerechnet (kein Schaetzwert --
+838-// derselbe Marker-Punkt durch dieselbe PIL-Transformation geschickt, siehe
+839-// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt
+840-// weiter an der Rotationsformel zu drehen.
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+842-  "-25": {dx:-32.5, dy: 22.0}, "-20": {dx:-30.0, dy: 12.0},
+843-  "-15": {dx:-24.0, dy:  5.0}, "-10": {dx:-16.5, dy:  0.0},
+844-  "-5":  {dx: -9.5, dy: -1.0}, "0":   {dx:  0.0, dy:  0.0},
+845-  "5":   {dx: 10.5, dy:-29.0}, "10":  {dx: 22.0, dy:-55.5},
+846-  "15":  {dx: 35.0, dy:-77.5}, "20":  {dx: 47.5, dy:-97.0},
+847-  "25":  {dx: 62.5, dy:-112.0},
+848-};
+849-let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+850-function federSchritt(ist, v, ziel, steife, daempfung){
+851-  v += (ziel - ist) * steife - v * daempfung;
+852-  ist += v;
+853-  return [ist, v];
+854-}
+855-function kopfKoerperDrehSchritt(){
+856-  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+857-  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+858-  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+859-  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+860-  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+861-  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+862-  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+863-  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+864-  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+865-  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+866-  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+867-  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+868-  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+869-  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+870-  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+871-  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872-  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873-  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874-  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875-  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876-  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877-  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879-  augenOffsetDx = zielOffset.dx;
+880-  augenOffsetDy = zielOffset.dy;
+881-  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882-  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+883-  $("augen-blink").style.transform =
+884-    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+885-}
+886-
+887-// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+888-// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+889-// gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+890-// neu befuellt und per opacity eingeblendet, das bisher sichtbare
+891-// ausgeblendet -- kein Bildsprung.
+892-// ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+893-// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+894-// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+895-// alte, opake, vorkomponierte Einzelbilder, die den jetzt durchscheinenden
+896-// Hintergrund wieder komplett verdecken wuerden. Deshalb tauscht diese
+897-// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+898-// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+899-// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+900-// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+901-// (per Signatur-Vergleich) und loest dafuer den Kamera-Nachschwung aus --
+902-// "passend zur Bewegung" (Gabriel), die Kamera reagiert, wenn sich Kopf/
+903-// Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+904-// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+905-// bewusst offen, siehe Bericht an den Koordinator -- kein stilles Verstecken.
+906-let _letzteZustandsSignatur = "";
+907-function gesichtNeuZeichnen(mitSchwung = true){
+908-  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+909-  if(signatur === _letzteZustandsSignatur) return; // kein echter Wechsel -- nichts zu tun
+910-  _letzteZustandsSignatur = signatur;
+911-  if(mitSchwung) kameraNachschwung();
+912-}
+913-
+914-// ⭐ 2026-09-11 Zusatz-Datensatz (FRANK_EXPRESSION_RIG_EXTRA_V1), Auftragsteil
+915-// A: weicher Wechsel in einen der 44 echt generierten Sonderausdruecke ueber
+916-// die reale stufe_00..stufe_06 Zwischensequenz -- kein Hart-Sprung auf den
+917-// Endpunkt (siehe hoch()/runter() unten, 90ms je Stufe, beide Richtungen).
+918-// Manuell ausloesbar (window.sonderausdruckZeigen in der Browser-Konsole)
+919-// UND seit Auftragsteil E automatisch fuer self_creative/-confident/
+920-// -uncertain aus sonderausdruckAusEmote() unten. Fuer self_empathetic/
+921-// -technical und fuer die Register demonic/serious_dystopian gibt es WEITER
+922-// kein gemessenes Signal -- kein passendes Bild bzw. keine der sechs
+923-// Antwort-Kategorien beschreibt Wut/Bedrohung/Trauer. Ein erfundener Trigger
+924-// (Chat-Schluesselwoerter o.ae.) waere selbst die Art erfundenes Signal, die
+925-// im ganzen Projekt vermieden wird. Diese Luecke bleibt bewusst offen, siehe
+926-// Bericht an den Koordinator.
+927-//
+928-// ⭐⭐ 2026-09-11 ZWEITER KOPF -- HIER WAR DIE URSACHE (Animations-Agent,
+929-// Beleg: Vorher-Screenshot /tmp/schwund_sonder_vorher.png im Bericht):
+930-// Diese Funktion blendete bisher die flachen, UNDURCHSICHTIGEN Vollbild-RGBs
+931-// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+932-// z-index:2). Diese alten Bilder tragen einen eingebratenen Hintergrund und
+933-// eine andere Kopfposition -- Ergebnis: ein zweiter Kopf mit Rechteckkante.
+934-// Jetzt: dieselben /ausdruck_erweitert/.../frontal/stufe_NN.png-Sequenzen
+935-// (echte 1536x1024-RGBA, laut PIL 10.4% Nicht-Alpha -- identische Silhouette
+936-// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+937-// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+938-// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+939-// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+940-// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+941-// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+942-let ausdruckAktiv = 1;
+943-let _sonderLaeuft = false;
+944-function sonderausdruckZeigen(register, ausdruck, haltenMs){
+945-  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+946-  haltenMs = haltenMs || 1400;
+947-  _sonderLaeuft = true;
+948-  $("mund-effekt").style.opacity = "0";
+949-  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+950-  const wechsel = (neu, mitSchwung) => {
+951-    const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+952-    const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+953-    if(sichtbar.getAttribute("src") === neu) return;
+954-    versteckt.src = neu;
+955-    // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+956-    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+957-    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+958-    // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+--
+1377-//   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+1378-//                      Hartregel: kein erfundener Blick ohne Erkennung)
+1379-function gazeZielBestimmen(){
+1380-  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+1381-  const wegAktiv = blickPauseAktiv || gespraechsFokus === "thema";
+1382-  if(wegAktiv) return {x:_wegZiel.x, y:_wegZiel.y, opazitaet:0.4};
+1383-  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+1384-}
+1385-function gazeSchritt(){
+1386-  const ziel = gazeZielBestimmen();
+1387-  zielGazeX = ziel.x; zielGazeY = ziel.y;
+1388-  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+1389-  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+1390-  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+1391-  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+1392-  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+1393-  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+1394-  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+1395-  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+1396-  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1397:  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+1398-  // driftet der Glimmer beim Rollen vom Blinzel-Flicken weg, obwohl beide
+1399-  // denselben Augen-Anker verfolgen sollen.
+1400-  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+1401-  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+1402-  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1403-  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+1404-  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+1405-  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+1406-  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+1407-  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1408-}
+1409-function wanderSchritt(){
+1410-  if(!serverBlick.anwesend){
+1411-    let neu = aktuelleBlickRichtung;
+1412-    while(neu === aktuelleBlickRichtung){
+1413-      neu = WANDER_RICHTUNGEN[Math.floor(Math.random()*WANDER_RICHTUNGEN.length)];
+1414-    }
+1415-    aktuelleBlickRichtung = neu;
+1416-    gesichtNeuZeichnen();
+1417-  }

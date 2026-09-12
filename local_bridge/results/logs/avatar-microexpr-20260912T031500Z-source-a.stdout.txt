@@ -1,0 +1,138 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+// Rand entsteht -- exakt die Formel, die der Browser intern fuer
+// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+// exakt. offsetWidth/offsetHeight statt getBoundingClientRect -- die sind
+// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+// mitgemessen werden (nur einmal bei Start/Resize aufgerufen, nicht pro
+// Frame -- die Leinwand selbst ist statisch, der Shake wirkt automatisch
+// weiter oben auf #kamera und bewegt die ganze Szene inklusive Leinwand mit).
+const BILD_W = 1536, BILD_H = 1024, OBJ_POS_X = 0.50, OBJ_POS_Y = 0.15;
+let _kopfCanvasScale = 1; // aktuelle Skala Leinwand-px -> CSS-px, siehe kopfCanvasAnpassen()
+function kopfCanvasAnpassen(){
+  const rahmen = $("gesicht-rahmen");
+  const cw = rahmen.offsetWidth, ch = rahmen.offsetHeight;
+  if(!cw || !ch) return; // noch nicht gelayoutet -- naechster Aufruf greift
+  const scale = Math.max(cw / BILD_W, ch / BILD_H);
+  _kopfCanvasScale = scale;
+  const rw = BILD_W * scale, rh = BILD_H * scale;
+  const ox = (cw - rw) * OBJ_POS_X;
+  const oy = (ch - rh) * OBJ_POS_Y;
+  const kc = $("kopf-canvas");
+  kc.style.left = ox.toFixed(2) + "px";
+  kc.style.top = oy.toFixed(2) + "px";
+  kc.style.width = rw.toFixed(2) + "px";
+  kc.style.height = rh.toFixed(2) + "px";
+}
+window.addEventListener("resize", kopfCanvasAnpassen);
+kopfCanvasAnpassen();
+
+let tempo = 1.0; // aus broadcast_value abgeleitet, 0..~3
+
+// Vordere Ebene: groesser, schneller -- wirkt naeher.
+// Performance-Ventil (Gabriel woertlich: "Bleibt sie unter 24 fps, reduziere
+// zuerst die Regenebenen -- Blinzeln und Mikrobewegung sind die letzten
+// Dinge, die fallen duerfen."). Regenebenen fallen zuerst, Praesenz zuletzt --
+// blinzeln()/atmen() lesen regenGedrosselt gar nicht erst.
+let regenGedrosselt = false;
+function tropfenErzeugenVorne(){
+  const deckel = regenGedrosselt ? 35 : 100;
+  if(tropfenVorne.length > deckel) return; // Deckel gegen fps-Einbruch
+  tropfenVorne.push({
+    x: Math.random() * canvas.width, y: -10,
+    v: (0.8 + Math.random() * 1.7) * tempo,
+    len: 14 + Math.random() * 26,
+    ton: Math.random() < 0.5 ? "34,221,238" : "136,51,255"
+  });
+}
+// Hintere Ebene: kleiner, langsamer, gedaempfter -- wirkt weiter weg.
+function tropfenErzeugenHinten(){
+  const deckel = regenGedrosselt ? 20 : 70;
+  if(tropfenHinten.length > deckel) return; // insgesamt weniger als vorher (140)
+  tropfenHinten.push({
+    x: Math.random() * canvasHinten.width, y: -10,
+    v: (0.35 + Math.random() * 0.7) * tempo,
+    len: 6 + Math.random() * 12,
+    ton: Math.random() < 0.5 ? "34,221,238" : "136,51,255"
+  });
+}
+function regenZeichnenEbene(c, cv, liste, alpha, breite){
+  c.clearRect(0,0,cv.width, cv.height);
+  c.lineWidth = breite;
+  for(const t of liste){
+    c.strokeStyle = `rgba(${t.ton},${alpha})`;
+    c.beginPath();
+    c.moveTo(t.x, t.y);
+    c.lineTo(t.x, t.y + t.len);
+    c.stroke();
+    t.y += t.v * 3.2;
+  }
+}
+function regenZeichnen(){
+  regenZeichnenEbene(ctx, canvas, tropfenVorne, 0.5, 1.4);
+  tropfenVorne = tropfenVorne.filter(t => t.y < canvas.height + 20);
+  regenZeichnenEbene(ctxHinten, canvasHinten, tropfenHinten, 0.28, 1.0);
+  tropfenHinten = tropfenHinten.filter(t => t.y < canvasHinten.height + 20);
+}
+
+// Sehr langsames Atmen, an den Puls-Takt (tempo, aus broadcast_value)
+// gekoppelt -- Skalierung bleibt in 1.00..1.012 (Gabriels Richtwert),
+// nie darunter, damit es nie wie ein Schrumpfen wirkt.
+let atemPhase = 0;
+// ⭐ 2026-09-11 Punkt c der Liste ("Mikro-Variation zwischen Nachbarstufen
+// DESSELBEN Ausdrucks, damit das Gesicht 'arbeitet' statt einzufrieren"):
+// woertlich nicht baubar wie gefragt -- die 6 Grundstimmungen haben keine
+// Stufen-Bilder (nur 1 flaches PNG je Stimmung, siehe ausdruck_zugeschnitten/)
+// und werden aktuell nicht einmal als eigene Bildebene gezeichnet (siehe
+// Kommentar bei gesichtNeuZeichnen() oben -- offene Luecke, schon gemeldet).
+// Ein erfundenes Stufenbild waere eine erfundene Ausdrucks-AENDERUNG, keine
+// Leerlaufbewegung -- verboten. Stattdessen: der GEIST des Auftrags auf dem
+// bereits echten, bereits sichtbaren Atem-Puls oben -- ein winziger, LANGSAM
+// und UNREGELMAESSIG wandernder Zusatz-Faktor (Random Walk, kein fester
+// Takt), der die Helligkeit minimal mitzittern laesst. Kein neuer Zustand,
+// keine neue Bildquelle -- nur mehr Unregelmaessigkeit auf echter, schon
+// gerenderter Bewegung.
+let _mikroUnruhe = 0, _mikroUnruheZiel = 0;
+setInterval(() => { _mikroUnruheZiel = (Math.random()*2 - 1); }, 2600 + Math.random()*3200);
+// ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+// erzwungenem Software-Rendering -- siehe --disable-gpu in buehne_daemon.py,
+// Grund dort dokumentiert: echter Speicherkonflikt mit llama-server -ngl 99
+// auf der geteilten iGPU, PERMISSION_FAULTS/MAPPING_ERROR in dmesg, kein
+// bloss abwaegbares Budget -- GPU-Kompositing bleibt deshalb AUS, dieser
+// Pfad wird nicht wieder angefasst). Ursache war NICHT das Rechnen selbst
+// (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+// atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+// jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+// eine erneute Rasterung der vollen 1536x1024-RGBA-Ebene an, UNABHAENGIG von
+// opacity:0 (der Browser kompositiert die Ebene nicht sichtbar, aber die
+// Filter-Pipeline muss trotzdem neu gerechnet werden, weil die Property sich
+// geaendert hat). Fix: nur die AKTUELL SICHTBARE Ebene jedes Zwillingspaars
+// bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+// angefasst.
+let _atmenTransform = "scale(1)";
+let _atmenFilter = "saturate(1.05) brightness(1)";
+function atmen(){
+  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+SOURCE_A_PASS

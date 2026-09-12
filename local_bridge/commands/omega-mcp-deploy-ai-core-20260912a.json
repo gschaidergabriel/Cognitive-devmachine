@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-deploy-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 240,
+  "command": "set -euo pipefail\nD=$(mktemp -d /tmp/omega-mcp-deploy.XXXXXX)\ncd \"$D\"\ngh repo clone gschaidergabriel/clay-global-research-entity repo -- --quiet\ncd repo\ngit fetch -q origin main\ngit checkout -q --detach 12fa3b4d0c8c73dcf8a205d8b282a30beebfafc0\nACTUAL=$(git rev-parse HEAD)\n[ \"$ACTUAL\" = \"12fa3b4d0c8c73dcf8a205d8b282a30beebfafc0\" ]\npython3 -m pytest -q tests/test_omega_chatgpt_mcp.py\nbash tools/install_omega_chatgpt_mcp_ai_core.sh\nprintf '\\nDEPLOYED_MAIN=%s\\n' \"$ACTUAL\"\nsystemctl --user show omega-chatgpt-mcp.service -p ActiveState -p SubState -p MainPID --no-pager"
+}

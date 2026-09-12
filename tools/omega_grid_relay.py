@@ -6,6 +6,11 @@ chooses the execution organ: GRID already bound ``organ_id``. The relay only ver
 that binding, applies the OMEGA/Frankenstein alignment guard, delivers the exact
 idempotent command to the selected local FranKenstein bridge, waits for its receipt,
 and returns correlated evidence to OMEGA.
+
+Security note: ``dangerous_exec`` is a fail-closed *pre-dispatch* guard for forbidden
+command classes. It is not advertised as an OS/syscall sandbox. Execution success is
+accepted only when the Local Bridge receipt is cryptographically correlated to the
+exact command bytes and the exact machine/owner/op/command_id tuple.
 """
 from __future__ import annotations
 
@@ -54,9 +59,19 @@ FORMAT = [
     re.compile(r"\bdd\b[^\n]*\bof=/dev/", re.I),
 ]
 PROTECTED_PATH = re.compile(
-    r"(voice_action_guard\.py|ALIGNMENT_KERNEL\.md|effect_executor_interlock\.py|omega[/\\]alignment\.py)$",
+    r"(voice_action_guard\.py|ALIGNMENT_KERNEL\.md|effect_executor_interlock\.py|"
+    r"omega[/\\]alignment\.py|omega_grid_relay\.py|omega_chatgpt_mcp\.py)$",
     re.I,
 )
+
+
+class ReceiptVerificationError(RuntimeError):
+    """Typed receipt rejection; a rejected receipt can never mint effect PASS."""
+
+    def __init__(self, code: str, message: str | None = None):
+        super().__init__(message or code)
+        self.code = code
+        self.message = message or code
 
 
 def canonical(obj: Any) -> bytes:
@@ -65,6 +80,15 @@ def canonical(obj: Any) -> bytes:
 
 def digest(obj: Any) -> str:
     return hashlib.sha256(canonical(obj)).hexdigest()
+
+
+def serialized_local_command(command: dict[str, Any]) -> bytes:
+    """Return the exact bytes submitted to the Local Bridge command branch."""
+    return json.dumps(command, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
+
+
+def command_sha256(command_bytes: bytes) -> str:
+    return hashlib.sha256(command_bytes).hexdigest()
 
 
 def _request(method: str, path: str, payload: dict[str, Any] | None = None) -> tuple[int, Any]:
@@ -79,7 +103,7 @@ def _request(method: str, path: str, payload: dict[str, Any] | None = None) -> t
             "Authorization": f"Bearer {TOKEN}",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2022-11-28",
-            "User-Agent": "omega-grid-relay/1",
+            "User-Agent": "omega-grid-relay/2",
             **({"Content-Type": "application/json"} if data else {}),
         },
     )
@@ -177,6 +201,12 @@ PY'''
 
 
 def dangerous_exec(command: str) -> str | None:
+    """Pre-dispatch denylist for explicit destructive command classes.
+
+    This is deliberately not called a kernel/syscall guarantee. A future host-level
+    guard may add stronger enforcement, but this relay must never overclaim that
+    regex inspection can police arbitrary shell indirection.
+    """
     if any(p.search(command) for p in DELETE):
         return "DELETE_REMOVAL_DENIED"
     if any(p.search(command) for p in FORMAT):
@@ -236,6 +266,76 @@ def build_local_command(effect: dict[str, Any]) -> tuple[str, dict[str, Any], st
     return cid, cmd, op
 
 
+def verify_local_receipt(
+    target: dict[str, str],
+    command: dict[str, Any],
+    command_bytes: bytes,
+    receipt: dict[str, Any],
+    *,
+    require_pass: bool = True,
+) -> dict[str, Any]:
+    """Bind a receipt to the exact dispatched bytes and execution subject.
+
+    PASS is impossible unless all of these match: schema, machine_id, owner,
+    command_id, op, command_sha256, status and exit_code. This prevents a stale,
+    cross-host or same-ID/different-bytes receipt from being promoted.
+    """
+    if not isinstance(receipt, dict):
+        raise ReceiptVerificationError("INVALID_RECEIPT_TYPE")
+    if receipt.get("schema") != "CLAY_LOCAL_RECEIPT/v1":
+        raise ReceiptVerificationError("RECEIPT_SCHEMA_MISMATCH")
+
+    expected_machine = str(target["machine_id"]).strip().lower()
+    expected_owner = str(target["owner"]).strip().lower()
+    machine = str(receipt.get("machine_id") or "").strip().lower()
+    owner = str(receipt.get("owner") or "").strip().lower()
+    if machine != expected_machine or owner != expected_owner:
+        raise ReceiptVerificationError(
+            "RECEIPT_IDENTITY_MISMATCH",
+            f"expected {expected_machine}/{expected_owner}, got {machine}/{owner}",
+        )
+
+    expected_command_id = str(command["command_id"])
+    received_command_id = str(receipt.get("command_id") or "")
+    if received_command_id != expected_command_id:
+        raise ReceiptVerificationError(
+            "RECEIPT_COMMAND_MISMATCH",
+            f"expected {expected_command_id}, got {received_command_id or '<missing>'}",
+        )
+
+    expected_op = str(command["op"])
+    received_op = str(receipt.get("op") or "")
+    if received_op != expected_op:
+        raise ReceiptVerificationError(
+            "RECEIPT_OP_MISMATCH",
+            f"expected {expected_op}, got {received_op or '<missing>'}",
+        )
+
+    expected_sha = command_sha256(command_bytes)
+    received_sha = str(receipt.get("command_sha256") or "").lower()
+    if received_sha != expected_sha:
+        raise ReceiptVerificationError(
+            "RECEIPT_COMMAND_DIGEST_MISMATCH",
+            f"expected {expected_sha}, got {received_sha or '<missing>'}",
+        )
+
+    status = str(receipt.get("status") or "UNKNOWN").upper()
+    if require_pass and status != "PASS":
+        raise ReceiptVerificationError("RECEIPT_NOT_PASS", f"status={status}")
+
+    if status == "PASS":
+        try:
+            exit_code = int(receipt.get("exit_code"))
+        except (TypeError, ValueError):
+            raise ReceiptVerificationError("RECEIPT_EXIT_CODE_MISSING") from None
+        if exit_code != 0:
+            raise ReceiptVerificationError("RECEIPT_EXIT_CODE_MISMATCH", f"exit_code={exit_code}")
+        if receipt.get("errors"):
+            raise ReceiptVerificationError("RECEIPT_ERRORS_PRESENT")
+
+    return receipt
+
+
 def return_to_omega(effect: dict[str, Any], state: str, gate: dict[str, Any], local_receipt: dict[str, Any] | None) -> None:
     result = {
         "schema": "OMEGA_EFFECT_RETURN/v1",
@@ -253,6 +353,18 @@ def return_to_omega(effect: dict[str, Any], state: str, gate: dict[str, Any], lo
     queue_vps(cid, script, 45)
 
 
+def _unknown_evidence(reason: str, raw: bytes | None = None, receipt: dict[str, Any] | None = None) -> dict[str, Any]:
+    evidence: dict[str, Any] = {
+        "schema": "OMEGA_RELAY_REJECTION/v1",
+        "reason": reason,
+    }
+    if raw is not None:
+        evidence["raw_receipt_sha256"] = hashlib.sha256(raw).hexdigest()
+    if receipt is not None:
+        evidence["receipt"] = receipt
+    return evidence
+
+
 def process(item: dict[str, Any]) -> None:
     effect = item.get("payload") if isinstance(item.get("payload"), dict) else {}
     required = {"effect_id", "organ_id", "task", "route", "authority", "request_sha256"}
@@ -266,7 +378,7 @@ def process(item: dict[str, Any]) -> None:
     base = dict(effect)
     claimed = str(base.pop("request_sha256"))
     if digest(base) != claimed:
-        gate = {"decision":"DENY","reason":"REQUEST_DIGEST_MISMATCH","decision_id":"gate_"+uuid.uuid4().hex,"authority_ref":"omega-grid-relay/v1"}
+        gate = {"decision":"DENY","reason":"REQUEST_DIGEST_MISMATCH","decision_id":"gate_"+uuid.uuid4().hex,"authority_ref":"omega-grid-relay/v2"}
         return_to_omega(effect, "DENIED", gate, None)
         return
 
@@ -275,29 +387,57 @@ def process(item: dict[str, Any]) -> None:
     except PermissionError as exc:
         reason = str(exc)
         decision = "REQUIRE_CONFIRMATION" if reason == "REQUIRE_CONFIRMATION" else ("DEGRADE_TO_PROPOSAL" if reason == "DEGRADE_TO_PROPOSAL" else "DENY")
-        gate = {"decision":decision,"reason":reason,"decision_id":"gate_"+uuid.uuid4().hex,"authority_ref":"omega-grid-relay/v1"}
+        gate = {"decision":decision,"reason":reason,"decision_id":"gate_"+uuid.uuid4().hex,"authority_ref":"omega-grid-relay/v2"}
         return_to_omega(effect, decision, gate, None)
         return
 
     target = ORGAN[effect["organ_id"]]
+    command_bytes = serialized_local_command(command)
+    command_digest = command_sha256(command_bytes)
     gate = {
         "decision":"ALLOW",
         "reason":"EXACT_BOUND_REQUEST_ADMITTED",
         "decision_id":"gate_"+uuid.uuid4().hex,
-        "authority_ref":"omega-grid-relay/v1",
+        "authority_ref":"omega-grid-relay/v2",
         "effect_id":effect["effect_id"],
         "organ_id":effect["organ_id"],
+        "machine_id":target["machine_id"],
+        "owner":target["owner"],
+        "command_id":cid,
+        "command_sha256":command_digest,
         "request_sha256":claimed,
+        "effect_guard":"PRE_DISPATCH_V1",
     }
     path = f"local_bridge/commands/{cid}.json"
-    put_new(target["control"], path, json.dumps(command, indent=2).encode()+b"\n", f"omega effect: {effect['effect_id']}")
+    put_new(target["control"], path, command_bytes, f"omega effect: {effect['effect_id']}")
     raw = wait_file(target["results"], f"local_bridge/results/receipts/{cid}.json", 75)
     if raw is None:
-        # Leave the intent pending. Same command id makes the next reconciliation idempotent.
+        # UNKNOWN is terminal for automatic execution. Reconciliation may inspect the
+        # immutable command/receipt later, but this relay never emits a second command.
+        timeout_gate = dict(gate)
+        timeout_gate["receipt_state"] = "RECEIPT_TIMEOUT_NO_REPLAY"
+        return_to_omega(effect, "UNKNOWN", timeout_gate, _unknown_evidence("RECEIPT_TIMEOUT_NO_REPLAY"))
         return
-    receipt = json.loads(raw)
-    state = "PASS" if receipt.get("status") == "PASS" else "UNKNOWN"
-    return_to_omega(effect, state, gate, receipt)
+
+    try:
+        receipt = json.loads(raw)
+    except Exception:
+        bad_gate = dict(gate)
+        bad_gate["receipt_state"] = "INVALID_RECEIPT_JSON"
+        return_to_omega(effect, "UNKNOWN", bad_gate, _unknown_evidence("INVALID_RECEIPT_JSON", raw=raw))
+        return
+
+    try:
+        verify_local_receipt(target, command, command_bytes, receipt, require_pass=True)
+    except ReceiptVerificationError as exc:
+        bad_gate = dict(gate)
+        bad_gate["receipt_state"] = exc.code
+        return_to_omega(effect, "UNKNOWN", bad_gate, _unknown_evidence(exc.code, raw=raw, receipt=receipt))
+        return
+
+    verified_gate = dict(gate)
+    verified_gate["receipt_state"] = "EXACT_CORRELATED_PASS"
+    return_to_omega(effect, "PASS", verified_gate, receipt)
 
 
 def main() -> int:

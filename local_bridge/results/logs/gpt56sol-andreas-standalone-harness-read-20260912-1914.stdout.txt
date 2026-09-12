@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""harness_crush_standalone.py -- "Free Frank" Free-Pool-Terminal-Harness
+fuer Andreas' Rechner (andreas-MACO). Eigenstaendige Variante von Gabriels
+~/.claude/star/harness_crush.py -- OHNE Abhaengigkeit von dessen
+stern.py/pool_wache.py/grid_packet_bridge.py (die existieren auf diesem
+Rechner nicht, andreas-MACO's ~/.claude/star/ ist ein eigener, viel
+schlankerer Stand). Enthaelt trotzdem denselben Kern-Mechanismus:
+  1. Vier Free-Pool-Provider (NVIDIA NIM, Groq, Mistral, OpenRouter) als
+     Crush-openai-compat-Provider, Schluessel aus Andreas' eigener
+     ~/.last-resort/keys.env (NICHT Gabriels Schluessel).
+  2. Deterministische, per-Modell zugeschnittene System-Prompts (reasoning-
+     Bremse fuer nvidia-nemotron/groq-gptoss, Standard-Fallback fuer alles
+     andere) -- exakt dieselbe Lookup-Logik wie bei Gabriel, hier
+     dupliziert weil die Kapsel eigenstaendig laufen muss.
+  3. Kein pool_wache/GRID-Integration hier (die Infrastruktur existiert auf
+     diesem Rechner nicht) -- ehrlich als Grenze im Bericht ausgewiesen,
+     nicht stillschweigend vorgetaeuscht.
+"""
+import json
+import os
+import subprocess
+import sys
+
+KEYS_PFAD = os.path.expanduser("~/.last-resort/keys.env")
+CRUSH_CONFIG_DIR = os.path.expanduser("~/.config/crush")
+CRUSH_CONFIG_PFAD = os.path.join(CRUSH_CONFIG_DIR, "crush.json")
+CRUSH_MD_PFAD = os.path.join(CRUSH_CONFIG_DIR, "CRUSH.md")
+SICHTBAR_REPO = os.path.expanduser("~/frankenstein-repo")
+NPM_BIN = os.path.expanduser("~/.local/npm-global/bin")
+
+# modell_id -> (aider-Stil-Modellname/real API-Modell, env_var-Zielname,
+# keys_env_quelle-Name in keys.env, ob reasoning-faehig)
+MODELL_MAP = {
+    "nvidia-nemotron": {"real_model": "nvidia/nemotron-3-super-120b-a12b",
+                         "env_var": "NVIDIA_NIM_API_KEY", "keys_env_quelle": "NVIDIA_NIM_API_KEY",
+                         "base_url": "https://integrate.api.nvidia.com/v1",
+                         "can_reason": True, "default_reasoning_effort": "low",
+                         "context_window": 131072},
+    "groq-gptoss": {"real_model": "openai/gpt-oss-120b",
+                    "env_var": "GROQ_API_KEY", "keys_env_quelle": "GROQ_API_KEY",
+                    "base_url": "https://api.groq.com/openai/v1",
+                    "can_reason": True, "default_reasoning_effort": "low",
+                    "context_window": 131072},
+    "mistral-small": {"real_model": "mistral-small-latest",
+                       "env_var": "MISTRAL_API_KEY", "keys_env_quelle": "MISTRAL2_API_KEY",
+                       "base_url": "https://api.mistral.ai/v1",
+                       "can_reason": False, "context_window": 32000},
+    "openrouter-deepseek": {"real_model": "deepseek/deepseek-chat",
+                             "env_var": "OPENROUTER_API_KEY", "keys_env_quelle": "OPENROUTER2_API_KEY",
+                             "base_url": "https://openrouter.ai/api/v1",
+                             "can_reason": False, "context_window": 64000},
+}
+
+_GEMEINSAME_IDENTITAET = (
+    "Du bist FranKenstein (Free-Pool-Modus, Andreas' Rechner), laeufst auf "
+    "einem Fremdmodell ueber Crush statt auf Claude. Antworte IMMER auf "
+    "Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache."
+)
+PROMPT_VARIANTEN = {
+    "reasoning_stark": _GEMEINSAME_IDENTITAET + (
+        " WICHTIG: Bei einfachen Nachrichten (Begruessungen, Small Talk) "
+        "antworte SOFORT in 1-2 kurzen Saetzen, ohne sichtbare lange "
+        "Ueberlegung -- internes Nachdenken bleibt in reasoning_content, "
+        "nie als sichtbare Antwort. Ausfuehrlich nur bei echten Coding-/"
+        "Debugging-Aufgaben."
+    ),
+    "reasoning_leicht": _GEMEINSAME_IDENTITAET + (
+        " Bei einfachen Nachrichten kurz und direkt antworten, keine "
+        "sichtbaren Denkschritte."
+    ),
+    "standard": _GEMEINSAME_IDENTITAET + " Antworte praezise und knapp.",
+}
+MODELL_PROMPT_ZUORDNUNG = {
+    "nvidia-nemotron": "reasoning_stark",
+    "groq-gptoss": "reasoning_leicht",
+    "mistral-small": "standard",
+    "openrouter-deepseek": "standard",
+}
+
+
+def _system_prompt_fuer(modell_id):
+    variante = MODELL_PROMPT_ZUORDNUNG.get(modell_id, "standard")
+    return PROMPT_VARIANTEN.get(variante, PROMPT_VARIANTEN["standard"])
+
+
+def _keys_laden():
+    werte = {}
+    if not os.path.isfile(KEYS_PFAD):
+        return werte
+    for zeile in open(KEYS_PFAD, encoding="utf-8"):
+        zeile = zeile.strip()
+        if not zeile or zeile.startswith("#") or "=" not in zeile:
+            continue
+        k, v = zeile.split("=", 1)
+        werte[k.strip()] = v.strip()
+    return werte
+
+
+def waehle_modell(geladene_quellen):
+    """Erstes MODELL_MAP-Modell (Kaskaden-Reihenfolge), fuer das ein echter
+    Schluessel in keys.env steht. Keine Cooldown-/Pool-Wache-Pruefung
+    (diese Infrastruktur existiert auf diesem Rechner nicht) -- ehrliche
+    Einschraenkung, nicht verschwiegen."""
+    for mid, info in MODELL_MAP.items():
+        if geladene_quellen.get(info["keys_env_quelle"]):
+            return mid
+    return None
+
+
+def crush_config_schreiben(startmodell_id, geladene_quellen):
+    os.makedirs(CRUSH_CONFIG_DIR, exist_ok=True)
+    providers = {}
+    for mid, info in MODELL_MAP.items():
+        if not geladene_quellen.get(info["keys_env_quelle"]):
+            continue
+        modell_eintrag = {
+            "id": info["real_model"], "name": f"Free-Pool -- {mid}",
+            "cost_per_1m_in": 0, "cost_per_1m_out": 0,
+            "cost_per_1m_in_cached": 0, "cost_per_1m_out_cached": 0,
+            "context_window": info["context_window"], "default_max_tokens": 4000,
+            "can_reason": info["can_reason"], "supports_attachments": False,
+        }
+        if info["can_reason"]:
+            modell_eintrag["reasoning_levels"] = ["low", "medium", "high"]
+            modell_eintrag["default_reasoning_effort"] = info["default_reasoning_effort"]
+        providers[f"freepool-{mid}"] = {
+            "id": f"freepool-{mid}", "name": f"Free-Pool {mid}", "type": "openai-compat",
+            "base_url": info["base_url"], "api_key": f"${info['env_var']}",
+            "system_prompt_prefix": _system_prompt_fuer(mid),
+            "discover_models": False, "models": [modell_eintrag],
+        }
+    konfig = {"$schema": "https://charm.land/crush.json", "providers": providers,
+              "options": {"context_paths": ["CRUSH.md"], "global_context_paths": [CRUSH_MD_PFAD]}}
+    if startmodell_id and f"freepool-{startmodell_id}" in providers:
+        info = MODELL_MAP[startmodell_id]
+        auswahl = {"model": info["real_model"], "provider": f"freepool-{startmodell_id}"}
+        if info["can_reason"]:
+            auswahl["reasoning_effort"] = info["default_reasoning_effort"]
+        konfig["models"] = {"large": dict(auswahl), "small": dict(auswahl)}
+    tmp = CRUSH_CONFIG_PFAD + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(konfig, f, indent=2, ensure_ascii=False, sort_keys=True)
+        f.write("\n")
+    os.replace(tmp, CRUSH_CONFIG_PFAD)
+
+
+def crush_md_schreiben():
+    os.makedirs(CRUSH_CONFIG_DIR, exist_ok=True)
+    inhalt = (
+        "# Free Frank -- Free-Pool-Harness (Andreas' Rechner)\n\n"
+        "Eigenstaendige Kapsel, kein GRID-/pool_wache-Anschluss auf diesem "
+        "Rechner (diese Infrastruktur existiert hier nicht, ehrlich "
+        "ausgewiesen statt vorgetaeuscht). /model wechselt frei zwischen "
+        "den geladenen Free-Pool-Modellen.\n"
+    )
+    tmp = CRUSH_MD_PFAD + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(inhalt)
+    os.replace(tmp, CRUSH_MD_PFAD)
+
+
+def main():
+    werte = _keys_laden()
+    modell_id = waehle_modell(werte)
+    if modell_id is None:
+        print("Abbruch: kein Free-Pool-Schluessel in ~/.last-resort/keys.env gefunden.", file=sys.stderr)
+        return 1
+    # Alle geladenen Schluessel unter ihrem env_var-Zielnamen in os.environ setzen
+    # (fuer freien /model-Wechsel mitten in der Sitzung, wie bei Gabriel).
+    for mid, info in MODELL_MAP.items():
+        wert = werte.get(info["keys_env_quelle"])
+        if wert:
+            os.environ[info["env_var"]] = wert
+    crush_config_schreiben(modell_id, werte)
+    crush_md_schreiben()
+    print("\x1b[38;5;46mFranKenstein v2.0 -- Free Pool Harness (Crush)\x1b[0m")
+    print(f"gewaehlt: {modell_id}")
+    crush_bin = os.path.join(NPM_BIN, "crush")
+    if not os.path.isfile(crush_bin):
+        print(f"Abbruch: crush-Binary fehlt unter {crush_bin}", file=sys.stderr)
+        return 1
+    os.makedirs(SICHTBAR_REPO, exist_ok=True)
+    env = dict(os.environ)
+    env["PATH"] = NPM_BIN + os.pathsep + env.get("PATH", "")
+    lauf = subprocess.run([crush_bin, "--cwd", SICHTBAR_REPO], env=env)
+    return lauf.returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

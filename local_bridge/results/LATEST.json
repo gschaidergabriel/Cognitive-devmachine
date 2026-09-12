@@ -1,22 +1,19 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "gabriel-deploy-shim-svc-20260912",
-  "command_sha256": "88649c798b09847acf0f66ce11358b8a9b70825766fa1f835447127bf71014e0",
+  "command_id": "gabriel-enable-shim-test-1789192669",
+  "command_sha256": "a22f7d061524d2530beb7feb6979ca0f8962397f3d51fd38983ae9dc20ddf8be",
   "host": "andreas-maco",
   "owner": "andreas",
   "machine_id": "andreas-maco",
-  "started_at": "2026-09-12T05:57:01.154076+00:00",
-  "finished_at": "2026-09-12T05:57:01.154214+00:00",
+  "started_at": "2026-09-12T05:58:11.870562+00:00",
+  "finished_at": "2026-09-12T05:58:20.492430+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "write_text",
-  "stdout_sha256": "97de988872f660e638766f3f6fba253fd4b843dcadc4f8d941611b0d168138a7",
-  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "WROTE /home/andreas/.config/systemd/user/claude-cli-shim.service\n",
-  "stderr_tail": "",
-  "meta": {
-    "sha256": "e9fc56bf5c65b85776116c04e96c3aded011e75d302056059d4c9641b3cf972a",
-    "bytes": 440
-  },
+  "op": "exec",
+  "stdout_sha256": "4aa35b06ce39ac7fb237429ffc42f17ed289e01bd9347b83dae0081a2a22f1dc",
+  "stderr_sha256": "c53c624e9f747825af5ec70c87c5747ab3e2c82ae8ed039df085fcd64d011a4e",
+  "stdout_tail": "active\n---curl---\n{\"id\": \"chatcmpl-cli-498669f7c5ca\", \"object\": \"chat.completion\", \"created\": 1789192700, \"model\": \"claude-haiku-4-5-20251001\", \"choices\": [{\"index\": 0, \"message\": {\"role\": \"assistant\", \"content\": \"ERFOLG\"}, \"finish_reason\": \"stop\"}], \"usage\": {\"prompt_tokens\": 10, \"completion_tokens\": 64, \"total_tokens\": 74}}",
+  "stderr_tail": "Created symlink '/home/andreas/.config/systemd/user/default.target.wants/claude-cli-shim.service' \u2192 '/home/andreas/.config/systemd/user/claude-cli-shim.service'.\n",
+  "meta": {},
   "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
 }

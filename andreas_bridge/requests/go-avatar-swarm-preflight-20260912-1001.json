@@ -1,0 +1,8 @@
+{
+  "schema": "f2.andreas.bridge.request.v1",
+  "id": "go-avatar-swarm-preflight-20260912-1001",
+  "operation": "exec",
+  "cwd": "~",
+  "argv": ["bash", "-lc", "set -u; printf 'user='; whoami; printf '\nhost='; hostname; printf '\npwd='; pwd; printf '\n--- swarm processes ---\n'; pgrep -af 'run_free_go_swarm|run_24h_entityos_swarm|run_research_distillery|run_free_evidence_forge' || true; printf '\n--- candidate checkouts ---\n'; for d in \"$HOME/clay-global-research-entity\" \"$HOME/.claude/clay-global-research-entity\" \"$HOME/.claude/star\"; do if [ -e \"$d\" ]; then printf '%s\n' \"$d\"; fi; done; printf '\n--- avatar visual root ---\n'; test -d /home/ai-core-node/.claude/star/visual && printf 'visual_root_present=yes\n' || printf 'visual_root_present=no\n'; printf '\n--- swarm controller candidates ---\n'; find \"$HOME\" -maxdepth 5 -type f -name run_free_go_swarm.py -print 2>/dev/null | head -20"],
+  "timeout_seconds": 120
+}

@@ -1,0 +1,16 @@
+===IDENTITY===
+srv1563149
+0
+===RUNTIME_PATHS===
+ABSENT:/workspace/omega_runtime
+ABSENT:/workspace/omega_runtime/current
+ABSENT:/workspace/omega_runtime/state
+ABSENT:/workspace/omega_runtime/data/omega_unified.db
+===PROCESSES===
+1353756   21196 SN   Sat Sep 12 13:43:12 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1
+1353758 1353756 SNs  Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.grid_runtime_v3
+1353759 1353756 SNs  Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.spool_bridge_relay_parallel
+1353760 1353756 SNs  Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.telemetry_daemon
+1353761 1353756 SNs  Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.master_bridge_carrier
+===SYSTEMD===
+===STATUS===

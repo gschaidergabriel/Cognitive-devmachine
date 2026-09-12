@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-sigma-vps-preflight-20260913-002",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail\npython3 - <<'PY'\nimport hashlib, json, pathlib, subprocess\nstatus=pathlib.Path('/workspace/omega_runtime/state/SUPERVISOR_STATUS.json')\npre=pathlib.Path('/workspace/omega_runtime/state/ASSEMBLY_PREFLIGHT.json')\ndb=pathlib.Path('/workspace/omega_runtime/data/omega_unified.db')\nout={'status_exists':status.exists(),'preflight_exists':pre.exists(),'db_exists':db.exists()}\nif status.exists():\n s=json.loads(status.read_text()); out['status']=s; root=pathlib.Path(s.get('repo_root','')); out['repo_root']=str(root); out['current_resolved']=str(root.resolve()) if root.exists() else None\n for rel in ['omega/supervisor.py','omega/grid_runtime_v3.py','omega/assembly.py','config/assembly.json']:\n  p=root/rel; out.setdefault('files',{})[rel]={'exists':p.exists(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None}\nif pre.exists(): out['assembly_preflight']=json.loads(pre.read_text())\nif db.exists(): out['db_size']=db.stat().st_size\nfor p in ['/workspace/omega_runtime/current','/workspace/omega_runtime/releases','/workspace/omega_runtime/data','/workspace/omega_runtime/state']:\n q=pathlib.Path(p); out.setdefault('paths',{})[p]={'exists':q.exists(),'is_symlink':q.is_symlink(),'resolved':str(q.resolve()) if q.exists() else None}\nprint(json.dumps(out,sort_keys=True))\nPY\nps -eo pid,lstart,args | grep -E 'omega\\.(supervisor|assembly|grid_runtime_v3|relay_entrypoint|spool_receipt_reconciler|telemetry_daemon|master_bridge)' | grep -v grep || true"
+}

@@ -1,0 +1,24 @@
+semantic-state-cutover selftest: PASS
+=== PRE ===
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; argv[]=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+=== INSTALL ===
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+SEMANTIC_STATE_FENCE_INSTALLED=1
+VM_RESTARTED=0
+MAINPID_BEFORE=319869
+MAINPID_AFTER=319869
+=== POST ===
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  /usr/local/libexec/entityos/semantic-state-cutover.py
+01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+OMEGA_SEMANTIC_FENCE_INSTALL_PASS=1
+SOURCE_HEAD=14aa62109659ab0df1c5fcb6c8af619edc34ec13

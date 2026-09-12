@@ -1,0 +1,12 @@
+=== launcher ===
+#!/bin/bash
+# FranKenstein Free Frank — canonical GRID10/UnifiedDB reentry harness on Andreas-MACO.
+# API keys are loaded internally by harness_aider.py from Andreas' own ~/.last-resort/keys.env;
+# no key material is echoed or copied here.
+export PATH="$HOME/.local/npm-global/bin:$PATH"
+cd "$HOME/.claude/star" || exit 1
+python3 harness_crush_knopf.py
+exec bash
+=== status function smoke ===
+ChatGPT-Bridge: TEILBEREIT (Local AN, ChatGPT-Login fehlt)
+ENABLED_REENTRY_LAUNCHER

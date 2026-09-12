@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-enable-reentry-crush-20260912-1922",
+  "command_sha256": "2459a51b8a8c0216cadbf0f6311436e0eaa46375eac4ce5e736767aa9fe25d21",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T11:20:29.119166+00:00",
+  "finished_at": "2026-09-12T11:20:29.430440+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "c7b0922a6af64563ad7d78d3c1da33853d72a152818418233335ea0e873ca666",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== launcher ===\n#!/bin/bash\n# FranKenstein Free Frank \u2014 canonical GRID10/UnifiedDB reentry harness on Andreas-MACO.\n# API keys are loaded internally by harness_aider.py from Andreas' own ~/.last-resort/keys.env;\n# no key material is echoed or copied here.\nexport PATH=\"$HOME/.local/npm-global/bin:$PATH\"\ncd \"$HOME/.claude/star\" || exit 1\npython3 harness_crush_knopf.py\nexec bash\n=== status function smoke ===\nChatGPT-Bridge: TEILBEREIT (Local AN, ChatGPT-Login fehlt)\nENABLED_REENTRY_LAUNCHER\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

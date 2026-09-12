@@ -1,0 +1,18 @@
+IsADirectoryError(21, 'Is a directory')
+Traceback (most recent call last):
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 209, in execute
+    p, meta = operate(s)
+              ^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 168, in operate
+    return op_read_file(str(s["path"]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/local_bridge_daemon.py", line 133, in op_read_file
+    data = p.read_bytes()
+           ^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1021, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IsADirectoryError: [Errno 21] Is a directory: '/home/ai-core-node/.claude/skills/gstack-connect-chrome'

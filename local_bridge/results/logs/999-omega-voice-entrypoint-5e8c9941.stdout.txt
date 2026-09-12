@@ -1,0 +1,42 @@
+SERVICE_SHOW
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 17:14:33 +07] ; stop_time=[n/a] ; pid=1170123 ; code=(null) ; status=0/0 }
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+SERVICE_UNIT
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+FILES
+MISSING:/home/ai-core-node/frankenstein-repo/scripts/voice_full_runtime.py
+MISSING:/home/ai-core-node/frankenstein-repo/scripts/voice_full_integration.py
+MISSING:/home/ai-core-node/frankenstein-repo/scripts/frankenstein_identity_assembly.py
+5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4  /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py
+MISSING:/home/ai-core-node/frankenstein-repo/scripts/gespraechsmodus.py
+REPO_BRANCH
+main
+origin	https://github.com/gschaidergabriel/frankenstein.git (fetch)
+origin	https://github.com/gschaidergabriel/frankenstein.git (push)
+ORIGIN_MAIN
+8ebbfa2aa8efe8223168af0f8d0b1bb813f12fed
+3	83

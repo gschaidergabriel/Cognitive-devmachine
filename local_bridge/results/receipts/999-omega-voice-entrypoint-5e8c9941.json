@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "999-omega-voice-entrypoint-5e8c9941",
+  "command_sha256": "9a71d7f2342ed2cbf23bdecc09e521d4b9cb69c202029616075d2863b0b60f87",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:49:20.908397+00:00",
+  "finished_at": "2026-09-12T10:49:22.624438+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a827c19cfb9325bcfa3ae514376abaae2aa0cd7c29dccc60d9bc8230e0841ff4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "SERVICE_SHOW\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 17:14:33 +07] ; stop_time=[n/a] ; pid=1170123 ; code=(null) ; status=0/0 }\nFragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service\nDropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf\nSERVICE_UNIT\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service\n[Unit]\nDescription=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)\nAfter=network-online.target\nWants=network-online.target\nStartLimitIntervalSec=600\nStartLimitBurst=5\n\n[Service]\nType=simple\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener\nRestart=on-failure\nRestartSec=30\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\nEnvironment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node\nEnvironment=LOCAL_BRIDGE_OWNER=gabriel\nEnvironment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel\nFILES\nMISSING:/home/ai-core-node/frankenstein-repo/scripts/voice_full_runtime.py\nMISSING:/home/ai-core-node/frankenstein-repo/scripts/voice_full_integration.py\nMISSING:/home/ai-core-node/frankenstein-repo/scripts/frankenstein_identity_assembly.py\n5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4  /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py\nMISSING:/home/ai-core-node/frankenstein-repo/scripts/gespraechsmodus.py\nREPO_BRANCH\nmain\norigin\thttps://github.com/gschaidergabriel/frankenstein.git (fetch)\norigin\thttps://github.com/gschaidergabriel/frankenstein.git (push)\nORIGIN_MAIN\n8ebbfa2aa8efe8223168af0f8d0b1bb813f12fed\n3\t83\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

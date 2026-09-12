@@ -1,80 +1,106 @@
 {
-  "schema": "AVATAR_DOM_WEBGL_DISCRIMINATOR/v4",
+  "schema": "AVATAR_BODY_RENDER_CONVERGENCE/v5",
   "created_at": "2026-09-12T02:08:00Z",
-  "updated_at": "2026-09-12T02:16:00Z",
-  "status": "STABILIZED_V3_LOCALIZES_RESIDUAL_TO_WEBGL_RASTER_MINIFICATION_PATH_NATIVE1TO1_PENDING",
+  "updated_at": "2026-09-12T02:27:00Z",
+  "status": "QUALITY_ROOT_CAUSE_STRONGLY_SUPPORTED_PRE_RESAMPLE_CANDIDATE_READY_PERF_CACHE_AB_NONTERMINAL",
   "scope": "real ai-core-node read-only diagnostic evidence; no live avatar mutation; no live WebGL/product acceptance credit",
   "subject": {
     "live_buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
-    "live_buehne_daemon_sha256": "5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2"
+    "live_buehne_daemon_sha256": "5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2",
+    "machine": "ai-core-node",
+    "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
   },
-  "causal_chain": [
+  "quality_causal_chain": [
     {
       "step": 1,
-      "evidence": "3af16f53c06bd4e802f1787dcceb2632855322b0",
+      "evidence_commit": "3af16f53c06bd4e802f1787dcceb2632855322b0",
       "finding": "isolated AMD/ANGLE source-over hardware blend is clean at component scope",
       "metrics": {"deep_hole_px":0,"min_jaccard_approx":0.9997066,"max_rgba_mae_approx":0.3071}
     },
     {
       "step": 2,
-      "evidence": "go-avatar-gpt56sol-dom-webgl-yfix-discriminator-20260912-0904",
-      "finding": "double Y-orientation defect in old gate is causal but partial",
+      "command_id": "go-avatar-gpt56sol-dom-webgl-yfix-discriminator-20260912-0904",
+      "finding": "double Y-orientation defect in the old screenshot gate is causal but partial",
       "before": {"changed_frac_ge3":0.616875,"rgb_mae":21.847881944444445,"rgb_p99":187.0},
       "after_y_fix": {"changed_frac_ge3":0.3178125,"rgb_mae":10.560520833333333,"rgb_p99":153.0}
     },
     {
       "step": 3,
-      "evidence": "764a450a6b9a2df47b7b132a117f6e5a8a0c3ae9",
-      "finding": "moving the old comparison to 620x414 does not by itself close the residual; extreme 120x80 downscale is not the sole cause"
-    },
-    {
-      "step": 4,
-      "evidence": "442029a5e762457e69115ac7f400aa0ee3ab62c1",
-      "finding": "older premultiply discriminator reported Canvas2D and WebGL variants identical while DOM differed",
-      "status": "HISTORICAL_DIAGNOSTIC_INTERPRETATION_SUPERSEDED",
-      "reason": "the later stabilized v3 gate removes additional old-harness confounders and directly contradicts the localization implied by this older discriminator; retain the raw result but do not use its causal interpretation as current authority"
-    },
-    {
-      "step": 5,
-      "evidence": "96713092b55852b59ec09e92ce9248f7c50d1fc4",
+      "evidence_commit": "96713092b55852b59ec09e92ce9248f7c50d1fc4",
       "receipt": "local_bridge/results/receipts/go-avatar-gpt56sol-dom-webgl-closure-v3-20260912-0915.json",
-      "gate_source": "chatgpt-gpt56sol-avatar-dom-webgl-gate-fix-20260912:handoff/avatar-body-shoulder-microkinematics-20260912/body_dom_webgl_crossfade_gate_v3.py",
-      "finding": "stabilized v3 removes double Y flip, stacked multi-viewport GL canvas and screenshot timing confound; DOM and Canvas2D are now close while WebGL remains measurably different",
+      "finding": "stabilized v3 removes Y, stacked-WebGL-canvas and screenshot-timing confounds; DOM and Canvas2D become close while raw WebGL remains measurably different",
       "geometry": [620,414],
       "cases": 6,
       "metrics": {
         "dom_canvas2d": {"max_changed_frac_ge3":0.024875331151628488,"max_changed_px_ge8":68,"max_mae":0.17434289127837516,"max_p99":3.0},
         "dom_webgl": {"max_changed_frac_ge3":0.15627629733520337,"max_changed_px_ge8":14129,"max_mae":0.7204404965975794,"max_p99":12.0},
         "canvas2d_webgl": {"max_changed_frac_ge3":0.17341047218326322,"max_changed_px_ge8":18026,"max_mae":0.861940938133084,"max_p99":15.0}
+      }
+    },
+    {
+      "step": 4,
+      "receipt": "local_bridge/results/receipts/go-avatar-gpt56sol-webgl-resample-v4-20260912-0918.json",
+      "finding": "pre-resampling each source to the 620x414 production geometry before WebGL upload collapses the Canvas2D-vs-WebGL residual across all six body families",
+      "metrics": {
+        "canvas2d_vs_preresampled_webgl": {"max_changed_frac_ge3":3.895901511609786e-06,"max_changed_px_ge8":0,"max_mae":0.10456989247311828,"max_p99":1.0},
+        "canvas2d_vs_raw_webgl": {"max_changed_frac_ge3":0.17341047218326322,"max_changed_px_ge8":18026,"max_mae":0.861940938133084,"max_p99":15.0},
+        "pre_to_raw_mae_ratio": 0.1213190925814602
       },
-      "causal_conclusion": "The dominant remaining stabilized mismatch is WebGL-vs-browser-raster, not DOM-vs-Canvas2D. At 1536x1024 source to 620x414 output, WebGL LINEAR minification/filtering is now the leading hypothesis."
+      "causal_conclusion": "RESAMPLING_KERNEL_ROOT_CAUSE_STRONGLY_SUPPORTED"
     }
   ],
-  "active_discriminator": {
-    "command_id": "go-avatar-gpt56sol-dom-native1to1-discriminator-20260912-0913",
+  "superseded_diagnostics": [
+    {
+      "evidence_commit": "442029a5e762457e69115ac7f400aa0ee3ab62c1",
+      "raw_result_retained": true,
+      "causal_interpretation": "SUPERSEDED_BY_STABILIZED_V3_AND_V4",
+      "reason": "older harness confounders produced a misleading DOM-localization; do not use that interpretation for current scheduling"
+    },
+    {
+      "command_id": "go-avatar-gpt56sol-dom-native1to1-discriminator-20260912-0913",
+      "state": "CANCELLED_AFTER_SCHEDULER_SKIP"
+    },
+    {
+      "command_id": "go-avatar-gpt56sol-dom-webgl-native1to1-v3-20260912-0919",
+      "state": "CANCELLED_AS_REDUNDANT_AFTER_STRONGER_RESAMPLE_V4_CLOSURE"
+    }
+  ],
+  "performance_attribution": {
+    "receipt": "local_bridge/results/receipts/go-avatar-gpt56sol-body-perf-attribution-20260912-0920.json",
+    "renderer": "ANGLE AMD Radeon Graphics radeonsi phoenix",
+    "canvas": [620,414],
+    "mesh": {"vertices":399,"triangles":720},
+    "static_base": {"fps":60.00268168409761,"mean_ms":16.6659217877095,"p95_ms_max":16.700000000000728,"over20_total":0,"measured_uploads_total":0},
+    "static_warp": {"fps":60.0016760413248,"mean_ms":16.66620111731843,"p95_ms_max":16.700000000000728,"over20_total":0,"measured_uploads_total":0},
+    "player_base": {"fps":56.827200863519494,"mean_ms":17.597206703910608,"p95_ms_max":33.29999999999927,"over20_total":20,"measured_uploads_total":40},
+    "player_warp": {"fps":56.678255429209884,"mean_ms":17.64357541899441,"p95_ms_max":33.29999999999927,"over20_total":20,"measured_uploads_total":40},
+    "warp_overhead_static_ms": 0.00027932960892940173,
+    "warp_overhead_player_ms": 0.04636871508380125,
+    "causal_conclusion": "residual shoulder/body warp is not the performance blocker; dynamic texture upload churn is the leading measured spike correlate"
+  },
+  "active_performance_discriminator": {
+    "command_id": "go-avatar-gpt56sol-body-texture-cache-ab-20260912-0926",
+    "control_commit": "32f152dade697143aeb821894fb1a3878da06139",
     "state": "UNKNOWN_NONTERMINAL",
-    "purpose": "one representative pair at native 1536x1024 1:1 geometry with Y fixed; distinguish minification/filter kernel from upload/color/pixel-registration causes",
-    "control_branch_commit": "d513944073c126fef58b262f8e2825737d4f6ad1"
+    "design": "same real host, same player, same warp, same source assets; symmetric upload-vs-preuploaded-texture-cache A/B; cache build outside measured animation interval",
+    "credit_until_receipt": 0
   },
-  "next_if_native_collapses": {
-    "hypothesis": "WebGL LINEAR minification differs from Chrome DOM/Canvas2D high-quality rasterization",
-    "candidate": "pre-resample each body texture once to production geometry before WebGL upload, preferably via createImageBitmap resize or an equivalent bounded preload path, then keep animation/blend on GPU",
-    "resource_note": "620x414 RGBA is 1026720 bytes versus 6291456 bytes at 1536x1024, about 83.7 percent less uncompressed texture memory per frame; this is a hypothesis-level optimization benefit until runtime-tested"
-  },
-  "next_if_native_persists": {
-    "hypothesis": "WebGL texture upload/color conversion/pixel-center registration differs even without minification",
-    "discriminator": "single opaque native-size source DOM-vs-Canvas2D-vs-WebGL, then half-texel and colorspace-conversion controls"
-  },
-  "coordination": {
-    "redundant_scale_command_cancelled": "go-avatar-gpt56sol-dom-webgl-scale-discriminator-20260912-0906",
-    "cancel_commit": "356293b38d0ae2c2e9761afcaf4a9c7261e9be69",
-    "rule": "do not open another body raster discriminator while the native 1:1 command is nonterminal"
+  "integration_candidate": {
+    "quality": "pre-resample body textures once to production geometry before WebGL upload",
+    "performance": "retain textures on GPU and switch by bind instead of texImage2D at animation frame changes if cache A/B closes",
+    "combined_expected_shape": "bounded preload/pre-resample stage -> persistent production-size GPU texture cache -> GPU crossfade + residual shoulder/chest warp",
+    "uncompressed_rgba_bytes_per_texture_1536x1024": 6291456,
+    "uncompressed_rgba_bytes_per_texture_620x414": 1026720,
+    "memory_reduction_fraction_if_cached_at_production_geometry": 0.8367843627929688,
+    "status": "CANDIDATE_NOT_LIVE"
   },
   "negative_credit_boundaries": {
     "live_source_changed": false,
     "webgl_live_integration_credit": 0,
     "avatar_visual_acceptance_credit": 0,
     "whole_avatar_credit": 0,
-    "whole_product_credit": 0
-  }
+    "whole_product_credit": 0,
+    "training_credit_change_from_this_work": 0
+  },
+  "next_exact_action": "Resolve the single active texture-cache A/B receipt. If steady-state uploads fall to zero and p95/slow-frame metrics converge toward static_warp without visual-scope regression, fuse pre-resample plus persistent production-size texture cache into one bounded live-candidate branch; otherwise classify the exact cache failure before changing architecture."
 }

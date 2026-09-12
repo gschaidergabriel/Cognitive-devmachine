@@ -1,0 +1,45 @@
+TASK
+[{"id":"omega-e2e-status-ai-core-node-20260912T135200Z","state":"DISPATCHED","created":"2026-09-12T13:27:24.795214+00:00"}]
+EFFECTS
+[{"id":"effect_ee236aaa650c46b0a003607f71d3c7c5","frame":"frame_d8bca98ca83749429677f21c91494687","organ":"host:ai-core-node","digest":"5bda8241cc4ea12d0d10e0540f4fd4c691009a495fb12ff28e806fe72bb00803","state":"PROPOSED","created":"2026-09-12T13:27:24.799090+00:00"}]
+STATUS
+{
+  "schema": "OMEGA_GRID_STATUS/v1",
+  "updated_at": "2026-09-12T13:27:24.803564+00:00",
+  "epoch_id": "epoch_f764c90853754809adacb394906e5b24",
+  "frame_id": "frame_d8bca98ca83749429677f21c91494687",
+  "winner": {
+    "cell": "HOST_SCOUT",
+    "score": 0.95,
+    "task": {
+      "bridge_args": {},
+      "bridge_op": "status",
+      "heavy": false,
+      "max_organs": 1,
+      "preferred_data_domains": [
+        "avatar"
+      ],
+      "required_capabilities": [
+        "avatar"
+      ],
+      "task_id": "omega-e2e-status-ai-core-node-20260912T135200Z"
+    },
+    "free": false
+  },
+  "result": {
+    "route": {
+      "selected_organs": [
+        "host:ai-core-node"
+      ],
+      "ranking": [
+        [
+          2.665059395524778,
+          "host:ai-core-node"
+        ]
+      ]
+    },
+    "effects": [
+      "effect_ee236aaa650c46b0a003607f71d3c7c5"
+    ]
+  }
+}

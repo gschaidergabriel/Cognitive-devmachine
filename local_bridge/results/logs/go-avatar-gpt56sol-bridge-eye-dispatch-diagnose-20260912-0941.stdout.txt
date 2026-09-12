@@ -1,0 +1,40 @@
+===SERVICE===
+active
+MainPID=959674
+ActiveState=active
+SubState=running
+===DAEMON_SOURCE_SELECTION===
+7:Repo gschaidergabriel/clay-global-research-entity -- Gabriel selbst hatte
+29:import sqlite3
+51:DB = STATE_DIR / "bridge.sqlite3"
+55:QUEUE = pathlib.Path("local_bridge/commands")
+79:def _db() -> sqlite3.Connection:
+81:    c = sqlite3.connect(DB)
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+176:def publish_receipt(receipt: dict, stdout: bytes, stderr: bytes):
+178:    (d / "receipts").mkdir(parents=True, exist_ok=True)
+180:    cid = receipt["command_id"]
+181:    (d / "receipts" / f"{cid}.json").write_text(json.dumps(receipt, indent=2) + "\n")
+184:    (d / "LATEST.json").write_text(json.dumps(receipt, indent=2) + "\n")
+200:    cid = str(s["command_id"])
+202:    if c.execute("SELECT 1 FROM done WHERE id=?", (cid,)).fetchone():
+221:    receipt = {
+223:        "command_id": cid,
+235:    publish_receipt(receipt, stdout, stderr)
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+247:    processed = 0
+256:    names = [n for n in text(p.stdout).splitlines() if n.startswith(str(QUEUE) + "/") and n.endswith(".json")]
+266:            processed += 1
+268:    if processed:
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+270:    return processed
+277:        print(f"processed={n}")
+===DB_CANDIDATES===
+local_bridge_state/bridge.sqlite3
+-rw-r--r-- 1 ai-core-node ai-core-node 73728 Sep 12 08:06 local_bridge_state/bridge.sqlite3
+===IDS_IN_LOCAL_STATE===
+local_bridge_state/repo/local_bridge/commands/go-avatar-gpt56sol-bridge-eye-dispatch-diagnose-20260912-0941.json:1:{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"go-avatar-gpt56sol-bridge-eye-dispatch-diagnose-20260912-0941","machine_id":"ai-core-node","owner":"gabriel","op":"exec","cwd":"/home/ai-core-node/.claude/star","timeout_seconds":60,"command":"set -euo pipefail\necho ===SERVICE===\nsystemctl --user is-active frankenstein-local-bridge.service || true\nsystemctl --user show frankenstein-local-bridge.service -p MainPID -p ActiveState -p SubState || true\necho ===DAEMON_SOURCE_SELECTION===\ngrep -nE 'sqlite|processed|command_id|glob|commands|receipt|fetch|checkout|for .*json|sorted|rglob' local_bridge_daemon.py | head -220 || true\necho ===DB_CANDIDATES===\nfind local_bridge_state -maxdepth 2 -type f \\( -name '*.db' -o -name '*.sqlite' -o -name '*.sqlite3' \\) -print -exec ls -l {} \\; 2>/dev/null || true\necho ===IDS_IN_LOCAL_STATE===\ngrep -R -n -E 'go-avatar-gpt56sol-eye-semantic-live-promote-20260912-0810|0000-go-avatar-eye-semantic-priority-20260912-0802' local_bridge_state 2>/dev/null | head -80 || true\necho ===CURRENT_CONTROL_HEAD===\ngit -C local_bridge_state/repo rev-parse HEAD || true\ngit -C local_bridge_state/repo log -1 --format='%H %cI %s' || true\necho SCOPE=READ_ONLY_BRIDGE_DISPATCH_DIAGNOSTIC"}
+===CURRENT_CONTROL_HEAD===
+4a22c92a5c4ba38d2c494e7ce31132b769243dac
+4a22c92a5c4ba38d2c494e7ce31132b769243dac 2026-09-12T08:06:22+07:00 local bridge: 2 command(s) executed on ai-core-node
+SCOPE=READ_ONLY_BRIDGE_DISPATCH_DIAGNOSTIC

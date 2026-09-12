@@ -1,0 +1,94 @@
+--- predeploy ---
+MainPID=3333824
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=
+ActiveState=active
+SubState=running
+BEFORE_CHROME=13
+Installed final Frankenstein Voice runtime.
+Source: /tmp/frankenstein-voice-final-test-gpt56sol-20260912-1714
+Destination: /home/ai-core-node/.local/lib/frankenstein-voice-final
+Drop-in: /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+Identity tuple: gabriel / ai-core-node / gabriel
+The conversation service was NOT restarted by this installer.
+--- postdeploy service ---
+MainPID=1170123
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 17:14:33 +07] ; stop_time=[n/a] ; pid=1170123 ; code=(null) ; status=0/0 }
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node LOCAL_BRIDGE_OWNER=gabriel FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+ActiveState=active
+SubState=running
+active
+AFTER_CHROME=13
+--- deployed file equality ---
+MATCH scripts/voice_final_runtime.py e02f87201a08b0317bd35ef003186d53ec4dc9a6a2acce3c94c8e0fcfd0196f3
+MATCH scripts/voice_action_executor.py ff44ba11c9d0e142aeac6059196f690914ecd0f12b1c4a312bcdd7823873475f
+MATCH scripts/voice_action_guard.py edc1af19a7b15779dfd39ceb40634aa7b0231cfaeebd07ee65b3d0f98e2dd56d
+MATCH scripts/voice_full_runtime.py 057d12a4d13fd4468585126ed753c17bd0be22b5212a0e0bd1a9a1f255561a66
+MATCH scripts/voice_full_integration.py 72893d377037d7f0086e2a6ce36ad347706f9f319e961c2a27578bbea9ee1aa0
+--- runtime import/patch probe ---
+FINAL_PATCHED True
+ACTION_WORKER voice_final_runtime worker
+TOOL_DISPATCH_FINAL True
+SETTINGS /home/ai-core-node/.local/share/frankenstein/voice_action_claude_settings.json
+--- journal ---
+Sep 12 17:06:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:06:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:06:54 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:06:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:06:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:06:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:07:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:07:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:08:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:08:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:09:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:09:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:10:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:10:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:11:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:11:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:12:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:12:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:38 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:38] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:48 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:48] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:13:58 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:13:58] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:14:08 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:14:08] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:14:18 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:14:18] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:14:28 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:14:28] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:14:32 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)...
+Sep 12 17:14:32 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 17:14:32] gespraechsmodus: Signal 15 erhalten -- verlasse 'Den Raum' (session=c6fc0d10-f90e-4dd5-9d3d-6804e1c0b49f) und beende
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-gespraechsmodus.service: Consumed 9.738s CPU time, 40.8M memory peak, 17.5M memory swap peak.
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] gespraechsmodus: gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] gespraechsmodus: cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] perception_l0: cortex.aktiv=1 -- L0Orchestrator startet (/dev/video0, tick_hz=1.0)
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [video4linux2,v4l2 @ 0x7594a0074e40] Cannot open video device /dev/video0: No such file or directory
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] perception_l0: Dauerschleife beendet, Kamera freigegeben
+Sep 12 17:14:33 ai-core-node-projekt-frankenstein env[1170123]: [2026-09-12 17:14:33] gespraechsmodus: Cortex-Dauerschleife mit Fehler beendet (nicht kritisch fuer den Gespraechsmodus): RuntimeError: cv2.VideoCapture konnte /dev/video0 nicht oeffnen
+LIVE_DEPLOY_PASS

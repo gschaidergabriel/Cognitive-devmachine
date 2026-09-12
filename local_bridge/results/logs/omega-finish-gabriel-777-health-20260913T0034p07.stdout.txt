@@ -1,0 +1,59 @@
+UNIT:frankenstein-gespraechsmodus.service
+MainPID=2376110
+Result=success
+NRestarts=0
+ExecMainStatus=0
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:27:22 +07
+ENV:2376110
+XDG_RUNTIME_DIR=/run/user/1000
+LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+LOCAL_BRIDGE_OWNER=gabriel
+FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+Sep 13 00:25:49 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:25:49] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:25:59 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:25:59] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:09 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:09] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:19 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:19] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:29 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:29] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:39 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:39] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:49 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:49] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:26:59 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:26:59] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:09 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:27:09] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:19 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:27:19] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2334921]: [2026-09-13 00:27:22] gespraechsmodus: Signal 15 erhalten -- verlasse 'Den Raum' (session=23898070-27c0-4e26-990d-50b7df73b7cf) und beende
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)...
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-gespraechsmodus.service: Consumed 2.369s CPU time, 70.6M memory peak, 0B memory swap peak.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] gespraechsmodus: gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] gespraechsmodus: cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] perception_l0: cortex.aktiv=1 -- L0Orchestrator startet (/dev/video0, tick_hz=1.0)
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [video4linux2,v4l2 @ 0x7ae79c072c00] Cannot open video device /dev/video0: No such file or directory
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] perception_l0: Dauerschleife beendet, Kamera freigegeben
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] gespraechsmodus: Cortex-Dauerschleife mit Fehler beendet (nicht kritisch fuer den Gespraechsmodus): RuntimeError: cv2.VideoCapture konnte /dev/video0 nicht oeffnen
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:22] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:32 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:32] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:42 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:27:52 ai-core-node-projekt-frankenstein env[2376110]: [2026-09-13 00:27:52] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+UNIT:frankenstein-chatgpt-client.service
+MainPID=2376101
+Result=success
+NRestarts=0
+ExecMainStatus=0
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:27:22 +07
+ENV:2376101
+XDG_RUNTIME_DIR=/run/user/1000
+FRANK_VOICE_MACHINE_ID=ai-core-node
+FRANK_VOICE_OWNER=gabriel
+Sep 12 17:07:11 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-chatgpt-client.service: Consumed 1.468s CPU time, 27.4M memory peak, 6.5M memory swap peak.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-chatgpt-client.service: Consumed 1.182s CPU time, 19.5M memory peak, 0B memory swap peak.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.

@@ -1,0 +1,45 @@
+SOURCE_HEAD=1a45da97d70b5e00e8cb9db2b06115db40ba5f89
+TEST=tests/test_omega_arm_bus.py
+TEST=tests/test_voice777_local_audio_arm.py
+TEST=tests/test_voice777_multiarm_integration.py
+TEST=tests/test_voice777_omni_presence.py
+TEST=tests/test_voice777_pocket_renderer.py
+TEST=tests/test_omega_organ_activity.py
+TEST=tests/test_voice777_installer_convergence.py
+TESTS_PASS=1
+OMEGA 777 convergence layer installed without restarting live voice.
+
+Prepared runtime composition:
+  presentation floor: OMNI > terminal > local_voice
+  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig
+  local renderer libs: Pocket streaming + cancellable local audio arm
+  OMNI sensor lib: voice777_omni_presence.py
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared effective service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+
+Verified loaded ExecStart definitions:
+  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the voice wrapper only when the current voice session is quiescent and
+host-specific safety/readback permits the lifecycle boundary:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+--- SERVICE DEFINITION READBACK ---
+MainPID=2376110
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+MainPID=2376101
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+--- INSTALLED VS SOURCE ---
+INSTALLED_BYTES_MATCH=1
+OMEGA_INSTALL_PASS=1

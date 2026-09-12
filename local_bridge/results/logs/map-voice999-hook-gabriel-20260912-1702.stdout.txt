@@ -1,0 +1,115 @@
+86:def _pw_env():
+154:def _mikro_schliessen():
+251:    def __getattr__(self, name):
+395:def _innenwelt_huelle(absatz: str) -> str:
+457:def _bloecke_als_absatz(voller_systemtext: str) -> str:
+1099:def _grid_orientierung() -> str:
+1165:def _handlung_ausfuehren(text: str):
+1183:def _naechste_zaesur(buf: str, mindest: int = 0):
+1208:def _log(msg):
+1224:def ch0_rms(frame_bytes, channels):
+1236:def vad_capture(max_wait_s=MAX_WAIT_S):
+1382:def _asr_modell_laden():
+1403:def run_asr_resident(wav_path):
+1541:def ohne_eigene_anrede(text: str) -> str:
+1588:def ohne_erfundene_handlung(text: str) -> str:
+1609:def ohne_anrede(text: str) -> str:
+1627:def _erste_sekunden(wav_path, sekunden: float) -> str:
+1647:def weckwort_tor(wav_path) -> tuple:
+1705:def gespraech_verlaengern():
+1740:def _gehoer_start():
+1761:def _gehoer_frage(wav_path):
+1792:def run_asr_whisper(wav_path):
+1821:def gehoer_urteil():
+1836:def run_asr_subprocess(wav_path):
+1882:def llm_health_ok(timeout=2.0):
+1891:def erzeugung_verfuegbar():
+1949:def kognitionsturn(session_id, user_text, gedaechtnis_kontext):
+1990:def _llm_stuecke_lokal(messages, ausdruck, max_tokens):
+2053:def _llm_stuecke(messages, ausdruck, max_tokens, erzwinge_lokal=False):
+2113:        def _sonnet():
+2187:def stream_llm_to_sentences(messages, sentence_queue, max_tokens=None,
+2496:def _reagiere_auf_einwurf(voice, wav_path):
+2528:def tts_speaker_worker(voice, sentence_queue, result_holder, ausdruck=None):
+2679:def scale_wav_gain(in_path, out_path, gain):
+2764:def _einwurf_wav_schreiben(buf: bytearray):
+2782:def _aufnahme_fortsetzen(ohr, vorab: bytearray):
+2832:def _spielen_mit_ohr(proc) -> bool:
+2928:def play(wav_path, gain=PLAYBACK_GAIN):
+2981:def _konfig_lesen(schluessel, default=None):
+2996:def _konfig_schreiben(schluessel, wert, quelle):
+3027:def _eine_erinnerung_fuer_begruessung(session_id):
+3029:        treffer = memory_abruf.automatischer_abruf(f"{session_id}-intro", INTRO_ABRUF_SEED)
+3070:def sag_kurz(tts_voice, text):
+3075:    hiesse, das Modell auf Rauschen antworten zu lassen -- also exakt die
+3100:def self_introduction(tts_voice, session_id):
+3119:    fakt = _eine_erinnerung_fuer_begruessung(session_id)
+3153:def run_turn(history, tts_voice, session_id):
+3194:    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)
+3195:    if not user_text:
+3209:             f"{_LETZTE_GUETE[0].get('no_speech_prob')}) -- keine Antwort: {user_text!r}")
+3213:             f"-- frage nach statt zu raten: {user_text!r}")
+3221:    # bekam einen Geraeuschfetzen ("Die."), hatte nichts zu beantworten und
+3223:    # kein Modellfehler, sondern eine Folge davon, dass ueberhaupt geantwortet
+3225:    # kommt hier der zweite Filter: worauf sich nicht antworten laesst, wird
+3226:    # nicht beantwortet.
+3227:    _worte = [w for w in re.split(r"\W+", user_text) if len(w) > 1]
+3228:    if len(user_text.strip()) < 8 or len(_worte) < 2:
+3229:        _log(f"[FILTER] zu wenig Substanz, keine Antwort: {user_text!r}")
+3237:    # antwortete, was im Raum gesprochen wurde. Ein Mensch am Tisch antwortet
+3241:    _t = user_text.lower()
+3243:        _WECK_MUSTER.search(user_text)
+3244:        or "?" in user_text
+3267:            _r = absicht.erkennen_reflex(user_text)
+3295:                 f"Antwort, trotz fehlender Anrede angenommen: {user_text[:60]!r}")
+3298:        _log(f"[FILTER] nicht an ihn gerichtet, bleibt still: {user_text[:60]!r}")
+3323:        _sem = erinnern.block(user_text, log=_log)
+3332:            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+3348:        konversation_kontext = konversation.block(user_text, log=_log)
+3365:    # Gefundenen -> nicht einspeisen. Lieber ohne Gedaechtnis antworten als
+3410:        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+3417:                       for w in re.findall(r"\w+", user_text.lower())):
+3464:    _befehl = absicht.als_befehl(user_text, laeuft=_laeuft, log=_log)
+3477:        _bt = _ent.turn(len(user_text or ""), 0) if _ent else {}
+3493:                antwort = a.spielen(arg, video=_video, sprache=_sprache)
+3495:                antwort = a.umschalten(_video)
+3497:                antwort = a.bildschirm(arg)
+3502:                antwort = a.neues(broadcast=(_bt or {}).get("broadcast_value"),
+3506:                antwort = a.sprache_umstellen(arg)
+3508:                antwort = a.stopp()
+3510:                antwort = a.pause()
+3512:                antwort = a.weiter()
+3514:                antwort = a.lautstaerke(+1)
+3516:                antwort = a.lautstaerke(-1)
+3518:                antwort = a.vollbild()
+3521:                antwort = a.nochmal()
+3523:                antwort = a.naechstes()
+3525:                antwort = a.status()
+3528:            antwort = "Beim Player ist etwas schiefgegangen."
+3531:        sag_kurz(tts_voice, antwort)
+3550:    if not netz.ist_rueckverweis(user_text):
+3551:        _neues_thema = netz.thema_aus(user_text)
+3566:    # antwortete mit dem Wikipedia-Artikel ueber den Fluss Bist:
+3575:    _ueber_ihn = selbstauskunft.ist_selbstfrage(user_text)
+3585:    _wesensfrage = (selbstauskunft.ist_wesensfrage(user_text)
+3586:                    if REGIME_GROSS else _ueber_ihn)
+3597:    elif netz.braucht_netz(user_text):
+3600:            _netzfund = netz.nachschlagen(user_text)
+3619:    _turn = _ent.turn(len(user_text or ""), len(gedaechtnis_kontext or "")) if _ent else {}
+3700:            reiz_text=user_text,
+3753:            if REGIME_GROSS and _b.get("gezuendet") and _b.get("fokus"):
+3759:                # Er BERICHTETE seinen Innenzustand, statt zu antworten.
+3774:            elif not REGIME_GROSS and _b.get("gezuendet") and _b.get("fokus_text"):
+3800:                 f"({'alle Kanaele' if REGIME_GROSS else 'nur Fokus'})")
+3817:        # nicht bei null anfaengt: der Frank vom Maerz antwortete als jemand,
+3936:                + (selbstmodell if REGIME_GROSS else selbstmodell[:800])
+3989:    _subjekt = None if _ueber_ihn else reflexion.ist_meinungsfrage(user_text)
+3996:                user_text, _subjekt,
+4009:    if _SICHTFRAGE.search(user_text):
+4134:    if _SICHTFRAGE.search(user_text):
+4175:    if REGIME_GROSS:
+4224:    # nichts mehr, woraus er antworten koennte -- also antwortet er aus dem
+4234:    if workspace is not None and not REGIME_GROSS:
+4238:                    user_text=user_text, user_name=NUTZER,
+4283:    # in der Nutzernachricht sind MATERIAL, aus dem man antwortet. Genau das
+4573:def main():

@@ -1,0 +1,1 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"chatgpt-terminal-source-locate-gabriel-20260912-1055","op":"exec","command":"for d in ~/frankenstein-repo ~/entityos-repo ~/.claude/star; do echo ===$d===; grep -RIl --exclude-dir=.git -E 'frank-terminal-hilfe|install_terminal_help_icon|work-on-frank' $d 2>/dev/null | head -n 80; done","timeout_seconds":90}

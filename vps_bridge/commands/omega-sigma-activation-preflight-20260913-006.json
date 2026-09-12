@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-sigma-activation-preflight-20260913-006",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail\npython3 - <<'PY'\nimport json, os, pathlib, subprocess\ncur=pathlib.Path('/workspace/omega_runtime/current')\nstatus=pathlib.Path('/workspace/omega_runtime/state/SUPERVISOR_STATUS.json')\nout={'current':str(cur.resolve()),'current_is_symlink':cur.is_symlink()}\nif status.exists(): out['status']=json.loads(status.read_text())\nprint(json.dumps(out,sort_keys=True))\nPY\necho '---PS---'\nps -eo pid,ppid,lstart,args | grep -E 'omega\\.(supervisor|supervisor_outer|assembly|grid_runtime_v3|relay_entrypoint|spool_receipt_reconciler|telemetry_daemon|master_bridge_carrier)' | grep -v grep || true\necho '---LOCK---'\ncat /workspace/omega_runtime/state/omega-supervisor.lock 2>/dev/null || true\necho '---CANDIDATE---'\ntest -d /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-003\npython3 -m compileall -q /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-003/omega\n"
+}

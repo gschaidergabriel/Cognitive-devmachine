@@ -137,6 +137,10 @@ EOF
 systemctl --user daemon-reload
 systemctl --user enable --now omega-local-effect-adapter.service
 systemctl --user enable --now omega-chatgpt-mcp.service
+# `enable --now` does not replace an already-running process after an upgrade.
+# Restart explicitly so deployed bytes and running bytes cannot drift.
+systemctl --user restart omega-local-effect-adapter.service
+systemctl --user restart omega-chatgpt-mcp.service
 sleep 0.5
 systemctl --user is-active --quiet omega-local-effect-adapter.service
 systemctl --user is-active --quiet omega-chatgpt-mcp.service

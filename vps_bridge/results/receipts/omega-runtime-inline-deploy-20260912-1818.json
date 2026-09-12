@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-runtime-inline-deploy-20260912-1818",
+  "command_sha256": "d5ef185d6a2020a6a66e64cee8511dcf1a0894d5fcd3a179993d2b13c66313a7",
+  "started_at": "2026-09-12T10:50:01.399823+00:00",
+  "finished_at": "2026-09-12T10:50:01.923239+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "b7a053151cb566ffad2e3ff15627ca85d7687cd6c59c3ab6628cc0de5d9f881e",
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/omega_runtime/omega_daemon.py\", line 92, in <module>\n    if __name__=='__main__':run('--once' in os.sys.argv)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/omega_runtime/omega_daemon.py\", line 86, in run\n    with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nsqlite3.OperationalError: table epoch has 4 columns but 5 values were supplied\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

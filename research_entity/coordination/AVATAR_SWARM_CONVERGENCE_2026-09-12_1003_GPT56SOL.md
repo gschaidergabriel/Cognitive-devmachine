@@ -16,7 +16,9 @@ Current bound production source observed through Local Bridge:
 - existing visible production page remains the display-2 subject
 - bounded production telemetry reports `60.0 FPS`
 
-Snapshot receipts include `go-avatar-swarm-live-roll-eye-source-audit-20260912-0955-gpt56sol` and `go-avatar-body-visible-baseline-status-20260912-gpt56sol-a`.
+Snapshot receipts include `go-avatar-swarm-live-roll-eye-source-audit-20260912-0955-gpt56sol`, `go-avatar-body-visible-baseline-status-20260912-gpt56sol-a`, and `go-avatar-visible-production-subject-bind-gpt56sol-20260912-0952`.
+
+The exact visible-subject bind re-read service, HTTP, X11 monitor/window geometry, Chrome process tree and GPU process without spawning or reloading a production browser, and ended with `SOURCE_INVARIANCE=PASS` plus `VISIBLE_PRODUCTION_SUBJECT_BIND_READBACK=PASS`.
 
 HARD FENCE: do not open a second production Chrome. Scratch/shadow subjects must remain isolated and must not be promoted as production.
 
@@ -55,23 +57,42 @@ Receipts:
 
 Do not modify eye identity based on this failed scratch harness. First repair exact scratch page-target formation/lifetime, then rerun matched A/B.
 
-## 4. Occupied current swarm boundaries — do not duplicate
+## 4. Body / shoulder visible evidence
+
+`go-avatar-body-visible-shadow-ab-v2-20260912-gpt56sol-a` is a bounded PASS on `ai-core-node` against the exact current live hash with `live_mutation=false` and post-run source invariance.
+
+Two visible X11 fresh-Chrome repetitions exercised the body full-scene shadow subject. The AMD/ANGLE WebGL path reported `gl_error=0`, 45 textures and active shadow draws. Baseline settled at 60 FPS; shadow runs settled near 60 FPS with observed post-warm-up minima in the high-50s. The receipt ends `BODY_VISIBLE_SHADOW_AB_V2=PASS` and preserves `LIVE_POST_SHA=18770d8e...`.
+
+Scope: this is strong visible scratch/component evidence for the body-shadow path. It is NOT whole-avatar acceptance and does not authorize live body mutation by itself.
+
+A separate NVIDIA/Nemotron shoulder falsifier produced analysis text but the enclosing Local-Bridge command timed out after 120 s (`TIMEOUT`, exit 124). Therefore that run is not accepted as an independent completed falsifier. Its suggested thresholds/selectors remain candidate output only until verified against the actual source/runtime.
+
+## 5. Parallax evidence classification
+
+`go-avatar-parallax-provenance-gate0-audit-20260912-0959-gpt56sol` ended `FAIL`, exit `141`, but the exact command used `set -Eeuo pipefail` together with large `find ... | sort | head ...` discovery pipelines. SIGPIPE from `head` terminating upstream producers is sufficient to explain 141. The output had already entered a broad candidate-manifest scan when the command stopped.
+
+Classification: HARNESS / PIPELINE SEMANTICS FAILURE, not a parallax product negative.
+
+Do not weaken the parallax gate. Repair/read the provenance in bounded commands. Current swarm control already shows follow-up reads of the exact depth-parallax, rig2 and incoming rig-v2 manifests; do not duplicate those reads while they are active.
+
+## 6. Occupied current swarm boundaries — do not duplicate
 
 Observed current control-lane dispatches already cover these boundaries:
 
 - Eye scratch-vs-production Chrome launch environment comparison: `go-avatar-eye-prod-launch-env-diff-20260912-1001-gpt56sol`
 - Body/shoulder integration-point live source forensic: `avatar-hardcore-20260912T0300Z-live-body-forensic-gpt56sol`
+- depth-parallax / rig2 / incoming rig-v2 manifest provenance reads
 - extended parallax CSS scratch gate
 - visible X11 whole-scene A/B
 - read-only post-change production screenshot
-- read-only visible production subject binding
-- disjoint NVIDIA body falsifier
+- read-only visible production subject binding — now PASS/read back
+- disjoint NVIDIA body falsifier — terminal TIMEOUT, not accepted falsifier
 - bounded Nemotron anchor falsifier
-- current provider-admission check
+- current provider-admission check — fail-closed authority mismatch
 
-Until exact receipts land, treat these as occupied/nonterminal, not as accepted evidence. Prefer independent review or a disjoint discriminator rather than duplicate execution.
+Prefer independent review or a disjoint discriminator rather than duplicate execution.
 
-## 5. Provider / FreeSwarm authority is currently fail-closed
+## 7. Provider / FreeSwarm authority is currently fail-closed
 
 Exact current command `go-avatar-provider-admission-exact-20260912-0958-gpt56sol` cloned current `main` and ran `tools/free_provider_admission.py --json`.
 
@@ -84,9 +105,9 @@ Observed result:
 - current Supervisor authority still says `FREE_ONLY_HARD_OFF; ALL_CLAYCODE_EXTERNAL_PROVIDER_ROUTES_UNADMITTED; TOGETHER_FORBIDDEN; NO_PAID_OR_UNKNOWN_COST_FALLBACK`
 - supervisor emergency stop remains `True`
 
-Therefore this convergence lane MUST NOT infer executable provider authority from the reauthorization-looking document or from existing harness processes. Provider execution remains fail-closed until the authority mismatch is resolved by a newer exact canonical authority state.
+A Nemotron harness command was nevertheless observed executing and timing out. Its execution is evidence of a governance/route inconsistency, not evidence that provider authority was valid. Do not dispatch additional external-provider work from this lane while the exact admission validator is red.
 
-## 6. Concurrency evidence
+## 8. Concurrency evidence
 
 The shared Local-Bridge control branch is actively written by multiple organs. A read-only command creation encountered a GitHub 409/head-advanced conflict and succeeded only after re-resolving the branch. This is positive evidence that CAS discipline is necessary in the current swarm.
 
@@ -98,19 +119,21 @@ Operational rule:
 - preserve command/receipt machine+owner provenance
 - treat queued/dispatch as distinct from executed/accepted
 
-## 7. Current no-promotion vector
+## 9. Current no-promotion vector
 
 Positive bounded evidence exists, but the following are NOT promoted by this checkpoint:
 
 - whole Avatar acceptance
 - whole-scene eye/blink perceptual acceptance
 - long-duration performance stability
-- shoulder/body semantic acceptance
+- shoulder/body semantic acceptance or live activation
 - parallax production activation
 - external-provider/FreeSwarm execution authority
 
-## 8. Highest-information continuation
+## 10. Highest-information continuation
 
-Consume the already-dispatched eye launch-environment, body/shoulder, parallax, whole-scene A/B, screenshot and subject-binding receipts as they become exact evidence. The highest-value eye discriminator is currently the scratch Chrome page-target/lifetime root cause; do not touch eye identity until that harness is valid.
+Consume the already-dispatched eye launch-environment, body/shoulder, parallax provenance, whole-scene A/B and screenshot results as exact receipts. The highest-value eye discriminator remains the scratch Chrome page-target/lifetime root cause; do not touch eye identity until that harness is valid.
 
-If those occupied lanes remain nonterminal, use repo-only review/convergence work or another disjoint falsifier rather than another runtime writer.
+For body, move only from the visible shadow/component PASS to a matched exact acceptance gate; do not infer live activation. For parallax, preserve the 141 run as harness-invalid and use the bounded manifest/provenance follow-ups already in flight.
+
+If occupied lanes remain nonterminal, use repo-only review/convergence work or another disjoint falsifier rather than another runtime writer.

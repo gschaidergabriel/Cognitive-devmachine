@@ -1,0 +1,7 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-blink-route-path-audit-20260912-0727",
+  "machine_id":"ai-core-node","owner":"gabriel","op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual","timeout_seconds":30,
+  "command":"set -u; cd /home/ai-core-node/.claude/star/visual; echo VARS; sed -n '55,90p' buehne_daemon.py; echo ROUTE; sed -n '740,875p' buehne_daemon.py; echo REALPATHS; python3 - <<'PY'\nimport os\nV='/home/ai-core-node/.claude/star/visual'\nfor p in [V, V+'/augen_blink', V+'/augen_blink/blink_000.png']:\n print(p,'=>',os.path.realpath(p), 'islink',os.path.islink(p))\nPY\necho FIND_DUPLICATES; find /home/ai-core-node/.claude/star -type f -path '*/augen_blink/blink_000.png' -print -exec sha256sum {} \\; 2>/dev/null | head -60"
+}

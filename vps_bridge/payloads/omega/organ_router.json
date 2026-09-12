@@ -1,0 +1,13 @@
+{
+  "schema":"OMEGA_ORGAN_ROUTER/v1",
+  "strategy":"dynamic_information_gain",
+  "central_organ":"omega-vps",
+  "allow_multi_organ_coalitions":true,
+  "telemetry_max_age_seconds":180,
+  "organs":[
+    {"organ_id":"omega-vps","kind":"central_runtime","owner_id":"omega","capabilities":["shell","files","internet","research","unifieddb","world_model","long_running_cognition"]},
+    {"organ_id":"host:ai-core-node","kind":"host_frankenstein","owner_id":"gabriel","machine_id":"ai-core-node","capabilities":["shell","files","desktop","browser","avatar","gpu","local_state","sensors"],"control_branch":"chatgpt-local-ai-core-node-control","results_branch":"chatgpt-local-ai-core-node-results"},
+    {"organ_id":"host:andreas-maco","kind":"host_frankenstein","owner_id":"andreas","machine_id":"andreas-maco","capabilities":["shell","files","entityos","self_integration","local_state","services"],"control_branch":"chatgpt-local-andreas-maco-control","results_branch":"chatgpt-local-andreas-maco-results"}
+  ],
+  "weights":{"capability_fit":1.0,"data_locality":0.9,"state_freshness":0.9,"information_gain":0.85,"independence_for_falsification":0.7,"compute_availability":0.6,"latency":0.45,"bridge_health":0.9,"host_resource_headroom":0.9,"effect_risk":-1.0,"duplicate_work":-0.7}
+}

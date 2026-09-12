@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-mcp-ingress-probe-20260912a",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 45,
+  "command": "set -u\nprintf 'HOST='; hostname\nprintf 'PUBLIC_HINT='; hostname -f 2>/dev/null || true\nprintf '\\nLISTENERS\\n'; ss -lnt 2>/dev/null | sed -n '1,40p'\nprintf '\\nINGRESS_BINARIES\\n'; for x in caddy nginx apache2 cloudflared traefik; do command -v \"$x\" 2>/dev/null && echo \"$x=present\"; done\nprintf '\\nSYSTEM_UNITS\\n'; systemctl --no-pager --type=service --state=running 2>/dev/null | grep -Ei 'caddy|nginx|cloudflared|traefik|omega|bridge' | head -30 || true"
+}

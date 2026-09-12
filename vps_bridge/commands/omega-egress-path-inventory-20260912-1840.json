@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-egress-path-inventory-20260912-1840",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -eu; echo '=== BRIDGE/EGRESS INVENTORY ==='; echo '-- dirs --'; find /workspace/vps_bridge /workspace/clay-global-research-entity/vps_bridge -maxdepth 3 -type f -printf '%p\\n' 2>/dev/null | sort | head -n 300; echo '-- bridge-related processes --'; ps -ef | grep -Ei 'bridge|git.*push|vps' | grep -v grep || true; echo '-- git remotes/config safe metadata --'; git -C /workspace/clay-global-research-entity remote -v 2>/dev/null | sed -E 's#(https?://)[^/@]+@#\\1REDACTED@#g' || true; git -C /workspace/clay-global-research-entity config --get-regexp 'remote\\..*\\.url|core\\.sshCommand' 2>/dev/null | sed -E 's#(https?://)[^/@]+@#\\1REDACTED@#g' || true; echo '-- env names only --'; env | cut -d= -f1 | grep -Ei 'bridge|git|github|ssh|token|key' | sort || true; echo '-- mounts --'; mount | grep -E '/workspace|vps_bridge|podman' | head -n 100 || true; echo '-- writable test dirs --'; for d in /workspace/vps_bridge /workspace/vps_bridge/results /workspace/clay-global-research-entity/vps_bridge /workspace/clay-global-research-entity/vps_bridge/results; do [ -e \"$d\" ] && printf '%s ' \"$d\" && [ -w \"$d\" ] && echo WRITABLE || echo READONLY; done; echo '=== END ==='"
+}

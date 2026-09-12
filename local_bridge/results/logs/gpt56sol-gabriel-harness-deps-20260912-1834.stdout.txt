@@ -1,0 +1,83 @@
+=== harness_crush.py ===
+import contextlib
+import json
+import os
+import sqlite3
+import subprocess
+import sys
+import time
+import harness_aider
+import pool_wache
+import crush_modell_rechte
+import stern
+import grid_packet_bridge
+import argparse
+=== harness_crush_knopf.py ===
+import os
+import subprocess
+import sys
+import harness_aider
+import harness_crush
+from harness_aider_knopf import _waehle_modell
+=== harness_aider.py ===
+import os
+import sys
+import subprocess
+import argparse
+import hashlib
+import json
+import sqlite3
+import time
+import fcntl
+import errno
+import contextlib
+from pathlib import Path
+import stern
+import pool_wache
+import pool_wache
+import ziel_bruecke
+import modell_profile
+import shutil
+import importlib.util
+import shutil
+=== harness_aider_knopf.py ===
+import os
+import subprocess
+import sys
+import harness_aider
+import pool_wache
+=== grid_packet_bridge.py ===
+from __future__ import annotations
+import importlib.util
+import json
+import pathlib
+import sqlite3
+import sys
+from typing import Any,Optional
+=== crush_modell_rechte.py ===
+from __future__ import annotations
+=== frank_chatgpt_terminal.py ===
+from __future__ import annotations
+import argparse
+import json
+import os
+import socket
+import sys
+import uuid
+from pathlib import Path
+import stern
+from f2wp1207_chatgpt_organ import execute_terminal_turn
+from f2wp1207_chatgpt_exact_backend import ExactChatGPTBackend
+=== f2wp1207_chatgpt_exact_backend.py ===
+from __future__ import annotations
+from types import SimpleNamespace
+from typing import Any
+from f2wp1207_chatgpt_harness_adapter import TargetedChatGPTHarness,_answer_from_payload
+=== f2wp1207_chatgpt_harness_adapter.py ===
+from __future__ import annotations
+import json
+import re
+import time
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any,Iterable

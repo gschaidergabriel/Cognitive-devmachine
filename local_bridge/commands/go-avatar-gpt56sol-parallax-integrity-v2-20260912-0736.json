@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-parallax-integrity-v2-20260912-0736",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\necho '=== GENERATOR ==='\nsha256sum tiefe_bauen.py\nsed -n '1,90p;205,280p' tiefe_bauen.py\necho '=== MANIFESTS ==='\nfind . -type f -path '*parallax*/manifest.json' -not -path './chrome-profile/*' -not -path './.go_backups/*' -print -exec sha256sum {} \\; -exec cat {} \\;\necho '=== RECONSTRUCTION ==='\nprintf '%s' 'ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmZyb20gUElMIGltcG9ydCBJbWFnZQppbXBvcnQgbnVtcHkgYXMgbnAKcD1QYXRoKCJrb3BmX3JnYmFfcGFyYWxsYXgiKQpmb3IgZCBpbiBzb3J0ZWQoeCBmb3IgeCBpbiBwLml0ZXJkaXIoKSBpZiB4LmlzX2RpcigpKToKICAgIGZzPXNvcnRlZChkLmdsb2IoInNsaWNlXyoucG5nIikpCiAgICBpbWdzPVtucC5hc2FycmF5KEltYWdlLm9wZW4oZikuY29udmVydCgiUkdCQSIpLGR0eXBlPW5wLnVpbnQxNikgZm9yIGYgaW4gZnNdCiAgICBhPW5wLnN0YWNrKFt4WzosOiwzXSBmb3IgeCBpbiBpbWdzXSkKICAgIHJnYj1ucC5zdGFjayhbeFs6LDosOjNdIGZvciB4IGluIGltZ3NdKQogICAgbWFzaz1hPjAKICAgIGFzdW09YS5zdW0oYXhpcz0wKQogICAgbno9YXN1bT4wCiAgICBtYXhkaWZmPTAKICAgIHBhaXJzPTAKICAgIGZvciBpIGluIHJhbmdlKGxlbihpbWdzKSk6CiAgICAgICAgZm9yIGogaW4gcmFuZ2UoaSsxLGxlbihpbWdzKSk6CiAgICAgICAgICAgIG09bWFza1tpXSZtYXNrW2pdCiAgICAgICAgICAgIGlmIG0uYW55KCk6CiAgICAgICAgICAgICAgICBkaWZmPW5wLmFicyhyZ2JbaV0uYXN0eXBlKG5wLmludDMyKS1yZ2Jbal0uYXN0eXBlKG5wLmludDMyKSkubWF4KGF4aXM9MikKICAgICAgICAgICAgICAgIG1heGRpZmY9bWF4KG1heGRpZmYsaW50KGRpZmZbbV0ubWF4KCkpKQogICAgICAgICAgICAgICAgcGFpcnMrPWludChtLnN1bSgpKQogICAgcHJpbnQoIkRJUiIsZC5uYW1lLCJGSUxFUyIsbGVuKGZzKSwiQUxQSEFfU1VNX01BWCIsaW50KGFzdW0ubWF4KCkpLCJVTklPTiIscm91bmQoZmxvYXQobnoubWVhbigpKSw2KSwiT1ZFUkxBUF9QSVgiLGludCgobWFzay5zdW0oYXhpcz0wKT4xKS5zdW0oKSksIlJHQl9PVkVSTEFQX01BWERJRkYiLG1heGRpZmYsIlJHQl9QQUlSUElYIixwYWlycykKcHJpbnQoIklOVEVHUklUWV9ET05FPTEiKQo=' | base64 -d | python3\n"
+}

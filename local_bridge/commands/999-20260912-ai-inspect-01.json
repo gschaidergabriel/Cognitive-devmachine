@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-ai-inspect-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -eu; echo HOST=$(hostname); echo USER=$(id -un); echo HOME=$HOME; echo '--- candidate repos ---'; for d in \"$HOME/frankenstein\" \"$HOME/frankenstein-repo\" \"$HOME/Frankenstein\" \"$HOME/.claude/plugins/frankenstein\"; do if [ -d \"$d/.git\" ]; then echo REPO=$d; git -C \"$d\" remote -v | head -4; git -C \"$d\" branch --show-current; git -C \"$d\" rev-parse HEAD; git -C \"$d\" status --short; fi; done; echo '--- discover matching git roots ---'; find \"$HOME\" -maxdepth 4 -type d -name .git -print 2>/dev/null | sed 's#/.git$##' | grep -Ei 'frankenstein|self-integration|clay-global-research-entity' | head -60",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120
+}

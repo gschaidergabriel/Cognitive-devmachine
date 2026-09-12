@@ -1,0 +1,49 @@
+{
+  "schema": "FRANKENSTEIN_EXECUTION_FABRIC_POLICY/v1",
+  "status": "CURRENT",
+  "effective_at": "2026-09-12",
+  "authority": "OWNER_DECISION",
+  "decision": {
+    "local_frankenstein_harness": {
+      "admission": "ALLOWED",
+      "role": "PRIMARY_DEFAULT",
+      "description": "The locally running Frankenstein harness/worker fabric is the preferred execution path for interactive coding, host work, terminal operation and ephemeral task workers."
+    },
+    "free_swarm": {
+      "admission": "ALLOWED",
+      "role": "SECONDARY_FALLBACK",
+      "description": "Free Swarm is permitted again, but is not the default execution fabric. Use it when the primary local harness lacks capability/capacity, when explicitly selected, or as a bounded fallback."
+    },
+    "precedence": [
+      "local_frankenstein_harness",
+      "free_swarm"
+    ]
+  },
+  "state_law": {
+    "single_canonical_cognitive_path": true,
+    "canonical_path": "Frankenstein/GRID10/UnifiedDB",
+    "split_brain_forbidden": true,
+    "terminal_and_web_are_ingress_surfaces_not_separate_brains": true,
+    "workers_are_ephemeral_execution_organs_not_independent_state_authorities": true
+  },
+  "execution_invariants": [
+    "Resolve current host/project capability authority at execution time; this owner policy does not bypass effect/write/network gates.",
+    "Local host effects preserve machine_id and owner provenance on every command and receipt.",
+    "Material effects require durable receipts/read-back evidence at the claimed scope.",
+    "Local fan-out requires current host telemetry and resource admission; unknown/red telemetry fails closed.",
+    "Free Swarm/provider execution may not bypass the same capability, write, effect, provenance, receipt or host-safety boundaries.",
+    "Do not create a second cognitive database or a parallel terminal-only/chat-only state store."
+  ],
+  "implementation_evidence": [
+    "research_entity/coordination/LOCAL_BRIDGE_PROTOCOL.md",
+    "gschaidergabriel/frankenstein:DEV_SOURCE_RESEARCH/repository/scripts/harness_aider.py",
+    "gschaidergabriel/frankenstein:DEV_SOURCE_RESEARCH/repository/scripts/harness_audit.py",
+    "gschaidergabriel/frankenstein:scripts/f2wp1207_grid10_turn_loop.py"
+  ],
+  "supersedes_policy_claim": "Free Swarm/provider admission is categorically HARD_OFF as an owner policy.",
+  "does_not_claim": [
+    "that every concrete runtime/provider switch has already been toggled on every host",
+    "that a provider is healthy merely because Free Swarm is permitted",
+    "that existing safety gates may be weakened"
+  ]
+}

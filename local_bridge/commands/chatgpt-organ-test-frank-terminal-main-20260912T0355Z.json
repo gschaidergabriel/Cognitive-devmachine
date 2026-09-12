@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-test-frank-terminal-main-20260912T0355Z",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "command": "set -euo pipefail; R=/home/andreas/frankenstein-repo; BEFORE=$(git -C \"$R\" status --porcelain | sha256sum | awk '{print $1}'); git -C \"$R\" fetch --quiet origin main; T=$(mktemp -d /tmp/frank-terminal-main-test.XXXXXX); trap 'rm -rf \"$T\"' EXIT; git -C \"$R\" archive origin/main scripts/frank_terminal.py tests/test_frank_terminal.py | tar -x -C \"$T\"; cd \"$T\"; python3 -m py_compile scripts/frank_terminal.py tests/test_frank_terminal.py; python3 -m pytest -q tests/test_frank_terminal.py; AFTER=$(git -C \"$R\" status --porcelain | sha256sum | awk '{print $1}'); test \"$BEFORE\" = \"$AFTER\"; echo WORKTREE_STATUS_HASH_UNCHANGED=$AFTER; echo TESTED_ORIGIN_MAIN=$(git -C \"$R\" rev-parse origin/main)",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 120
+}

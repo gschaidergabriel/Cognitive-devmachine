@@ -1,0 +1,1 @@
+{"schema": "CLAY_LOCAL_COMMAND/v1", "command_id": "gabriel-check-8420b-1789192385", "op": "exec", "command": "ps -p 8612 -o pid,cmd --no-headers; echo ---; systemctl --user list-units --type=service --state=running | grep -iE \"shim|claude|crush|8420\"; echo ---node---; node --version; echo ---claudepath---; readlink -f $(which claude)", "timeout_seconds": 60}

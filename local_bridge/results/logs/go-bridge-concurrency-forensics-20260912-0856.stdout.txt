@@ -1,0 +1,71 @@
+===UNITS===
+# /home/ai-core-node/.config/systemd/user/clay-local-bridge.service
+[Unit]
+Description=Clay ChatGPT local development bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment="HOME=/home/ai-core-node"
+Environment="GIT_SSH_COMMAND=ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts"
+ExecStart=/usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py
+WorkingDirectory=/home/ai-core-node
+Restart=always
+RestartSec=2
+Nice=5
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-local-bridge.service
+[Unit]
+Description=Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+===SHOW===
+MainPID=2495
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Id=clay-local-bridge.service
+ActiveState=active
+SubState=running
+
+MainPID=959674
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Id=frankenstein-local-bridge.service
+ActiveState=active
+SubState=running
+===PROCESSES===
+ 959674    2339 Sat Sep 12 06:35:09 2026 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+===SAFE_ENV===
+PID=2495
+PID=959674
+===DB_ROWS===
+db /home/ai-core-node/.claude/star/local_bridge_state/bridge.sqlite3 exists True
+go-avatar-gpt56sol-body-transform-authority-20260912-0842 []
+go-avatar-gpt56sol-body-style-authority-20260912-0852 []
+go-avatar-gpt56sol-body-sourceover-v2-20260912-0854 [('go-avatar-gpt56sol-body-sourceover-v2-20260912-0854', '1d8a7a761282bc705c6c7712e3f9508e3dd4eed256ea2be3ebb6e0c65860746f', '2026-09-12T01:52:56.507890+00:00', 1)]
+done_count 292
+===REPO_STATE===
+## chatgpt-local-ai-core-node-results...origin/chatgpt-local-ai-core-node-results
+ M local_bridge/results/LATEST.json
+?? local_bridge/commands/
+?? local_bridge/results/logs/go-avatar-gpt56sol-body-display-signal-sweep-20260912-0916.stderr.txt
+?? local_bridge/results/logs/go-avatar-gpt56sol-body-display-signal-sweep-20260912-0916.stdout.txt
+?? local_bridge/results/logs/go-avatar-gpt56sol-body-sourceover-identity-v2-20260912-1116.stderr.txt
+?? local_bridge/results/logs/go-avatar-gpt56sol-body-sourceover-identity-v2-20260912-1116.stdout.txt
+?? local_bridge/results/logs/go-avatar-gpt56sol-depthwarp-summary-v2-20260912-1117.stderr.txt
+?? local_bridge/results/logs/go-avatar-gpt56sol-depthwarp-summary-v2-20260912-1117.stdout.txt
+?? local_bridge/results/receipts/go-avatar-gpt56sol-body-display-signal-sweep-20260912-0916.json
+?? local_bridge/results/receipts/go-avatar-gpt56sol-body-sourceover-identity-v2-20260912-1116.json
+?? local_bridge/results/receipts/go-avatar-gpt56sol-depthwarp-summary-v2-20260912-1117.json
+origin	https://github.com/gschaidergabriel/clay-global-research-entity.git (fetch)
+origin	https://github.com/gschaidergabriel/clay-global-research-entity.git (push)

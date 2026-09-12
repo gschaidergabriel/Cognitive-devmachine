@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-heavy-telemetry-guard-fix-20260912-1824",
+  "command_sha256": "d270b13c8c0c23779922998d900dbb256dc8892b449a601851b243631407c7b3",
+  "started_at": "2026-09-12T10:51:29.053945+00:00",
+  "finished_at": "2026-09-12T10:51:29.279120+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "baf85e3afadcbce7fd5e166f35ab8bc24dab422a4871401c1dfb9ce142f855b0",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "57:  if heavy and is_host and a>180:continue\n58:  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue\n59:  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

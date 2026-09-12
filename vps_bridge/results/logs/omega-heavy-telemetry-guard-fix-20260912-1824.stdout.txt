@@ -1,0 +1,3 @@
+57:  if heavy and is_host and a>180:continue
+58:  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue
+59:  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue

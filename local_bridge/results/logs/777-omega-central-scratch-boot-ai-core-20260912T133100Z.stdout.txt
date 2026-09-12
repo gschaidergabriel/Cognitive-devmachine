@@ -1,0 +1,116 @@
+OMEGA_BOOT_PREFLIGHT load1=6.35 mem_available_kib=13728816
+OMEGA_BOOT_HEAD=e8336eeac4f43f3808b44b5bb5859e010f8a7b26
+............................................                             [100%]
+44 passed in 1.36s
+OMEGA_BOOT_SUPERVISOR_PID=3615848
+===OMEGA_STATUS_LIVE===
+{
+  "schema": "OMEGA_SUPERVISOR_STATUS/v3",
+  "updated_at": "2026-09-12T13:30:59.227143+00:00",
+  "pid": 3615848,
+  "repo_root": "/tmp/omega777-central-boot-20260912T133100Z/current",
+  "children": {
+    "grid": {
+      "pid": 3615859,
+      "returncode": null,
+      "alive": true,
+      "restart_count": 0,
+      "restart_in_seconds": null
+    },
+    "relay": {
+      "pid": 3616437,
+      "returncode": null,
+      "alive": true,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "receipt_reconciler": {
+      "pid": 3616438,
+      "returncode": null,
+      "alive": true,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "telemetry": {
+      "pid": 3616439,
+      "returncode": null,
+      "alive": true,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "master_bridge": {
+      "pid": 3616440,
+      "returncode": null,
+      "alive": true,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    }
+  },
+  "relay_watchdog": {
+    "host_stall_seconds": 360.0,
+    "current_oldest_host_dispatch": null,
+    "kill_count": 0,
+    "last_stall": null
+  }
+}
+===OMEGA_DB===
+{"bytes": 4096, "exists": true, "tables": ["bridge_message", "claim", "claim_evidence", "cognition_epoch", "cognition_frame", "effect_intent", "effect_receipt", "improvement_candidate", "observation", "organ_telemetry", "policy_decision", "proposal", "reentry_snapshot", "relay_ledger", "source_subject", "task", "worker_run", "world_entity", "world_projection_checkpoint", "world_relation"]}
+===OMEGA_CHILD_PROCESSES===
+    PID    PPID STAT     ELAPSED CMD
+3615859 3615848 SNs        00:03 /tmp/omega777-central-boot-20260912T133100Z/venv/bin/python -m omega.grid_runtime_v3
+3616437 3615848 ZNs        00:00 [python] <defunct>
+3616438 3615848 ZNs        00:00 [python] <defunct>
+3616439 3615848 ZNs        00:00 [python] <defunct>
+3616440 3615848 ZNs        00:00 [python] <defunct>
+OMEGA_BOOT_SUPERVISOR_EXIT=0
+===OMEGA_STATUS_FINAL===
+{
+  "schema": "OMEGA_SUPERVISOR_STATUS/v3",
+  "updated_at": "2026-09-12T13:31:00.428810+00:00",
+  "pid": 3615848,
+  "repo_root": "/tmp/omega777-central-boot-20260912T133100Z/current",
+  "children": {
+    "grid": {
+      "pid": 3615859,
+      "returncode": -15,
+      "alive": false,
+      "restart_count": 0,
+      "restart_in_seconds": null
+    },
+    "relay": {
+      "pid": 3616437,
+      "returncode": 1,
+      "alive": false,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "receipt_reconciler": {
+      "pid": 3616438,
+      "returncode": 1,
+      "alive": false,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "telemetry": {
+      "pid": 3616439,
+      "returncode": 1,
+      "alive": false,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    },
+    "master_bridge": {
+      "pid": 3616440,
+      "returncode": 1,
+      "alive": false,
+      "restart_count": 1,
+      "restart_in_seconds": null
+    }
+  },
+  "relay_watchdog": {
+    "host_stall_seconds": 360.0,
+    "current_oldest_host_dispatch": null,
+    "kill_count": 0,
+    "last_stall": null
+  }
+}
+OMEGA_BOOT_FINAL_CHILD_ALIVE={"grid": false, "master_bridge": false, "receipt_reconciler": false, "relay": false, "telemetry": false}

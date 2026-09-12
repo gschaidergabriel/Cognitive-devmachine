@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-daemon-router-source-20260912T2035Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 20,
+  "command": "python3 -c \"from pathlib import Path; lines=Path('/workspace/omega_runtime/omega_daemon.py').read_text().splitlines(); print('\\n'.join(f'{i+1}:{lines[i]}' for i in range(min(115,len(lines)))))\""
+}

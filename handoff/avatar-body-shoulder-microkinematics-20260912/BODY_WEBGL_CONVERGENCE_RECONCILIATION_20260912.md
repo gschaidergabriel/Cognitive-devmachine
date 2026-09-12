@@ -38,7 +38,7 @@ All accepted runs below preserved live source byte identity before/after.
 
 6. The separate fail-closed 72-case attested harness that returned red status and `gpu_activity_fraction=0.0` is **EVIDENCE_INVALID / NONTERMINAL FOR PRODUCT SEMANTICS**, not a product-negative result. Its own readiness fence failed, so it correctly minted zero pixel-equivalence credit.
 
-7. Real-host four-condition performance attribution isolates the cadence blocker:
+7. Real-host four-condition performance attribution isolates the cadence blocker on raw 1536x1024 texture uploads:
    - static_base: ~`60.003 fps`, p95 max `16.7 ms`, zero >20ms frames.
    - static_warp: ~`60.002 fps`, p95 max `16.7 ms`, zero >20ms frames.
    - player_base: ~`56.827 fps`, p95 max `33.3 ms`, 20 >20ms frames over two runs.
@@ -46,7 +46,15 @@ All accepted runs below preserved live source byte identity before/after.
    - residual warp overhead: `0.00028 ms` static and `0.04637 ms` with player.
    - player/upload overhead: ~`0.93-0.98 ms` mean plus periodic 33.3ms stalls.
 
-The shoulder residual mesh is therefore **not** the performance blocker. Large-frame texture uploads are the measured blocker. Pre-resizing from 1536x1024 to 620x414 reduces upload pixel count to ~16.32% of the original while simultaneously fixing fidelity.
+8. The same four-condition harness with body frames resized once and cached at 620x414 **before** the measured animation/upload loop closes the cadence gate while retaining the same 40 selected-image uploads:
+   - static_base: `60.001676 fps`, p95 max `16.8 ms`, zero >20ms frames.
+   - static_warp: `60.001676 fps`, p95 max `16.7 ms`, zero >20ms frames.
+   - player_base: `60.002682 fps`, p95 max `16.8 ms`, zero >20ms frames, 40 measured uploads.
+   - player_warp: `60.001676 fps`, p95 max `16.7 ms`, zero >20ms frames, 40 measured uploads.
+   - measured player/warp overhead collapses to timer noise (`<=0.00028 ms`).
+   - classification: `PRERESIZED_BODY_PLAYER_WARP_50FPS_HEADROOM_PASS`.
+
+The shoulder residual mesh is therefore **not** the performance blocker. Large-frame texture uploads are the measured blocker. Pre-resizing from 1536x1024 to 620x414 reduces upload pixel count to ~16.32% of the original while simultaneously fixing fidelity and restoring stable 60 Hz cadence at this real-host component scope.
 
 ## Current engineering decision
 
@@ -58,11 +66,18 @@ Do not promote the old raw 1536x1024 direct-upload path as the production defaul
 
 Prefer caching resized sources (or equivalently precomputed 620x414 assets) so the resize is outside the animation hot path. Preserve source-space mesh coordinates/semantics unless a separate discriminator proves a reason to change them.
 
+## Closed gates at exact scope
+
+- real-host production-shape pre-resized DOM/WebGL fidelity: PASS;
+- real-host cached-pre-resize dynamic player cadence with residual shoulder warp: PASS;
+- residual shoulder-mesh compute overhead as primary blocker: falsified;
+- raw full-resolution texture-upload path as acceptable cadence baseline: falsified.
+
 ## Open gates
 
-- cached-pre-resize player cadence on the real host (dispatched; must prove that the periodic upload stalls collapse rather than move elsewhere);
-- exact live-runtime insertion point and ownership (read-only locator dispatched);
+- exact live-runtime insertion point and current mutation ownership;
 - shadow/integration A/B against the byte-exact live subject before any live replacement;
+- integrated visual + cadence gate with the actual live scheduler/state transitions rather than the isolated player harness;
 - rollback/hash/HTTP-readback fences for any eventual live promotion;
 - whole-avatar interaction with canonical eye identity route and head/body coupling;
 - no HCU/GWT/J-Space/training credit from these presentation-layer results.

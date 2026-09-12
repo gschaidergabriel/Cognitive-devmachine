@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-roll-current-probe-20260912-0722",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 30,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\nEXPECTED_HTML=\"18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\"\ntest \"$(hostname)\" = \"ai-core-node-projekt-frankenstein\"\nACTUAL=$(sha256sum buehne.html | awk '{print $1}')\necho HTML_SHA256=$ACTUAL\ntest \"$ACTUAL\" = \"$EXPECTED_HTML\"\ntest \"$(systemctl --user is-active frankenstein-buehne.service)\" = active\npython3 - <<'PY'\nfrom pathlib import Path\nt=Path('buehne.html').read_text(encoding='utf-8')\nneedles=[\n'kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;',\n'augenOffsetDx += (zielOffset.dx - augenOffsetDx) * 0.4;',\n'augenOffsetDy += (zielOffset.dy - augenOffsetDy) * 0.4;',\n'kopfRollAusgleichDeg = kopfRollWert;',\n'augenOffsetDx = zielOffset.dx;',\n'augenOffsetDy = zielOffset.dy;',\n'KOPF_ROLL_AUGEN_OFFSET'\n]\nfor n in needles: print('COUNT',repr(n),t.count(n))\nkeys=['function kopfRollTick','function kopfKoerperDrehSchritt','KOPF_ROLL_AUGEN_OFFSET','kopfRollAusgleichDeg +=','augenOffsetDx +=']\nfor k in keys:\n    i=t.find(k)\n    print('===KEY',k,'POS',i,'===')\n    if i>=0: print(t[max(0,i-500):min(len(t),i+1800)])\nPY\necho ===FPS===\ncurl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps({\"fps\":(d.get(\"fps\") or {}).get(\"fps\"),\"ts\":(d.get(\"fps\") or {}).get(\"ts\")},sort_keys=True))'\necho PROBE_SCOPE=EXACT_CURRENT_ROLL_EYE_GEOMETRY_READ_ONLY\n"
+}

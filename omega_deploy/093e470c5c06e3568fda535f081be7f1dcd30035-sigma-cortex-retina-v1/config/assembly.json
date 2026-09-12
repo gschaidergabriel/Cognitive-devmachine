@@ -1,0 +1,288 @@
+{
+  "schema": "OMEGA_ASSEMBLY/v1",
+  "entity": "OMEGA",
+  "center": "repo:omega",
+  "principle": "compose_existing_organs_without_creating_competing_authorities",
+  "canonical_authorities": {
+    "truth_projection": "omega.unifieddb",
+    "cognition_selection": "omega.grid",
+    "effect_authority": "omega.alignment",
+    "runtime_supervision": "omega.supervisor"
+  },
+  "organs": [
+    {
+      "organ_id": "omega.context_gate",
+      "role": "context_relevance_gate",
+      "authority": "CANDIDATE_ONLY",
+      "activation_policy": "PROBE_BEFORE_USE",
+      "providers": [
+        {
+          "source_id": "repo:project-frankenstein",
+          "source_path": "services/context_gate",
+          "entrypoint": "services.context_gate:get_context_gate",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD_BEFORE_ACTIVATION"
+        }
+      ],
+      "inputs": ["typed_entry", "retrieved_context", "state_scalars"],
+      "outputs": ["context_selection_candidate"],
+      "constraints": [
+        "may suppress candidate context but never delete source evidence",
+        "cannot grant effect authority",
+        "runtime activation requires exact source and subject probe"
+      ]
+    },
+    {
+      "organ_id": "omega.hypothesis_engine",
+      "role": "empirical_hypothesis_cycle",
+      "authority": "CANDIDATE_ONLY",
+      "activation_policy": "PROBE_BEFORE_USE",
+      "providers": [
+        {
+          "source_id": "repo:project-frankenstein",
+          "source_path": "services/hypothesis_engine",
+          "entrypoint": "services.hypothesis_engine:get_hypothesis_engine",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD_BEFORE_ACTIVATION"
+        }
+      ],
+      "inputs": ["observation", "open_question", "research_delta"],
+      "outputs": ["hypothesis_candidate", "prediction_candidate", "experiment_request_candidate"],
+      "constraints": [
+        "hypotheses remain noncanonical until evidence-bound promotion",
+        "active experiments cross normal alignment and effect gates",
+        "negative results are preserved"
+      ]
+    },
+    {
+      "organ_id": "omega.genesis",
+      "role": "continuous_self_improvement_proposer",
+      "authority": "CANDIDATE_ONLY",
+      "activation_policy": "PROBE_BEFORE_USE",
+      "providers": [
+        {
+          "source_id": "repo:project-frankenstein",
+          "source_path": "services/genesis",
+          "entrypoint": "services.genesis:get_daemon",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD_BEFORE_ACTIVATION"
+        }
+      ],
+      "inputs": ["hypothesis_candidate", "telemetry", "reflection", "research_delta"],
+      "outputs": ["improvement_candidate"],
+      "constraints": [
+        "proposal only: no direct protected-kernel mutation",
+        "every candidate must carry baseline, falsifier and shadow evidence before promotion",
+        "cannot weaken provenance, alignment or no-replay invariants"
+      ]
+    },
+    {
+      "organ_id": "omega.research_entity",
+      "role": "research_evidence_falsification",
+      "authority": "EVIDENCE_ONLY",
+      "activation_policy": "REMOTE_EVIDENCE_ONLY",
+      "providers": [
+        {
+          "source_id": "repo:research",
+          "source_path": "research_entity",
+          "entrypoint": "CURRENT_AUTHORITY_AND_RECEIPTS",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD"
+        }
+      ],
+      "inputs": ["hypothesis_candidate", "improvement_candidate", "open_gate"],
+      "outputs": ["evidence_packet", "negative_result", "replication_result", "falsifier_result"],
+      "constraints": [
+        "worker volume is never authority",
+        "component pass never self-promotes whole-system credit",
+        "provider or cost authority must be current"
+      ]
+    },
+    {
+      "organ_id": "omega.goodhart_guard",
+      "role": "anti_goodhart_promotion_gate",
+      "authority": "PROMOTION_GUARD",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/assembly.py",
+          "entrypoint": "omega.assembly:GoodhartGuard",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        }
+      ],
+      "inputs": ["improvement_candidate", "evidence_packet", "negative_result"],
+      "outputs": ["promotion_eligibility"],
+      "constraints": [
+        "single-metric self-evaluation cannot promote",
+        "independent falsifier or explicit owner authority required",
+        "negative evidence cannot be dropped",
+        "promotion scope cannot exceed evidence scope"
+      ]
+    },
+    {
+      "organ_id": "omega.grid",
+      "role": "grid10_gwt_hcu_selection",
+      "authority": "CANONICAL_COGNITION_SELECTION",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/grid_runtime_v3.py",
+          "entrypoint": "omega.grid_runtime_v3:Runtime",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        }
+      ],
+      "inputs": ["typed_entry", "context_selection_candidate", "evidence_packet", "open_task"],
+      "outputs": ["selected_proposal", "broadcast", "effect_intent_candidate"],
+      "constraints": [
+        "one canonical productive GRID",
+        "selection does not grant effect authority"
+      ]
+    },
+    {
+      "organ_id": "omega.unifieddb",
+      "role": "central_provenance_and_truth_projection",
+      "authority": "CANONICAL_TRUTH_PROJECTION",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/unified_store.py",
+          "entrypoint": "omega.unified_store:UnifiedStore",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        }
+      ],
+      "inputs": ["observation", "receipt", "claim", "telemetry", "assembly_status"],
+      "outputs": ["provenance_record", "current_projection", "reentry_state"],
+      "constraints": [
+        "typed writers only",
+        "unknown stays UNKNOWN",
+        "host and owner provenance never flattened"
+      ]
+    },
+    {
+      "organ_id": "omega.alignment",
+      "role": "frankenstein_2_effect_authority_kernel",
+      "authority": "CANONICAL_EFFECT_AUTHORITY",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/alignment.py",
+          "entrypoint": "omega.alignment:authorize",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        }
+      ],
+      "inputs": ["effect_intent_candidate", "authority_binding", "subject_binding"],
+      "outputs": ["allow", "deny", "unknown"],
+      "constraints": [
+        "executor cannot mint its own ALLOW",
+        "unknown outcome never auto-replays",
+        "protected alignment surfaces cannot be autonomously weakened"
+      ]
+    },
+    {
+      "organ_id": "omega.relay",
+      "role": "effect_transport_and_receipt_reconciliation",
+      "authority": "EXECUTOR_ONLY",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/relay_entrypoint.py",
+          "entrypoint": "omega.relay_entrypoint:main",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        },
+        {
+          "source_id": "repo:research",
+          "source_path": "research_entity/coordination/LOCAL_BRIDGE_PROTOCOL.md",
+          "entrypoint": "per_machine_local_bridge",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD"
+        }
+      ],
+      "inputs": ["authorized_effect_intent"],
+      "outputs": ["effect_receipt", "unknown_effect", "blocked_effect"],
+      "constraints": [
+        "exactly one automatic dispatch claim",
+        "machine_id and owner required for host effects",
+        "late exact receipts reconcile without replay"
+      ]
+    },
+    {
+      "organ_id": "omega.voice",
+      "role": "realtime_conversational_presence",
+      "authority": "PRESENTATION_AND_DIALOG_ONLY",
+      "activation_policy": "HOST_BOUND_PROBE_REQUIRED",
+      "providers": [
+        {
+          "source_id": "repo:frankenstein",
+          "source_path": "DEV_SOURCE_RESEARCH/repository/GESPRAECHSMODUS.md",
+          "entrypoint": "host_bound_voice_runtime",
+          "source_commit_policy": "REFRESH_CURRENT_HEAD"
+        }
+      ],
+      "inputs": ["gwt_broadcast", "presence_state", "conversation_state"],
+      "outputs": ["speech_act", "audio", "conversation_observation"],
+      "constraints": [
+        "voice model is an organ, not identity authority",
+        "tool effects still cross alignment"
+      ]
+    },
+    {
+      "organ_id": "omega.avatar",
+      "role": "visible_embodiment",
+      "authority": "PRESENTATION_ONLY",
+      "activation_policy": "HOST_BOUND_PROBE_REQUIRED",
+      "providers": [
+        {
+          "source_id": "host:ai-core-node",
+          "source_path": "/home/ai-core-node/.claude/star/visual",
+          "entrypoint": "frankenstein-buehne.service",
+          "source_commit_policy": "LIVE_READBACK_WINS"
+        }
+      ],
+      "inputs": ["presence_state", "affect_state", "gwt_broadcast"],
+      "outputs": ["visible_embodiment_observation"],
+      "constraints": [
+        "one visible production avatar instance",
+        "reload existing production subject instead of spawning another"
+      ]
+    },
+    {
+      "organ_id": "omega.supervisor",
+      "role": "runtime_supervision",
+      "authority": "CANONICAL_RUNTIME_SUPERVISION",
+      "activation_policy": "STATIC_SOURCE_BOUND",
+      "providers": [
+        {
+          "source_id": "repo:omega",
+          "source_path": "omega/supervisor.py",
+          "entrypoint": "omega.supervisor:Supervisor",
+          "source_commit_policy": "SAME_AS_ACTIVE_OMEGA"
+        }
+      ],
+      "inputs": ["child_liveness", "relay_stall_state", "assembly_status"],
+      "outputs": ["runtime_status", "bounded_restart"],
+      "constraints": [
+        "no hanging child may freeze the whole runtime",
+        "restart ambiguity must not cause effect replay"
+      ]
+    }
+  ],
+  "connections": [
+    ["omega.context_gate", "omega.grid"],
+    ["omega.hypothesis_engine", "omega.research_entity"],
+    ["omega.research_entity", "omega.goodhart_guard"],
+    ["omega.genesis", "omega.goodhart_guard"],
+    ["omega.goodhart_guard", "omega.grid"],
+    ["omega.grid", "omega.alignment"],
+    ["omega.alignment", "omega.relay"],
+    ["omega.relay", "omega.unifieddb"],
+    ["omega.unifieddb", "omega.context_gate"],
+    ["omega.unifieddb", "omega.hypothesis_engine"],
+    ["omega.unifieddb", "omega.genesis"],
+    ["omega.grid", "omega.voice"],
+    ["omega.grid", "omega.avatar"],
+    ["omega.voice", "omega.unifieddb"],
+    ["omega.avatar", "omega.unifieddb"],
+    ["omega.supervisor", "omega.grid"],
+    ["omega.supervisor", "omega.relay"]
+  ]
+}

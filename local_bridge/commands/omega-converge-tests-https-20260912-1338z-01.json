@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-converge-tests-https-20260912-1338z-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; export GIT_TERMINAL_PROMPT=0; d=\"$HOME/omega-validation-converge-20260912-1338\"; git clone --depth 1 --branch 'omega/converge-relay-safety-20260912' https://github.com/gschaidergabriel/oMEGA.git \"$d\"; echo ===HEAD===; git -C \"$d\" rev-parse HEAD; echo ===COMPILE===; PYTHONPATH=\"$d\" python3 -m compileall -q \"$d/omega\" \"$d/tests\"; echo COMPILE_PASS; echo ===TESTS===; cd \"$d\"; python3 -m pytest -q",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 180
+}

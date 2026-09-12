@@ -1,0 +1,386 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+     siehe Skript) exakt auf die reale cover-Skalierung/-Position gebrachte
+     Zwischenebene, die 1:1 die volle 1536x1024-Leinwand repraesentiert --
+     #gesicht-rahmen beschneidet sie per overflow:hidden auf den sichtbaren
+     Ausschnitt (identisches Ergebnis zum alten object-fit:cover). Kopf,
+     Koerper UND Mund sitzen jetzt alle als simple Prozent-Kinder DIESER
+     Leinwand -- ein Anker gilt fuer immer, keine zwei widerspruechlichen
+     Bezugsrahmen mehr. */
+  /* ⭐ 2026-09-11 Schattenwurf (Gabriels ausdruecklicher Wunsch, ueber
+     Filter-Agent geprueft: 101,3% fps-Ratio = praktisch gratis). filter:drop-shadow
+     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --
+     legt sich also korrekt um die Silhouette, nicht um ein Rechteck. */
+  /* ⭐⭐ 2026-09-11 (Animations-Agent, Zweiter-Kopf-Pruefung): 8px/14px/16px
+     bei 0.45 war ein so dunkler, so weit versetzter Schattenkopf, dass er bei
+     Kopfneigung als zweiter Kopf-Kandidat lesbar war. Versatz+Weiche+Deckkraft
+     spuerbar reduziert -- bleibt als Silhouetten-Schatten am Koerper, liest
+     sich nicht mehr als eigene Kopfform. Vorher/Nachher-Screenshots im Bericht. */
+  #kopf-canvas{position:absolute;pointer-events:none;filter:drop-shadow(4px 7px 10px rgba(0,0,0,0.28))}
+  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+     OHNE eigenen z-index -- erzeugen also KEINEN neuen Stacking-Context,
+     die z-index-Werte der Kinder (1/2/4) vergleichen sich weiter exakt wie
+     vorher direkt gegeneinander. Zweck: kopfKoerperSchritt() (JS weiter
+     unten) darf hier eine kleine gefederte rotate()/translateY() setzen,
+     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+     in atmen() anzufassen -- zwei getrennte Transform-Ebenen, keine
+     Merge-Logik noetig, kein Risiko fuer die Atmung. */
+  /* ⭐⭐ 2026-09-11 NACHTRAG (Gabriel zeigt auf den Hals, gemessen statt
+     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+     Default 50%/50%) statt um den Halswirbel. Laut Rig-Manifest sitzt der
+     head_neck_anchor bei 768,600 auf 1536x1024 = 50% / 58,59% -- das ist
+     der tatsaechliche Drehpunkt eines echten Kopfes. Vorher wanderte der
+     Halsansatz bei jeder Neigung seitlich weg (bei 3 Grad schon ~4,6px),
+     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+     bekommt aus demselben Grund 50%/100%: ein Oberkoerper kippt aus der
+     Huefte (Bildunterkante), nicht aus der Mitte. Kostet nichts, behebt
+     laut Messung den groessten Teil des "Puppen"-Eindrucks am Hals. */
+  #kopf-dreh{transform-origin:50% 58.59%}
+  #koerper-dreh{transform-origin:50% 100%}
+  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+  #ausdruck-schicht,#ausdruck-schicht2{position:absolute;inset:0;width:100%;height:100%;
+    display:block;pointer-events:none}
+  #koerper-schicht{z-index:1}
+  #kopf-schicht{z-index:2}
+  /* ⭐⭐ 2026-09-11 (Animations-Agent, ZWEITER KOPF, Ursache behoben):
+     #ausdruck-schicht/#ausdruck-schicht2 ersetzen die alten flachen
+     #gesicht/#gesicht2 (undurchsichtige Vollbild-RGBs mit eingebratenem
+     Hintergrund, z-index:3 UEBER dem RGBA-Kopf). Die 44 Sonderausdruecke
+     existieren in /ausdruck_erweitert/ als echte 1536x1024-RGBA mit
+     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+     Leinwand, mit demselben unteren Hals-Masken-Verlauf wie der Kopf.
+     Kein Rechteck, kein Hintergrund, kein Versatz: kein Geisterkopf. */
+  #ausdruck-schicht{z-index:3}
+  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+  /* ⭐⭐ 2026-09-11 ECHTES ATMEN (Gabriel: "eins nach dem anderen", DIE eine
+     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+     wie #gesicht/#gesicht2 (Kommentar oben), nur fuer den Koerper -- 12 echte
+     fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png) werden
+     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+  #koerper-schicht2{opacity:0}
+  /* ⭐⭐ 2026-09-11 NACHTRAG 2 (Gabriel zeigt auf die Halskante, ZWEITES,
+     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+     bei y 505..599 (Leinwand 1536x1024). Der Kopf bricht dort hart ab (y 584:
+     165 Kopfpixel/Zeile -> y 600: 0), darunter erscheint abrupt der andere
+     Hals-Farbverlauf des Koerperbildes -- genau die sichtbare Kante. Fix:
+     Kopf unten per Masken-Gradient WEICH ausblenden statt hart abschneiden
+     lassen, in exakt dem gemessenen Ueberlappungsstreifen (y 550/1024=53,7%
+     bis y 599/1024=58,5%). Das ist KEINE Weichzeichnung der Textur (die
+     bleibt scharf, Gabriel will das Grobe erhalten) -- nur die Deckkraft
+     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+     auch wenn sich der Kopf bewegt. Startwerte aus der Messung, per Screenshot
+     bei 4-8x-Zoom nachjustierbar falls zu durchsichtig/Kante steht noch. */
+  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 53.7%,transparent 58.5%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 53.7%,transparent 58.5%)}
+  /* ⭐ 2026-09-11 Crossfade (Gabriel: "smooth ... uncanny in jeder Hinsicht" --
+const AUSDRUCK_DATEIEN = ["01_ruhig_neutral","02_wach_aufmerksam","03_angespannt",
+  "04_zugewandt_weich","05_erschoepft_schwer","06_ueberrascht"];
+const AUGEN_RICHTUNG_ZU_DATEI = {
+  geradeaus:"01_geradeaus_kamera", links:"02_blick_links", rechts:"03_blick_rechts",
+  oben:"04_blick_oben", unten:"05_blick_unten",
+  links_oben:"06_blick_links_oben", rechts_oben:"07_blick_rechts_oben"
+};
+const AUGEN_HALB = "08_augen_halb_geschlossen";
+const AUGEN_ZU = "09_augen_geschlossen";
+// ⭐ 2026-09-11 (Animations-Agent): die alten Vorladerunden fuer /ausdruck/
+// (6 flache Vollbild-RGBs) und /kopf/ (4 flache Posen) sind ENTFERNT -- diese
+// beiden Sets werden nicht mehr angezeigt (Geisterkopf-Fix, siehe
+// sonderausdruckZeigen()/kopfKurzNeigen()); 10 volle Frames weniger im
+// Speicher. AUSDRUCK_DATEIEN bleibt nur noch als Namensquelle fuer die
+// /api/status-Ausdruckskuerzel (AUSDRUCK_ZU_STIMMUNG unten).
+// ⭐ 2026-09-11 ECHTES BLINZELN: 12 fotografierte Lid-Zwischenbilder, mit
+// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+// ⭐ 2026-09-11 LAZY-BILDCACHE: grosse RGBA-Frames (Kopfrollen, Koerper-Aktionen)
+// werden erst beim ersten echten Bedarf geladen, nicht alle vor. bildLaden()
+// liefert einen Eintrag mit ok/err; Spieler warten auf ok, statt ein
+// halb geladenes Bild sichtbar zu wechseln (kein Flash, kein Leerraum).
+const _bildCache = new Map();
+function bildLaden(src){
+  let eintrag = _bildCache.get(src);
+  if(!eintrag){
+    const img = new Image();
+    eintrag = { ok:false, err:false };
+    img.onload = () => { eintrag.ok = true; };
+    img.onerror = () => { eintrag.err = true; };
+    img.src = src;
+    _bildCache.set(src, eintrag);
+  }
+  return eintrag;
+}
+
+// ⭐ 2026-09-11 (Punkt 5 der Liste): Hintergrund-Stimmung aus dem echten,
+// server-gemessenen Ausdruck abgeleitet -- keine eigene erfundene Stimmung.
+// Mapping ist eine bewusste, dokumentierte Zuordnung (5 Stimmungsordner
+// stehen 6 Ausdruecken gegenueber, also nicht 1:1): 05_erschoepft_schwer
+// laeuft ruhig (beides niedrige Erregung), 06_ueberrascht laeuft bedrohlich
+// (ploetzliche Alarmiertheit ist der Stimmung am naechsten, die als einzige
+// von den fuenf "geladen"/warnend wirkt).
+const AUSDRUCK_ZU_STIMMUNG = {
+  "01_ruhig_neutral":"ruhig", "02_wach_aufmerksam":"wach",
+  "03_angespannt":"angespannt", "04_zugewandt_weich":"heiter",
+  "05_erschoepft_schwer":"ruhig", "06_ueberrascht":"bedrohlich"
+};
+const HINTERGRUND_FRAMES = 60;
+// Wasserlinie. Zwei Regenebenen statt einer erzeugen Tiefe (Gabriel,
+// 2026-09-11: "so als waere er wirklich da drinnen"): eine langsame,
+// kleine Ebene HINTER dem Gesichtsrahmen (im Rand/Hintergrund sichtbar),
+// eine schnelle, groessere Ebene VOR dem Gesicht (halbtransparent drueber)
+// -- er steht optisch zwischen den beiden statt nur davor.
+const canvas = $("regen");           // vorne, ueber dem Gesicht
+const ctx = canvas.getContext("2d");
+const canvasHinten = $("regen-hinten"); // hinten, hinter dem Rahmen
+const ctxHinten = canvasHinten.getContext("2d");
+let tropfenVorne = [];
+let tropfenHinten = [];
+
+function regenGroesseSetzen(){
+  const r = $("gesicht-rahmen").getBoundingClientRect();
+  canvas.width = r.width; canvas.height = r.height;
+  // ⭐ 2026-09-11: #regen-hinten liegt jetzt IN #kamera (Overscan-Box, 112%
+  // von #buehne), nicht mehr direkt in #buehne -- Groesse muss deshalb vom
+  // tatsaechlichen Elternrahmen kommen, sonst bleibt am Ueberstand-Rand eine
+  // ungezeichnete Luecke, die der Cam-Shake sichtbar ins Bild zieht.
+  const b = $("kamera").getBoundingClientRect();
+  canvasHinten.width = b.width; canvasHinten.height = b.height;
+}
+window.addEventListener("resize", regenGroesseSetzen);
+regenGroesseSetzen();
+
+// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+// object-position:50% 15%). Cover-Formel: scale = max(containerW/bildW,
+// containerH/bildH); die Leinwand wird auf renderedW x renderedH gesetzt und
+// so weit verschoben, dass an der object-position-Stelle (50%/15%) kein
+// Rand entsteht -- exakt die Formel, die der Browser intern fuer
+// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+// exakt. offsetWidth/offsetHeight statt getBoundingClientRect -- die sind
+// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+// mitgemessen werden (nur einmal bei Start/Resize aufgerufen, nicht pro
+// Frame -- die Leinwand selbst ist statisch, der Shake wirkt automatisch
+// weiter oben auf #kamera und bewegt die ganze Szene inklusive Leinwand mit).
+const BILD_W = 1536, BILD_H = 1024, OBJ_POS_X = 0.50, OBJ_POS_Y = 0.15;
+let _kopfCanvasScale = 1; // aktuelle Skala Leinwand-px -> CSS-px, siehe kopfCanvasAnpassen()
+function kopfCanvasAnpassen(){
+  const rahmen = $("gesicht-rahmen");
+  const cw = rahmen.offsetWidth, ch = rahmen.offsetHeight;
+  if(!cw || !ch) return; // noch nicht gelayoutet -- naechster Aufruf greift
+  const scale = Math.max(cw / BILD_W, ch / BILD_H);
+  _kopfCanvasScale = scale;
+  const rw = BILD_W * scale, rh = BILD_H * scale;
+  const ox = (cw - rw) * OBJ_POS_X;
+  const oy = (ch - rh) * OBJ_POS_Y;
+  const kc = $("kopf-canvas");
+  kc.style.left = ox.toFixed(2) + "px";
+  kc.style.top = oy.toFixed(2) + "px";
+  kc.style.width = rw.toFixed(2) + "px";
+  kc.style.height = rh.toFixed(2) + "px";
+}
+window.addEventListener("resize", kopfCanvasAnpassen);
+kopfCanvasAnpassen();
+
+let tempo = 1.0; // aus broadcast_value abgeleitet, 0..~3
+// auf der geteilten iGPU, PERMISSION_FAULTS/MAPPING_ERROR in dmesg, kein
+// bloss abwaegbares Budget -- GPU-Kompositing bleibt deshalb AUS, dieser
+// Pfad wird nicht wieder angefasst). Ursache war NICHT das Rechnen selbst
+// (6x scale()+saturate()+brightness() pro Frame ist trivial), sondern dass
+// atmen() bisher alle 6 Ebenen (inkl. beider "2"-Zwillinge, die 4 von 6
+// Framezeiten lang komplett unsichtbar sind: kopf-schicht2 ausser waehrend
+// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+// jeder Schreibzugriff auf transform/filter stoesst unter Software-Rendering
+// eine erneute Rasterung der vollen 1536x1024-RGBA-Ebene an, UNABHAENGIG von
+// opacity:0 (der Browser kompositiert die Ebene nicht sichtbar, aber die
+// Filter-Pipeline muss trotzdem neu gerechnet werden, weil die Property sich
+// geaendert hat). Fix: nur die AKTUELL SICHTBARE Ebene jedes Zwillingspaars
+// bekommt den Schreibzugriff -- aus max. 6 Style-Writes/Frame werden 2-3 (Kopf
+// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+// angefasst.
+let _atmenTransform = "scale(1)";
+let _atmenFilter = "saturate(1.05) brightness(1)";
+function atmen(){
+  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+  const skala = 1 + auf * 0.012;
+  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+  const transform = `scale(${skala})`;
+  const filter = `saturate(1.05) brightness(${helligkeit})`;
+  _atmenTransform = transform;
+  _atmenFilter = filter;
+  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+  $(kopfSichtbar).style.transform = transform;
+  $(kopfSichtbar).style.filter = filter;
+  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+  // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+  // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+  // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+  // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+  // beim Kopf oben.
+  $(atmenAktivSchicht).style.transform = transform;
+  $(atmenAktivSchicht).style.filter = filter;
+  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  if(_sonderLaeuft){
+    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+    $(ausdruckSichtbar).style.transform = transform;
+    $(ausdruckSichtbar).style.filter = filter;
+  }
+}
+
+// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eintrag = bildLaden(a.bilder[a.idx]);
+    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+    a.letzterT = jetzt;
+    koerperCrossfade(a.bilder[a.idx]);
+    a.idx++;
+    if(a.idx >= a.bilder.length){
+      koerperAktion = null;
+      const f = a.fertig; a.fertig = null;
+      if(f) f();
+    }
+    return;
+  }
+  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  atmenLetzterWechsel = jetzt;
+  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+}
+
+// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+SCOPE=REAL_HOST_READ_ONLY_BODY_LIVE_SECTIONS

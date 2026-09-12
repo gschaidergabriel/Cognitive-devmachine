@@ -1,0 +1,486 @@
+=== 130:190 ===
+130:# PHASE 48 -- sichtbarer Terminal-Harness: laeuft im ECHTEN Repo (kein
+131:# Sandbox-Werkraum-Versteck mehr, Gabriel-Auftrag), aber NIE in ~/.claude/star
+132:# selbst (das ist der laufende Dashboard-/Hook-Dienst -- ein Aider-Lauf
+133:# koennte den waehrend des eigenen Betriebs veraendern). Notizen fuer die
+134:# 'eingeschraenkt'-Stufe landen unter NOTIZ_PRAEFIX innerhalb dieses Repos.
+135:SICHTBAR_REPO = os.path.expanduser("~/frankenstein-repo")
+136:SICHTBAR_NOTIZ_PRAEFIX = "notizen-freepool/"
+137:SICHTBAR_HINWEIS_BASIS = os.path.expanduser("~/.claude/star/harness-hinweise")
+138:
+139:# ── Forschungsmodus-Konstanten (PHASE 46b) ─────────────────────────────────
+140:# FEST verdrahtet, bewusst KEIN CLI-Parameter dafuer -- eine beliebig
+141:# waehlbare Zielpfad-Option waere genau die "aufgeweichte Sandbox-Sperre",
+142:# die Gabriel ausdruecklich NICHT wollte.
+143:FORSCHUNG_REPO = os.path.expanduser("~/clay-global-research-entity")
+144:FORSCHUNG_ERLAUBTER_PRAEFIX = "research_entity/topic_packets/fallback-runs/"
+145:FORSCHUNG_ACTOR_ID = "freepool-fallback-secondary"
+146:
+147:
+148:def git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=None):
+149:    """
+150:    Fuehrt Git-Checkpoint durch, protokolliert neue Commits und uncommitted
+151:    changes in zero_raum_ruf. Gibt Dict mit {"anzahl_commits": N,
+152:    "unquittiert": bool, "commit_hashes": [...]} zurueck.
+153:
+154:    `seit` (Bugfix 2026-08-27, real gefunden beim ersten Forschungsmodus-
+155:    Test): OHNE dieses Argument listet `git log` die GESAMTE Repo-Historie.
+156:    Im Sandbox-Modus ist das harmlos (jeder Werkraum ist ein frisches,
+157:    leeres Repo -- 'alle Commits' == 'Commits dieses Laufs'). Im
+158:    Forschungsmodus ist der Werkraum das ECHTE Repo mit tausenden
+159:    Alt-Commits -- ohne `seit` wurden beim ersten echten Testlauf 5930
+160:    (!) Alt-Commits faelschlich als AKTION dieses einen Laufs in
+161:    zero_raum_ruf protokolliert, bevor das Skript am Umfang schlicht zu
+162:    lange brauchte. `seit` (der vor dem Lauf erfasste HEAD-Hash) grenzt
+163:    korrekt auf `seit..HEAD` ein -- WENN gesetzt."""
+164:    try:
+165:        log_range = f"{seit}..HEAD" if seit else None
+166:        cmd = ["git", "-C", werkraum, "log", "--format=%H", "--reverse"]
+167:        if log_range:
+168:            cmd.append(log_range)
+169:        out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL, text=True)
+170:        commit_hashes = [line.strip() for line in out.splitlines() if line.strip()]
+171:    except subprocess.CalledProcessError:
+172:        commit_hashes = []
+173:
+174:    conn = None
+175:    try:
+176:        conn = _s.verbindung()
+177:        cursor = conn.cursor()
+178:    except Exception as e:
+179:        print(f"Warnung: DB-Verbindung fehlgeschlagen: {e}", file=sys.stderr)
+180:        cursor = None
+181:
+182:    for commit in commit_hashes:
+183:        if cursor:
+184:            cursor.execute(
+185:                """SELECT 1 FROM zero_raum_ruf
+186:                   WHERE text LIKE ? AND text LIKE ? LIMIT 1""",
+187:                (f"%paket_id={paket_id}%", f"%commit={commit}%"),
+188:            )
+189:            if cursor.fetchone():
+190:                continue  # Bereits protokolliert
+=== 900:1120 ===
+900:        "hier wahrscheinlich schlechter als Claude, aber lass es uns versuchen' "
+901:        "(wenn die Aufgabe an deine Grenzen geht -- z.B. grosse Refactorings, "
+902:        "subtile Bugs, viel repoweiter Kontext). Kein Pflichtritual bei jeder "
+903:        "Kleinigkeit, aber sichtbar bei echten Aufgaben.\n\n"
+904:        "## Nachdem du geliefert hast: kurze, ehrliche Selbstpruefung\n\n"
+905:        "Bevor du dein Ergebnis als fertig meldest: pruef kurz selbst, ob es "
+906:        "inhaltlich plausibel/vertretbar ist. Bist du unsicher, sag das EHRLICH "
+907:        "(z.B. 'bei X bin ich mir nicht sicher, das sollte nochmal gegengeprueft "
+908:        "werden') statt falsche Zuversicht vorzutaeuschen. Kein Overhead-Ritual bei "
+909:        "trivialen Antworten, aber Pflicht bei echten Code-/Faktenaussagen.\n"
+910:    )
+911:
+912:    wissenspaket_text = _wissenspaket_block()
+913:    wissenspaket_block = (
+914:        f"\n---\n\n{wissenspaket_text}\n" if wissenspaket_text else ""
+915:    )
+916:
+917:    text = (
+918:        "# Hinweis fuer diese Sitzung (automatisch eingefuegt, harness_aider.py visible-start)\n\n"
+919:        "Du bist FranKensteinಠ_ಠ -- dieselbe Identitaet wie in der normalen "
+920:        "Claude-Code-Sitzung (Persona-Auszug unten), aber du laeufst GERADE NICHT "
+921:        f"auf Claude, sondern auf einem anderen Modell "
+922:        f"({MODELL_MAP.get(modell_id, {}).get('aider_model', modell_id)}) ueber einen "
+923:        f"separaten Aider-Harness. {stufe_text}\n\n---\n\n{auszug}\n"
+924:        f"{wissenspaket_block}{_zusicherung_block}{zustand_block}{eignung_block}{kapsel_block}"
+925:    )
+926:    if ziel_pfad:
+927:        pfad = ziel_pfad
+928:        os.makedirs(os.path.dirname(pfad), exist_ok=True)
+929:    else:
+930:        zielordner = os.path.join(SICHTBAR_HINWEIS_BASIS, paket_id)
+931:        os.makedirs(zielordner, exist_ok=True)
+932:        pfad = os.path.join(zielordner, "SYSTEM_HINWEIS.md")
+933:    with open(pfad, "w", encoding="utf-8") as f:
+934:        f.write(text)
+935:    return pfad
+936:
+937:
+938:# PHASE 48 Nachtrag (Gabriel-Feedback 2026-08-27) -- FranKenstein-CI-Banner
+939:# fuer das sichtbare Terminal, WIEDERVERWENDET aus dem etablierten Look
+940:# (~/frankenstein-repo/banners/installer_welcome.txt: gleiche ANSI-256-
+941:# Farben 240/136/220/88/249/70, gleiche ಠ_ಠ-Box, gleiche
+942:# ░▒▓███...▓▒░-Trennzeile) statt neu erfunden. Ersetzt den rohen
+943:# Handoff-Kapsel-Dump + wirkt als Rahmen VOR Aiders eigenem (nicht
+944:# unterdrueckbarem, siehe Docstring visible_run()) Start-Boilerplate.
+945:_ANSI_GRAU, _ANSI_AMBER, _ANSI_GOLD, _ANSI_ROT, _ANSI_HELLGRAU, _ANSI_GRUEN, _ANSI_RESET = (
+946:    "\x1b[38;5;240m", "\x1b[38;5;136m", "\x1b[38;5;220m", "\x1b[38;5;88m",
+947:    "\x1b[38;5;249m", "\x1b[38;5;70m", "\x1b[0m",
+948:)
+949:_ANSI_TRENNER = _ANSI_GRAU + "░▒▓" + "█" * 78 + "▓▒░" + _ANSI_RESET
+950:
+951:
+952:def _terminal_banner(modell_id, berechtigung, paket_id):
+953:    """PHASE 50 (Gabriel-Auftrag 2026-09-12, woertlich: 'mach es das es 1:1
+954:    gleich aussieht nur das frankenstein unten links soll gelb sein statt
+955:    rot'): kompakte EINE Statuszeile im Stil der ECHTEN, gerade laufenden
+956:    Claude-Code-Statuszeile (~/.claude/star/statusline-frankenstein.sh --
+957:    gleiche 256-Farbpalette 240 Grau-Trenner/136 Amber/220 Gelb/249
+958:    Hellgrau/70 Gruen, gleicher ' · '-Segment-Trenner), statt des alten
+959:    PHASE-48-Absatz-Blocks (ASCII-Box + Trennzeilen + Mehrzeiler, siehe
+960:    Git-Historie fuer die vorherige Fassung). Einziger bewusster
+961:    Unterschied zur echten Sitzung: das FranKenstein-Element (Smiley +
+962:    Label, in der echten Statuszeile _ANSI_ROT/rot) steht hier in
+963:    _ANSI_GOLD/gelb (220, deckungsgleich mit deren YELLOW) -- Gabriels
+964:    Erkennungszeichen 'das ist die Free-Pool-Variante', kein weiterer
+965:    optischer Unterschied gewollt. Modell/Stufe/Repo/Paket bleiben
+966:    erhalten, nur als Segmente statt als eigener Absatz."""
+967:    aider_model = MODELL_MAP.get(modell_id, {}).get("aider_model", modell_id)
+968:    rechte = "edit:ja" if berechtigung == "voll" else "edit:nein(ask)"
+969:    sep = f"{_ANSI_GRAU} · {_ANSI_RESET}"
+970:    smiley = f"{_ANSI_GOLD}ಠ_ಠ{_ANSI_RESET}"
+971:    label = f"{_ANSI_GOLD}FRANKENSTEIN{_ANSI_RESET}"
+972:    model_str = f"{_ANSI_HELLGRAU}{modell_id} ({aider_model}){_ANSI_RESET}"
+973:    stufe_str = f"{_ANSI_AMBER}free-pool:{berechtigung}({rechte}){_ANSI_RESET}"
+974:    repo_str = f"{_ANSI_HELLGRAU}repo:{os.path.basename(SICHTBAR_REPO)}{_ANSI_RESET}"
+975:    kontext_str = f"{_ANSI_GRUEN}kontext:geladen{_ANSI_RESET}"
+976:    paket_str = f"{_ANSI_HELLGRAU}paket:{paket_id}{_ANSI_RESET}"
+977:    parts = [smiley, label, model_str, stufe_str, repo_str, kontext_str, paket_str]
+978:    return sep.join(parts)
+979:
+980:
+981:def _werkraum_diff_dateien(werkraum, seit):
+982:    """Datei-Status (A/M/D/...) aller Aenderungen seit `seit`..HEAD, frisch aus
+983:    git gelesen (kein Cache) -- Grundlage der Loesch-/Allowlist-Wachen unten."""
+984:    try:
+985:        out = subprocess.check_output(
+986:            ["git", "-C", werkraum, "diff", "--name-status", f"{seit}..HEAD"],
+987:            stderr=subprocess.DEVNULL, text=True,
+988:        )
+989:    except subprocess.CalledProcessError:
+990:        return []
+991:    ergebnis = []
+992:    for zeile in out.splitlines():
+993:        teile = zeile.split("\t")
+994:        if len(teile) >= 2:
+995:            ergebnis.append((teile[0][:1], teile[-1]))
+996:    return ergebnis
+997:
+998:
+999:def _loeschungen_pruefen(werkraum, seit):
+1000:    """AUSNAHMSLOS bei ALLEN Free-Pool-Berechtigungsstufen (Gabriel-Vorgabe
+1001:    2026-08-27): kein Loeschen. '--no-suggest-shell-commands' sperrt den
+1002:    ueblichen Weg (rm/git rm ueber einen von Aider vorgeschlagenen und per
+1003:    --yes-always automatisch bestaetigten Shell-Befehl) bereits strukturell
+1004:    -- das hier ist die UNABHAENGIGE zweite Sicherung (frisch aus git
+1005:    gelesen, nicht aus irgendeinem Aider-eigenen Zustand), falls ein
+1006:    Edit-Format selbst einen Datei-Wegfall erzeugt."""
+1007:    verstoesse = [(status, pfad) for status, pfad in _werkraum_diff_dateien(werkraum, seit)
+1008:                  if status == "D"]
+1009:    return {"ok": len(verstoesse) == 0, "verstoesse": verstoesse}
+1010:
+1011:
+1012:def _eingeschraenkt_verstoesse_pruefen(werkraum, seit):
+1013:    """Fuer berechtigung='eingeschraenkt': JEDE Datei-Aenderung ausserhalb von
+1014:    SICHTBAR_NOTIZ_PRAEFIX ist ein Verstoss -- die Notiz-Datei dort schreibt
+1015:    der Harness SELBST (_notiz_schreiben(), unten), nie das Modell direkt.
+1016:    Zweite, unabhaengige Absicherung neben '--edit-format ask'."""
+1017:    verstoesse = [(status, pfad) for status, pfad in _werkraum_diff_dateien(werkraum, seit)
+1018:                  if not pfad.startswith(SICHTBAR_NOTIZ_PRAEFIX)]
+1019:    return {"ok": len(verstoesse) == 0, "verstoesse": verstoesse}
+1020:
+1021:
+1022:def _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad):
+1023:    """Fuer berechtigung='eingeschraenkt': der Harness selbst (NICHT das
+1024:    Modell) liest Aiders eigenes Chat-Protokoll und legt eine Notiz-Datei an
+1025:    -- das ist der 'Dokumente schreiben erlaubt'-Teil der Faehigkeiten-Liste
+1026:    (modell_katalog.py), OHNE dass das eingeschraenkte Modell selbst
+1027:    Dateizugriff braucht oder bekommt."""
+1028:    try:
+1029:        with open(chat_history_pfad, "r", encoding="utf-8", errors="replace") as f:
+1030:            inhalt = f.read()
+1031:    except Exception:
+1032:        inhalt = "(kein Chat-Protokoll gefunden -- evtl. keine Nachricht gewechselt)"
+1033:    zielordner = os.path.join(werkraum, SICHTBAR_NOTIZ_PRAEFIX)
+1034:    os.makedirs(zielordner, exist_ok=True)
+1035:    rel = os.path.join(SICHTBAR_NOTIZ_PRAEFIX, f"{paket_id}.md")
+1036:    pfad = os.path.join(werkraum, rel)
+1037:    with open(pfad, "w", encoding="utf-8") as f:
+1038:        f.write(f"# Notiz -- {modell_id} ({paket_id})\n\n"
+1039:                f"Vom Harness (nicht vom Modell) aus dem Aider-Chatprotokoll "
+1040:                f"uebernommen:\n\n{inhalt}\n")
+1041:    _git(werkraum, "add", rel)
+1042:    commit = _git(werkraum, "commit", "-m",
+1043:                   f"harness(freepool-sichtbar): Notiz {modell_id} {paket_id}", check=False)
+1044:    return rel if commit.returncode == 0 else None
+1045:
+1046:
+1047:def visible_run(modell_id):
+1048:    """PHASE 48 (Gabriel-Auftrag 2026-08-27) -- sichtbarer, interaktiver
+1049:    Terminal-Harness. Ersetzt den alten headless Sandbox-Testlauf
+1050:    (modus='sandbox', entfernt) komplett: laeuft NICHT mehr in einer
+1051:    isolierten harness-werkraum/-Sandbox, sondern im echten Projekt-Repo
+1052:    (SICHTBAR_REPO) -- sichtbar, auditierbar per `git log`, kein Versteck.
+1053:    Echt interaktiv: subprocess.run() mit voll vererbtem stdio (kein Pipe-
+1054:    Capture -- das wuerde Aiders prompt_toolkit-REPL kaputt machen), damit
+1055:    im Terminal-Fenster normal getippt werden kann. Gibt IMMER ein dict
+1056:    zurueck, wirft nie unbehandelt nach aussen (gleicher Vertrag wie
+1057:    einen_lauf())."""
+1058:    if modell_id not in MODELL_MAP:
+1059:        grund = f"unbekannte modell_id: {modell_id}"
+1060:        print(grund)
+1061:        return {"ok": False, "grund": grund}
+1062:
+1063:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1064:    if modell_id != aktiv_modell:
+1065:        grund = (f"Modell {modell_id} ist nicht das aktive Modell "
+1066:                  f"(aktiv: {aktiv_modell or '(keins)'}) -- erst auf /modelle aktivieren")
+1067:        print(grund)
+1068:        return {"ok": False, "grund": grund}
+1069:
+1070:    berechtigung = MODELL_MAP[modell_id]["berechtigung"]
+1071:    # PHASE 49 (Punkt 2): ALLE 4 Free-Pool-Keys laden, nicht nur den des
+1072:    # Startmodells -- sonst scheitert ein spaeterer '/model <anderer-
+1073:    # provider>'-Wechsel MITTEN in der Sitzung an einer fehlenden Env-Var
+1074:    # (siehe _alle_api_keys_laden()-Docstring). Der Key des Startmodells
+1075:    # bleibt eine harte Vorbedingung (kein sinnvoller Start ohne ihn).
+1076:    geladen = _alle_api_keys_laden()
+1077:    if not geladen.get(modell_id):
+1078:        grund = (f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1079:                  f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})")
+1080:        print(grund)
+1081:        return {"ok": False, "grund": grund}
+1082:    fehlend = [mid for mid, ok in geladen.items() if not ok and mid != modell_id]
+1083:    if fehlend:
+1084:        print(f"{_ANSI_GRAU}  Hinweis: kein Schluessel geladen fuer {', '.join(fehlend)} -- "
+1085:              f"'/model' dorthin waere aktuell nicht nutzbar.{_ANSI_RESET}")
+1086:
+1087:    werkraum = SICHTBAR_REPO
+1088:    if not os.path.isdir(os.path.join(werkraum, ".git")):
+1089:        grund = f"kein git-Repo unter {werkraum}"
+1090:        print(grund)
+1091:        return {"ok": False, "grund": grund}
+1092:
+1093:    vor_status = subprocess.run(["git", "-C", werkraum, "status", "--porcelain"],
+1094:                                 capture_output=True, text=True).stdout.strip()
+1095:    if vor_status:
+1096:        print(f"HINWEIS: {werkraum} hat bereits unquittierte Aenderungen VOR diesem "
+1097:              f"Lauf -- werden diesem Harness-Lauf NICHT zugeschrieben, bleiben aber "
+1098:              f"unangetastet stehen:\n{vor_status}\n")
+1099:    vor_head = subprocess.run(["git", "-C", werkraum, "rev-parse", "HEAD"],
+1100:                               capture_output=True, text=True).stdout.strip()
+1101:    if not vor_head:
+1102:        grund = f"HEAD in {werkraum} nicht ermittelbar"
+1103:        print(grund)
+1104:        return {"ok": False, "grund": grund}
+1105:
+1106:    session_id = _s._uid("harness-sess")
+1107:    paket_id, kapsel = None, ""
+1108:    try:
+1109:        handoff_result = _s.handoff(
+1110:            session_id=session_id, auftrag=f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})",
+1111:            womit=f"harness:sichtbar:{modell_id}",
+1112:            warum="Free-Pool-Coding-Harness, sichtbares Terminal (Gabriel-Auftrag Modell-Dashboard Umbau)",
+1113:            thema=f"Sichtbarer Harness {modell_id} ({berechtigung})",
+1114:        )
+1115:        if handoff_result:
+1116:            paket_id = handoff_result.get("paket_id")
+1117:            kapsel = handoff_result.get("kapsel", "")
+1118:    except Exception as e:
+1119:        print(f"Warnung: Handoff fehlgeschlagen ({e}) -- laeuft ohne Kontinuitaets-Kapsel weiter.")
+1120:    if not paket_id:
+=== 1120:1320 ===
+1120:    if not paket_id:
+1121:        paket_id = _s._uid("harness-sichtbar")
+1122:
+1123:    _werkraum_git_identitaet(werkraum, modell_id)
+1124:    _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "START",
+1125:                            f"paket_id={paket_id} berechtigung={berechtigung} werkraum={werkraum}")
+1126:
+1127:    # PHASE 48 Nachtrag (Gabriel-Feedback 2026-08-27, live-Screenshot): die
+1128:    # rohe Kapsel wandert in die Read-Only-Datei (Kontext fuers Modell),
+1129:    # NICHT mehr aufs Terminal -- siehe _persona_hinweis_schreiben()-Docstring.
+1130:    #
+1131:    # PHASE 51: session_id/auftrag mitgeben, damit der hyperGRID-Turn (in
+1132:    # _grid_zustand_block()) mit echtem Kontext statt einem generischen
+1133:    # Platzhalter rechnet.
+1134:    _anfangsauftrag = f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})"
+1135:    hinweis_pfad = _persona_hinweis_schreiben(
+1136:        paket_id, modell_id, berechtigung, kapsel=kapsel,
+1137:        session_id=session_id, auftrag=_anfangsauftrag)
+1138:
+1139:    # PHASE 51 (Punkt 1, "bei jedem /model-Wechsel"): Umgebungsvariablen fuer
+1140:    # aider_retry_launcher.py's Modellwechsel-Hook -- der Hook laeuft im
+1141:    # KIND-Interpreter (siehe dortiger Modul-Docstring, "ein Monkeypatch im
+1142:    # harness_aider.py-eigenen Python-Interpreter wirkt NICHT im
+1143:    # Kind-Interpreter des Subprozesses"), braucht diese Werte also ueber
+1144:    # os.environ statt ueber ein direktes Funktionsargument. Kapsel gekuerzt
+1145:    # wie in _persona_hinweis_schreiben() selbst (dort erneut auf 1200
+1146:    # Zeichen begrenzt, hier nur der Transport).
+1147:    os.environ["FRANKENSTEIN_HARNESS_PAKET_ID"] = paket_id
+1148:    os.environ["FRANKENSTEIN_HARNESS_MODELL_ID"] = modell_id
+1149:    os.environ["FRANKENSTEIN_HARNESS_BERECHTIGUNG"] = berechtigung
+1150:    os.environ["FRANKENSTEIN_HARNESS_HINWEIS_PFAD"] = hinweis_pfad
+1151:    os.environ["FRANKENSTEIN_HARNESS_SESSION_ID"] = session_id
+1152:    os.environ["FRANKENSTEIN_HARNESS_AUFTRAG"] = _anfangsauftrag
+1153:    os.environ["FRANKENSTEIN_HARNESS_KAPSEL"] = (kapsel or "")[:1200]
+1154:
+1155:    buchfuehrung_dir = os.path.join(_AIDER_BUCHFUEHRUNG_BASIS, paket_id)
+1156:    os.makedirs(buchfuehrung_dir, exist_ok=True)
+1157:    chat_history_pfad = os.path.join(buchfuehrung_dir, "chat-history.md")
+1158:
+1159:    aider_cmd = [
+1160:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1161:        "--no-analytics", "--no-check-update", "--no-gitignore",
+1162:        # ⭐ 2026-09-12 (Gabriel, genervt): die "Unknown context window size
+1163:        # and costs"-Warnung von aider.chat/docs/llms/warnings bei jedem Lauf
+1164:        # fuer die Free-Pool-Modelle (NVIDIA/Mistral sind nicht in aiders
+1165:        # Metadaten-Tabelle). Diese Flagge unterdrueckt sie; sanere Defaults
+1166:        # bleiben aktiv.
+1167:        "--no-show-model-warnings",
+1168:        "--no-suggest-shell-commands",  # AUSNAHMSLOS -- siehe Modulkopf/Docstring
+1169:        "--read", hinweis_pfad,
+1170:        "--chat-history-file", chat_history_pfad,
+1171:        "--input-history-file", os.path.join(buchfuehrung_dir, "input-history"),
+1172:        "--llm-history-file", os.path.join(buchfuehrung_dir, "llm-history"),
+1173:        # PHASE 48 Nachtrag (Bugfix nach Live-Testlauf 2026-08-27): Aiders
+1174:        # Standard-Repo-Map + Kontext sprengte beim ersten echten Testlauf
+1175:        # Groqs Free-Tier-TPM-Limit (8000 Token/Minute, real
+1176:        # litellm.RateLimitError beobachtet). 512 reicht fuer Einzelaufgaben-
+1177:        # Orientierung, ohne das knappe Free-Pool-Kontingent zu verbrennen.
+1178:        "--map-tokens", "512",
+1179:    ]
+1180:    if berechtigung == "voll":
+1181:        aider_cmd += ["--auto-commits", "--yes-always"]
+1182:    else:
+1183:        aider_cmd += ["--edit-format", "ask", "--no-auto-commits"]
+1184:
+1185:    # PHASE 50 (Gabriel-Auftrag 2026-09-12) -- kompakte Statuszeile(n) im
+1186:    # Stil der echten Claude-Code-Statuszeile statt des alten PHASE-48-
+1187:    # Absatz-Blocks (siehe _terminal_banner()/_kontingent_banner()-
+1188:    # Docstrings). Aiders EIGENES Start-Boilerplate (Version/Modell/Git-
+1189:    # Repo/Repo-Map/"Added ... to chat") danach ist NICHT unterdrueckbar,
+1190:    # ohne Aiders stdout zu einer Pipe umzuleiten -- das wuerde die
+1191:    # interaktive prompt_toolkit-REPL (Zeileneditor im echten Terminal)
+1192:    # riskieren kaputtzumachen, ein rein kosmetischer Gewinn ist das nicht
+1193:    # wert. Bleibt daher als kurze eigene Zeile(n) direkt darueber stehen.
+1194:    print(_terminal_banner(modell_id, berechtigung, paket_id))
+1195:    kontingent_zeile = _kontingent_banner()
+1196:    if kontingent_zeile:
+1197:        print(kontingent_zeile)
+1198:    print()
+1199:
+1200:    try:
+1201:        proc = subprocess.run(aider_cmd, cwd=werkraum, env=os.environ)
+1202:        aider_exit = proc.returncode
+1203:    except Exception as e:
+1204:        print(f"Aider-Start fehlgeschlagen: {e}")
+1205:        aider_exit = 1
+1206:
+1207:    _aider_werkraum_aufraeumen(werkraum)
+1208:
+1209:    if berechtigung == "eingeschraenkt":
+1210:        _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad)
+1211:
+1212:    try:
+1213:        checkpoint_result = git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=vor_head)
+1214:    except Exception as e:
+1215:        print(f"Checkpoint fehlgeschlagen: {e}")
+1216:        checkpoint_result = {"anzahl_commits": 0, "unquittiert": True, "commit_hashes": []}
+1217:
+1218:    verworfen, verworfen_grund = False, None
+1219:    loeschwache = _loeschungen_pruefen(werkraum, vor_head)
+1220:    if not loeschwache["ok"]:
+1221:        verworfen = True
+1222:        verworfen_grund = f"Loeschung(en) erkannt: {loeschwache['verstoesse']}"
+1223:    if berechtigung == "eingeschraenkt" and not verworfen:
+1224:        eing_pruef = _eingeschraenkt_verstoesse_pruefen(werkraum, vor_head)
+1225:        if not eing_pruef["ok"]:
+1226:            verworfen = True
+1227:            verworfen_grund = f"Aenderung ausserhalb Notizordner trotz ask-Modus: {eing_pruef['verstoesse']}"
+1228:
+1229:    if verworfen:
+1230:        _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "VERSTOSS_VERWORFEN",
+1231:                                f"paket_id={paket_id} grund={verworfen_grund} -- git reset --hard {vor_head}")
+1232:        _git(werkraum, "reset", "--hard", vor_head, check=False)
+1233:        _git(werkraum, "clean", "-fd", "--", SICHTBAR_NOTIZ_PRAEFIX, check=False)
+1234:        print(f"\n!!! VERSTOSS ERKANNT UND VERWORFEN: {verworfen_grund}\n"
+1235:              f"Lauf wurde per 'git reset --hard {vor_head[:10]}' zurueckgesetzt.\n")
+1236:
+1237:    audit_script = os.path.join(os.path.dirname(__file__), "harness_audit.py")
+1238:    audit_cmd = ["python3", audit_script, "--werkraum", werkraum, "--paket-id", paket_id,
+1239:                 "--seit-commit", vor_head]
+1240:    try:
+1241:        audit_proc = subprocess.run(audit_cmd, capture_output=True, text=True, timeout=120)
+1242:        audit_exit = audit_proc.returncode
+1243:    except Exception as e:
+1244:        print(f"Audit-Ausnahme: {e}")
+1245:        audit_exit = 1
+1246:    if verworfen:
+1247:        audit_exit = 1
+1248:
+1249:    gesamt_ok = (aider_exit == 0) and (audit_exit == 0) and not verworfen
+1250:    reconcile_text = (f"aider_exit={aider_exit} commits={checkpoint_result['anzahl_commits']} "
+1251:                       f"audit_exit={audit_exit} berechtigung={berechtigung} "
+1252:                       f"verworfen={verworfen} verworfen_grund={verworfen_grund}")
+1253:    beleg = f"test:{0 if gesamt_ok else 1}:sichtbarer_harness paket_id={paket_id} modell={modell_id}"
+1254:    try:
+1255:        _s.reconcile(paket_id=paket_id, ergebnis=reconcile_text, beleg=beleg, session_id=session_id)
+1256:    except Exception as e:
+1257:        print(f"Reconcile fehlgeschlagen: {e}")
+1258:
+1259:    status_farbe = _ANSI_GRUEN if gesamt_ok else _ANSI_ROT
+1260:    print(f"\n{_ANSI_TRENNER}\n{status_farbe}  Fertig -- {'ok' if gesamt_ok else 'Verstoss/Fehler erkannt'}"
+1261:          f"{_ANSI_RESET}  ({checkpoint_result['anzahl_commits']} Commit(s)"
+1262:          + (f", VERWORFEN: {verworfen_grund}" if verworfen else "") +
+1263:          f")\n{_ANSI_TRENNER}\n")
+1264:
+1265:    return {"ok": gesamt_ok, "paket_id": paket_id, "modell": modell_id, "berechtigung": berechtigung,
+1266:            "aider_exit": aider_exit, "audit_exit": audit_exit,
+1267:            "commits": checkpoint_result["anzahl_commits"], "verworfen": verworfen,
+1268:            "verworfen_grund": verworfen_grund}
+1269:
+1270:
+1271:def _aider_ausfuehren(werkraum, modell_id, nachricht, timeout=600, map_tokens=None, paket_id=None):
+1272:    """Startet Aider, gibt live-vorangestellte Ausgabe aus, wartet auf
+1273:    Prozessende. Gibt aider_exit (int) zurueck.
+1274:
+1275:    map_tokens=0 (Forschungsmodus, real getestet 2026-08-27): das echte
+1276:    Forschungsentitaets-Repo hat >12.000 Dateien/258MB -- Aiders
+1277:    Standard-Repo-Map (tree-sitter-Scan des GESAMTEN Baums) sprengt selbst
+1278:    ein grosszuegiges Timeout, WEIT bevor das Modell ueberhaupt gefragt
+1279:    wird. Der Forschungsmodus braucht das nicht (gezielter Einzelschreibauftrag
+1280:    in einen neuen Unterordner, kein Codebase-weites Verstehen) -- die
+1281:    Kontinuitaets-Kapsel (handoff()) liefert den noetigen Kontext bereits.
+1282:
+1283:    paket_id gesetzt (Bugfix 2026-08-27, real gefunden -- siehe
+1284:    _aider_werkraum_aufraeumen()): Aiders eigene Chat-/Eingabe-Historiendateien
+1285:    werden per Flag AUSSERHALB des Werkraums abgelegt (eigener Ordner unter
+1286:    _AIDER_BUCHFUEHRUNG_BASIS), damit sie erst gar nicht als unversionierte
+1287:    Altlast im (im Forschungsmodus: ECHTEN) Repo auftauchen."""
+1288:    geladen = _alle_api_keys_laden()
+1289:    if not geladen.get(modell_id):
+1290:        print(f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1291:              f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})", file=sys.stderr)
+1292:        return 1
+1293:
+1294:    aider_cmd = [
+1295:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1296:        "--yes-always", "--no-analytics", "--no-check-update",
+1297:        # ⭐ 2026-09-12: gleiche Warn-Unterdrueckung wie oben (Gabriel).
+1298:        "--no-show-model-warnings",
+1299:        "--auto-commits", "--no-gitignore",
+1300:    ]
+1301:    if map_tokens is not None:
+1302:        aider_cmd += ["--map-tokens", str(map_tokens)]
+1303:    if paket_id:
+1304:        buchfuehrung_dir = os.path.join(_AIDER_BUCHFUEHRUNG_BASIS, paket_id)
+1305:        os.makedirs(buchfuehrung_dir, exist_ok=True)
+1306:        aider_cmd += ["--chat-history-file", os.path.join(buchfuehrung_dir, "chat-history.md"),
+1307:                      "--input-history-file", os.path.join(buchfuehrung_dir, "input-history"),
+1308:                      "--llm-history-file", os.path.join(buchfuehrung_dir, "llm-history")]
+1309:    aider_cmd += ["--message", nachricht]
+1310:    proc = None
+1311:    try:
+1312:        proc = subprocess.Popen(
+1313:            aider_cmd, cwd=werkraum, env=os.environ,
+1314:            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+1315:            universal_newlines=True, bufsize=1,
+1316:        )
+1317:        try:
+1318:            for line in proc.stdout:
+1319:                print(f"[{modell_id}|aider] {line}", end="")
+1320:        except Exception as e:

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-final-assembly-deploy-survey-20260912-1741z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -u\nROOT=/workspace/omega_runtime\nREL=/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\nprintf '%s\\n' '---RUNTIME TREE---'\nfind \"$ROOT\" -maxdepth 2 -type f -o -type l | sort | head -200\nprintf '%s\\n' '---CURRENT LINK---'\nls -ld \"$ROOT/current\" 2>&1 || true\nreadlink -f \"$ROOT/current\" 2>/dev/null || true\nprintf '%s\\n' '---RELEASE TOP---'\nfind \"$REL\" -maxdepth 2 -type f | sort | head -200\nprintf '%s\\n' '---SUPERVISOR OUTER---'\nsed -n '1,280p' \"$REL/omega/supervisor_outer.py\" 2>/dev/null || true\nprintf '%s\\n' '---SERVICE/LAUNCH REFERENCES---'\ngrep -Rsn --exclude='*.pyc' -E 'omega_runtime/current|supervisor_outer|full-777-v1|releases/' \"$ROOT\" /etc/systemd/system /root/.config/systemd 2>/dev/null | head -240 || true\n"
+}

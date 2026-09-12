@@ -1,0 +1,13 @@
+VOICE_STATUS_BEGIN
+ai-core-node-projekt-frankenstein
+not-found
+inactive
+Result=success
+ExecMainStatus=0
+LoadState=not-found
+ActiveState=inactive
+SubState=dead
+FragmentPath=
+3262519 bash -lc echo VOICE_STATUS_BEGIN; hostname; systemctl --user is-enabled frankenstein-gespraechsmodus.service 2>&1; systemctl --user is-active frankenstein-gespraechsmodus.service 2>&1; systemctl --user show frankenstein-gespraechsmodus.service -p LoadState -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecStart -p FragmentPath --no-pager 2>&1; pgrep -af 'gespraechsmodus.py|realtime_gespraech.py' || true; journalctl --user -u frankenstein-gespraechsmodus.service -n 40 --no-pager 2>&1; echo VOICE_STATUS_END
+-- No entries --
+VOICE_STATUS_END

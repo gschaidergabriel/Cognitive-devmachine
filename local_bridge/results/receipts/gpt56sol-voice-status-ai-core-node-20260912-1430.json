@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-voice-status-ai-core-node-20260912-1430",
+  "command_sha256": "77474e098fc871d6af8afd941afd0c62215ec4cd863b970b4d7c1949b7360bed",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T07:30:53.994209+00:00",
+  "finished_at": "2026-09-12T07:30:54.088666+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "26a95c4bf1ca49f306651bcab76a8caafa80f30608584e8a122414b5d45f4026",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "VOICE_STATUS_BEGIN\nai-core-node-projekt-frankenstein\nnot-found\ninactive\nResult=success\nExecMainStatus=0\nLoadState=not-found\nActiveState=inactive\nSubState=dead\nFragmentPath=\n3262519 bash -lc echo VOICE_STATUS_BEGIN; hostname; systemctl --user is-enabled frankenstein-gespraechsmodus.service 2>&1; systemctl --user is-active frankenstein-gespraechsmodus.service 2>&1; systemctl --user show frankenstein-gespraechsmodus.service -p LoadState -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecStart -p FragmentPath --no-pager 2>&1; pgrep -af 'gespraechsmodus.py|realtime_gespraech.py' || true; journalctl --user -u frankenstein-gespraechsmodus.service -n 40 --no-pager 2>&1; echo VOICE_STATUS_END\n-- No entries --\nVOICE_STATUS_END\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-activate-voice777-ai-core-node-20260913T0028+07",
+  "command_sha256": "54cf7b35ce380490cd979e8693bf8f1c90143e3ed9670a218369fde16513a0db",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:25:18.203941+00:00",
+  "finished_at": "2026-09-12T17:25:18.941798+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "c3a8b326cd6ada2729ecea8c5a994d96b986087d50461151ba89c019d9071ad8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== PRECONDITION ===\n{\n  \"aktiv\": false,\n  \"berechtigung\": \"acceptEdits\",\n  \"tts_modell\": \"gpt-4o-mini-tts\",\n  \"tts_stimme\": \"onyx\",\n  \"stt_modell\": \"gpt-4o-transcribe\",\n  \"konversation_timeout_sekunden\": 90,\n  \"openai_schluessel_lokal_vorhanden\": true,\n  \"openai_vault_id\": \"cred-1787752096678-b69ede\",\n  \"claude_session_id\": null,\n  \"realtime_modell\": \"gpt-realtime-2.1\",\n  \"realtime_stimme\": \"cedar\",\n  \"realtime_reasoning_effort\": \"minimal\",\n  \"stille_timeout_sekunden\": 5,\n  \"user_speaking\": false,\n  \"assistant_speaking\": false\n}\nEFFECTIVE_BEFORE={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nOLD_PID=2800373\nOLD_CMD=python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py \n=== CONTROLLED RESTART ===\nNEW_PID=2334921\nNEW_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py \n=== POST ===\nMainPID=2334921\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:25:18 +07] ; stop_time=[n/a] ; pid=2334921 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n{\n  \"aktiv\": false,\n  \"berechtigung\": \"acceptEdits\",\n  \"tts_modell\": \"gpt-4o-mini-tts\",\n  \"tts_stimme\": \"onyx\",\n  \"stt_modell\": \"gpt-4o-transcribe\",\n  \"konversation_timeout_sekunden\": 90,\n  \"openai_schluessel_lokal_vorhanden\": true,\n  \"openai_vault_id\": \"cred-1787752096678-b69ede\",\n  \"claude_session_id\": null,\n  \"realtime_modell\": \"gpt-realtime-2.1\",\n  \"realtime_stimme\": \"cedar\",\n  \"realtime_reasoning_effort\": \"minimal\",\n  \"stille_timeout_sekunden\": 5,\n  \"user_speaking\": false,\n  \"assistant_speaking\": false\n}\nOMEGA_VOICE_777_ACTIVATED=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

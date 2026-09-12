@@ -1,0 +1,75 @@
+=== IDENTITY ===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-13T00:25:19+07:00
+=== OMEGA FILES ===
+PRESENT:/home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py|11055|2026-09-12 20:35:50.278308369 +0700|755
+4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py
+PRESENT:/home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py|6013|2026-09-12 20:35:50.279771111 +0700|755
+83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+PRESENT:/home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py|3149|2026-09-12 20:35:50.281358329 +0700|755
+8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+PRESENT:/home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py
+/home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py|2427|2026-09-12 20:35:50.282926501 +0700|755
+d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py
+PRESENT:/home/ai-core-node/.local/bin/frank-omega
+/home/ai-core-node/.local/bin/frank-omega|126|2026-09-12 20:35:50.285216329 +0700|755
+4143aa14f0fcbbafb1506604a1f00f120bec29343c0588c1d03db69c8b660b7b  /home/ai-core-node/.local/bin/frank-omega
+=== VOICE UNIT ===
+MainPID=2334921
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:25:18 +07] ; stop_time=[n/a] ; pid=2334921 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+=== CLIENT UNIT ===
+MainPID=3687487
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 20:36:51 +07] ; stop_time=[n/a] ; pid=3687487 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+=== DROPINS ===
+DIR:/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d
+total 28
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 20:35 .
+drwxrwxr-x 15 ai-core-node ai-core-node 12288 Sep 12 20:34 ..
+-rw-rw-r--  1 ai-core-node ai-core-node   124 Sep 12 20:34 95-omega-777-organ-floor.conf
+-rw-rw-r--  1 ai-core-node ai-core-node   279 Sep 12 18:01 95-voice-live-final.conf
+-rw-rw-r--  1 ai-core-node ai-core-node   124 Sep 12 20:35 99-omega-777-organ-floor.conf
+FILE:/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+FILE:/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+FILE:/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+DIR:/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d
+total 24
+drwxrwxr-x  2 ai-core-node ai-core-node  4096 Sep 12 20:35 .
+drwxrwxr-x 15 ai-core-node ai-core-node 12288 Sep 12 20:34 ..
+-rw-rw-r--  1 ai-core-node ai-core-node   133 Sep 12 20:34 95-omega-777-organ-floor.conf
+-rw-rw-r--  1 ai-core-node ai-core-node   133 Sep 12 20:35 99-omega-777-organ-floor.conf
+FILE:/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+FILE:/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+=== PROCESSES ===
+2334921 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+2334966 bash -lc set -o pipefail; echo '=== IDENTITY ==='; hostname; whoami; date -Is; echo '=== OMEGA FILES ==='; for p in $HOME/.local/lib/frankenstein/scripts/omega_organ_activity.py $HOME/.local/lib/frankenstein/scripts/voice_777_runtime.py $HOME/.local/lib/frankenstein/scripts/voice_host_777_live_client.py $HOME/.local/lib/frankenstein/scripts/frank_terminal_777.py $HOME/.local/bin/frank-omega; do if test -f "$p"; then echo PRESENT:$p; stat -c '%n|%s|%y|%a' "$p"; sha256sum "$p"; else echo ABSENT:$p; fi; done; echo '=== VOICE UNIT ==='; systemctl --user show frankenstein-gespraechsmodus.service -p ActiveState -p SubState -p MainPID -p DropInPaths -p ExecStart --no-pager 2>&1 || true; echo '=== CLIENT UNIT ==='; systemctl --user show frankenstein-chatgpt-client.service -p ActiveState -p SubState -p MainPID -p DropInPaths -p ExecStart --no-pager 2>&1 || true; echo '=== DROPINS ==='; for d in $HOME/.config/systemd/user/frankenstein-gespraechsmodus.service.d $HOME/.config/systemd/user/frankenstein-chatgpt-client.service.d; do echo DIR:$d; ls -la "$d" 2>&1 || true; for f in "$d"/*.conf; do test -f "$f" || continue; echo FILE:$f; sed -n '1,100p' "$f"; done; done; echo '=== PROCESSES ==='; pgrep -a -f 'voice_777_runtime|voice_full_runtime|voice_host_777_live_client|voice_host_live_client|frank_terminal_777' || true; echo '=== ORGAN CACHE ==='; XDG=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}; test -f "$XDG/frankenstein/omega_organ_activity.json" && cat "$XDG/frankenstein/omega_organ_activity.json" || echo NO_ACTIVE_CACHE
+3687487 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+=== ORGAN CACHE ===
+NO_ACTIVE_CACHE

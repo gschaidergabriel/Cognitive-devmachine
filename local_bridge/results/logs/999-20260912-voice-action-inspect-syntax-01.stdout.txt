@@ -1,0 +1,45 @@
+HEAD=0cae5c38386464d74a70c9c77128f54c2dd65df2
+--- lines 82-110 ---
+    82	    guard = (HERE / "voice_action_guard.py").resolve()
+    83	    if not guard.is_file():
+    84	        raise RuntimeError(f"voice action guard missing: {guard}")
+    85	    root = Path.home() / ".local/share/frankenstein"
+    86	    root.mkdir(parents=True, exist_ok=True)
+    87	    path = root / "voice_action_claude_settings.json"
+    88	    command = f"{shlex.quote(sys.executable)} {shlex.quote(str(guard))}"
+    89	    payload = {
+    90	        "hooks": {
+    91	            "PreToolUse": [{
+    92	                "matcher": "Bash|Write|Edit|MultiEdit|NotebookEdit",
+    93	                "hooks": [{"type": "command", "command": command}],
+    94	            }]
+    95	        }
+    96	    }
+    97	    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "
+    98	", encoding="utf-8")
+    99	    os.chmod(path, 0o600)
+   100	    return str(path)
+   101	
+   102	
+   103	def _prewarm_titan_mc() -> None:
+   104	    conn = None
+   105	    try:
+   106	        conn = sqlite3.connect(stern.DB_PATH, timeout=_TITAN_PREWARM_TIMEOUT_S)
+   107	        conn.execute("PRAGMA busy_timeout=500")
+   108	        titan_mc.ensure_schema(conn)
+   109	    except Exception:
+   110	        pass
+--- changed files ---
+ M DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py
+ M scripts/install_voice_full_integration.sh
+ M scripts/voice_action_guard.py
+ M scripts/voice_full_integration.py
+ M scripts/voice_full_runtime.py
+?? tests/test_voice_action_policy_final.py
+--- diffstat ---
+ .../repository/scripts/gespraechsmodus.py          |  33 ++-
+ scripts/install_voice_full_integration.sh          |   3 +
+ scripts/voice_action_guard.py                      | 223 +++++++++------------
+ scripts/voice_full_integration.py                  |  14 +-
+ scripts/voice_full_runtime.py                      | 124 ++++++++++--
+ 5 files changed, 237 insertions(+), 160 deletions(-)

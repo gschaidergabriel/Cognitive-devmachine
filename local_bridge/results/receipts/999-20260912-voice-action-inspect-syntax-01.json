@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "999-20260912-voice-action-inspect-syntax-01",
+  "command_sha256": "c43b0411c2e0451e0fe5c4fc88722683aef3a8fcf212db210a3ff431c8333286",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:11:34.472299+00:00",
+  "finished_at": "2026-09-12T10:11:34.536845+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "bc8d18f13dd6d2b8d949c03c36a5060bda6f57f64753e5ddb44ee3f9fb7caa79",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=0cae5c38386464d74a70c9c77128f54c2dd65df2\n--- lines 82-110 ---\n    82\t    guard = (HERE / \"voice_action_guard.py\").resolve()\n    83\t    if not guard.is_file():\n    84\t        raise RuntimeError(f\"voice action guard missing: {guard}\")\n    85\t    root = Path.home() / \".local/share/frankenstein\"\n    86\t    root.mkdir(parents=True, exist_ok=True)\n    87\t    path = root / \"voice_action_claude_settings.json\"\n    88\t    command = f\"{shlex.quote(sys.executable)} {shlex.quote(str(guard))}\"\n    89\t    payload = {\n    90\t        \"hooks\": {\n    91\t            \"PreToolUse\": [{\n    92\t                \"matcher\": \"Bash|Write|Edit|MultiEdit|NotebookEdit\",\n    93\t                \"hooks\": [{\"type\": \"command\", \"command\": command}],\n    94\t            }]\n    95\t        }\n    96\t    }\n    97\t    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + \"\n    98\t\", encoding=\"utf-8\")\n    99\t    os.chmod(path, 0o600)\n   100\t    return str(path)\n   101\t\n   102\t\n   103\tdef _prewarm_titan_mc() -> None:\n   104\t    conn = None\n   105\t    try:\n   106\t        conn = sqlite3.connect(stern.DB_PATH, timeout=_TITAN_PREWARM_TIMEOUT_S)\n   107\t        conn.execute(\"PRAGMA busy_timeout=500\")\n   108\t        titan_mc.ensure_schema(conn)\n   109\t    except Exception:\n   110\t        pass\n--- changed files ---\n M DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py\n M scripts/install_voice_full_integration.sh\n M scripts/voice_action_guard.py\n M scripts/voice_full_integration.py\n M scripts/voice_full_runtime.py\n?? tests/test_voice_action_policy_final.py\n--- diffstat ---\n .../repository/scripts/gespraechsmodus.py          |  33 ++-\n scripts/install_voice_full_integration.sh          |   3 +\n scripts/voice_action_guard.py                      | 223 +++++++++------------\n scripts/voice_full_integration.py                  |  14 +-\n scripts/voice_full_runtime.py                      | 124 ++++++++++--\n 5 files changed, 237 insertions(+), 160 deletions(-)\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

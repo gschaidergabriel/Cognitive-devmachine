@@ -39,6 +39,7 @@ OMEGA_MCP_EFFECTS_ENABLED=1
 OMEGA_MCP_WAIT_SECONDS=12
 OMEGA_MCP_GATEWAY_MACHINE_ID=ai-core-node
 OMEGA_MCP_GATEWAY_OWNER=gabriel
+OMEGA_MCP_DIRECT_GABRIEL_URL=http://127.0.0.1:8765
 OMEGA_MCP_LOCAL_FALLBACK_ENABLED=1
 OMEGA_LOCAL_EFFECT_SOCKET=$LOCAL_SOCKET
 OMEGA_LOCAL_EFFECT_DB=$STATE/local-effect.sqlite3
@@ -55,6 +56,7 @@ else
   }
   ensure_kv OMEGA_MCP_GATEWAY_MACHINE_ID ai-core-node
   ensure_kv OMEGA_MCP_GATEWAY_OWNER gabriel
+  ensure_kv OMEGA_MCP_DIRECT_GABRIEL_URL http://127.0.0.1:8765
   ensure_kv OMEGA_MCP_LOCAL_FALLBACK_ENABLED 1
   ensure_kv OMEGA_LOCAL_EFFECT_SOCKET "$LOCAL_SOCKET"
   ensure_kv OMEGA_LOCAL_EFFECT_DB "$STATE/local-effect.sqlite3"
@@ -111,12 +113,14 @@ EOF
 cat >"$UNIT" <<EOF
 [Unit]
 Description=OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback
-After=network-online.target omega-local-effect-adapter.service
+After=network-online.target omega-local-effect-adapter.service frankenstein-chatgpt-client.service
 Wants=network-online.target omega-local-effect-adapter.service
 
 [Service]
 Type=simple
 EnvironmentFile=%h/.config/omega/omega-mcp.env
+# Reuse the existing typed host-broker token in memory; never copy or print it.
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
 ExecStart=%h/.local/lib/omega-chatgpt-mcp/run.sh
 Restart=on-failure
 RestartSec=3

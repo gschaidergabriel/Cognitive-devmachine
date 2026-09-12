@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-egress-publisher-falsifier-20260912-1843",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu; mkdir -p /workspace/vps_bridge/results/omega_egress; python3 - <<'PY'\nimport json,datetime,pathlib,hashlib\np=pathlib.Path('/workspace/vps_bridge/results/omega_egress/egress-falsifier-20260912-1843.json')\nd={'schema':'OMEGA_EGRESS_FALSIFIER/v1','id':'egress-falsifier-20260912-1843','created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'payload':'non_effecting_bridge_publisher_probe'}\nd['digest']=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(',',':')).encode()).hexdigest(); p.write_text(json.dumps(d,indent=2)+'\\n'); print(p); print(d['digest'])\nPY"
+}

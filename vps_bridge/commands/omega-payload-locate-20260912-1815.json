@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v3",
+  "command_id":"omega-payload-locate-20260912-1815",
+  "op":"exec",
+  "cwd":"/workspace",
+  "timeout_seconds":60,
+  "command":"set -eu; echo 'payload paths'; find /workspace -maxdepth 6 -path '*vps_bridge/payloads/omega*' -print 2>/dev/null | head -n 100; echo 'control command visible paths'; find /workspace -maxdepth 6 -name 'omega-runtime-deploy-20260912-1810.json' -print 2>/dev/null | head -n 20; echo 'git branches'; for d in /workspace/*; do [ -d \"$d/.git\" ] || continue; printf '%s ' \"$d\"; git -C \"$d\" branch --show-current 2>/dev/null || true; done"
+}

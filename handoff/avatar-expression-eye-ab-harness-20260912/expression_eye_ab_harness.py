@@ -10,7 +10,9 @@ retries screenshots, clips captures to the eye neighborhood, and uses the
 already-live localized relief2 blink_000 as the ONE canonical open-eye plate.
 
 This script changes only the isolated headless browser DOM. It does not write
-buehne.html, buehne_daemon.py, or live assets.
+buehne.html, buehne_daemon.py, or live assets. The forced glow phase is a
+GEOMETRY/COMPOSITING discriminator only; it does not claim that gaze should be
+visible when the real presence/face signal says otherwise.
 """
 from __future__ import annotations
 
@@ -18,7 +20,6 @@ import argparse
 import base64
 import io
 import json
-import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -33,6 +34,8 @@ import websocket
 EXPECTED_HTML_SHA256 = "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e"
 EXPECTED_OPEN_PLATE_SHA256 = "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9"
 URL = "http://127.0.0.1:8788/"
+VIEWPORT_W = 1536
+VIEWPORT_H = 1024
 
 
 def sha256_file(path: Path) -> str:
@@ -96,7 +99,7 @@ class CDP:
                 data = base64.b64decode(result["data"])
                 path.write_bytes(data)
                 return np.asarray(Image.open(io.BytesIO(data)).convert("RGB"))
-            except Exception as exc:  # evidence-preserving bounded retry
+            except Exception as exc:  # bounded retry, with exact failure surfaced
                 last = exc
                 print(f"SCREENSHOT_RETRY attempt={attempt} error={type(exc).__name__}:{exc}", flush=True)
                 time.sleep(0.7 * attempt)
@@ -137,24 +140,28 @@ def main() -> int:
     root = args.visual_root.resolve()
     html = root / "buehne.html"
     open_plate = root / "augen_blink_relief2" / "blink_000.png"
-    if sha256_file(html) != EXPECTED_HTML_SHA256:
-        raise SystemExit(f"FAIL HTML drift {sha256_file(html)}")
-    if sha256_file(open_plate) != EXPECTED_OPEN_PLATE_SHA256:
-        raise SystemExit(f"FAIL open-plate drift {sha256_file(open_plate)}")
+    got_html = sha256_file(html)
+    got_open = sha256_file(open_plate)
+    if got_html != EXPECTED_HTML_SHA256:
+        raise SystemExit(f"FAIL HTML drift {got_html}")
+    if got_open != EXPECTED_OPEN_PLATE_SHA256:
+        raise SystemExit(f"FAIL open-plate drift {got_open}")
 
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
-    before_html = sha256_file(html)
+    before_html = got_html
 
     tmp = Path(tempfile.mkdtemp(prefix="f2-expression-eye-ab-"))
+    stdout_f = (tmp / "chrome.stdout").open("wb")
+    stderr_f = (tmp / "chrome.stderr").open("wb")
     proc = subprocess.Popen(
         [
             "google-chrome", "--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
             f"--remote-debugging-port={args.port}", "--remote-allow-origins=*",
-            f"--user-data-dir={tmp / 'profile'}", "--window-size=1536,1024", URL,
+            f"--user-data-dir={tmp / 'profile'}", f"--window-size={VIEWPORT_W},{VIEWPORT_H}", URL,
         ],
-        stdout=(tmp / "chrome.stdout").open("wb"),
-        stderr=(tmp / "chrome.stderr").open("wb"),
+        stdout=stdout_f,
+        stderr=stderr_f,
     )
     cdp: CDP | None = None
     try:
@@ -179,8 +186,6 @@ def main() -> int:
                 break
             time.sleep(0.1)
 
-        # Use a long expression interval so all three captures occur inside one
-        # stable expression state. This is isolated-browser state only.
         cdp.eval(
             f"(()=>{{sonderausdruckZeigen({json.dumps(args.expression_register)},"
             f"{json.dumps(args.expression)},15000); return true}})()"
@@ -193,12 +198,16 @@ def main() -> int:
             "JSON.stringify((()=>{const r=document.getElementById('pupillen-glow').getBoundingClientRect();"
             "return {x:r.x,y:r.y,width:r.width,height:r.height}})())"
         ))
-        pad = 70
+        pad = 70.0
+        x = max(0.0, float(rect["x"]) - pad)
+        y = max(0.0, float(rect["y"]) - pad)
+        want_w = float(rect["width"]) + 2 * pad
+        want_h = float(rect["height"]) + 2 * pad
         clip = {
-            "x": max(0.0, float(rect["x"]) - pad),
-            "y": max(0.0, float(rect["y"]) - pad),
-            "width": min(1536.0, float(rect["width"]) + 2 * pad),
-            "height": min(1024.0, float(rect["height"]) + 2 * pad),
+            "x": x,
+            "y": y,
+            "width": max(1.0, min(float(VIEWPORT_W) - x, want_w)),
+            "height": max(1.0, min(float(VIEWPORT_H) - y, want_h)),
             "scale": 1.0,
         }
 
@@ -207,8 +216,8 @@ def main() -> int:
         phase.append({"phase": "expression_native", "glow_opacity": base_opacity})
         native = cdp.screenshot(out / "01_expression_native.png", clip)
 
-        # Candidate A: canonical open eye plate only. Reuse the productive
-        # relief2 asset and existing eye geometry; do not create a new eye DOM.
+        # Candidate A: canonical open eye plate only. Reuse productive relief2
+        # and the existing eye geometry; do not add a second eye DOM authority.
         cdp.eval(
             "(()=>{const e=document.getElementById('augen-blink');"
             "e.src='/augen_blink/blink_000.png';e.style.opacity='1';return true})()"
@@ -217,8 +226,8 @@ def main() -> int:
         eye = cdp.screenshot(out / "02_expression_canonical_eye.png", clip)
         phase.append({"phase": "expression_canonical_eye", "blink_opacity": cdp.eval("getComputedStyle(document.getElementById('augen-blink')).opacity")})
 
-        # Candidate B: same canonical eye plate plus the existing measured gaze
-        # signal. Only remove the _sonderLaeuft suppression in isolated DOM.
+        # Candidate B: same canonical eye plate plus existing measured gaze
+        # geometry. Full opacity is forced only to make compositing measurable.
         cdp.eval(
             "(()=>{const s=document.createElement('style');s.id='gate-eye-glow';"
             "s.textContent='#pupillen-glow{opacity:1!important}';document.head.appendChild(s);return true})()"
@@ -236,9 +245,10 @@ def main() -> int:
         report = {
             "schema": "FRANK_AVATAR_EXPRESSION_EYE_AB/v2",
             "scope": "ISOLATED_BROWSER_RUNTIME_DOM_AB_NO_SOURCE_WRITE",
+            "gaze_phase_scope": "GEOMETRY_COMPOSITING_ONLY_NOT_PRESENCE_AUTHORITY",
             "live_subject": {
                 "buehne_html_sha256": before_html,
-                "productive_relief2_open_plate_sha256": sha256_file(open_plate),
+                "productive_relief2_open_plate_sha256": got_open,
             },
             "expression": {"register": args.expression_register, "name": args.expression},
             "clip": clip,
@@ -272,6 +282,8 @@ def main() -> int:
             proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
             proc.kill()
+        stdout_f.close()
+        stderr_f.close()
 
 
 if __name__ == "__main__":

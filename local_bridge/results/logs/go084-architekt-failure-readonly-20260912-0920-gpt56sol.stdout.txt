@@ -1,0 +1,170 @@
+=== ARCHITEKT FAILURE READONLY ===
+2026-09-12T04:20:19+02:00
+andreas-MACO
+--- UNIT SHOW ---
+LoadState=loaded
+ActiveState=failed
+SubState=failed
+FragmentPath=/home/andreas/.config/systemd/user/frankenstein-architekt.service
+Result=exit-code
+ExecMainStartTimestamp=Sat 2026-09-12 00:20:25 CEST
+ExecMainExitTimestamp=Sat 2026-09-12 00:20:32 CEST
+ExecMainStatus=1
+ExecStart={ path=/home/andreas/architekt/lauf.sh ; argv[]=/home/andreas/architekt/lauf.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=
+--- TIMER SHOW ---
+LoadState=loaded
+ActiveState=active
+SubState=waiting
+FragmentPath=/home/andreas/.config/systemd/user/frankenstein-architekt.timer
+NextElapseUSecRealtime=
+LastTriggerUSec=Sat 2026-09-12 00:20:25 CEST
+--- UNIT CAT ---
+# /home/andreas/.config/systemd/user/frankenstein-architekt.service
+[Unit]
+Description=FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)
+
+[Service]
+Type=oneshot
+ExecStart=/home/andreas/architekt/lauf.sh
+TimeoutStartSec=3600
+Nice=10
+
+# /home/andreas/.config/systemd/user/frankenstein-architekt.timer
+[Unit]
+Description=Architekten-Zyklus alle 4 Stunden
+
+[Timer]
+OnBootSec=20min
+OnUnitActiveSec=4h
+AccuracySec=5min
+Persistent=true
+Unit=frankenstein-architekt.service
+
+[Install]
+WantedBy=timers.target
+--- JOURNAL ---
+2026-09-11T20:27:00+02:00 andreas-MACO sudo[1996000]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/systemd-run --machine=entityos --quiet --pipe --wait /bin/sh -c stat -c %i \'/var/lib/entityos/unified.db\' 2>/dev/null
+2026-09-11T20:27:00+02:00 andreas-MACO sudo[1996000]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:00+02:00 andreas-MACO sudo[1996012]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:00+02:00 andreas-MACO sudo[1996012]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %i /var/lib/entityos/unified.db
+2026-09-11T20:27:00+02:00 andreas-MACO sudo[1996012]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996016]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996016]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/grep -rn --include=*.py -F \"/var/lib/entityos/unified.db\" /var/lib/entityos/voice
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996016]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996113]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996113]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/data/unified.db?mode=ro SELECT 1 FROM star_konfig LIMIT 1;
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996113]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996117]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996117]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/journalctl --no-pager -o short-iso
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996117]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996123]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996123]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/data/unified.db?mode=ro SELECT wert FROM star_konfig WHERE schluessel=\'gespraech.aktiv\';
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996123]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996128]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996128]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/journalctl --no-pager -o short-iso _COMM=sudo
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996128]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996229]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996229]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/data/unified.db?mode=ro SELECT wert FROM star_konfig WHERE schluessel=\'cortex.aktiv\';
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996229]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996234]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:01+02:00 andreas-MACO sudo[1996234]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/journalctl --no-pager -o short-iso _COMM=sudo
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996234]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996323]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996323]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/systemctl cat entityos-vm.service
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996323]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996331]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996331]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/systemctl show entityos-vm.service -p ActiveState --value
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996331]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996335]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996335]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/systemctl show entityos-vm.service -p ActiveEnterTimestamp --value
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996335]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996340]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996340]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/find /var/lib/entityos/rootfs-run -type f -size +99c -newermt Tue 2026-09-08 12:04:36 CEST -print0
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996340]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996392]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996392]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/xargs -0 -r file -N -F |
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996392]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996434]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996434]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db?mode=ro SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\';
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996434]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996438]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996438]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db?mode=ro SELECT count(*) FROM \"events\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996438]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996442]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996442]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db?mode=ro SELECT count(*) FROM \"settings\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996442]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996446]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996446]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996446]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996450]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996450]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910?mode=ro SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\';
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996450]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996453]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996453]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910?mode=ro PRAGMA schema_version;
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996453]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996457]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996457]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996457]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996461]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996461]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\';
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996461]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996465]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996465]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro SELECT count(*) FROM \"somatic_markers\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996465]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996469]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996469]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro SELECT count(*) FROM \"threat_log\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996469]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996473]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996473]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro SELECT count(*) FROM \"extinction_patterns\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996473]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996477]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996477]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996477]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996481]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996481]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\';
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996481]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996485]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996485]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro SELECT count(*) FROM \"personality_state\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996485]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996489]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996489]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro SELECT count(*) FROM \"identity_snapshots\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996489]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996493]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996493]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro SELECT count(*) FROM \"extreme_state_log\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996493]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996497]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996497]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996497]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996501]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996501]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\';
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996501]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996505]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996505]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro SELECT count(*) FROM \"experience_vectors\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996505]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996509]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996509]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro SELECT count(*) FROM \"mood_archive\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996509]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996513]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996513]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro SELECT count(*) FROM \"reflections\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996513]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996517]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996517]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro SELECT count(*) FROM \"erlebnis_beispiele\";
+2026-09-11T20:27:02+02:00 andreas-MACO sudo[1996517]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996521]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996521]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996521]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996524]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996524]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/lsof -F pn -- /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+2026-09-11T20:27:03+02:00 andreas-MACO sudo[1996524]: pam_unix(sudo:session): session closed for user root
+2026-09-11T20:27:27+02:00 andreas-MACO systemd[6988]: Finished frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht).
+2026-09-11T20:27:27+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Consumed 1min 47.918s CPU time over 11min 58.148s wall clock time, 966.5M memory peak, 6M memory swap peak.
+2026-09-12T00:20:25+02:00 andreas-MACO systemd[6988]: Starting frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)...
+2026-09-12T00:20:32+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Main process exited, code=exited, status=1/FAILURE
+2026-09-12T00:20:32+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Failed with result 'exit-code'.
+2026-09-12T00:20:32+02:00 andreas-MACO systemd[6988]: Failed to start frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht).
+2026-09-12T00:20:32+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Consumed 4.576s CPU time over 6.153s wall clock time, 311M memory peak.
+--- PROCESSES ---
+ 271537  Sa Sep 12 04:20:19 2026 bash -lc set +e; echo '=== ARCHITEKT FAILURE READONLY ==='; date -Is; hostname; echo '--- UNIT SHOW ---'; systemctl --user show frankenstein-architekt.service -p LoadState -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecMainStartTimestamp -p ExecMainExitTimestamp -p FragmentPath -p ExecStart -p Environment 2>&1; echo '--- TIMER SHOW ---'; systemctl --user show frankenstein-architekt.timer -p LoadState -p ActiveState -p SubState -p LastTriggerUSec -p NextElapseUSecRealtime -p FragmentPath 2>&1; echo '--- UNIT CAT ---'; systemctl --user cat frankenstein-architekt.service frankenstein-architekt.timer 2>&1; echo '--- JOURNAL ---'; journalctl --user -u frankenstein-architekt.service -n 120 --no-pager -o short-iso 2>&1; echo '--- PROCESSES ---'; ps -eo pid,lstart,cmd | grep -E '[f]rankenstein-architekt|[c]laude.*architekt|[a]rchitekt.*claude' || true; echo '=== END ==='; exit 0
+ 271712  Sa Sep 12 04:20:19 2026 grep -E [f]rankenstein-architekt|[c]laude.*architekt|[a]rchitekt.*claude
+=== END ===

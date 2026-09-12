@@ -1,0 +1,72 @@
+=== base wrapper ===
+384-        parts.append("VOICE_SESSION_CAPSULE=" + json.dumps(cdict, ensure_ascii=False, separators=(",", ":"))[:6500])
+385-    return "\n".join(parts)
+386-
+387-
+388:def _patch_response_instructions() -> None:
+389-    original = rt.RealtimeSession._response_erstellen
+390-    if getattr(original, "_voice_full_wrapped", False):
+391-        return
+392-
+393-    def wrapped(self, ws, zusatz_hinweis: str = ""):
+394-        if getattr(self, "_voice_waiting_for_transcript", False) and not getattr(self, "_voice_force_response", False):
+395-            generation = getattr(self, "_voice_turn_generation", 0)
+396-            first = getattr(self, "_voice_pending_response", None) is None
+397-            self._voice_pending_response = (ws, zusatz_hinweis, generation)
+398-            if first:
+399-                threading.Thread(target=_transcript_timeout_worker, args=(self, generation), daemon=True).start()
+400-            return None
+401-
+402-        ctx = getattr(self, "voice_full", None)
+403-        if ctx is None:
+404-            return original(self, ws, zusatz_hinweis)
+=== transcript final ===
+201-    base._refresh_emergent_grid_context = grid
+202-    base._local_inner_state = inner
+203-
+204-
+205:def _patch_transcript_identity() -> None:
+206-    def final_note(self, text: str) -> dict[str, Any]:
+207-        session = getattr(self, "voice_full", None)
+208-        if session is None:
+209-            return {"refusal": False, "switch": None, "selected_person": None, "bound": False}
+210-
+211-        base._note_signal(self, "transcript_ready")
+212-        self._voice_last_user_text = text or ""
+213-        refusal = session.note_user_text(text)
+214-        switch = session.switch_intent(text)
+215-        if switch:
+216-            session.select_person(switch)
+217-            receipt = base._current_receipt()
+218-            # Spoken self-identification changes routing/context only. It may
+219-            # become effect authority only when the underlying VoiceLite/session
+220-            # role is already a registered user and host provenance also matches.
+221-            if _verified_human(self, switch) and base._receipt_matches(switch, receipt):
+222-                session.bind(switch, receipt=receipt)
+223-            elif session.binding is not None and session.binding.label != switch:
+224-                session.binding = None
+225-
+226-        _ensure_verified_binding(self)
+227-        base._refresh_relationship_context(self, text)
+228-        base._refresh_emergent_grid_context(self, text)
+229-        released = base._release_pending_response(
+230-            self, reason="transcript_ready_after_verified_identity_titan_grid_retrieval"
+231-        )
+232-        return {
+233-            "refusal": refusal,
+234-            "switch": switch,
+235-            "selected_person": session.selected_person,
+236-            "bound": session.binding is not None,
+237-            "remote_context": self._voice_remote_state is not None,
+238-            "emergent_context": bool(self._voice_emergent_context),
+239-            "response_released": released,
+240-        }
+241-
+242-    # The base realtime wrapper resolves this module global at call time.
+243-    base._note_real_transcript = final_note
+=== legacy response signature ===
+1144:    def _response_erstellen(self, ws, zusatz_hinweis: str = "", *,
+1145-                            floor_action: Optional[str] = None,
+1146-                            dialogue_act: Optional[str] = None,
+1147-                            proactive_action: Optional[str] = None,
+1148-                            response_class: Optional[str] = None) -> None:

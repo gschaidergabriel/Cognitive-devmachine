@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-host-preflight-20260912T0341Z",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "command": "printf 'HOST=%s\\n' \"$(hostname)\"; printf '%s\\n' '--- uptime ---'; uptime; printf '%s\\n' '--- memory MiB ---'; free -m; printf '%s\\n' '--- cpus ---'; nproc; printf '%s\\n' '--- relevant processes ---'; pgrep -af 'harness_aider|chatgpt_burst|stern.py|frankenstein|entityos' | head -40 || true",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 30
+}

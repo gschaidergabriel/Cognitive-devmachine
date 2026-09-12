@@ -1,0 +1,18 @@
+HEAD=11855bca1bcb22ba30424763514eb169ee93196c
+TEST=tests/test_omega_arm_bus.py
+TEST=tests/test_voice777_local_audio_arm.py
+TEST=tests/test_voice777_multiarm_integration.py
+TEST=tests/test_voice777_omni_presence.py
+TEST=tests/test_voice777_pocket_renderer.py
+TEST=tests/test_omega_organ_activity.py
+TEST=tests/test_voice777_installer_convergence.py
+--- ROLE INVARIANTS ---
+ROLE_INVARIANTS_PASS=1
+--- FINAL POLICY BINDING ---
+BASE_KIND=voice_final_runtime
+BASE_ENTRY=/home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+BASE_USES_CONVERGED_FULL=True
+FINAL_BASE_IS_FULL=True
+FINAL_VFI_IS_VFI=True
+FINAL_RT_IS_RT=True
+OMEGA_FINAL_POLICY_CURRENT_PASS=1

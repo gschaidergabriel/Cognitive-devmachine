@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-policy-v2-validate-ai-core-node-20260913-0100",
+  "command_sha256": "c4f4df4274cad77c230670534467fc6741cef8749092733a34e64b346dd1b765",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:46:49.914214+00:00",
+  "finished_at": "2026-09-12T17:46:56.247535+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "323d0a4127370e6c538e6bd952c9be66da7d4eaed86dad6fcdcd8df0aeda3adf",
+  "stderr_sha256": "9f111f2c1f3c0c33ccab6d1f094270a4ea60405ed301da1176fdf8c659600726",
+  "stdout_tail": "HEAD=7112ed80bf50717248a9101ec7003f266f832730\nTEST=tests/test_omega_arm_bus.py\nTEST=tests/test_voice777_local_audio_arm.py\nTEST=tests/test_voice777_multiarm_integration.py\nTEST=tests/test_voice777_omni_presence.py\nTEST=tests/test_voice777_pocket_renderer.py\nTEST=tests/test_omega_organ_activity.py\nTEST=tests/test_voice777_installer_convergence.py\nTEST=tests/test_voice_host_777_identity.py\nTEST=tests/test_voice_host_777_close.py\n",
+  "stderr_tail": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.001s\n\nOK\n..............\n----------------------------------------------------------------------\nRan 14 tests in 0.180s\n\nOK\n.\n----------------------------------------------------------------------\nRan 1 test in 0.114s\n\nOK\n..\n----------------------------------------------------------------------\nRan 2 tests in 0.001s\n\nOK\nEE.\n======================================================================\nERROR: test_canonical_close_failure_is_not_suppressed (__main__.VoiceHost777CloseTest.test_canonical_close_failure_is_not_suppressed)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/omega-final-v2.PaolKu/tests/test_voice_host_777_close.py\", line 81, in test_canonical_close_failure_is_not_suppressed\n    module._install_omni_projection(agent)\n  File \"/tmp/omega-final-v2.PaolKu/scripts/voice_host_777_live_client.py\", line 53, in _install_omni_projection\n    _install_omega_identity(agent)\n  File \"/tmp/omega-final-v2.PaolKu/scripts/voice_host_777_live_client.py\", line 40, in _install_omega_identity\n    original = agent.canonical_identity_block\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'FakeAgent' object has no attribute 'canonical_identity_block'\n\n======================================================================\nERROR: test_release_failure_never_blocks_canonical_close (__main__.VoiceHost777CloseTest.test_release_failure_never_blocks_canonical_close)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/omega-final-v2.PaolKu/tests/test_voice_host_777_close.py\", line 68, in test_release_failure_never_blocks_canonical_close\n    module._install_omni_projection(agent)\n  File \"/tmp/omega-final-v2.PaolKu/scripts/voice_host_777_live_client.py\", line 53, in _install_omni_projection\n    _install_omega_identity(agent)\n  File \"/tmp/omega-final-v2.PaolKu/scripts/voice_host_777_live_client.py\", line 40, in _install_omega_identity\n    original = agent.canonical_identity_block\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: 'FakeAgent' object has no attribute 'canonical_identity_block'\n\n----------------------------------------------------------------------\nRan 3 tests in 0.057s\n\nFAILED (errors=2)\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-authority-readback-20260913",
+  "command_sha256": "0ecec6b4c73b65a0df06f29f77b41304fb1a7907900df6b345506b2f1cbed3d9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:46:35.636812+00:00",
+  "finished_at": "2026-09-12T17:46:35.708893+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e9d2ec239409d3706ef1305926c858604099a04098a93ebff01f3f880e94d2f6",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "--- unit ---\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service\n[Unit]\nDescription=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)\nAfter=network-online.target\nWants=network-online.target\nStartLimitIntervalSec=600\nStartLimitBurst=5\n\n[Service]\nType=simple\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener\nRestart=on-failure\nRestartSec=30\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py\n\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\nEnvironment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node\nEnvironment=LOCAL_BRIDGE_OWNER=gabriel\nEnvironment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel\n\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py\n--- effective ---\nMainPID=2407635\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- dropins ---\n95-omega-777-organ-floor.conf\n95-voice-live-final.conf\n99-omega-777-organ-floor.conf\n--- final tree ---\n56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\n1b6ef2c853be212b9452676e9af788cb009b09f3a8b6407b1dc2c9adc4eb0db8  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py\nc5d441148951bda39518fc927d65be84ea558d79409492dd3b09802f801bdefd  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_integration.py\n--- final imports/patch ---\nimport voice_full_runtime as base True\nimport voice_full_integration as vfi True\nimport realtime_gespraech as rt False\nbase.patch_runtime() True\ndef patch_final_runtime True\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

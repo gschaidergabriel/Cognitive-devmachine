@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega777-final-main-6b675-regression-ai-core-node-20260913-001",
+  "command_sha256": "c7fd2673de98508bd7bd2759a27d9bd0cdb6c0733ee5e5ddfe969bc36511dea9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:48:06.735495+00:00",
+  "finished_at": "2026-09-12T17:48:10.463965+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "d0a5202619291ff86ea2e9298bdc9fc017348a75cebe8e9ef09947225322c42b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=6b675ccaeb1e45c575f6400fc676eaa837c7012a\nPASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": false,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is composition only; durable state stays in the existing runtime\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is an entry point, not another resident authority\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

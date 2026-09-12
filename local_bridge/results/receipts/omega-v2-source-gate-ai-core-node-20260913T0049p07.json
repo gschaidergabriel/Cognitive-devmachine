@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-v2-source-gate-ai-core-node-20260913T0049p07",
+  "command_sha256": "2367d465e0db6be24d09ccbc9918b60fe24d0d0e3e3ac69f9cb4dd95756e6e48",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:47:46.715926+00:00",
+  "finished_at": "2026-09-12T17:47:49.372668+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "7612eaf62e18cedb7f57f8914d12404ee7eb9761035dd9fca15af8d3aa820bfa",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "EXPECTED=03834d25fcc91f48302b05dd9f2909265bb4415f\nACTUAL=03834d25fcc91f48302b05dd9f2909265bb4415f\nPASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v2\",\n  \"ok\": false,\n  \"scope\": \"assembly-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_materialized_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"canonical identity assembly must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration must project SELF=OMEGA\"\n    },\n    {\n      \"name\": \"persistent_host_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"777 host-client must project the canonical identity as OMEGA\"\n    },\n    {\n      \"name\": \"realtime_has_one_acoustic_role\",\n      \"ok\": true,\n      \"detail\": \"Realtime must be omni_voice only; compatibility launcher adds no second arbiter\"\n    },\n    {\n      \"name\": \"pocket_is_local_voice\",\n      \"ok\": true,\n      \"detail\": \"Pocket/local audio must own local_voice\"\n    },\n    {\n      \"name\": \"terminal_projects_omega_without_legacy_self\",\n      \"ok\": true,\n      \"detail\": \"terminal must not contradict OMEGA identity\"\n    },\n    {\n      \"name\": \"final_voice_authority_preserved\",\n      \"ok\": true,\n      \"detail\": \"source installer contract or installed systemd readback must retain voice_final_runtime.py\"\n    },\n    {\n      \"name\": \"launcher_has_no_durable_writer\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is composition/readback only\"\n    },\n    {\n      \"name\": \"launcher_has_no_resident_loop\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is an entrypoint, not a resident authority\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves composition only; live effects/activation require exact current host/owner readback.\"\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

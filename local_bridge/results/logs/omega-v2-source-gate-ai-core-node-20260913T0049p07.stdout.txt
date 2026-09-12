@@ -1,0 +1,64 @@
+EXPECTED=03834d25fcc91f48302b05dd9f2909265bb4415f
+ACTUAL=03834d25fcc91f48302b05dd9f2909265bb4415f
+PASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v2",
+  "ok": false,
+  "scope": "assembly-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_materialized_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "canonical identity assembly must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration must project SELF=OMEGA"
+    },
+    {
+      "name": "persistent_host_self_is_omega",
+      "ok": true,
+      "detail": "777 host-client must project the canonical identity as OMEGA"
+    },
+    {
+      "name": "realtime_has_one_acoustic_role",
+      "ok": true,
+      "detail": "Realtime must be omni_voice only; compatibility launcher adds no second arbiter"
+    },
+    {
+      "name": "pocket_is_local_voice",
+      "ok": true,
+      "detail": "Pocket/local audio must own local_voice"
+    },
+    {
+      "name": "terminal_projects_omega_without_legacy_self",
+      "ok": true,
+      "detail": "terminal must not contradict OMEGA identity"
+    },
+    {
+      "name": "final_voice_authority_preserved",
+      "ok": true,
+      "detail": "source installer contract or installed systemd readback must retain voice_final_runtime.py"
+    },
+    {
+      "name": "launcher_has_no_durable_writer",
+      "ok": false,
+      "detail": "omega_runtime is composition/readback only"
+    },
+    {
+      "name": "launcher_has_no_resident_loop",
+      "ok": false,
+      "detail": "omega_runtime is an entrypoint, not a resident authority"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves composition only; live effects/activation require exact current host/owner readback."
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-wire-v3-validate-ai-core-node-20260913-0110",
+  "command_sha256": "ab96a7f7598eb59977a8d2caf8cc115e207ce80c65371c55daa412ec1480dbb8",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:47:01.329554+00:00",
+  "finished_at": "2026-09-12T17:47:06.257669+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "81b2f0329568cc5ffd4041eab6ad9cc6b3fe278a01969396f03aa672d8d9e5fc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=79743f29958ef063dc7016ba52c0d1d366840dd1\nPASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": false,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"local_audio_uses_canonical_arm_bus\",\n      \"ok\": true,\n      \"detail\": \"Pocket/local emission must stay behind omega_arm_bus local_voice\"\n    },\n    {\n      \"name\": \"local_audio_has_owner_entrypoint\",\n      \"ok\": true,\n      \"detail\": \"omega launcher must make the finished local acoustic arm reachable without a second daemon\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is composition only; durable state stays in the existing runtime\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is an entry point, not another resident authority\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

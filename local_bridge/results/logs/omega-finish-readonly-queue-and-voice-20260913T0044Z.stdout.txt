@@ -1,0 +1,35 @@
+===TIME===
+2026-09-13T00:47:06+07:00
+===VOICE_UNIT===
+MainPID=2407635
+Result=success
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+VOICE_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py 
+===ACTIVITY===
+{
+  "aktiv": false,
+  "berechtigung": "acceptEdits",
+  "tts_modell": "gpt-4o-mini-tts",
+  "tts_stimme": "onyx",
+  "stt_modell": "gpt-4o-transcribe",
+  "konversation_timeout_sekunden": 90,
+  "openai_schluessel_lokal_vorhanden": true,
+  "openai_vault_id": "cred-1787752096678-b69ede",
+  "claude_session_id": null,
+  "realtime_modell": "gpt-realtime-2.1",
+  "realtime_stimme": "cedar",
+  "realtime_reasoning_effort": "minimal",
+  "stille_timeout_sekunden": 5,
+  "user_speaking": false,
+  "assistant_speaking": false
+}
+===PENDING_COMMAND_LOCAL_STATE===
+ROOT /home/ai-core-node/.claude/star/local_bridge_state exists True
+HIT /home/ai-core-node/.claude/star/local_bridge_state/repo/local_bridge/commands/omega-finish-readonly-queue-and-voice-20260913T0044Z.json 1756
+===OMEGA_FILES===
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+1b6ef2c853be212b9452676e9af788cb009b09f3a8b6407b1dc2c9adc4eb0db8  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+MISSING /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_runtime.py
+6650ebc83d3d05c948d522bbb0674425e7e43d5bc9162375e88da1d486d4c42e  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py

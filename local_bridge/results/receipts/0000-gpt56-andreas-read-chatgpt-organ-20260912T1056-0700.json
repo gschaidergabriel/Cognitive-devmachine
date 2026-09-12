@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56-andreas-read-chatgpt-organ-20260912T1056-0700",
+  "command_sha256": "28d3ed34164fa6fe87cff6d3c96fb7183c3d09ee28325f03b56b4a647b815014",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:44:54.483494+00:00",
+  "finished_at": "2026-09-12T03:44:54.483875+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
+  "op": "read_file",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "702ea153774b9c79ac1fdba8e755f87a9365d01610e52dab6406f7a4b949e7fa",
+  "stdout_tail": "",
+  "stderr_tail": "FileNotFoundError(2, 'No such file or directory')\nTraceback (most recent call last):\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 209, in execute\n    p, meta = operate(s)\n              ~~~~~~~^^^\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 168, in operate\n    return op_read_file(str(s[\"path\"]))\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 133, in op_read_file\n    data = p.read_bytes()\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 778, in read_bytes\n    with self.open(mode='rb', buffering=0) as f:\n         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 772, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/andreas/.claude/star/f2wp1207_chatgpt_organ.py'\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

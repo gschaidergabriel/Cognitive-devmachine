@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-expression-authority-bind-20260912-0809",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\nREL='anime_90s/anime_fassungslos/frontal/stufe_00.png'\necho '===SUBJECT==='\nsha256sum buehne.html buehne_daemon.py\necho '===EXPRESSION_VARIANTS==='\nfor d in ausdruck_erweitert ausdruck_erweitert_ai ausdruck_erweitert_relief2; do\n  if test -d \"$d\"; then\n    n=$(find \"$d\" -type f -path '*/frontal/stufe_*.png' | wc -l)\n    printf '%s FRONTAL_COUNT=%s ' \"$d\" \"$n\"\n    if test -f \"$d/$REL\"; then sha256sum \"$d/$REL\"; else echo REPRESENTATIVE_MISSING; fi\n  else\n    echo \"$d DIR_MISSING\"\n  fi\ndone\necho '===HTTP_AUTHORITY==='\nprintf 'HTTP '; curl -fsS \"http://127.0.0.1:8788/ausdruck_erweitert/$REL?authority=3\" | sha256sum\necho '===SERVICE==='\nsystemctl --user is-active frankenstein-buehne.service\necho SCOPE=READ_ONLY_PRODUCTIVE_SPECIAL_EXPRESSION_AUTHORITY_BINDING"
+}

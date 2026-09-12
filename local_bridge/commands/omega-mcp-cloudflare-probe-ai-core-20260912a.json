@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-cloudflare-probe-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 60,
+  "command": "set -u\nprintf 'VERSION\\n'; cloudflared --version 2>&1 || true\nprintf '\\nUSER_CONFIG_FILES\\n'; find \"$HOME/.cloudflared\" -maxdepth 1 -type f -printf '%f\\n' 2>/dev/null | sort || true\nprintf '\\nSYSTEM_CONFIG_FILES\\n'; find /etc/cloudflared -maxdepth 1 -type f -printf '%f\\n' 2>/dev/null | sort || true\nprintf '\\nUSER_UNITS\\n'; systemctl --user --no-pager list-unit-files 2>/dev/null | grep -i cloudflared || true\nprintf '\\nSYSTEM_UNITS\\n'; systemctl --no-pager list-unit-files 2>/dev/null | grep -i cloudflared || true\nprintf '\\nTUNNELS\\n'; cloudflared tunnel list 2>&1 | sed -E 's/[0-9a-fA-F-]{30,}/<TUNNEL-ID>/g' | head -30 || true"
+}

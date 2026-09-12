@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-inspect-blinzeln-exact-20260912-0803",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\ns=Path('buehne.html').read_text()\nsig='function blinzeln(zeitplanNeu = true){'\na=s.index(sig); b=s.index('{',a); d=0; end=None\nfor i in range(b,len(s)):\n    if s[i]=='{': d+=1\n    elif s[i]=='}':\n        d-=1\n        if d==0: end=i+1; break\nprint(s[a:end])\nPY\nsha256sum buehne.html\necho SCOPE=READ_ONLY_BLINK_FUNCTION_INSPECTION"
+}

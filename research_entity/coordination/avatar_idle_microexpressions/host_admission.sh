@@ -25,7 +25,7 @@ MEM_AVAILABLE_KB=$(awk '/MemAvailable:/{print $2}' /proc/meminfo)
 [[ "$CPU_ONLINE" =~ ^[0-9]+$ ]] || fail "cpu_count_unknown"
 [[ "$MEM_AVAILABLE_KB" =~ ^[0-9]+$ ]] || fail "memory_unknown"
 
-python3 - "$CPU_ONLINE" "$LOAD1" "$LOAD5" "$MEM_AVAILABLE_KB" <<'PY'
+if ! python3 - "$CPU_ONLINE" "$LOAD1" "$LOAD5" "$MEM_AVAILABLE_KB" <<'PY'
 import sys
 n=int(sys.argv[1]); l1=float(sys.argv[2]); l5=float(sys.argv[3]); mem=int(sys.argv[4])
 # Require real headroom; mutation itself is tiny, but it must not join an overloaded host.
@@ -33,8 +33,9 @@ if l1 > n*0.85: raise SystemExit(75)
 if l5 > n*0.95: raise SystemExit(75)
 if mem < 4*1024*1024: raise SystemExit(75)
 PY
-rc=$?
-[[ $rc -eq 0 ]] || fail "resource_headroom cpu=$CPU_ONLINE load1=$LOAD1 load5=$LOAD5 mem_kb=$MEM_AVAILABLE_KB"
+then
+  fail "resource_headroom cpu=$CPU_ONLINE load1=$LOAD1 load5=$LOAD5 mem_kb=$MEM_AVAILABLE_KB"
+fi
 
 PROD_CHROME_COUNT=$(pgrep -a -f '/opt/google/chrome/chrome --app=http://127.0.0.1:8788/' \
   | grep -v -- '--type=' | grep -v 'bash -lc' | wc -l)

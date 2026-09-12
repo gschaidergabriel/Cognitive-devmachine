@@ -1,0 +1,874 @@
+$ hostname RC 0
+ai-core-node-projekt-frankenstein
+HOST= ai-core-node-projekt-frankenstein
+UID= 1000 USER= ai-core-node
+$ systemctl --user show frankenstein-gespraechsmodus.service -p ActiveState -p SubState -p FragmentPath -p ExecStart RC 0
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[Sat 2026-09-12 14:36:30 +07] ; stop_time=[n/a] ; pid=3333824 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+$ systemctl --user show frankenstein-local-bridge.service -p ActiveState -p SubState -p FragmentPath -p ExecStart RC 0
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-local-bridge.service
+$ systemctl --user show frankenstein-chatgpt-client.service -p ActiveState -p SubState -p FragmentPath -p ExecStart RC 0
+ActiveState=inactive
+SubState=dead
+FragmentPath=
+--- candidate roots ---
+/home/ai-core-node/frankenstein-repo exists= True
+/home/ai-core-node/frankenstein exists= False
+/home/ai-core-node/.claude/star exists= True
+/opt/frankenstein exists= False
+/var/lib/entityos/voice exists= True
+$ git -C /home/ai-core-node/frankenstein-repo status --short --branch RC 0
+## main...origin/main [ahead 3, behind 15]
+?? scripts/openai_api_key.local
+$ git -C /home/ai-core-node/frankenstein-repo rev-parse HEAD RC 0
+dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+$ git -C /home/ai-core-node/frankenstein-repo remote -v RC 0
+origin	https://github.com/gschaidergabriel/frankenstein.git (fetch)
+origin	https://github.com/gschaidergabriel/frankenstein.git (push)
+$ git -C /home/ai-core-node/.claude/star status --short --branch RC 0
+## master
+ M chatgpt_fallback_ergebnisse.jsonl
+ D harness-hinweise/paket-1789163559288-39f0c6/SYSTEM_HINWEIS.md
+ M harness_aider.py
+ M harness_crush.py
+ M harness_crush_knopf.py
+ M immunsystem_status.json
+ M quota_uebergabe.py
+ M stern.py
+?? claude_cli_shim.py
+?? crush_modell_rechte.py
+?? daten/FREE_POOL_WISSENSPAKET.md
+?? f2wp1207_chatgpt_exact_backend.py
+?? f2wp1207_chatgpt_harness_adapter.py
+?? f2wp1207_chatgpt_organ.py
+?? frank_chatgpt_remote_exec.py
+?? frank_chatgpt_terminal.py
+?? harness-werkraum/_aider-buchfuehrung/paket-1789181878345-f2b453/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789186223537-bb8f9c/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789187424285-a87899/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789188594009-5f3d4f/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789189763636-d1bbca/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789190936248-a7d95a/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789192105077-52f439/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789193275336-4c6b49/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789194444259-287800/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789195612357-346e01/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789196779830-6c3e31/
+?? harness-werkraum/_aider-buchfuehrung/paket-1789198950421-bdd775/
+?? modell_profile.py
+$ git -C /home/ai-core-node/.claude/star rev-parse HEAD RC 0
+2aca4a193583110b5625bba43728c9b5d6e52028
+$ git -C /home/ai-core-node/.claude/star remote -v RC 0
+
+$ git -C /var/lib/entityos/voice status --short --branch RC 0
+## main...origin/main
+ M buehne.py
+ M gespraech_loop.py
+ M glm_client.py
+ M grid_autonomie.py
+ M hoeren.py
+ M start_lokal.sh
+?? buehne.py.bak-vor-koerperaus-20260912T135259Z
+?? gespraech_loop.py.bak-vor-handeln-20260912T131757Z
+?? gespraech_loop.py.bak-vor-identitaet-20260912T125430Z
+?? gespraech_loop.py.bak-vor-mistral-20260912T110505Z
+?? gespraech_loop.py.bak-vor-orientierung-20260912T124934Z
+?? gespraech_loop.py.bak-vor-poolstufe-20260912T122254Z
+?? glm_client.py.bak-vor-harness-20260912T135950Z
+?? glm_client.py.bak-vor-pool-20260912T122226Z
+?? handeln.py
+?? hoeren.py.bak-vor-greedy-20260912T115456Z
+$ git -C /var/lib/entityos/voice rev-parse HEAD RC 0
+c2d3f1a75d154420a8b18690c29b036eafb46167
+$ git -C /var/lib/entityos/voice remote -v RC 0
+origin	https://github.com/gschaidergabriel/frankenstein-voice.git (fetch)
+origin	https://github.com/gschaidergabriel/frankenstein-voice.git (push)
+--- voice/runtime files ---
+FILE /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py SHA256 5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4 SIZE 161280
+  67:   - `session.audio.input.format.rate` MUSS >= 24000 sein (Server lehnt
+  493:     erkannte Rolle, DAMIT es guest-Beschraenkungen gar nicht erst versucht.
+  500:     return (f"Erkannter Sprecher: {wer}, Rolle 'guest' -- NUR Fragen beantworten/Status vorlesen "
+  833:         # alles machen guest nur fragen stellen". sprecher_rolle=None
+  836:         # 'guest' behandelt (sicherster Default, keine unbeschraenkte
+  844:         self.sprecher_rolle = (sprecher_rolle or "guest").strip().lower()
+  845:         if self.sprecher_rolle not in ("user", "guest"):
+  846:             self.sprecher_rolle = "guest"
+  879:         # _auftrag_stellen_mit_bestaetigung()): zwischen 'gehoert' und
+  892:         # transkripte_zaehler` immer, damit _auftrag_stellen_mit_bestaetigung()
+  1046:                         "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_IN},
+  1051:                     "output": {"voice": self.stimme, "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_OUT}},
+  1626:                         # hat -- siehe _auftrag_stellen_mit_bestaetigung().
+  2087:     def _auftrag_stellen_mit_bestaetigung(self, args: dict) -> dict:
+  2195:         # Durchsetzung -- "user kann mit sprache alles machen guest nur
+  2200:         # bleiben fuer guest erlaubt (reines Lesen/Beenden, keine
+  2202:         _GUEST_GESPERRTE_WERKZEUGE = ("frank_auftrag_stellen", "frank_erinnerung_schreiben")
+  2203:         if self.sprecher_rolle == "guest" and name in _GUEST_GESPERRTE_WERKZEUGE:
+  2206:                 f"{self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- nur registrierte "
+  2208:         elif self.sprecher_rolle == "guest" and name == "frank_forschung" and \
+  2212:                 f"(erkannter Sprecher: {self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- "
+  2221:             ergebnis = self._auftrag_stellen_mit_bestaetigung(args)
+  2302:     # Rollen-Durchsetzung "user kann mit sprache alles machen guest nur
+  2354:                                                      "_auftrag_stellen_mit_bestaetigung()-Zustandsmaschine "
+  2537:         # Echte Zustandsmaschine (_auftrag_stellen_mit_bestaetigung) wird
+  2546:         r1 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+  2549:         r2 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+  2552:         r3_anderer_text = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "irgendwas anderes", "bestaetigt": True})
+  2561:         sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+  2563:         r4 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+  2691:             sitzung._letzte_assistant_aussage = "Ich habe die Datei geloescht."
+FILE /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py SHA256 c9104c11f9ab3940be3c9ce09f99055e72c686106c329c9a9652a5bd8560728c SIZE 30407
+FILE /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/gespraechsmodus.py SHA256 7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709 SIZE 66070
+  285: #  (`claude -p --resume <session-id> --output-format json`) -- echte
+  329: # destruktive Verhalten (Datei loeschen, Daten exfiltrieren, ...) nicht im
+  335: # das GESAMTE Bash-Werkzeug ueber `--disallowedTools` geblockt (bare
+  340: # ansetzt, sondern am Werkzeug selbst. `--disallowedTools` hat nachweislich
+  349: # kann. `_GEFAEHRLICHE_WERKZEUGE` wird unconditional (unabhaengig von
+  350: # `berechtigung`, auch bei `bypassPermissions`) an `--disallowedTools`
+  354: _GEFAEHRLICHE_WERKZEUGE = ["Bash"]
+  364:     Bash-Kommandos ueber --disallowedTools (siehe _GEFAEHRLICHE_WERKZEUGE),
+  370:         "--output-format", "json",
+  372:         "--disallowedTools", *_GEFAEHRLICHE_WERKZEUGE,
+  424:             model=modell, voice=stimme, input=text, response_format="wav",
+  506:         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+FILE /home/ai-core-node/.claude/star/realtime_gespraech.py SHA256 5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4 SIZE 161280
+  67:   - `session.audio.input.format.rate` MUSS >= 24000 sein (Server lehnt
+  493:     erkannte Rolle, DAMIT es guest-Beschraenkungen gar nicht erst versucht.
+  500:     return (f"Erkannter Sprecher: {wer}, Rolle 'guest' -- NUR Fragen beantworten/Status vorlesen "
+  833:         # alles machen guest nur fragen stellen". sprecher_rolle=None
+  836:         # 'guest' behandelt (sicherster Default, keine unbeschraenkte
+  844:         self.sprecher_rolle = (sprecher_rolle or "guest").strip().lower()
+  845:         if self.sprecher_rolle not in ("user", "guest"):
+  846:             self.sprecher_rolle = "guest"
+  879:         # _auftrag_stellen_mit_bestaetigung()): zwischen 'gehoert' und
+  892:         # transkripte_zaehler` immer, damit _auftrag_stellen_mit_bestaetigung()
+  1046:                         "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_IN},
+  1051:                     "output": {"voice": self.stimme, "format": {"type": "audio/pcm", "rate": SAMPLE_RATE_OUT}},
+  1626:                         # hat -- siehe _auftrag_stellen_mit_bestaetigung().
+  2087:     def _auftrag_stellen_mit_bestaetigung(self, args: dict) -> dict:
+  2195:         # Durchsetzung -- "user kann mit sprache alles machen guest nur
+  2200:         # bleiben fuer guest erlaubt (reines Lesen/Beenden, keine
+  2202:         _GUEST_GESPERRTE_WERKZEUGE = ("frank_auftrag_stellen", "frank_erinnerung_schreiben")
+  2203:         if self.sprecher_rolle == "guest" and name in _GUEST_GESPERRTE_WERKZEUGE:
+  2206:                 f"{self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- nur registrierte "
+  2208:         elif self.sprecher_rolle == "guest" and name == "frank_forschung" and \
+  2212:                 f"(erkannter Sprecher: {self.sprecher_name or 'unbekannt'}, Rolle 'guest') -- "
+  2221:             ergebnis = self._auftrag_stellen_mit_bestaetigung(args)
+  2302:     # Rollen-Durchsetzung "user kann mit sprache alles machen guest nur
+  2354:                                                      "_auftrag_stellen_mit_bestaetigung()-Zustandsmaschine "
+  2537:         # Echte Zustandsmaschine (_auftrag_stellen_mit_bestaetigung) wird
+  2546:         r1 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+  2549:         r2 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+  2552:         r3_anderer_text = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "irgendwas anderes", "bestaetigt": True})
+  2561:         sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs"})
+  2563:         r4 = sitzung._auftrag_stellen_mit_bestaetigung({"auftrag": "loesche alle logs", "bestaetigt": True})
+  2691:             sitzung._letzte_assistant_aussage = "Ich habe die Datei geloescht."
+FILE /home/ai-core-node/.claude/star/voice_session_capsule.py SHA256 c9104c11f9ab3940be3c9ce09f99055e72c686106c329c9a9652a5bd8560728c SIZE 30407
+FILE /home/ai-core-node/.claude/star/gespraechsmodus.py SHA256 7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709 SIZE 66070
+  285: #  (`claude -p --resume <session-id> --output-format json`) -- echte
+  329: # destruktive Verhalten (Datei loeschen, Daten exfiltrieren, ...) nicht im
+  335: # das GESAMTE Bash-Werkzeug ueber `--disallowedTools` geblockt (bare
+  340: # ansetzt, sondern am Werkzeug selbst. `--disallowedTools` hat nachweislich
+  349: # kann. `_GEFAEHRLICHE_WERKZEUGE` wird unconditional (unabhaengig von
+  350: # `berechtigung`, auch bei `bypassPermissions`) an `--disallowedTools`
+  354: _GEFAEHRLICHE_WERKZEUGE = ["Bash"]
+  364:     Bash-Kommandos ueber --disallowedTools (siehe _GEFAEHRLICHE_WERKZEUGE),
+  370:         "--output-format", "json",
+  372:         "--disallowedTools", *_GEFAEHRLICHE_WERKZEUGE,
+  424:             model=modell, voice=stimme, input=text, response_format="wav",
+  506:         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/local_bridge_state/repo/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_remapfix_20260912_1014_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v2_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_v3_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_dual_falsifier_20260912_1002_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_blind_perceptual_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_matched_ab_20260912_1023_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/eye_runtime_v3_20260912_1022_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_current_daemons_shadow_v2_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_abba_v2_20260912_1020_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/visible_shoulder_ab_20260912_1000_gpt56sol/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_adapter_gate_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tools/mini_inference_capability_binding_v1.py SHA256 c0999607748b716d40d050ae6926a21e871d702f3293e0ad0402aa57e3e30fe7 SIZE 11160
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tools/trigger2_physical_witness_capability_v1.py SHA256 dd730bef30f1375a943c78ec7d72f0f433b19a22862888f971b9daf934aa1cea SIZE 7328
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tools/free_swarm_provider_capability_attribution_v1.py SHA256 4924b91ddc404c81abbe2cf60958b55464536e21ab77b945e3c0141fe89b3675 SIZE 11707
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tests/test_mini_inference_capability_binding_v1.py SHA256 4caefe7fcf22d5448598841dbf676a9d3f7d4c0b7f837ae3dcd896de4c7f22d9 SIZE 6464
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tests/test_unified_cognitive_fabric_adaptive_capability_fence.py SHA256 8faafd6ad438d7f737397ee63c6adedd10b6b524730d7da01f559b233a8e3c1f SIZE 1754
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tests/test_free_swarm_provider_capability_attribution_v1.py SHA256 3f5d2847533da32aa06113f9144cc04fa7ab7078a139707ad176550055443c54 SIZE 1335
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/tests/test_trigger2_physical_witness_capability_v1.py SHA256 b11c0e5689944a1e92a872eac09167d1b31c0e84749c1e7c7d020be3218be8c3 SIZE 3999
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/the artefact/blogpost_entity/test_reference_local_exec_capability_authority.py SHA256 89c4ebd605b4cdc9124be64b4b413b28289fc42c968f794f481145997b57612e SIZE 5474
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/test_eval_runner_capability_authority_ood_v1.py SHA256 8d96e2203160d456c27bf5a332360c3e356861a9f9dbb1dcc7722ded00fb1745 SIZE 2617
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/the artefact/blogpost_entity/mini_cognition/generate_eval_runner_capability_authority_ood_v1.py SHA256 38f65f1e3853505999fde174288e72d0b2c9b4e4381572c72d1ecb34eb96bdb8 SIZE 6317
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/research_entity/runtime/system_capability_event_runtime.py SHA256 827684b043af5cdd2b12c623fc08912647f29781a814bac493b3ccff3620be2f SIZE 3818
+FILE /home/ai-core-node/.claude/star/visual/.go_evidence/shoulder_residual_envelope_fullscene_gpt56sol_20260912/src/research_entity/trigger_runs/spawn/spawn_20260809T1918p0700_claycode_capffi_attest_c4/capability_attested_gate_probe.py SHA256 f1be086b8d3c7a8d8e20a2c7928de27172328365d0227263ffe01c26eab6c653 SIZE 4517
+FOUND 194
+--- running processes ---
+$ ps -eo pid,etimes,args RC 0
+PID ELAPSED COMMAND
+      1  410012 /usr/lib/systemd/systemd --system --deserialize=135 splash
+      2  410012 [kthreadd]
+      3  410012 [pool_workqueue_release]
+      4  410012 [kworker/R-rcu_gp]
+      5  410012 [kworker/R-sync_wq]
+      6  410012 [kworker/R-kvfree_rcu_reclaim]
+      7  410012 [kworker/R-slub_flushwq]
+      8  410012 [kworker/R-netns]
+     11  410012 [kworker/0:0H-events_highpri]
+     13  410012 [kworker/R-mm_percpu_wq]
+     14  410012 [ksoftirqd/0]
+     15  410012 [rcu_preempt]
+     16  410012 [rcu_exp_par_gp_kthread_worker/0]
+     17  410012 [rcu_exp_gp_kthread_worker]
+     18  410012 [migration/0]
+     19  410012 [idle_inject/0]
+     20  410012 [cpuhp/0]
+     21  410012 [cpuhp/1]
+     22  410012 [idle_inject/1]
+     23  410012 [migration/1]
+     24  410012 [ksoftirqd/1]
+     26  410012 [kworker/1:0H-events_highpri]
+     27  410012 [cpuhp/2]
+     28  410012 [idle_inject/2]
+     29  410012 [migration/2]
+     30  410012 [ksoftirqd/2]
+     32  410012 [kworker/2:0H-events_highpri]
+     33  410012 [cpuhp/3]
+     34  410012 [idle_inject/3]
+     35  410012 [migration/3]
+     36  410012 [ksoftirqd/3]
+     38  410012 [kworker/3:0H-events_highpri]
+     39  410012 [cpuhp/4]
+     40  410012 [idle_inject/4]
+     41  410012 [migration/4]
+     42  410012 [ksoftirqd/4]
+     44  410012 [kworker/4:0H-events_highpri]
+     45  410012 [cpuhp/5]
+     46  410012 [idle_inject/5]
+     47  410012 [migration/5]
+     48  410012 [ksoftirqd/5]
+     50  410012 [kworker/5:0H-events_highpri]
+     51  410012 [cpuhp/6]
+     52  410012 [idle_inject/6]
+     53  410012 [migration/6]
+     54  410012 [ksoftirqd/6]
+     56  410012 [kworker/6:0H-events_highpri]
+     57  410012 [cpuhp/7]
+     58  410012 [idle_inject/7]
+     59  410012 [migration/7]
+     60  410012 [ksoftirqd/7]
+     62  410012 [kworker/7:0H-events_highpri]
+     63  410012 [cpuhp/8]
+     64  410012 [idle_inject/8]
+     65  410012 [migration/8]
+     66  410012 [ksoftirqd/8]
+     68  410012 [kworker/8:0H-events_highpri]
+     69  410012 [cpuhp/9]
+     70  410012 [idle_inject/9]
+     71  410012 [migration/9]
+     72  410012 [ksoftirqd/9]
+     74  410012 [kworker/9:0H-events_highpri]
+     75  410012 [cpuhp/10]
+     76  410012 [idle_inject/10]
+     77  410012 [migration/10]
+     78  410012 [ksoftirqd/10]
+     80  410012 [kworker/10:0H-events_highpri]
+     81  410012 [cpuhp/11]
+     82  410012 [idle_inject/11]
+     83  410012 [migration/11]
+     84  410012 [ksoftirqd/11]
+     86  410012 [kworker/11:0H-events_highpri]
+     87  410012 [cpuhp/12]
+     88  410012 [idle_inject/12]
+     89  410012 [migration/12]
+     90  410012 [ksoftirqd/12]
+     92  410012 [kworker/12:0H-events_highpri]
+     93  410012 [cpuhp/13]
+     94  410012 [idle_inject/13]
+     95  410012 [migration/13]
+     96  410012 [ksoftirqd/13]
+     98  410012 [kworker/13:0H-events_highpri]
+     99  410012 [cpuhp/14]
+    100  410012 [idle_inject/14]
+    101  410012 [migration/14]
+    102  410012 [ksoftirqd/14]
+    104  410012 [kworker/14:0H-events_highpri]
+    105  410012 [cpuhp/15]
+    106  410012 [idle_inject/15]
+    107  410012 [migration/15]
+    108  410012 [ksoftirqd/15]
+    110  410012 [kworker/15:0H-events_highpri]
+    111  410012 [kdevtmpfs]
+    112  410012 [kworker/R-inet_frag_wq]
+    113  410012 [rcu_tasks_kthread]
+    114  410012 [rcu_tasks_rude_kthread]
+    115  410012 [rcu_tasks_trace_kthread]
+    116  410012 [kauditd]
+    117  410012 [khungtaskd]
+    119  410012 [oom_reaper]
+    120  410012 [kworker/R-writeback]
+    122  410012 [kcompactd0]
+    123  410012 [ksmd]
+    124  410012 [khugepaged]
+    125  410012 [kworker/R-kblockd]
+    126  410012 [kworker/R-blkcg_punt_bio]
+    127  410012 [kworker/R-kintegrityd]
+    128  410012 [irq/9-acpi]
+    131  410012 [kworker/R-tpm_dev_wq]
+    132  410012 [kworker/R-ata_sff]
+    133  410012 [kworker/R-md]
+    134  410012 [kworker/R-md_bitmap]
+    135  410012 [kworker/R-edac-poller]
+    136  410012 [kworker/R-devfreq_wq]
+    137  410012 [watchdogd]
+    138  410012 [kworker/R-quota_events_unbound]
+    139  410011 [kworker/0:1H-kblockd]
+    141  410011 [irq/24-AMD-Vi]
+    142  410011 [kswapd0]
+    143  410011 [ecryptfs-kthread]
+    144  410011 [kworker/R-kthrotld]
+    146  410011 [irq/29-aerdrv]
+    147  410011 [irq/30-aerdrv]
+    148  410011 [irq/31-aerdrv]
+    149  410011 [irq/32-aerdrv]
+    150  410011 [irq/32-pciehp]
+    151  410011 [irq/33-aerdrv]
+    152  410011 [irq/33-pciehp]
+    153  410011 [kworker/R-acpi_thermal_pm]
+    161  410011 [kworker/R-mld]
+    162  410011 [kworker/R-ipv6_addrconf]
+    163  410011 [kworker/R-kstrp]
+    181  410011 [kworker/R-charger_manager]
+    182  410011 [irq/25-ACPI:Event]
+    183  410011 [irq/26-ACPI:Event]
+    184  410011 [irq/27-ACPI:Event]
+    185  410011 [irq/28-ACPI:Event]
+    214  410011 [kworker/1:1H-kblockd]
+    217  410011 [kworker/8:1H-kblockd]
+    219  410011 [kworker/13:1H-kblockd]
+    248  410011 [kworker/6:1H-kblockd]
+    249  410011 [kworker/12:1H-kblockd]
+    250  410011 [kworker/3:1H-kblockd]
+    251  410011 [kworker/4:1H-kblockd]
+    252  410011 [kworker/5:1H-kblockd]
+    255  410011 [kworker/2:1H-kblockd]
+    256  410011 [kworker/9:1H-kblockd]
+    258  410011 [kworker/10:1H-kblockd]
+    260  410011 [kworker/14:1H-kblockd]
+    262  410011 [kworker/15:1H-kblockd]
+    266  410011 [kworker/7:1H-kblockd]
+    267  410011 [kworker/11:1H-kblockd]
+    297  410011 [kworker/R-nvme-wq]
+    298  410011 [kworker/R-nvme-reset-wq]
+    299  410011 [kworker/R-nvme-delete-wq]
+    300  410011 [kworker/R-nvme-auth-wq]
+    320  410009 [kworker/R-amdgpu-reset-dev]
+    334  410009 [kworker/R-ttm]
+    335  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    336  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    337  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    338  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    339  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    340  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    341  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    342  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    343  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    344  410008 [kworker/R-amdgpu_dm_hpd_rx_offload_wq]
+    345  410008 [kworker/R-dm_vblank_control_workqueue]
+    346  410008 [kworker/R-amdgpu_dm_hpd_wq]
+    347  410008 [card1-crtc0]
+    348  410008 [card1-crtc1]
+    349  410008 [card1-crtc2]
+    350  410008 [card1-crtc3]
+    351  410008 [kworker/R-gfx_0.0.0]
+    352  410008 [kworker/R-comp_1.0.0]
+    353  410008 [kworker/R-comp_1.1.0]
+    354  410008 [kworker/R-comp_1.2.0]
+    355  410008 [kworker/R-comp_1.3.0]
+    356  410008 [kworker/R-comp_1.0.1]
+    357  410008 [kworker/R-comp_1.1.1]
+    358  410008 [kworker/R-comp_1.2.1]
+    359  410008 [kworker/R-comp_1.3.1]
+    360  410008 [kworker/R-sdma0]
+    361  410008 [kworker/R-vcn_unified_0]
+    362  410008 [kworker/R-jpeg_dec]
+    949  410006 [kworker/R-raid5wq]
+   1005  410004 [jbd2/nvme0n1p2-8]
+   1006  410004 [kworker/R-ext4-rsv-conversion]
+   1101  410004 /usr/lib/systemd/systemd-udevd
+   1131  410003 [psimon]
+   1531  410003 [kworker/R-cfg80211]
+   1762  410003 [irq/103-ACP_PCI_IRQ]
+   1763  410003 [napi/phy0-0]
+   1764  410003 [napi/phy0-0]
+   1765  410003 [napi/phy0-0]
+   1938  410002 /usr/lib/systemd/systemd-oomd
+   1941  410002 /usr/lib/systemd/systemd-resolved
+   1942  410002 /usr/lib/systemd/systemd-timesyncd
+   2017  410002 avahi-daemon: running [ai-core-node-projekt-frankenstein.local]
+   2018  410002 /usr/libexec/bluetooth/bluetoothd
+   2019  410002 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   2022  410002 /usr/libexec/gnome-remote-desktop-daemon --system
+   2027  410002 /usr/lib/polkit-1/polkitd --no-debug
+   2028  410002 /usr/libexec/power-profiles-daemon
+   2031  410002 /usr/sbin/smartd -n
+   2035  410002 /snap/snapd/current/usr/lib/snapd/snapd
+   2044  410002 /usr/libexec/accounts-daemon
+   2045  410002 /usr/sbin/cron -f -P
+   2046  410002 /usr/libexec/switcheroo-control
+   2048  410002 /usr/lib/systemd/systemd-logind
+   2052  410002 /usr/libexec/udisks2/udisksd
+   2063  410002 avahi-daemon: chroot helper
+   2074  410002 /usr/sbin/rsyslogd -n -iNONE
+   2142  410002 /usr/sbin/NetworkManager --no-daemon
+   2152  410002 /usr/sbin/wpa_supplicant -u -s -O DIR=/run/wpa_supplicant GROUP=netdev
+   2173  410002 /usr/sbin/ModemManager
+   2174  410002 /usr/libexec/boltd
+   2227  410001 [mt76-tx phy0]
+   2314  410001 /usr/local/bin/gitlab-runner run --config /etc/gitlab-runner/config.toml --working-directory /home/gitlab-runner --service gitlab-runner --user gitlab-runner
+   2318  410001 /usr/sbin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=41641
+   2319  410001 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+   2339  410001 /usr/lib/systemd/systemd --user
+   2346  410001 /usr/bin/containerd
+   2354  410001 /usr/sbin/lightdm
+   2388  410001 (sd-pam)
+   2396  410001 /sbin/agetty -o -p -- \u --noclear - linux
+   2434  410000 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+   2476  410000 /usr/bin/Xvfb :150 -screen 0 1920x1080x24 -nolisten tcp
+   2477  410000 /usr/bin/x11vnc -display :150 -localhost -forever -shared -rfbport 5998 -nopw -quiet
+   2478  410000 /usr/bin/python3 /usr/bin/websockify --web /usr/share/novnc 127.0.0.1:8114 127.0.0.1:5998
+   2480  410000 /usr/bin/pipewire
+   2481  410000 /usr/bin/pipewire -c filter-chain.conf
+   2490  410000 /usr/bin/wireplumber
+   2491  410000 /usr/bin/pipewire-pulse
+   2502  410000 /usr/bin/python3 /home/ai-core-node/aicore/opt/aicore/tools/chronik/wache.py
+   2823  409999 inotifywait -m -q --format %w%f -e close_write -e moved_to -e moved_from -e create -e delete /home/ai-core-node/synteq-umbau /home/ai-core-node/synteq-umbau/.xenostore /home/ai-core-node/synteq-umbau/.probe-bild /home/ai-core-node/synteq-umbau/pruef-A2 /home/ai-core-node/synteq-umbau/.gstack /home/ai-core-node/synteq-umbau/.store /home/ai-core-node/synteq-umbau/assets /home/ai-core-node/synteq-umbau/.claude /home/ai-core-node/synteq-umbau/plaetze /home/ai-core-node/synteq-umbau/pruef-A2/knet /home/ai-core-node/synteq-umbau/assets/texturen-pack /home/ai-core-node/synteq-umbau/assets/texturen /home/ai-core-node/synteq-umbau/assets/hintergrund2 /home/ai-core-node/synteq-umbau/assets/hintergrund /home/ai-core-node/synteq-umbau/assets/icon-post /home/ai-core-node/synteq-umbau/assets/icons-roh /home/ai-core-node/swarm /home/ai-core-node/swarm/sitzungen /home/ai-core-node/swarm/uebergaben /home/ai-core-node/swarm/zuordnung /home/ai-core-node/swarm/bau /home/ai-core-node/swarm/desktop /home/ai-core-node/swarm/profile /home/ai-core-node/swarm/.vault /home/ai-core-node/swarm/anzeige /home/ai-core-node/swarm/assets /home/ai-core-node/swarm/armc_kompiliert_rohdaten /home/ai-core-node/swarm/angemeldet /home/ai-core-node/swarm/sprache /home/ai-core-node/swarm/ablauf /home/ai-core-node/swarm/sitzungen/booth-o3-bc077761b5 /home/ai-core-node/swarm/sitzungen/2026-08-05-oberflaeche-kanaele /home/ai-core-node/swarm/sitzungen/booth-o1-ff7561c1b4 /home/ai-core-node/swarm/sitzungen/booth-o2-2be558df98 /home/ai-core-node/swarm/sitzungen/booth-o2-ce9733c291 /home/ai-core-node/swarm/sitzungen/booth-f4-4dce8bbccd /home/ai-core-node/swarm/sitzungen/booth-o1-51e344987c /home/ai-core-node/swarm/sitzungen/booth-o1-4d1b39e008 /home/ai-core-node/swarm/sitzungen/booth-f6-2f83563d63 /home/ai-core-node/swarm/sitzungen/2026-08-05-f8-tmux-test /home/ai-core-node/swarm/sitzungen/2026-08-05-innenleben /home/ai-core-node/swarm/sitzungen/booth-o1-86711016fd /home/ai-core-node/swarm/sitzungen/booth-o10-e61e5e5109 /home/ai-core-node/swarm/sitzungen/booth-f4-be621e1212 /home/ai-core-node/swarm/sitzungen/booth-o1-f152f3aea3 /home/ai-core-node/swarm/sitzungen/booth-f5-45fc10bbb9 /home/ai-core-node/swarm/sitzungen/booth-f6-4769855e04 /home/ai-core-node/swarm/sitzungen/booth-o1-54f364a25f /home/ai-core-node/swarm/sitzungen/booth-f6-3c4302208d /home/ai-core-node/swarm/sitzungen/booth-p1-ff755072db /home/ai-core-node/swarm/sitzungen/booth-o4-ea89d41f8f /home/ai-core-node/swarm/sitzungen/booth-f7-2bb5f1c56c /home/ai-core-node/swarm/sitzungen/booth-f4-f8ca5446f5 /home/ai-core-node/swarm/sitzungen/booth-f4-85f2d1e90a /home/ai-core-node/swarm/sitzungen/booth-o1-6e5cbe71af /home/ai-core-node/swarm/sitzungen/2026-08-05-modell-training /home/ai-core-node/swarm/sitzungen/2026-08-01-start /home/ai-core-node/swarm/sitzungen/booth-o3-a33bb1d935 /home/ai-core-node/swarm/sitzungen/2026-08-05-werkzeuge-autonomie /home/ai-core-node/swarm/sitzungen/booth-f6-53fc7b104a /home/ai-core-node/swarm/sitzungen/booth-o1-8485629a2d /home/ai-core-node/swarm/sitzungen/booth-f6-340f03074f /home/ai-core-node/swarm/sitzungen/booth-f5-40aac9fdde /home/ai-core-node/swarm/sitzungen/booth-o1-b15e71b11c /home/ai-core-node/swarm/sitzungen/booth-o8-94120478d5 /home/ai-core-node/swarm/sitzungen/booth-f4-fc41e5be61 /home/ai-core-node/swarm/sitzungen/booth-f5-52b0d0c30c /home/ai-core-node/swarm/sitzungen/booth-f7-81cdf56272 /home/ai-core-node/swarm/sitzungen/booth-f5-4738b66543 /home/ai-core-node/swarm/sitzungen/booth-o1-fc2ef07a4c /home/ai-core-node/swarm/sitzungen/booth-s3-3231bcf257 /home/ai-core-node/swarm/sitzungen/booth-o2-a0b667d578 /home/ai-core-node/swarm/sitzungen/booth-f4-3bdeb05d68 /home/ai-core-node/swarm/sitzungen/booth-o10-9c8824f5ab /home/ai-core-node/swarm/sitzungen/booth-f7-9c28b8a9e3 /home/ai-core-node/swarm/sitzungen/2026-08-06-xn11-schrift-frank-feld /home/ai-core-node/swarm/sitzungen/booth-o2-9314ea2872 /home/ai-core-node/swarm/sitzungen/booth-o3-bb158557cf /home/ai-core-node/swarm/sitzungen/booth-f8-59a6de339e /home/ai-core-node/swarm/sitzungen/booth-f7-90b0c3b2f0 /home/ai-core-node/swarm/sitzungen/booth-s3-a02ebc8c03 /home/ai-core-node/swarm/sitzungen/booth-f5-efab0e0fb6 /home/ai-core-node/swarm/sitzungen/booth-f6-7a8d8c17d5 /home/ai-core-node/swarm/sitzungen/booth-f6-b8d447bd56 /home/ai-core-node/swarm/sitzungen/booth-f5-ed5d3caec8 /home/ai-core-node/swarm/sitzungen/booth-s3-201203b58e /home/ai-core-node/swarm/sitzungen/booth-f4-c8a3883220 /home/ai-core-node/swarm/sitzungen/booth-f5-37be53909e /home/ai-core-node/swarm/sitzungen/booth-f4-3c19eb319f /home/ai-core-node/swarm/sitzungen/booth-f6-dd5ef863dc /home/ai-core-node/swarm/sitzungen/booth-f1-2db2ed7180 /home/ai-core-node/swarm/sitzungen/booth-f6-25e8cbfa49 /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027 /home/ai-core-node/swarm/sitzungen/2026-08-05-codex-kammer /home/ai-core-node/swarm/sitzungen/2026-08-05-gedaechtnis-wissen /home/ai-core-node/swarm/sitzungen/booth-o10-5361832b6c /home/ai-core-node/swarm/sitzungen/2026-08-05-f8-tmux-test/status /home/ai-core-node/swarm/sitzungen/2026-08-05-innenleben/status /home/ai-core-node/swarm/sitzungen/2026-08-06-xn11-schrift-frank-feld/status /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/uebergaben /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/status /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/briefings /home/ai-core-node/swarm/sitzungen/2026-08-04-frank-4-8-2027/berichte /home/ai-core-node/swarm/sitzungen/2026-08-05-codex-kammer/status /home/ai-core-node/swarm/bau/proben /home/ai-core-node/swarm/desktop/logo /home/ai-core-node/swarm/desktop/daten /home/ai-core-node/swarm/anzeige/h1_rohdaten /home/ai-core-node/swarm/anzeige/armc_rohdaten /home/ai-core-node/swarm/anzeige/desktop /home/ai-core-node/swarm/anzeige/manual /home/ai-core-node/swarm/anzeige/assets /home/ai-core-node/swarm/anzeige/desktop/daten /home/ai-core-node/swarm/anzeige/desktop/.gstack /home/ai-core-node/swarm/assets/party /home/ai-core-node/swarm/assets/fonts /home/ai-core-node/swarm/sprache/.probe-store /home/ai-core-node/swarm/sprache/schwarm /home/ai-core-node/swarm/sprache/.store /home/ai-core-node/swarm/sprache/bildfragen /home/ai-core-node/swarm/sprache/koordination /home/ai-core-node/swarm/sprache/xn11 /home/ai-core-node/swarm/sprache/schwarm/bilder /home/ai-core-node/swarm/sprache/koordination/.store /home/ai-core-node/swarm/sprache/xn11/bau /home/ai-core-node/swarm/sprache/xn11/quelle-xn11 /home/ai-core-node/swarm/sprache/xn11/leseprobe /home/ai-core-node/swarm/sprache/xn11/quelle-g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit /home/ai-core-node/swarm/sprache/xn11/bau/schrift5_store /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg /home/ai-core-node/swarm/sprache/xn11/bau/g11 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/tests /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/bin /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/xn11 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples/ex01 /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/examples/ex01/store /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/skills /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/hooks /home/ai-core-node/swarm/sprache/xn11/bau/xn11-pkg/.claude/skills/se-xeno-native /home/ai-core-node/swarm/sprache/xn11/bau/g11/tests /home/ai-core-node/swarm/sprache/xn11/bau/g11/examples /home/ai-core-node/swarm/sprache/xn11/bau/g11/evaluation /home/ai-core-node/swarm/sprache/xn11/bau/g11/src /home/ai-core-node/swarm/sprache/xn11/bau/g11/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/bau/g11/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/tests /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/bin /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/xn11 /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples/ex01 /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/examples/ex01/store /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/skills /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/hooks /home/ai-core-node/swarm/sprache/xn11/quelle-xn11/.claude/skills/se-xeno-native /home/ai-core-node/swarm/sprache/xn11/leseprobe/stimuli-reich /home/ai-core-node/swarm/sprache/xn11/quelle-g11/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/capability /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/sources /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/state /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/implementation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/traffic /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/motifs /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/reports /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/migration /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/language/rejected_candidates /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/linebreak /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/fresh_reader /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/raw_results /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/compaction /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/property /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/ood /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/fuzz /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/baselines /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/tests/unit /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/island_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/projection_traces /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/lens_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/display/graph_json_examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package/src/xeno_g11/_vendor /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_3 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_1 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/research/cycle_2 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/tests /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/examples /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/evaluation /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src/xeno_g11 /home/ai-core-node/swarm/sprache/xn11/quelle-g11-audit/package_project/src/xeno_g11/_vendor /home/ai-core-node/aicore/opt/aicore /home/ai-core-node/aicore/opt/aicore/ingestd /home/ai-core-node/aicore/opt/aicore/intelligence /home/ai-core-node/aicore/opt/aicore/.next /home/ai-core-node/aicore/opt/aicore/analysen /home/ai-core-node/aicore/opt/aicore/agentic /home/ai-core-node/aicore/opt/aicore/gaming /home/ai-core-node/aicore/opt/aicore/gateway /home/ai-core-node/aicore/opt/aicore/personality /home/ai-core-node/aicore/opt/aicore/.github /home/ai-core-node/aicore/opt/aicore/core /home/ai-core-node/aicore/opt/aicore/tools /home/ai-core-node/aicore/opt/aicore/tests /home/ai-core-node/aicore/opt/aicore/writer /home/ai-core-node/aicore/opt/aicore/config /home/ai-core-node/aicore/opt/aicore/needle /home/ai-core-node/aicore/opt/aicore/scripts /home/ai-core-node/aicore/opt/aicore/configs /home/ai-core-node/aicore/opt/aicore/docs /home/ai-core-node/aicore/opt/aicore/skills /home/ai-core-node/aicore/opt/aicore/ext /home/ai-core-node/aicore/opt/aicore/.gstack /home/ai-core-node/aicore/opt/aicore/ui /home/ai-core-node/aicore/opt/aicore/bridges /home/ai-core-node/aicore/opt/aicore/common /home/ai-core-node/aicore/opt/aicore/synteq /home/ai-core-node/aicore/opt/aicore/modeld /home/ai-core-node/aicore/opt/aicore/wissen /home/ai-core-node/aicore/opt/aicore/training /home/ai-core-node/aicore/opt/aicore/router /home/ai-core-node/aicore/opt/aicore/docker /home/ai-core-node/aicore/opt/aicore/assets /home/ai-core-node/aicore/opt/aicore/.claude /home/ai-core-node/aicore/opt/aicore/konzepte /home/ai-core-node/aicore/opt/aicore/services /home/ai-core-node/aicore/opt/aicore/desktopd /home/ai-core-node/aicore/opt/aicore/papers /home/ai-core-node/aicore/opt/aicore/updater /home/ai-core-node/aicore/opt/aicore/webd /home/ai-core-node/aicore/opt/aicore/analysen/verhalten /home/ai-core-node/aicore/opt/aicore/analysen/2026-08-04 /home/ai-core-node/aicore/opt/aicore/personality/tests /home/ai-core-node/aicore/opt/aicore/.github/workflows /home/ai-core-node/aicore/opt/aicore/tools/titan /home/ai-core-node/aicore/opt/aicore/tools/system_control /home/ai-core-node/aicore/opt/aicore/tools/omni_log_monitor /home/ai-core-node/aicore/opt/aicore/tools/lcme /home/ai-core-node/aicore/opt/aicore/tools/discovered /home/ai-core-node/aicore/opt/aicore/tools/schranke /home/ai-core-node/aicore/opt/aicore/tools/chronik /home/ai-core-node/aicore/opt/aicore/tests/ui test /home/ai-core-node/aicore/opt/aicore/writer/export /home/ai-core-node/aicore/opt/aicore/writer/ai /home/ai-core-node/aicore/opt/aicore/writer/editor /home/ai-core-node/aicore/opt/aicore/writer/sidebar /home/ai-core-node/aicore/opt/aicore/writer/config /home/ai-core-node/aicore/opt/aicore/writer/preview /home/ai-core-node/aicore/opt/aicore/writer/ingestion /home/ai-core-node/aicore/opt/aicore/writer/ui /home/ai-core-node/aicore/opt/aicore/writer/mode /home/ai-core-node/aicore/opt/aicore/writer/sandbox /home/ai-core-node/aicore/opt/aicore/writer/coding /home/ai-core-node/aicore/opt/aicore/writer/autofix /home/ai-core-node/aicore/opt/aicore/writer/ingestion/parsers /home/ai-core-node/aicore/opt/aicore/writer/ui/dialogs /home/ai-core-node/aicore/opt/aicore/skills/log-analyzer /home/ai-core-node/aicore/opt/aicore/skills/docker-helper /home/ai-core-node/aicore/opt/aicore/skills/sysadmin /home/ai-core-node/aicore/opt/aicore/skills/regex-helper /home/ai-core-node/aicore/opt/aicore/skills/http-tester /home/ai-core-node/aicore/opt/aicore/skills/code-review /home/ai-core-node/aicore/opt/aicore/skills/business-plan /home/ai-core-node/aicore/opt/aicore/skills/product-research /home/ai-core-node/aicore/opt/aicore/skills/markdown-helper /home/ai-core-node/aicore/opt/aicore/skills/conventional-commits /home/ai-core-node/aicore/opt/aicore/skills/cron-helper /home/ai-core-node/aicore/opt/aicore/skills/json-yaml-helper /home/ai-core-node/aicore/opt/aicore/skills/summarize /home/ai-core-node/aicore/opt/aicore/skills/meal-planner /home/ai-core-node/aicore/opt/aicore/skills/doc-assistant /home/ai-core-node/aicore/opt/aicore/skills/git-workflow /home/ai-core-node/aicore/opt/aicore/skills/essence-distiller /home/ai-core-node/aicore/opt/aicore/skills/translate-helper /home/ai-core-node/aicore/opt/aicore/skills/content-repurpose /home/ai-core-node/aicore/opt/aicore/skills/security-audit /home/ai-core-node/aicore/opt/aicore/skills/shell-explain /home/ai-core-node/aicore/opt/aicore/skills/systemd-helper /home/ai-core-node/aicore/opt/aicore/ext/sovereign /home/ai-core-node/aicore/opt/aicore/ext/genesis /home/ai-core-node/aicore/opt/aicore/ui/fas_popup /home/ai-core-node/aicore/opt/aicore/ui/webui /home/ai-core-node/aicore/opt/aicore/ui/ewish_popup /home/ai-core-node/aicore/opt/aicore/ui/adi_popup /home/ai-core-node/aicore/opt/aicore/ui/ui_tester /home/ai-core-node/aicore/opt/aicore/ui/sounds /home/ai-core-node/aicore/opt/aicore/ui/overlay /home/ai-core-node/aicore/opt/aicore/ui/fas_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/webui/static /home/ai-core-node/aicore/opt/aicore/ui/webui/static/css /home/ai-core-node/aicore/opt/aicore/ui/webui/static/fonts /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets /home/ai-core-node/aicore/opt/aicore/ui/webui/static/sprites /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/logo /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/daten /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/schrift /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/texturen /home/ai-core-node/aicore/opt/aicore/ui/webui/static/synteq/vendor /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets/klang /home/ai-core-node/aicore/opt/aicore/ui/webui/static/assets/fonts /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js/components /home/ai-core-node/aicore/opt/aicore/ui/webui/static/js/pages /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img/faces /home/ai-core-node/aicore/opt/aicore/ui/webui/static/img/faces/_orig /home/ai-core-node/aicore/opt/aicore/ui/ewish_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/adi_popup/styles /home/ai-core-node/aicore/opt/aicore/ui/ui_tester/styles /home/ai-core-node/aicore/opt/aicore/ui/overlay/helpers /home/ai-core-node/aicore/opt/aicore/ui/overlay/voice /home/ai-core-node/aicore/opt/aicore/ui/overlay/game /home/ai-core-node/aicore/opt/aicore/ui/overlay/commands /home/ai-core-node/aicore/opt/aicore/ui/overlay/aura /home/ai-core-node/aicore/opt/aicore/ui/overlay/mixins /home/ai-core-node/aicore/opt/aicore/ui/overlay/bsn /home/ai-core-node/aicore/opt/aicore/ui/overlay/services /home/ai-core-node/aicore/opt/aicore/ui/overlay/widgets /home/ai-core-node/aicore/opt/aicore/ui/overlay/genesis /home/ai-core-node/aicore/opt/aicore/ui/overlay/game/rooms /home/ai-core-node/aicore/opt/aicore/synteq/zwilling /home/ai-core-node/aicore/opt/aicore/synteq/systemd /home/ai-core-node/aicore/opt/aicore/synteq/fusion /home/ai-core-node/aicore/opt/aicore/synteq/lib /home/ai-core-node/aicore/opt/aicore/synteq/pruefung /home/ai-core-node/aicore/opt/aicore/synteq/ui /home/ai-core-node/aicore/opt/aicore/synteq/vault /home/ai-core-node/aicore/opt/aicore/synteq/kern /home/ai-core-node/aicore/opt/aicore/synteq/konzepte /home/ai-core-node/aicore/opt/aicore/synteq/bin /home/ai-core-node/aicore/opt/aicore/synteq/vault/sitzungen /home/ai-core-node/aicore/opt/aicore/synteq/vault/rohdaten /home/ai-core-node/aicore/opt/aicore/synteq/vault/befunde /home/ai-core-node/aicore/opt/aicore/synteq/vault/entscheidungen /home/ai-core-node/aicore/opt/aicore/synteq/vault/kartei /home/ai-core-node/aicore/opt/aicore/synteq/vault/hypothesen /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence /home/ai-core-node/aicore/opt/aicore/synteq/vault/rohdaten/forschungsfusion-2026-08-05 /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05 /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/schwarm-auftrag /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/rohdaten /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/werkzeuge /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/logs /home/ai-core-node/aicore/opt/aicore/synteq/vault/digitaltranscence/sprachforschung-2026-08-05/bilder /home/ai-core-node/aicore/opt/aicore/wissen/altbestand /home/ai-core-node/aicore/opt/aicore/training/v27 /home/ai-core-node/aicore/opt/aicore/training/v26 /home/ai-core-node/aicore/opt/aicore/training/v27/gut /home/ai-core-node/aicore/opt/aicore/training/v27/roh /home/ai-core-node/aicore/opt/aicore/training/v26/fein /home/ai-core-node/aicore/opt/aicore/training/v26/abzug /home/ai-core-node/aicore/opt/aicore/training/v26/gut /home/ai-core-node/aicore/opt/aicore/training/v26/roh-vor-chatgpt-0823 /home/ai-core-node/aicore/opt/aicore/training/v26/eval /home/ai-core-node/aicore/opt/aicore/training/v26/roh /home/ai-core-node/aicore/opt/aicore/konzepte/text /home/ai-core-node/aicore/opt/aicore/konzepte/text/03_bewusstsein-und-psychologie /home/ai-core-node/aicore/opt/aicore/konzepte/text/08_sonstiges /home/ai-core-node/aicore/opt/aicore/konzepte/text/06_berichte-und-audits /home/ai-core-node/aicore/opt/aicore/konzepte/text/04_training-und-modelle /home/ai-core-node/aicore/opt/aicore/konzepte/text/05_werkzeuge-und-module /home/ai-core-node/aicore/opt/aicore/konzepte/text/01_synthetic-equilibrium /home/ai-core-node/aicore/opt/aicore/konzepte/text/02_architektur /home/ai-core-node/aicore/opt/aicore/konzepte/text/07_uebersicht-und-praesentation /home/ai-core-node/aicore/opt/aicore/services/quantum_reflector /home/ai-core-node/aicore/opt/aicore/services/context_gate /home/ai-core-node/aicore/opt/aicore/services/neural_immune /home/ai-core-node/aicore/opt/aicore/services/sanctum_rl /home/ai-core-node/aicore/opt/aicore/services/news_intel /home/ai-core-node/aicore/opt/aicore/services/art /home/ai-core-node/aicore/opt/aicore/services/nerd_physics /home/ai-core-node/aicore/opt/aicore/services/invariants /home/ai-core-node/aicore/opt/aicore/services/room_content /home/ai-core-node/aicore/opt/aicore/services/asrs /home/ai-core-node/aicore/opt/aicore/services/pip_agent /home/ai-core-node/aicore/opt/aicore/services/genesis /home/ai-core-node/aicore/opt/aicore/services/hypothesis_engine /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/backgrounds /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/terminal_gui /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/fonts /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/overlays /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/sprites /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/textures /home/ai-core-node/aicore/opt/aicore/services/room_content/external_assets/portraits /home/ai-core-node/aicore/opt/aicore/services/genesis/core /home/ai-core-node/aicore/opt/aicore/services/genesis/integration /home/ai-core-node/aicore/opt/aicore/services/genesis/sensors /home/ai-core-node/aicore/opt/aicore/services/genesis/reflection /home/ai-core-node/frank /home/ai-core-node/frank/genesis-monitor /home/ai-core-node/hellmachine /home/ai-core-node/hellmachine/sessions /home/ai-core-node/hellmachine/sessions/20260723-172545-4255 /home/ai-core-node/estelle /home/ai-core-node/estelle/archive /home/ai-core-node/feminize-cam-filter /home/ai-core-node/frank-projects /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent /home/ai-core-node/frank-projects/video-launch-page /home/ai-core-node/frank-projects/autocar-hunter /home/ai-core-node/frank-projects/autocamp-scout /home/ai-core-node/frank-projects/test-project /home/ai-core-node/frank-projects/autoscout-ioniq-5-finder /home/ai-core-node/frank-projects/ai-research-agent /home/ai-core-node/frank-projects/autocarfinder-pro /home/ai-core-node/frank-projects/e-auto-scout-sterreich /home/ai-core-node/frank-projects/ev-camperscout /home/ai-core-node/frank-projects/ev-scout-graz /home/ai-core-node/frank-projects/autoscout-e-car-hunter /home/ai-core-node/frank-projects/e-auto-graz-finder /home/ai-core-node/frank-projects/grazcamperfinder /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent/.browser /home/ai-core-node/frank-projects/autohunter-ioniq-5-autonomer-autokauf-agent/.tasks /home/ai-core-node/frank-projects/video-launch-page/.browser /home/ai-core-node/frank-projects/video-launch-page/.tasks /home/ai-core-node/frank-projects/autocar-hunter/.browser /home/ai-core-node/frank-projects/autocar-hunter/.tasks /home/ai-core-node/frank-projects/autocamp-scout/.browser /home/ai-core-node/frank-projects/autocamp-scout/.tasks /home/ai-core-node/frank-projects/autoscout-ioniq-5-finder/.tasks /home/ai-core-node/frank-projects/ai-research-agent/.browser /home/ai-core-node/frank-projects/ai-research-agent/code /home/ai-core-node/frank-projects/ai-research-agent/docs /home/ai-core-node/frank-projects/ai-research-agent/.tasks /home/ai-core-node/frank-projects/autocarfinder-pro/searches /home/ai-core-node/frank-projects/autocarfinder-pro/.browser /home/ai-core-node/frank-projects/autocarfinder-pro/templates /home/ai-core-node/frank-projects/autocarfinder-pro/results /home/ai-core-node/frank-projects/autocarfinder-pro/scripts /home/ai-core-node/frank-projects/autocarfinder-pro/.tasks /home/ai-core-node/frank-projects/autocarfinder-pro/search_results /home/ai-core-node/frank-projects/autocarfinder-pro/.browser/screenshots /home/ai-core-node/frank-projects/e-auto-scout-sterreich/.browser /home/ai-core-node/frank-projects/ev-camperscout/.browser /home/ai-core-node/frank-projects/ev-camperscout/.tasks /home/ai-core-node/frank-projects/ev-camperscout/.browser/screenshots /home/ai-core-node/frank-projects/ev-scout-graz/.browser /home/ai-core-node/frank-projects/ev-scout-graz/.tasks /home/ai-core-node/frank-projects/ev-scout-graz/.browser/screenshots /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.browser /home/ai-core-node/frank-projects/autoscout-e-car-hunter/code /home/ai-core-node/frank-projects/autoscout-e-car-hunter/docs /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.tasks /home/ai-core-node/frank-projects/autoscout-e-car-hunter/email_templates /home/ai-core-node/frank-projects/autoscout-e-car-hunter/.browser/screenshots /home/ai-core-node/frank-projects/e-auto-graz-finder/.browser /home/ai-core-node/frank-projects/e-auto-graz-finder/docs /home/ai-core-node/frank-projects/e-auto-graz-finder/.tasks /home/ai-core-node/frank-projects/e-auto-graz-finder/dreams /home/ai-core-node/frank-projects/e-auto-graz-finder/email_templates /home/ai-core-node/frank-projects/e-auto-graz-finder/dealers /home/ai-core-node/frank-projects/e-auto-graz-finder/.browser/screenshots /home/ai-core-node/frank-projects/grazcamperfinder/.browser /home/ai-core-node/frank-projects/grazcamperfinder/.tasks /home/ai-core-node/frank-projects/grazcamperfinder/.browser/screenshots /home/ai-core-node/frank-demo /home/ai-core-node/frank-demo/.vercel /home/ai-core-node/frank-demo/static /home/ai-core-node/frank-demo/static/css /home/ai-core-node/frank-demo/static/art /home/ai-core-node/frank-demo/static/sprites /home/ai-core-node/frank-demo/static/js /home/ai-core-node/frank-demo/static/art/.vercel /home/ai-core-node/frank-demo/static/js/responses /home/ai-core-node/frank-demo/static/js/components /home/ai-core-node/frank-demo/static/js/pages /home/ai-core-node/frank-video /home/ai-core-node/frank-video/public /home/ai-core-node/frank-video/src /home/ai-core-node/frank-video/src/lib /home/ai-core-node/frank-video/src/clips /home/ai-core-node/frank-video/src/components /home/ai-core-node/frank-library /home/ai-core-node/frank-rettung-2026-07-31 /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai /home/ai-core-node/frank-rettung-2026-07-31/unversioniert /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/agentic /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/personality /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/tools /home/ai-core-node/frank-rettung-2026-07-31/vom-11-mai/services /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/room_content /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/genesis /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/room_content/custom_styles /home/ai-core-node/frank-rettung-2026-07-31/unversioniert/services/genesis/sensors
+   3171  409997 /usr/libexec/upowerd
+   3230  409997 /usr/libexec/colord
+   3457  409996 [krfcommd]
+   3498  409995 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+   3499  409995 /usr/bin/python3 /home/ai-core-node/.claude/glm-fallback/proxy.py
+   3504  409995 /usr/sbin/kerneloops --test
+   3509  409995 /usr/sbin/kerneloops
+   3514  409995 /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+   3577  409995 /usr/bin/gpg-agent --supervised
+   4001  409989 python3 /usr/local/sbin/clay-flugschreiber
+   4046  409989 /usr/libexec/gcr-ssh-agent --base-dir /run/user/1000/gcr
+  12314    4515 /usr/libexec/gvfsd-http --spawner :1.28 /org/gtk/gvfs/exec_spaw/6
+  19656    4480 [kworker/u64:4-flush-259:0]
+  27785    4443 npm exec @wonderwhy-er/desktop-commander@latest remote
+  27965    4442 sh -c desktop-commander remote
+  27966    4442 node /home/ai-core-node/.npm/_npx/4b4c857f6efdfb61/node_modules/.bin/desktop-commander remote
+  28319    4440 /home/ai-core-node/.nvm/versions/node/v22.23.2/bin/node /home/ai-core-node/.npm/_npx/4b4c857f6efdfb61/node_modules/@wonderwhy-er/desktop-commander/dist/index.js
+ 113019  408449 /usr/libexec/fwupd/fwupd
+ 148739   22198 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {80c7350a-d808-4c52-9bc6-3573acd17fee} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 51 tab
+ 185481    3704 [kworker/u64:2+events_unbound]
+ 239913   64100 /usr/libexec/gvfsd-network --spawner :1.28 /org/gtk/gvfs/exec_spaw/2
+ 239924   64100 /usr/libexec/gvfsd-dnssd --spawner :1.28 /org/gtk/gvfs/exec_spaw/3
+ 276222   21563 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {be115138-cd11-4626-85ee-44431c4273ad} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 52 tab
+ 292644    3209 [kworker/11:0-events]
+ 377341    2813 [kworker/4:2-cgroup_free]
+ 421651    2608 [kworker/u64:5-kvfree_rcu_reclaim]
+ 429935    2572 [kworker/u64:6-kvfree_rcu_reclaim]
+ 490099    2292 [kworker/10:1-events]
+ 543521    2045 [kworker/1:1-events]
+ 563706    1953 [kworker/13:0-cgroup_release]
+ 588806    1833 [kworker/u65:0-uvcvideo]
+ 592732    1815 [kworker/0:2-events]
+ 593150   61207 /usr/sbin/cupsd -l
+ 593170   61207 /usr/sbin/cups-browsed
+ 613206    1721 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52127 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {de0b2be3-7f8a-44a7-bf0d-b8e15253eced} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 171 tab
+ 635831    1616 [kworker/7:0-events]
+ 641051  403146 /usr/lib/systemd/systemd-machined
+ 652230    1540 [kworker/9:0-cgroup_release]
+ 665940    1478 [kworker/3:0-cgroup_free]
+ 672348    1448 [kworker/1:2-cgroup_release]
+ 678837    1417 [kworker/15:0-cgroup_release]
+ 682438    1402 [kworker/2:2-events]
+ 686059    1386 [kworker/9:3-cgroup_free]
+ 725242    1203 [kworker/6:3-mm_percpu_wq]
+ 742131    1124 [kworker/10:2-events]
+ 758675    1048 [kworker/u65:3-ttm]
+ 764787    1019 [kworker/8:1-cgroup_release]
+ 770046     995 [kworker/u64:0-ipv6_addrconf]
+ 771950     989 [kworker/13:2-cgwb_release]
+ 791437     897 [kworker/12:1-cgroup_offline]
+ 805550     831 [kworker/4:3-cgroup_free]
+ 805591     831 [kworker/14:3-events]
+ 815353     787 [kworker/10:3-events]
+ 818931     772 [kworker/15:1-events]
+ 832359     708 [kworker/8:0-cgroup_offline]
+ 835426     693 [kworker/3:1-events]
+ 850692     622 [kworker/0:1-cgroup_free]
+ 861247     573 [kworker/12:2-events]
+ 871449     527 [kworker/6:1-cgroup_release]
+ 875092     511 [kworker/14:1-cgroup_free]
+ 881454     481 [kworker/13:1-events]
+ 884300     465 [kworker/7:1-cgroup_release]
+ 891213     437 [kworker/u65:2-ttm]
+ 891559     435 [kworker/11:2-cgroup_free]
+ 896494     411 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52127 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {8c2ea4aa-4330-4e74-92f6-99c859ce8766} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 177 tab
+ 900821     389 [kworker/8:2-cgroup_bpf_destroy]
+ 900828     389 [kworker/15:2-events]
+ 904206     375 [kworker/u64:1-gfx_0.0.0]
+ 904391     373 [kworker/5:0-events]
+ 907220     358 [kworker/5:1-cgroup_free]
+ 910829     343 [kworker/9:1-events]
+ 917158     312 [kworker/2:1-cgroup_free]
+ 917159     312 [kworker/4:0-events]
+ 920831     297 [kworker/15:3-cgroup_free]
+ 924478     282 [kworker/1:0-events]
+ 924972     279 [kworker/0:0-cgroup_free]
+ 930869     250 [kworker/3:2]
+ 930876     250 [kworker/13:3-cgroup_free]
+ 936133     227 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52127 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {ba073e6d-4474-4535-8d8b-4f00bb86d6cc} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 178 tab
+ 940757     205 [kworker/14:0-cgroup_release]
+ 940767     205 [kworker/12:0-cgroup_free]
+ 947231     175 [kworker/6:0-cgroup_free]
+ 953533     144 [kworker/10:0-events_freezable]
+ 957278     129 [kworker/4:1-events]
+ 959674   37497 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+ 960189     113 [kworker/7:2-cgroup_free]
+ 964764      93 [kworker/11:1-cgroup_free]
+ 966748      83 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52127 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {63abab0c-e2c8-45a3-adf0-9ddb22ed8ad9} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 179 tab
+ 966789      82 [kworker/8:3-events]
+ 968051   37461 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py
+ 970391      67 [kworker/9:2]
+ 982957       7 git -C /home/ai-core-node/.local/share/clay-local-bridge/results-mirror checkout -B chatgpt-local-results origin/chatgpt-local-results
+ 983295       6 /bin/sh -c ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts "$@" ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack 'gschaidergabriel/clay-global-research-entity.git'
+ 983296       6 ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts -o SendEnv=GIT_PROTOCOL git@github.com git-upload-pack 'gschaidergabriel/clay-global-research-entity.git'
+ 983926       2 pw-record --format s16 --rate 16000 --channels 2 -
+ 984193       2 bash -lc python3 - <<'PY' import os, pathlib, subprocess, hashlib, json def run(args):  r=subprocess.run(args,capture_output=True,text=True); print('$',' '.join(args),'RC',r.returncode); print((r.stdout+r.stderr).strip()); return r print('HOST=',run(['hostname']).stdout.strip()); print('UID=',os.getuid(),'USER=',os.environ.get('USER')) for svc in ['frankenstein-gespraechsmodus.service','frankenstein-local-bridge.service','frankenstein-chatgpt-client.service']:  run(['systemctl','--user','show',svc,'-p','ActiveState','-p','SubState','-p','FragmentPath','-p','ExecStart']) print('--- candidate roots ---') roots=[] for s in ['/home/ai-core-node/frankenstein-repo','/home/ai-core-node/frankenstein','/home/ai-core-node/.claude/star','/opt/frankenstein','/var/lib/entityos/voice']:  p=pathlib.Path(s); print(s,'exists=',p.exists());  if p.exists(): roots.append(p) for p in roots:  if (p/'.git').exists():   run(['git','-C',str(p),'status','--short','--branch']); run(['git','-C',str(p),'rev-parse','HEAD']); run(['git','-C',str(p),'remote','-v']) print('--- voice/runtime files ---') names={'gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py','voice_session_capsule.py','speaker_handoff.py'} seen=0 for root in roots:  for q in root.rglob('*.py'):   if any(x in q.parts for x in ['venv','.venv','site-packages','.git','node_modules']): continue   if q.name in names or 'voice_action' in q.name or 'capability' in q.name:    try: b=q.read_bytes()    except: continue    print('FILE',q,'SHA256',hashlib.sha256(b).hexdigest(),'SIZE',len(b)); seen+=1    if q.name in {'gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py'}:     text=b.decode('utf-8','replace').splitlines()     for i,line in enumerate(text,1):      if any(k in line for k in ['_GEFAEHRLICHE_WERKZEUGE','disallowedTools','_auftrag_stellen_mit_bestaetigung','_GUEST_GESPERRTE_WERKZEUGE','format','delete','loesch','löschen','guest','voll handlungs','capabil']):       print(f'  {i}: {line[:240]}') print('FOUND',seen) print('--- running processes ---') r=run(['ps','-eo','pid,etimes,args']) for line in r.stdout.splitlines():  if any(k in line for k in ['gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py','chatgpt_client','local_bridge_daemon.py']): print('PROC',line) PY
+ 984200       2 python3 -
+ 984398       1 /usr/lib/systemd/systemd --user
+ 984402       1 (sd-pam)
+ 984408       1 /usr/lib/git-core/git -c fetch.negotiationAlgorithm=noop fetch origin --no-tags --no-write-fetch-head --recurse-submodules=no --filter=blob:none --stdin
+ 984410       0 /usr/lib/git-core/git rev-list --objects --stdin --exclude-promisor-objects --not --exclude-hidden=fetch --all --quiet --alternate-refs
+ 984413       0 [psimon]
+ 984420       0 /snap/snapd-desktop-integration/391/usr/bin/user-session-helper /snap/snapd-desktop-integration/391/usr/bin/snapd-desktop-integration
+ 984474       0 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+ 984475       0 /usr/libexec/xdg-document-portal
+ 984479       0 /usr/libexec/xdg-permission-store
+ 984487       0 fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/0/doc
+ 984491       0 (udev-worker)
+ 984691       0 ps -eo pid,etimes,args
+1073844   56652 /bin/bash /home/ai-core-node/.local/bin/claude-code-launch
+1073846   56652 claude --dangerously-skip-permissions
+1085713   18231 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+1085718   18231 cat
+1085719   18231 cat
+1085775   18231 /opt/google/chrome/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=5 --shared-client-connection
+1085777   18231 /opt/google/chrome/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=4 --shared-client-connection
+1085783   18231 /opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085784   18231 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085786   18231 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1085809   18231 /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,2989059060398609842,3769412852088022985,262144 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708988185955192
+1085810   18231 /opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,13315579006145763074,17810321553272990872,524288 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708989122997041
+1085824   18231 /opt/google/chrome/chrome --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14626137318714820586,423753365967811627,524288 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708990060038890
+1085871   18231 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=391781293164 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,12328966088090823338,3725290504461721708,2097152 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708991934122588
+1085875   18231 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1085775 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=391781295832 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,15890650666161691472,874757428049188234,2097152 --field-trial-handle=3,i,15072593124153178455,16664634418562985937,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,1648850982081581584,9501475901269016698,4 --trace-process-track-uuid=3190708990997080739
+1263569   17462 [kworker/u64:13-gfx_0.0.0]
+1445971   16729 /usr/libexec/mutter-x11-frames
+1446242   16728 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+1446679   16726 gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app
+1528091  125953 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+1528353  125946 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+1528596  125944 /usr/libexec/xdg-document-portal
+1528600  125944 /usr/libexec/xdg-permission-store
+1528607  125944 fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1000/doc
+1530638  125900 lightdm --session-child 12 22
+1532068  125868 /usr/bin/gnome-keyring-daemon --foreground --components=pkcs11,secrets --control-directory=/run/user/1000/keyring
+1532073  125868 /usr/libexec/gnome-session-binary --session=ubuntu
+1532162  125868 /usr/libexec/at-spi-bus-launcher
+1532169  125868 /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 11 --address=unix:path=/run/user/1000/at-spi/bus_0
+1532184  125868 /usr/libexec/gnome-session-ctl --monitor
+1532196  125868 /usr/libexec/gvfsd
+1532204  125868 /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f
+1532207  125868 /usr/libexec/gnome-session-binary --systemd-service --session=ubuntu
+1532239  125867 /usr/bin/gnome-shell
+1532373  125867 /usr/libexec/at-spi2-registryd --use-gnome-session
+1532465  125867 /usr/lib/x86_64-linux-gnu/xfce4/notifyd/xfce4-notifyd
+1532466  125867 /usr/libexec/xdg-desktop-portal
+1532497  125867 /usr/libexec/gnome-shell-calendar-server
+1532505  125867 /usr/libexec/evolution-source-registry
+1532509  125867 /usr/libexec/dconf-service
+1532545  125867 /usr/bin/ibus-daemon --panel disable --xim
+1532546  125867 /usr/libexec/gsd-a11y-settings
+1532553  125867 /usr/libexec/gsd-color
+1532556  125867 /usr/libexec/gsd-datetime
+1532558  125867 /usr/libexec/gsd-housekeeping
+1532563  125867 /usr/libexec/gsd-keyboard
+1532569  125867 /usr/libexec/gsd-media-keys
+1532578  125867 /usr/libexec/gsd-power
+1532580  125867 /usr/libexec/gsd-print-notifications
+1532583  125867 /usr/libexec/gsd-rfkill
+1532586  125867 /usr/libexec/gsd-screensaver-proxy
+1532588  125867 /usr/libexec/gsd-sharing
+1532592  125867 /usr/libexec/gsd-smartcard
+1532595  125867 /usr/libexec/gsd-sound
+1532599  125867 /usr/libexec/gsd-wacom
+1532600  125867 /usr/libexec/gsd-xsettings
+1532603  125867 /usr/lib/x86_64-linux-gnu/indicator-messages/indicator-messages-service
+1532620  125867 /usr/libexec/gvfs-udisks2-volume-monitor
+1532654  125867 /usr/libexec/gsd-disk-utility-notify
+1532664  125867 /usr/libexec/evolution-data-server/evolution-alarm-notify
+1532711  125867 /usr/libexec/ibus-dconf
+1532714  125867 /usr/libexec/ibus-extension-gtk3
+1532721  125867 /usr/libexec/ibus-x11 --kill-daemon
+1532725  125867 /usr/libexec/ibus-portal
+1532745  125867 /usr/libexec/goa-daemon
+1532763  125867 /usr/libexec/gsd-printer
+1532802  125867 /usr/libexec/goa-identity-service
+1532806  125867 /usr/libexec/gvfs-goa-volume-monitor
+1532818  125866 /usr/libexec/gvfs-afc-volume-monitor
+1532841  125866 /usr/libexec/evolution-calendar-factory
+1532845  125866 /usr/libexec/gvfs-gphoto2-volume-monitor
+1532864  125866 /usr/libexec/gvfs-mtp-volume-monitor
+1532882  125866 /usr/libexec/evolution-addressbook-factory
+1532927  125866 /usr/libexec/ibus-engine-simple
+1532933  125866 /usr/libexec/xdg-desktop-portal-gnome
+1532972  125866 /usr/libexec/gvfsd-trash --spawner :1.28 /org/gtk/gvfs/exec_spaw/0
+1532973  125866 /usr/bin/Thunar --daemon
+1532997  125866 /usr/libexec/xdg-desktop-portal-gtk
+1533028  125865 [gjs] <defunct>
+1533056  125865 /usr/libexec/gvfsd-metadata
+1533112  125864 /snap/snapd-desktop-integration/391/usr/bin/user-session-helper /snap/snapd-desktop-integration/391/usr/bin/snapd-desktop-integration
+1533186  125864 /snap/snapd-desktop-integration/391/usr/bin/snapd-desktop-integration
+1533484  125856 /usr/libexec/gnome-terminal-server
+1533495  125855 /bin/bash /home/ai-core-node/.local/bin/claude-code-launch
+1533496  125855 claude --dangerously-skip-permissions
+1539608  125806 /usr/bin/update-notifier
+1632280   34498 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+1640388  125387 /usr/lib/systemd/systemd-journald
+1658098  125284 /usr/bin/ssh-agent -D -a /run/user/1000/keyring/.ssh
+1673582  125165 /snap/snapd/current/usr/bin/snap userd
+1792143   53044 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/koerperpflege.py
+2086407   32717 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+2237670   51236 /usr/bin/python3 /home/ai-core-node/.claude/star/cortex_dashboard.py
+2285072   50999 /usr/bin/python3 -m uvicorn api.main:app --host 127.0.0.1 --port 8000
+2285086   50999 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+2285097   50999 /var/lib/entityos/voice/venv/bin/python3 /var/lib/entityos/voice/denker.py
+2285098   50999 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py
+2285100   50999 /usr/bin/python3 /home/ai-core-node/.claude/star/immunsystem.py
+2286091   50996 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/home/ai-core-node/.local/share/agentzero:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/home/ai-core-node/frankenstein-repo/scripts:/opt/entityos/cognition --bind=/home/ai-core-node/.local/share/agentzero:/home/ai-core-node/.local/share/agentzero --bind=/home/ai-core-node/frankenstein-repo/scripts:/home/ai-core-node/frankenstein-repo/scripts --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+2286093   50996 /usr/lib/systemd/systemd
+2286095   50996 [psimon]
+2286097   50996 /usr/bin/python3 /opt/entityos/dashboard/entityos_dashboard_launcher.py
+2286143   50996 [psimon]
+2286150   50996 /usr/lib/systemd/systemd-journald
+2286265   50995 /usr/lib/systemd/systemd-logind
+2286266   50995 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+2286277   50995 /sbin/agetty -o -p -- \u --noclear --keep-baud - 115200,38400,9600 vt220
+2433982   12541 /usr/bin/python3 /home/ai-core-node/.claude/star/claude_cli_shim.py
+2600475   30817 /usr/bin/python3 /home/ai-core-node/.claude/star/erinnerungsdienst.py
+2893366   10627 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+2897514   10608 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+2996020   28872 /snap/firefox/8863/usr/lib/firefox/firefox
+2996284   28871 /snap/firefox/8863/usr/lib/firefox/crashhelper 2996020 9 /tmp/ 11 20260904071051
+2996963   28868 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -ipcHandle 0 -signalPipe 1 -initialChannelId {90eac86d-679d-4cea-87f9-444f9884785c} -parentPid 2996020 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 1 forkserver
+2996988   28868 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -prefsHandle 0:38593 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {c822f405-a3b9-4041-ba57-1bf15be7ba7e} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 2 socket
+2997198   28867 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:38680 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {b087dff5-39b3-42c8-a3e7-d5ea877ada80} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 3 tab
+2997210   28867 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -prefsHandle 0:38680 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {9eca1534-6b25-463f-9e05-4f81551c16bf} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 4 rdd
+2997837   28865 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:38858 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {7ed7e217-5e65-44e8-8386-f93ad1d4e31c} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 5 tab
+2998711   28864 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -sandboxingKind 0 -prefsHandle 0:56048 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {2c8628d9-19cc-4966-8773-0994581be770} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 6 utility
+2998720   28864 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {0c51634c-bb26-44d7-b2b3-60df6f11085a} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 7 tab
+2998785   28864 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {63f1d752-88b2-41ba-b27f-99686f69c5ab} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 8 tab
+3041417   28657 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {1028af26-0f23-4709-b536-5343ab4b3703} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 12 tab
+3080476   28462 /usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py
+3145645  375511 [kworker/R-tls-strp]
+3240012  108381 /usr/bin/nautilus --gapplication-service
+3240319  108380 /usr/libexec/gvfsd-recent --spawner :1.28 /org/gtk/gvfs/exec_spaw/1
+3333824    8616 /usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+3414717    8228 [kworker/u64:11-mt76]
+3557825   26059 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {001653a6-6158-488b-a82c-22f2f561f936} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 28 tab
+3767008   44000 /usr/bin/speech-dispatcher -s -t 0
+3767049   43999 [sd_espeak-ng-mb] <defunct>
+3767096   43999 /usr/lib/speech-dispatcher-modules/sd_espeak-ng /etc/speech-dispatcher/modules/espeak-ng.conf
+3767140   43999 /usr/lib/speech-dispatcher-modules/sd_dummy /etc/speech-dispatcher/modules/dummy.conf
+3767166   43999 /usr/lib/speech-dispatcher-modules/sd_openjtalk /etc/speech-dispatcher/modules/openjtalk.conf
+3772586   24994 /usr/bin/python3 /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx.py --db /home/ai-core-node/.local/share/agentzero/unified.db --state-db /home/ai-core-node/.local/share/agentzero/titan_mx.db --follow --interval 0.5 --max-frames 100
+3773296  368996 /home/ai-core-node/aicore/opt/llama.cpp-neu/build-vulkan/bin/llama-server -m /opt/entityos/voice/models/llm/Qwen3.5-4B-abliterated.Q4_K_M.gguf -c 12288 --parallel 1 --host 127.0.0.1 --port 8990 -t 8 -ngl 99 -fa on --jinja
+3935115   24185 [psimon]
+3938821    5747 [kworker/u64:9-flush-259:0]
+4078424   69430 /home/ai-core-node/aicore/opt/llama.cpp-neu/build-vulkan/bin/llama-server --host 127.0.0.1 --port 8105 --model /home/ai-core-node/aicore/var/lib/aicore/models/Qwen3.5-4B-abliterated.Q4_K_M.gguf --mmproj /home/ai-core-node/aicore/var/lib/aicore/models/Qwen3.5-4B-abliterated-mmproj.gguf --ctx-size 16384 -ngl 99 --parallel 2 --threads 12 --threads-batch 14 --batch-size 512 --repeat-penalty 1.1 --reasoning-budget 0 --lora /home/ai-core-node/aicore/var/lib/aicore/models/frank-lora-v25.gguf -fa on --reasoning-format none --jinja --chat-template-kwargs {"enable_thinking":false}
+4078425   69430 /home/ai-core-node/aicore/opt/venv-ingestd/bin/python3 -m uvicorn router.app:app --host 127.0.0.1 --port 8091 --log-level info --lifespan off
+4078426   69430 /home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/core/app.py
+4078427   69430 /usr/bin/python3 -m services.nerd_physics.main
+4108587    4960 bash
+4113544    4939 /usr/libexec/rtkit-daemon
+4173152   23037 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {ef1284cd-fc83-447e-b863-18f22b2f86cc} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 46 tab
+4173289    4663 /usr/bin/cool-retro-term -T Free Frank -e /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+4173411    4663 /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+4173412    4663 python3 harness_crush_knopf.py
+4173926    4660 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue
+4174017    4659 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue
+PROC  959674   37497 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+PROC  984193       2 bash -lc python3 - <<'PY' import os, pathlib, subprocess, hashlib, json def run(args):  r=subprocess.run(args,capture_output=True,text=True); print('$',' '.join(args),'RC',r.returncode); print((r.stdout+r.stderr).strip()); return r print('HOST=',run(['hostname']).stdout.strip()); print('UID=',os.getuid(),'USER=',os.environ.get('USER')) for svc in ['frankenstein-gespraechsmodus.service','frankenstein-local-bridge.service','frankenstein-chatgpt-client.service']:  run(['systemctl','--user','show',svc,'-p','ActiveState','-p','SubState','-p','FragmentPath','-p','ExecStart']) print('--- candidate roots ---') roots=[] for s in ['/home/ai-core-node/frankenstein-repo','/home/ai-core-node/frankenstein','/home/ai-core-node/.claude/star','/opt/frankenstein','/var/lib/entityos/voice']:  p=pathlib.Path(s); print(s,'exists=',p.exists());  if p.exists(): roots.append(p) for p in roots:  if (p/'.git').exists():   run(['git','-C',str(p),'status','--short','--branch']); run(['git','-C',str(p),'rev-parse','HEAD']); run(['git','-C',str(p),'remote','-v']) print('--- voice/runtime files ---') names={'gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py','voice_session_capsule.py','speaker_handoff.py'} seen=0 for root in roots:  for q in root.rglob('*.py'):   if any(x in q.parts for x in ['venv','.venv','site-packages','.git','node_modules']): continue   if q.name in names or 'voice_action' in q.name or 'capability' in q.name:    try: b=q.read_bytes()    except: continue    print('FILE',q,'SHA256',hashlib.sha256(b).hexdigest(),'SIZE',len(b)); seen+=1    if q.name in {'gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py'}:     text=b.decode('utf-8','replace').splitlines()     for i,line in enumerate(text,1):      if any(k in line for k in ['_GEFAEHRLICHE_WERKZEUGE','disallowedTools','_auftrag_stellen_mit_bestaetigung','_GUEST_GESPERRTE_WERKZEUGE','format','delete','loesch','löschen','guest','voll handlungs','capabil']):       print(f'  {i}: {line[:240]}') print('FOUND',seen) print('--- running processes ---') r=run(['ps','-eo','pid,etimes,args']) for line in r.stdout.splitlines():  if any(k in line for k in ['gespraechsmodus.py','realtime_gespraech.py','frank_terminal.py','chatgpt_client','local_bridge_daemon.py']): print('PROC',line) PY
+PROC 3333824    8616 /usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener

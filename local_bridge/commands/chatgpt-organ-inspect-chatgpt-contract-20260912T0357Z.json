@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-inspect-chatgpt-contract-20260912T0357Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "python3 - <<'PY'\nimport ast, pathlib\np=pathlib.Path('/home/ai-core-node/frankenstein-repo/scripts/stern.py')\ns=p.read_text(encoding='utf-8')\nt=ast.parse(s)\nfor n in t.body:\n    if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name in {'chatgpt_senden','chatgpt_ernten'}:\n        print('###',n.name, n.lineno, n.end_lineno)\n        print(''.join(s.splitlines(True)[n.lineno-1:n.end_lineno]))\nPY",
+  "cwd": "/home/ai-core-node/frankenstein-repo",
+  "timeout_seconds": 30
+}

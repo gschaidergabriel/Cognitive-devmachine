@@ -1,0 +1,16 @@
+=== GO084 INTERLOCK INSTALLER SCRATCH SELFTEST ===
+2026-09-12T04:44:08+02:00
+andreas-MACO
+ok 1 - accepted sources and installer parse
+ok 2 - clean exact-byte install succeeds
+ok 3 - installed byte identities match accepted hashes
+ok 4 - same accepted installation is idempotent
+ok 5 - pre-existing divergent live artifact fails closed before write
+ok 6 - source-byte drift fails closed before write
+ok 7 - post-write lifecycle drift rolls files back
+ok 8 - installer contains no entityos-vm start/stop/restart path
+GO084_INTERLOCK_INSTALLER_SELFTEST_PASS=8/8
+TESTED_BRANCH_HEAD=80d11f7f62f150aabd9b9bcf39f859d8d3147f79
+WORKTREE_HEAD_UNCHANGED=e28d758a91b181fdeae7160231a1b38e614e46d1
+SCOPE=SCRATCH_ONLY_NO_SYSTEMD_OR_ENTITYOS_LIVE_MUTATION
+=== PASS ===

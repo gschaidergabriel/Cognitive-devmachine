@@ -1,0 +1,121 @@
+usage: harness_aider.py [-h] {visible-start,fallback-start} ...
+
+Harness fuer kontrollierten Aufruf von aider
+
+positional arguments:
+  {visible-start,fallback-start}
+    visible-start       PHASE 48: sichtbarer, interaktiver Terminal-Harness im
+                        echten Repo (kein Sandbox-Versteck mehr)
+    fallback-start      ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft
+                        im Forschungsmodus (echtes Repo, allowlist+audit-
+                        gated)
+
+options:
+  -h, --help            show this help message and exit
+---MODEL-IDS---
+34:          PROVENANCE.json (actor_id=freepool-fallback-secondary, siehe
+81:# modell_katalog.py MODELLE[*]['berechtigung_stufe'] (bewusst dupliziert, siehe
+87:MODELL_MAP = {
+88:    "nvidia-nemotron": {"aider_model": "nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
+91:    "groq-gptoss":      {"aider_model": "groq/openai/gpt-oss-120b",
+94:    "mistral-small":    {"aider_model": "mistral/mistral-small-latest",
+97:    "openrouter-deepseek": {"aider_model": "openrouter/deepseek/deepseek-chat",
+104:# MODELL_MAP-Schluessel hier (verschiedene Module, verschiedene Historie).
+106:_MODELL_ZU_POOL_TIER = {
+107:    "nvidia-nemotron": "nvidia",
+108:    "groq-gptoss": "groq",
+109:    "mistral-small": "mistral",
+110:    "openrouter-deepseek": "openrouter",
+119:SICHTBAR_NOTIZ_PRAEFIX = "notizen-freepool/"
+128:FORSCHUNG_ACTOR_ID = "freepool-fallback-secondary"
+131:def git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=None):
+205:            f"harness:aider:{modell_id}", "AKTION",
+218:                f"harness:aider:{modell_id}", "UNCOMMITTED",
+242:    MODELL_MAP-Eintraege in os.environ, nicht nur fuer das Startmodell.
+243:    Ohne das wuerde ein '/model <anderer-provider>'-Wechsel MITTEN in der
+248:    Start-Modells lud. Gibt {modell_id: bool(key_gesetzt)} zurueck (fuer
+251:    for mid, minfo in MODELL_MAP.items():
+289:        for modell_id, tier in _MODELL_ZU_POOL_TIER.items():
+298:            segs.append(f"{_ANSI_HELLGRAU}{modell_id}:{farbe}{kurz}{_ANSI_RESET}")
+308:def _api_key_laden(modell_id):
+311:    if modell_id not in MODELL_MAP:
+313:    keys_env_quelle = MODELL_MAP[modell_id]["keys_env_quelle"]
+465:def _forschung_provenance_schreiben(werkraum, paket_id, modell_id, auftrag,
+476:        "provider": "NVIDIA NIM / Mistral AI (free-tier pool)",
+477:        "runtime_model": modell_id,
+492:                   f"harness(freepool-fallback): provenance fuer {paket_id} ({modell_id})",
+497:def _werkraum_git_identitaet(werkraum, modell_id):
+499:    _git(werkraum, "config", "user.name", f"harness-{modell_id}", check=False)
+684:    Sitzung durchsickern -- genau DAS war beim nvidia-nemotron-Live-Test
+723:def _persona_hinweis_schreiben(paket_id, modell_id, berechtigung, kapsel="",
+737:    Kontext fuer das MODELL -- deshalb wandert sie hier rein, in die
+873:        f"({MODELL_MAP.get(modell_id, {}).get('aider_model', modell_id)}) ueber einen "
+903:def _terminal_banner(modell_id, berechtigung, paket_id):
+918:    aider_model = MODELL_MAP.get(modell_id, {}).get("aider_model", modell_id)
+923:    model_str = f"{_ANSI_HELLGRAU}{modell_id} ({aider_model}){_ANSI_RESET}"
+924:    stufe_str = f"{_ANSI_AMBER}free-pool:{berechtigung}({rechte}){_ANSI_RESET}"
+973:def _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad):
+989:        f.write(f"# Notiz -- {modell_id} ({paket_id})\n\n"
+994:                   f"harness(freepool-sichtbar): Notiz {modell_id} {paket_id}", check=False)
+998:def visible_run(modell_id):
+1009:    if modell_id not in MODELL_MAP:
+1010:        grund = f"unbekannte modell_id: {modell_id}"
+1015:    if modell_id != aktiv_modell:
+1016:        grund = (f"Modell {modell_id} ist nicht das aktive Modell "
+1021:    berechtigung = MODELL_MAP[modell_id]["berechtigung"]
+1024:    # provider>'-Wechsel MITTEN in der Sitzung an einer fehlenden Env-Var
+1028:    if not geladen.get(modell_id):
+1029:        grund = (f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1030:                  f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})")
+1033:    fehlend = [mid for mid, ok in geladen.items() if not ok and mid != modell_id]
+1061:            session_id=session_id, auftrag=f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})",
+1062:            womit=f"harness:sichtbar:{modell_id}",
+1064:            thema=f"Sichtbarer Harness {modell_id} ({berechtigung})",
+1074:    _werkraum_git_identitaet(werkraum, modell_id)
+1075:    _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "START",
+1085:    _anfangsauftrag = f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})"
+1087:        paket_id, modell_id, berechtigung, kapsel=kapsel,
+1099:    os.environ["FRANKENSTEIN_HARNESS_MODELL_ID"] = modell_id
+1111:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1145:    print(_terminal_banner(modell_id, berechtigung, paket_id))
+1161:        _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad)
+1164:        checkpoint_result = git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=vor_head)
+1181:        _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "VERSTOSS_VERWORFEN",
+1204:    beleg = f"test:{0 if gesamt_ok else 1}:sichtbarer_harness paket_id={paket_id} modell={modell_id}"
+1216:    return {"ok": gesamt_ok, "paket_id": paket_id, "modell": modell_id, "berechtigung": berechtigung,
+1222:def _aider_ausfuehren(werkraum, modell_id, nachricht, timeout=600, map_tokens=None, paket_id=None):
+1240:    if not geladen.get(modell_id):
+1241:        print(f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1242:              f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})", file=sys.stderr)
+1246:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1270:                print(f"[{modell_id}|aider] {line}", end="")
+1278:            print(f"\n[{modell_id}|aider] PROZESS GEKILLT NACH {timeout}S TIMEOUT", file=sys.stderr)
+1301:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1308:    if modell_id not in MODELL_MAP:
+1309:        return {"ok": False, "grund": f"unbekannte modell_id: {modell_id}"}
+1313:    if modell_id != aktiv_modell:
+1314:        return {"ok": False, "grund": f"Modell {modell_id} ist nicht das aktive Modell "
+1330:            womit=f"harness:aider:{modell_id}",
+1332:            thema=f"Harness {modell_id} ({modus})",
+1359:    _werkraum_git_identitaet(werkraum, modell_id)
+1361:    _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "START",
+1366:    aider_exit = _aider_ausfuehren(werkraum, modell_id, nachricht,
+1382:            werkraum, paket_id, modell_id, seit=(vor_head if modus == "forschung" else None))
+1397:            _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "ALLOWLIST_VERLETZUNG",
+1405:            _forschung_provenance_schreiben(werkraum, paket_id, modell_id, auftrag,
+1411:                    werkraum, paket_id, modell_id, seit=vor_head)
+1472:        _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "PUSH" if gepusht else "PUSH_FEHLGESCHLAGEN",
+1513:        "ok": gesamt_ok, "paket_id": paket_id, "modell": modell_id, "modus": modus,
+1538:    kandidaten = [k.strip() for k in (args.kandidaten or "nvidia-nemotron,mistral-small").split(",") if k.strip()]
+1540:    for modell_id in kandidaten:
+1541:        if modell_id not in MODELL_MAP:
+1542:            versuche.append({"modell": modell_id, "ok": False, "grund": "unbekannte modell_id"})
+1544:        if _api_key_laden(modell_id) is None:
+1545:            versuche.append({"modell": modell_id, "ok": False, "grund": "kein API-Schluessel in keys.env"})
+1547:        aktiviert = _s.modell_aktiv_setzen(modell_id, von="chatgpt-fallback")
+1549:            versuche.append({"modell": modell_id, "ok": False, "grund": f"Aktivierung fehlgeschlagen: {aktiviert}"})
+1560:            ergebnis = einen_lauf(modell_id, args.auftrag, modus="forschung",
+1562:        ergebnis["modell"] = modell_id
+1571:            ausgabe["gewonnen_mit"] = modell_id
+1588:    p_fb.add_argument("--kandidaten", default="nvidia-nemotron,mistral-small",
+1589:                       help="Komma-getrennte modell_id-Liste, Reihenfolge = Prioritaet")

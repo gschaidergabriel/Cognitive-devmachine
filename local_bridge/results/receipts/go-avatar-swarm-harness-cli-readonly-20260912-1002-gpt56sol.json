@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-swarm-harness-cli-readonly-20260912-1002-gpt56sol",
+  "command_sha256": "86bc963e53bbdde64ee9b7940716ac86843e4e6234739e230b9c5e20b5f9be9d",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:57:28.627724+00:00",
+  "finished_at": "2026-09-12T02:57:28.964008+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "62403960aa9212383074efb8cf7729ea91ba58747fd8ab19711a314388cfcdb0",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== VISIBLE HELP ===\nusage: harness_aider.py visible-start [-h] --modell MODELL\n\noptions:\n  -h, --help       show this help message and exit\n  --modell MODELL\n=== FALLBACK HELP ===\nusage: harness_aider.py fallback-start [-h] --auftrag AUFTRAG\n                                       [--kandidaten KANDIDATEN]\n                                       [--grund GRUND]\n\noptions:\n  -h, --help            show this help message and exit\n  --auftrag AUFTRAG\n  --kandidaten KANDIDATEN\n                        Komma-getrennte modell_id-Liste, Reihenfolge =\n                        Prioritaet\n  --grund GRUND         Warum der Fallback aktiviert wurde (fuer Provenance)\n=== PARSER TAIL ===\n86:# visible_run(), nicht nur behauptet.\n247:    war bisher nie gesetzt, weil visible_run() nur den Key des\n736:    ins Terminal gedruckt (siehe visible_run()). Sie bleibt aber technisch\n895:# unterdrueckbarem, siehe Docstring visible_run()) Start-Boilerplate.\n998:def visible_run(modell_id):\n1008:    einen_lauf()).\"\"\"\n1301:def einen_lauf(modell_id, auftrag, *, modus=\"sandbox\", fallback_grund=None,\n1530:    ergebnis = visible_run(args.modell)\n1557:        # Docstring). einen_lauf() faengt selbst alle Ausnahmen ab, das\n1560:            ergebnis = einen_lauf(modell_id, args.auftrag, modus=\"forschung\",\n1583:    p_vis = sub.add_parser(\"visible-start\", help=\"PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)\")\n1584:    p_vis.add_argument(\"--modell\", required=True)\n1586:    p_fb = sub.add_parser(\"fallback-start\", help=\"ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft im Forschungsmodus (echtes Repo, allowlist+audit-gated)\")\n1587:    p_fb.add_argument(\"--auftrag\", required=True)\n1588:    p_fb.add_argument(\"--kandidaten\", default=\"nvidia-nemotron,mistral-small\",\n1590:    p_fb.add_argument(\"--grund\", default=None, help=\"Warum der Fallback aktiviert wurde (fuer Provenance)\")\n1592:    args = parser.parse_args()\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

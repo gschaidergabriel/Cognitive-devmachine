@@ -1,0 +1,36 @@
+=== VISIBLE HELP ===
+usage: harness_aider.py visible-start [-h] --modell MODELL
+
+options:
+  -h, --help       show this help message and exit
+  --modell MODELL
+=== FALLBACK HELP ===
+usage: harness_aider.py fallback-start [-h] --auftrag AUFTRAG
+                                       [--kandidaten KANDIDATEN]
+                                       [--grund GRUND]
+
+options:
+  -h, --help            show this help message and exit
+  --auftrag AUFTRAG
+  --kandidaten KANDIDATEN
+                        Komma-getrennte modell_id-Liste, Reihenfolge =
+                        Prioritaet
+  --grund GRUND         Warum der Fallback aktiviert wurde (fuer Provenance)
+=== PARSER TAIL ===
+86:# visible_run(), nicht nur behauptet.
+247:    war bisher nie gesetzt, weil visible_run() nur den Key des
+736:    ins Terminal gedruckt (siehe visible_run()). Sie bleibt aber technisch
+895:# unterdrueckbarem, siehe Docstring visible_run()) Start-Boilerplate.
+998:def visible_run(modell_id):
+1008:    einen_lauf())."""
+1301:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1530:    ergebnis = visible_run(args.modell)
+1557:        # Docstring). einen_lauf() faengt selbst alle Ausnahmen ab, das
+1560:            ergebnis = einen_lauf(modell_id, args.auftrag, modus="forschung",
+1583:    p_vis = sub.add_parser("visible-start", help="PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)")
+1584:    p_vis.add_argument("--modell", required=True)
+1586:    p_fb = sub.add_parser("fallback-start", help="ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft im Forschungsmodus (echtes Repo, allowlist+audit-gated)")
+1587:    p_fb.add_argument("--auftrag", required=True)
+1588:    p_fb.add_argument("--kandidaten", default="nvidia-nemotron,mistral-small",
+1590:    p_fb.add_argument("--grund", default=None, help="Warum der Fallback aktiviert wurde (fuer Provenance)")
+1592:    args = parser.parse_args()

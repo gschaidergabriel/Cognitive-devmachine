@@ -1,0 +1,122 @@
+===FETCH_CHECKOUT===
+    88	    p = subprocess.run(["git", "-C", str(cwd), *args], capture_output=True, timeout=timeout)
+    89	    if check and p.returncode != 0:
+    90	        raise RuntimeError(f"git {args} failed: {text(p.stderr)}")
+    91	    return p
+    92	
+    93	
+    94	def sync_control():
+    95	    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+    96	
+    97	
+    98	def sync_and_push_results(message: str):
+    99	    _git("add", "-A")
+   100	    diff = _git("diff", "--cached", "--quiet", check=False)
+   101	    if diff.returncode != 0:
+   102	        _git("commit", "-m", message)
+   103	    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+   104	
+   105	
+   106	def is_denied(command: str) -> str | None:
+   107	    for pat in DENY_PATTERNS:
+   108	        if re.search(pat, command):
+   109	            return pat
+   110	    return None
+   111	
+   112	
+   113	def op_exec(cmd: str, cwd: str, timeout: int):
+   114	    denied = is_denied(cmd)
+   115	    if denied:
+===PROCESS_ONE===
+   188	    raw = path.read_bytes()
+   189	    try:
+   190	        s = json.loads(raw)
+   191	    except json.JSONDecodeError as e:
+   192	        print(f"skip malformed command file {path.name}: {e}")
+   193	        c = _db()
+   194	        c.execute("INSERT OR IGNORE INTO done VALUES(?,?,?,?)", (f"malformed:{sha(raw)}", sha(raw), now(), -1))
+   195	        c.commit(); c.close()
+   196	        return False
+   197	    if s.get("schema") not in ("CLAY_LOCAL_COMMAND/v1",):
+   198	        print(f"skip unsupported schema in {path.name}: {s.get('schema')!r}")
+   199	        return False
+   200	    cid = str(s["command_id"])
+   201	    c = _db()
+   202	    if c.execute("SELECT 1 FROM done WHERE id=?", (cid,)).fetchone():
+   203	        c.close()
+   204	        return False
+   205	    started = now()
+   206	    stdout = stderr = b""
+   207	    meta = {}
+   208	    try:
+   209	        p, meta = operate(s)
+   210	        code = p.returncode
+   211	        stdout = p.stdout or b""
+   212	        stderr = p.stderr or b""
+   213	        st = "PASS" if code == 0 else "FAIL"
+   214	    except subprocess.TimeoutExpired as e:
+   215	        code, st = 124, "TIMEOUT"
+   216	        stdout = e.stdout or b""
+   217	        stderr = (e.stderr or b"") + repr(e).encode()
+   218	    except Exception as e:
+   219	        code, st = 125, "ERROR"
+   220	        stderr = (repr(e) + "\n" + traceback.format_exc()).encode()
+   221	    receipt = {
+   222	        "schema": "CLAY_LOCAL_RECEIPT/v1",
+   223	        "command_id": cid,
+   224	        "command_sha256": sha(raw),
+   225	        "host": MACHINE_ID,
+   226	        "owner": OWNER,
+   227	        "machine_id": MACHINE_ID,
+   228	        "started_at": started, "finished_at": now(),
+   229	        "status": st, "exit_code": code, "op": s.get("op", "exec"),
+   230	        "stdout_sha256": sha(stdout), "stderr_sha256": sha(stderr),
+   231	        "stdout_tail": text(stdout)[-24000:], "stderr_tail": text(stderr)[-24000:],
+   232	        "meta": meta,
+   233	        "execution_boundary": f"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED",
+   234	    }
+   235	    publish_receipt(receipt, stdout, stderr)
+   236	    c.execute("INSERT INTO done VALUES(?,?,?,?)", (cid, sha(raw), now(), code))
+   237	    c.commit()
+   238	    c.close()
+   239	    return True
+   240	
+===PROCESS_QUEUE===
+   240	
+   241	
+   242	def poll_once() -> int:
+   243	    """Ein Durchlauf: Control-Branch holen, neue Befehle ausfuehren, Ergebnisse pushen."""
+   244	    sync_control()
+   245	    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+   246	    cmd_dir = REPO / QUEUE
+   247	    processed = 0
+   248	    try:
+   249	        listing = subprocess.run(
+   250	            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+   251	            capture_output=True)
+   252	    except Exception:
+   253	        listing = None
+   254	    p = subprocess.run(["git", "-C", str(REPO), "ls-tree", "-r", "--name-only",
+   255	                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+   256	    names = [n for n in text(p.stdout).splitlines() if n.startswith(str(QUEUE) + "/") and n.endswith(".json")]
+   257	    for n in names:
+   258	        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+   259	                               capture_output=True)
+   260	        if show.returncode != 0:
+   261	            continue
+   262	        cmd_dir.mkdir(parents=True, exist_ok=True)
+   263	        tmp = cmd_dir / pathlib.Path(n).name
+   264	        tmp.write_bytes(show.stdout)
+   265	        if execute(tmp):
+   266	            processed += 1
+   267	        tmp.unlink(missing_ok=True)
+   268	    if processed:
+   269	        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+   270	    return processed
+   271	
+   272	
+   273	if __name__ == "__main__":
+   274	    import sys
+   275	    if len(sys.argv) > 1 and sys.argv[1] == "poll-once":
+   276	        n = poll_once()
+SCOPE=READ_ONLY_BRIDGE_SOURCE

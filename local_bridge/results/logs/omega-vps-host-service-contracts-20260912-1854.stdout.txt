@@ -1,0 +1,17 @@
+[Unit]
+[Service]
+User=claymcp
+Group=claymcp
+WorkingDirectory=/opt/clayverse-mcp-ro
+ExecStart=/opt/clayverse-mcp-ro/.venv/bin/python /opt/clayverse-mcp-ro/server.py
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+[Install]
+---
+[Unit]
+[Service]
+User=claylab
+Group=claylab
+WorkingDirectory=/srv/claylab/actions-runner-host
+ExecStart=/srv/claylab/actions-runner-host/run.sh
+[Install]

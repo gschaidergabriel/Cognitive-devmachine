@@ -1,0 +1,2024 @@
+=== ID ===
+ai-core-node-projekt-frankenstein
+ai-core-node
+=== DESKTOP CANDIDATES ===
+--- /home/ai-core-node/.local/share/applications/work-on-frank.desktop
+[Desktop Entry]
+Type=Application
+Name=Work on Frank
+Comment=Claude Code lokal öffnen und an Frank arbeiten (mit Kontext + Gedächtnis-Direktive)
+Exec=/home/ai-core-node/.local/bin/work-on-frank
+Icon=/home/ai-core-node/.local/share/icons/work-on-frank.png
+Terminal=false
+Categories=Development;
+Keywords=frank;claude;code;work;ki;ai;dev;
+StartupNotify=true
+--- /home/ai-core-node/.local/share/applications/killswitch.desktop
+[Desktop Entry]
+Type=Application
+Name=⚛ KILLSWITCH
+Comment=Stoppt FranKenstein 2.0 und GRID sofort und vollstaendig
+Exec=x-terminal-emulator -e env KILLSWITCH_MENSCH=1 /home/ai-core-node/.claude/star/killswitch.sh
+Icon=weather-severe-alert
+Terminal=false
+Categories=System;
+--- /home/ai-core-node/.local/share/applications/frankenstein-start-safe.desktop
+[Desktop Entry]
+Type=Application
+Name=▶ FranKenstein SAFE MODE
+Comment=Alles ausser der GRID-Autonomie -- er denkt, verfolgt aber keine eigenen Ziele
+Exec=x-terminal-emulator -e env KILLSWITCH_MENSCH=1 /home/ai-core-node/.claude/star/hochfahren.sh safe
+Icon=media-playback-start
+Terminal=false
+Categories=System;
+--- /home/ai-core-node/.local/share/applications/frank-terminal.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FranKenstein Terminal
+GenericName=Direkte Hilfe-Sitzung mit FranKensteinಠ_ಠ
+Comment=Oeffnet ein Terminal mit claude, dort wo die FranKenstein-Hooks feuern -- sofortige Hilfe, kein Dashboard
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Exec=/home/ai-core-node/.local/bin/frank-terminal-hilfe
+Terminal=true
+Categories=Development;
+Keywords=frankenstein;claude;terminal;hilfe;
+StartupNotify=true
+--- /home/ai-core-node/.local/share/applications/frank-stat.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FranKenstein Dashboard
+GenericName=/stat Status-Dashboard
+Comment=Lokales Cortex-Dashboard: Head-Registry, GRID10-Canary, Kamera-Bridge (nur 127.0.0.1, schliesst sich mit dem Tab)
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Exec=/home/ai-core-node/.local/bin/frank-cortex-fenster
+Terminal=false
+Categories=Utility;
+Keywords=stat;dashboard;frankenstein;kontingent;
+StartupNotify=false
+--- /home/ai-core-node/.local/share/applications/free-pool-harness.desktop
+[Desktop Entry]
+Type=Application
+Name=Free Frank
+GenericName=FranKenstein v2.0 Free-Pool-Harness (Crush)
+Comment=Glamouroeses Crush-Terminal gegen NVIDIA/Groq/Mistral/OpenRouter -- Modellwechsel per /model, echtes Reentry (crush --continue), GRID-Kanal, Matrix-Gruen-Theme
+Icon=/home/ai-core-node/.claude/star/daten/free-frank-icon.png
+Exec=cool-retro-term -T "Free Frank" -e /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+Terminal=false
+Categories=Development;
+Keywords=crush;freepool;frankenstein;grid;modell;
+StartupNotify=true
+--- /home/ai-core-node/.local/share/applications/frank-hub.desktop
+[Desktop Entry]
+Type=Application
+Name=Frank
+GenericName=Neural Hub
+Comment=Franks Oberfläche öffnen — startet die Kernkette, falls sie aus ist
+Icon=/home/ai-core-node/.local/share/icons/frank-hub-256.png
+Exec=/home/ai-core-node/.local/bin/frank-hub
+Terminal=false
+StartupNotify=true
+Categories=Utility;
+Keywords=frank;frankenstein;aicore;hub;
+--- /home/ai-core-node/.local/share/applications/frank-notruf.desktop
+[Desktop Entry]
+Type=Application
+Name=Frank — Notruf
+Comment=Hilfeknopf, der auch funktioniert, wenn Frank steht
+Exec=sh -c 'systemctl --user start frank-notruf 2>/dev/null; sleep 1; xdg-open http://127.0.0.1:8102/'
+Icon=dialog-warning
+Terminal=false
+Categories=Utility;
+--- /home/ai-core-node/.local/share/applications/frank-webui.desktop
+[Desktop Entry]
+Name=Frank
+Comment=Frank AI Web Dashboard
+Exec=/home/ai-core-node/.local/bin/frank-fenster
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Terminal=false
+Type=Application
+Categories=Utility;Network;
+StartupNotify=false
+StartupWMClass=net.seimensch.frank
+--- /home/ai-core-node/.local/share/applications/frankenstein-start-super-safe.desktop
+[Desktop Entry]
+Type=Application
+Name=▶ FranKenstein SUPER SAFE
+Comment=Ohne GRID: nur Gespraech, Leib und Dashboard (FranKenstein 1.0, besser)
+Exec=x-terminal-emulator -e env KILLSWITCH_MENSCH=1 /home/ai-core-node/.claude/star/hochfahren.sh super-safe
+Icon=media-playback-start
+Terminal=false
+Categories=System;
+--- /home/ai-core-node/.local/share/applications/frankenstein-start-voll.desktop
+[Desktop Entry]
+Type=Application
+Name=▶ FranKenstein HOCHFAHREN
+Comment=Alles: Wahrnehmung, Grid, Gespraech und autonome Zielverfolgung
+Exec=x-terminal-emulator -e env KILLSWITCH_MENSCH=1 /home/ai-core-node/.claude/star/hochfahren.sh voll
+Icon=media-playback-start
+Terminal=false
+Categories=System;
+--- /home/ai-core-node/.local/share/applications/claude-code-ohne-frankenstein.desktop
+[Desktop Entry]
+Type=Application
+Name=💩 Claude Code (ohne FranKenstein)
+Comment=Reines Claude Code, --bare, ohne FranKenstein-Hooks/Persona/CLAUDE.md
+Exec=x-terminal-emulator -e /home/ai-core-node/.local/bin/claude --bare
+Icon=/home/ai-core-node/.local/share/icons/claude-vanilla-icon.png
+Terminal=false
+Categories=Development;
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (8)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/frank-terminal.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FranKenstein Terminal
+GenericName=Direkte Hilfe-Sitzung mit FranKensteinಠ_ಠ
+Comment=Oeffnet ein Terminal mit claude, dort wo die FranKenstein-Hooks feuern -- sofortige Hilfe, kein Dashboard
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Exec=/home/ai-core-node/.local/bin/frank-terminal-hilfe
+Terminal=true
+Categories=Development;
+Keywords=frankenstein;claude;terminal;hilfe;
+StartupNotify=true
+--- /home/ai-core-node/Desktop/frank-stat.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FranKenstein Dashboard
+GenericName=/stat Status-Dashboard
+Comment=Lokales Cortex-Dashboard: Head-Registry, GRID10-Canary, Kamera-Bridge (nur 127.0.0.1, schliesst sich mit dem Tab)
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Exec=/home/ai-core-node/.local/bin/frank-cortex-fenster
+Terminal=false
+Categories=Utility;
+Keywords=stat;dashboard;frankenstein;kontingent;
+StartupNotify=false
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (2)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/free-pool-harness.desktop
+[Desktop Entry]
+Type=Application
+Name=Free Frank
+GenericName=FranKenstein v2.0 Free-Pool-Harness (Crush)
+Comment=Glamouroeses Crush-Terminal gegen NVIDIA/Groq/Mistral/OpenRouter -- Modellwechsel per /model, echtes Reentry (crush --continue), GRID-Kanal, Matrix-Gruen-Theme
+Icon=/home/ai-core-node/.claude/star/daten/free-frank-icon.png
+Exec=cool-retro-term -T "Free Frank" -e /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+Terminal=false
+Categories=Development;
+Keywords=crush;freepool;frankenstein;grid;modell;
+StartupNotify=true
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (4)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (1)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (5)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/KILLSWITCH.desktop
+[Desktop Entry]
+Type=Application
+Name=⚛ KILLSWITCH
+Comment=Stoppt FranKenstein 2.0 und GRID sofort und vollstaendig
+Exec=x-terminal-emulator -e env KILLSWITCH_MENSCH=1 /home/ai-core-node/.claude/star/killswitch.sh
+Icon=weather-severe-alert
+Terminal=false
+Categories=System;
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket./packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/frank-webui.desktop
+[Desktop Entry]
+Name=Frank
+Comment=Frank AI Web Dashboard
+Exec=/home/ai-core-node/.local/bin/frank-fenster
+Icon=/home/ai-core-node/.local/share/icons/hicolor/256x256/apps/frank-overlay.png
+Terminal=false
+Type=Application
+Categories=Utility;Network;
+StartupNotify=false
+StartupWMClass=net.seimensch.frank
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (3)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (6)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+--- /home/ai-core-node/Desktop/claude-code-ohne-frankenstein.desktop
+[Desktop Entry]
+Type=Application
+Name=💩 Claude Code (ohne FranKenstein)
+Comment=Reines Claude Code, --bare, ohne FranKenstein-Hooks/Persona/CLAUDE.md
+Exec=x-terminal-emulator -e /home/ai-core-node/.local/bin/claude --bare
+Icon=/home/ai-core-node/.local/share/icons/claude-vanilla-icon.png
+Terminal=false
+Categories=Development;
+--- /home/ai-core-node/Desktop/Xeno-Lauf-Datenpaket. (7)/packen.sh
+#!/usr/bin/env bash
+# packen.sh — Schlussbericht bauen, PDF erzeugen, alles auf den Desktop legen.
+#
+# Reihenfolge ist wichtig: erst nachmessen, dann auswerten, dann setzen.
+# Ein PDF, das vor der Nachmessung gebaut wird, zeigt die Baseline zweimal.
+set -uo pipefail
+L="$HOME/xeno-lauf"
+D="$HOME/Desktop"
+cd "$L"
+
+echo "1/7  Global Workspace nachmessen"
+python3 messstand.py --n 300 --marke "NACHHER — nach dem Umbau durch XO1+XS1" \
+        --raus berichte/nachher.json 2>&1 | sed 's/^/     /'
+
+echo "2/7  Tokenbilanz"
+python3 tokenbilanz.py > /dev/null 2>&1 && echo "     berichte/tokenbilanz.json"
+python3 wirkung.py > /dev/null 2>&1 && echo "     berichte/wirkung.json"
+python3 vergleich.py > berichte/vergleich.txt 2>&1 && echo "     berichte/vergleich.txt"
+python3 agentizitaet.py > berichte/agentizitaet.txt 2>&1 && echo "     berichte/agentizitaet.txt"
+
+echo "3/7  Auswertung zusammenstellen"
+python3 auswertung.py 2>&1 | sed 's/^/     /'
+
+echo "4/7  Gesamtbericht bauen"
+STAMP="$(date '+%Y-%m-%d %H:%M')"
+{
+  cat berichte/ERGEBNIS.md
+  echo; echo "---"; echo
+  cat berichte/EMERGENZ.md
+  echo; echo "---"; echo
+  cat berichte/ARCHITEKTUR-FRANK.md
+  echo; echo "---"; echo
+  cat berichte/AUSWERTUNG.md
+  echo; echo '---'; echo
+  cat berichte/HUERDEN.md
+  echo; echo '---'; echo
+  cat berichte/MASCHINENFORMAT.md
+  echo; echo "---"; echo
+  cat berichte/ABLATION.md
+  echo; echo "---"; echo
+  echo "# Anhang — Selektive Agentizitaet (Rohausgabe)"; echo
+  printf '%s\n' '~~~'; cat berichte/agentizitaet.txt; printf '%s\n' '~~~'
+  echo; echo "---"; echo
+  cat berichte/ABSCHLUSS-KOORD.md
+  for f in berichte/ABSCHLUSS-XO1.md berichte/ABSCHLUSS-XS1.md; do [ -f "$f" ] && { echo; echo "---"; echo; cat "$f"; }; done
+  echo; echo "---"; echo
+  echo "# Anhang — Wirkungsmetrik (Rohwerte)"; echo
+  printf '%s\n' '~~~json'; cat berichte/wirkung.json; printf '%s\n' '~~~'
+  echo; echo '---'; echo
+  echo '# Anhang — Tokenbilanz (Rohwerte)'; echo
+  printf '%s\n' '~~~json'; cat berichte/tokenbilanz.json; printf '%s\n' '~~~'
+} > berichte/GESAMT.md
+echo "     berichte/GESAMT.md ($(wc -c < berichte/GESAMT.md) Bytes)"
+
+echo "5/7  PDF"
+pandoc berichte/GESAMT.md -f gfm -t html5 --standalone --toc --toc-depth=2 \
+  --metadata title="Xeno-Lauf — eine Stunde in einer fremden Sprache" \
+  --metadata date="$STAMP" \
+  -c /dev/null -o /tmp/xeno-gesamt.html 2>/dev/null
+python3 - <<'PY'
+from pathlib import Path
+h = Path("/tmp/xeno-gesamt.html").read_text(encoding="utf-8")
+css = """<style>
+@page { size: A4; margin: 20mm 18mm; @bottom-center { content: counter(page); font: 9pt sans-serif; color:#888; } }
+body { font: 10.5pt/1.5 "DejaVu Sans", sans-serif; color:#1a1a1a; }
+h1 { font-size:19pt; border-bottom:2px solid #333; padding-bottom:4px; page-break-before:always; }
+h1:first-of-type { page-break-before: avoid; }
+h2 { font-size:14pt; margin-top:1.4em; color:#222; }
+h3 { font-size:11.5pt; color:#444; }
+code, pre { font-family:"DejaVu Sans Mono", monospace; font-size:8.5pt; }
+pre { background:#f5f5f5; padding:7px 9px; border-left:3px solid #bbb; white-space:pre-wrap; word-wrap:break-word; }
+table { border-collapse:collapse; width:100%; font-size:9pt; margin:0.8em 0; }
+th,td { border:1px solid #ccc; padding:4px 6px; text-align:left; vertical-align:top; }
+th { background:#eee; }
+blockquote { border-left:3px solid #999; margin-left:0; padding-left:10px; color:#444; font-style:italic; }
+#TOC { page-break-after: always; }
+</style>"""
+Path("/tmp/xeno-gesamt.html").write_text(h.replace("</head>", css + "</head>"), encoding="utf-8")
+PY
+weasyprint /tmp/xeno-gesamt.html "$D/Xeno-Lauf-Auswertung.pdf" 2>/dev/null \
+  && echo "     $D/Xeno-Lauf-Auswertung.pdf ($(du -h "$D/Xeno-Lauf-Auswertung.pdf" | cut -f1))" \
+  || echo "     PDF FEHLGESCHLAGEN"
+
+echo "6/7  Wissensdatenbank"
+python3 einspeisen.py 2>&1 | sed 's/^/     /'
+
+echo "7/7  Datenpaket"
+Z="$D/Xeno-Lauf-Datenpaket.zip"
+rm -f "$Z"
+zip -qr "$Z" \
+  berichte/ analysen/ db/verkehr.db gw-vorher/ \
+  SPRACHE.txt BRIEF.md CLAUDE.md \
+  messstand.py wache.py sprachwacht.py xsag auswertung.py tokenbilanz.py \
+  interview.py vergleich.py einspeisen.py wirkung.py agentizitaet.py packen.sh \
+  wache.log sprachwacht.log \
+  -x '*/__pycache__/*' '*.pyc'
+echo "     $Z ($(du -h "$Z" | cut -f1))"
+echo
+echo "fertig $(date '+%H:%M:%S')"
+=== GNOME FAVORITES ===
+['org.gnome.Terminal.desktop', 'org.gnome.Nautilus.desktop', 'firefox_firefox.desktop', 'free-pool-harness.desktop', 'claude-code-ohne-frankenstein.desktop', 'frank-stat.desktop', 'claude-code.desktop', 'killswitch.desktop', 'frankenstein-start-voll.desktop']
+=== SERVICE ===
+● frankenstein-buehne.service - FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-buehne.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-09-12 07:25:08 +07; 3h 40min ago
+   Main PID: 1632280 (python3)
+      Tasks: 155 (limit: 28222)
+     Memory: 1.6G (peak: 2.0G swap: 84.6M swap peak: 1.8G)
+        CPU: 5h 55min 35.302s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-buehne.service
+             ├─1632280 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+             ├─4008857 cat
+             ├─4008859 cat
+             ├─4008875 /opt/google/chrome/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler "--database=/home/ai-core-node/.config/google-chrome/Crash Reports" --url=https://clients2.google.com/cr/report --annotation=channel= "--annotation=lsb-release=Ubuntu 24.04.4 LTS" --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=5 --shared-client-connection
+             ├─4008877 /opt/google/chrome/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler "--database=/home/ai-core-node/.config/google-chrome/Crash Reports" --url=https://clients2.google.com/cr/report --annotation=channel= "--annotation=lsb-release=Ubuntu 24.04.4 LTS" --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=4 --shared-client-connection
+             ├─4008887 "/opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable"
+             ├─4008888 "/opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable"
+             ├─4008900 "/opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable"
+             ├─4008966 "/opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,14370356443488163539,17185750840382786140,262144 --field-trial-handle=3,i,7128422079923189228,2904259709941993542,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,14091383992094826257,13859277984167865894,4 --trace-process-track-uuid=3190708988185955192"
+             ├─4008967 "/opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,3577946462854008020,12370668941831690450,524288 --field-trial-handle=3,i,7128422079923189228,2904259709941993542,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,14091383992094826257,13859277984167865894,4 --trace-process-track-uuid=3190708989122997041"
+             ├─4008982 "/opt/google/chrome/chrome --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,1117289369668171582,4266168383905565981,524288 --field-trial-handle=3,i,7128422079923189228,2904259709941993542,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,14091383992094826257,13859277984167865894,4 --trace-process-track-uuid=3190708990060038890"
+             ├─4009037 "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=386183723044 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4465311713919925556,3461546400785283498,2097152 --field-trial-handle=3,i,7128422079923189228,2904259709941993542,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,14091383992094826257,13859277984167865894,4 --trace-process-track-uuid=3190708991934122588"
+             └─4009044 "/opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=4008875 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=386183725022 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,9867320284156713850,16288625784472994389,2097152 --field-trial-handle=3,i,7128422079923189228,2904259709941993542,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,14091383992094826257,13859277984167865894,4 --trace-process-track-uuid=3190708990997080739"
+
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 945, in do_GET
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 760, in _json
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.wfile.write(b)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 840, in write
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self._sock.sendall(b)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: BrokenPipeError: [Errno 32] Broken pipe
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: ----------------------------------------
+Sep 12 10:21:56 ai-core-node-projekt-frankenstein systemd-coredump[3995927]: Process 3995878 (chrome) of user 1000 dumped core.
+                                                                             
+                                                                             Module libstdc++.so.6 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libzstd.so.1 from deb libzstd-1.5.5+dfsg2-2build1.1.amd64
+                                                                             Module libsystemd.so.0 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Module libgcc_s.so.1 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libudev.so.1 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Stack trace of thread 3995878:
+                                                                             #0  0x00007248afeb9e5b n/a (libGLESv2.so + 0x4b9e5b)
+                                                                             #1  0x00007248afd6b31e n/a (libGLESv2.so + 0x36b31e)
+                                                                             #2  0x00007248afd00a21 n/a (libGLESv2.so + 0x300a21)
+                                                                             #3  0x00007248afb55bd1 n/a (libGLESv2.so + 0x155bd1)
+                                                                             #4  0x00007248afb57756 EGL_CreateWindowSurface (libGLESv2.so + 0x157756)
+                                                                             #5  0x000061ccaa95412a n/a (chrome + 0xb74212a)
+                                                                             #6  0x000061ccaa95ef3e n/a (chrome + 0xb74cf3e)
+                                                                             #7  0x000061ccaa953a47 n/a (chrome + 0xb741a47)
+                                                                             #8  0x000061ccaa99f2ab n/a (chrome + 0xb78d2ab)
+                                                                             #9  0x000061ccac182c72 n/a (chrome + 0xcf70c72)
+                                                                             #10 0x000061ccac1cdff3 n/a (chrome + 0xcfbbff3)
+                                                                             #11 0x000061ccac1c73b3 n/a (chrome + 0xcfb53b3)
+                                                                             #12 0x000061ccac1c71f5 n/a (chrome + 0xcfb51f5)
+                                                                             #13 0x000061ccac1bf60d n/a (chrome + 0xcfad60d)
+                                                                             #14 0x000061cca383d009 n/a (chrome + 0x462b009)
+                                                                             #15 0x000061ccac1c2318 n/a (chrome + 0xcfb0318)
+                                                                             #16 0x000061cca369c4bc n/a (chrome + 0x448a4bc)
+                                                                             #17 0x000061cca255bb0f n/a (chrome + 0x3349b0f)
+                                                                             #18 0x000061cca39c5a16 n/a (chrome + 0x47b3a16)
+                                                                             #19 0x00007248baa23585 n/a (libglib-2.0.so.0 + 0x5d585)
+                                                                             #20 0x00007248baa82977 n/a (libglib-2.0.so.0 + 0xbc977)
+                                                                             #21 0x00007248baa22a23 g_main_context_iteration (libglib-2.0.so.0 + 0x5ca23)
+                                                                             #22 0x000061cca2560b39 n/a (chrome + 0x334eb39)
+                                                                             #23 0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #24 0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #25 0x000061cca4e7c4ca n/a (chrome + 0x5c6a4ca)
+                                                                             #26 0x000061cca4f517f3 n/a (chrome + 0x5d3f7f3)
+                                                                             #27 0x000061cca4f51031 n/a (chrome + 0x5d3f031)
+                                                                             #28 0x000061cca4f4fbae n/a (chrome + 0x5d3dbae)
+                                                                             #29 0x000061cca4f4f27d ChromeMain (chrome + 0x5d3d27d)
+                                                                             #30 0x00007248b9c2a1ca __libc_start_call_main (libc.so.6 + 0x2a1ca)
+                                                                             #31 0x00007248b9c2a28b __libc_start_main_impl (libc.so.6 + 0x2a28b)
+                                                                             #32 0x000061cca5a4500a _start (chrome + 0x683300a)
+                                                                             
+                                                                             Stack trace of thread 3995885:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+=== PORT 8788 ===
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=1632280,fd=3))     
+=== BROWSER PROCESSES ===
+119358 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {42ba7839-ba0a-4be2-8804-f69c5f2003b8} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 50 tab
+148739 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {80c7350a-d808-4c52-9bc6-3573acd17fee} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 51 tab
+183332 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --hide-crash-restore-bubble --disable-blink-features=AutomationControlled --disable-extensions-except=/home/ai-core-node/.claude/skills/gstack/extension --load-extension=/home/ai-core-node/.claude/skills/gstack/extension --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --remote-debugging-pipe about:blank
+183334 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome-for-testing/Crash Reports --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=145.0.7632.6 --initial-client-fd=7 --shared-client-connection
+183336 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome-for-testing/Crash Reports --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=145.0.7632.6 --initial-client-fd=4 --shared-client-connection
+183339 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=zygote --no-zygote-sandbox --no-sandbox --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable
+183340 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=zygote --no-sandbox --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable
+183413 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-sandbox --disable-dev-shm-usage --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,4317060962077764595,4487270733086748758,524288 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708989122997041
+183422 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --no-sandbox --disable-dev-shm-usage --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,17852577664704442858,800180717205814470,524288 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708990060038890
+183564 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=renderer --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable --no-sandbox --disable-dev-shm-usage --disable-back-forward-cache --disable-background-timer-throttling --disable-breakpad --enable-automation --force-color-profile=srgb --remote-debugging-pipe --allow-pre-commit-input --ozone-platform=x11 --disable-blink-features=AutomationControlled --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=387994649203 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,16770692381499422239,5741232950490957234,2097152 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708991934122588
+183607 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=renderer --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --extension-process --change-stack-guard-on-fork=enable --no-sandbox --disable-dev-shm-usage --disable-back-forward-cache --disable-background-timer-throttling --disable-breakpad --enable-automation --force-color-profile=srgb --remote-debugging-pipe --allow-pre-commit-input --ozone-platform=x11 --disable-blink-features=AutomationControlled --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=8 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=387994768515 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,11940760066293293472,18152239314299388562,2097152 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708993808206286
+183734 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=gpu-process --no-sandbox --disable-dev-shm-usage --disable-breakpad --ozone-platform=x11 --enable-unsafe-swiftshader --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable --gpu-preferences=UAAAAAAAAAAgAAAEAAAAAAAAAAAAAGAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAYAAAAAAAAABgAAAAAAAAAAQAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --use-gl=angle --use-angle=swiftshader-webgl --shared-files --metrics-shmem-handle=4,i,8533810244158726801,18405474627416440850,262144 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708995682289984
+184032 /home/ai-core-node/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome --type=renderer --crashpad-handler-pid=183334 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.gstack/chromium-profile --change-stack-guard-on-fork=enable --no-sandbox --disable-dev-shm-usage --disable-back-forward-cache --disable-background-timer-throttling --disable-breakpad --enable-automation --force-color-profile=srgb --remote-debugging-pipe --allow-pre-commit-input --ozone-platform=x11 --disable-gpu-compositing --disable-blink-features=AutomationControlled --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=11 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=387996507042 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,5271837369946469693,12709991236564173091,2097152 --field-trial-handle=3,i,6946317035532854178,2982886016886932329,262144 --enable-features=CDPScreenshotNewSurface --disable-features=AutoDeElevate,AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,OptimizationHints,PaintHolding,RenderDocument,ThirdPartyStoragePartitioning,Translate --variations-seed-version --trace-process-track-uuid=3190708996619331833
+276222 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {be115138-cd11-4626-85ee-44431c4273ad} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 52 tab
+286448 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {3eddedc0-8ad0-40be-b602-5440f7b23112} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 53 tab
+323699 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {2e55ce56-e4f5-4972-a9f8-57233d747d61} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 54 tab
+323708 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {65158c40-8628-4a2f-9b77-cf7132a932f3} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 55 tab
+344534 bash -lc set -o pipefail; echo '=== ID ==='; hostname; id -un; echo '=== DESKTOP CANDIDATES ==='; find "$HOME/.local/share/applications" "$HOME/Desktop" "$HOME/.config/autostart" -maxdepth 2 -type f \( -name '*.desktop' -o -name '*.sh' \) 2>/dev/null | while read -r f; do if grep -Eqi 'free[ -]?frank|frankenstein|127\.0\.0\.1:8788|8788|frank' "$f"; then echo "--- $f"; sed -n '1,140p' "$f"; fi; done; echo '=== GNOME FAVORITES ==='; gsettings get org.gnome.shell favorite-apps 2>&1 || true; echo '=== SERVICE ==='; systemctl --user --no-pager --full status frankenstein-buehne.service 2>&1 | sed -n '1,80p' || true; echo '=== PORT 8788 ==='; ss -ltnp 2>/dev/null | grep ':8788' || true; echo '=== BROWSER PROCESSES ==='; pgrep -af 'chrome|chromium|brave|firefox' | head -30 || true; echo '=== RECENT JOURNAL ==='; journalctl --user -u frankenstein-buehne.service -n 40 --no-pager 2>&1 || true
+2996020 /snap/firefox/8863/usr/lib/firefox/firefox
+2996284 /snap/firefox/8863/usr/lib/firefox/crashhelper 2996020 9 /tmp/ 11 20260904071051
+2996963 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -ipcHandle 0 -signalPipe 1 -initialChannelId {90eac86d-679d-4cea-87f9-444f9884785c} -parentPid 2996020 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 1 forkserver
+2996988 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -prefsHandle 0:38593 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {c822f405-a3b9-4041-ba57-1bf15be7ba7e} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 2 socket
+2997198 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:38680 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {b087dff5-39b3-42c8-a3e7-d5ea877ada80} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 3 tab
+2997210 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -prefsHandle 0:38680 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {9eca1534-6b25-463f-9e05-4f81551c16bf} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 4 rdd
+2997837 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:38858 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {7ed7e217-5e65-44e8-8386-f93ad1d4e31c} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 5 tab
+2998711 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -parentBuildID 20260904071051 -sandboxingKind 0 -prefsHandle 0:56048 -prefMapHandle 1:297087 -sandboxReporter 2 -chrootClient 3 -ipcHandle 4 -initialChannelId {2c8628d9-19cc-4966-8773-0994581be770} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 5 -crashReporter 6 -appDir /snap/firefox/8863/usr/lib/firefox/browser 6 utility
+2998720 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {0c51634c-bb26-44d7-b2b3-60df6f11085a} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 7 tab
+2998785 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {63f1d752-88b2-41ba-b27f-99686f69c5ab} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 8 tab
+3041417 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {1028af26-0f23-4709-b536-5343ab4b3703} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 12 tab
+3557825 /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {001653a6-6158-488b-a82c-22f2f561f936} -parentPid 2996020 -crashHelperPid 2996284 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 28 tab
+=== RECENT JOURNAL ===
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self.finish_request(request, client_address)
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self.RequestHandlerClass(request, client_address, self)
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self.handle()
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/http/server.py", line 436, in handle
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self.handle_one_request()
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/http/server.py", line 424, in handle_one_request
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     method()
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 951, in do_GET
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self._json(z)
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 760, in _json
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self.wfile.write(b)
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 840, in write
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]:     self._sock.sendall(b)
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]: BrokenPipeError: [Errno 32] Broken pipe
+Sep 12 10:17:50 ai-core-node-projekt-frankenstein python3[1632280]: ----------------------------------------
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: ----------------------------------------
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: Exception occurred during processing of request from ('127.0.0.1', 38010)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: Traceback (most recent call last):
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 692, in process_request_thread
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.finish_request(request, client_address)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 362, in finish_request
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.RequestHandlerClass(request, client_address, self)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 761, in __init__
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.handle()
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/http/server.py", line 436, in handle
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.handle_one_request()
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/http/server.py", line 424, in handle_one_request
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     method()
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 945, in do_GET
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/home/ai-core-node/.claude/star/visual/buehne_daemon.py", line 760, in _json
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self.wfile.write(b)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:   File "/usr/lib/python3.12/socketserver.py", line 840, in write
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]:     self._sock.sendall(b)
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: BrokenPipeError: [Errno 32] Broken pipe
+Sep 12 10:17:51 ai-core-node-projekt-frankenstein python3[1632280]: ----------------------------------------
+Sep 12 10:21:56 ai-core-node-projekt-frankenstein systemd-coredump[3995927]: Process 3995878 (chrome) of user 1000 dumped core.
+                                                                             
+                                                                             Module libstdc++.so.6 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libzstd.so.1 from deb libzstd-1.5.5+dfsg2-2build1.1.amd64
+                                                                             Module libsystemd.so.0 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Module libgcc_s.so.1 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libudev.so.1 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Stack trace of thread 3995878:
+                                                                             #0  0x00007248afeb9e5b n/a (libGLESv2.so + 0x4b9e5b)
+                                                                             #1  0x00007248afd6b31e n/a (libGLESv2.so + 0x36b31e)
+                                                                             #2  0x00007248afd00a21 n/a (libGLESv2.so + 0x300a21)
+                                                                             #3  0x00007248afb55bd1 n/a (libGLESv2.so + 0x155bd1)
+                                                                             #4  0x00007248afb57756 EGL_CreateWindowSurface (libGLESv2.so + 0x157756)
+                                                                             #5  0x000061ccaa95412a n/a (chrome + 0xb74212a)
+                                                                             #6  0x000061ccaa95ef3e n/a (chrome + 0xb74cf3e)
+                                                                             #7  0x000061ccaa953a47 n/a (chrome + 0xb741a47)
+                                                                             #8  0x000061ccaa99f2ab n/a (chrome + 0xb78d2ab)
+                                                                             #9  0x000061ccac182c72 n/a (chrome + 0xcf70c72)
+                                                                             #10 0x000061ccac1cdff3 n/a (chrome + 0xcfbbff3)
+                                                                             #11 0x000061ccac1c73b3 n/a (chrome + 0xcfb53b3)
+                                                                             #12 0x000061ccac1c71f5 n/a (chrome + 0xcfb51f5)
+                                                                             #13 0x000061ccac1bf60d n/a (chrome + 0xcfad60d)
+                                                                             #14 0x000061cca383d009 n/a (chrome + 0x462b009)
+                                                                             #15 0x000061ccac1c2318 n/a (chrome + 0xcfb0318)
+                                                                             #16 0x000061cca369c4bc n/a (chrome + 0x448a4bc)
+                                                                             #17 0x000061cca255bb0f n/a (chrome + 0x3349b0f)
+                                                                             #18 0x000061cca39c5a16 n/a (chrome + 0x47b3a16)
+                                                                             #19 0x00007248baa23585 n/a (libglib-2.0.so.0 + 0x5d585)
+                                                                             #20 0x00007248baa82977 n/a (libglib-2.0.so.0 + 0xbc977)
+                                                                             #21 0x00007248baa22a23 g_main_context_iteration (libglib-2.0.so.0 + 0x5ca23)
+                                                                             #22 0x000061cca2560b39 n/a (chrome + 0x334eb39)
+                                                                             #23 0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #24 0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #25 0x000061cca4e7c4ca n/a (chrome + 0x5c6a4ca)
+                                                                             #26 0x000061cca4f517f3 n/a (chrome + 0x5d3f7f3)
+                                                                             #27 0x000061cca4f51031 n/a (chrome + 0x5d3f031)
+                                                                             #28 0x000061cca4f4fbae n/a (chrome + 0x5d3dbae)
+                                                                             #29 0x000061cca4f4f27d ChromeMain (chrome + 0x5d3d27d)
+                                                                             #30 0x00007248b9c2a1ca __libc_start_call_main (libc.so.6 + 0x2a1ca)
+                                                                             #31 0x00007248b9c2a28b __libc_start_main_impl (libc.so.6 + 0x2a28b)
+                                                                             #32 0x000061cca5a4500a _start (chrome + 0x683300a)
+                                                                             
+                                                                             Stack trace of thread 3995885:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995884:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995887:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995886:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995888:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995889:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995890:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995892:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995893:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995894:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995895:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995891:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995896:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995923:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995918:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x000061cca222a80b n/a (chrome + 0x301880b)
+                                                                             #3  0x000061cca222638d n/a (chrome + 0x301438d)
+                                                                             #4  0x000061cca2225d1a n/a (chrome + 0x3013d1a)
+                                                                             #5  0x000061cca2225cb6 n/a (chrome + 0x3013cb6)
+                                                                             #6  0x000061ccac1bb5fe n/a (chrome + 0xcfa95fe)
+                                                                             #7  0x000061ccac1ba3d9 n/a (chrome + 0xcfa83d9)
+                                                                             #8  0x000061ccac1ba25a n/a (chrome + 0xcfa825a)
+                                                                             #9  0x000061cca57f1703 n/a (chrome + 0x65df703)
+                                                                             #10 0x000061cca5223539 n/a (chrome + 0x6011539)
+                                                                             #11 0x000061cca5223303 n/a (chrome + 0x6011303)
+                                                                             #12 0x000061cca5950b9a n/a (chrome + 0x673eb9a)
+                                                                             #13 0x000061cca3214a53 n/a (chrome + 0x4002a53)
+                                                                             #14 0x000061cca32165a8 n/a (chrome + 0x40045a8)
+                                                                             #15 0x000061cca320c5d4 n/a (chrome + 0x3ffa5d4)
+                                                                             #16 0x000061cca3208899 n/a (chrome + 0x3ff6899)
+                                                                             #17 0x000061cca372aab3 n/a (chrome + 0x4518ab3)
+                                                                             #18 0x000061cca255bb0f n/a (chrome + 0x3349b0f)
+                                                                             #19 0x000061cca39c5a16 n/a (chrome + 0x47b3a16)
+                                                                             #20 0x00007248baa23585 n/a (libglib-2.0.so.0 + 0x5d585)
+                                                                             #21 0x00007248baa82977 n/a (libglib-2.0.so.0 + 0xbc977)
+                                                                             #22 0x00007248baa22a23 g_main_context_iteration (libglib-2.0.so.0 + 0x5ca23)
+                                                                             #23 0x000061cca2560b39 n/a (chrome + 0x334eb39)
+                                                                             #24 0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #25 0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #26 0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #27 0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #28 0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #29 0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #30 0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995903:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995897:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995898:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995922:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995899:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995900:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995901:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995902:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995904:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995912:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca25696c2 n/a (chrome + 0x33576c2)
+                                                                             #4  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #5  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #6  0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #7  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #8  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #9  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #10 0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995913:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995914:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca2225d1a n/a (chrome + 0x3013d1a)
+                                                                             #4  0x000061cca9e9783f n/a (chrome + 0xac8583f)
+                                                                             #5  0x000061cca9e97983 n/a (chrome + 0xac85983)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995915:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca3504488 n/a (chrome + 0x42f2488)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995916:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca2556ca2 n/a (chrome + 0x3344ca2)
+                                                                             #4  0x000061cca30d4c0d n/a (chrome + 0x3ec2c0d)
+                                                                             #5  0x000061cca30d4b52 n/a (chrome + 0x3ec2b52)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995920:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995921:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995919:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995924:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3995917:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca3d1a074 n/a (chrome + 0x4b08074)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             ELF object binary architecture: AMD x86-64
+Sep 12 10:21:57 ai-core-node-projekt-frankenstein systemd-coredump[3996144]: Process 3996093 (chrome) of user 1000 dumped core.
+                                                                             
+                                                                             Module libstdc++.so.6 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libzstd.so.1 from deb libzstd-1.5.5+dfsg2-2build1.1.amd64
+                                                                             Module libsystemd.so.0 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Module libgcc_s.so.1 from deb gcc-14-14.2.0-4ubuntu2~24.04.1.amd64
+                                                                             Module libudev.so.1 from deb systemd-255.4-1ubuntu8.17.amd64
+                                                                             Stack trace of thread 3996093:
+                                                                             #0  0x00007248afeb9e5b n/a (libGLESv2.so + 0x4b9e5b)
+                                                                             #1  0x00007248afd6b31e n/a (libGLESv2.so + 0x36b31e)
+                                                                             #2  0x00007248afd00a21 n/a (libGLESv2.so + 0x300a21)
+                                                                             #3  0x00007248afb55bd1 n/a (libGLESv2.so + 0x155bd1)
+                                                                             #4  0x00007248afb57756 EGL_CreateWindowSurface (libGLESv2.so + 0x157756)
+                                                                             #5  0x000061ccaa95412a n/a (chrome + 0xb74212a)
+                                                                             #6  0x000061ccaa95ef3e n/a (chrome + 0xb74cf3e)
+                                                                             #7  0x000061ccaa953a47 n/a (chrome + 0xb741a47)
+                                                                             #8  0x000061ccaa99f2ab n/a (chrome + 0xb78d2ab)
+                                                                             #9  0x000061ccac182c72 n/a (chrome + 0xcf70c72)
+                                                                             #10 0x000061ccac1cdff3 n/a (chrome + 0xcfbbff3)
+                                                                             #11 0x000061ccac1c73b3 n/a (chrome + 0xcfb53b3)
+                                                                             #12 0x000061ccac1c71f5 n/a (chrome + 0xcfb51f5)
+                                                                             #13 0x000061ccac1bf60d n/a (chrome + 0xcfad60d)
+                                                                             #14 0x000061cca383d009 n/a (chrome + 0x462b009)
+                                                                             #15 0x000061ccac1c2318 n/a (chrome + 0xcfb0318)
+                                                                             #16 0x000061cca369c4bc n/a (chrome + 0x448a4bc)
+                                                                             #17 0x000061cca255bb0f n/a (chrome + 0x3349b0f)
+                                                                             #18 0x000061cca39c5a16 n/a (chrome + 0x47b3a16)
+                                                                             #19 0x00007248baa23585 n/a (libglib-2.0.so.0 + 0x5d585)
+                                                                             #20 0x00007248baa82977 n/a (libglib-2.0.so.0 + 0xbc977)
+                                                                             #21 0x00007248baa22a23 g_main_context_iteration (libglib-2.0.so.0 + 0x5ca23)
+                                                                             #22 0x000061cca2560b39 n/a (chrome + 0x334eb39)
+                                                                             #23 0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #24 0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #25 0x000061cca4e7c4ca n/a (chrome + 0x5c6a4ca)
+                                                                             #26 0x000061cca4f517f3 n/a (chrome + 0x5d3f7f3)
+                                                                             #27 0x000061cca4f51031 n/a (chrome + 0x5d3f031)
+                                                                             #28 0x000061cca4f4fbae n/a (chrome + 0x5d3dbae)
+                                                                             #29 0x000061cca4f4f27d ChromeMain (chrome + 0x5d3d27d)
+                                                                             #30 0x00007248b9c2a1ca __libc_start_call_main (libc.so.6 + 0x2a1ca)
+                                                                             #31 0x00007248b9c2a28b __libc_start_main_impl (libc.so.6 + 0x2a28b)
+                                                                             #32 0x000061cca5a4500a _start (chrome + 0x683300a)
+                                                                             
+                                                                             Stack trace of thread 3996103:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996110:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996105:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996106:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996101:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996138:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996130:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996111:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996109:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996116:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996108:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996114:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996134:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca3d1a074 n/a (chrome + 0x4b08074)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996118:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996115:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996120:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996136:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996140:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996132:
+                                                                             #0  0x00007248b9d2a2d2 epoll_wait (libc.so.6 + 0x12a2d2)
+                                                                             #1  0x000061cca2564674 n/a (chrome + 0x3352674)
+                                                                             #2  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #3  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #4  0x000061cca3504488 n/a (chrome + 0x42f2488)
+                                                                             #5  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996119:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996131:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca2225d1a n/a (chrome + 0x3013d1a)
+                                                                             #4  0x000061cca9e9783f n/a (chrome + 0xac8583f)
+                                                                             #5  0x000061cca9e97983 n/a (chrome + 0xac85983)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996135:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x000061cca222a80b n/a (chrome + 0x301880b)
+                                                                             #3  0x000061cca222638d n/a (chrome + 0x301438d)
+                                                                             #4  0x000061cca2225d1a n/a (chrome + 0x3013d1a)
+                                                                             #5  0x000061cca2225cb6 n/a (chrome + 0x3013cb6)
+                                                                             #6  0x000061ccac1bb5fe n/a (chrome + 0xcfa95fe)
+                                                                             #7  0x000061ccac1ba3d9 n/a (chrome + 0xcfa83d9)
+                                                                             #8  0x000061ccac1ba25a n/a (chrome + 0xcfa825a)
+                                                                             #9  0x000061cca57f1703 n/a (chrome + 0x65df703)
+                                                                             #10 0x000061cca5223539 n/a (chrome + 0x6011539)
+                                                                             #11 0x000061cca5223303 n/a (chrome + 0x6011303)
+                                                                             #12 0x000061cca5950b9a n/a (chrome + 0x673eb9a)
+                                                                             #13 0x000061cca3214a53 n/a (chrome + 0x4002a53)
+                                                                             #14 0x000061cca32165a8 n/a (chrome + 0x40045a8)
+                                                                             #15 0x000061cca320c5d4 n/a (chrome + 0x3ffa5d4)
+                                                                             #16 0x000061cca3208899 n/a (chrome + 0x3ff6899)
+                                                                             #17 0x000061cca372aab3 n/a (chrome + 0x4518ab3)
+                                                                             #18 0x000061cca255bb0f n/a (chrome + 0x3349b0f)
+                                                                             #19 0x000061cca39c5a16 n/a (chrome + 0x47b3a16)
+                                                                             #20 0x00007248baa23585 n/a (libglib-2.0.so.0 + 0x5d585)
+                                                                             #21 0x00007248baa82977 n/a (libglib-2.0.so.0 + 0xbc977)
+                                                                             #22 0x00007248baa22a23 g_main_context_iteration (libglib-2.0.so.0 + 0x5ca23)
+                                                                             #23 0x000061cca2560b39 n/a (chrome + 0x334eb39)
+                                                                             #24 0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #25 0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #26 0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #27 0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #28 0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #29 0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #30 0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996121:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996137:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996133:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca2556ca2 n/a (chrome + 0x3344ca2)
+                                                                             #4  0x000061cca30d4c0d n/a (chrome + 0x3ec2c0d)
+                                                                             #5  0x000061cca30d4b52 n/a (chrome + 0x3ec2b52)
+                                                                             #6  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #7  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #8  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996141:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996139:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996117:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996104:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996112:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996129:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9bd6e __pthread_cond_wait_common (libc.so.6 + 0x9bd6e)
+                                                                             #2  0x000061cca2226223 n/a (chrome + 0x3014223)
+                                                                             #3  0x000061cca25696c2 n/a (chrome + 0x33576c2)
+                                                                             #4  0x000061cca3504f4d n/a (chrome + 0x42f2f4d)
+                                                                             #5  0x000061cca3504621 n/a (chrome + 0x42f2621)
+                                                                             #6  0x000061cca35044e8 n/a (chrome + 0x42f24e8)
+                                                                             #7  0x000061cca3151462 n/a (chrome + 0x3f3f462)
+                                                                             #8  0x000061cca3153fa8 n/a (chrome + 0x3f41fa8)
+                                                                             #9  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #10 0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996113:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996102:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             
+                                                                             Stack trace of thread 3996107:
+                                                                             #0  0x00007248b9c98e51 __futex_abstimed_wait_common64 (libc.so.6 + 0x98e51)
+                                                                             #1  0x00007248b9c9b8cd __pthread_cond_wait_common (libc.so.6 + 0x9b8cd)
+                                                                             #2  0x00007248ac199edd n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599edd)
+                                                                             #3  0x00007248ac165fbb n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x565fbb)
+                                                                             #4  0x00007248ac199e0c n/a (libgallium-25.2.8-0ubuntu0.24.04.2.so + 0x599e0c)
+                                                                             #5  0x00007248b9c9cb84 start_thread (libc.so.6 + 0x9cb84)
+                                                                             #6  0x00007248b9d29ecc __clone3 (libc.so.6 + 0x129ecc)
+                                                                             ELF object binary architecture: AMD x86-64

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-runtime-credit-semantic-fence-bindcheck-andreas-20260913-a2",
+  "command_sha256": "36cfb2c70ee41404708a9285a586ea4eb8383f600df047a98693e0a3ca21e522",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:56:23.353048+00:00",
+  "finished_at": "2026-09-12T17:56:23.660520+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "69672e6dec21f27e2ca2a7ccbd8166306cc3b1d5e1bdb21d5288cd84379bbb73",
+  "stderr_sha256": "bbcb9ac9b786a71a70cf8aa970d412bdb4eef6abe7c9023484919e54da567754",
+  "stdout_tail": "HOST=andreas-MACO USER=andreas\nSOURCE_REF=2f9fa1004ab140eb312302f799bf2e6165c4aff6\nBIND:werkzeug/fluechtig-vor-start-pruefen.sh:794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0:/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh:794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0\nBIND:werkzeug/semantic-state-cutover.py:eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f:/usr/local/libexec/entityos/semantic-state-cutover.py:eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f\nBIND:werkzeug/entityos-vm-volatile-state-guard.conf:8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e:/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf:8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e\nBIND:werkzeug/entityos-vm-semantic-cutover.conf:01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d:/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf:01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d\nEFFECTIVE\nACTIVE=active\nPID=319869\nEPOCH=Tue 2026-09-08 12:04:36 CEST\nDROPINS=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nEXECCONDITION={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nEXECSTOPPOST=CUTOVER_CONDITION_RC=255\nOMEGA_RUNTIME_BINDCHECK_PASS=1\n",
+  "stderr_tail": "START BLOCKIERT -- volatile_semantic_state_without_verified_cutover: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db, /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db, /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db, /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db, /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-relay-runtime-preflight-20260912T2020Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 30,
+  "command": "set -u; echo PWD=$(pwd); echo PROCESSES; pgrep -af 'omega_grid_relay|omega-grid|omega_grid' || true; echo TMUX; tmux ls 2>/dev/null || true; echo STATE; find /workspace/omega_runtime/state -maxdepth 2 -type f -printf '%p\\n' 2>/dev/null | sort | tail -80; echo OUTBOX; find /workspace/omega_runtime/state/outbox -maxdepth 1 -type f -printf '%f\\n' 2>/dev/null | sort | tail -40"
+}

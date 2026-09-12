@@ -44,6 +44,7 @@ If current canonical/repo reality cannot be verified, mark the limitation and ne
 
 ## 3. Trigger roles
 
+- `fred`: maximum-effort current-reality convergence. Refresh authority/repo heads/active work/receipts/runtime subjects, preserve Gabriel/Andreas provenance, avoid duplicate live authorities, protect the existing Avatar and EntityOS VM safety boundary, then execute the strongest non-duplicate open gate. `fred` intensifies effort but never expands effect/provider/training/restart/destructive authority. Follow `FRED_MAXIMUM_EFFORT_PROTOCOL.md`.
 - `999`: build/test/integrate the existing OpenAI Realtime voice organ into a deeply human, emotionally expressive, proactive and fully action-capable Frankenstein conversation surface while preserving the canonical Voice/GRID/GWT/state/Room/authority path. No parallel voice entity/runtime/state authority. Follow `999_REALTIME_HUMAN_CONVERSATION_FUSION_PROTOCOL.md`.
 - `frank`: whole Frank v0.1 architecture, implementation and integration.
 - `harness`: direct Frank v0.1 test/falsification/repair; Harness is a method, not a product.
@@ -82,6 +83,8 @@ fresh Frank v0.1 state
 ```
 
 Long runs refresh current repo/work/evidence repeatedly; one start snapshot is insufficient.
+
+For `fred`, “maximum effort” means maximize decision-relevant verification and execution against current reality; it is not permission to bypass authority or create duplicate runtime subjects.
 
 For `999`, “build/test/measure” specifically means modifying the existing canonical Realtime/Voice product path when justified, not creating a second dialogue manager or a concept-only artifact.
 

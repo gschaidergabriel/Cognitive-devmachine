@@ -44,6 +44,7 @@ If current canonical/repo reality cannot be verified, mark the limitation and ne
 
 ## 3. Trigger roles
 
+- `999`: build/test/integrate the existing OpenAI Realtime voice organ into a deeply human, emotionally expressive, proactive and fully action-capable Frankenstein conversation surface while preserving the canonical Voice/GRID/GWT/state/Room/authority path. No parallel voice entity/runtime/state authority. Follow `999_REALTIME_HUMAN_CONVERSATION_FUSION_PROTOCOL.md`.
 - `frank`: whole Frank v0.1 architecture, implementation and integration.
 - `harness`: direct Frank v0.1 test/falsification/repair; Harness is a method, not a product.
 - `claycode`: implement ClayCode needed to compile/execute real Frank v0.1 semantics.
@@ -81,6 +82,8 @@ fresh Frank v0.1 state
 ```
 
 Long runs refresh current repo/work/evidence repeatedly; one start snapshot is insufficient.
+
+For `999`, “build/test/measure” specifically means modifying the existing canonical Realtime/Voice product path when justified, not creating a second dialogue manager or a concept-only artifact.
 
 ## 5. Historical evidence law
 

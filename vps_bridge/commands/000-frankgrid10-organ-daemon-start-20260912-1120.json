@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000-frankgrid10-organ-daemon-start-20260912-1120",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; BASE=/workspace/frankgrid10-organ; SRC=/workspace/.frankgrid10-daemon-src; rm -rf \"$SRC\"; ORIGIN=$(git -C /workspace/clay-global-research-entity remote get-url origin); git clone --quiet --depth 1 --branch chatgpt-frankgrid10-sandbox \"$ORIGIN\" \"$SRC\"; install -m 0755 \"$SRC/research_entity/experiments/chatgpt_frankgrid10/organ_daemon.py\" \"$BASE/code/organ_daemon.py\"; rm -rf \"$SRC\"; echo DAEMON_SOURCE_SHA256=$(sha256sum \"$BASE/code/organ_daemon.py\" | awk '{print $1}'); python3 -m py_compile \"$BASE/code/organ_daemon.py\"; mkdir -p \"$BASE/run\" \"$BASE/logs\" \"$BASE/ipc/inbox\" \"$BASE/ipc/processing\" \"$BASE/ipc/outbox\" \"$BASE/ipc/receipts\" \"$BASE/ipc/deadletter\"; if [ -f \"$BASE/run/organ-daemon.pid\" ]; then OLD=$(cat \"$BASE/run/organ-daemon.pid\" 2>/dev/null || true); if [ -n \"$OLD\" ] && kill -0 \"$OLD\" 2>/dev/null && tr '\\0' ' ' <\"/proc/$OLD/cmdline\" | grep -Fq '/workspace/frankgrid10-organ/code/organ_daemon.py'; then echo ALREADY_RUNNING_PID=$OLD; cat \"$BASE/run/heartbeat.json\"; exit 0; fi; fi; : > \"$BASE/logs/organ-daemon.log\"; nohup setsid python3 \"$BASE/code/organ_daemon.py\" --poll 0.5 >>\"$BASE/logs/organ-daemon.log\" 2>&1 < /dev/null & PID=$!; echo \"$PID\" > \"$BASE/run/organ-daemon.pid\"; sleep 2; kill -0 \"$PID\"; echo PID=$PID; echo CMDLINE=$(tr '\\0' ' ' <\"/proc/$PID/cmdline\"); echo HEARTBEAT; cat \"$BASE/run/heartbeat.json\"; echo LOG_TAIL; tail -40 \"$BASE/logs/organ-daemon.log\" || true; echo FRANKGRID10_ORGAN_DAEMON_START_PASS"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "person-memory-index-gabriel-20260912-1558",
+  "command_sha256": "87cbc9df6b9ed5fc3bd7b2b134bbe90b93c16bce90f9113dcdef83e6f821f1a9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T08:20:25.834119+00:00",
+  "finished_at": "2026-09-12T08:20:25.896236+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "ab4cb2f54b66c55945d8300fd89edb56eba2002c4eaa923815b08e3e10c8c007",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "indexes [('idx_durable_memory_ts', 'CREATE INDEX idx_durable_memory_ts ON durable_memory(ts DESC)'), ('idx_turns_session_ord', 'CREATE INDEX idx_turns_session_ord ON turns(session_id, ordinal DESC)'), ('sqlite_autoindex_durable_memory_1', None), ('sqlite_autoindex_turns_1', None), ('sqlite_autoindex_turns_2', None)]\nfts_tables ['cognition_research_findings', 'cognition_research_injection_log', 'cognition_research_rejected', 'fts_index_artikel', 'fts_index_artikel_config', 'fts_index_artikel_data', 'fts_index_artikel_docsize', 'fts_index_artikel_idx', 'fts_index_datei', 'fts_index_datei_config', 'fts_index_datei_data', 'fts_index_datei_docsize', 'fts_index_datei_idx', 'vp_alias', 'vp_alias_df', 'vp_alias_fts', 'vp_alias_fts_config', 'vp_alias_fts_data', 'vp_alias_fts_docsize', 'vp_alias_fts_idx', 'vp_alias_meta', 'vp_datei_fts', 'vp_datei_fts_config', 'vp_datei_fts_content', 'vp_datei_fts_data', 'vp_datei_fts_docsize', 'vp_datei_fts_idx', 'vp_dir_fts', 'vp_dir_fts_config', 'vp_dir_fts_content', 'vp_dir_fts_data', 'vp_dir_fts_docsize', 'vp_dir_fts_idx']\nfts_index_artikel ['titel', 'text']\nfts_index_artikel_data ['id', 'block']\nfts_index_artikel_idx ['segid', 'term', 'pgno']\nfts_index_artikel_docsize ['id', 'sz']\nfts_index_artikel_config ['k', 'v']\nfts_index_datei ['titel', 'text']\nfts_index_datei_data ['id', 'block']\nfts_index_datei_idx ['segid', 'term', 'pgno']\nfts_index_datei_docsize ['id', 'sz']\nfts_index_datei_config ['k', 'v']\nvp_alias_fts ['alias_norm']\nvp_alias_fts_data ['id', 'block']\nvp_alias_fts_idx ['segid', 'term', 'pgno']\nvp_alias_fts_docsize ['id', 'sz']\nvp_alias_fts_config ['k', 'v']\nvp_datei_fts ['titel', 'datei_id']\nvp_datei_fts_data ['id', 'block']\nvp_datei_fts_idx ['segid', 'term', 'pgno']\nvp_datei_fts_content ['id', 'c0', 'c1']\nvp_datei_fts_docsize ['id', 'sz']\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

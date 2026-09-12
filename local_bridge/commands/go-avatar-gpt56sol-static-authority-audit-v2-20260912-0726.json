@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-static-authority-audit-v2-20260912-0726",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":30,
+  "command":"set -u; cd /home/ai-core-node/.claude/star/visual; date -Is; echo SERVICE; systemctl --user show frankenstein-buehne.service -p ActiveEnterTimestamp -p ExecMainStartTimestamp -p MainPID -p NRestarts; echo TIMER; systemctl --user show go-avatar-blink-restart-20260912-0723.timer -p ActiveState -p Result -p TriggerUSec 2>&1 || true; systemctl --user show go-avatar-blink-restart-20260912-0723.service -p ActiveState -p Result -p ExecMainCode -p ExecMainStatus 2>&1 || true; echo HASH; sha256sum buehne_daemon.py buehne.html augen_blink/blink_000.png augen_blink/blink_006.png; echo HTTP; curl -fsS http://127.0.0.1:8788/augen_blink/blink_000.png|sha256sum; curl -fsS http://127.0.0.1:8788/augen_blink/blink_006.png|sha256sum; echo STATIC_CODE; grep -n -E 'augen_blink|SimpleHTTPRequestHandler|BaseHTTPRequestHandler|send_file|CACHE|cache|read_bytes|open\\(' buehne_daemon.py | tail -100"
+}

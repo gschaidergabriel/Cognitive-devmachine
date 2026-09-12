@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56-read-wrapper-andreas-20260912T0342Z",
+  "command_sha256": "ba682c639e5f45df36532b9388310fb23db5b1f273152b3a2bbf6b695d4a9d04",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:39:05.881600+00:00",
+  "finished_at": "2026-09-12T03:39:05.882825+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
+  "op": "read_file",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "2428f8c5524f1615b1b6ce6cfe56b94ba8e41a97d8f07345807f973f3e0efc1f",
+  "stdout_tail": "",
+  "stderr_tail": "FileNotFoundError(2, 'No such file or directory')\nTraceback (most recent call last):\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 209, in execute\n    p, meta = operate(s)\n              ~~~~~~~^^^\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 168, in operate\n    return op_read_file(str(s[\"path\"]))\n  File \"/home/andreas/.claude/star/local_bridge_daemon.py\", line 133, in op_read_file\n    data = p.read_bytes()\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 778, in read_bytes\n    with self.open(mode='rb', buffering=0) as f:\n         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/pathlib/__init__.py\", line 772, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/andreas/.local/bin/frank-harness-sichtbar'\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

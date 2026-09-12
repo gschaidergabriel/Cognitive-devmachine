@@ -1,0 +1,108 @@
+===IDENT===
+andreas
+andreas-MACO
+2026-09-12T03:39:05Z
+===HOST===
+nproc=16
+load=2.59 3.13 2.89 2/2335 1402180
+MemTotal:       21789196 kB
+MemAvailable:    6078068 kB
+===FILES===
+MISSING:/home/andreas/.claude/star/stern.py
+MISSING:/home/andreas/.claude/star/harness_aider.py
+MISSING:/home/andreas/scripts/chatgpt_burst_worker_v2.sh
+/home/andreas/self-integration/werkzeug/db-autoritaet.sh 14725 2026-09-10 20:18:21.430092544 +0200
+a40a788689caf4884edb0815726404e63469edc6c80deec2c754c686c4f97b4a  /home/andreas/self-integration/werkzeug/db-autoritaet.sh
+===FRANK-CMD===
+===REPOS===
+--/home/andreas/frankenstein-repo
+## main...origin/main
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py
+c7de75d22b94ee88d02c5f663252009ccace282b
+--/home/andreas/self-integration
+## main...origin/main [hinterher 11]
+e28d758a91b181fdeae7160231a1b38e614e46d1
+===DB-AUTHORITY===
+Datenbank-Autoritaet auf andreas-MACO -- 2026-09-12T03:39:05Z
+Entscheidet ueber inodes, nicht ueber Pfadstrings. Nur lesend.
+
+== Die Autoritaet ==
+  AUTORITAET       inode=9319392     79183872 B  tab=219  grid10=12  2026-09-12 05:31
+              /var/lib/entityos/data/unified.db
+              beansprucht Entitaet 410e0108ae035e713adf029284467488
+
+== Jede weitere Datei namens unified.db auf dem HOST ==
+  fremd            inode=62006024    19787776 B  tab=187  grid10=0   2026-09-07 13:59
+              /home/andreas/.claude/udb/unified.db
+  ATTRAPPE         inode=61997837           0 B  tab=0    grid10=0   2026-09-10 07:26
+              /home/andreas/.local/share/agentzero/unified.db
+              Herkunft: geboren 2026-09-10 07:26:45, durch gabriel
+                        /usr/bin/sqlite3 /home/andreas/.local/share/agentzero/unified.db SELECT schluessel,wert FROM sta
+  ATTRAPPE         inode=58860974           0 B  tab=0    grid10=0   2026-09-06 23:14
+              /home/andreas/unified.db
+              Herkunft: geboren 2026-09-06 23:14:32, durch andreas
+                        /usr/bin/python3 -c \nimport sqlite3\nc=sqlite3.connect(\'/home/andreas/unified.db\')\nfor r in 
+  FREMDE ENTITAET  inode=61878309   105271296 B  tab=213  grid10=7   2026-09-06 21:13
+              /home/gabriel/.local/share/agentzero/unified.db
+              andere Entitaet: 7a1bd3f56160ce514659f8c9117484057f1e7a8fb77696e5c7a55cee3e94f8ae
+              (Autoritaet: 410e0108ae035e713adf029284467488) -- gehoert jemandem,
+              ist kein Konkurrent um die Autoritaet ueber DIESE Entitaet.
+              Herkunft: keine Spur im Journal (-60s/+5s um die Geburt).
+                        Das heisst NICHT "niemand" -- nur: kein Befehl,
+                        der diesen Pfad ausschreibt, steht im Protokoll.
+  fremd            inode=14690372       24576 B  tab=3    grid10=0   2026-09-12 02:09
+              /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+  ATTRAPPE         inode=9308520            0 B  tab=0    grid10=0   2026-09-08 14:47
+              /var/lib/entityos/unified.db
+              Herkunft: geboren 2026-09-08 14:47:06, durch gabriel
+                        /usr/bin/sqlite3 /var/lib/entityos/unified.db SELECT schluessel, wert FROM star_konfig WHERE sch
+
+== Derselbe Pfadstring in der VM (entityos) ==
+  CLAUDE.md: "/var/lib/entityos/data/unified.db (= /var/lib/entityos/unified.db, dieselbe Datei)"
+  in der VM  : inode=9319392
+  auf dem Host: inode=9308520
+  DIESELBE DATEI -- in der VM stimmt die Aussage der CLAUDE.md.
+  Aber auf dem HOST ist /var/lib/entityos/unified.db eine andere Datei.
+  Wer diesen Pfad ausserhalb der VM oeffnet, arbeitet nicht auf der Autoritaet.
+
+== Wer traegt diesen Pfad als Voreinstellung ==
+  voice/aufmerksamkeit.py:73:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/buehne.py:70:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/charakter.py:41:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/cortex.py:71:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/entitaet.py:80:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/erinnern.py:62:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/erleben.py:76:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/gesicht.py:52:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/gespraech_waechter.py:34:DB_PATH = "/var/lib/entityos/unified.db"
+  voice/grid_steuerung.py:76:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/konversation.py:88:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/lagebild.py:32:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/meinung.py:53:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/memory_abruf.py:70:DB_PATH = os.environ.get("FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/puls.py:57:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/reflexion.py:68:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/regie.py:67:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/schirm.py:63:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/sehen.py:47:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/selbstauskunft.py:38:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/selbstreflexion.py:46:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/sinne.py:487:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/umschlag.py:155:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/verkoerperung.py:55:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db"
+  voice/vorlieben.py:44:# "/var/lib/entityos/unified.db" -- auf dem Wirt eine 0-BYTE-ATTRAPPE. Wer
+  voice/wege.py:85:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/wiederholung.py:62:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  voice/workspace.py:99:    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+  -> Diese Module gehoeren in die VM. Auf dem Host oeffnen sie eine leere DB,
+     ohne Fehlermeldung, weil sqlite3 eine fehlende Datei stumm anlegt.
+
+----
+4 Datei(en), die mit der Autoritaet verwechselbar sind.
+Das ist ein Befund, kein Auftrag: keine davon von selbst loeschen oder verlinken.
+Eine 0-Byte-Datei kann ein Mountpunkt sein; eine FREMDE ENTITAET gehoert jemandem.
+Verwechselbar heisst hier: durch den Dateinamen. Wessen Geschichte darin steht,
+sagt die entity_id -- und nur beim Etikett ZWEITSATZ ist es dieselbe wie hier.
+===STERN-HOOKS===
+===HARNESS===

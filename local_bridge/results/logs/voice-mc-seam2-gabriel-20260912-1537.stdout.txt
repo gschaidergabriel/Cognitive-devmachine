@@ -1,0 +1,372 @@
+===RETRIEVAL-BLOCK===
+    #     das waere wieder echtes Hintergrundgeraeusch, auch kurz nach einer
+    #     Antwort, und soll weiter gefiltert werden).
+    if not angesprochen and history and history[-1].get("role") == "assistant":
+        _seit_letztem = time.time() - _LETZTER_WORTWECHSEL[0]
+        if _seit_letztem < _NAHER_ANSCHLUSS_S and len(_worte) <= _KURZER_ANSCHLUSS_WORTE:
+            angesprochen = True
+            _log(f"[FILTER] kurzer Anschluss {_seit_letztem:.1f}s nach eigener "
+                 f"Antwort, trotz fehlender Anrede angenommen: {user_text[:60]!r}")
+
+    if not angesprochen:
+        _log(f"[FILTER] nicht an ihn gerichtet, bleibt still: {user_text[:60]!r}")
+        gespraech_verlaengern()
+        return None, history
+
+    gespraech_verlaengern()
+
+    session_start = time.time()
+    # ⭐⭐ SEMANTISCH ZUERST (2026-09-10). Gabriel: "das emergente Retrieval
+    # muss intelligent angeschlossen sein ... bau das mega intelligent und
+    # wieder so, dass die kognitive Last gering bleibt."
+    #
+    # Der Stichwortweg sucht mit Woertern aus dem Gesagten. Gemessen:
+    # "wie geht es dir" -> Stichwort ['geht'] -> 1294 Zeichen Arbeitsprotokoll
+    # im Kontext. `erinnern.py` bettet Frage UND Lage ein und liefert bei
+    # unpassender Frage NICHTS -- das ist der eigentliche Gewinn, nicht die
+    # Geschwindigkeit (6,4 ms gegen 16-44 ms, beides schnell genug).
+    #
+    # ⚠️ KEIN RUECKFALL auf den Stichwortweg, wenn semantisch nichts kommt.
+    # Genau dieser Rueckfall waere die Wiedereinfuehrung des Problems: ein
+    # Abrufsystem, das immer etwas liefert, liefert bei jeder unpassenden
+    # Frage das am wenigsten unpassende -- und das landet als Tatsache in
+    # der Antwort.
+    gedaechtnis_kontext = None
+    _sem = ""
+    try:
+        _sem = erinnern.block(user_text, log=_log)
+    except Exception as _e:
+        _log(f"[ERINNERN] ausgefallen ({type(_e).__name__}: {_e})")
+    if _sem:
+        gedaechtnis_kontext = _sem
+    try:
+        if gedaechtnis_kontext is None and not hasattr(erinnern, "block"):
+            # Nur wenn erinnern.py GAR NICHT da ist (frische Installation
+            # ohne sentence-transformers), uebernimmt der alte Weg.
+            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+    except Exception as e:
+        _log(f"[MEMORY] FEHLER (nicht fatal, Turn laeuft ohne Gedaechtniskontext weiter): "
+             f"{type(e).__name__}: {e}")
+        gedaechtnis_kontext = None
+    # ⭐ Gespraechsgedaechtnis, GETRENNT von erinnern.py (2026-09-12, Gabriel:
+    # "es muss ein conversational memory geben ... das retrival muss aber
+    # hyper intelligent sein"). Eigene Tabelle (f2_konversation), eigener
+    # Index (eigene .npz, nicht erinnern.npz), harte Intent-/Zeitvorfilterung
+    # VOR der Semantik -- siehe konversation.py Kopf fuer die Begruendung.
+    # Bewusst eine EIGENE Variable, nicht in gedaechtnis_kontext gemischt:
+    # so bleibt sie unabhaengig vom RELEVANZTOR unten (das nur fuer den
+    # alten Stichwortweg gebaut wurde, siehe dortigen Kommentar) und kann
+    # eigenstaendig ausfallen, ohne den Sachwissen-Abruf zu beruehren.
+    konversation_kontext = ""
+    try:
+        konversation_kontext = konversation.block(user_text, log=_log)
+    except Exception as _e:
+        _log(f"[KONVERSATION] ausgefallen ({type(_e).__name__}: {_e})")
+        konversation_kontext = ""
+    memory_s = time.time() - session_start
+    # RELEVANZTOR (2026-09-08). Gabriel: "er reagiert wieder nicht auf mich
+    # und sagt immer wieder das selbe."
+    #
+    # Gemessen: auf "Frankenstein, wie geht's dir?" lieferte der Abruf 1322
+    # Zeichen Arbeitsprotokoll ("Sprachmodus funktioniert IMMER NOCH NICHT",
+    # "1x-Together-Finetune-Lauf") -- und genau das hat er dann gesagt. Er
+    # hat nicht konfabuliert, er hat vorgelesen, was ihm hingelegt wurde.
+    # Gegen eine Frage aus fuenf Woertern gewinnt die Masse, jedes Mal.
+    #
+    # Der Abruf selbst hat kein Relevanzmass, das man abfragen koennte, und
+    # er liefert lieber irgendetwas als nichts. Also hier ein zweites Tor:
+    # keine gemeinsamen Inhaltswoerter zwischen dem Gesagten und dem
+    # Gefundenen -> nicht einspeisen. Lieber ohne Gedaechtnis antworten als
+    # etwas Fremdes vorlesen; ein Mensch bringt auch nicht bei jeder Frage
+    # sein Projekttagebuch mit.
+    #
+    # Bewusst grob (Praefix auf 5 Zeichen, deutsche Beugung wird so mit
+    # erfasst) und bewusst nachsichtig -- EIN gemeinsames Wort genuegt.
+    # Ein zu strenges Tor macht ihn vergesslich, und das waere der
+    # gegenteilige Fehler.
+    if gedaechtnis_kontext and _sem:
+        # ⚠️ SEMANTISCHE TREFFER GEHEN AM TOR VORBEI (2026-09-10). Das
+        # Relevanztor prueft auf ein gemeinsames WORT -- es wurde gebaut, um
+        # Stichwort-Scheintreffer abzuweisen. Ein semantischer Treffer hat
+        # per Definition oft kein gemeinsames Wort ("erzaehl mir was ueber
+        # LeihMich" findet "Nutzerkonten, Kommentare via Clerk"), und genau
+        # das ist sein Wert. Ihn durch ein Wortfilter zu schicken hiesse,
+        # die Semantik wieder wegzuwerfen.
+        _log(f"[MEMORY] {time.time()-session_start:.3f}s -> semantisch "
+             f"({len(gedaechtnis_kontext)} Zeichen), Wortfilter uebersprungen.")
+    elif gedaechtnis_kontext:
+        # Haeufige deutsche Funktionswoerter mit >=5 Zeichen. Ohne sie reicht
+        # ein "nicht" auf beiden Seiten, um beliebiges Protokoll fuer
+        # einschlaegig zu erklaeren -- an genau diesem Wort ist die erste
+        # Fassung durchgerutscht.
+        _stop = {"frankenstein", "eigentlich", "vielleicht", "nochmal", "wieder",
+                 "nicht", "nichts", "kannst", "koennen", "kannst", "einfach",
+                 "warum", "welche", "welcher", "sollte", "solltest", "haben",
+                 "hatte", "werden", "wurde", "worden", "machen", "macht",
+                 "immer", "schon", "etwas", "alles", "gerade", "wirklich",
+                 "eben", "gibt", "geben", "sagen", "gesagt", "diese", "dieser",
+                 "dieses", "jetzt", "heute", "wieso", "weshalb", "musst",
+                 "muessen", "wollen", "willst", "deine", "deinen", "meine",
+                 "meinen", "unser", "unsere"}
+        # ⚠️⭐ AUF DEM PRAEFIX PRUEFEN, NICHT AUF DEM VOLLEN WORT
+        # (2026-09-10). Gemessen: "[MEMORY] Treffer, gemeinsam: ['frank',
+        # 'siehs'] -- wird eingespeist" liess 1553 Zeichen Arbeitsprotokoll
+        # in den Kontext, worauf er von "Code, Kamera, Termin" und einem
+        # "Maedel mit Rucksack" erzaehlte. Ursache: `_stop` enthaelt
+        # "frankenstein", verglichen wird aber `w[:5]` = "frank" -- und das
+        # stand nicht in der Liste. SEIN EIGENER NAME war das gemeinsame
+        # Wort. Ein Anredewort ist nie ein Themenbezug.
+        _stop_p = {w[:5] for w in _stop} | {"frank", "siehs", "sehen", "sagst",
+                                            "sagen", "denks", "weiss", "meins",
+                                            "hallo", "gerad", "bitte"}
+        _worte = lambda s: {w[:5] for w in re.findall(r"\w{5,}", s.lower())
+                            if w not in _stop and w[:5] not in _stop_p}
+        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+        # EIN gemeinsames Wort bleibt zulaessig (ein strenges Tor macht ihn
+        # vergesslich), aber dann muss es tragend sein: mindestens sieben
+        # Zeichen im Originaltext. "siehs" reicht nicht, "paywall" schon.
+        if len(_ueberlappung) == 1:
+            _p = next(iter(_ueberlappung))
+            if not any(len(w) >= 7 and w.startswith(_p)
+                       for w in re.findall(r"\w+", user_text.lower())):
+                _log(f"[MEMORY] nur ein kurzes Wort gemeinsam ({_p!r}) -- "
+                     "zu duenn, NICHT eingespeist.")
+                _ueberlappung = set()
+        if not _ueberlappung:
+            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, aber kein gemeinsames "
+                 f"Wort mit dem Gesagten ({len(gedaechtnis_kontext)} Zeichen) "
+                 f"-- NICHT eingespeist.")
+            gedaechtnis_kontext = None
+        else:
+            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, gemeinsam: "
+                 f"{sorted(_ueberlappung)} -- wird eingespeist.")
+    else:
+        _log(f"[MEMORY] {memory_s:.3f}s -> kein Treffer / keine Stichwoerter.")
+
+    # WICHTIG (gemessen 2026-09-07, Fehler beim ersten Testlauf): Qwens Jinja-
+    # Chat-Template erzwingt GENAU EINE System-Nachricht ganz am Anfang
+    # ("System message must be at the beginning") -- eine zweite system-role-
+    # Nachricht (z.B. fuer den Gedaechtniskontext) laesst llama-server mit
+    # HTTP 400 abbrechen. Fix: Gedaechtniskontext wird in DIESELBE System-
+    # Nachricht wie SYSTEM_PROMPT gehaengt, nicht als eigene Nachricht.
+    # Betrifft die Frage IHN? Entscheidet, ob die Bloecke ueber ihn selbst in
+    # den Kontext kommen -- Begruendung weiter unten bei WAS DAVON ER ZU SEHEN
+    # BEKOMMT. Der Turn passiert unabhaengig davon.
+    # ── DIE EINE ERLAUBTE HANDLUNG (2026-09-08) ───────────────────────────
+    # Gabriel: "ich moechte vlc player einbauen so das er im gespraechsmodus
+    # ... musik ... und filme und fernsehsender abspielen kann", "und das ad
+    # free", "auch videos alles".
+    #
+===SYSTEM-CONTEXT-BLOCK===
+        _ged = denker.juengste_gedanken(n=1, max_alter_s=86400.0)
+        if _ged:
+            system_content += _ged
+            _log(f"[DENKER] {_ged.count('(')} eigene Gedanken im Kontext")
+
+        # ⚠️ DER ANSTOSS STEHT HIER NICHT MEHR (2026-09-10, noch am selben
+        # Tag zurueckgenommen). Ich hatte ihn heute Nachmittag in den
+        # Gespraechszug gehaengt -- er gehoert aber ins Denken, wenn niemand
+        # da ist, und genau dort steht er auch beim alten Frank (denker.py).
+        #
+        # Was er im Gespraech anrichtete, gemessen 15:16: die Anstoesse reden
+        # ueber Gabriel in der DRITTEN Person ("damit Gabriel nicht erst
+        # danach fragen muss"), waehrend Gabriel gerade DIREKT spricht und als
+        # "du" angesprochen wird. Fuer ein 4B sind das zwei Personen. Ergebnis:
+        # "...damit Gabriel, du und ich alle auf einem gleichen Tisch stehen."
+        #
+        # Ein Anstoss ist eine Frage an sich selbst. Wer gefragt wird, hat
+        # keine.
+    except Exception as e:
+        _log(f"[BUEHNE] Fehler ({type(e).__name__}) -- ohne Buehne weiter")
+    try:
+        jetzt_bild = lagebild.lagebild()
+    except Exception as e:
+        _log(f"[LAGE] FEHLER (nicht fatal): {type(e).__name__}: {e}")
+        jetzt_bild = ""
+
+    # SELBSTAUSKUNFT, bedarfsweise (2026-09-08). Gabriel: er soll "aus seinem
+    # state heraus + gedaechtnis und perception heraus kognitiv sein ... nicht
+    # nur aus einem statischen prompt". Deshalb steht seine Identitaet NICHT
+    # mehr als Behauptung im Systemprompt, sondern kommt als BELEGE -- aber nur
+    # wenn die Frage ihn selbst betrifft. Dauerhaft eingespeist wuerde dieser
+    # Block mit dem konkurrieren, was Gabriel gerade gesagt hat; genau daran
+    # ist der aufgeblaehte Prompt vorher gescheitert.
+    # IMMER, nicht nur bei Selbstfragen. Gabriel, 2026-09-08: "das soll bei
+    # allem so sein im gespraechsmodus -- im gespraechsmodus soll er maximal
+    # kognitiv sein". Die vorherige Fassung schaltete diesen Block nur bei
+    # erkannten Selbstfragen zu, um den Kontext klein zu halten. Das war eine
+    # Optimierung auf Kosten des Ziels: er soll nicht nur DANN wissen, wer er
+    # ist, wenn man ihn danach fragt.
+    #
+    # Der Preis ist echt und gemessen: Prompt-Verarbeitung laeuft mit ~55
+    # Token/s. Deshalb steht das Unveraenderliche (Identitaet, Faehigkeiten)
+    # VOR dem Veraenderlichen (Zaehlerstaende, Uhrzeit, Gedaechtnistreffer) --
+    # llama.cpp behaelt einen gleichbleibenden Prompt-Anfang im
+    # Zwischenspeicher, sodass pro Turn nur der bewegliche Rest neu gerechnet
+    # werden muss.
+    try:
+        sa = selbstauskunft.selbstauskunft() if _wesensfrage else ""
+        if sa:
+            # ⭐⭐ KEINE VERSALIEN-ETIKETTEN, KEINE KLAMMER-METATEXTE, KEINE
+            # VERNEINUNGEN -- gilt fuer ALLE Bloecke hier unten (2026-09-10,
+            # dritte Korrektur desselben Fehlers an einem Tag).
+            #
+            # GEMESSEN, seine Antwort auf eine harmlose Frage:
+            #     "WAS FRUEHER WAR (Notizen aus zurueckliegender Arbeit --
+            #      Hintergrund, KEINE Aufgabenliste fuer dieses Gespraech) ...
+            #      WORAN DU DICH ERINNERST (aus deinem Gedaechtnis, passend zu"
+            # -- woertlich die Ueberschriften, mitten im Satz abgeschnitten.
+            #
+            # DREI URSACHEN, alle drei hausgemacht:
+            #  1. VERSALIEN sehen aus wie eine Ueberschrift, und Ueberschriften
+            #     werden zitiert. Ein Etikett macht aus Material ein Datenfeld.
+            #  2. Die KLAMMER ist Text ueber den Text. Wer erklaert, was ein
+            #     Block ist, legt diese Erklaerung in denselben Kontext -- und
+            #     sie ist genauso vorlesbar wie der Block selbst.
+            #  3. Die VERNEINUNG ("lies es nicht vor", "KEINE Aufgabenliste",
+            #     "gib es nicht wieder") wirkt bei einem 4B nicht, sondern
+            #     gegenteilig: wer "nicht anbieten" schreibt, hat "anbieten" in
+            #     den Kontext gelegt. Dieselbe Falle wie beim Sperrtext, der
+            #     die Wiederholung erzeugte, die er verhindern sollte.
+            #
+            # STATTDESSEN: ein kurzer Prosasatz in zweiter Person, der den
+            # Status IMPLIZIT setzt. "Aus frueherer Arbeit weisst du noch" ist
+            # Vergangenheit -- daraus wird von selbst keine Agenda, und die
+            # Woerter "anbieten/vorschlagen/erledigen" kommen gar nicht erst
+            # vor, koennen also auch nichts aktivieren.
+            _bloecke["selbstauskunft"] = (
+                "\n\nAn dir selbst nachgeschlagen:\n" + sa
+            )
+            _log(f"[SELBST] {len(sa)} Zeichen Belege ueber sich selbst eingespeist.")
+    except Exception as e:
+        _log(f"[SELBST] FEHLER (nicht fatal): {type(e).__name__}: {e}")
+
+    # SEIN EIGENES SELBSTMODELL (2026-09-08). Gabriel: er soll verstehen, was er
+    # ist, "ohne es zu promten aus reflexion". Der Text hier stammt nicht von
+    # mir, sondern von ihm: selbstreflexion.py legt ihm die Quellen vor (die
+    # systemd-Unit seiner VM, das Architekturdokument, der Docstring seiner
+    # Kognitionsschleife, die gemessenen Zahlen) und er formuliert daraus eine
+    # eigene Auskunft, die gespeichert und beim naechsten Lauf ueberarbeitet
+    # wird.
+    #
+    # GEKUERZT 2026-09-08 auf 800 Zeichen: mit 3575 Zeichen war er der laengste
+    # Block im Prompt und dominierte die Antwort -- er leierte seine
+    # Faehigkeitsliste herunter, und der erste Ton kam erst nach 14,7 s (bei
+    # 55 Token/s Prompt-Verarbeitung). Seit ein gesprochener Beitrag einen
+    # echten Turn oeffnet, ist die Erdung ein EREIGNIS ("was eben in dir
+    # passiert ist") und braucht keine lange Selbstbeschreibung mehr.
+    #
+    # Er kommt ZUSAETZLICH zu den Messwerten, nicht statt ihrer, und der
+    # Hinweis unten ist keine Hoeflichkeit: sein Selbstmodell ist SEINE
+    # Auffassung und kann veralten oder daneben liegen -- beim ersten Lauf hat
+    # er sich innerhalb einer Seite selbst widersprochen. Die Messung ist die
+    # Wahrheit, das Selbstmodell ist seine Lesart davon.
+    try:
+        _, selbstmodell = selbstreflexion.letztes_selbstmodell() if _wesensfrage else (None, "")
+        if selbstmodell:
+===SESSION-INIT===
+        unterbrochen = _spielen_mit_ohr(proc)
+        if unterbrochen:
+            _UNTERBROCHEN[0] = True
+            _log("[PLAY] unterbrochen -- er hat zu reden angefangen")
+            return True, 0
+    if proc.returncode != 0:
+        _log(f"[PLAY] FEHLER: pw-play exit={proc.returncode} stderr={err.decode(errors='replace')[:300]}")
+        return False, proc.returncode
+    return True, proc.returncode
+
+
+def _konfig_lesen(schluessel, default=None):
+    """Liest EINEN star_konfig-Wert aus der kanonischen unified.db. Fail-closed:
+    jeder Fehler (DB gesperrt, Tabelle fehlt) gibt den uebergebenen default
+    zurueck, wirft nie."""
+    try:
+        with contextlib.closing(sqlite3.connect(memory_abruf.DB_PATH, timeout=5.0)) as c:
+            row = c.execute(
+                "SELECT wert FROM star_konfig WHERE schluessel = ?", (schluessel,)
+            ).fetchone()
+            return row[0] if row is not None else default
+    except Exception as e:
+        _log(f"[KONFIG] FEHLER beim Lesen von {schluessel}: {type(e).__name__}: {e}")
+        return default
+
+
+def _konfig_schreiben(schluessel, wert, quelle):
+    """Schreibt EINEN star_konfig-Wert in dieselbe kanonische unified.db (kein
+    zweiter Zustandspfad). Nie ein Fehler nach aussen -- nur geloggt."""
+    try:
+        with contextlib.closing(sqlite3.connect(memory_abruf.DB_PATH, timeout=8.0)) as c:
+            c.execute("PRAGMA busy_timeout=8000")
+            c.execute(
+                "INSERT INTO star_konfig (schluessel, wert, typ, quelle, geaendert) "
+                "VALUES (?, ?, 'str', ?, ?) "
+                "ON CONFLICT(schluessel) DO UPDATE SET wert=excluded.wert, "
+                "quelle=excluded.quelle, geaendert=excluded.geaendert",
+                (schluessel, str(wert), quelle, time.time()),
+            )
+            c.commit()
+    except Exception as e:
+        _log(f"[KONFIG] FEHLER beim Schreiben von {schluessel}={wert!r}: {type(e).__name__}: {e}")
+
+
+# GEAENDERT 2026-09-07 (Sprachmodus 3.4, HANDOVER_SPRACHMODUS.md Punkt 2d):
+# "EIN echter Fakt aus Andreas' Verlauf (live per memory_abruf.py geholt,
+# NICHT hartkodiert)". automatischer_abruf() ist stichwortgetrieben und
+# braucht echten Nutzertext, um Stichwoerter zu ziehen -- es gibt bewusst
+# KEINE zweite, eigene Abfrage gegen durable_memory o.ae. daneben (Hausregel:
+# eine Datenbank, ein Abrufweg). Stattdessen wird derselbe kanonische Abruf
+# mit mehreren echten, konkreten Themenwoertern aus Andreas' tatsaechlichem
+# Leben "angefuettert" (SeiMensch/HerzRad/LeihMich/Gastbetrieb -- siehe
+# ~/.claude/CLAUDE.md), damit mindestens ein Treffer in FTS/durable_memory
+# wahrscheinlich ist, ohne den Abrufmechanismus selbst zu verdoppeln.
+INTRO_ABRUF_SEED = "seimensch herzrad leihmich workshop gastbetrieb projekt"
+
+
+def _eine_erinnerung_fuer_begruessung(session_id):
+    try:
+        treffer = memory_abruf.automatischer_abruf(f"{session_id}-intro", INTRO_ABRUF_SEED)
+        if treffer:
+            _log("[INTRO] echten Gedaechtnistreffer gefunden fuer den Wissensbeweis.")
+            return treffer
+        _log("[INTRO] kein Gedaechtnistreffer fuer die Saat-Stichwoerter -- Begruessung "
+             "laeuft ohne Beweisfakt (ehrlich benannt, nicht erfunden).")
+        return None
+    except Exception as e:
+        _log(f"[INTRO] FEHLER beim Gedaechtnisabruf fuer die Begruessung: "
+             f"{type(e).__name__}: {e}")
+        return None
+
+
+INTRO_SYSTEM_PROMPT = (
+    "Du bist FranKenstein, " + NUTZER + "s lokale Sprachstimme auf seinem eigenen Rechner. "
+    "Das hier ist die ALLERERSTE Aktivierung des Sprachmodus ueberhaupt. Stell dich "
+    "jetzt einmalig vor, gesprochen, auf Deutsch, in 5 bis 8 kurzen Saetzen, "
+    "warmherzig aber knapp -- keine Aufzaehlungszeichen, das wird vorgelesen. Sag: "
+    "wer hier spricht; dass alles rein lokal auf seinem eigenen Rechner laeuft, "
+    "nichts geht ins Internet; dass eine Antwort ungefaehr fuenf bis neun Sekunden "
+    "dauert, bei laengeren Antworten auch mal deutlich laenger; dass man ihn ueber "
+    "den Schalter im Dashboard wieder ausschaltet; dass NICHT dauerhaft im "
+    "Hintergrund mitgehoert oder etwas dauerhaft aufgezeichnet wird -- nur waehrend "
+    "eines Redebeitrags wird kurz Audio verarbeitet und danach wieder ueberschrieben. "
+    "Baue die unten angegebene, wirklich live aus dem Gedaechtnis abgerufene "
+    "Tatsache natuerlich in einen Satz ein, als Beweis dass du ihn kennst -- nicht "
+    "wortwoertlich vorlesen, sondern frei in eigenen Worten einbauen. Wenn keine "
+    "Tatsache angegeben ist, sag ehrlich, dass das Gedaechtnis gerade nichts Passendes "
+    "hergegeben hat, statt dir etwas auszudenken."
+)
+
+
+_NACHFRAGEN = [
+    "Das hab ich nicht verstanden.",
+    "Da ist mir zu viel verlorengegangen, sag das nochmal.",
+    "Ich hab nur Fetzen mitbekommen.",
+    "Nochmal bitte, das kam nicht sauber an.",
+===IDENTITY-VARS===
+252:        wert = self._WERTE.get(name)
+2988:                "SELECT wert FROM star_konfig WHERE schluessel = ?", (schluessel,)
+3005:                "ON CONFLICT(schluessel) DO UPDATE SET wert=excluded.wert, "
+4361:                    _u = umschlag.bauen(session_id=session_id,
+4362:                                        nutzertext=user_text, log=_log)
+4602:    session_id = f"{NUTZER.lower()}-voice-{int(time.time())}"
+4630:    _ENTITAET[0] = entitaet.Entitaet(session_id, log=_log)
+4646:    _log(f"[MAIN] bereit. session_id={session_id}. STOP-Datei: {STOP_FILE}")

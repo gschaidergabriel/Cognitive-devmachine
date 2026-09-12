@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-runtime-release-check-20260912T2026Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 30,
+  "command": "set -u; echo RELEASE; cat /workspace/omega_runtime/CURRENT_RELEASE.json 2>/dev/null || true; echo PROCESSES; pgrep -af 'outer_bridge_worker|bridge_relay|omega_daemon' || true; echo OUTER_STATUS; cat /workspace/omega_runtime/state/OUTER_WORKER_STATUS.json 2>/dev/null || echo absent; echo SPOOL; find /workspace/omega_runtime/state -maxdepth 2 -type d -name '*outer*' -o -name '*spool*' 2>/dev/null | sort"
+}

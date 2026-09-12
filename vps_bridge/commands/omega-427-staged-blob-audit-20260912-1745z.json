@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-427-staged-blob-audit-20260912-1745z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/carrier_repo",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\ngit fetch origin omega-vps-deploy\ngit checkout omega-vps-deploy\ngit reset --hard origin/omega-vps-deploy\nBASE=omega_deploy/427cca1300ed597687d720aa94cc1a54cc5abdb5\nprintf 'CARRIER_HEAD=%s\\n' \"$(git rev-parse HEAD)\"\nfor f in config/assembly.json omega/__init__.py omega/assembly.py omega/relay_entrypoint.py omega/spool_relay_runtime.py omega/spool_bridge_relay_parallel.py omega/supervisor_outer.py omega/receipt_reconciler.py omega/spool_receipt_reconciler.py; do\n  p=\"$BASE/$f\"\n  if [ -f \"$p\" ]; then printf '%s %s\\n' \"$(git hash-object \"$p\")\" \"$f\"; else printf 'MISSING %s\\n' \"$f\"; fi\ndone\n"
+}

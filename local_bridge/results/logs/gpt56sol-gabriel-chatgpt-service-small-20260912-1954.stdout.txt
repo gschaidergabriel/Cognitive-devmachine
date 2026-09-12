@@ -1,0 +1,43 @@
+===SERVICE===
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+===SHOW===
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=PYTHONUNBUFFERED=1
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+===BROWSE===
+[browse] Starting server...
+[browse] Executable not found in $PATH: "bun"
+===CLIENT_FILES===
+-rw-rw-r-- 1 ai-core-node ai-core-node  3149 Sep 12 17:42 /home/ai-core-node/.claude/star/chatgpt_fallback_ergebnisse.jsonl
+-rw------- 1 ai-core-node ai-core-node  8382 Aug 27 08:47 /home/ai-core-node/.claude/star/chatgpt_session_cookies_backup.json
+-rw-rw-r-- 1 ai-core-node ai-core-node  3408 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_exact_backend.py
+-rw-rw-r-- 1 ai-core-node ai-core-node  9776 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_harness_adapter.py
+-rw-rw-r-- 1 ai-core-node ai-core-node 18758 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+-rwxrw-r-- 1 ai-core-node ai-core-node  2824 Sep 12 10:57 /home/ai-core-node/.claude/star/frank_chatgpt_remote_exec.py
+-rwxrw-r-- 1 ai-core-node ai-core-node  2564 Sep 12 10:57 /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py

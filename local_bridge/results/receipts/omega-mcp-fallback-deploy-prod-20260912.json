@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-mcp-fallback-deploy-prod-20260912",
+  "command_sha256": "cc6fec3d214773f5310d6f3d9b7f2df90f8bd9ba2de109d90069b6f0a8c09314",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:52:21.779752+00:00",
+  "finished_at": "2026-09-12T12:53:34.134984+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "286287e6cd6f143d6ab60bee09dd399c4d42c6d08a4e6afb4632c445d2cfcd36",
+  "stderr_sha256": "e1136ed8ff087743ca282575a43cb9de53febc31520638c97c19d9986b48236d",
+  "stdout_tail": "....................                                                     [100%]\n20 passed in 0.16s\n{\"mcp_service\":\"active\",\"local_adapter\":\"active\",\"mcp_health\":{\"ok\":true,\"service\":\"omega-frankenstein-bridge\",\"version\":\"1.1.0-fallback\",\"auth_required\":true,\"effects_enabled\":true,\"github_control_plane_configured\":true,\"local_fallback_enabled\":true,\"local_socket\":\"/run/user/1000/omega-local-effect.sock\"},\"local_identity\":{\"machine_id\":\"ai-core-node\",\"owner\":\"gabriel\"}}\n{\"transport_status\":{\"direct\":true,\"local_live\":true,\"github_configured\":true},\"status\":{\"state\":\"PASS\",\"transport\":\"direct_host_broker\",\"machine_id\":\"ai-core-node\",\"owner\":\"gabriel\"},\"local_exec\":{\"state\":\"PASS\",\"transport\":\"local_unix_engine\",\"stdout\":\"OMEGA_FALLBACK_PROD_LOCAL_OK\",\"command_id\":\"omega-effect-chatgpt-mcp-local-3-49d304570645b134\"},\"delete_denied\":\"DELETE_REMOVAL_DENIED\"}\nDEPLOYED_MAIN=1972551d5c83a3653a43ef877bd93387cd099627\nMainPID=3168989\nExecMainStartTimestamp=Sat 2026-09-12 19:53:33 +07\nActiveState=active\nSubState=running\nMainPID=3168996\nExecMainStartTimestamp=Sat 2026-09-12 19:53:33 +07\nActiveState=active\nSubState=running\n",
+  "stderr_tail": "Created symlink /home/ai-core-node/.config/systemd/user/default.target.wants/omega-local-effect-adapter.service \u2192 /home/ai-core-node/.config/systemd/user/omega-local-effect-adapter.service.\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

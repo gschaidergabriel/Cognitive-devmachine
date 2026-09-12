@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-gabriel-chatgpt-service-small-20260912-1954",
+  "command_sha256": "3c500678414052d14c7defd47c92001a5ccb2792400611a4aafdcaf773a29ed8",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:52:21.297978+00:00",
+  "finished_at": "2026-09-12T12:52:21.360874+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "44479e2b3ed01b5dc09656941a37f9434da4c25e3b500d11a65906532777b2d3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===SERVICE===\n# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service\n[Unit]\nDescription=FranKenstein Persistent Headless ChatGPT Client\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py\nRestart=always\nRestartSec=2\nEnvironment=PYTHONUNBUFFERED=1\nEnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\n\n# This process owns no browser and starts no Chrome. It is the typed,\n# persistent session/context endpoint behind the already-existing ChatGPT\n# bridge. The loader hard-binds canonical runtime authority to the live\n# ~/.claude/star/stern.py used by production; effects remain behind existing\n# Frankenstein authority/effect fences.\n\n[Install]\nWantedBy=default.target\n===SHOW===\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nEnvironment=PYTHONUNBUFFERED=1\nActiveState=active\nSubState=running\nFragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service\n===BROWSE===\n[browse] Starting server...\n[browse] Executable not found in $PATH: \"bun\"\n===CLIENT_FILES===\n-rw-rw-r-- 1 ai-core-node ai-core-node  3149 Sep 12 17:42 /home/ai-core-node/.claude/star/chatgpt_fallback_ergebnisse.jsonl\n-rw------- 1 ai-core-node ai-core-node  8382 Aug 27 08:47 /home/ai-core-node/.claude/star/chatgpt_session_cookies_backup.json\n-rw-rw-r-- 1 ai-core-node ai-core-node  3408 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_exact_backend.py\n-rw-rw-r-- 1 ai-core-node ai-core-node  9776 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_harness_adapter.py\n-rw-rw-r-- 1 ai-core-node ai-core-node 18758 Sep 12 10:57 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py\n-rwxrw-r-- 1 ai-core-node ai-core-node  2824 Sep 12 10:57 /home/ai-core-node/.claude/star/frank_chatgpt_remote_exec.py\n-rwxrw-r-- 1 ai-core-node ai-core-node  2564 Sep 12 10:57 /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

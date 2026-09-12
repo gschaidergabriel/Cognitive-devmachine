@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-live-cdp-gpu-probe-20260912-0923",
+  "command_sha256": "fa8feacd0d4fca16b626cfc05f150596eb41bca070ed1bc7f402e74f0269ec7e",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T01:03:43.740453+00:00",
+  "finished_at": "2026-09-12T01:03:43.948847+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1f708440586027fa2acf904afc991d71961d4f0633141bcfeaa95c7cc0ed391c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "CHROME_PROCESSES\n1633051 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate \n2237831 bash -lc set -euo pipefail\necho CHROME_PROCESSES\npython3 - <<'PY'\nfrom pathlib import Path\nfor p in Path('/proc').glob('[0-9]*/cmdline'):\n try:\n  s=p.read_bytes().replace(b'\\0',b' ').decode(errors='replace')\n except: continue\n if 'chrome' in s.lower() and ('buehne' in s.lower() or 'remote-debugging' in s.lower() or '--app=' in s.lower()): print(p.parent.name,s[:1800])\nPY\necho CDP_PORTS\nfor p in 9222 9223 9224 9225 9226 9230; do if curl -fsS --max-time 1 http://127.0.0.1:$p/json/version >/tmp/cdp.$p 2>/dev/null; then echo PORT=$p; cat /tmp/cdp.$p; fi; rm -f /tmp/cdp.$p; done\necho LIVE_HASHES\nsha256sum buehne.html buehne_daemon.py filmlook.js\nsystemctl --user is-active frankenstein-buehne.service \nCDP_PORTS\nLIVE_HASHES\n18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html\n5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py\n179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js\nactive\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

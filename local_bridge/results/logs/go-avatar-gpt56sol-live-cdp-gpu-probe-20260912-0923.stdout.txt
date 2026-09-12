@@ -1,0 +1,23 @@
+CHROME_PROCESSES
+1633051 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate 
+2237831 bash -lc set -euo pipefail
+echo CHROME_PROCESSES
+python3 - <<'PY'
+from pathlib import Path
+for p in Path('/proc').glob('[0-9]*/cmdline'):
+ try:
+  s=p.read_bytes().replace(b'\0',b' ').decode(errors='replace')
+ except: continue
+ if 'chrome' in s.lower() and ('buehne' in s.lower() or 'remote-debugging' in s.lower() or '--app=' in s.lower()): print(p.parent.name,s[:1800])
+PY
+echo CDP_PORTS
+for p in 9222 9223 9224 9225 9226 9230; do if curl -fsS --max-time 1 http://127.0.0.1:$p/json/version >/tmp/cdp.$p 2>/dev/null; then echo PORT=$p; cat /tmp/cdp.$p; fi; rm -f /tmp/cdp.$p; done
+echo LIVE_HASHES
+sha256sum buehne.html buehne_daemon.py filmlook.js
+systemctl --user is-active frankenstein-buehne.service 
+CDP_PORTS
+LIVE_HASHES
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+active

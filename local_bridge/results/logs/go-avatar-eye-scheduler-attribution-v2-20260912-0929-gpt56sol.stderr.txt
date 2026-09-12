@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py", line 260, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py", line 234, in main
+    run_condition(url, args.cdp_port_base + i, mode, args.expression_register, args.expression)
+  File "/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py", line 146, in run_condition
+    row["trigger"] = cdp.eval(
+                     ^^^^^^^^^
+  File "/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime_v2.py", line 68, in eval
+    raise RuntimeError(str(result))
+RuntimeError: {'result': {'type': 'object', 'subtype': 'error', 'className': 'SyntaxError', 'description': "SyntaxError: Unexpected token '}'", 'objectId': '-6257364274862703284.1.1'}, 'exceptionDetails': {'exceptionId': 1, 'text': 'Uncaught', 'lineNumber': 0, 'columnNumber': 117, 'scriptId': '10', 'exception': {'type': 'object', 'subtype': 'error', 'className': 'SyntaxError', 'description': "SyntaxError: Unexpected token '}'", 'objectId': '-6257364274862703284.1.2'}}}

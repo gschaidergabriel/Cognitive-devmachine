@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-eye-scheduler-attribution-v2-20260912-0929-gpt56sol",
+  "command_sha256": "102be7287a05ca8bb83a785f737d6d88b14f6b1fd1c2f38e4ea46cd9097ad9f2",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:30:42.500851+00:00",
+  "finished_at": "2026-09-12T02:31:11.245335+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "4bfec1d39a27ea086bdd4f35f9afbf05057a937cfb5f172e5a29f8dbc56ba678",
+  "stderr_sha256": "ff3c37ec8e5a544535af6b0d7d3c156362a3a06b42c3a3ddb042ccc795eb3899",
+  "stdout_tail": "BRANCH_HEAD=d4058b1d0ed91704c7f7e87ec8215faa4ea0ae14\nVALIDATOR_RC=1\nLIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nSCOPE=REAL_BROWSER_EXACT_SHADOW_SCHEDULER_ATTRIBUTION_NO_LIVE_WRITE\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py\", line 260, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py\", line 234, in main\n    run_condition(url, args.cdp_port_base + i, mode, args.expression_register, args.expression)\n  File \"/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/diagnose_shadow_scheduler_attribution_v2.py\", line 146, in run_condition\n    row[\"trigger\"] = cdp.eval(\n                     ^^^^^^^^^\n  File \"/tmp/go-eye-scheduler-v2.rMIsKR/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime_v2.py\", line 68, in eval\n    raise RuntimeError(str(result))\nRuntimeError: {'result': {'type': 'object', 'subtype': 'error', 'className': 'SyntaxError', 'description': \"SyntaxError: Unexpected token '}'\", 'objectId': '-6257364274862703284.1.1'}, 'exceptionDetails': {'exceptionId': 1, 'text': 'Uncaught', 'lineNumber': 0, 'columnNumber': 117, 'scriptId': '10', 'exception': {'type': 'object', 'subtype': 'error', 'className': 'SyntaxError', 'description': \"SyntaxError: Unexpected token '}'\", 'objectId': '-6257364274862703284.1.2'}}}\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,218 @@
+===STERN HELP===
+usage: stern.py [-h]
+                {hook,merken,schliessen,suche,abruf,laden,paket-anlegen,paket-abschliessen,handoff,reconcile,thema-status,herzschlag,waechter-herzschlag,waechter-blockiert,waechter-fertig,waechter-pruefen,waechter-prozess-pruefen,arbeitspaket-belege-nachpruefen,quota-monitor-lauf,graph-bauen,pruefen,messen,digest,selbsttest,kalibrieren,architekt-ein,architekt-aus,architekt-dialog-start,architekt-dialog-ende,architekt-tiefensitzung-pruefen,willkommen-banner,ton-ein,ton-aus,nuetzlich,nutzlos,befoerderung-pruefen,kognition-richten,such-semantisch,embeddings-nachziehen,embedding-regressionstest,sicht-vorbereiten,sicht-buchen,sicht-nuetzlich,sicht-nutzlos,sebukku-anbieten,sebukku-status,sebukku-vollziehen,wiederbeleben,ausweichsatz,lehre,fehler,gelungen,verdichten,verdichtung-an,verdichtung-aus,kognition-an,kognition-aus,embedding-an,embedding-aus,gw-lernen-an,gw-lernen-aus,telegram-an,telegram-aus,telegram-status,telegram-token-setzen,telegram-chat-erlauben,telegram-chat-sperren,telegram-alarm-ziel-setzen,telegram-senden,telegram-listener,openai-schluessel-cachen,gespraech-an,gespraech-aus,gespraech-status,gespraech-mic-setzen,gespraech-mic-status,gespraech-kamera-setzen,gespraech-kamera-status,stimme-anlegen,stimmen-liste,stimme-loeschen,stimmen-embeddings,gespraech-verifikation-setzen,gespraech-sprechzustand-setzen,gespraech-augenposition-setzen,cortex-an,cortex-aus,cortex-status,voice-loop-konfig,initiative-episode-loggen,gespraech-session-zuruecksetzen,gespraech-session-merken,gespraech-erinnerung-schreiben,gespraech-erinnerung-lesen,gespraech-status-lesen,gespraech-raum-beitreten,gespraech-raum-puls,gespraech-raum-verlassen,gespraech-zustandskontext,gespraech-kosten-event-loggen,gespraech-kosten-uebersicht,gespraech-berechtigung-setzen,squeeze,system-gesundheit,system-bestand,lastschutz,bug-einstufen,vault-erstellen,vault-hinzufuegen,vault-liste,vault-lesen,vault-entfernen,vault-aufraeumen,vault-melden,vault-pruefen,vault-passphrase-pruefen,vault-hinzufuegen-stdin,modell-aktiv-lesen,modell-aktiv-setzen,chatgpt-login-status,chatgpt-login-bestaetigen,chatgpt-senden,chatgpt-ernten,chatgpt-zusammenfassung-neueste,ascii-erzeugen,ascii-rahmen,ascii-bild,db-pfad-setzen,db-pfad-zeigen,db-selbstheilung-pruefen,schnappschuss-nehmen,deinstallation-anbieten,deinstallation-status,deinstallation-bestaetigen,deinstallieren,github-sync-einrichten,github-sync-aktivieren,github-sync-deaktivieren,github-sync-push,github-sync-status,pool-quote-status,chatgpt-idle-status,browser-status,browser-wahrnehmung,browser-login-pruefen,browser-autologin-versuch,browser-accounts,raum-puls-global,raum-nachricht-senden,raum-nachrichten}
+                ...
+
+stern -- die eine Datei (Phase 1 Konsolidierung)
+
+positional arguments:
+  {hook,merken,schliessen,suche,abruf,laden,paket-anlegen,paket-abschliessen,handoff,reconcile,thema-status,herzschlag,waechter-herzschlag,waechter-blockiert,waechter-fertig,waechter-pruefen,waechter-prozess-pruefen,arbeitspaket-belege-nachpruefen,quota-monitor-lauf,graph-bauen,pruefen,messen,digest,selbsttest,kalibrieren,architekt-ein,architekt-aus,architekt-dialog-start,architekt-dialog-ende,architekt-tiefensitzung-pruefen,willkommen-banner,ton-ein,ton-aus,nuetzlich,nutzlos,befoerderung-pruefen,kognition-richten,such-semantisch,embeddings-nachziehen,embedding-regressionstest,sicht-vorbereiten,sicht-buchen,sicht-nuetzlich,sicht-nutzlos,sebukku-anbieten,sebukku-status,sebukku-vollziehen,wiederbeleben,ausweichsatz,lehre,fehler,gelungen,verdichten,verdichtung-an,verdichtung-aus,kognition-an,kognition-aus,embedding-an,embedding-aus,gw-lernen-an,gw-lernen-aus,telegram-an,telegram-aus,telegram-status,telegram-token-setzen,telegram-chat-erlauben,telegram-chat-sperren,telegram-alarm-ziel-setzen,telegram-senden,telegram-listener,openai-schluessel-cachen,gespraech-an,gespraech-aus,gespraech-status,gespraech-mic-setzen,gespraech-mic-status,gespraech-kamera-setzen,gespraech-kamera-status,stimme-anlegen,stimmen-liste,stimme-loeschen,stimmen-embeddings,gespraech-verifikation-setzen,gespraech-sprechzustand-setzen,gespraech-augenposition-setzen,cortex-an,cortex-aus,cortex-status,voice-loop-konfig,initiative-episode-loggen,gespraech-session-zuruecksetzen,gespraech-session-merken,gespraech-erinnerung-schreiben,gespraech-erinnerung-lesen,gespraech-status-lesen,gespraech-raum-beitreten,gespraech-raum-puls,gespraech-raum-verlassen,gespraech-zustandskontext,gespraech-kosten-event-loggen,gespraech-kosten-uebersicht,gespraech-berechtigung-setzen,squeeze,system-gesundheit,system-bestand,lastschutz,bug-einstufen,vault-erstellen,vault-hinzufuegen,vault-liste,vault-lesen,vault-entfernen,vault-aufraeumen,vault-melden,vault-pruefen,vault-passphrase-pruefen,vault-hinzufuegen-stdin,modell-aktiv-lesen,modell-aktiv-setzen,chatgpt-login-status,chatgpt-login-bestaetigen,chatgpt-senden,chatgpt-ernten,chatgpt-zusammenfassung-neueste,ascii-erzeugen,ascii-rahmen,ascii-bild,db-pfad-setzen,db-pfad-zeigen,db-selbstheilung-pruefen,schnappschuss-nehmen,deinstallation-anbieten,deinstallation-status,deinstallation-bestaetigen,deinstallieren,github-sync-einrichten,github-sync-aktivieren,github-sync-deaktivieren,github-sync-push,github-sync-status,pool-quote-status,chatgpt-idle-status,browser-status,browser-wahrnehmung,browser-login-pruefen,browser-autologin-versuch,browser-accounts,raum-puls-global,raum-nachricht-senden,raum-nachrichten}
+    handoff             P5a/ZECP13: Uebergabekapsel fuer einen delegierten
+                        Subagenten
+    reconcile           P5b/ZECP14: Paket abschliessen -- Beleg ist Pflicht
+    thema-status        2026-08-27: Themen-Register lesen (billig, kein
+                        Modellaufruf) -- fuer Fragen ausserhalb des eigenen
+                        Sitzungs-Fokus
+    waechter-herzschlag
+                        PHASE 21: Werkzeugaufruf-Herzschlag, Zeitmarke in
+                        star_waechter aktualisieren (Status->aktiv)
+    waechter-blockiert  PHASE 21: bewusst 'wartet auf Nutzer' markieren --
+                        kein Stillstand-Alarm waehrenddessen
+    waechter-fertig     PHASE 21: Marke loeschen, Waechter schlaeft wieder
+    waechter-pruefen    PHASE 21: 15-Minuten-Stillstandspruefung, cron-
+                        aufgerufen (alle 5 Min)
+    waechter-prozess-pruefen
+                        PHASE 24: zweiter, unabhaengiger Waechter -- echte
+                        /proc-Prozesspruefung, cron-aufgerufen (alle 5 Min,
+                        eigener Eintrag)
+    arbeitspaket-belege-nachpruefen
+                        PHASE 24: taegliche Nachpruefung bereits
+                        'fertig'-gestandener entityos_arbeitspaket-Belege
+                        (Handbefehl/Testhilfe)
+    quota-monitor-lauf  PHASE 21 Nachtrag: Ratenlimit-Erschoepfung erkennen +
+                        nach Reset frische Sitzung tmux-gewrappt anstossen
+    graph-bauen         PHASE 4a: kante deterministisch aus
+                        artikel/vp_alias/effects ableiten
+    architekt-dialog-start
+                        PHASE 17v2: automatischen Architekt-Dialog
+                        einschalten, gibt ERSTE Nachricht fertig gerahmt
+                        zurueck (unveraendert ausgeben, nicht nacherzaehlen)
+    architekt-dialog-ende
+                        PHASE 17v2: automatischen Architekt-Dialog ausschalten
+    architekt-tiefensitzung-pruefen
+                        PHASE 17v2: 7-Tage-Tiefensitzungs-Trigger pruefen
+                        (Testhilfe: --jetzt epoch-override)
+    willkommen-banner   PHASE 17v2: SessionStart-Willkommensbanner bauen
+                        (Titel rotierend, Liste real aus
+                        bau_historie/entityos_arbeitspaket)
+    ton-ein             Statuszeile: Ton bei 'waiting' einschalten (Default
+                        aus)
+    ton-aus             Statuszeile: Ton bei 'waiting' ausschalten
+    nuetzlich           PHASE 3/ZECP04: mensch:nuetzlich-Quittung fuer eine
+                        retrieval_id
+    nutzlos             PHASE 3/ZECP04: mensch:nutzlos-Quittung fuer eine
+                        retrieval_id
+    befoerderung-pruefen
+                        PHASE 3/ZECP04: Handbefehl, prueft SHADOW->ACTIVE-
+                        Schwellen (befoerdert nie automatisch)
+    kognition-richten   PHASE 4b.2: manueller Relevanz-Richter-Aufruf
+                        (qwen2.5:0.5b ueber Ollama), schreibt NICHTS in die DB
+    such-semantisch     PHASE 4c.3: Kosinus-Suche ueber bge-m3-Embeddings,
+                        rein lesend, SHADOW -- liefert NIE an einen Hook aus
+    embeddings-nachziehen
+                        PHASE 4c.5: Backfill fuer durable_memory/artikel-
+                        Zeilen ohne Embedding, batched, resumierbar
+    embedding-regressionstest
+                        PHASE 4c: feste 20-Zeilen-Regression (siehe
+                        _REGRESSION_20), Handbefehl
+    sicht-vorbereiten   PHASE 14/§5bis.5 Teil A: Bild vorbereiten (mechanisch,
+                        kein LLM)
+    sicht-buchen        PHASE 14/§5bis.5 Teil C: Nutzlast als JSON auf stdin
+    sicht-nuetzlich     PHASE 14: menschliches Nutzungssignal fuer ein
+                        sicht_weltobjekt
+    sicht-nutzlos       PHASE 14: menschliches Nutzungssignal fuer ein
+                        sicht_weltobjekt
+    sebukku-anbieten    PHASE 13/§5.4.2 Punkt 5+6: Gate+Zaehler, hoechstens 1x
+                        je Sitzung
+    sebukku-status      PHASE 13: Marke+Zaehler einer Sitzung lesen, schreibt
+                        nichts
+    sebukku-vollziehen  PHASE 13/§5.5: Marke setzen, Effekt buchen, ASCII-Bild
+                        ausgeben
+    wiederbeleben       PHASE 13/§5.5.2 Punkt 4: SEBUKKU-Marke einer Sitzung
+                        loeschen
+    ausweichsatz        PHASE 13/§5.3: naechste Rueckfrage aus dem
+                        Ausweichvorrat, Round-Robin je Sitzung
+    lehre               PHASE 13/§5.6: Lehre eintragen -- OHNE --beleg wird
+                        NICHTS geschrieben
+    fehler              PHASE 13/§5.6: rohen Fehlschlag verbuchen (keine
+                        Beleg-Pflicht)
+    gelungen            PHASE 13/§5.6: gelungenen Zug verbuchen (keine Beleg-
+                        Pflicht)
+    verdichten          PHASE 15: ein Verdichtungszug -- ruft GLM/Mistral,
+                        schreibt mv_prestage_turns
+    verdichtung-an      PHASE 15/16d: verdichtung.aktiv=1
+    verdichtung-aus     PHASE 15/16d: verdichtung.aktiv=0
+    kognition-an        PHASE 28.2: kognition.aktiv=1 (4b.2 Relevanz-Richter)
+    kognition-aus       PHASE 28.2: kognition.aktiv=0 (Killschalter,
+                        ersatzlos)
+    embedding-an        PHASE 28.2: embedding.aktiv=1 (4c semantische Suche)
+    embedding-aus       PHASE 28.2: embedding.aktiv=0 (Killschalter,
+                        ersatzlos)
+    gw-lernen-an        PHASE 28.2: gw.lernen_aktiv=1 (P6b.8, rein
+                        beobachtend)
+    gw-lernen-aus       PHASE 28.2: gw.lernen_aktiv=0
+    telegram-an         PHASE 33: telegram.aktiv=1 (Bruecke einschalten)
+    telegram-aus        PHASE 33: telegram.aktiv=0 (Killschalter, ersatzlos)
+    telegram-status     PHASE 33: Konfig+Zaehler anzeigen, rein lesend
+    telegram-token-setzen
+                        PHASE 33: Bot-Token interaktiv setzen (Tresor + lokale
+                        0600-Datei). IMMER interaktiv per getpass -- kein
+                        --token/--passphrase-Flag (Bugfix 2026-08-27: Secrets
+                        duerfen nie in argv/ps/History landen).
+    telegram-chat-erlauben
+                        PHASE 33: chat_id zur Allowlist hinzufuegen
+    telegram-chat-sperren
+                        PHASE 33: chat_id aus der Allowlist entfernen
+    telegram-alarm-ziel-setzen
+                        PHASE 33: chat_id fuer Watchdog/Quota-Alarme setzen
+    telegram-senden     PHASE 33: Testnachricht manuell senden
+    telegram-listener   PHASE 33: Long-Polling-Dauerprozess -- ExecStart von
+                        frankenstein-telegram.service, NICHT von Hand in einer
+                        normalen Sitzung starten
+    openai-schluessel-cachen
+                        PHASE 42: bestehenden platform.openai.com-Tresor-
+                        Eintrag in lokale 0600-Datei spiegeln, fuer
+                        gespraechsmodus.py (TTY-loser Dauerprozess)
+    gespraech-an        PHASE 42: gespraech.aktiv=1 (Gespraechsmodus
+                        einschalten)
+    gespraech-aus       PHASE 42: gespraech.aktiv=0 (Killschalter, ersatzlos)
+    gespraech-status    PHASE 42: Konfig/Zustand anzeigen, rein lesend, kein
+                        Geheimniswert
+    gespraech-mic-setzen
+                        Dashboard-Mikrofonauswahl (2026-08-27): pactl-
+                        Quellenname als Audit-Datensatz persistieren (live
+                        wirksam ist pactl set-default-source, direkt in
+                        pay.py, VOR diesem Aufruf)
+    gespraech-mic-status
+                        Dashboard-Mikrofonauswahl: aktuell konfigurierten
+                        Geraetenamen anzeigen
+    gespraech-kamera-setzen
+                        Dashboard-Kameraauswahl (2026-08-27): Audit-Datensatz
+                        persistieren (Live-Wechsel noch nicht gebaut, s.
+===TURN HELP===
+usage: stern.py [-h]
+                {hook,merken,schliessen,suche,abruf,laden,paket-anlegen,paket-abschliessen,handoff,reconcile,thema-status,herzschlag,waechter-herzschlag,waechter-blockiert,waechter-fertig,waechter-pruefen,waechter-prozess-pruefen,arbeitspaket-belege-nachpruefen,quota-monitor-lauf,graph-bauen,pruefen,messen,digest,selbsttest,kalibrieren,architekt-ein,architekt-aus,architekt-dialog-start,architekt-dialog-ende,architekt-tiefensitzung-pruefen,willkommen-banner,ton-ein,ton-aus,nuetzlich,nutzlos,befoerderung-pruefen,kognition-richten,such-semantisch,embeddings-nachziehen,embedding-regressionstest,sicht-vorbereiten,sicht-buchen,sicht-nuetzlich,sicht-nutzlos,sebukku-anbieten,sebukku-status,sebukku-vollziehen,wiederbeleben,ausweichsatz,lehre,fehler,gelungen,verdichten,verdichtung-an,verdichtung-aus,kognition-an,kognition-aus,embedding-an,embedding-aus,gw-lernen-an,gw-lernen-aus,telegram-an,telegram-aus,telegram-status,telegram-token-setzen,telegram-chat-erlauben,telegram-chat-sperren,telegram-alarm-ziel-setzen,telegram-senden,telegram-listener,openai-schluessel-cachen,gespraech-an,gespraech-aus,gespraech-status,gespraech-mic-setzen,gespraech-mic-status,gespraech-kamera-setzen,gespraech-kamera-status,stimme-anlegen,stimmen-liste,stimme-loeschen,stimmen-embeddings,gespraech-verifikation-setzen,gespraech-sprechzustand-setzen,gespraech-augenposition-setzen,cortex-an,cortex-aus,cortex-status,voice-loop-konfig,initiative-episode-loggen,gespraech-session-zuruecksetzen,gespraech-session-merken,gespraech-erinnerung-schreiben,gespraech-erinnerung-lesen,gespraech-status-lesen,gespraech-raum-beitreten,gespraech-raum-puls,gespraech-raum-verlassen,gespraech-zustandskontext,gespraech-kosten-event-loggen,gespraech-kosten-uebersicht,gespraech-berechtigung-setzen,squeeze,system-gesundheit,system-bestand,lastschutz,bug-einstufen,vault-erstellen,vault-hinzufuegen,vault-liste,vault-lesen,vault-entfernen,vault-aufraeumen,vault-melden,vault-pruefen,vault-passphrase-pruefen,vault-hinzufuegen-stdin,modell-aktiv-lesen,modell-aktiv-setzen,chatgpt-login-status,chatgpt-login-bestaetigen,chatgpt-senden,chatgpt-ernten,chatgpt-zusammenfassung-neueste,ascii-erzeugen,ascii-rahmen,ascii-bild,db-pfad-setzen,db-pfad-zeigen,db-selbstheilung-pruefen,schnappschuss-nehmen,deinstallation-anbieten,deinstallation-status,deinstallation-bestaetigen,deinstallieren,github-sync-einrichten,github-sync-aktivieren,github-sync-deaktivieren,github-sync-push,github-sync-status,pool-quote-status,chatgpt-idle-status,browser-status,browser-wahrnehmung,browser-login-pruefen,browser-autologin-versuch,browser-accounts,raum-puls-global,raum-nachricht-senden,raum-nachrichten}
+                ...
+stern.py: error: argument cmd: invalid choice: 'f2wp1207-turn-loop-turn' (choose from 'hook', 'merken', 'schliessen', 'suche', 'abruf', 'laden', 'paket-anlegen', 'paket-abschliessen', 'handoff', 'reconcile', 'thema-status', 'herzschlag', 'waechter-herzschlag', 'waechter-blockiert', 'waechter-fertig', 'waechter-pruefen', 'waechter-prozess-pruefen', 'arbeitspaket-belege-nachpruefen', 'quota-monitor-lauf', 'graph-bauen', 'pruefen', 'messen', 'digest', 'selbsttest', 'kalibrieren', 'architekt-ein', 'architekt-aus', 'architekt-dialog-start', 'architekt-dialog-ende', 'architekt-tiefensitzung-pruefen', 'willkommen-banner', 'ton-ein', 'ton-aus', 'nuetzlich', 'nutzlos', 'befoerderung-pruefen', 'kognition-richten', 'such-semantisch', 'embeddings-nachziehen', 'embedding-regressionstest', 'sicht-vorbereiten', 'sicht-buchen', 'sicht-nuetzlich', 'sicht-nutzlos', 'sebukku-anbieten', 'sebukku-status', 'sebukku-vollziehen', 'wiederbeleben', 'ausweichsatz', 'lehre', 'fehler', 'gelungen', 'verdichten', 'verdichtung-an', 'verdichtung-aus', 'kognition-an', 'kognition-aus', 'embedding-an', 'embedding-aus', 'gw-lernen-an', 'gw-lernen-aus', 'telegram-an', 'telegram-aus', 'telegram-status', 'telegram-token-setzen', 'telegram-chat-erlauben', 'telegram-chat-sperren', 'telegram-alarm-ziel-setzen', 'telegram-senden', 'telegram-listener', 'openai-schluessel-cachen', 'gespraech-an', 'gespraech-aus', 'gespraech-status', 'gespraech-mic-setzen', 'gespraech-mic-status', 'gespraech-kamera-setzen', 'gespraech-kamera-status', 'stimme-anlegen', 'stimmen-liste', 'stimme-loeschen', 'stimmen-embeddings', 'gespraech-verifikation-setzen', 'gespraech-sprechzustand-setzen', 'gespraech-augenposition-setzen', 'cortex-an', 'cortex-aus', 'cortex-status', 'voice-loop-konfig', 'initiative-episode-loggen', 'gespraech-session-zuruecksetzen', 'gespraech-session-merken', 'gespraech-erinnerung-schreiben', 'gespraech-erinnerung-lesen', 'gespraech-status-lesen', 'gespraech-raum-beitreten', 'gespraech-raum-puls', 'gespraech-raum-verlassen', 'gespraech-zustandskontext', 'gespraech-kosten-event-loggen', 'gespraech-kosten-uebersicht', 'gespraech-berechtigung-setzen', 'squeeze', 'system-gesundheit', 'system-bestand', 'lastschutz', 'bug-einstufen', 'vault-erstellen', 'vault-hinzufuegen', 'vault-liste', 'vault-lesen', 'vault-entfernen', 'vault-aufraeumen', 'vault-melden', 'vault-pruefen', 'vault-passphrase-pruefen', 'vault-hinzufuegen-stdin', 'modell-aktiv-lesen', 'modell-aktiv-setzen', 'chatgpt-login-status', 'chatgpt-login-bestaetigen', 'chatgpt-senden', 'chatgpt-ernten', 'chatgpt-zusammenfassung-neueste', 'ascii-erzeugen', 'ascii-rahmen', 'ascii-bild', 'db-pfad-setzen', 'db-pfad-zeigen', 'db-selbstheilung-pruefen', 'schnappschuss-nehmen', 'deinstallation-anbieten', 'deinstallation-status', 'deinstallation-bestaetigen', 'deinstallieren', 'github-sync-einrichten', 'github-sync-aktivieren', 'github-sync-deaktivieren', 'github-sync-push', 'github-sync-status', 'pool-quote-status', 'chatgpt-idle-status', 'browser-status', 'browser-wahrnehmung', 'browser-login-pruefen', 'browser-autologin-versuch', 'browser-accounts', 'raum-puls-global', 'raum-nachricht-senden', 'raum-nachrichten')
+===HARNESS HELP===
+usage: harness_aider.py [-h] {visible-start,fallback-start} ...
+
+Harness fuer kontrollierten Aufruf von aider
+
+positional arguments:
+  {visible-start,fallback-start}
+    visible-start       PHASE 48: sichtbarer, interaktiver Terminal-Harness im
+                        echten Repo (kein Sandbox-Versteck mehr)
+    fallback-start      ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft
+                        im Forschungsmodus (echtes Repo, allowlist+audit-
+                        gated)
+
+options:
+  -h, --help            show this help message and exit
+===TURN DISPATCH SOURCE===
+# ~/.claude/star/ heraus ergibt das eine ANDERE Installation als aus
+# ~/frankenstein-repo/scripts/, wo die 115 Epochen und 1743 Frames haengen.
+# Der Turn wurde daraufhin korrekt fail-closed abgelehnt ("Identity/
+# HostBinding/Epoche inkongruent") -- kein Defekt, sondern genau der Zweck
+# dieser Schicht. Eine Kopie hier haette stillschweigend eine zweite
+# Installation aufgemacht und die Kontinuitaet zerschnitten.
+#
+# Stattdessen: Unterprozess auf die kanonische Spur. Gemessen 0,49 s bei
+# 3 s Hook-Budget. Gleiches Muster wie der bestehende SHA-Pin-Aufruf.
+# Fail-closed: jede Ausnahme wird verschluckt und geloggt, der Hook laeuft
+# unveraendert weiter. Reiner Seiteneffekt in unified.db, KEIN Einfluss auf
+# additionalContext.
+_F2WP1207_KANON_STERN = Path.home() / "frankenstein-repo" / "scripts" / "stern.py"
+
+
+
+# Zwei Wege zum selben Turn. Der VM-Weg ist seit 2026-09-07 der normale
+# (Gabriel: "mach den vollen umzug"); der Wirtsweg bleibt als Rueckfall.
+# Beide rufen DIESELBE Datei auf demselben Pfad auf -- die VM bindet
+# ~/frankenstein-repo/scripts und die unified.db unter identischen Namen
+# ein, damit die aus den Pfaden abgeleitete installation_id gleich bleibt
+# (geprueft: fb068ee8... innen wie aussen). Ohne diesen Trick waere der
+# Umzug ein Identitaetswechsel gewesen.
+_F2WP1207_VM_BEFEHL = [
+    "sudo", "-n", "systemd-run", "--machine=entityos", "--pipe", "--quiet",
+    "--setenv=AGENTZERO_DB=" + str(
+        Path.home() / ".local/share/agentzero/unified.db"),
+    "/usr/bin/python3", str(Path.home() / "frankenstein-repo/scripts/stern.py"),
+    "f2wp1207-turn-loop-turn",
+]
+_F2WP1207_WIRT_BEFEHL = [
+    sys.executable,
+    str(Path.home() / "frankenstein-repo/scripts/stern.py"),
+    "f2wp1207-turn-loop-turn",
+]
+
+
+def _f2wp1207_turn_versuchen(befehl, nutzlast: str, weg: str):
+    """EIN Turn-Versuch. Gibt das Ergebnis-dict zurueck oder None, wenn
+    dieser Weg nicht getragen hat (Zeitueberschreitung, unlesbare Antwort,
+    ok=False). None bedeutet 'naechsten Weg probieren', NICHT 'Turn
+    fehlgeschlagen' -- das entscheidet erst der Aufrufer."""
+    try:
+        # paket-1789134967688-dbe4cd (Hook-Performance-Befund): gemessen
+        # 0,7-0,85s pro echtem Versuch (VM per systemd-run, dann Wirt-
+        # Rueckfall) -- 2,5s Timeout hier * 2 Versuche sequentiell ergab ein
+        # WORST CASE von bis zu 5,0s allein fuer diesen einen Seiteneffekt-
+        # Aufruf, VOR jeder anderen Arbeit im selben UserPromptSubmit-Hook.
+        # 1,2s laesst echten erfolgreichen Laeufen (~0,85s) weiter Luft,
+        # deckelt aber den Ausfallfall (VM haengt/DB-Lock) auf 2,4s statt 5,0s
+        # fuer beide Versuche zusammen. Aendert NICHTS an der Semantik --
+        # None bedeutet weiterhin nur "dieser Weg trug nicht".
+        p = subprocess.run(befehl, input=nutzlast, capture_output=True,
+                           text=True, timeout=1.2)
+        roh = (p.stdout or "").strip()
+        letzte = roh.split("\n")[-1] if roh else ""

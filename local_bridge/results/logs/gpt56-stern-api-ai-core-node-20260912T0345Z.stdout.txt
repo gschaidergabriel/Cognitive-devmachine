@@ -1,0 +1,8 @@
+verbindung (pfad: 'Optional[str]' = None) -> 'sqlite3.Connection'
+_raum_ruf_schreiben (von: 'str', typ: 'str', text: 'str') -> 'None'
+handoff (session_id: 'str', auftrag: 'str', womit: 'str', warum: 'str', thema: 'str' = '') -> 'dict'
+reconcile (paket_id: 'str', ergebnis: 'str', beleg: 'Optional[str]', session_id: 'Optional[str]' = None, thema: 'str' = '') -> 'dict'
+chatgpt_senden (prompts: 'list', *, num_workers: 'Optional[int]' = None, sleep_between: 'Optional[float]' = None, ram_schwelle_mb: 'Optional[int]' = None, tab_recycle_alle: 'Optional[int]' = None, tab_hardlimit: 'Optional[int]' = None, dry_run: 'bool' = False, lock_timeout_s: 'float' = 1200.0) -> 'dict'
+chatgpt_ernten (*, timeout_s: 'float' = 900.0, lock_timeout_s: 'float' = 1200.0) -> 'dict'
+chatgpt_login_status () -> 'dict'
+run_canonical_turn MISSING

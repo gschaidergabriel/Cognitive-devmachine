@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""GitHub-bridge transport from a remote FranKenstein host to Gabriel's ChatGPT harness.
+
+Transport only. No durable cognition lives here. The origin host owns the
+canonical GRID10/unified.db state. This module just submits one exact command
+to ai-core-node's existing local bridge and waits for the matching receipt.
+"""
+from __future__ import annotations
+
+import base64
+import json
+import os
+import shlex
+import subprocess
+import tempfile
+import time
+import uuid
+from pathlib import Path
+from typing import Any
+
+REPO_FALLBACK = "git@github-clay-research-entity:gschaidergabriel/clay-global-research-entity.git"
+CONTROL = "chatgpt-local-ai-core-node-control"
+RESULTS = "chatgpt-local-ai-core-node-results"
+
+
+class ProxyError(RuntimeError):
+    pass
+
+
+def _run(cmd: list[str], cwd: Path | None = None, timeout: float = 120.0, check: bool = True) -> subprocess.CompletedProcess[str]:
+    p = subprocess.run(cmd, cwd=str(cwd) if cwd else None, text=True, capture_output=True, timeout=timeout)
+    if check and p.returncode != 0:
+        raise ProxyError(f"command failed rc={p.returncode}: {' '.join(cmd)} :: {p.stderr[-600:]}")
+    return p
+
+
+def _discover_remote() -> str:
+    env = os.environ.get("FRANK_CHATGPT_BRIDGE_REMOTE")
+    if env:
+        return env
+    daemon_repo = Path.home() / ".claude/star/local_bridge_state/repo"
+    if (daemon_repo / ".git").exists():
+        p = _run(["git", "remote", "get-url", "origin"], cwd=daemon_repo, check=False)
+        if p.returncode == 0 and p.stdout.strip():
+            return p.stdout.strip()
+    return REPO_FALLBACK
+
+
+def _last_json(text: str) -> dict:
+    for line in reversed((text or "").splitlines()):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            obj = json.loads(line)
+        except Exception:
+            continue
+        if isinstance(obj, dict):
+            return obj
+    raise ProxyError("remote executor produced no JSON object")
+
+
+class GabrielGitHubHarness:
+    def __init__(self, timeout_s: float = 1200.0):
+        self.timeout_s = timeout_s
+        self._pending: dict[str, Any] | None = None
+
+    def _request(self, prompt: str, num_workers: int) -> dict:
+        payload = {"prompt": prompt, "num_workers": max(1, min(30, int(num_workers or 1)))}
+        b64 = base64.urlsafe_b64encode(json.dumps(payload, ensure_ascii=False).encode()).decode()
+        command_id = "chatgpt-organ-proxy-" + uuid.uuid4().hex
+        shell = "python3 ~/.claude/star/frank_chatgpt_remote_exec.py --payload-b64 " + shlex.quote(b64)
+        cmd_doc = {
+            "schema": "CLAY_LOCAL_COMMAND/v1",
+            "command_id": command_id,
+            "op": "exec",
+            "command": shell,
+            "timeout_seconds": min(3600, int(self.timeout_s)),
+        }
+        remote = _discover_remote()
+        started = time.monotonic()
+        with tempfile.TemporaryDirectory(prefix="frank-chatgpt-proxy-") as td:
+            repo = Path(td) / "repo"
+            _run(["git", "clone", "--depth", "1", "--branch", CONTROL, remote, str(repo)], timeout=180)
+            _run(["git", "config", "user.name", "andreas-maco-chatgpt-proxy"], cwd=repo)
+            _run(["git", "config", "user.email", "andreas@seimensch.net"], cwd=repo)
+            rel = Path("local_bridge/commands") / f"{command_id}.json"
+            for attempt in range(5):
+                _run(["git", "fetch", "--depth", "1", "origin", CONTROL], cwd=repo)
+                _run(["git", "reset", "--hard", "FETCH_HEAD"], cwd=repo)
+                target = repo / rel
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(json.dumps(cmd_doc, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+                _run(["git", "add", str(rel)], cwd=repo)
+                _run(["git", "commit", "-m", f"bridge: {command_id}"], cwd=repo)
+                push = _run(["git", "push", "origin", f"HEAD:{CONTROL}"], cwd=repo, check=False, timeout=120)
+                if push.returncode == 0:
+                    break
+                if attempt == 4:
+                    raise ProxyError(f"cannot push bridge command: {push.stderr[-800:]}")
+                time.sleep(1 + attempt)
+
+            receipt_path = f"local_bridge/results/receipts/{command_id}.json"
+            while time.monotonic() - started < self.timeout_s:
+                fetch = _run(["git", "fetch", "--depth", "1", "origin", RESULTS], cwd=repo, check=False, timeout=120)
+                if fetch.returncode == 0:
+                    show = _run(["git", "show", f"FETCH_HEAD:{receipt_path}"], cwd=repo, check=False, timeout=30)
+                    if show.returncode == 0 and show.stdout.strip():
+                        receipt = json.loads(show.stdout)
+                        if receipt.get("command_id") != command_id:
+                            raise ProxyError("receipt command_id mismatch")
+                        if receipt.get("machine_id") != "ai-core-node" or receipt.get("owner") != "gabriel":
+                            raise ProxyError("receipt attribution mismatch")
+                        if receipt.get("status") != "PASS":
+                            return {"ok": False, "receipt": receipt,
+                                    "error": f"remote bridge status={receipt.get('status')}"}
+                        result = _last_json(receipt.get("stdout_tail") or "")
+                        result["bridge_receipt"] = {
+                            "command_id": command_id,
+                            "command_sha256": receipt.get("command_sha256"),
+                            "machine_id": receipt.get("machine_id"),
+                            "owner": receipt.get("owner"),
+                            "execution_boundary": receipt.get("execution_boundary"),
+                        }
+                        return result
+                time.sleep(2.0)
+        raise ProxyError(f"timeout waiting for {command_id}")
+
+    def send(self, prompts: list[str], *, num_workers: int | None = None, **_: Any) -> dict:
+        if len(prompts or []) != 1:
+            return {"ok": False, "grund": "remote proxy accepts exactly one coordinator prompt per send"}
+        try:
+            r = self._request(str(prompts[0]), int(num_workers or 1))
+        except Exception as e:
+            r = {"ok": False, "error": str(e)}
+        self._pending = r
+        return {"ok": bool(r.get("ok")), "remote_proxy": True,
+                "laeufe": [{"antwort": r.get("response"), "receipt": r.get("bridge_receipt"),
+                             "grund": r.get("error")}], "raw": r}
+
+    def harvest(self, **_: Any) -> dict:
+        r = self._pending or {"ok": False, "error": "nothing pending"}
+        self._pending = None
+        return {"ok": bool(r.get("ok")), "remote_proxy": True,
+                "results": [{"antwort": r.get("response")}],
+                "bridge_receipt": r.get("bridge_receipt"), "raw": r}

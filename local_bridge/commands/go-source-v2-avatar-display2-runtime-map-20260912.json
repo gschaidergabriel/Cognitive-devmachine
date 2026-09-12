@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-source-v2-avatar-display2-runtime-map-20260912",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120,
+  "command": "set -o pipefail; echo '=== HOST ==='; hostname; whoami; echo '=== DISPLAYS ==='; DISPLAY=:0 xrandr --listmonitors 2>&1 || true; DISPLAY=:0 xrandr --query 2>&1 | sed -n '1,80p' || true; echo '=== WINDOWS ==='; DISPLAY=:0 wmctrl -lxG 2>&1 | grep -Ei 'chrome|chromium|franken|buehne|avatar' || true; echo '=== XDOTOOL WINDOWS ==='; DISPLAY=:0 xdotool search --onlyvisible --class 'chrome|chromium' getwindowgeometry --shell %@ 2>&1 || true; echo '=== SERVICES ==='; systemctl --user status frankenstein-buehne.service --no-pager -l 2>&1 | sed -n '1,120p' || true; systemctl --user cat frankenstein-buehne.service 2>&1 | sed -n '1,160p' || true; echo '=== PROCESSES ==='; ps -eo pid,ppid,lstart,args | grep -E '[c]hrom(e|ium)|[b]uehne_daemon|[f]rankenstein-buehne' | sed -n '1,160p'; echo '=== LIVE FILES ==='; ls -l --time-style=long-iso /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py 2>&1 || true; sha256sum /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py 2>&1 || true"
+}

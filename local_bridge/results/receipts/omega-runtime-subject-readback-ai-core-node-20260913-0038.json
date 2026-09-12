@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-runtime-subject-readback-ai-core-node-20260913-0038",
+  "command_sha256": "e1aefa47ad129793ef9f16cef490c3b9bf75e2e173dce62cd2dbbc44eec46e05",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:29:25.624556+00:00",
+  "finished_at": "2026-09-12T17:29:26.023214+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "821b17cc3ebba43298d043fdb7d9e13464e0b145eea9e351aecc854f953ffd51",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "UNIT=frankenstein-gespraechsmodus.service\nPID=2407635\nCMDLINE=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py \nSun Sep 13 00:29:24 2026       00:00\nExecMainStartTimestamp=Sun 2026-09-13 00:29:24 +07\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:29:24 +07] ; stop_time=[n/a] ; pid=2407635 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nUNIT=frankenstein-chatgpt-client.service\nPID=2407631\nCMDLINE=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py \nSun Sep 13 00:29:24 2026       00:00\nExecMainStartTimestamp=Sun 2026-09-13 00:29:24 +07\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:29:24 +07] ; stop_time=[n/a] ; pid=2407631 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- VOICE STATUS BEST-EFFORT ---\n{\"ok\": true, \"uhrzeit\": \"2026-09-13 00:29:25\", \"laufende_auftraege\": [], \"waechter\": {\"beschreibung\": \"blockiert bei Start\", \"letzter_herzschlag_vor_sekunden\": 860380.2, \"status\": \"blockiert_wartet_auf_nutzer\"}, \"andere_sitzungen_im_raum\": []}\n--- ACTIVE FLOOR CACHE ---\nNONE\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

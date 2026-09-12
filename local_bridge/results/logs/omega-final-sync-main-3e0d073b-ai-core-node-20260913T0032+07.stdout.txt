@@ -1,0 +1,58 @@
+SOURCE_TESTS_PASS=1
+OMEGA 777 convergence layer installed without restarting live voice.
+
+Prepared runtime composition:
+  presentation floor: OMNI > terminal > local_voice
+  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig
+  local renderer libs: Pocket streaming + cancellable local audio arm
+  OMNI sensor lib: voice777_omni_presence.py
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared effective service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+
+Verified loaded ExecStart definitions:
+  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the voice wrapper only when the current voice session is quiescent and
+host-specific safety/readback permits the lifecycle boundary:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+INSTALL_READBACK_PASS=1
+CLIENT_PID=2407631
+VOICE_PID=2407635
+CLIENT_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py 
+VOICE_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py 
+OMEGA_INSTALLED_SOURCE_SHA256_OMEGA_ORGAN_ACTIVITY=94c7086ed73a798f0a87c9ecf824eda26e2db70b43c5eaae8944d45085d9a193
+Result=success
+NRestarts=0
+ActiveState=active
+SubState=running
+Result=success
+NRestarts=0
+ActiveState=active
+SubState=running
+{
+  "aktiv": false,
+  "berechtigung": "acceptEdits",
+  "tts_modell": "gpt-4o-mini-tts",
+  "tts_stimme": "onyx",
+  "stt_modell": "gpt-4o-transcribe",
+  "konversation_timeout_sekunden": 90,
+  "openai_schluessel_lokal_vorhanden": true,
+  "openai_vault_id": "cred-1787752096678-b69ede",
+  "claude_session_id": null,
+  "realtime_modell": "gpt-realtime-2.1",
+  "realtime_stimme": "cedar",
+  "realtime_reasoning_effort": "minimal",
+  "stille_timeout_sekunden": 5,
+  "user_speaking": false,
+  "assistant_speaking": false
+}
+OMEGA_LIVE_MAIN_COMMIT=3e0d073b7b6a4ba41117ffd8ad8c06dd0da8e62d
+OMEGA_LIVE_MAIN_SYNC_PASS=1

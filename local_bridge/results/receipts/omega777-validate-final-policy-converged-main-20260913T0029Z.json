@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega777-validate-final-policy-converged-main-20260913T0029Z",
+  "command_sha256": "b8331ace2c4a5a9a50d3cbf5729f1f745cd257707ace748014073bb965af5ef6",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:29:26.693713+00:00",
+  "finished_at": "2026-09-12T17:29:40.311533+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "f48f459794d8e308e9d3754a3f5ff42280ab68eef5134c7636e638e236d42eb3",
+  "stderr_sha256": "ee210a05f4e481d6bc8fe6f6abd05e424294d1eaa522aee0d9be2a5634c3df76",
+  "stdout_tail": "HEAD=b2290dc3b6ed00ceb1c453c2c8fe207b957e1164\nBASE_KIND=voice_final_runtime\nBASE_ENTRY=/home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\nBASE_USES_CONVERGED_FULL=True\nFINAL_PATCH_MODULE=_omega777_installed_voice_final_policy\nFULL_HAS_ARM_BUS=True\nFINAL_BASE_IS_FULL=True\nFINAL_VFI_IS_VFI=True\nFINAL_RT_IS_RT=True\nMISSING_FINAL_RC=1\n",
+  "stderr_tail": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.125s\n\nOK\n.\n----------------------------------------------------------------------\nRan 1 test in 0.102s\n\nOK\nEEE\n======================================================================\nERROR: test_omega_arm_bus (unittest.loader._FailedTest.test_omega_arm_bus)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_omega_arm_bus\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'tests.test_omega_arm_bus'\n\n\n======================================================================\nERROR: test_voice777_local_audio_arm (unittest.loader._FailedTest.test_voice777_local_audio_arm)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_voice777_local_audio_arm\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'tests.test_voice777_local_audio_arm'\n\n\n======================================================================\nERROR: test_voice777_pocket_renderer (unittest.loader._FailedTest.test_voice777_pocket_renderer)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_voice777_pocket_renderer\nTraceback (most recent call last):\n  File \"/usr/lib/python3.12/unittest/loader.py\", line 137, in loadTestsFromName\n    module = __import__(module_name)\n             ^^^^^^^^^^^^^^^^^^^^^^^\nModuleNotFoundError: No module named 'tests.test_voice777_pocket_renderer'\n\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nFAILED (errors=3)\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,38 @@
+..................                                                       [100%]
+18 passed in 0.37s
+OMEGA 777 convergence layer installed without restarting live voice.
+
+Prepared runtime composition:
+  presentation floor: OMNI > terminal > local_voice
+  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig
+  local renderer libs: Pocket streaming + cancellable local audio arm
+  OMNI sensor lib: voice777_omni_presence.py
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared effective service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+
+Verified loaded ExecStart definitions:
+  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the voice wrapper only when the current voice session is quiescent and
+host-specific safety/readback permits the lifecycle boundary:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+
+POST_INSTALL_HEAD=3e0d073b7b6a4ba41117ffd8ad8c06dd0da8e62d TREE=ce72702ec157e24e6b642aa130daffca54edbecf
+MATCH omega_arm_bus.py
+MATCH omega_organ_activity.py
+MATCH voice777_local_audio_arm.py
+MATCH voice777_omni_presence.py
+MATCH voice777_pocket_renderer.py
+MATCH voice_full_runtime.py
+MATCH frank_terminal.py
+MATCH voice_777_runtime.py
+MATCH voice_host_777_live_client.py
+MATCH frank_terminal_777.py

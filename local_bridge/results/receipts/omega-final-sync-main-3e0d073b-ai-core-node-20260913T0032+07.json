@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-sync-main-3e0d073b-ai-core-node-20260913T0032+07",
+  "command_sha256": "d92b755002bc70e8a17e0b80d6fafd732d57a84e2c0ea342b9292758b6b81b1d",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:29:19.848395+00:00",
+  "finished_at": "2026-09-12T17:29:25.206338+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "03d62bcf86e90ed7b3768b23eb1ebca1d34d0c2a8ae5f704a05ccd6a1cd40d38",
+  "stderr_sha256": "aa76a1c8a1428d2a9bb00e5ef2dcba5179b97fbf63724534ea4c3f162e5b06aa",
+  "stdout_tail": "SOURCE_TESTS_PASS=1\nOMEGA 777 convergence layer installed without restarting live voice.\n\nPrepared runtime composition:\n  presentation floor: OMNI > terminal > local_voice\n  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig\n  local renderer libs: Pocket streaming + cancellable local audio arm\n  OMNI sensor lib: voice777_omni_presence.py\n  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json\n  terminal: /home/ai-core-node/.local/bin/frank-omega\n\nPrepared effective service overrides:\n  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf\n  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf\n\nVerified loaded ExecStart definitions:\n  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n\nNo production conversation process was restarted by this installer.\nApply the persistent ChatGPT-client wrapper at a controlled boundary with:\n  systemctl --user restart frankenstein-chatgpt-client.service\nApply the voice wrapper only when the current voice session is quiescent and\nhost-specific safety/readback permits the lifecycle boundary:\n  systemctl --user restart frankenstein-gespraechsmodus.service\nINSTALL_READBACK_PASS=1\nCLIENT_PID=2407631\nVOICE_PID=2407635\nCLIENT_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py \nVOICE_CMD=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py \nOMEGA_INSTALLED_SOURCE_SHA256_OMEGA_ORGAN_ACTIVITY=94c7086ed73a798f0a87c9ecf824eda26e2db70b43c5eaae8944d45085d9a193\nResult=success\nNRestarts=0\nActiveState=active\nSubState=running\nResult=success\nNRestarts=0\nActiveState=active\nSubState=running\n{\n  \"aktiv\": false,\n  \"berechtigung\": \"acceptEdits\",\n  \"tts_modell\": \"gpt-4o-mini-tts\",\n  \"tts_stimme\": \"onyx\",\n  \"stt_modell\": \"gpt-4o-transcribe\",\n  \"konversation_timeout_sekunden\": 90,\n  \"openai_schluessel_lokal_vorhanden\": true,\n  \"openai_vault_id\": \"cred-1787752096678-b69ede\",\n  \"claude_session_id\": null,\n  \"realtime_modell\": \"gpt-realtime-2.1\",\n  \"realtime_stimme\": \"cedar\",\n  \"realtime_reasoning_effort\": \"minimal\",\n  \"stille_timeout_sekunden\": 5,\n  \"user_speaking\": false,\n  \"assistant_speaking\": false\n}\nOMEGA_LIVE_MAIN_COMMIT=3e0d073b7b6a4ba41117ffd8ad8c06dd0da8e62d\nOMEGA_LIVE_MAIN_SYNC_PASS=1\n",
+  "stderr_tail": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.161s\n\nOK\n.\n----------------------------------------------------------------------\nRan 1 test in 0.098s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

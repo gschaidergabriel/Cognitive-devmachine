@@ -1,0 +1,90 @@
+PATH /home/ai-core-node/.claude/star/harness_aider.py
+SHA256 0d8c76cdb57b9ddf30814df746872f044510cad4feedad4133bc34bd6b28548d BYTES 82644 LINES 1602
+IMPORTS
+import os
+import sys
+import subprocess
+import argparse
+import hashlib
+import json
+import sqlite3
+import time
+import fcntl
+import errno
+import contextlib
+from pathlib import Path
+DEFS
+FunctionDef git_checkpoint_und_protokollieren 131
+FunctionDef _aider_kommando_praefix 231
+FunctionDef _alle_api_keys_laden 240
+FunctionDef _relative_zeit_de 259
+FunctionDef _kontingent_banner 275
+FunctionDef _api_key_laden 308
+FunctionDef _git 328
+FunctionDef _forschung_preflight 333
+ClassDef ForschungLockTimeout 382
+FunctionDef _forschung_lock 389
+FunctionDef _forschung_allowlist_pruefen 444
+FunctionDef _forschung_provenance_schreiben 465
+FunctionDef _werkraum_git_identitaet 497
+FunctionDef _aider_werkraum_aufraeumen 507
+FunctionDef _grid_zustand_block 531
+FunctionDef _hinweis_ordner_aufraeumen 681
+FunctionDef _persona_hinweis_schreiben 723
+FunctionDef _terminal_banner 903
+FunctionDef _werkraum_diff_dateien 932
+FunctionDef _loeschungen_pruefen 950
+FunctionDef _eingeschraenkt_verstoesse_pruefen 963
+FunctionDef _notiz_schreiben 973
+FunctionDef visible_run 998
+FunctionDef _aider_ausfuehren 1222
+FunctionDef _antwort_zuruecklesen 1290
+FunctionDef einen_lauf 1301
+FunctionDef cmd_visible_start 1524
+FunctionDef cmd_fallback_start 1534
+FunctionDef main 1579
+STERN_REFS
+18:     fallback-start schaltet das aktive Modell selbst um (_s.modell_aktiv_setzen,
+45:  zurueckgelesen) -- der aufrufende Agent (stern.py-Fallback) muss nicht im
+51:import argparse
+61:# Import lokalen Stern-Modul
+63:    import stern as _s
+65:    print(f"Fehler: Lokalen Stern-Modul nicht gefunden: {e}", file=sys.stderr)
+159:        conn = _s.verbindung()
+204:        _s._raum_ruf_schreiben(
+217:            _s._raum_ruf_schreiben(
+405:    Verschmutzung. Analog zu `_chatgpt_lock()` in stern.py: ein zweiter
+483:        "erzeugt_am": _s._jetzt_iso(),
+553:      4. stern.py's _f2wp1207_turn_loop_delegieren() -- DIESELBE hyperGRID-
+555:         via UserPromptSubmit-Hook bekommt (siehe stern.py cmd_hook()).
+588:        grid_text = _s._f2wp1207_turn_loop_delegieren(
+589:            session_id or _s._uid("harness-grid"),
+653:        with contextlib.closing(_s.verbindung()) as c:
+698:        with contextlib.closing(_s.verbindung()) as c:
+733:    die stern.handoff()-Kontinuitaets-Kapsel (offene Pakete, Vorwissen, Beleg-
+814:    # Dieselbe Zusicherung, die stern.py fuer die Claude-Code-Terminalsitzung
+1014:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1057:    session_id = _s._uid("harness-sess")
+1060:        handoff_result = _s.handoff(
+1072:        paket_id = _s._uid("harness-sichtbar")
+1075:    _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "START",
+1181:        _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "VERSTOSS_VERWORFEN",
+1206:        _s.reconcile(paket_id=paket_id, ergebnis=reconcile_text, beleg=beleg, session_id=session_id)
+1306:    nach aussen (der Aufrufer -- stern.py-Fallback -- braucht ein
+1312:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1326:    session_id = _s._uid("harness-sess")
+1328:        handoff_result = _s.handoff(
+1361:    _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "START",
+1397:            _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "ALLOWLIST_VERLETZUNG",
+1472:        _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "PUSH" if gepusht else "PUSH_FEHLGESCHLAGEN",
+1506:        reconcile_result = _s.reconcile(paket_id=paket_id, ergebnis=reconcile_text,
+1535:    """Fuer stern.py's chatgpt-Fallback: probiert Kandidaten der Reihe nach,
+1547:        aktiviert = _s.modell_aktiv_setzen(modell_id, von="chatgpt-fallback")
+1566:            # spiegeln -- stern.py's _chatgpt_harness_fallback() liest diese
+1580:    parser = argparse.ArgumentParser(description="Harness fuer kontrollierten Aufruf von aider")
+1583:    p_vis = sub.add_parser("visible-start", help="PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)")
+1584:    p_vis.add_argument("--modell", required=True)
+1586:    p_fb = sub.add_parser("fallback-start", help="ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft im Forschungsmodus (echtes Repo, allowlist+audit-gated)")
+1587:    p_fb.add_argument("--auftrag", required=True)
+1588:    p_fb.add_argument("--kandidaten", default="nvidia-nemotron,mistral-small",
+1590:    p_fb.add_argument("--grund", default=None, help="Warum der Fallback aktiviert wurde (fuer Provenance)")

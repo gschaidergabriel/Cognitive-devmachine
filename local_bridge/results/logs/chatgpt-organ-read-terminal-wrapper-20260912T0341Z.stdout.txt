@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# frank-harness-sichtbar -- Wrapper fuer den sichtbaren Free-Pool-Terminal-
+# Harness (PHASE 48, Gabriel-Auftrag 2026-08-27). Ersetzt den alten headless
+# Sandbox-Testlauf: startet harness_aider.py visible-start im echten Repo,
+# in einem echten, sichtbaren Terminal-Fenster (gleiches Muster wie
+# ~/.local/bin/frank-terminal-hilfe, PHASE 34/40) -- kein Hintergrundprozess,
+# kein neuer Dauerdienst.
+set -uo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+
+MODELL_ID="${1:-}"
+if [[ -z "$MODELL_ID" ]]; then
+  echo "frank-harness-sichtbar: keine modell_id uebergeben." >&2
+  exec bash
+fi
+
+echo "FranKensteinಠ_ಠ -- sichtbarer Free-Pool-Harness (${MODELL_ID})"
+echo "Repo: $HOME/frankenstein-repo (echtes Repo, kein Sandbox-Versteck)"
+echo "----------------------------------------------------------------"
+
+python3 "$HOME/.claude/star/harness_aider.py" visible-start --modell "$MODELL_ID"
+STATUS=$?
+
+echo "----------------------------------------------------------------"
+echo "Sichtbarer Harness-Lauf beendet (exit=$STATUS)."
+read -r -p "Enter zum Schliessen dieses Fensters... " _ignore
+
+exit "$STATUS"

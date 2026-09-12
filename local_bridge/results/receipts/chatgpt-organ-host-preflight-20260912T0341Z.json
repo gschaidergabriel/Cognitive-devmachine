@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-organ-host-preflight-20260912T0341Z",
+  "command_sha256": "a187b8f41c80f1593fcbdfad9d392fea9a29c6967aec180af5665e43d68fc20f",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:39:48.365351+00:00",
+  "finished_at": "2026-09-12T03:39:48.432551+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "6eec1b5794957c1f975ac3a84fe0e2adefb7f3f7c394bfa776d1d2e4fda0e48a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HOST=ai-core-node-projekt-frankenstein\n--- uptime ---\n 10:39:48 up 4 days, 11:33,  1 user,  load average: 8.03, 7.71, 7.68\n--- memory MiB ---\n               total        used        free      shared  buff/cache   available\nMem:           23808       11388        1412         477       11257       12420\nSwap:          24575       14738        9837\n--- cpus ---\n16\n--- relevant processes ---\n2017 avahi-daemon: running [ai-core-node-projekt-frankenstein.local]\n3433 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n3479 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n23277 bash -lc printf 'HOST=%s\\n' \"$(hostname)\"; printf '%s\\n' '--- uptime ---'; uptime; printf '%s\\n' '--- memory MiB ---'; free -m; printf '%s\\n' '--- cpus ---'; nproc; printf '%s\\n' '--- relevant processes ---'; pgrep -af 'harness_aider|chatgpt_burst|stern.py|frankenstein' | head -40 || true\n2286091 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/home/ai-core-node/.local/share/agentzero:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/home/ai-core-node/frankenstein-repo/scripts:/opt/entityos/cognition --bind=/home/ai-core-node/.local/share/agentzero:/home/ai-core-node/.local/share/agentzero --bind=/home/ai-core-node/frankenstein-repo/scripts:/home/ai-core-node/frankenstein-repo/scripts --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm\n2821771 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n2821845 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n3940897 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n3940972 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

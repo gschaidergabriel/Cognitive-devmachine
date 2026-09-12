@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-organ-read-terminal-wrapper-20260912T0341Z",
+  "command_sha256": "1913adaa024fcfd6468d8399ffe024bd87e7d19d9ae1262582b46aa6172fb8b9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:39:48.452315+00:00",
+  "finished_at": "2026-09-12T03:39:48.452410+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "2baeb3d13c74af2f153b88ce9f31e668f88f389a59659e93698ad2b3bafd20c9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env bash\n# frank-harness-sichtbar -- Wrapper fuer den sichtbaren Free-Pool-Terminal-\n# Harness (PHASE 48, Gabriel-Auftrag 2026-08-27). Ersetzt den alten headless\n# Sandbox-Testlauf: startet harness_aider.py visible-start im echten Repo,\n# in einem echten, sichtbaren Terminal-Fenster (gleiches Muster wie\n# ~/.local/bin/frank-terminal-hilfe, PHASE 34/40) -- kein Hintergrundprozess,\n# kein neuer Dauerdienst.\nset -uo pipefail\nexport PATH=\"$HOME/.local/bin:$PATH\"\n\nMODELL_ID=\"${1:-}\"\nif [[ -z \"$MODELL_ID\" ]]; then\n  echo \"frank-harness-sichtbar: keine modell_id uebergeben.\" >&2\n  exec bash\nfi\n\necho \"FranKenstein\u0ca0_\u0ca0 -- sichtbarer Free-Pool-Harness (${MODELL_ID})\"\necho \"Repo: $HOME/frankenstein-repo (echtes Repo, kein Sandbox-Versteck)\"\necho \"----------------------------------------------------------------\"\n\npython3 \"$HOME/.claude/star/harness_aider.py\" visible-start --modell \"$MODELL_ID\"\nSTATUS=$?\n\necho \"----------------------------------------------------------------\"\necho \"Sichtbarer Harness-Lauf beendet (exit=$STATUS).\"\nread -r -p \"Enter zum Schliessen dieses Fensters... \" _ignore\n\nexit \"$STATUS\"\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "2baeb3d13c74af2f153b88ce9f31e668f88f389a59659e93698ad2b3bafd20c9",
+    "bytes": 1125,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

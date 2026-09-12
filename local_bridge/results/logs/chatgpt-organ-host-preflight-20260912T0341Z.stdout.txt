@@ -1,0 +1,19 @@
+HOST=ai-core-node-projekt-frankenstein
+--- uptime ---
+ 10:39:48 up 4 days, 11:33,  1 user,  load average: 8.03, 7.71, 7.68
+--- memory MiB ---
+               total        used        free      shared  buff/cache   available
+Mem:           23808       11388        1412         477       11257       12420
+Swap:          24575       14738        9837
+--- cpus ---
+16
+--- relevant processes ---
+2017 avahi-daemon: running [ai-core-node-projekt-frankenstein.local]
+3433 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo
+3479 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo
+23277 bash -lc printf 'HOST=%s\n' "$(hostname)"; printf '%s\n' '--- uptime ---'; uptime; printf '%s\n' '--- memory MiB ---'; free -m; printf '%s\n' '--- cpus ---'; nproc; printf '%s\n' '--- relevant processes ---'; pgrep -af 'harness_aider|chatgpt_burst|stern.py|frankenstein' | head -40 || true
+2286091 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/home/ai-core-node/.local/share/agentzero:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/home/ai-core-node/frankenstein-repo/scripts:/opt/entityos/cognition --bind=/home/ai-core-node/.local/share/agentzero:/home/ai-core-node/.local/share/agentzero --bind=/home/ai-core-node/frankenstein-repo/scripts:/home/ai-core-node/frankenstein-repo/scripts --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+2821771 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo
+2821845 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo
+3940897 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo
+3940972 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo

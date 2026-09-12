@@ -1,0 +1,83 @@
+---INSTALLED-ORGAN---
+623f20d318c64c2f65a715d32fd3a6fb75db806ff558143b64aa7e98927f2343  /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+756b73dd37a6e61521805ece7d32cd9557b021a3a87ba4cb2718648980ece255  /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+11:      -> dispatch through stern.py's EXISTING chatgpt_senden()/chatgpt_ernten()
+139:def host_admission() -> HostAdmission:
+172:def latest_pointer(conn: sqlite3.Connection) -> dict:
+244:    """GRID is the caller/owner. User text is evidence, not direct authority."""
+252:        "task as Claude Code would: analyze, use available tools/workers where justified, preserve machine/owner "
+260:def _extract_response(value: Any) -> str:
+355:        pointer = latest_pointer(conn)
+374:        _insert_message(conn, run_id=run_id, direction="USER", role="gabriel",
+376:        _insert_message(conn, run_id=run_id, direction="GRID_TO_CHATGPT", role="GRID10",
+396:    direct = _extract_response(send)
+397:    harvest = stern_module.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)
+398:    response = _extract_response(harvest) or direct
+407:        _insert_message(conn, run_id=run_id, direction="CHATGPT_TO_GRID", role="chatgpt-organ",
+---HARVEST-EXACT---
+run_harvest() {
+    log "=== HARVEST MODE START ==="
+    if [ ! -f "$SENT_URLS_FILE" ]; then
+        log "no $SENT_URLS_FILE found, nothing to harvest"
+        exit 1
+    fi
+
+    local harvested_done=0 harvested_pending=0 harvested_lost=0
+
+    while IFS=$'\t' read -r worker_id url sent_at; do
+        [ -z "${url:-}" ] && continue
+
+        if ! resource_guard; then
+            log "HARVEST: aborting remaining harvest due to resource guard"
+            break
+        fi
+
+        # single-tab discipline: reuse the existing tab, just navigate it.
+        # (never close-then-reopen — see ensure_single_tab_at comment: closing
+        # the last tab bricks the daemon beyond CLI repair.)
+        if ! ensure_single_tab_at "$url"; then
+            log "HARVEST: aborting remaining harvest, daemon has 0 tabs"
+            break
+        fi
+        enforce_tab_hardlimit "$CURRENT_TAB"
+
+        timeout 8 "$B" wait --networkidle >>"$LOG" 2>&1
+        sleep 1
+
+        txt=$($B text 2>/dev/null)
+        stopping=$($B snapshot -i 2>/dev/null | grep -ic "Stop answering")
+
+        if echo "$txt" | grep -q "Worked for" && [ "${stopping:-0}" -eq 0 ]; then
+            log "HARVEST worker $worker_id: DONE ($url)"
+            # worker_id alone collides across separate send runs (each run
+            # restarts numbering at 1) -- 5/6 results silently overwrote each
+            # other on 2026-08-26 when several single-worker runs were
+            # harvested back to back. Key by the conversation id from the URL
+            # (globally unique) instead; fall back to a worker_id+timestamp
+            # key only if the URL doesn't have the expected /c/<id> shape.
+            conv_id=$(echo "$url" | grep -oP '/c/\K[a-zA-Z0-9-]+' | head -1)
+            if [ -n "$conv_id" ]; then
+                result_key="$conv_id"
+            else
+                result_key="${worker_id}_$(date +%s%N)"
+            fi
+            echo "$txt" > "$STATE_DIR/result_${result_key}.txt"
+            harvested_done=$((harvested_done + 1))
+        else
+            log "HARVEST worker $worker_id: still pending/running ($url)"
+            harvested_pending=$((harvested_pending + 1))
+        fi
+
+        sleep 1
+    done < "$SENT_URLS_FILE"
+
+    log "HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost"
+    log "HARVEST_CYCLE_COMPLETE"
+}
+
+---SENT-URL-FORMAT-SAMPLE---
+3	https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b-clay-science-pipeline/c/6a8f9b27-1448-83ec-8fb4-7bd141dafbfb	2026-08-27T09:04:16+07:00
+4	https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b-clay-science-pipeline/c/6a8f9b35-1c40-83ec-8680-44297d7e23fa	2026-08-27T09:04:30+07:00
+5	https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b-clay-science-pipeline/c/6a8f9b48-5e5c-83ec-bf36-d7438df4bb04	2026-08-27T09:04:44+07:00
+6	https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b-clay-science-pipeline/c/6a8f9b58-c700-83ec-9e56-89ba579ebf34	2026-08-27T09:05:06+07:00
+7	https://chatgpt.com/g/g-p-6a7644f542508191b324659134fb593b-clay-science-pipeline/c/6a8f9b66-f3dc-83ec-8629-9ccae73c2d32	2026-08-27T09:05:20+07:00

@@ -1,0 +1,50 @@
+# /home/ai-core-node/.config/systemd/user/aicore-webd.service
+[Unit]
+Description=AI Core web search daemon (DuckDuckGo HTML)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/home/ai-core-node/aicore/opt/aicore
+Environment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore
+Type=simple
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/webd/app.py
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/aicore-webui.service
+[Unit]
+Description=Frank Web UI — Cyberpunk Dashboard
+After=network.target aicore-core.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ai-core-node/aicore/opt/aicore
+ExecStart=/home/ai-core-node/aicore/opt/venv-ingestd/bin/python3 /home/ai-core-node/aicore/opt/aicore/ui/webui/app.py
+Restart=on-failure
+RestartSec=5
+Environment=DISPLAY=:0
+Environment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/aicore-webui.service.d/immer-neustarten.conf
+[Unit]
+# 24/7-Betrieb (Gabriel, 2026-08-01): "frank wird darauf ausgelegt 24/7 zu
+# laufen und sollte er abstuerzen beim hochfahren des pc automatisch wieder
+# mit hoch". Diese Unit stand auf Restart=on-failure — damit bleibt sie
+# liegen, wenn der Prozess sich SAUBER beendet (Exit 0). Fuer einen Dienst,
+# der nie enden soll, ist das falsch: Frank waere still, ohne dass etwas
+# "fehlgeschlagen" waere. StartLimit hochgesetzt, damit systemd nach ein
+# paar schnellen Neustarts nicht dauerhaft aufgibt.
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+[Service]
+Restart=always
+RestartSec=5

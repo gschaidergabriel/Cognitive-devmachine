@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-aicore-service-source-20260912T1104-0700",
+  "command_sha256": "de736baa39437b88131aab16d29f82c6a5f7e8d322a9e49c08aecbbd2338d102",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:43:30.990420+00:00",
+  "finished_at": "2026-09-12T03:43:31.033827+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "d1db40774b7422badbc2416a2e42da46cf02368c49bce26262173c604db4405e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "# /home/ai-core-node/.config/systemd/user/aicore-webd.service\n[Unit]\nDescription=AI Core web search daemon (DuckDuckGo HTML)\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nWorkingDirectory=/home/ai-core-node/aicore/opt/aicore\nEnvironment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore\nType=simple\nEnvironment=PYTHONUNBUFFERED=1\nExecStart=/home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/webd/app.py\nRestart=always\nRestartSec=1\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/aicore-webui.service\n[Unit]\nDescription=Frank Web UI \u2014 Cyberpunk Dashboard\nAfter=network.target aicore-core.service\n\n[Service]\nType=simple\nWorkingDirectory=/home/ai-core-node/aicore/opt/aicore\nExecStart=/home/ai-core-node/aicore/opt/venv-ingestd/bin/python3 /home/ai-core-node/aicore/opt/aicore/ui/webui/app.py\nRestart=on-failure\nRestartSec=5\nEnvironment=DISPLAY=:0\nEnvironment=PYTHONPATH=/home/ai-core-node/aicore/opt/aicore\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/aicore-webui.service.d/immer-neustarten.conf\n[Unit]\n# 24/7-Betrieb (Gabriel, 2026-08-01): \"frank wird darauf ausgelegt 24/7 zu\n# laufen und sollte er abstuerzen beim hochfahren des pc automatisch wieder\n# mit hoch\". Diese Unit stand auf Restart=on-failure \u2014 damit bleibt sie\n# liegen, wenn der Prozess sich SAUBER beendet (Exit 0). Fuer einen Dienst,\n# der nie enden soll, ist das falsch: Frank waere still, ohne dass etwas\n# \"fehlgeschlagen\" waere. StartLimit hochgesetzt, damit systemd nach ein\n# paar schnellen Neustarts nicht dauerhaft aufgibt.\nStartLimitIntervalSec=300\nStartLimitBurst=10\n\n[Service]\nRestart=always\nRestartSec=5\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

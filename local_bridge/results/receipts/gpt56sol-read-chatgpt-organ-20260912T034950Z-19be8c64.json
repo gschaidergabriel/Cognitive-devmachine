@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-read-chatgpt-organ-20260912T034950Z-19be8c64",
+  "command_sha256": "5a9fe061c8276605238124f490d591cb160ffe43ac1a7cbd1c97600dd55be72c",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:43:35.213971+00:00",
+  "finished_at": "2026-09-12T03:43:35.214464+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
+  "op": "read_file",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "8b38ac042f6ffff812a07c00fd1fee224e42508026ca6bfa03f27e49ad5d24be",
+  "stdout_tail": "",
+  "stderr_tail": "FileNotFoundError(2, 'No such file or directory')\nTraceback (most recent call last):\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 209, in execute\n    p, meta = operate(s)\n              ^^^^^^^^^^\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 168, in operate\n    return op_read_file(str(s[\"path\"]))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.claude/star/local_bridge_daemon.py\", line 133, in op_read_file\n    data = p.read_bytes()\n           ^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1021, in read_bytes\n    with self.open(mode='rb') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/pathlib.py\", line 1015, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/home/ai-core-node/frankenstein-repo/scripts/f2wp1207_chatgpt_organ.py'\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

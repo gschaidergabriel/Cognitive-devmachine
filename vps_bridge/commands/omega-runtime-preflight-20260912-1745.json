@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-runtime-preflight-20260912-1745",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -eu; echo '=== OMEGA RUNTIME PREFLIGHT ==='; date -u +%FT%TZ; printf '\\n-- oMEGA private repo read --\\n'; git ls-remote https://github.com/gschaidergabriel/oMEGA.git HEAD 2>&1 || true; printf '\\n-- research bridge refs --\\n'; git ls-remote https://github.com/gschaidergabriel/clay-global-research-entity.git 'refs/heads/chatgpt-local-*' 'refs/heads/chatgpt-vps-*' 2>&1 | tail -n 30 || true; printf '\\n-- runtime tools --\\n'; for x in python3 git sqlite3 systemctl loginctl dbus-run-session Xvfb weston startxfce4 openbox chromium firefox; do printf '%-18s ' \"$x\"; command -v \"$x\" || echo MISSING; done; printf '\\n-- init / supervisors --\\n'; ps -p 1 -o pid,comm,args; command -v supervisord || true; command -v s6-svscan || true; command -v tmux || true; printf '\\n=== END ===\\n'"
+}

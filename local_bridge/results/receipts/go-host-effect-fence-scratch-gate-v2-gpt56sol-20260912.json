@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-host-effect-fence-scratch-gate-v2-gpt56sol-20260912",
+  "command_sha256": "10ba442facea6769fac33423cd670cc7a00190d36c08e8d0f08637b2150009cd",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:27:23.350860+00:00",
+  "finished_at": "2026-09-12T02:27:31.655867+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "306f799e5101f996374e41fcb4d686a0ee97ce5afe475adbfa91edd439bf8394",
+  "stderr_sha256": "16979917200a071572c0120919f6fa9be1eeee65632d1b5f5fa3a3b053e23849",
+  "stdout_tail": "SOURCE_HEAD=a6569fe0386868bdb9455edd4a43448ad0775cbb\n19b9362563576ebd51611de89afd3f941f085a2c725e151e9be4fe9acabf3a91  /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/run/host_effect_fence.py\n0c11a9cfdc3b7aa74189116b6ab6ba91ca3dc2504b43b4a43462d9690d30731d  /home/ai-core-node/.claude/star/visual/.go_evidence/host_effect_fence_gate_v2_gpt56sol_20260912/run/test_host_effect_fence.py\nCROSS_PROCESS_LEASE_EXCLUSION_PASS\nUNVERIFIED_PRIOR_EFFECT_BLOCKS_FRANK_PASS\nINDEPENDENT_READBACK_UNBLOCKS_NEXT_EFFECT_PASS\nCRASH_TO_UNKNOWN_REPLAY_BLOCK_PASS\nHOST_EFFECT_FENCE_CROSS_PROCESS_RUNTIME_PASS\nHOST_EFFECT_FENCE_SCRATCH_RUNTIME_GATE_V2=PASS\nSCOPE=REAL_HOST_SCRATCH_ONLY_PINNED_SOURCE_NO_LIVE_MUTATION\n",
+  "stderr_tail": "test_body_return_is_not_success_and_blocks_next_effect (test_host_effect_fence.HostEffectFenceTests.test_body_return_is_not_success_and_blocks_next_effect) ... ok\ntest_effect_exception_becomes_unknown_and_blocks_replay (test_host_effect_fence.HostEffectFenceTests.test_effect_exception_becomes_unknown_and_blocks_replay) ... ok\ntest_independent_verification_enables_exact_replay_suppression (test_host_effect_fence.HostEffectFenceTests.test_independent_verification_enables_exact_replay_suppression) ... ok\ntest_read_only_does_not_create_effect_attempt (test_host_effect_fence.HostEffectFenceTests.test_read_only_does_not_create_effect_attempt) ... ok\ntest_reconcile_requires_explicit_note_and_then_allows_retry (test_host_effect_fence.HostEffectFenceTests.test_reconcile_requires_explicit_note_and_then_allows_retry) ... ok\ntest_same_command_id_changed_bytes_conflicts_even_after_verified_success (test_host_effect_fence.HostEffectFenceTests.test_same_command_id_changed_bytes_conflicts_even_after_verified_success) ... ok\ntest_scratch_escape_fails_closed (test_host_effect_fence.HostEffectFenceTests.test_scratch_escape_fails_closed) ... ok\ntest_subject_drift_fails_before_live_effect (test_host_effect_fence.HostEffectFenceTests.test_subject_drift_fails_before_live_effect) ... ok\ntest_verify_requires_unverified_body_state (test_host_effect_fence.HostEffectFenceTests.test_verify_requires_unverified_body_state) ... ok\n\n----------------------------------------------------------------------\nRan 9 tests in 0.187s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

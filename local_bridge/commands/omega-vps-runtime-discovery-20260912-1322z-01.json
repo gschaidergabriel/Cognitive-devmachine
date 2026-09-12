@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-runtime-discovery-20260912-1322z-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -u; echo '===HOST==='; hostname; echo '===OMEGA_PROCESSES==='; pgrep -af 'omega\\.(supervisor|grid_runtime|bridge_relay|spool_bridge_relay|outer_bridge_worker|telemetry_daemon|master_bridge)' || true; echo '===RUNTIME_DIRS==='; for p in /workspace/omega_runtime /home/ai-core-node/omega_runtime /home/ai-core-node/oMEGA; do if [ -e \"$p\" ]; then ls -ld \"$p\"; fi; done; echo '===OMEGA_SERVICES==='; systemctl --user --no-pager is-active omega-chatgpt-mcp.service omega-local-effect-adapter.service frankenstein-local-bridge.service 2>/dev/null || true; echo '===SSH_HOST_ALIASES==='; if [ -r \"$HOME/.ssh/config\" ]; then awk '/^[[:space:]]*Host[[:space:]]+/ {for(i=2;i<=NF;i++) if($i !~ /[*?!]/) print $i}' \"$HOME/.ssh/config\"; fi",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60
+}

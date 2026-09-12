@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-read-remote-exec-gabriel-20260912T1121",
+  "command_sha256": "9970a82a7c149ffcb97e18b08fc70b23a610f9e700aeb1517aae0764dcce279a",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T04:00:37.394347+00:00",
+  "finished_at": "2026-09-12T04:00:37.394762+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "79919f0dfc3835e6ee79ec78bd8367ed921f5fb2c0cff9b941327803fa61ebda",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env python3\n\"\"\"Stateless executor for remote FranKenstein hosts.\n\nRuns on ai-core-node. It only executes the existing ChatGPT browser harness and\nprints one JSON result. It never opens/writes unified.db; the originating host\nowns GRID/state uptake.\n\"\"\"\nfrom __future__ import annotations\nimport argparse, base64, json, sys\nfrom pathlib import Path\n\nSTAR = Path.home() / \".claude\" / \"star\"\nif str(STAR) not in sys.path:\n    sys.path.insert(0, str(STAR))\n\n\ndef main() -> int:\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--payload-b64\", required=True)\n    args = ap.parse_args()\n    try:\n        payload = json.loads(base64.urlsafe_b64decode(args.payload_b64.encode()).decode(\"utf-8\"))\n        prompt = str(payload[\"prompt\"])\n    except Exception as e:\n        print(json.dumps({\"ok\": False, \"error\": f\"bad payload: {e}\"}, ensure_ascii=False, separators=(\",\", \":\")))\n        return 2\n\n    import stern\n    import f2wp1207_chatgpt_organ as organ\n    from f2wp1207_chatgpt_exact_backend import ExactChatGPTBackend\n\n    admission = organ.host_admission()\n    if not admission.ok:\n        print(json.dumps({\"ok\": False, \"error\": f\"target host admission failed: {admission.reason}\",\n                          \"admission\": admission.__dict__},\n                         ensure_ascii=False, separators=(\",\", \":\"), default=str))\n        return 6\n\n    try:\n        status = stern.chatgpt_login_status()\n    except Exception as e:\n        print(json.dumps({\"ok\": False, \"error\": f\"login status failed: {e}\"}, ensure_ascii=False, separators=(\",\", \":\")))\n        return 1\n    if not status.get(\"eingeloggt\"):\n        print(json.dumps({\"ok\": False, \"needs_login\": True, \"login\": status,\n                          \"error\": \"ChatGPT browser harness not logged in\"},\n                         ensure_ascii=False, separators=(\",\", \":\")))\n        return 3\n\n    backend = ExactChatGPTBackend(stern)\n    sent = backend.send([prompt], num_workers=1,\n                        ram_schwelle_mb=max(1800, min(6000, admission.mem_available_mb // 3)))\n    if not sent.get(\"ok\"):\n        print(json.dumps({\"ok\": False, \"send\": sent, \"error\": sent.get(\"grund\") or \"exact ChatGPT send failed\"},\n                         ensure_ascii=False, separators=(\",\", \":\"), default=str))\n        return 4\n    harvested = backend.harvest(timeout_s=900.0)\n    response = organ._extract_response(harvested)\n    ok = bool(harvested.get(\"ok\")) and bool(response)\n    print(json.dumps({\"ok\": ok, \"response\": response, \"send\": sent, \"harvest\": harvested,\n                      \"backend_host\": \"ai-core-node\", \"backend_owner\": \"gabriel\",\n                      \"admission\": admission.__dict__},\n                     ensure_ascii=False, separators=(\",\", \":\"), default=str))\n    return 0 if ok else 5\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "79919f0dfc3835e6ee79ec78bd8367ed921f5fb2c0cff9b941327803fa61ebda",
+    "bytes": 2824,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

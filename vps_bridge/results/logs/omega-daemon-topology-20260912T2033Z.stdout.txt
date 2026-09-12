@@ -1,0 +1,5 @@
+16: for n in ('inbox','outbox','telemetry','candidates'): (ROOT/n).mkdir(parents=True,exist_ok=True)
+22:def telemetry():
+24: for p in (ROOT/'telemetry').glob('*.json'):
+49: req=set(task.get('required_capabilities',[]));domains=set(task.get('preferred_data_domains',[]));heavy=bool(task.get('heavy'));risk=bool(task.get('high_risk_effect'));want2=bool(task.get('wants_independent_falsifier'));tele=telemetry();scores=[]
+64: ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};

@@ -211,8 +211,11 @@ def main() -> int:
         cdp = CDP(target["webSocketDebuggerUrl"])
         cdp.call("Page.enable")
         cdp.call("Runtime.enable")
-        cdp.call("Emulation.setVirtualTimePolicy", {"policy": "advance", "budget": 1000.0})
 
+        # Do not constrain virtual time until the real shadow has finished
+        # loading and its runtime functions exist. An early finite budget can
+        # pause the page before readyState reaches complete, turning a harness
+        # timing artifact into SHADOW_RUNTIME_NOT_READY.
         ready = False
         for _ in range(120):
             try:
@@ -236,8 +239,9 @@ def main() -> int:
         if cdp.eval("_sonderLaeuft===true") is not True:
             raise SystemExit("SPECIAL_EXPRESSION_NOT_ACTIVE")
 
-        # Freeze JS timers/rAF at one exact state. DOM changes and screenshots
-        # remain available through CDP while page virtual time is paused.
+        # Freeze only after runtime readiness and special-expression activation.
+        # From here onward the two screenshots differ only by canonical eye
+        # opacity/src, while timers/rAF stay pinned at the same visual state.
         cdp.call("Emulation.setVirtualTimePolicy", {"policy": "pause"})
         geometry = json.loads(cdp.eval(
             "JSON.stringify((()=>{const e=document.getElementById('augen-blink');"

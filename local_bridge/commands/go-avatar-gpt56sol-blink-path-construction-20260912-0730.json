@@ -1,0 +1,4 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1","command_id":"go-avatar-gpt56sol-blink-path-construction-20260912-0730","machine_id":"ai-core-node","owner":"gabriel","op":"exec","cwd":"/home/ai-core-node/.claude/star/visual","timeout_seconds":20,
+  "command":"set -u; cd /home/ai-core-node/.claude/star/visual; echo VISUAL_DEF; grep -n -E '^VISUAL_DIR|^BLINK_DIR|__file__' buehne_daemon.py | head -30; echo ROUTE_TAIL; sed -n '838,885p' buehne_daemon.py; echo PROC_EXE_CWD; readlink -f /proc/$(systemctl --user show frankenstein-buehne.service -p MainPID --value)/exe; readlink -f /proc/$(systemctl --user show frankenstein-buehne.service -p MainPID --value)/cwd"
+}

@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-mcp-restartfix-test-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail; D=$(mktemp -d /tmp/omega-mcp-restartfix.XXXXXX); trap 'rm -rf -- \"$D\"' EXIT; export GIT_SSH_COMMAND='ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts'; git clone -q git@github.com:gschaidergabriel/clay-global-research-entity.git \"$D/repo\"; cd \"$D/repo\"; git checkout -q chatgpt/omega-mcp-fallback-restart-fix-20260912; bash -n tools/install_omega_chatgpt_mcp_ai_core.sh; grep -q 'restart omega-local-effect-adapter.service' tools/install_omega_chatgpt_mcp_ai_core.sh; grep -q 'restart omega-chatgpt-mcp.service' tools/install_omega_chatgpt_mcp_ai_core.sh; git diff --check HEAD^ HEAD; echo RESTART_FIX_OK=$(git rev-parse HEAD)"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-hostguard-source-map-20260912-1352",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/carrier_repo",
+  "timeout_seconds": 60,
+  "command": "set -eu\ngit fetch --quiet --no-tags origin refs/heads/main\nSHA=$(git rev-parse FETCH_HEAD)\nprintf 'MAIN=%s\\n' \"$SHA\"\nprintf '%s\\n' '--- PATHS ---'\ngit ls-tree -r --name-only \"$SHA\" | grep -Ei '(alignment|sandbox|effect.*interlock|interlock.*effect|local_bridge|voice_action_guard|authority.*contract|executor)' | head -n 220 || true\nprintf '%s\\n' '--- CONTENT MATCHES ---'\ngit grep -n -Ei 'bubblewrap|\\bbwrap\\b|landlock|seccomp|host[-_ ]side effect|effect sandbox|delete.*denied|format.*denied|execution_boundary|cap_sys_admin|unshare' \"$SHA\" -- ':!dump*' ':!free swarm*' ':!research_sources*' | head -n 260 || true"
+}

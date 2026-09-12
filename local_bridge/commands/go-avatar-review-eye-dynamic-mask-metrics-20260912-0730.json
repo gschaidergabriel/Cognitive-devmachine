@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-review-eye-dynamic-mask-metrics-20260912-0730",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\nEXPECTED_HTML=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\ntest \"$(sha256sum buehne.html | awk '{print $1}')\" = \"$EXPECTED_HTML\"\npython3 - <<'PY'\nfrom PIL import Image, ImageFilter\nimport glob, numpy as np\nps=sorted(glob.glob('augen_blink/blink_*.png')); assert len(ps)==12\nims=np.stack([np.asarray(Image.open(p).convert('RGBA')) for p in ps])\nrgb=ims[:,:,:,:3].astype(np.int16); rng=(rgb.max(axis=0)-rgb.min(axis=0)).max(axis=2)\nglow=np.asarray(Image.open('augen_gaze/rotglow_tracking_master.png').convert('RGBA'))[:,:,3]>0\ndef bbox(m):\n ys,xs=np.where(m); return None if not len(xs) else (int(xs.min()),int(ys.min()),int(xs.max())+1,int(ys.max())+1)\ndef dilate(m,r):\n if r<=0:return m\n k=2*r+1\n return np.asarray(Image.fromarray((m*255).astype('uint8')).filter(ImageFilter.MaxFilter(k)))>0\nprint('PATCH_SIZE',ims.shape[2],ims.shape[1],'GLOW_BBOX',bbox(glow),'GLOW_PIXELS',int(glow.sum()))\nfor thr in [1,2,3,5,8,12,20,30,50]:\n m=rng>=thr\n print('DYNAMIC_THR',thr,'PIXELS',int(m.sum()),'FRAC',round(float(m.mean()),6),'BBOX',bbox(m),'RANGE_P50_P90_P99_MAX',*[round(float(x),2) for x in np.quantile(rng[m],[.5,.9,.99,1])] if m.any() else [None]*4)\nbase=(rng>=5)|glow\nprint('BASE_UNION_PIXELS',int(base.sum()),'FRAC',round(float(base.mean()),6),'BBOX',bbox(base))\nfor r in [2,4,6,8,10,12,16,20,24,30]:\n m=dilate(base,r); print('DILATE',r,'PIXELS',int(m.sum()),'FRAC',round(float(m.mean()),6),'BBOX',bbox(m))\n# How much of canonical plate is nearly identical across all blink frames? Large stable skin region is unnecessary for eye identity.\nstable=rng<=2\nprint('STABLE_LE2_PIXELS',int(stable.sum()),'FRAC',round(float(stable.mean()),6))\nprint('SCOPE=READ_ONLY_BLINK_DYNAMIC_MASK_DERIVATION')\nPY\n"
+}

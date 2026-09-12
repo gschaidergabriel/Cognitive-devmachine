@@ -1,0 +1,66 @@
+From github.com:gschaidergabriel/clay-global-research-entity
+ * branch                fred/omega-continuous-free-workers-v1 -> FETCH_HEAD
+   0ff9da889..e04d2fbf4  fred/omega-continuous-free-workers-v1 -> origin/fred/omega-continuous-free-workers-v1
+Preparing worktree (detached HEAD e04d2fbf4)
+Updating files:  39% (5423/13654)Updating files:  40% (5462/13654)Updating files:  41% (5599/13654)Updating files:  42% (5735/13654)Updating files:  43% (5872/13654)Updating files:  44% (6008/13654)Updating files:  45% (6145/13654)Updating files:  46% (6281/13654)Updating files:  47% (6418/13654)Updating files:  48% (6554/13654)Updating files:  49% (6691/13654)Updating files:  50% (6827/13654)Updating files:  51% (6964/13654)Updating files:  52% (7101/13654)Updating files:  53% (7237/13654)Updating files:  54% (7374/13654)Updating files:  55% (7510/13654)Updating files:  56% (7647/13654)Updating files:  57% (7783/13654)Updating files:  58% (7920/13654)Updating files:  59% (8056/13654)Updating files:  60% (8193/13654)Updating files:  61% (8329/13654)Updating files:  62% (8466/13654)Updating files:  63% (8603/13654)Updating files:  64% (8739/13654)Updating files:  65% (8876/13654)Updating files:  66% (9012/13654)Updating files:  67% (9149/13654)Updating files:  68% (9285/13654)Updating files:  69% (9422/13654)Updating files:  70% (9558/13654)Updating files:  71% (9695/13654)Updating files:  72% (9831/13654)Updating files:  73% (9968/13654)Updating files:  74% (10104/13654)Updating files:  75% (10241/13654)Updating files:  76% (10378/13654)Updating files:  76% (10512/13654)Updating files:  77% (10514/13654)Updating files:  78% (10651/13654)Updating files:  79% (10787/13654)Updating files:  80% (10924/13654)Updating files:  81% (11060/13654)Updating files:  82% (11197/13654)Updating files:  83% (11333/13654)Updating files:  84% (11470/13654)Updating files:  85% (11606/13654)Updating files:  86% (11743/13654)Updating files:  87% (11879/13654)Updating files:  88% (12016/13654)Updating files:  89% (12153/13654)Updating files:  90% (12289/13654)Updating files:  91% (12426/13654)Updating files:  92% (12562/13654)Updating files:  93% (12699/13654)Updating files:  94% (12835/13654)Updating files:  95% (12972/13654)Updating files:  96% (13108/13654)Updating files:  97% (13245/13654)Updating files:  98% (13381/13654)Updating files:  99% (13518/13654)Updating files: 100% (13654/13654)Updating files: 100% (13654/13654), done.
+test_distilled_worker_output_is_noncanonical_candidate (tests.test_omega_continuous_free_workers.ContinuousCandidateTests.test_distilled_worker_output_is_noncanonical_candidate) ... ok
+test_duplicate_worker_text_is_collapsed (tests.test_omega_continuous_free_workers.ContinuousCandidateTests.test_duplicate_worker_text_is_collapsed) ... ok
+test_explicit_steering_conflict_fails_closed (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_explicit_steering_conflict_fails_closed) ... ERROR
+test_program_alias_conflict_fails_closed (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_program_alias_conflict_fails_closed) ... ERROR
+test_steering_may_omit_identity_repeated_by_current_inbox (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_steering_may_omit_identity_repeated_by_current_inbox) ... ERROR
+
+======================================================================
+ERROR: test_explicit_steering_conflict_fails_closed (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_explicit_steering_conflict_fails_closed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 52, in test_explicit_steering_conflict_fails_closed
+    root, td = self._control_root(steering_extra={"product": "OtherProduct"})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 26, in _control_root
+    (root / rel).write_text(json.dumps(steering), encoding="utf-8")
+  File "/usr/lib/python3.12/pathlib.py", line 1049, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpznv_9lt8/research_entity/claycode/autonomous/STEERING.json'
+
+======================================================================
+ERROR: test_program_alias_conflict_fails_closed (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_program_alias_conflict_fails_closed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 64, in test_program_alias_conflict_fails_closed
+    root, td = self._control_root(
+               ^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 26, in _control_root
+    (root / rel).write_text(json.dumps(steering), encoding="utf-8")
+  File "/usr/lib/python3.12/pathlib.py", line 1049, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpn5hbfrk6/research_entity/claycode/autonomous/STEERING.json'
+
+======================================================================
+ERROR: test_steering_may_omit_identity_repeated_by_current_inbox (tests.test_omega_continuous_free_workers.FreeAdmissionAuthorityTests.test_steering_may_omit_identity_repeated_by_current_inbox)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 40, in test_steering_may_omit_identity_repeated_by_current_inbox
+    root, td = self._control_root()
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmp.tvOrol3glP/repo/tests/test_omega_continuous_free_workers.py", line 26, in _control_root
+    (root / rel).write_text(json.dumps(steering), encoding="utf-8")
+  File "/usr/lib/python3.12/pathlib.py", line 1049, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/tmpr1gi9yz1/research_entity/claycode/autonomous/STEERING.json'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.014s
+
+FAILED (errors=3)

@@ -1,0 +1,173 @@
+# ChatGPT-Automation: Do's and Don'ts
+
+Werkzeug: `~/scripts/chatgpt_burst_worker_v2.sh`, angesteuert ueber
+`python3 ~/.claude/star/stern.py chatgpt-senden` / `chatgpt-ernten` /
+`chatgpt-login-status`. Diese Datei fasst zusammen, was aus ECHTEN Logs vom
+2026-08-26 gelernt wurde (`~/scripts/chatgpt_burst_state/burst_v2_*.log`,
+`SUMMARY_v2_*.json`) -- nicht aus dem Skriptkopf allein geraten.
+
+## Do's
+
+- **Bis zu 30 Worker pro Lauf** sind normal (`NUM_WORKERS`, Default 30).
+  Real bestaetigt: `SUMMARY_v2_20260826_054612.json` = 30 versucht / 25
+  gesendet / 5 fehlgeschlagen (~17% Fehlerquote bei Burst-Groesse nahe 30 --
+  siehe "Erwartete Fehlerquote" unten, das ist NORMAL, kein Absturz).
+- **Ein-Tab-Disziplin einhalten.** Das Skript schliesst Tabs automatisch
+  (`close_all_except`, `TAB_RECYCLE_EVERY=5`, `TAB_HARDLIMIT=3`) -- lass es
+  das tun, nicht selbst eingreifen.
+- **Sende-/Ernte-Phase getrennt lassen.** `chatgpt-senden` schreibt URLs
+  nach `sent_urls_v2.txt`, `chatgpt-ernten` liest sie spaeter separat.
+  `chatgpt-ernten` ist rein lesend gegenueber ChatGPT -- gefahrlos
+  wiederholbar, auch nach einem Absturz mittendrin (siehe unten: bereits
+  geerntete Resultate bleiben erhalten, `lost=0`).
+- **Vor jedem Lauf `chatgpt-login-status` pruefen** (`eingeloggt: true`
+  noetig) -- `chatgpt-senden` verweigert selbst fail-closed ohne Login,
+  aber pruefen spart einen sinnlosen Skriptaufruf.
+- **`--dry-run` nutzen**, um Env/Kommando vor einem echten,
+  Rate-Limit-riskanten Lauf zu pruefen.
+
+## Don'ts
+
+- **Nicht sofort nach einem Absturz erneut senden/ernten.** Real
+  beobachtet (`burst_v2_20260826_200109.log`): 25 Sekunden nach dem
+  Absturz `burst_v2_20260826_195938.log` (0 Tabs) sofort erneut versucht
+  -- wieder 0 Tabs, wieder FATAL. Ohne externe Reparatur (siehe
+  "Bei Absturz" unten) bringt sofortiges Retry nichts.
+- **Keine manuelle `$B`-Tab-Nutzung parallel zu einem laufenden Burst**
+  (PHASE-29-Lehre, im `chatgpt`-Skill dokumentiert): ein Bauagent, der
+  neben einem laufenden `chatgpt-senden`/`-ernten` eigenhaendig
+  `$B newtab`/`goto`/`click` auf demselben Daemon macht, wird von der
+  `TAB_HARDLIMIT`-Panik-Schliessung der anderen Sitzung mehrfach
+  weggerissen -- eine Bildgenerierungsanfrage ging dadurch nachweislich
+  verloren.
+- **Kein Poll-Loop gegen "Too many requests".** Wiederholtes goto/reload
+  haelt das Rate-Limit selbst aufrecht (live beobachtet: 10 Iterationen
+  haengend trotz sauberem manuellem Check kurz vorher). v2 macht bewusst
+  nur EINEN Check + 90s Wartezeit, kein Loop -- nicht selbst nachbauen.
+- **Nie auf 0 offene Tabs herunterschliessen.** `close_all_except` NIE
+  mit einem Sentinel aufrufen, der zu keinem echten Tab passt (historisch
+  `"__none__"` -- reale Absturzursache in den fruehesten Logs von heute,
+  `burst_v2_20260826_050254.log`/`050331.log`: "closed stray tab 1
+  (keeping __none__)" -> "FATAL: could not open initial tab". Im
+  AKTUELLEN Skript bereits gefixt (`ensure_single_tab_at()` reused immer
+  einen bestehenden Tab), aber als Lektion wichtig, falls das Skript
+  nochmal umgebaut wird.
+
+## Erwartete Fehlerquote bei grossen Bursts (~25-30 Worker)
+
+Nicht jeder "failed" Worker ist ein Absturz. Bei Burst-Groessen nahe 30
+tritt ab Worker ~15 wiederholt das Rate-Limit-Modal VOR dem Tippen auf;
+v2 dismissed es, aber der Text landet trotzdem oft nicht im Feld ->
+`FAILED_TYPE`. Praktische Konsequenz: ~15-20% Fehlerquote bei grossen
+Bursts ist NORMAL, kein Bug. Nach dem Lauf `chatgpt-ernten`-Ergebnis auf
+fehlende/`lost` URLs pruefen und Fehlgeschlagene notfalls in einem
+zweiten, kleineren Lauf nachschicken -- nicht auf 100% Zustellung
+vertrauen.
+
+## Bei Absturz ("0 Tabs" / FATAL)
+
+Real aufgetreten heute 19:59-20:01 (`burst_v2_20260826_195938.log`,
+`burst_v2_20260826_200109.log`): waehrend `chatgpt-ernten` (Harvest-Modus)
+fiel der Daemon mitten im Lauf von 1 Tab auf 0 Tabs (Chrome-Tab
+crashed/schloss sich selbst -- Ursache nicht im Log sichtbar, nur die
+Folge). Log-Zeile zum Erkennen:
+
+```
+FATAL: 0 tabs open on this daemon. This is NOT recoverable via the CLI
+(root client always needs an active page) -- restarting the daemon would
+also drop the browser context/cookies. Manual fix needed (re-run
+cookie-import) before this script can proceed.
+```
+
+Ablauf, der tatsaechlich funktioniert hat (rekonstruiert aus Logs +
+Dateizeitstempeln -- `~/.gstack/chromium-profile` wurde um 20:05:56
+beruehrt, 4 Minuten nach dem letzten FATAL um 20:01:11; Daemon danach
+wieder `Status: healthy, Tabs: 1`):
+
+1. **Nicht sofort neu senden/ernten** (siehe Don'ts oben) -- der Daemon
+   braucht eine echte Reparatur, kein Retry.
+2. **Browserfenster neu verbinden/aufmachen**: Skill `gstack-connect-chrome`
+   (startet/verbindet das sichtbare, headed Browserfenster neu).
+3. Falls Login dabei verloren ging: Skill `gstack-setup-browser-cookies`
+   (Cookie-Reimport aus echtem Chromium-Profil) -- ACHTUNG laut
+   Skriptkopf: Cloudflare-Turnstile cleart auf frischem Headless-
+   Fingerprint NICHT zuverlaessig, ggf. mehrere Versuche/Geduld noetig.
+4. **Verifizieren, nicht annehmen:** `python3 ~/.claude/star/stern.py
+   chatgpt-login-status` -- erst bei `eingeloggt: true` weitermachen.
+5. Erst danach `chatgpt-senden`/`chatgpt-ernten` erneut versuchen.
+   Bei `chatgpt-ernten` gehen bereits geerntete Resultate NICHT verloren
+   (`result_<worker>.txt` sind vor dem Absturz schon geschrieben, siehe
+   `HARVEST summary: done=3 pending=2 lost=0` im Log trotz Absturz
+   mittendrin) -- Harvest kann einfach fortgesetzt werden.
+
+**Nachtrag 2026-08-26 (Gabriel-Auftrag "repariere chatgpt ein fuer alle
+mal"): jetzt gebaut.** `chatgpt_senden()`/`chatgpt_ernten()` in `stern.py`
+laufen seitdem automatisch durch `_chatgpt_lauf_mit_recovery()` --
+erkennt genau die oben beschriebenen Absturzsignaturen ("FATAL: 0 tabs
+open"/"not recoverable via the CLI"/Timeout = "running but not
+responding") automatisch im stdout/stderr des Skriptaufrufs, versucht bis
+zu 2x eine echte Wiederherstellung (`_chatgpt_daemon_wiederherstellen()`:
+alten Prozess hart beenden, Singleton-Lockdateien raeumen, `$B connect`
+headed neu verbinden, auf die Projekt-URL navigieren -- exakt Schritte 2-4
+von oben, jetzt Code statt Handarbeit), dann automatischen Retry mit
+15s/45s-Backoff. **Real getestet 2026-08-26** (echter Daemon-Kill +
+Recovery, siehe `_chatgpt_daemon_wiederherstellen`-Docstring in stern.py):
+ein bloser `$B status`/`newtab`-Neustart landet im falschen 'launched'-
+Modus und haengt an Cloudflares Turnstile-Challenge -- der Fix nutzt
+deshalb explizit `$B connect` (headed), nicht die generischen Befehle.
+**Harte Grenze unveraendert:** kein Passwort/2FA/E-Mail-Eintippen. Geht
+die Sitzung dabei wirklich verloren (`chatgpt-login-status` zeigt danach
+`eingeloggt:false`), meldet die Routine das ehrlich (`sitzung_verloren:
+true`) statt es zu verschleiern, und bricht ab -- Mensch muss dann selbst
+einloggen. Zusaetzlich: ein echter `flock`-Dateilock
+(`_chatgpt_lock()`, Default-Timeout 20 Min) um beide Funktionen verhindert
+jetzt auch die PHASE-29-Tab-Kollision zwischen zwei gleichzeitigen
+Aufrufern -- der zweite wartet, statt dem ersten die Tabs wegzureissen.
+
+## PHASE 46b (2026-08-27): kein manuelles Neu-Login mehr noetig -- Free-Pool-Fallback
+
+Bleibt die Bruecke auch nach `_chatgpt_lauf_mit_recovery()`s automatischem
+Cookie-Wiederherstellungsversuch (siehe oben) weiter nicht eingeloggt,
+brechen `chatgpt_senden()`/`chatgpt_ernten()` NICHT mehr einfach ab
+(fail-closed war der alte Stand). Stattdessen schalten sie SELBST auf
+`~/.claude/star/harness_aider.py fallback-start` um:
+
+- **Modell-Umschaltung ist programmatisch**, kein UI-Klick auf `/modelle`
+  noetig: probiert erst NVIDIA Nemotron-3-Super, dann Mistral Small
+  (Free-Pool), aktiviert das jeweils selbst als "aktives Modell".
+- Laeuft dabei in `harness_aider.py`s eigenem **Forschungsmodus** (nicht
+  der normale Sandbox-Testlauf-Modus): darf tatsaechlich im echten
+  `~/clay-global-research-entity`-Repo committen+pushen, aber NUR unter
+  `research_entity/topic_packets/fallback-runs/<paket_id>/` -- harte
+  Datei-Allowlist, mechanisch geprueft. Jeder Verstoss verwirft den
+  GESAMTEN Lauf per `git reset --hard`. Push nur wenn `harness_audit.py`
+  (unabhaengiger Abgleich gegen den echten git-Verlauf) exit 0 meldet.
+- Meldet sich bei der Forschungsentitaet als eigener, niedriger
+  gewichteter Akteur an: `actor_id=freepool-fallback-secondary`,
+  `decision_weight=0.5` (gegenueber `chatgpt-secondary`s 1.0 -- kleineres
+  Modell, Einzelschuss, entsprechend weniger Gewicht bei Widerspruch).
+- Ergebnis geht BEIDE Wege: dauerhaft als Commit im Repo UND direkt im
+  Rueckgabewert des Aufrufs (`laeufe[i].antwort`) -- `chatgpt_ernten()`
+  liefert wartende Fallback-Antworten aus einer kleinen lokalen
+  Warteschlange, kein separates manuelles Nachschauen im Repo noetig.
+- **Real getestet, nicht nur behauptet:** drei echte Bugs beim ersten
+  Live-Lauf gefunden und gefixt (Voll-Historie-Scan zaehlte faelschlich
+  5930 Alt-Commits mit, `git show --stat` kuerzte lange Pfade und erzeugte
+  dadurch Fehlalarme, Aiders eigene Logdateien blockierten den naechsten
+  Preflight-Check) -- zwei echte Antworten ("Paris", "vier") sauber bis
+  zum Aufrufer durchgereicht UND dauerhaft im Repo gelandet.
+
+**Praktische Konsequenz:** kein Grund mehr, bei einer toten ChatGPT-Sitzung
+auf ein manuelles Mensch-Login zu warten -- die Funktionen erledigen den
+Fallback selbst. Nur wenn AUCH der Free-Pool-Fallback scheitert (z.B. keine
+gueltigen NVIDIA-/Mistral-Schluessel im Tresor), bleibt der Mensch-Login
+der letzte Ausweg.
+
+## Quellen
+
+- `~/scripts/chatgpt_burst_worker_v2.sh` (Skriptkopf, v1->v2-Lektionen)
+- `~/scripts/chatgpt_burst_state/burst_v2_20260826_{050254,050331,195938,200109}.log`
+  (die vier Absturz-Logs von heute)
+- `~/scripts/chatgpt_burst_state/SUMMARY_v2_20260826_054612.json` (30/25/5)
+- `~/.claude/skills/chatgpt/SKILL.md` (PHASE-29-Lehre, Fehlerquote-Befund)
+- `~/.claude/star/stern.py`, Abschnitt "CHATGPT-BURST-BRUECKE"

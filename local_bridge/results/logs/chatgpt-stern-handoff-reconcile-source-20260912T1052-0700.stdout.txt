@@ -1,0 +1,261 @@
+                "letzte_ausloesung = ? WHERE skript_id = ?",
+                (_jetzt(), skript_id),
+            )
+            return (
+                f"GRID-Weiche ({skript_id}, Muster '{treffer.group(0)}' getroffen): "
+                f"{regel} -- vor einem Sonnet-Subagenten pruefen: braucht DIESER Schritt "
+                f"wirklich Read/Edit/Write/Bash, oder reicht `gen \"...\"` "
+                f"(~/last-resort/llm.py, kostet kein Claude-Kontingent)?"
+            )
+    return None
+
+
+def handoff(session_id: str, auftrag: str, womit: str, warum: str, thema: str = "") -> dict:
+    """ZECP13: legt ein entityos_arbeitspaket an (stand='laeuft') und baut
+    die Uebergabekapsel -- AUSSCHLIESSLICH aus der DB zusammengesetzt, kein
+    Satz davon ist vom Modell formuliert. Das ist der Text, den der
+    Koordinator dem delegierten Subagenten mitgibt. `stern` delegiert
+    selbst NICHTS (ausdrueckliches Nicht-Ziel) -- es verbucht nur, dass
+    delegiert wurde, und gibt dem Koordinator das Material dazu.
+
+    `thema` (optional, 2026-08-27-Nachtrag Themen-Register): freier
+    Kurztitel, unter dem dieses Vorhaben in themen_status auffindbar wird
+    (z.B. 'Xeno/HCU-Trainingscurriculum'). Fehlt er, faellt der Schluessel
+    auf `auftrag` zurueck -- immer noch besser auffindbar als gar keine
+    Zeile, siehe Docstring des Themen-Register-Abschnitts."""
+    try:
+        with contextlib.closing(schreib_verbindung()) as c:
+            paket_id = _uid("paket")
+            jetzt = _jetzt()
+            c.execute(
+                "INSERT INTO entityos_arbeitspaket (paket_id, besteller, session_id, "
+                "auftrag, womit, warum, stand, ergebnis, beleg, erstellt, geaendert) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                (paket_id, USER_ID, session_id, auftrag, womit, warum, "laeuft", None, None, jetzt, jetzt),
+            )
+            c.commit()
+
+            # PHASE 50 -- Goal-Bruecke: dieser handoff() IST der Moment, in
+            # dem der Koordinator entschieden hat "das ist echte Bauarbeit,
+            # kein Ein-Zeiler" (siehe ziel_bruecke.py-Docstring). Eigener
+            # try/except, eigener Commit-Punkt NICHT noetig (dieselbe
+            # Transaktion, c.commit() unten deckt auch die Verlinkung ab).
+            if _ziel_bruecke is not None:
+                try:
+                    _ziel_bruecke.goal_fuer_handoff(c, paket_id, auftrag, warum, log=_log)
+                    c.commit()
+                except Exception as e:
+                    _log(f"handoff ziel_bruecke fehler paket={paket_id}: {e}")
+
+            dateien = _kapsel_betroffene_dateien(c, session_id, womit)
+            offene = _kapsel_offener_zustand(c, session_id)
+            erinnerungen = _kapsel_relevante_erinnerungen(c, auftrag, warum)
+
+            # Befund 2026-09-12/Ziel [239]: deterministische Free-Pool-Weiche,
+            # abschaltbar per Env-Var (nie ohne Fluchtweg bauen). Darf handoff()
+            # nie zum Scheitern bringen -- eigenes try/except, gleiche Absicherung
+            # wie beim ziel_bruecke-Aufruf oben.
+            pool_hinweis = None
+            if not os.environ.get("FRANKENSTEIN_POOL_ROUTING_HINWEIS_AUS"):
+                try:
+                    pool_hinweis = _pool_routing_pruefen(c, auftrag, womit)
+                    c.commit()
+                except Exception as e:
+                    _log(f"handoff pool_routing fehler paket={paket_id}: {e}")
+    except Exception as e:
+        _log(f"handoff fehler sid={session_id}: {e}")
+        return {"paket_id": None, "kapsel": f"handoff fehlgeschlagen: {e}"}
+
+    # P5d: Pacht auf jede betroffene Datei -- die Sitzung, die delegiert,
+    # markiert die Dateien ab JETZT als in Arbeit, nicht erst beim ersten
+    # tatsaechlichen Edit (sonst saehe eine zweite Sitzung die Kollision zu
+    # spaet). Nur MELDUNG fuer andere, nie eine Sperre fuer diese Sitzung.
+    hinweise = []
+    if dateien:
+        try:
+            with contextlib.closing(verbindung()) as c2:
+                genrow = c2.execute(
+                    "SELECT generation FROM sessions WHERE session_id=?", (session_id,)
+                ).fetchone()
+            generation = genrow[0] if genrow else 1
+        except Exception:
+            generation = 1
+        for pfad in dateien:
+            lease_halten(pfad, session_id, generation)
+        hinweise = lease_hinweise(ausser_sitzung=session_id, ressourcen=dateien)
+
+    _raum_ruf_schreiben(session_id, "HANDOFF", f"paket_id={paket_id} auftrag={_kurz(auftrag, 120)}")
+    _themen_status_schreiben(thema or auftrag, f"laeuft: {_kurz(auftrag, 300)}", "laeuft",
+                              paket_id, session_id)
+
+    zeilen = [
+        f"HANDOFF {paket_id}",
+        f"Auftrag: {auftrag}",
+    ]
+    if womit:
+        zeilen.append(f"Womit: {womit}")
+    if warum:
+        zeilen.append(f"Warum: {warum}")
+    if pool_hinweis:
+        zeilen.append(pool_hinweis)
+    zeilen.append(f"Betroffene Dateien ({len(dateien)}): " + (", ".join(dateien) if dateien else "keine ermittelt"))
+    if hinweise:
+        zeilen.append("Kollisionshinweis (keine Sperre): " + " | ".join(hinweise))
+    if offene:
+        zeilen.append(f"Andere offene Pakete ({len(offene)}):")
+        zeilen.extend(f"  - {z}" for z in offene)
+    if erinnerungen:
+        zeilen.append(f"Relevantes Vorwissen ({len(erinnerungen)}):")
+        zeilen.extend(f"  - {z}" for z in erinnerungen)
+    zeilen.append(
+        f"Beleg-Pflicht bei Abschluss: `stern.py reconcile --paket-id {paket_id} "
+        f"--ergebnis ... --beleg ...` -- Beleg MUSS effect:<id>, datei:<pfad>:<sha256> "
+        f"oder test:<exit_code>:<beschreibung> sein. Ohne Beleg wird das Paket als "
+        f"gescheitert/unbelegte_behauptung verbucht, nicht als Erfolg."
+    )
+    return {"paket_id": paket_id, "kapsel": "\n".join(zeilen)}
+
+
+def paket_abschliessen(paket_id: str, ergebnis: str, beleg: str, session_id: Optional[str] = None) -> str:
+    """Rueckwaerts-kompatible CLI-Form von reconcile() -- ruft dieselbe
+    Beleg-Pflicht auf (keine zwei Wahrheiten fuer denselben Abschluss)."""
+    ergebnis_dict = reconcile(paket_id, ergebnis, beleg, session_id)
+    return "ok" if ergebnis_dict.get("stand") == "fertig" else ergebnis_dict.get("stand", "fehlgeschlagen")
+
+
+# ── Beleg-Pruefung (ZECP14-Kern): mechanisch, nie Modell-formuliert ───────
+_BELEG_EFFECT_RE = re.compile(r"^(?:effect:)?(eff-[a-zA-Z0-9._-]+)$")
+_BELEG_DATEI_RE = re.compile(r"^datei:(.+):([0-9a-fA-F]{64})$")
+_BELEG_TEST_RE = re.compile(r"^test:([^:]+)(?::(.*))?$")
+
+
+def _beleg_pruefen(c, sitzung: Optional[str], beleg: Optional[str]) -> dict:
+    """Gibt {'ok':bool, 'art':str, 'detail':str} zurueck. Drei zulaessige
+    Belegformen (siehe Auftrag 5b): eine effect_id AUS DIESER SITZUNG, ein
+    Dateipfad mit sha256, oder ein Testausgang. Alles andere -- inklusive
+    leerer Beleg -- ist KEIN Beleg, egal wie plausibel der Text klingt.
+
+    Abweichung/Ehrlichkeit: der volle ZECP17-Effect-Vertrag (status
+    ZUGELASSEN/VERIFIED/ABGELEHNT/UNGEPRUEFT, requested_generation echt) ist
+    Phase 2 und war zum Zeitpunkt dieses Baus NICHT gelandet -- effects.status
+    hatte zum Messzeitpunkt nur 'ausgefuehrt'/'fehler'. Die Pruefung hier
+    verlangt deshalb NICHT status='VERIFIED' (das gaebe es noch nicht),
+    sondern nur: die Zeile existiert wirklich, gehoert nachweisbar zur
+    angegebenen Sitzung (ueber episode_id -> workspace_episodes.session_id),
+    und ist nicht selbst als 'fehler' verbucht. Sobald P2 landet, greift
+    dieselbe Abfrage automatisch strenger (status wird dann u.a. 'VERIFIED'
+    sein) -- kein Nacharbeiten hier noetig, nur eine Formatierung, die schon
+    auf beide Vertraege passt (Vergleich ist != 'fehler', nicht == 'ausgefuehrt')."""
+    if not beleg or not beleg.strip():
+        return {"ok": False, "art": "kein_beleg", "detail": "kein Beleg angegeben"}
+    beleg = beleg.strip()
+
+    m = _BELEG_EFFECT_RE.match(beleg)
+    if m:
+        eff_id = m.group(1)
+        row = c.execute(
+            "SELECT e.status, e.ts, w.session_id FROM effects e "
+            "LEFT JOIN workspace_episodes w ON e.episode_id = w.episode_id "
+            "WHERE e.effect_id=?",
+            (eff_id,),
+        ).fetchone()
+        if not row:
+            return {"ok": False, "art": "effect_id", "detail": f"effect_id {eff_id} nicht in effects gefunden"}
+        status, ts, eff_session = row
+        if sitzung and eff_session and eff_session != sitzung:
+            return {"ok": False, "art": "effect_id",
+                     "detail": f"effect_id {eff_id} gehoert zu Sitzung {eff_session}, nicht zu {sitzung}"}
+        if status == "fehler":
+            return {"ok": False, "art": "effect_id", "detail": f"effect_id {eff_id} selbst als 'fehler' verbucht"}
+        return {"ok": True, "art": "effect_id", "detail": f"effect_id={eff_id} status={status} ts={ts}"}
+
+    m = _BELEG_DATEI_RE.match(beleg)
+    if m:
+        pfad, erwartet = m.group(1), m.group(2).lower()
+        if not os.path.isfile(pfad):
+            return {"ok": False, "art": "datei_sha256", "detail": f"Datei nicht gefunden: {pfad}"}
+        try:
+            echt = hashlib.sha256(Path(pfad).read_bytes()).hexdigest()
+        except Exception as e:
+            return {"ok": False, "art": "datei_sha256", "detail": f"sha256 fehlgeschlagen: {e}"}
+        if echt != erwartet:
+            return {"ok": False, "art": "datei_sha256",
+                     "detail": f"sha256 stimmt nicht: erwartet {erwartet}, real {echt}"}
+        return {"ok": True, "art": "datei_sha256", "detail": f"{pfad} sha256={echt}"}
+
+    m = _BELEG_TEST_RE.match(beleg)
+    if m:
+        exit_code = m.group(1).strip()
+        beschreibung = (m.group(2) or "").strip()
+        if exit_code != "0":
+            return {"ok": False, "art": "test_ausgang",
+                     "detail": f"Testausgang exit_code={exit_code} (nicht 0) -- {beschreibung}"}
+        return {"ok": True, "art": "test_ausgang", "detail": f"exit_code=0 {beschreibung}"}
+
+    return {"ok": False, "art": "unbekanntes_format",
+             "detail": "Beleg muss effect:<eff-id>, datei:<pfad>:<sha256> oder "
+                        "test:<exit_code>:<beschreibung> sein"}
+
+
+def reconcile(paket_id: str, ergebnis: str, beleg: Optional[str], session_id: Optional[str] = None,
+              thema: str = "") -> dict:
+    """ZECP14: schliesst ein Paket ab -- ABER NUR, wenn der Beleg mechanisch
+    stimmt. Das ist der eigentliche Abnahmetest von Phase 5 (Auftrag,
+    Pruefschritt 2): reconcile OHNE gueltigen Beleg setzt stand='gescheitert'
+    und markiert ergebnis als 'unbelegte_behauptung' -- wird NIE als Erfolg
+    verbucht, unabhaengig davon, was --ergebnis behauptet.
+
+    `thema` (optional, 2026-08-27-Nachtrag): wie bei handoff() -- fehlt es,
+    wird zuerst nachgeschaut, ob DIESES paket_id bereits eine themen_status-
+    Zeile hat (die handoff() beim Anlegen geschrieben haette, mit oder ohne
+    explizites --thema) und deren `thema` unveraendert weiterverwendet, damit
+    reconcile() DIESELBE Zeile abschliesst statt eine zweite unter einem
+    anderen Schluessel anzulegen. Gibt es keine (z.B. Paket kam ueber
+    paket-anlegen statt handoff), faellt es auf den `auftrag` des Pakets
+    zurueck."""
+    try:
+        with contextlib.closing(schreib_verbindung()) as c:
+            row = c.execute(
+                "SELECT session_id, stand, auftrag FROM entityos_arbeitspaket WHERE paket_id=?",
+                (paket_id,),
+            ).fetchone()
+            if not row:
+                return {"paket_id": paket_id, "stand": "FEHLER", "grund": "paket_id nicht gefunden"}
+            paket_session, bisheriger_stand, paket_auftrag = row
+            pruef_sitzung = session_id or paket_session
+
+            # 2026-08-27-Nachtrag (Themen-Register): falls handoff() dieses
+            # Paket mit einem EXPLIZITEN --thema angelegt hat, MUSS reconcile()
+            # ohne eigenes --thema dieselbe themen_status-Zeile treffen, nicht
+            # eine zweite unter dem (anderen!) auftrag-Fallback-Schluessel
+            # anlegen -- sonst bleibt die handoff-Zeile fuer immer auf
+            # stand='laeuft' stehen, obwohl das Paket laengst fertig ist
+            # (genau der Fehler, den der Verifikationslauf dieses Baus
+            # aufgedeckt hat). Nachschlagen ueber paket_id, die
+            # _themen_status_schreiben() bei jedem Schreiben mitspeichert --
+            # kein zweiter Zuordnungspfad, dieselbe Tabelle.
+            vorheriges_thema = None
+            try:
+                vr = c.execute(
+                    "SELECT thema FROM themen_status WHERE paket_id=? ORDER BY aktualisiert DESC LIMIT 1",
+                    (paket_id,),
+                ).fetchone()
+                vorheriges_thema = vr[0] if vr else None
+            except sqlite3.OperationalError:
+                pass  # Tabelle noch nicht angelegt
+
+            befund = _beleg_pruefen(c, pruef_sitzung, beleg)
+            jetzt = _jetzt()
+
+            if befund["ok"]:
+                neuer_stand = "fertig"
+                gespeichertes_ergebnis = ergebnis
+            else:
+                neuer_stand = "gescheitert"
+                gespeichertes_ergebnis = f"unbelegte_behauptung: {ergebnis or ''}".strip()
+
+            beleg_json = json.dumps({
+                "roh": beleg, "art": befund["art"], "ok": befund["ok"],
+                "grund": befund["detail"], "geprueft_um": jetzt,
+            }, ensure_ascii=False)
+

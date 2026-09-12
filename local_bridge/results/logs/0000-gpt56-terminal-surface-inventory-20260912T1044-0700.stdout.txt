@@ -1,0 +1,48 @@
+=== COMMANDS ===
+-rwxrwxr-x 1 ai-core-node ai-core-node     3320 Aug 26 09:06 clay-chatgpt-usage-check
+-rwxrwxr-x 1 ai-core-node ai-core-node      814 Aug 26 09:06 clay-chatgpt-usage-hook
+-rwxrwxr-x 1 ai-core-node ai-core-node     1005 Aug 26 09:05 clay-chatgpt-usage-log
+-rwxrwxr-x 1 ai-core-node ai-core-node     4728 Sep  5 22:56 frank-cortex-fenster
+-rwxrwxr-x 1 ai-core-node ai-core-node     7163 Aug  6 21:47 frank-fenster
+-rwxrwxr-x 1 ai-core-node ai-core-node     1125 Aug 27 15:44 frank-harness-sichtbar
+-rwxrwxr-x 1 ai-core-node ai-core-node     2201 Aug  6 05:53 frank-hub
+-rwxrwxr-x 1 ai-core-node ai-core-node     1387 Aug  6 05:53 frank-hub.vor-appfenster-055313
+-rwxrwxr-x 1 ai-core-node ai-core-node     4075 Aug  1 02:06 frank-rollback
+-rwxrwxr-x 1 ai-core-node ai-core-node     1815 Aug  1 02:01 frank-snapshot
+-rwxr-xr-x 1 ai-core-node ai-core-node     6369 Aug 27 16:57 frank-stat-fenster
+-rwxr-xr-x 1 ai-core-node ai-core-node      316 Sep 12 10:37 frank-terminal-hilfe
+-rwxr-xr-x 1 ai-core-node ai-core-node     1532 Sep 12 10:37 frank-terminal-hilfe.pre-chatgpt-organ-20260912-103758
+-rwxr-xr-x 1 ai-core-node ai-core-node     1016 Sep 12 10:41 work-on-frank
+-rwxrwxr-x 1 ai-core-node ai-core-node     1865 Sep 12 10:41 work-on-frank.pre-chatgpt-organ-20260912-104121
+=== SHELL ALIASES ===
+=== WEBUI SERVICE ===
+# /home/ai-core-node/.config/systemd/user/frankenstein-local-bridge-webui.service
+[Unit]
+Description=Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target
+=== RELATED STAR FILES ===
+/home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+/home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+/home/ai-core-node/.claude/star/harness_aider_knopf.py
+/home/ai-core-node/.claude/star/harness_aider_knopf.sh
+/home/ai-core-node/.claude/star/harness_aider.py
+/home/ai-core-node/.claude/star/harness_audit.py
+/home/ai-core-node/.claude/star/harness_crush_knopf.py
+/home/ai-core-node/.claude/star/harness_crush_knopf.sh
+/home/ai-core-node/.claude/star/harness_crush.py
+/home/ai-core-node/.claude/star/__pycache__/f2wp1207_chatgpt_organ.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/frank_chatgpt_terminal.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/harness_aider.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/harness_aider_knopf.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/harness_audit.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/harness_crush.cpython-312.pyc
+/home/ai-core-node/.claude/star/__pycache__/harness_crush_knopf.cpython-312.pyc

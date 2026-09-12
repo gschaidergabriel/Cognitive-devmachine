@@ -1,0 +1,151 @@
+---SEND-CORRELATION---
+    failed_count=0
+    # mid-burst stubborn-wait guard: Phase A only catches a limit that's
+    # already active BEFORE the first send. If the limit kicks in partway
+    # through the 30-worker burst instead, every remaining worker used to
+    # blow straight through as BLOCKED_NO_URL_CHANGE with no recovery
+    # (Gabriel's "5-7min wait, then click windows away, then continue"
+    # never happened). Fire the same stubborn wait ONCE, only after 2
+    # consecutive blocks (avoids treating one flaky send as a real limit).
+    consec_blocked=0
+    rate_limit_wait_used=0
+
+    > /dev/null  # noop, keep shellcheck quiet about empty body possibilities
+
+    for i in $(seq 1 "$NUM_WORKERS"); do
+        ts_start="$(date -Iseconds)"
+        result_json="$STATE_DIR/worker_${i}.json"
+
+        if ! resource_guard; then
+            log "Worker $i: RESOURCE_GUARD_PAUSE, stopping remaining cycle early"
+            printf '{"worker":%d,"status":"RESOURCE_GUARD_PAUSE","sent_at":"%s","trigger":"%s"}\n' \
+                "$i" "$ts_start" "$TRIGGER" > "$result_json"
+            break
+        fi
+
+        $B tab "$CURRENT_TAB" >>"$LOG" 2>&1
+        $B goto "$PROJECT_URL" >>"$LOG" 2>&1
+        sleep 1.5
+
+        timeout 6 "$B" wait "$INPUT_SEL" >>"$LOG" 2>&1
+        sleep 0.5
+
+        if is_rate_limited; then
+            log "Worker $i: rate-limit modal visible before typing on tab $CURRENT_TAB, dismissing and continuing (not auto-blocking)"
+            dismiss_rate_limit
+        fi
+
+        $B click "$INPUT_SEL" >>"$LOG" 2>&1
+        $B js 'var el=document.querySelector("#prompt-textarea"); if(el) el.innerText="";' >>"$LOG" 2>&1
+        sleep 0.2
+        $B type "$TRIGGER" >>"$LOG" 2>&1
+        sleep 0.3
+
+        actual=$($B js 'document.querySelector("#prompt-textarea") ? document.querySelector("#prompt-textarea").innerText : "__MISSING__"' 2>/dev/null)
+        if [ "$actual" != "$TRIGGER" ]; then
+            log "Worker $i: text mismatch on tab $CURRENT_TAB (got '$actual'), retrying once"
+            $B click "$INPUT_SEL" >>"$LOG" 2>&1
+            $B js 'var el=document.querySelector("#prompt-textarea"); if(el) el.innerText="";' >>"$LOG" 2>&1
+            sleep 0.2
+            $B type "$TRIGGER" >>"$LOG" 2>&1
+            sleep 0.3
+            actual=$($B js 'document.querySelector("#prompt-textarea") ? document.querySelector("#prompt-textarea").innerText : "__MISSING__"' 2>/dev/null)
+            if [ "$actual" != "$TRIGGER" ]; then
+                log "Worker $i: text STILL mismatched ('$actual'), marking FAILED_TYPE"
+                printf '{"worker":%d,"tab_id":%s,"status":"FAILED_TYPE","sent_at":"%s","trigger":"%s"}\n' \
+                    "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+                failed_count=$((failed_count + 1))
+                enforce_tab_hardlimit "$CURRENT_TAB"
+                sleep "$SLEEP_BETWEEN_WORKERS"
+                continue
+            fi
+        fi
+
+        $B click "$SEND_SEL" >>"$LOG" 2>&1
+
+        # verification: trust URL transition, not modal presence
+        if conv_url=$(verify_send); then
+            log "Worker $i: SENT on tab $CURRENT_TAB -> $conv_url"
+            printf '{"worker":%d,"tab_id":%s,"url":"%s","status":"SENT","sent_at":"%s","trigger":"%s"}\n' \
+                "$i" "$CURRENT_TAB" "$conv_url" "$ts_start" "$TRIGGER" > "$result_json"
+            printf '%s\t%s\t%s\n' "$i" "$conv_url" "$ts_start" >> "$SENT_URLS_FILE"
+            sent_count=$((sent_count + 1))
+            consec_blocked=0
+        else
+            log "Worker $i: URL never left /project after send, marking BLOCKED"
+            if is_rate_limited; then
+                dismiss_rate_limit
+            fi
+            printf '{"worker":%d,"tab_id":%s,"status":"BLOCKED_NO_URL_CHANGE","sent_at":"%s","trigger":"%s"}\n' \
+                "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+            blocked_count=$((blocked_count + 1))
+            consec_blocked=$((consec_blocked + 1))
+
+            if [ "$consec_blocked" -ge 2 ] && [ "$rate_limit_wait_used" -eq 0 ]; then
+                log "Worker $i: $consec_blocked consecutive BLOCKED -- real rate limit mid-burst, stubborn wait ${RATE_LIMIT_WAIT_S}s once (Gabriel 2026-08-26), then dismiss + continue"
+                sleep "$RATE_LIMIT_WAIT_S"
+                if is_rate_limited; then
+                    dismiss_rate_limit
+                fi
+                rate_limit_wait_used=1
+                consec_blocked=0
+            fi
+        fi
+
+        enforce_tab_hardlimit "$CURRENT_TAB"
+
+        # tab recycle: every TAB_RECYCLE_EVERY workers, close + reopen fresh tab (RAM reset)
+        if [ $((i % TAB_RECYCLE_EVERY)) -eq 0 ] && [ "$i" -lt "$NUM_WORKERS" ]; then
+            log "Worker $i: recycle point (every $TAB_RECYCLE_EVERY), closing tab $CURRENT_TAB and opening fresh tab"
+            old_tab="$CURRENT_TAB"
+            out=$($B newtab "$PROJECT_URL" 2>&1)
+            new_tab=$(echo "$out" | grep -o 'Opened tab [0-9]*' | grep -o '[0-9]*')
+            if [ -n "$new_tab" ]; then
+                $B closetab "$old_tab" >>"$LOG" 2>&1
+                CURRENT_TAB="$new_tab"
+                log "recycled: closed $old_tab, now on fresh tab $CURRENT_TAB"
+            else
+                log "recycle: failed to open fresh tab, keeping $old_tab"
+            fi
+            avail_now=$(free -m | awk '/^Mem:/{print $7}')
+            log "post-recycle available RAM: ${avail_now}MB"
+        fi
+
+        sleep "$SLEEP_BETWEEN_WORKERS"
+    done
+
+    log "Phase B complete: sent=$sent_count blocked=$blocked_count failed=$failed_count attempted=$NUM_WORKERS"
+
+    avail_end=$(free -m | awk '/^Mem:/{print $7}')
+    log "final available RAM: ${avail_end}MB, tabs open: $(tab_ids | wc -l)"
+
+    SUMMARY_FILE="$STATE_DIR/SUMMARY_v2_${RUN_TS}.json"
+    cat > "$SUMMARY_FILE" <<EOF
+{
+  "run_ts": "$RUN_TS",
+  "attempted": $NUM_WORKERS,
+  "sent": $sent_count,
+  "blocked": $blocked_count,
+  "failed": $failed_count,
+  "sent_urls_file": "$SENT_URLS_FILE",
+  "log_file": "$LOG"
+}
+EOF
+    log "Summary written to $SUMMARY_FILE"
+    log "BURST_CYCLE_COMPLETE (send phase only; run --harvest separately to collect results)"
+}
+
+# ---------------------------------------------------------------------------
+# entrypoint
+# ---------------------------------------------------------------------------
+---LATEST-SUMMARY-SHAPE---
+FILE=SUMMARY_v2_20260827_231249.json
+{
+  "run_ts": "<str:15>",
+  "attempted": 1,
+  "sent": 0,
+  "blocked": 0,
+  "failed": 1,
+  "sent_urls_file": "<str:63>",
+  "log_file": "<str:75>"
+}

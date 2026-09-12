@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56-terminal-surface-inventory-20260912T1044-0700",
+  "command_sha256": "ad4c68c881abdee39d42a8f6f77dcb34f3d61a210d365c9423ccbb21beca9bf9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:41:52.006293+00:00",
+  "finished_at": "2026-09-12T03:41:52.072862+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8993f4541ad2e1bf9421e7e93dfba7c31ce10f48aadd17cb93e620b31e6e9978",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== COMMANDS ===\n-rwxrwxr-x 1 ai-core-node ai-core-node     3320 Aug 26 09:06 clay-chatgpt-usage-check\n-rwxrwxr-x 1 ai-core-node ai-core-node      814 Aug 26 09:06 clay-chatgpt-usage-hook\n-rwxrwxr-x 1 ai-core-node ai-core-node     1005 Aug 26 09:05 clay-chatgpt-usage-log\n-rwxrwxr-x 1 ai-core-node ai-core-node     4728 Sep  5 22:56 frank-cortex-fenster\n-rwxrwxr-x 1 ai-core-node ai-core-node     7163 Aug  6 21:47 frank-fenster\n-rwxrwxr-x 1 ai-core-node ai-core-node     1125 Aug 27 15:44 frank-harness-sichtbar\n-rwxrwxr-x 1 ai-core-node ai-core-node     2201 Aug  6 05:53 frank-hub\n-rwxrwxr-x 1 ai-core-node ai-core-node     1387 Aug  6 05:53 frank-hub.vor-appfenster-055313\n-rwxrwxr-x 1 ai-core-node ai-core-node     4075 Aug  1 02:06 frank-rollback\n-rwxrwxr-x 1 ai-core-node ai-core-node     1815 Aug  1 02:01 frank-snapshot\n-rwxr-xr-x 1 ai-core-node ai-core-node     6369 Aug 27 16:57 frank-stat-fenster\n-rwxr-xr-x 1 ai-core-node ai-core-node      316 Sep 12 10:37 frank-terminal-hilfe\n-rwxr-xr-x 1 ai-core-node ai-core-node     1532 Sep 12 10:37 frank-terminal-hilfe.pre-chatgpt-organ-20260912-103758\n-rwxr-xr-x 1 ai-core-node ai-core-node     1016 Sep 12 10:41 work-on-frank\n-rwxrwxr-x 1 ai-core-node ai-core-node     1865 Sep 12 10:41 work-on-frank.pre-chatgpt-organ-20260912-104121\n=== SHELL ALIASES ===\n=== WEBUI SERVICE ===\n# /home/ai-core-node/.config/systemd/user/frankenstein-local-bridge-webui.service\n[Unit]\nDescription=Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)\nAfter=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py\nRestart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n=== RELATED STAR FILES ===\n/home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py\n/home/ai-core-node/.claude/star/frank_chatgpt_terminal.py\n/home/ai-core-node/.claude/star/harness_aider_knopf.py\n/home/ai-core-node/.claude/star/harness_aider_knopf.sh\n/home/ai-core-node/.claude/star/harness_aider.py\n/home/ai-core-node/.claude/star/harness_audit.py\n/home/ai-core-node/.claude/star/harness_crush_knopf.py\n/home/ai-core-node/.claude/star/harness_crush_knopf.sh\n/home/ai-core-node/.claude/star/harness_crush.py\n/home/ai-core-node/.claude/star/__pycache__/f2wp1207_chatgpt_organ.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/frank_chatgpt_terminal.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/harness_aider.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/harness_aider_knopf.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/harness_audit.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/harness_crush.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/harness_crush_knopf.cpython-312.pyc\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

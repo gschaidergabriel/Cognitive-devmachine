@@ -1,0 +1,109 @@
+=== ORGAN STRUCTURE ===
+  449 /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+   72 /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+  521 total
+10:      -> read the resulting canonical pointer/state from unified.db
+11:      -> dispatch through stern.py's EXISTING chatgpt_senden()/chatgpt_ernten()
+12:      -> persist dispatch/harvest in unified.db
+53:    worker_budget            INTEGER NOT NULL,
+89:class ChatGPTOrganError(RuntimeError):
+94:class HostAdmission:
+100:    max_swarm_workers: int
+103:def _now() -> str:
+107:def _canon(value: Any) -> str:
+111:def ensure_schema(conn: sqlite3.Connection) -> dict:
+128:def _mem_available_mb() -> int:
+139:def host_admission() -> HostAdmission:
+158:    # Browser workers are mostly remote-inference clients, but still consume
+166:def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
+172:def latest_pointer(conn: sqlite3.Connection) -> dict:
+185:def _latest_hypermirror(conn: sqlite3.Connection) -> Optional[str]:
+208:def state_capsule(conn: sqlite3.Connection, pointer: Mapping[str, Any]) -> dict:
+238:def _one_line(text: str, limit: int = 12000) -> str:
+243:def build_grid_instruction(user_text: str, capsule: Mapping[str, Any], run_id: str) -> str:
+250:        "GRID10 owns the cognitive turn lifecycle and unified.db is canonical state. Read/inspect connected "
+252:        "task as Claude Code would: analyze, use available tools/workers where justified, preserve machine/owner "
+256:        "\"next\":\"...\",\"workers_suggested\":0}."
+260:def _extract_response(value: Any) -> str:
+283:def _insert_message(conn: sqlite3.Connection, *, run_id: str, direction: str,
+297:def _update_run(conn: sqlite3.Connection, run_id: str, **fields: Any) -> None:
+301:        "worker_budget", "status", "send_json", "harvest_json", "response_sha256",
+315:def _suggest_worker_budget(user_text: str, admission: HostAdmission) -> int:
+324:    return max(1, min(admission.max_swarm_workers, complexity))
+327:def execute_terminal_turn(user_text: str, *, session_id: str, stern_module: Any) -> dict:
+361:        budget = _suggest_worker_budget(text, admission)
+367:            "source_session_id,source_winner_cell,source_broadcast_value,user_text_sha256,worker_budget,"
+382:    send = stern_module.chatgpt_senden(
+383:        [instruction], num_workers=budget,
+397:    harvest = stern_module.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)
+440:        "workers": budget,
+=== STERN/GRID SYMBOLS ===
+9258:def _f2wp1207_runtime_sha_ok() -> bool:
+9307:_F2WP1207_P7_KONFIG_KEY = "f2wp1207.p7_active"
+9310:def _f2wp1207_p7_bruecke_aktiv() -> bool:
+9320:def _f2wp1207_p7_bruecke_versuchen(session_id: str) -> None:
+9332:        if not _f2wp1207_p7_bruecke_aktiv():
+9334:        if not _f2wp1207_runtime_sha_ok():
+9336:                _log("f2wp1207 p7-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9350:            _log(f"f2wp1207 p7-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9360:# Zielsubbefehl (f2wp1207-p9-reconcile-turn statt p7-bridge-turn), ruft dort
+9361:# NUR _f2wp1207_runtime_epoch(session_id) auf -- der eigentliche Reconciler-
+9363:# _f2wp1207_p9_reconciler_aktiv() dort), diese Bruecke hier fuegt kein
+9376:_F2WP1207_P9_KONFIG_KEY = "f2wp1207.p9_reconciler_active"
+9379:def _f2wp1207_p9_bruecke_aktiv() -> bool:
+9389:def _f2wp1207_p9_bruecke_versuchen(session_id: str) -> None:
+9392:    frankenstein-repo/scripts/stern.py f2wp1207-p9-reconcile-turn, Timeout
+9396:        if not _f2wp1207_p9_bruecke_aktiv():
+9398:        if not _f2wp1207_runtime_sha_ok():
+9400:                _log("f2wp1207 p9-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9409:            [sys.executable, str(bruecke), "f2wp1207-p9-reconcile-turn"],
+9414:            _log(f"f2wp1207 p9-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9428:# _f2wp1207_p15_canary_turn_ausfuehren() in frankenstein-repo/scripts/
+9431:# EIGENES Flag `f2wp1207.p15_canary_active`, bewusst NICHT dasselbe wie
+9432:# `f2wp1207.p7_active` -- Gabriels Aktivierungsliste verlangt "P7
+9450:_F2WP1207_P15_KONFIG_KEY = "f2wp1207.p15_canary_active"
+9453:def _f2wp1207_p15_bruecke_aktiv() -> bool:
+9463:_F2WP1207_TUNE_KONFIG_PRAEFIX = "f2wp1207.tune."
+9466:def f2wp1207_tune_overrides(conn) -> dict:
+9471:    star_konfig-Schluessel unter `f2wp1207.tune.*` (z.B.
+9472:    f2wp1207.tune.kappa -> {"kappa": 0.55}).
+9477:    Mathematik (f2wp1207_grid10_p7_coordination.py: state_update/
+9498:def _f2wp1207_p15_canary_bruecke_versuchen(session_id: str) -> None:
+9501:    frankenstein-repo/scripts/stern.py f2wp1207-p15-canary-turn, Timeout
+9507:    etwaige /cognition-Pegel-Overrides (star_konfig `f2wp1207.tune.*`)
+9513:        if not _f2wp1207_p15_bruecke_aktiv():
+9515:        if not _f2wp1207_runtime_sha_ok():
+9517:                _log("f2wp1207 p15-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9528:                tune = f2wp1207_tune_overrides(c)
+9540:            [sys.executable, str(bruecke), "f2wp1207-p15-canary-turn"],
+9545:            _log(f"f2wp1207 p15-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9555:# Der erste Versuch war, die ~20 _f2wp1207_*-Funktionen in diese Datei zu
+9588:    "f2wp1207-turn-loop-turn",
+9593:    "f2wp1207-turn-loop-turn",
+9597:def _f2wp1207_turn_versuchen(befehl, nutzlast: str, weg: str):
+9618:            _log(f"f2wp1207-turn-loop[{weg}] traegt nicht: "
+9624:        _log(f"f2wp1207-turn-loop[{weg}] Zeitueberschreitung (>1,2s)")
+9627:        _log(f"f2wp1207-turn-loop[{weg}] ausnahme: {ex}")
+9681:def _f2wp1207_grid_steuert(e: dict) -> Optional[str]:
+9849:def _f2wp1207_grid_rueckweg(e: dict, steuerzeile: Optional[str] = None,
+9864:    (`nutzertext`, im Aufrufer `_f2wp1207_turn_loop_delegieren` bereits
+9870:    der Docstring von _f2wp1207_turn_loop_auto sagt es woertlich: "Gibt
+10104:def _f2wp1207_turn_loop_delegieren(
+10142:        e = _f2wp1207_turn_versuchen(_F2WP1207_VM_BEFEHL, nutzlast, "vm")
+10149:            e = _f2wp1207_turn_versuchen(_F2WP1207_WIRT_BEFEHL, nutzlast, "wirt")
+10153:            _log(f"f2wp1207-turn-loop fehler: {e.get('fehler')}")
+10156:            _log(f"f2wp1207-turn-loop inaktiv: {e.get('grund')}")
+10158:        _log(f"f2wp1207-turn-loop[{e.get('_weg')}] turn geschrieben: "
+10162:        steuerzeile = _f2wp1207_grid_steuert(e)
+10163:        return _f2wp1207_grid_rueckweg(e, steuerzeile, nutzertext)
+10165:        _log(f"f2wp1207-turn-loop ausnahme: {e}")
+10221:                _f2wp1207_p9_bruecke_versuchen(session_id)
+10616:            # _f2wp1207_p15_bruecke_aktiv() oben fuer die volle Begruendung.
+10623:                if _f2wp1207_p15_bruecke_aktiv():
+10624:                    _f2wp1207_p15_canary_bruecke_versuchen(session_id)
+10626:                    _f2wp1207_p7_bruecke_versuchen(session_id)
+10765:            grid_rueckweg = _f2wp1207_turn_loop_delegieren(session_id, prompt_text, treffer)
+14094:def db_pfad_setzen(pfad: str) -> dict:
+14107:def db_pfad_zeigen() -> dict:
+15337:def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+15508:def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:

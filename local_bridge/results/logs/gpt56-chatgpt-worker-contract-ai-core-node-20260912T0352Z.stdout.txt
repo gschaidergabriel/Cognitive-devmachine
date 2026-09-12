@@ -1,0 +1,35 @@
+13:#     recorded to a state file; a separate --harvest run opens them later,
+14:#     one at a time, to check/collect results.
+20:#     ~/scripts/chatgpt_burst_worker_v2.sh --harvest
+79:SENT_URLS_FILE="$STATE_DIR/sent_urls_v2.txt"
+217:# harvest mode
+219:run_harvest() {
+220:    log "=== HARVEST MODE START ==="
+222:        log "no $SENT_URLS_FILE found, nothing to harvest"
+226:    local harvested_done=0 harvested_pending=0 harvested_lost=0
+232:            log "HARVEST: aborting remaining harvest due to resource guard"
+240:            log "HARVEST: aborting remaining harvest, daemon has 0 tabs"
+249:        stopping=$($B snapshot -i 2>/dev/null | grep -ic "Stop answering")
+252:            log "HARVEST worker $worker_id: DONE ($url)"
+254:            # restarts numbering at 1) -- 5/6 results silently overwrote each
+256:            # harvested back to back. Key by the conversation id from the URL
+261:                result_key="$conv_id"
+263:                result_key="${worker_id}_$(date +%s%N)"
+265:            echo "$txt" > "$STATE_DIR/result_${result_key}.txt"
+266:            harvested_done=$((harvested_done + 1))
+268:            log "HARVEST worker $worker_id: still pending/running ($url)"
+269:            harvested_pending=$((harvested_pending + 1))
+275:    log "HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost"
+276:    log "HARVEST_CYCLE_COMPLETE"
+335:        result_json="$STATE_DIR/worker_${i}.json"
+340:                "$i" "$ts_start" "$TRIGGER" > "$result_json"
+374:                    "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+388:                "$i" "$CURRENT_TAB" "$conv_url" "$ts_start" "$TRIGGER" > "$result_json"
+398:                "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+440:    SUMMARY_FILE="$STATE_DIR/SUMMARY_v2_${RUN_TS}.json"
+441:    cat > "$SUMMARY_FILE" <<EOF
+448:  "sent_urls_file": "$SENT_URLS_FILE",
+452:    log "Summary written to $SUMMARY_FILE"
+453:    log "BURST_CYCLE_COMPLETE (send phase only; run --harvest separately to collect results)"
+459:if [ "${1:-}" = "--harvest" ]; then
+460:    run_harvest

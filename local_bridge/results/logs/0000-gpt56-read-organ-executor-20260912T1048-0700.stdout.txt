@@ -1,0 +1,140 @@
+        "UPDATE f2_chatgpt_organ_run SET " + ",".join(f"{c}=?" for c in cols) + " WHERE run_id=?",
+        tuple(fields[c] for c in cols) + (run_id,),
+    )
+
+
+def _suggest_worker_budget(user_text: str, admission: HostAdmission) -> int:
+    if not admission.ok:
+        return 0
+    text = (user_text or "").lower()
+    complexity = 1
+    complexity += min(5, len(user_text) // 500)
+    for word in ("hardcore", "maximal", "research", "avatar", "debug", "audit", "test", "grid", "swarm"):
+        if word in text:
+            complexity += 1
+    return max(1, min(admission.max_swarm_workers, complexity))
+
+
+def execute_terminal_turn(user_text: str, *, session_id: str, stern_module: Any) -> dict:
+    """One complete canonical user->GRID->ChatGPT->GRID cycle.
+
+    stern_module is injected to keep this module testable; in production it
+    is scripts/stern.py and therefore uses the already-installed harness.
+    """
+    text = (user_text or "").strip()
+    if not text:
+        return {"ok": False, "error": "empty terminal input"}
+
+    # 1) User input first becomes canonical GRID state.
+    turn = stern_module._f2wp1207_turn_loop_turn_ausfuehren({
+        "session_id": session_id,
+        "event_type": "TerminalUserInput",
+        "prompt_len": len(text),
+        "retrieval_present": False,
+        "retrieval_len": 0,
+    })
+    if not turn.get("ok") or not turn.get("active"):
+        return {"ok": False, "phase": "grid-user-turn", "turn": turn}
+
+    admission = host_admission()
+    if not admission.ok:
+        return {"ok": False, "phase": "host-admission", "admission": admission.__dict__}
+
+    run_id = uuid.uuid4().hex
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        ensure_schema(conn)
+        pointer = latest_pointer(conn)
+        if pointer.get("frame_id") != turn.get("frame_id"):
+            raise ChatGPTOrganError(
+                "canonical pointer moved before ChatGPT dispatch; refuse ambiguous state"
+            )
+        capsule = state_capsule(conn, pointer)
+        budget = _suggest_worker_budget(text, admission)
+        instruction = build_grid_instruction(text, capsule, run_id)
+        now = _now()
+        conn.execute(
+            "INSERT INTO f2_chatgpt_organ_run "
+            "(run_id,source_frame_id,source_pointer_id,source_turn_event_id,source_runtime_epoch_id,"
+            "source_session_id,source_winner_cell,source_broadcast_value,user_text_sha256,worker_budget,"
+            "status,schema,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (run_id, pointer["frame_id"], pointer["pointer_id"], pointer["turn_event_id"],
+             pointer["runtime_epoch_id"], pointer["session_id"], pointer["broadcast_winner_cell"],
+             pointer["broadcast_value"], hashlib.sha256(text.encode("utf-8")).hexdigest(), budget,
+             "QUEUED", SCHEMA_RUN, now, now),
+        )
+        _insert_message(conn, run_id=run_id, direction="USER", role="gabriel",
+                        content=text, source_frame_id=pointer["frame_id"])
+        _insert_message(conn, run_id=run_id, direction="GRID_TO_CHATGPT", role="GRID10",
+                        content=instruction, source_frame_id=pointer["frame_id"])
+        _update_run(conn, run_id, status="DISPATCHING")
+        conn.commit()
+
+    # 2) Existing harness is the only browser/inference executor.
+    send = stern_module.chatgpt_senden(
+        [instruction], num_workers=budget,
+        ram_schwelle_mb=max(1800, min(6000, admission.mem_available_mb // 3)),
+        lock_timeout_s=1200.0,
+    )
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _update_run(conn, run_id, status="DISPATCHED" if send.get("ok") else "FAILED",
+                    send_json=_canon(send), error_text=None if send.get("ok") else str(send.get("grund") or "send failed"))
+        conn.commit()
+    if not send.get("ok"):
+        return {"ok": False, "phase": "send", "run_id": run_id, "send": send}
+
+    # Some fallback paths return the answer directly; harvest preserves the
+    # normal browser send/harvest contract and is safe/repeatable.
+    direct = _extract_response(send)
+    harvest = stern_module.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)
+    response = _extract_response(harvest) or direct
+    if not response:
+        with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+            _update_run(conn, run_id, status="FAILED", harvest_json=_canon(harvest),
+                        error_text="no ChatGPT organ response harvested")
+            conn.commit()
+        return {"ok": False, "phase": "harvest", "run_id": run_id, "harvest": harvest}
+
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _insert_message(conn, run_id=run_id, direction="CHATGPT_TO_GRID", role="chatgpt-organ",
+                        content=response, source_frame_id=turn.get("frame_id"))
+        _update_run(conn, run_id, status="HARVESTED", harvest_json=_canon(harvest),
+                    response_sha256=hashlib.sha256(response.encode("utf-8")).hexdigest())
+        conn.commit()
+
+    # 3) Inference flows back into the SAME canonical GRID/reentry chain.
+    response_turn = stern_module._f2wp1207_turn_loop_turn_ausfuehren({
+        "session_id": session_id,
+        "runtime_epoch_id": turn.get("runtime_epoch_id"),
+        "event_type": "ChatGPTOrganResponse",
+        "prompt_len": len(response),
+        "retrieval_present": True,
+        "retrieval_len": len(response),
+    })
+    if not response_turn.get("ok") or not response_turn.get("active"):
+        with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+            _update_run(conn, run_id, status="FAILED", error_text="response GRID uptake failed")
+            conn.commit()
+        return {"ok": False, "phase": "grid-response-turn", "run_id": run_id,
+                "response": response, "turn": response_turn}
+
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _update_run(conn, run_id, status="UPTAKEN", response_frame_id=response_turn.get("frame_id"))
+        conn.commit()
+
+    return {
+        "ok": True,
+        "schema": SCHEMA_RUN,
+        "run_id": run_id,
+        "user_frame_id": turn.get("frame_id"),
+        "response_frame_id": response_turn.get("frame_id"),
+        "runtime_epoch_id": turn.get("runtime_epoch_id"),
+        "workers": budget,
+        "admission": admission.__dict__,
+        "response": response,
+        "grid_after": {
+            "winner_cell_id": response_turn.get("winner_cell_id"),
+            "broadcast_value": response_turn.get("broadcast_value"),
+            "pointer_id": response_turn.get("pointer_id"),
+            "reentry": response_turn.get("reentry"),
+        },
+    }

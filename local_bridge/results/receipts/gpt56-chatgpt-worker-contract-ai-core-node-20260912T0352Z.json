@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56-chatgpt-worker-contract-ai-core-node-20260912T0352Z",
+  "command_sha256": "6fca3d44e6eef1a56dee192bc8ada346fad69eb9f1f85391dd01d7b20dba25b0",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:43:01.694546+00:00",
+  "finished_at": "2026-09-12T03:43:01.838718+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8a4b9aea330b744fe008aa528ec2a4f62d1404e9190ba86ec93bdadab5bf0b06",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "13:#     recorded to a state file; a separate --harvest run opens them later,\n14:#     one at a time, to check/collect results.\n20:#     ~/scripts/chatgpt_burst_worker_v2.sh --harvest\n79:SENT_URLS_FILE=\"$STATE_DIR/sent_urls_v2.txt\"\n217:# harvest mode\n219:run_harvest() {\n220:    log \"=== HARVEST MODE START ===\"\n222:        log \"no $SENT_URLS_FILE found, nothing to harvest\"\n226:    local harvested_done=0 harvested_pending=0 harvested_lost=0\n232:            log \"HARVEST: aborting remaining harvest due to resource guard\"\n240:            log \"HARVEST: aborting remaining harvest, daemon has 0 tabs\"\n249:        stopping=$($B snapshot -i 2>/dev/null | grep -ic \"Stop answering\")\n252:            log \"HARVEST worker $worker_id: DONE ($url)\"\n254:            # restarts numbering at 1) -- 5/6 results silently overwrote each\n256:            # harvested back to back. Key by the conversation id from the URL\n261:                result_key=\"$conv_id\"\n263:                result_key=\"${worker_id}_$(date +%s%N)\"\n265:            echo \"$txt\" > \"$STATE_DIR/result_${result_key}.txt\"\n266:            harvested_done=$((harvested_done + 1))\n268:            log \"HARVEST worker $worker_id: still pending/running ($url)\"\n269:            harvested_pending=$((harvested_pending + 1))\n275:    log \"HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost\"\n276:    log \"HARVEST_CYCLE_COMPLETE\"\n335:        result_json=\"$STATE_DIR/worker_${i}.json\"\n340:                \"$i\" \"$ts_start\" \"$TRIGGER\" > \"$result_json\"\n374:                    \"$i\" \"$CURRENT_TAB\" \"$ts_start\" \"$TRIGGER\" > \"$result_json\"\n388:                \"$i\" \"$CURRENT_TAB\" \"$conv_url\" \"$ts_start\" \"$TRIGGER\" > \"$result_json\"\n398:                \"$i\" \"$CURRENT_TAB\" \"$ts_start\" \"$TRIGGER\" > \"$result_json\"\n440:    SUMMARY_FILE=\"$STATE_DIR/SUMMARY_v2_${RUN_TS}.json\"\n441:    cat > \"$SUMMARY_FILE\" <<EOF\n448:  \"sent_urls_file\": \"$SENT_URLS_FILE\",\n452:    log \"Summary written to $SUMMARY_FILE\"\n453:    log \"BURST_CYCLE_COMPLETE (send phase only; run --harvest separately to collect results)\"\n459:if [ \"${1:-}\" = \"--harvest\" ]; then\n460:    run_harvest\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

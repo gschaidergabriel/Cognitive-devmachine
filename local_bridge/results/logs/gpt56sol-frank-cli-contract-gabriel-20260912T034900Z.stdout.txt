@@ -1,0 +1,88 @@
+===STAR CHATGPT SEND HELP===
+usage: stern.py chatgpt-senden [-h] [--prompts PROMPTS]
+                               [--num-workers NUM_WORKERS] [--sleep SLEEP]
+                               [--ram-schwelle-mb RAM_SCHWELLE_MB]
+                               [--tab-recycle-alle TAB_RECYCLE_ALLE]
+                               [--tab-hardlimit TAB_HARDLIMIT] [--dry-run]
+                               [--lock-timeout-s LOCK_TIMEOUT_S]
+
+options:
+  -h, --help            show this help message and exit
+  --prompts PROMPTS     JSON-Liste von Texten, z.B. '["triggerwort2"]' -- leer
+                        = Skript-Default
+  --num-workers NUM_WORKERS
+  --sleep SLEEP
+  --ram-schwelle-mb RAM_SCHWELLE_MB
+  --tab-recycle-alle TAB_RECYCLE_ALLE
+  --tab-hardlimit TAB_HARDLIMIT
+  --dry-run
+  --lock-timeout-s LOCK_TIMEOUT_S
+                        max. Wartezeit auf den chatgpt-Daemon-Lock, falls ein
+                        anderer Aufruf gerade laeuft (Default 1200s/20min)
+===STAR CHATGPT HARVEST HELP===
+usage: stern.py chatgpt-ernten [-h] [--timeout-s TIMEOUT_S]
+                               [--lock-timeout-s LOCK_TIMEOUT_S]
+
+options:
+  -h, --help            show this help message and exit
+  --timeout-s TIMEOUT_S
+  --lock-timeout-s LOCK_TIMEOUT_S
+                        max. Wartezeit auf den chatgpt-Daemon-Lock, falls ein
+                        anderer Aufruf gerade laeuft (Default 1200s/20min)
+===LASTSCHUTZ HELP===
+usage: stern.py lastschutz [-h] [--schwelle-je-kern SCHWELLE_JE_KERN]
+
+options:
+  -h, --help            show this help message and exit
+  --schwelle-je-kern SCHWELLE_JE_KERN
+                        last_je_kern ab dieser Schwelle -> 'drosseln' (Vorgabe
+                        1.5)
+===LASTSCHUTZ NOW===
+{
+  "stand": "OK",
+  "empfehlung": "ok",
+  "load1": 14.18,
+  "load5": 9.92,
+  "load15": 8.47,
+  "kerne": 16,
+  "last_je_kern": 0.8862,
+  "schwelle_je_kern": 1.5
+}
+===CANON HELP SEARCH===
+f2wp1207.canonical_turn_loop)
+f2wp1207-p15-canary-turn
+f2wp1207-p9-reconcile-turn
+f2wp1207-turn-loop-turn
+===CANON TURN HELP===
+usage: stern.py f2wp1207-turn-loop-turn [-h] [--force-new-epoch]
+                                        [--declared-reentry {previous_frame,previous_epoch,genesis}]
+                                        [--evidence-path EVIDENCE_PATH]
+
+options:
+  -h, --help            show this help message and exit
+  --force-new-epoch     nur wenn keine runtime_epoch_id im Payload steht: neue
+                        RuntimeEpoch mit predecessor mint
+  --declared-reentry {previous_frame,previous_epoch,genesis}
+                        Reentry bewusst deklarieren (Vorgabe: der Loop loest
+                        selbst auf)
+  --evidence-path EVIDENCE_PATH
+                        abweichender Pfad fuer die JSONL-Evidenz (Vorgabe:
+                        f2wp1207_turn_loop_evidence.jsonl neben dieser Datei)
+===CANON HEAD/HASH===
+8e3da8735c6dd7a5c77229fc7b59f3b13032ce7c4068e72f11d965b720fbd9c0  /home/ai-core-node/frankenstein-repo/scripts/stern.py
+ec6fce07eb3a464c27730e428efc129d9b7ce177
+===DB PATHS===
+{
+  "db_path_aufgeloest": "/home/ai-core-node/.local/share/agentzero/unified.db",
+  "existiert": true,
+  "zeiger_datei": "/home/ai-core-node/.config/agentzero/db_pfad.txt",
+  "zeiger_inhalt": null,
+  "zeiger_zeigt_auf_existierende_datei": false
+}
+{
+  "db_path_aufgeloest": "/home/ai-core-node/.local/share/agentzero/unified.db",
+  "existiert": true,
+  "zeiger_datei": "/home/ai-core-node/.config/agentzero/db_pfad.txt",
+  "zeiger_inhalt": null,
+  "zeiger_zeigt_auf_existierende_datei": false
+}

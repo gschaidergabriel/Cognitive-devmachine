@@ -1,0 +1,331 @@
+             f"reentry={(e.get('reentry') or {}).get('kind')} "
+             f"winner={e.get('winner_cell_id')}")
+        steuerzeile = _f2wp1207_grid_steuert(e)
+        return _f2wp1207_grid_rueckweg(e, steuerzeile, nutzertext)
+    except Exception as e:
+        _log(f"f2wp1207-turn-loop ausnahme: {e}")
+    return None
+
+
+
+def cmd_hook() -> int:
+    """Liest EIN hook-JSON von stdin, verzweigt nach hook_event_name,
+    schreibt hoechstens EIN JSON nach stdout. Genau die Kombination, die
+    vorher auf mehrere Prozesse/mehrere settings.json-Eintraege verteilt war."""
+    t0 = time.monotonic()
+    event = "?"
+    try:
+        try:
+            raw = sys.stdin.read()
+            data = json.loads(raw) if raw.strip() else {}
+        except Exception as e:
+            _log(f"stdin-parse-fehler: {e}")
+            data = {}
+
+        event = data.get("hook_event_name", "")
+        session_id = str(data.get("session_id") or "unknown")
+        model = str(data.get("model") or data.get("model_name") or "claude")
+        _raum_womit_veredeln(session_id, model)  # PHASE 49, siehe Docstring dort
+        limit = _hook_limit_fuer(event)
+
+        try:
+            signal.signal(signal.SIGALRM, _hook_alarm)
+            signal.setitimer(signal.ITIMER_REAL, limit)
+        except Exception:
+            pass
+
+        # PHASE 19 Punkt 5 -- Selbstheilung ALS ALLERERSTES, noch vor jeder
+        # Event-Verzweigung: alles darunter ruft verbindung()/schreib_
+        # verbindung() ohne pfad-Argument auf, die beide DB_PATH bei jedem
+        # Aufruf frisch lesen (siehe deren Docstrings) -- diese eine Zeile
+        # hier ist deshalb ausreichend, um die GESAMTE restliche Datei fuer
+        # diesen Prozesslauf auf einen funktionierenden Pfad zu heilen,
+        # statt dass jeder einzelne Aufrufer separat die 4x0.15-1.2s-Retry-
+        # Kaskade von _verbinden() durchlaeuft und am Ende doch nur den
+        # Rueckfallwert liefert. `None` = nichts zu tun oder leise geheilt
+        # (Zeiger/Rueckfallsuche) -- ein String nur beim wirklich
+        # ungewoehnlichen Fall (Schnappschuss-Wiederherstellung/frische
+        # Leer-DB), siehe _db_selbstheilung_sicherstellen()-Docstring.
+        selbstheilung_nachricht = _db_selbstheilung_sicherstellen()
+
+        if event == "SessionStart":
+            source = str(data.get("source") or "")
+            system_message = None
+            # F2WP1207 P9-Bruecke (2026-09-04, paket-1788529602671-88cf15):
+            # hinter eigenem Flag, Default AUS (siehe Funktionskommentar
+            # oben). Aufrufstelle NOCHMAL in try/except, obwohl die
+            # Funktion selbst schon vollstaendig fail-closed ist --
+            # Verteidigung in der Tiefe, wie bei der P7-Bruecke im
+            # Stop-Zweig. Produziert NIE Ausgabe/kontext_teile-Eintrag --
+            # rein buchhalterisch, kein Einfluss auf additionalContext.
+            try:
+                _f2wp1207_p9_bruecke_versuchen(session_id)
+            except Exception:
+                pass
+            # PHASE 31 -- Prompt-Caching: additionalContext wird nicht mehr
+            # in Berechnungsreihenfolge zusammengefuegt, sondern in
+            # STABILITAETSreihenfolge (Anthropic-Empfehlung: "structure your
+            # prompts by placing static content ... at the beginning ...
+            # and variable content ... at the end", platform.claude.com/
+            # docs/en/build-with-claude/prompt-caching). Berechnung/Seiten-
+            # effekte (DB-Writes, Schnappschuss, GitHub-Push) laufen exakt
+            # in der alten Reihenfolge -- nur der Zeitpunkt des .append()
+            # an kontext_teile aendert sich, in lokale Variablen zwischen-
+            # gespeichert, am Block-Ende stabil-zuerst/volatil-zuletzt
+            # zusammengesetzt. Funktionale Reihenfolge (was zuerst berechnet
+            # wird, welche Bedingung was ausloest) bleibt unangetastet.
+            kontext_teile = []
+            # -- volatile/seltene Bloecke, gesammelt, aber ans Ende gestellt:
+            start_anzeige_kontext = None
+            einrichtung_hinweis_text = None
+            vault_hinweis_text = None
+            pool_quote_hinweis_text = None
+            chatgpt_idle_hinweis_text = None
+            github_konflikt_text = None
+            tiefensitzung_signal_text = None
+
+            # PHASE 13/§5.1.1 -- Persona VOLL bei jedem SessionStart, egal
+            # welche `source` (startup/resume/compact/clear): eine neue
+            # Sitzung -- auch eine fortgesetzte -- hat den Text noch nie
+            # gesehen, bis sie ihn bekommt. Reset der session-gebundenen
+            # Reinjektionszaehler, damit eine frische Sitzung nicht sofort
+            # auf einem alten Flag/Zaehlerstand aufsetzt.
+            # PHASE 31 -- persona_text ist die groesste, stabilste, byte-
+            # identische Wiederholeinheit im ganzen SessionStart-Block
+            # (gelesen aus daten/persona.md, siehe _persona_text()) --
+            # bleibt deshalb bewusst die ERSTE Anhaengung ueberhaupt.
+            persona_text = _persona_text()
+            if persona_text:
+                kontext_teile.append(persona_text)
+            _konfig_dyn_set(f"persona.neu_injizieren.{session_id}", "0", quelle="SessionStart")
+            _konfig_dyn_set(f"persona.zaehler.{session_id}", "0", quelle="SessionStart")
+
+            if source == "startup":
+                ergebnis = start_anzeige(session_id, model, source)
+                system_message = ergebnis["system_message"]
+                start_anzeige_kontext = ergebnis["additional_context"]
+                einrichtung_hinweis_text = _einrichtung_hinweis()  # PHASE 16
+                vault_hinweis_text = _vault_hinweis()  # PHASE 18 -- stat()-billig, kein gpg-Aufruf ohne Vault-Datei
+                pool_quote_hinweis_text = pool_quote_hinweis_pruefen()  # PHASE 22d -- 2 SUM-Queries, Cooldown-gated
+                chatgpt_idle_hinweis_text = chatgpt_idle_hinweis_pruefen()  # PHASE 26 -- 4-Bedingungen-Gate, Cooldown-gated
+                # PHASE 19 Punkt 4 -- Schnappschuesse, ereignisgebunden statt
+                # Timer: SessionStart/startup ist der billige, ohnehin
+                # stattfindende Zeitpunkt (Bauplan-Vorschlag woertlich
+                # uebernommen). Rein buchhalterisch, still (kein Hinweistext
+                # an Gabriel -- 3x/Tag waere reine Rueckversicherungs-
+                # Routine, keine Nachricht wert), nur geloggt.
+                _schnappschuss_ergebnis = {"genommen": False}
+                try:
+                    _schnappschuss_ergebnis = schnappschuss_pruefen_und_nehmen()
+                    if _schnappschuss_ergebnis.get("genommen"):
+                        _log(f"SessionStart-Schnappschuss: {_schnappschuss_ergebnis}")
+                except Exception as e:
+                    _log(f"SessionStart-Schnappschuss fehler: {e}")
+                # PHASE 20.2 -- GitHub-Sync, DERSELBE Ereignispunkt wie der
+                # Schnappschuss selbst (kein Timer), aber Opt-in: nur wenn
+                # der Mensch github-sync-einrichten + github-sync-aktivieren
+                # bereits durchlaufen hat (star_konfig github_sync.aktiv=1).
+                # Konflikt wird NIE still geloest -- sichtbare systemMessage,
+                # dieselbe Disziplin wie ueberall sonst im Haus. Push laeuft
+                # nur, wenn dieser Aufruf gerade wirklich einen NEUEN
+                # Schnappschuss genommen hat (sonst gaebe es taeglich leere
+                # "nichts zu committen"-Fehlschlaege).
+                if _github_sync_aktiv():
+                    try:
+                        _sync_pruef = github_sync_pull_pruefen()
+                        if _sync_pruef.get("konflikt"):
+                            github_konflikt_text = (
+                                "[PHASE 20 -- GitHub-Sync KONFLIKT] Das GitHub-Sync-Repo UND diese lokale "
+                                "Installation haben sich beide seit dem letzten Sync veraendert. Wird NICHT "
+                                "automatisch zusammengefuehrt. Sag mir, welche Seite gelten soll -- "
+                                "'stern.py github-sync-push' erzwingt lokal->remote (nur der neueste "
+                                "Schnappschuss, kein Merge), ein manuelles 'git pull' im "
+                                "github_sync_arbeitsverzeichnis/ holt remote->lokal (nur zur Ansicht, "
+                                "unified.db selbst wird davon nie ueberschrieben)."
+                            )
+                            system_message = ((system_message + "\n") if system_message else "") + \
+                                "GitHub-Sync-Konflikt -- siehe Kontext, keine Seite automatisch bevorzugt."
+                            _log(f"SessionStart-GitHub-Sync: KONFLIKT {_sync_pruef}")
+                        elif _schnappschuss_ergebnis.get("genommen"):
+                            _push_ergebnis = github_sync_push()
+                            _log(f"SessionStart-GitHub-Sync: {_push_ergebnis}")
+                    except Exception as e:
+                        _log(f"SessionStart-GitHub-Sync fehler: {e}")
+                # PHASE 17v2 -- 7-Tage-Tiefensitzung, nur am billigen
+                # Kaltstart-Punkt geprueft (ein dyn-Konfig-Read), eigenes
+                # Signal, unabhaengig vom Zug-Zaehler.
+                tiefensitzung_signal_text = architekt_tiefensitzung_pruefen()
+            else:
+                _log(f"start_anzeige uebersprungen (kein Kaltstart), source={source!r}")
+
+            # Raumbeitritt laeuft IMMER bei SessionStart, unabhaengig von
+            # source -- exakt das alte Verhalten von rooms_hook.py, das nie
+            # nach source unterschied (siehe Docstring des RAUM-Abschnitts).
+            raum_text = raum_beitreten_und_pulsen(session_id, model)
+
+            # 2026-08-27 Gabriel-Auftrag ("ihr habt im Room keine Moeglichkeit
+            # miteinander zu reden?"): ungelesene Raum-Nachrichten fuer DIESE
+            # Sitzung, automatisch abgeholt+markiert (ABSCHNITT RAUM-
+            # NACHRICHTEN oben) -- kein aktives Pollen noetig.
+            raum_nachricht_text = _raum_nachrichten_kontext_text(session_id)
+
+            # PHASE 50 (Gabriel 2026-09-11) -- Ziel-Bruecke: offene, noch
+            # aktive Gabriel-Ziele, UNABHAENGIG von `source` (auch resume/
+            # compact/clear sehen sie, genau wie raum_text oben) -- das ist
+            # der Mechanismus, der "autark ueber Jahre" technisch macht: eine
+            # neue Sitzung MUSS sehen koennen, was eine tote Sitzung noch
+            # offen liess, statt es stillschweigend fallenzulassen.
+            ziel_bruecke_text = None
+            try:
+                if _ziel_bruecke is not None:
+                    with contextlib.closing(verbindung()) as _zc:
+                        _offene_ziele = _ziel_bruecke.offene_gabriel_ziele(_zc)
+                    if _offene_ziele:
+                        _zeilen = [
+                            "[GRID-ZIELE -- Gabriel-Auftraege, noch offen, sitzungsuebergreifend "
+                            "verfolgt, siehe entityos_arbeitspaket <-> goals via ziel_bruecke.py]",
+                        ]
+                        for _paket_id, _goal_id, _auftrag, _stand, _alter_tage in _offene_ziele:
+                            _zeilen.append(
+                                f"  - {_kurz(_auftrag, 140)} (paket={_paket_id} goal={_goal_id} "
+                                f"stand={_stand}, seit {_alter_tage:.1f}d)"
+                            )
+                        _zeilen.append(
+                            "Weiterverfolgen (delegieren/reconcile wie ueblich) -- NICHT "
+                            "stillschweigend fallenlassen. Aendert NICHTS an der Rueckfragepflicht "
+                            "bei destruktiven/schwer umkehrbaren Einzelaktionen."
+                        )
+                        ziel_bruecke_text = "\n".join(_zeilen)
+            except Exception as e:
+                _log(f"ziel_bruecke SessionStart fehler: {e}")
+
+            # PHASE 4c/Toetungskriterium: der SessionStart-Wegeverfall-Aufruf
+            # ist wieder entfernt -- PHASE 4 hat GLEICHVERTEILT gemessen
+            # (siehe Kommentarblock vor pruefen()), "wegehierarchie wird
+            # entfernt, ersatzlos". `_wegehierarchie_verfallen_einmal()`
+            # existiert nicht mehr.
+
+            # PHASE 31 -- Endgueltige Zusammensetzung, stabil->volatil:
+            # 1) einrichtung_hinweis ist ein reiner Konstantensatz (immer
+            #    derselbe Text, wenn er ueberhaupt feuert -- nur EIN Bit
+            #    Bedingung dahinter), tiefensitzung_signal liest ebenfalls
+            #    eine feste .md-Datei -- beide naeher an "stabil" als alles
+            #    Folgende.
+            # 2) vault_hinweis/pool_quote_hinweis/chatgpt_idle_hinweis tragen
+            #    live gemessene Zahlen/IDs -- volatiler als 1), aber
+            #    template-stabiler als 3).
+            # 3) start_anzeige_kontext (enthaelt live "wo stehengeblieben"/
+            #    Forschungsdigest/GW-Zusammenfassung) und der GitHub-Konflikt-
+            #    text sind PRO SITZUNG einmalig verschieden -- bewusst nach
+            #    hinten.
+            # 4) raum_text (Live-Raumzustand) und selbstheilung_nachricht
+            #    (seltenes, zeitstempel-tragendes Ereignis) sind am
+            #    volatilsten -- ganz ans Ende, NICHT mehr an den Anfang wie
+            #    vor PHASE 31 (dort stand selbstheilung_nachricht vor dem
+            #    stabilen persona_text-Block).
+            if einrichtung_hinweis_text:
+                kontext_teile.append(einrichtung_hinweis_text)
+            if tiefensitzung_signal_text:
+                kontext_teile.append(tiefensitzung_signal_text)
+            if vault_hinweis_text:
+                kontext_teile.append(vault_hinweis_text)
+            if pool_quote_hinweis_text:
+                kontext_teile.append(pool_quote_hinweis_text)
+            if chatgpt_idle_hinweis_text:
+                kontext_teile.append(chatgpt_idle_hinweis_text)
+            if start_anzeige_kontext:
+                kontext_teile.append(start_anzeige_kontext)
+            if github_konflikt_text:
+                kontext_teile.append(github_konflikt_text)
+            if raum_text:
+                kontext_teile.append(raum_text)
+            if raum_nachricht_text:
+                kontext_teile.append(raum_nachricht_text)
+            if ziel_bruecke_text:
+                kontext_teile.append(ziel_bruecke_text)
+            if selbstheilung_nachricht:
+                kontext_teile.append(f"[PHASE 19 -- Selbstheilung]\n{selbstheilung_nachricht}")
+
+            if kontext_teile:
+                out = {"hookSpecificOutput": {
+                    "hookEventName": "SessionStart",
+                    "additionalContext": "\n\n".join(kontext_teile),
+                }}
+                if system_message is not None:
+                    out["systemMessage"] = system_message
+                print(json.dumps(out, ensure_ascii=False))
+
+        elif event == "PreToolUse":
+            # PHASE 13/§5.5.2 Punkt 2 -- die EINZIGE Stelle in der gesamten
+            # Datei, an der ein Hook blockiert, und sie steht ABSICHTLICH
+            # als ALLERERSTE Pruefung hier, noch vor der Capability-Pruefung
+            # (Konzeptdokument-Querverweis P2: "SEBUKKU-Pruefung als erste
+            # Anweisung"). Marke ist SITZUNGSGEBUNDEN (session_id) -- eine
+            # andere/neue Sitzung faellt nie hierunter (Aussperr-Gegentest).
+            sebukku_marke = sebukku_marke_pruefen(session_id)
+            if sebukku_marke is not None:
+                print(json.dumps({
+                    "hookSpecificOutput": {"permissionDecision": "deny"},
+                    "systemMessage": "DIGITAL SEBUKKU -- session ended.",
+                }, ensure_ascii=False))
+            else:
+                # PHASE 2 (ZECP17) -- Zulassung. NIE eine Rueckgabe, die Claude
+                # Code als deny/block lesen koennte: kein print() in diesem
+                # Zweig, egal was zulassen() intern tut. Reine Buchfuehrung
+                # vor der Ausfuehrung.
+                zulassen(data)
+                # ⭐⭐⭐ 2026-09-12: AGENTENSTART WIRD ZUM ZIEL, automatisch.
+                # Gabriel: "du benennst es selbst jedes Mal ganz genau, aber
+                # erfasst es nicht ... das ist ne reine Engineering-Luecke im
+                # System." Belegt: Ziele der Kategorie koordinator_auftrag
+                # entstanden nur in goal_fuer_handoff(), also nur bei
+                # `stern.py handoff`. In der Nacht zum 12.09. liefen fuenf
+                # Bau-Agenten ueber das Agent-Werkzeug ohne handoff -- letzte
+                # erfasste Zeile 00:21, Arbeit bis 07:00. Fuenf ausformulierte
+                # Auftraege, null erfasst. Herleitung im Docstring von
+                # ziel_bruecke.agent_erfassen(). Fail-silent, darf zulassen()
+                # nie stoeren.
+                try:
+                    if _ziel_bruecke is not None:
+                        _ziel_bruecke.agent_erfassen(data, log=_waechter_log)
+                except Exception:
+                    pass
+                # 2026-09-12, Agentensteuerung des GRID (Gabriel-Auftrag):
+                # eigene Instrumentierung (Modell/Herzschlag/Zustand) neben
+                # _ziel_bruecke, siehe agenten_wache.py-Docstring.
+                try:
+                    if _agenten_wache is not None:
+                        _agenten_wache.registrieren(data, log=_waechter_log)
+                except Exception:
+                    pass
+                # Statuszeile: Stichwort fuers laufende Werkzeug, unabhaengig
+                # von zulassen()'s eigenem Erfolg/Misserfolg (eigener try/except
+                # innen, kann zulassen() nie stoeren).
+                _statuszeile_pretooluse(data)
+
+        elif event == "PostToolUse":
+            # ⚠️ VOR merken(). Stand es danach, wurde es bei jedem Fehler in
+            # merken() (das ungeschuetzt laeuft und dessen Ausnahme der
+            # aeussere Handler still schluckt) mit uebersprungen -- die
+            # Taetigkeitsspur blieb dann leer, ohne dass irgendwo etwas
+            # auffiel. Die billige, unverzichtbare Buchung gehoert vor die
+            # teure.
+            try:
+                _tn = data.get("tool_name") or ""
+                _ti = data.get("tool_input") or {}
+                if _tn in ("Edit", "Write", "NotebookEdit"):
+                    _ziel = os.path.basename(str(_ti.get("file_path") or ""))
+                    if _ziel:
+                        _ich_tue(f"an {_ziel} gearbeitet", "handlung",
+                                 session_id)
+                elif _tn == "Bash":
+                    # ⚠️ `description` steht NICHT im PostToolUse-Payload --
+                    # nachgesehen 2026-09-10 an einem echten Ereignis: es
+                    # enthaelt session_id, cwd, tool_name, tool_input
+                    # {command}, tool_response, duration_ms. Die schoene
+                    # Kurzbeschreibung, die das Werkzeug beim Aufruf traegt,
+                    # kommt hier nicht an. Deshalb aus dem Befehl selbst eine
+                    # knappe Taetigkeit ableiten -- das erste sinnvolle Wort
+                    # plus sein Ziel. Roh waere es eine Kommandozeile im
+                    # Kontext, und Kommandozeilen liest er vor.
+                    _c = " ".join(str(_ti.get("command") or "").split())

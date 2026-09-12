@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-stop-wrong-cloudflare-path-20260912-2000",
+  "command_sha256": "97114b095cf452ddce84cffffde2150622e8449959180ec88530ae710f22ea4f",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T12:53:24.556130+00:00",
+  "finished_at": "2026-09-12T12:53:35.508927+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "633d2d4393a354a94a8e0f297f32618574c122fa2bf5f680bb8697a1e2c9be1c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "BEFORE\nStatus: healthy\nMode: launched\nURL: about:blank\nTabs: 1\nPID: 3359678\nSTOP\n[browse] Server connection lost. Restarting...\n[browse] [browse] Server crashed twice in a row \u2014 aborting\nAFTER\n[browse] Starting server...\nStatus: healthy\nMode: launched\nURL: about:blank\nTabs: 1\nPID: 3647502\nNOTE: existing human Brave left untouched\n8400 /bin/bash /usr/bin/brave-browser --restore-last-session\n8462 /opt/brave.com/brave/brave --restore-last-session\n3645111 bash -lc set +e; B=/home/andreas/.claude/skills/gstack/browse/dist/browse; echo BEFORE; $B status 2>&1 | head -20; echo STOP; $B stop 2>&1 | head -40; echo AFTER; $B status 2>&1 | head -20; echo 'NOTE: existing human Brave left untouched'; pgrep -af '^/opt/brave.com/brave/brave --restore-last-session$|/usr/bin/brave-browser --restore-last-session' | head -10\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

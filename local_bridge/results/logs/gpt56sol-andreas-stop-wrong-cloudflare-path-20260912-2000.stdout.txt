@@ -1,0 +1,20 @@
+BEFORE
+Status: healthy
+Mode: launched
+URL: about:blank
+Tabs: 1
+PID: 3359678
+STOP
+[browse] Server connection lost. Restarting...
+[browse] [browse] Server crashed twice in a row — aborting
+AFTER
+[browse] Starting server...
+Status: healthy
+Mode: launched
+URL: about:blank
+Tabs: 1
+PID: 3647502
+NOTE: existing human Brave left untouched
+8400 /bin/bash /usr/bin/brave-browser --restore-last-session
+8462 /opt/brave.com/brave/brave --restore-last-session
+3645111 bash -lc set +e; B=/home/andreas/.claude/skills/gstack/browse/dist/browse; echo BEFORE; $B status 2>&1 | head -20; echo STOP; $B stop 2>&1 | head -40; echo AFTER; $B status 2>&1 | head -20; echo 'NOTE: existing human Brave left untouched'; pgrep -af '^/opt/brave.com/brave/brave --restore-last-session$|/usr/bin/brave-browser --restore-last-session' | head -10

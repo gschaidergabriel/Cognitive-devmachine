@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-mcp-fallback-mergeproof-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":240,
+  "command":"set -euo pipefail; D=$(mktemp -d /tmp/omega-mcp-fallback-mergeproof.XXXXXX); trap 'rm -rf -- \"$D\"' EXIT; export GIT_SSH_COMMAND='ssh -i /home/ai-core-node/.local/share/clay-local-bridge/keys/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/home/ai-core-node/.local/share/clay-local-bridge/keys/known_hosts'; git clone -q git@github.com:gschaidergabriel/clay-global-research-entity.git \"$D/repo\"; cd \"$D/repo\"; git checkout -q main; MAIN=$(git rev-parse HEAD); git fetch -q origin chatgpt/omega-mcp-fallback-stack-20260912; git -c user.name='OMEGA Merge Proof' -c user.email='omega@local' merge --no-commit --no-ff origin/chatgpt/omega-mcp-fallback-stack-20260912; echo MAIN=$MAIN; echo HEAD_UNCOMMITTED=$(git rev-parse HEAD); echo FALLBACK_HEAD=$(git rev-parse origin/chatgpt/omega-mcp-fallback-stack-20260912); python3 -m py_compile tools/omega_chatgpt_mcp.py tools/omega_chatgpt_mcp_fallback.py tools/omega_local_effect_adapter.py tools/omega_grid_relay.py; bash -n tools/install_omega_chatgpt_mcp_ai_core.sh; pytest -q tests/test_omega_chatgpt_mcp.py tests/test_omega_mcp_fallback.py; git diff --check; git merge --abort"
+}

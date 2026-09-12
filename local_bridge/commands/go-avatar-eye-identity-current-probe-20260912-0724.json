@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-eye-identity-current-probe-20260912-0724",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 45,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\nEXPECTED_HTML=\"18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\"\ntest \"$(hostname)\" = \"ai-core-node-projekt-frankenstein\"\nACTUAL=$(sha256sum buehne.html | awk '{print $1}')\necho HTML_SHA256=$ACTUAL\ntest \"$ACTUAL\" = \"$EXPECTED_HTML\"\ntest \"$(systemctl --user is-active frankenstein-buehne.service)\" = active\npython3 - <<'PY'\nfrom pathlib import Path\nimport re,glob,hashlib,os\nt=Path('buehne.html').read_text(encoding='utf-8')\nneedles=[\n '_sonderLaeuft ? \"0\" : String(ziel.opazitaet)',\n \"_sonderLaeuft ? '0' : String(ziel.opazitaet)\",\n 'sonderausdruckZeigen',\n 'pupillen-glow',\n 'augen-blink',\n 'rotglow_tracking_master.png'\n]\nfor n in needles: print('COUNT',repr(n),t.count(n))\nkeys=['function sonderausdruckZeigen','sonderausdruckZeigen','function gazeSchritt','pupillen-glow','augen-blink']\nfor k in keys:\n    i=t.find(k)\n    print('===KEY',k,'POS',i,'===')\n    if i>=0: print(t[max(0,i-900):min(len(t),i+3000)])\nprint('===EYE_ASSETS===')\nfor pat in ['*rotglow*','augen_blink/*.png','augen_*/*.png','*auge*/*.png','*augen*/*.png']:\n    xs=sorted(glob.glob(pat))\n    print('PATTERN',pat,'COUNT',len(xs))\n    for p in xs[:80]:\n        try:\n            h=hashlib.sha256(Path(p).read_bytes()).hexdigest()\n            print(p,os.path.getsize(p),h)\n        except OSError: pass\nprint('===EXPRESSION_ASSET_REFERENCES===')\nfor m in re.finditer(r'[^\\\"\\\']*(?:ausdruck|expression)[^\\\"\\\']*\\.(?:png|webp)',t,re.I):\n    print(m.group(0)[-240:])\nPY\necho ===FPS===\ncurl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps({\"fps\":(d.get(\"fps\") or {}).get(\"fps\"),\"ts\":(d.get(\"fps\") or {}).get(\"ts\")},sort_keys=True))'\necho PROBE_SCOPE=EXACT_CURRENT_EYE_IDENTITY_SPECIAL_EXPRESSION_READ_ONLY\n"
+}

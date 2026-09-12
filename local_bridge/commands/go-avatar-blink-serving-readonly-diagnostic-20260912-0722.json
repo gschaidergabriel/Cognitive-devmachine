@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-blink-serving-readonly-diagnostic-20260912-0722",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; cd /home/ai-core-node/.claude/star/visual; echo HOST=$(hostname); echo ===HASHES===; sha256sum buehne_daemon.py buehne.html filmlook.js augen_blink/blink_000.png augen_blink/blink_006.png; echo ===HTTP_HASHES===; for n in blink_000.png blink_006.png; do echo -n \"$n local=\"; sha256sum \"augen_blink/$n\" | awk '{print $1}'; echo -n \"$n http=\"; curl -fsS \"http://127.0.0.1:8788/augen_blink/$n?diag=$(date +%s%N)\" | sha256sum | awk '{print $1}'; done; echo ===HEADERS===; curl -fsSI 'http://127.0.0.1:8788/augen_blink/blink_006.png?diag=1' | head -30; echo ===DAEMON_ROUTES===; grep -nE 'augen_blink|send_file|send_from_directory|static|add_url_rule|route\\(' buehne_daemon.py | head -160; echo ===STATUS===; systemctl --user is-active frankenstein-buehne.service; curl -fsS http://127.0.0.1:8788/api/status | head -c 1000; echo"
+}

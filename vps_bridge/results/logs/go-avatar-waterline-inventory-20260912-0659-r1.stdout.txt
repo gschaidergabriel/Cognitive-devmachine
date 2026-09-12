@@ -1,0 +1,30 @@
+WASSERLINIE_HITS 3
+00218:      richtig -- Speicherdruck sichtbar machen -- die Form falsch: ein
+00219:      halbtransparentes Rechteck verdeckt, statt zu zeigen. Der Wert bleibt in
+00220:      b.swap_voll_anteil verfuegbar; wer ihn wieder zeigen will, nimmt Farbe
+00221:      oder Saettigung, keine Flaeche. */
+00222:   #wasserlinie{display:none}
+00223:   /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus
+00224:      dem RIG-Manifest.
+00225:      ⭐⭐ 2026-09-11 KORRIGIERT nach Koordinator-Messung ("Mundfehler
+00226:      aufgeklaert"). Meine erste Reparatur (bottom:52%, per Bildschirmraster
+00378:           </div>
+00379:         </div>
+00380:         <canvas id="regen"></canvas>
+00381:         <div id="farbschicht"></div>
+00382:         <div id="wasserlinie"></div>
+00383:         <div id="vignette"></div>
+00384:       </div>
+00385:     </div>
+00386:   </div>
+01824:       const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+01825:       farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+01826:       farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+01827:     }
+01828:     const wasser = $("wasserlinie");
+01829:     let hoehe = null;
+01830:     if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+01831:     else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+01832:     if(hoehe !== null){
+waterline_forbidden None
+scope=READ_ONLY_WATERLINE_INVENTORY

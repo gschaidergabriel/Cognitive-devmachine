@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "go-avatar-waterline-inventory-20260912-0659-r1",
+  "command_sha256": "e9498fbcd174eafd51626c5e513c14c906874e0c48cd1be180f442c23cd0a9d4",
+  "started_at": "2026-09-12T03:05:12.797377+00:00",
+  "finished_at": "2026-09-12T03:05:12.959269+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1fd361d778f3a8d664ff4372c1e893ad1db9080193a1ff0a1f890d0cc07a03e4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "WASSERLINIE_HITS 3\n00218:      richtig -- Speicherdruck sichtbar machen -- die Form falsch: ein\n00219:      halbtransparentes Rechteck verdeckt, statt zu zeigen. Der Wert bleibt in\n00220:      b.swap_voll_anteil verfuegbar; wer ihn wieder zeigen will, nimmt Farbe\n00221:      oder Saettigung, keine Flaeche. */\n00222:   #wasserlinie{display:none}\n00223:   /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus\n00224:      dem RIG-Manifest.\n00225:      \u2b50\u2b50 2026-09-11 KORRIGIERT nach Koordinator-Messung (\"Mundfehler\n00226:      aufgeklaert\"). Meine erste Reparatur (bottom:52%, per Bildschirmraster\n00378:           </div>\n00379:         </div>\n00380:         <canvas id=\"regen\"></canvas>\n00381:         <div id=\"farbschicht\"></div>\n00382:         <div id=\"wasserlinie\"></div>\n00383:         <div id=\"vignette\"></div>\n00384:       </div>\n00385:     </div>\n00386:   </div>\n01824:       const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));\n01825:       farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;\n01826:       farb.style.opacity = intensitaet > 0.05 ? \"1\" : \"0\";\n01827:     }\n01828:     const wasser = $(\"wasserlinie\");\n01829:     let hoehe = null;\n01830:     if(typeof b.swap_voll_anteil === \"number\") hoehe = b.swap_voll_anteil;\n01831:     else if(typeof b.ram_frei_anteil === \"number\") hoehe = 1 - b.ram_frei_anteil;\n01832:     if(hoehe !== null){\nwaterline_forbidden None\nscope=READ_ONLY_WATERLINE_INVENTORY\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

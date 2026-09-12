@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-runtime-credit-semantic-privileged-readback-andreas-20260913-a4",
+  "command_sha256": "c992f22459e7da4fc9909e2cebd5f8bbd8151001ae5ff02d893671cc766099cd",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:59:53.135974+00:00",
+  "finished_at": "2026-09-12T18:00:02.177450+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "5aaa752a971d9d067808258230fcfd245021b3e602b25e60af0500185a03fd95",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HOST=andreas-MACO USER=andreas\nSERVICE\nActiveState=active\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST\nMainPID=319869\nExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nINSPECT\n{\n  \"current_binds\": [\n    \"--bind=/var/lib/entityos/data:/var/lib/entityos/data\",\n    \"--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts\",\n    \"--bind=/run/user/1000:/run/user/1000\",\n    \"--bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n  ],\n  \"layout\": {\n    \"config\": \"/etc/entityos/entityos.conf\",\n    \"data_dir\": \"/var/lib/entityos/data\",\n    \"durable_root\": \"/var/lib/entityos/data/semantic-state\",\n    \"manifest\": \"/var/lib/entityos/data/semantic-state/CUTOVER.json\",\n    \"rootfs_run\": \"/var/lib/entityos/rootfs-run\",\n    \"service\": \"entityos-vm.service\"\n  },\n  \"manifest_present\": false,\n  \"populated_sources\": [\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\"\n  ],\n  \"required_binds\": [\n    \"--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero\",\n    \"--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n  ],\n  \"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\"\n}\nCONFIG_BINDS\nENTITYOS_DATA_DIR=/var/lib/entityos/data\nENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run\nENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix\"\nMANIFEST\nMANIFEST_ABSENT\nSOURCES_PRIV\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db 479232 1789235957 644 root:root\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db 24576 1789171766 644 root:root\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db 471040 1789235977 644 root:root\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db 36864 1789022078 644 root:root\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db 327680 1789235265 644 root:root\nSOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910 4096 1789036439 644 root:root\nDURABLE_TREE\nOPEN_SQLITE_DELETED\nOPEN_SQLITE_PATHS\nOMEGA_PRIVILEGED_READBACK_PASS=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

@@ -1,0 +1,54 @@
+HOST=andreas-MACO USER=andreas
+SERVICE
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+INSPECT
+{
+  "current_binds": [
+    "--bind=/var/lib/entityos/data:/var/lib/entityos/data",
+    "--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts",
+    "--bind=/run/user/1000:/run/user/1000",
+    "--bind=/tmp/.X11-unix:/tmp/.X11-unix"
+  ],
+  "layout": {
+    "config": "/etc/entityos/entityos.conf",
+    "data_dir": "/var/lib/entityos/data",
+    "durable_root": "/var/lib/entityos/data/semantic-state",
+    "manifest": "/var/lib/entityos/data/semantic-state/CUTOVER.json",
+    "rootfs_run": "/var/lib/entityos/rootfs-run",
+    "service": "entityos-vm.service"
+  },
+  "manifest_present": false,
+  "populated_sources": [
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db"
+  ],
+  "required_binds": [
+    "--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero",
+    "--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank"
+  ],
+  "schema": "ENTITYOS_SEMANTIC_CUTOVER/v1"
+}
+CONFIG_BINDS
+ENTITYOS_DATA_DIR=/var/lib/entityos/data
+ENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run
+ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix"
+MANIFEST
+MANIFEST_ABSENT
+SOURCES_PRIV
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db 479232 1789235957 644 root:root
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db 24576 1789171766 644 root:root
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db 471040 1789235977 644 root:root
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db 36864 1789022078 644 root:root
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db 327680 1789235265 644 root:root
+SOURCE /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910 4096 1789036439 644 root:root
+DURABLE_TREE
+OPEN_SQLITE_DELETED
+OPEN_SQLITE_PATHS
+OMEGA_PRIVILEGED_READBACK_PASS=1

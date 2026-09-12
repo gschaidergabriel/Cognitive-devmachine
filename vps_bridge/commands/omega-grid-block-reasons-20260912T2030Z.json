@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-grid-block-reasons-20260912T2030Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 20,
+  "command": "python3 -c \"import json,pathlib; root=pathlib.Path('/workspace/omega_runtime/state/outbox'); rows=[]; [(lambda d,p: rows.append({'file':p.name,'error':(d.get('payload') or {}).get('error'),'task_id':(((d.get('payload') or {}).get('task') or {}).get('task_id')),'required_capabilities':(((d.get('payload') or {}).get('task') or {}).get('required_capabilities')),'preferred_data_domains':(((d.get('payload') or {}).get('task') or {}).get('preferred_data_domains'))}) if d.get('kind')=='GRID_ROUTE_BLOCKED' else None)(json.loads(p.read_text()),p) for p in root.glob('*.json')]; print(json.dumps(rows,sort_keys=True))\""
+}

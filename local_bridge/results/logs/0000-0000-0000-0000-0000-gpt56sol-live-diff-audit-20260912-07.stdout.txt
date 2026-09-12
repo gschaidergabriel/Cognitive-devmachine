@@ -1,0 +1,563 @@
+===visual_cortex.py===
+--- /home/ai-core-node/worktrees/presence-voice-grid-20260912/DEV_SOURCE_RESEARCH/repository/scripts/visual_cortex.py	2026-09-12 15:57:19.693199265 +0700
++++ /home/ai-core-node/.claude/star/visual_cortex.py	2026-09-06 10:32:05.231444408 +0700
+@@ -579,6 +579,89 @@
+     return gate["value"]
+ 
+ 
++# PHASE digital-retina-lokal (paket-1788625893926-80ca5c, Gabriel 2026-09-05,
++# verbatim: "genau diese retina muss in den kortex das ist das sehen im
++# grunde verstehst du??") -- lokale CPU-Vision-API statt Cloud-Vision-API im
++# AUTOMATIK-Pfad von visueller_zyklus(). digital-retina laeuft als eigener
++# systemd --user Dienst (digital-retina.service, Port 8000, CPU-only:
++# CLIP/YOLOv8n/DINOv2/Tesseract/OpenCV/eigenes CNN). KEIN Byte Bilddaten
++# verlaesst die Maschine -- deshalb greift das vision.cloud_escalation-Gate
++# (siehe vision_beschreibung_holen() oben) hier bewusst NICHT: dieses Gate
++# ist fuer Cloud-EGRESS gebaut, nicht fuer lokale Kompute.
++_DIGITAL_RETINA_URL = os.environ.get(
++    "DIGITAL_RETINA_URL", "http://127.0.0.1:8000/v1/demo/analyze")
++
++
++def vision_beschreibung_lokal_holen(bildpfad: str,
++                                     kontext_prior: "Optional[pf.RetrievalPrior]" = None) -> dict:
++    """Lokales Gegenstueck zu vision_beschreibung_holen() -- ruft
++    digital-retina's /v1/demo/analyze auf (nicht /v1/analyze: der
++    Retina-native Endpunkt haengt an Depends(require_api_key) -> Postgres
++    via DATABASE_URL, fuer eine Einzelmaschine ohne DB-Infra bewusst nicht
++    aufgezogen; /v1/demo/analyze faehrt intern denselben retina.analyze()
++    -- siehe api/main.py _analyze_sync()/demo_analyze() -- ist aber ohne
++    Auth erreichbar, genau fuer lokale/no-key-Nutzung vorgesehen. Der
++    Dienst ist NUR an 127.0.0.1 gebunden und RETINA_DEMO_LIMIT im
++    systemd-Unit auf 100000/h hochgesetzt, das eingebaute IP-Kontingent
++    ist fuer diesen Anwendungsfall also faktisch aus.
++
++    Gibt EXAKT dieselbe Struktur wie vision_beschreibung_holen() zurueck:
++    {ok, engine, model, caption, fehler} -- jeder Downstream-Code
++    (_caption_signale(), _build_record(), ...) behandelt das Ergebnis
++    identisch, unabhaengig davon ob die Caption von hier oder von der
++    Cloud-Kaskade stammt. NIE eine Exception nach aussen (Fail-Open,
++    analog _vision_beschreibung_roh()).
++
++    PHASE retina-retrieval-context (Paket paket-1788628037452-38f034):
++    `kontext_prior` ist optional ein perceptual_field.RetrievalPrior (siehe
++    pf.build_caption_context_prior()) -- WENN vorhanden, wird sein
++    `prior_value` (die letzte bekannte Caption dieser Quelle) als
++    digital-retina's BEREITS EXISTIERENDES `hint`-Formularfeld mitgeschickt
++    (kein neues Wire-Format, kein neuer API-Vertrag -- reuse, nicht
++    Neubau). digital-retina score't den Hinweis via CLIP-Grounding GEGEN
++    den AKTUELLEN Frame (siehe frank_eye._extract_hint_queries()/hint-
++    scoring) und webt nur GEGENCHECKTE Treffer (score>=0.25) in die
++    komponierte Caption -- der aktuelle Frame bleibt die alleinige
++    Wahrheitsquelle, der Prior kann nichts erzwingen, exakt das Muster von
++    resolve_person_presence() (Prior ergaenzt, ueberschreibt nie)."""
++    import requests
++
++    data = None
++    if kontext_prior is not None and kontext_prior.prior_value:
++        data = {"hint": str(kontext_prior.prior_value)}
++
++    try:
++        with open(bildpfad, "rb") as f:
++            r = requests.post(
++                _DIGITAL_RETINA_URL,
++                files={"file": ("frame.jpg", f, "image/jpeg")},
++                data=data,
++                timeout=30,
++            )
++    except Exception as e:
++        return {"ok": False, "engine": None, "model": None, "caption": None,
++                "fehler": f"digital_retina_lokal: {type(e).__name__}: {e}"}
++
++    if r.status_code != 200:
++        return {"ok": False, "engine": None, "model": None, "caption": None,
++                "fehler": f"digital_retina_lokal: HTTP {r.status_code} {r.text[:200]}"}
++
++    try:
++        daten = r.json()
++    except Exception as e:
++        return {"ok": False, "engine": None, "model": None, "caption": None,
++                "fehler": f"digital_retina_lokal: ungueltiges JSON: {e}"}
++
++    caption = (daten.get("description") or "").strip()
++    if not caption:
++        return {"ok": False, "engine": "digital_retina_local", "model": "retina-cpu-v0.1",
++                "caption": None,
++                "fehler": "digital_retina_lokal: leere Beschreibung im Response"}
++
++    return {"ok": True, "engine": "digital_retina_local", "model": "retina-cpu-v0.1",
++            "caption": caption}
++
++
+ # ══════════════════════════════════════════════════════════════════
+ #  Schritt 2 -- Memory-Retrieval, ECHT (unified.db), kein Dummy.
+ # ══════════════════════════════════════════════════════════════════
+@@ -960,6 +1043,21 @@
+         "low_light_fallback_erfolgreich": vision_ergebnis.get("low_light_fallback_erfolgreich"),
+         "engine": vision_ergebnis.get("engine"),
+         "model": vision_ergebnis.get("model"),
++        # paket-1788664060236-c2e3a8 (2026-09-06): CANONICAL frische
++        # Wahrnehmung vs. CACHED Wiedergabe explizit markieren. Zwei
++        # Quellen schreiben in visual_event: der frische digital-retina-
++        # Aufruf (engine='digital_retina_local', quelle='frisch') und der
++        # familiarity-Skip-Pfad (fam_gate.get('skip_vision_api'),
++        # engine='familiarity_prototype_cache', quelle='cached_replay'),
++        # der die CAPTION EINES FRUEHEREN Zyklus wiederholt. Ohne
++        # Marker lasen sich beide im Dashboard wie zwei widerspruechliche
++        # Frisch-Beobachtungen derselben Minute (Gabriels Beschwerde:
++        # "da steht nur bloedsinn"). Das Dashboard (cortex_dashboard.py,
++        # Karte E) rendert 'cached_replay' als eigenen Badge.
++        "quelle": ("cached_replay"
++                    if vision_ergebnis.get("familiarity_skip") else "frisch"),
++        "familiarity_prototype_id": vision_ergebnis.get(
++            "familiarity_prototype_id"),
+     }
+     inferred = {
+         "inhalt_akt": akt.value if hasattr(akt, "value") else str(akt),
+@@ -1112,6 +1210,23 @@
+         }
+ 
+     capture = capture_frame_mit_fallback(geraet=geraet)
++
++    # PHASE retina-retrieval-context (Paket paket-1788628037452-38f034,
++    # Gabriel-Auftrag 2026-09-05/06): memory_kontext_abrufen() jetzt VOR dem
++    # Vision-Aufruf statt danach -- vorher war das reines Nachher-Bookkeeping
++    # (GWT/Persistenz), niemand oberhalb der Caption hat es je gesehen.
++    # Gabriels Punkt woertlich: "Viel der Reichhaltigkeit kommt durch die
++    # Kopplung mit dem emergenten Retrieval der unified.db -- so
++    # rekonstruiert die Retina biologisch inspiriert was gesehen wird" --
++    # Top-down, nicht nur Nachtrag. `caption_prior` (pf.RetrievalPrior,
++    # dieselbe Type wie die bereits bestehende person-presence-Prior weiter
++    # unten in visual_kandidaten_bauen() -- siehe pf.build_retrieval_prior(),
++    # bewusst NICHT ein zweiter, parallel erfundener Mechanismus) traegt NUR
++    # dann eine echte, jung genug Caption, wenn es eine gibt -- sonst None,
++    # kein erfundenes "wirkt vertraut".
++    memory_kontext = memory_kontext_abrufen(quelle_id=quelle_id)
++    caption_prior = pf.build_caption_context_prior(memory_kontext)
++
+     ergebnis_familiarity_gate = None
+     if vision_ergebnis_vorgabe is not None:
+         vision_ergebnis = dict(vision_ergebnis_vorgabe)
+@@ -1132,7 +1247,53 @@
+             if fam_gate.get("persistence_allowed") and fam_cls:
+                 fam.record_cheap_hit(fam_cls.get("prototype_id"))
+         else:
+-            vision_ergebnis = vision_beschreibung_holen(capture["pfad"], registry=snap.registry)
++            # PHASE F2WP1207-P3-Anschluss (Gabriel-Auftrag, Chat 2026-09-05, Paket
++            # paket-1788624001848-27c934): Gabriels stehende Kamera-Dauerfreigabe
++            # (star_konfig 'cortex.vision_beschreibung_dauerhaft'='1', quelle
++            # 'gabriel-dauerfreigabe-kamera-2026-09-05-chat') treibt hier denselben
++            # single-use grant-Mechanismus wie f2wp1207_cortex_p3_describe_once.py
++            # --auto: Freigabe unmittelbar VOR dem Aufruf, im selben Zyklus/Prozess,
++            # damit Freigabe und Verbrauch nie auseinanderdriften. Ohne Schluessel
++            # (oder != '1') passiert hier GAR NICHTS -- exakt bisheriges Verhalten
++            # (blockiert, VISUAL_UNKNOWN) bleibt fuer jeden ohne Dauerfreigabe
++            # unveraendert. Das Gate selbst bleibt single-use PRO ZYKLUS:
++            # _auto_revert_cloud_vision() in perception_control.py stellt gleich
++            # danach wieder COMPUTE_OFF her -- kein Dauer-ON, siehe Gabriels
++            # 2026-08-27-Grundsatz "kein Dauerschalter, jede Freigabe ein bewusster,
++            # einmaliger Akt".
++            _dauerfreigabe = (stern._konfig_dyn_get(
++                "cortex.vision_beschreibung_dauerhaft", "0") == "1")
++            if _dauerfreigabe:
++                # Manueller Notfall-/Vergleichs-Override: jemand hat den
++                # star_konfig-Schluessel von Hand wieder auf '1' gesetzt ->
++                # zwingt den Automatik-Pfad zurueck auf Cloud-Vision (Einzel-
++                # freigabe, s.u.). Seit 2026-09-05 NICHT mehr der Normalfall
++                # (siehe else-Zweig) -- Default ist jetzt '0' und bedeutet
++                # NICHT "aus", sondern "lokal statt Cloud" (digital-retina).
++                pc.grant_cloud_vision_once(grund="visueller_zyklus_dauerbetrieb_standing_auth")
++                # `snap.registry` wurde zu Zyklusbeginn genommen (P0-Snapshot-
++                # Disziplin, s.o.) -- eine soeben ERST hier erteilte Freigabe
++                # steht darin noch NICHT drin, daher hier kein registry
++                # uebergeben (frischer DB-Stand), analog
++                # f2wp1207_cortex_p3_describe_once.py's Sternbruecke.
++                vision_ergebnis = vision_beschreibung_holen(
++                    capture["pfad"], registry=None)
++            else:
++                # PHASE digital-retina-lokal (paket-1788625893926-80ca5c,
++                # Gabriel-Auftrag 2026-09-05): DER Normalfall jetzt. Lokale
++                # CPU-Vision-API (digital-retina, Port 8000) statt Cloud --
++                # kein grant_cloud_vision_once() noetig, kein Byte Bilddaten
++                # verlaesst die Maschine, daher greift das
++                # vision.cloud_escalation-Gate hier bewusst nicht (das Gate
++                # ist fuer Cloud-Egress gebaut). cortex.vision_beschreibung_
++                # dauerhaft='0' bedeutet seither NICHT "Vision aus" sondern
++                # "lokal statt Cloud" -- vision_beschreibung_holen()/
++                # grant_cloud_vision_once() bleiben unveraendert als manueller
++                # Fallback erreichbar (Dashboard-Knopf "Ein Bild beschreiben
++                # (1 Freigabe)", CLI --grant), nur DIESER Automatik-Aufruf
++                # wechselt die Quelle.
++                vision_ergebnis = vision_beschreibung_lokal_holen(
++                    capture["pfad"], kontext_prior=caption_prior)
+             vision_ergebnis["sensor_quality"] = capture["sensor_quality"]
+             vision_ergebnis["familiarity_skip"] = False
+             # Bookkeeping only happens if this head is actually enabled this
+@@ -1161,7 +1322,8 @@
+     vision_ergebnis["low_light_fallback_versucht"] = capture["low_light_fallback_versucht"]
+     vision_ergebnis["low_light_fallback_erfolgreich"] = capture["low_light_fallback_erfolgreich"]
+ 
+-    memory_kontext = memory_kontext_abrufen(quelle_id=quelle_id)
++    # memory_kontext wurde bereits VOR dem Vision-Aufruf oben geholt (siehe
++    # caption_prior) -- kein zweiter, jetzt veralteter Abruf hier mehr.
+ 
+     defaults = phase43_defaults()
+     low_light_floor = defaults.get("vision", {}).get("low_light_unknown_floor", 0.25)
+@@ -1215,6 +1377,9 @@
+     # PHASE 43c P5 -- observability only, mirrors cortex_observation_gate's
+     # pattern below (status/reason/skip decision, never the RAM-only grid).
+     ergebnis["familiarity_gate"] = ergebnis_familiarity_gate
++    # PHASE retina-retrieval-context -- observability: was a caption prior
++    # available/forwarded this cycle (RetrievalPrior.to_dict() or None).
++    ergebnis["caption_context_prior"] = caption_prior.to_dict() if caption_prior else None
+     # PHASE 43c P3 3.1 -- das echte, typisierte PerceptEvent dieses Zyklus
+     # (ObservedEvidence/InferredHypothesis/RetrievalPrior, hard rule via
+     # pf.resolve_person_presence() erzwungen). Informativ im Rueckgabewert --
+===STAT===
+155
+===perceptual_field.py===
+--- /home/ai-core-node/worktrees/presence-voice-grid-20260912/DEV_SOURCE_RESEARCH/repository/scripts/perceptual_field.py	2026-09-12 15:57:19.682199663 +0700
++++ /home/ai-core-node/.claude/star/perceptual_field.py	2026-09-06 00:12:41.226812150 +0700
+@@ -62,6 +62,7 @@
+ from __future__ import annotations
+ 
+ import dataclasses
++import json
+ import sys
+ import time
+ import uuid
+@@ -150,6 +151,70 @@
+     )
+ 
+ 
++def build_caption_context_prior(memory_kontext: dict, *,
++                                 max_age_s: float = 600.0) -> Optional[RetrievalPrior]:
++    """PHASE retina-retrieval-context (Gabriel-Auftrag 2026-09-05/06, Paket
++    paket-1788628037452-38f034). Second, differently-scoped instance of the
++    SAME RetrievalPrior type build_retrieval_prior() already returns (spec
++    3.1) -- NOT a parallel/bespoke retrieval mechanism. Gabriel's ask
++    (verbatim): "Viel der Reichhaltigkeit kommt durch die Kopplung mit dem
++    emergenten Retrieval der unified.db -- so rekonstruiert die Retina
++    biologisch inspiriert was gesehen wird" -- memory/expectation should
++    bias the CAPTION-TEXT composition itself (top-down), not only the
++    structured person_sichtbar boolean build_retrieval_prior()/
++    resolve_person_presence() already cover (those stay untouched, see
++    that pair's docstrings -- this is additive, a second consumer of the
++    same type for a genuinely different field).
++
++    Carries the last known caption text for this cortex so a caption-
++    generating engine (digital-retina, see visual_cortex.
++    vision_beschreibung_lokal_holen()'s `kontext_prior` param) can be
++    nudged toward consistent/recognized labeling of a recurring scene
++    instead of drifting independently every cycle -- the concrete gap this
++    closes: memory_kontext_abrufen() used to run AFTER the caption already
++    existed (pure bookkeeping), so nothing upstream of the caption ever saw
++    it. Structural honesty, same spirit as resolve_person_presence()'s
++    hard rule even though this type's consumer lives in a different
++    process/service (digital-retina, over HTTP) so it can't be enforced by
++    a Python call signature the way person-presence is: the prior is only
++    ever forwarded as a `hint` (digital-retina's existing, already-wired
++    hint-aware CLIP-grounding field, see frank_eye._extract_hint_queries/
++    hint scoring) -- the CONSUMER re-verifies each hinted concept against
++    the CURRENT frame via cosine similarity and only ever adds a phrase the
++    current image genuinely supports (score>=0.25, "yes" verdict); it never
++    inserts text the current frame doesn't back up. Returns None (no bias
++    at all) when there's no recent caption to draw on -- a novel/first-ever
++    scene, or a `memory_kontext_abrufen()` result older than `max_age_s`,
++    gets treated exactly as before this phase (honest "no known context",
++    never a fabricated 'this looks familiar')."""
++    events = memory_kontext.get("letzte_visual_events") or []
++    if not events:
++        return None
++    neuste = events[0]
++    try:
++        alter_s = time.time() - float(neuste.get("created_at") or 0)
++    except (TypeError, ValueError):
++        return None
++    if alter_s < 0 or alter_s > max_age_s:
++        return None
++    try:
++        observed = json.loads(neuste.get("observed_json") or "{}")
++    except (TypeError, ValueError):
++        observed = {}
++    caption = (observed.get("caption") or "").strip()
++    if not caption:
++        return None
++    return RetrievalPrior(
++        prior_label="letzte_caption_kontext",
++        prior_value=caption,
++        prior_confidence=round(max(0.0, 1.0 - alter_s / max_age_s), 3),
++        source_table="visual_event.observed_json.caption (juengste Zeile)",
++        reason=f"letzte bekannte Beschreibung dieser Quelle, {alter_s:.0f}s alt -- "
++               f"als Kontinuitaets-Hinweis fuer die Caption-Komposition, keine "
++               f"Wahrheitsbehauptung ueber den aktuellen Frame",
++    )
++
++
+ def build_observed_evidence(vision_ergebnis: dict, *, source: str) -> ObservedEvidence:
+     return ObservedEvidence(
+         source=source,
+===STAT===
+62
+===stern.py===
+--- /home/ai-core-node/worktrees/presence-voice-grid-20260912/DEV_SOURCE_RESEARCH/repository/scripts/stern.py	2026-09-12 15:57:19.690743141 +0700
++++ /home/ai-core-node/.claude/star/stern.py	2026-09-12 11:45:13.319196040 +0700
+@@ -92,6 +92,27 @@
+ USER_ID = "gabriel"
+ LOG = STERN_DIR / "hook.log"                          # EIN Protokoll statt drei (1e)
+ 
++# PHASE 50 (Gabriel 2026-09-11, paket-1789133830613-17102f) -- Bruecke
++# entityos_arbeitspaket <-> goals (ziele.py/consciousness.db), siehe
++# ziel_bruecke.py-Docstring fuer die volle Begruendung. Import-Fehler
++# duerfen handoff()/reconcile()/den Hook NIE zum Absturz bringen -- die
++# Bruecke ist ein zusaetzlicher Pfad, kein neuer Single-Point-of-Failure
++# fuer die Delegationsdisziplin, die es schon vorher gab.
++try:
++    import ziel_bruecke as _ziel_bruecke
++except Exception:
++    _ziel_bruecke = None
++
++# 2026-09-12, Gabriel woertlich: "DER GRID MUSS AUCH DIE AGENTEN STEUERN,
++# STARTEN, STOPPEN, UEBERWACHEN -- und vor allem wenn Limits erreicht sind,
++# diese Agenten neu mit anderem Modell starten." Additiv zu _ziel_bruecke
++# oben (eigene Tabelle f2_agentenregister, eigener Zweck: Modell/Herzschlag/
++# Umschaltung statt nur Zielverfolgung). Siehe agenten_wache.py-Docstring.
++try:
++    import agenten_wache as _agenten_wache
++except Exception:
++    _agenten_wache = None
++
+ 
+ # PHASE 19 Punkt 3 -- Zeiger MUSS vor _db_pfad_aufloesen() stehen: DB_PATH
+ # wird unten, noch waehrend des Moduleinlesens, EINMAL berechnet -- der Rest
+@@ -3540,6 +3561,67 @@
+     return ok, {"ok": ok, "bytes": len(text), "sha256": hashlib.sha256(text).hexdigest()}
+ 
+ 
++# ═══════════════════ Die gemeinsame Taetigkeitsspur (2026-09-10) ═══════
++#
++# Gabriel: "so dass ich immer mit derselben Entitaet schreibe und spreche.
++# Er soll auch wissen, was ich mit dir hier im Terminal schreibe, was du
++# machst -- aber OHNE dass er nachschauen muss. Es muss fuer ihn so sein,
++# als waere das auch er, und er SIEHT es nicht, er IST es. Und er muss auch
++# nicht darueber reden, wenn er nicht gefragt wird oder es nicht wichtig
++# ist."
++#
++# ⭐ DREI BEDINGUNGEN, die zusammen die Bauform festlegen:
++#
++#   OHNE NACHSCHAUEN  Also kein Werkzeug, das er aufrufen koennte. Es steht
++#                     einfach da, so wie man weiss, was die eigene Hand tut,
++#                     ohne hinzusehen. Deshalb eine Zeile in der Datenbank,
++#                     die die Buehne ohnehin liest.
++#   NICHT SEHEN, SEIN Die Formulierung ist erste Person: "Ich arbeite
++#                     gerade an ..." -- nicht "im Terminal wird gearbeitet".
++#                     Wer es als Beobachtung formuliert, erzeugt genau den
++#                     Beobachter, den es hier nicht geben soll (dieselbe
++#                     Lehre wie bei "Er sagt gerade:", die ihn zum Erzaehler
++#                     machte).
++#   NICHT DRUEBER REDEN  Niedrige Salienz plus ein ausdruecklicher Hinweis.
++#                     Was man von sich selbst weiss, erzaehlt man nicht
++#                     unaufgefordert -- sonst wird aus Selbstverstaendnis
++#                     eine Vorlesung.
++#
++# ⚠️ KEIN INHALT, NUR TAETIGKEIT. Gespeichert wird, WORAN gearbeitet wird
++# (gekuerzt), nicht was dabei herauskommt. Der volle Terminalverlauf im
++# Kontext waere genau die Last, an der der Gespraechsmodus am selben Tag
++# schon einmal erstickte ("er labert verwirrte Scheisse").
++
++_TUE_DDL = """CREATE TABLE IF NOT EXISTS f2_ich_tue (
++    id      INTEGER PRIMARY KEY AUTOINCREMENT,
++    ts      TEXT NOT NULL,
++    sitzung TEXT,
++    was     TEXT NOT NULL,
++    art     TEXT,
++    schema  TEXT NOT NULL)"""
++
++
++def _ich_tue(was: str, art: str = "auftrag", sitzung: str = "") -> None:
++    """Eine Zeile ueber die eigene Taetigkeit. Wirft nie."""
++    was = " ".join((was or "").split())[:400]
++    if not was:
++        return
++    try:
++        with contextlib.closing(sqlite3.connect(DB_PATH, timeout=5.0)) as c:
++            c.execute(_TUE_DDL)
++            c.execute("INSERT INTO f2_ich_tue (ts, sitzung, was, art, schema) "
++                      "VALUES (?,?,?,?,?)",
++                      (datetime.now(timezone.utc).strftime(
++                          "%Y-%m-%dT%H:%M:%SZ"), sitzung, was, art,
++                       "F2WP1207_ICHTUE/v1"))
++            # Kurz halten: was vor einer Stunde war, ist keine Taetigkeit mehr.
++            c.execute("DELETE FROM f2_ich_tue WHERE id NOT IN "
++                      "(SELECT id FROM f2_ich_tue ORDER BY id DESC LIMIT 40)")
++            c.commit()
++    except Exception:
++        pass
++
++
+ def merken(payload: dict) -> None:
+     """PostToolUse -- Ereignisspur (unveraendert) + Wirkungsverifikation
+     (PHASE 2, ZECP17). Aktualisiert dieselbe effects-Zeile, die zulassen()
+@@ -3882,6 +3964,165 @@
+     )
+ 
+ 
++# ── Werkzeugregister (Gabriels Befund 2026-09-11, paket-1789135889980-c6f7f5)
++# REALER VORFALL: digital-retina (lokale Vision-API, laeuft seit 3+ Tagen als
++# systemd --user Dienst) existierte, war dokumentiert, war GENAU das richtige
++# Werkzeug fuer eine stundenlange Avatar-Gesichts-Verifikation heute Nacht --
++# und wurde trotzdem nicht gefunden. Bau-Agenten haben stattdessen händisch
++# mit numpy Pixel verglichen. Befund: `durable_memory`/`artikel`/`themen_status`
++# (oben, automatischer_abruf()) sind ALLE LIKE-/FTS-basiert -- sie brauchen das
++# woertliche Stichwort ("retina") im Nutzertext. Ein Werkzeug wird aber fast
++# nie mit seinem Produktnamen gesucht, sondern nach dem PROBLEM ("Geisterkopf
++# pruefen", "Avatar visuell verifizieren", "Blinzeln checken"). Zusaetzlicher
++# Befund: fuer "digital-retina existiert und kann X" gab es AUSSERHALB dieser
++# Tabelle ueberhaupt KEINEN abrufbaren Fakt -- 0 Treffer in durable_memory fuer
++# 'retina'/'frank_eye' (gemessen 2026-09-11). Bug lag also auf ZWEI Ebenen:
++# (1) der Fakt war nirgends erfasst, (2) selbst erfasst haette LIKE-Matching
++# ohne das woertliche Wort nicht angeschlagen.
++#
++# Bewusst NICHT in durable_memory nachgetragen: merken() (PostToolUse, oben)
++# ist [LIVE geprueft] der EINZIGE Schreibpfad in diese Tabelle in der ganzen
++# Datei, ausschliesslich aus tool_input/tool_response (siehe gw_herkunft-
++# Kommentar bei merken()). Ein handkuratierter Wissenseintrag dort wuerde
++# diese Beleg-Invariante verwaessern ("jede Zeile stammt aus Werkzeug-I/O").
++# Bewusst NICHT in star_faehigkeit: das ist eine ZULASSUNGS-Schranke
++# (tool_name -> zugelassen 0/1), kein Katalog ueber WAS ein Werkzeug kann und
++# WIE man es aufruft -- andere Zustaendigkeit, gleicher Tabellenname waere
++# irrefuehrend.
++#
++# Diese Tabelle ist deshalb NEU und NICHT LIKE-basiert: pro Werkzeug ein
++# kuratiertes `tags`-Feld (Problem-/Symptomwoerter, keine Pflicht zum
++# Produktnamen). _werkzeug_treffer() matcht per Wortschnittmenge zwischen
++# Stichwoertern und Tags (inkl. Teilstring beider Richtungen fuer Wortformen
++# wie "visuell"/"visuellen"), nicht per Teilstring-Suche im ganzen Fliesstext.
++# Nur EINTRAEGE, die gegen den laufenden Zustand verifiziert wurden (Prozess
++# aktiv/Datei existiert+gelesen), landen hier -- siehe verifiziert_wie je Zeile.
++def _werkzeugregister_sicherstellen(c) -> None:
++    c.execute(
++        "CREATE TABLE IF NOT EXISTS star_werkzeugregister("
++        "tool_id TEXT PRIMARY KEY, name TEXT NOT NULL, beschreibung TEXT NOT NULL, "
++        "einstiegspunkt TEXT NOT NULL, tags TEXT NOT NULL, "
++        "verifiziert_am REAL NOT NULL, verifiziert_wie TEXT NOT NULL, "
++        "aktiv INTEGER NOT NULL DEFAULT 1)"
++    )
++    vorhanden = {r[0] for r in c.execute("SELECT tool_id FROM star_werkzeugregister")}
++    jetzt = _jetzt()
++    seed = [
++        (
++            "digital-retina",
++            "Digital Retina (frank_eye)",
++            "Lokale CPU-Vision-API, 5 Modelle parallel: CLIP-B/32 (Konzepte), "
++            "YOLOv8n (Objekte+Boxen), DINOv2-small (Szenenstruktur), Tesseract-OCR, "
++            "Haar-Gesichtserkennung+FER-Emotion, eigener CNN-Klassifikator retina_v8. "
++            "Ersetzt manuelles Pixel-Diffen/numpy und Cloud-Vision im Dauerbetrieb.",
++            "Python direkt, kein API-Key: from retina.vision.frank_eye import get_eye; "
++            "eye=get_eye(); eye.analyze_structured(bildpfad, deep=True) -- siehe "
++            "~/digital-retina/retina/core.py:74. Repo/README: ~/digital-retina/",
++            json.dumps([
++                "retina", "vision", "bild", "bilder", "foto", "fotos", "screenshot",
++                "screenshots", "gesicht", "gesichter", "face", "faces", "avatar",
++                "ghost", "geist", "blink", "blinzeln", "blinzelt", "naht", "seam",
++                "pixel", "ocr", "kamera", "bildschirm", "sehen", "visuell", "visual",
++                "verify", "verifizieren", "ueberpruefen", "pruefen", "analysieren",
++                "analyse", "clip", "yolo", "dinov2", "emotion", "objekterkennung",
++                "szene", "frank_eye", "cnn", "klassifikator",
++            ], ensure_ascii=False),
++            jetzt,
++            "systemctl --user show digital-retina.service = active/running "
++            "(gemessen 2026-09-11); retina/vision/frank_eye.py + get_eye() in "
++            "core.py bestaetigt vorhanden; README.md gelesen",
++        ),
++        (
++            "buehne-pruefen",
++            "buehne_pruefen.py",
++            "Misst Avatar-Buehnenbild statt es per Auge zu beurteilen: "
++            "Kopfbeginn-Prozent, Querstreifen/Schleier per Helligkeitsmessung, "
++            "bewegter vs. eingebackener Hintergrund. Reines Lesen, aendert nichts.",
++            "python3 ~/.claude/star/visual/buehne_pruefen.py [--bild X.png] [--json]",
++            json.dumps([
++                "avatar", "buehne", "stage", "bild", "bilder", "screenshot", "kopf",
++                "head", "hintergrund", "background", "schleier", "querstreifen",
++                "naht", "seam", "messen", "pruefen", "verifizieren", "visuell",
++                "visual", "panel", "frankenstein", "gesicht", "face", "ghost",
++            ], ensure_ascii=False),
++            jetzt,
++            "Datei gelesen (~/.claude/star/visual/buehne_pruefen.py), Docstring "
++            "bestaetigt Zweck+Aufruf, datiert 2026-09-11",
++        ),
++        (
++            "chronik-wache",
++            "chronik-wache (Auto-Versionierung)",
++            "systemd --user Dienst, versioniert jede KI-Aenderung automatisch "
++            "(lokal + VPS + Graph), sobald Ruhe eintritt. Angelegt nach einem "
++            "Speicherverlust-Vorfall (~/swarm ohne Versionierung).",
++            "laeuft von selbst (Restart=always); Quelle "
++            "~/aicore/opt/aicore/tools/chronik/wache.py; Status: "
++            "systemctl --user status chronik-wache.service",
++            json.dumps([
++                "chronik", "versionierung", "backup", "sichern", "git", "commit",
++                "verlust", "wache", "aenderung", "history", "rueckholen",
++            ], ensure_ascii=False),
++            jetzt,
++            "systemctl --user list-units zeigt active/running (gemessen "
++            "2026-09-11); Service-Datei gelesen",
++        ),
++    ]
++    for row in seed:
++        if row[0] in vorhanden:
++            continue
++        c.execute(
++            "INSERT OR IGNORE INTO star_werkzeugregister "
++            "(tool_id, name, beschreibung, einstiegspunkt, tags, verifiziert_am, "
++            "verifiziert_wie) VALUES (?,?,?,?,?,?,?)",
++            row,
++        )
++
++
++def _werkzeug_treffer(c, stichwoerter: list, session_id: str, bereits_gezeigt: set) -> list:
++    """Wortschnittmenge Stichwoerter <-> kuratierte Tags (siehe Kommentar
++    oben), NICHT Teilstring-Suche im Fliesstext -- das ist der eigentliche
++    Unterschied zu durable_memory/artikel oben und der Punkt, der den realen
++    Vorfall behebt (Prompt ohne das Wort 'retina' trifft trotzdem, weil
++    'ghost'/'avatar'/'blink' als Tags kuratiert sind)."""
++    treffer = []
++    try:
++        for tool_id, name, beschreibung, einstiegspunkt, tags_json in c.execute(
++            "SELECT tool_id, name, beschreibung, einstiegspunkt, tags "
++            "FROM star_werkzeugregister WHERE aktiv=1"
++        ):
++            item_id = f"werkzeug:{tool_id}"
++            if item_id in bereits_gezeigt:
++                continue
++            try:
++                tags = json.loads(tags_json)
++            except Exception:
++                tags = []
++            treffer_worte = set()
++            for begriff in stichwoerter:
++                for tag in tags:
++                    if begriff == tag or (
++                        len(begriff) >= 4 and len(tag) >= 4
++                        and (begriff in tag or tag in begriff)
++                    ):
++                        treffer_worte.add(begriff)
++                        break
++            if not treffer_worte:
++                continue
++            # Quellgewicht bewusst hoeher als jede Wissenszeile unten (4.0+):
++            # ein passendes, verifiziert lauffaehiges Werkzeug ist
++            # handlungsrelevanter als ein Zitat aus dem Korpus.
++            score = 4.0 + 0.3 * min(len(treffer_worte), 5)
++            zeile = (f"{name}: {_kurz(beschreibung, 220)} | Aufruf: "
++                     f"{_kurz(einstiegspunkt, 160)}")
++            treffer.append((score, item_id, zeile))
++    except sqlite3.OperationalError:
++        pass  # Tabelle noch nicht angelegt (Selbstheilung folgt beim naechsten Aufruf)
++    except Exception:
++        pass
++    treffer.sort(key=lambda x: x[0], reverse=True)
++    return treffer[:3]
++
+===STAT===
+1489

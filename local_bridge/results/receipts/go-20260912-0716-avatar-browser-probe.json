@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-20260912-0716-avatar-browser-probe",
+  "command_sha256": "d3222678bbd9cf8061d34749497f29383f704332c2865bb5464ff8907bdea3f5",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:12:15.747551+00:00",
+  "finished_at": "2026-09-12T00:12:15.967036+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9490bef2461d14e29620c6e9ee5d98374b847c1bba5098449ea551454d4e8996",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===CHROME===\n1199400 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate --disable-gpu --disable-gpu-compositing --disable-software-rasterizer\n1464734 bash -lc set -eu; echo '===CHROME==='; pgrep -af '/opt/google/chrome/chrome --app=http://127.0.0.1:8788/' || true; echo '===WINDOWS==='; xdotool search --onlyvisible --name '.*' 2>/dev/null | while read w; do printf '%s ' \"$w\"; xdotool getwindowname \"$w\" 2>/dev/null || true; done | sed -n '1,80p'; echo '===PORTS==='; ss -ltnp 2>/dev/null | grep -E ':(8788|9222|9223|9333)\\b' || true; echo '===HTTP==='; curl -fsS -o /dev/null -w 'http=%{http_code} bytes=%{size_download} time=%{time_total}\\n' http://127.0.0.1:8788/\n===WINDOWS===\n989 \n52429980 frontal\n52440766 Screencasts\n52428804 Home\n52429279 Screenshots\n52442170 Downloads\n12590534 FranKenstein -- live\n8388615 mutter guard window\n8388611 \n50331737 Desktop Icons 2\n50331733 Desktop Icons 1\n52439418 Search for \u201cund d\u201d\n12590743 crush ~/frankenstein-repo\n59186016 \u2733 Claude Code\n58720266 \u2733 PC-Absturz\n60817430 GO V3 Hardening \u2014 Original profile \u2014 Mozilla Firefox\n58864504 Terminal\n50354643 gjs\n50395481 gjs\n50395485 gjs\n60817527 Firefox\n20986152 xfce4-notifyd\n52429981 \n52440767 \n52428805 \n52429280 \n52442171 \n12590535 \n6291460 FranKenstein -- live\n50331738 \n50331734 \n52439419 \n12590744 \n73400352 crush ~/frankenstein-repo\n73400371 \n59186017 \n58720267 \n60817431 \n60817424 \n58864505 \n50354644 \n50395482 \n50395486 \n60817528 \n20986153 \n===PORTS===\nLISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:((\"python3\",pid=2665680,fd=3))     \n===HTTP===\nhttp=200 bytes=113597 time=0.000947\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,78 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+2026-09-12T07:12:16+07:00
+===SUBJECT_HASHES===
+87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645  buehne.html
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+===BLINK_PREIMAGES===
+58eabd5484fc8b9ab28063ebc5e10be0fb4b56d977a5c9ca3c8c959cd03b2fb8  augen_blink/blink_004.png
+58eabd5484fc8b9ab28063ebc5e10be0fb4b56d977a5c9ca3c8c959cd03b2fb8  augen_blink/blink_009.png
+5c3a76bda483b6bd2ed6a488b8cd2584a857f3aa72da15acbbcd7cbd8c9d0c7f  augen_blink/blink_003.png
+6bf13c8bbc7dc8934d25910cca4a3938a132a9643481f24f86e6741e57df3384  augen_blink/blink_001.png
+8eb96677ea4d24548e201e779a56ae1417b5c5650f88c75e063c445c8963ed1c  augen_blink/blink_008.png
+a426ae34297e4624c4a6cf974006d39dd89fba1a8eb293177f949fd60bcfe316  augen_blink/blink_005.png
+ce9599334eec60b7b848b752a3262ec10f992c9550bb5f1edf9256b1bf5bbebf  augen_blink/blink_007.png
+e7dce5c8859f97e53bb29edaaa0093aac0887ed134b15c32283e7e4337452019  augen_blink/blink_002.png
+e7dce5c8859f97e53bb29edaaa0093aac0887ed134b15c32283e7e4337452019  augen_blink/blink_010.png
+f7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  augen_blink/blink_000.png
+f7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  augen_blink/blink_011.png
+f7cc3fc538478c9a0f5748f2139a8bba7234f74aa59b634dc3f266caa237d0fa  augen_blink/blink_006.png
+===GAZE_MASTER===
+e9222dde99c5bf84adf838cde2c23284ed1d7b4a5d05c24fe48954871cf64ced  augen_gaze/rotglow_tracking_master.png
+===PROCESS_PORT===
+1464887 bash -lc set -eu; VIS=/home/ai-core-node/.claude/star/visual; cd "$VIS"; echo '===IDENTITY==='; hostname; date -Is; echo '===SUBJECT_HASHES==='; sha256sum buehne.html filmlook.js; echo '===BLINK_PREIMAGES==='; sha256sum augen_blink/blink_*.png | sort; echo '===GAZE_MASTER==='; sha256sum augen_gaze/rotglow_tracking_master.png; echo '===PROCESS_PORT==='; pgrep -a -f 'buehne_daemon.py|google-chrome.*8788' || true; ss -ltnp 2>/dev/null | grep ':8788' || true; echo '===CAPTURE_TOOLS==='; command -v import || true; command -v scrot || true; command -v gnome-screenshot || true; command -v xdotool || true; command -v wmctrl || true; echo '===DISPLAY==='; printf 'DISPLAY=%s XAUTHORITY=%s\n' "${DISPLAY-}" "${XAUTHORITY-}"; echo '===PERF_MARKERS==='; grep -nE 'fps|FPS|frame|requestAnimationFrame|KOPF_ROLL_MS' buehne.html | tail -80; echo '===DONE==='
+2665680 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=2665680,fd=3))     
+===CAPTURE_TOOLS===
+/usr/bin/import
+/usr/bin/scrot
+/usr/bin/xdotool
+/usr/bin/wmctrl
+===DISPLAY===
+DISPLAY=:0 XAUTHORITY=/home/ai-core-node/.Xauthority
+===PERF_MARKERS===
+54:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+96:     4px auf der vollen 1536er-Leinwand gemessen; #hg-frame ist im
+99:     Mass uebernommen. fps VORHER (baseline, echte Selbstmeldung ueber
+102:  #hg-frame{position:absolute;inset:0;width:100%;height:100%;z-index:0;
+115:     Hauptebene -- #hg-frame (Hintergrund) scheint jetzt durch echte Transparenz
+138:     Filter-Agent geprueft: 101,3% fps-Ratio = praktisch gratis). filter:drop-shadow
+228:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+333:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+382:      <img id="hg-frame" alt="">
+386:             #gesicht als Hauptdarstellung -- #hg-frame scheint jetzt durch. -->
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+517:// nicht alle 221 Dateien in mund_keyframes/.
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+689:  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+730:const KOPF_ROLL_MS = 110;                         // je 5°-Schritt, kurz
+752:  if(jetzt - kopfRollLetzterT < KOPF_ROLL_MS) return;
+966:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+974:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+1214:  const [frame, dauer, phase] = schritte[idx];
+1215:  $("augen-blink").src = BLINK_BILDER[frame];
+1552:// Performance-Ventil (Gabriel woertlich: "Bleibt sie unter 24 fps, reduziere
+1559:  if(tropfenVorne.length > deckel) return; // Deckel gegen fps-Einbruch
+1616:// ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+1833:  driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+1847:  // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+1850:  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+1861:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1866:function fpsMessen(t){
+1885:  fpsMessen(t);
+1886:  requestAnimationFrame(schleife);
+1888:requestAnimationFrame(schleife);
+1890:  const fps = window.__buehneFps || 60;
+1891:  if(fps < 24 && !regenGedrosselt){
+1893:    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+1894:  }else if(fps >= 28 && regenGedrosselt){
+1900:// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+1902:  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+1903:    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+1905:// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+1906:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+===DONE===

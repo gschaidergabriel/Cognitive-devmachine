@@ -1,0 +1,53 @@
+===CHROME===
+1199400 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate --disable-gpu --disable-gpu-compositing --disable-software-rasterizer
+1464734 bash -lc set -eu; echo '===CHROME==='; pgrep -af '/opt/google/chrome/chrome --app=http://127.0.0.1:8788/' || true; echo '===WINDOWS==='; xdotool search --onlyvisible --name '.*' 2>/dev/null | while read w; do printf '%s ' "$w"; xdotool getwindowname "$w" 2>/dev/null || true; done | sed -n '1,80p'; echo '===PORTS==='; ss -ltnp 2>/dev/null | grep -E ':(8788|9222|9223|9333)\b' || true; echo '===HTTP==='; curl -fsS -o /dev/null -w 'http=%{http_code} bytes=%{size_download} time=%{time_total}\n' http://127.0.0.1:8788/
+===WINDOWS===
+989 
+52429980 frontal
+52440766 Screencasts
+52428804 Home
+52429279 Screenshots
+52442170 Downloads
+12590534 FranKenstein -- live
+8388615 mutter guard window
+8388611 
+50331737 Desktop Icons 2
+50331733 Desktop Icons 1
+52439418 Search for “und d”
+12590743 crush ~/frankenstein-repo
+59186016 ✳ Claude Code
+58720266 ✳ PC-Absturz
+60817430 GO V3 Hardening — Original profile — Mozilla Firefox
+58864504 Terminal
+50354643 gjs
+50395481 gjs
+50395485 gjs
+60817527 Firefox
+20986152 xfce4-notifyd
+52429981 
+52440767 
+52428805 
+52429280 
+52442171 
+12590535 
+6291460 FranKenstein -- live
+50331738 
+50331734 
+52439419 
+12590744 
+73400352 crush ~/frankenstein-repo
+73400371 
+59186017 
+58720267 
+60817431 
+60817424 
+58864505 
+50354644 
+50395482 
+50395486 
+60817528 
+20986153 
+===PORTS===
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=2665680,fd=3))     
+===HTTP===
+http=200 bytes=113597 time=0.000947

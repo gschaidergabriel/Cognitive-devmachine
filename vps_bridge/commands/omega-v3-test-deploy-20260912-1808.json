@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-v3-test-deploy-20260912-1808",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "command": "set -eu; echo '=== OMEGA V3 TEST DEPLOY ==='; date -u +%FT%TZ; if [ -d /workspace/oMEGA/.git ]; then git -C /workspace/oMEGA fetch origin main; git -C /workspace/oMEGA checkout main; git -C /workspace/oMEGA merge --ff-only origin/main; else if command -v gh >/dev/null 2>&1; then gh repo clone gschaidergabriel/oMEGA /workspace/oMEGA; else git clone git@github.com:gschaidergabriel/oMEGA.git /workspace/oMEGA; fi; fi; echo HEAD=$(git -C /workspace/oMEGA rev-parse HEAD); cd /workspace/oMEGA; python3 -m compileall -q omega tests; python3 -m pytest -q; mkdir -p /workspace/omega_runtime/data /workspace/omega_runtime/state; PYTHONPATH=/workspace/oMEGA python3 - <<'PY'\nfrom pathlib import Path\nfrom omega.unified_store import UnifiedStore\ns=UnifiedStore(Path('/workspace/omega_runtime/data/omega_unified.db'),Path('/workspace/oMEGA/schema'))\nprint('UNIFIED_DB',s.db_path,s.db_path.stat().st_size)\nwith s.connect() as c:\n print('TABLES',len(c.execute(\"select name from sqlite_master where type='table'\").fetchall()))\nPY\necho '=== PASS ==='"
+}

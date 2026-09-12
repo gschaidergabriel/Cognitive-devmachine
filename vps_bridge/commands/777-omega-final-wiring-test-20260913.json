@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "777-omega-final-wiring-test-20260913",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\nROOT=$(python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('/workspace/omega_runtime/state/SUPERVISOR_STATUS.json')\nprint(json.loads(p.read_text())['repo_root'])\nPY\n)\nTMP=$(mktemp -d /tmp/omega-final-wiring-XXXXXX)\ncp -a \"$ROOT/.\" \"$TMP/\"\npython3 - \"$TMP\" <<'PY'\nimport pathlib, sys\nroot=pathlib.Path(sys.argv[1])\np=root/'omega/supervisor_outer.py'\ns=p.read_text()\nneedle='    \"relay\": [sys.executable, \"-m\", \"omega.relay_entrypoint\"],\\n'\ninsert=needle+'    \"receipt_reconciler\": [sys.executable, \"-m\", \"omega.receipt_reconciler\"],\\n'\nif '"receipt_reconciler"' not in s:\n    if needle not in s: raise SystemExit('PATCH_NEEDLE_MISSING')\n    p.write_text(s.replace(needle,insert,1))\nPY\ncd \"$TMP\"\npython3 -m pytest -q tests/test_receipt_reconciler.py tests/test_receipt_reconciler_atomic.py tests/test_relay_entrypoint.py tests/test_777_central_spool_runtime.py\npython3 - <<'PY'\nimport json, pathlib, sys, tempfile\nsys.path.insert(0,'.')\nfrom omega.supervisor_outer import CHILDREN, Supervisor\nassert CHILDREN['receipt_reconciler'][1:] == ['-m','omega.receipt_reconciler']\nwith tempfile.TemporaryDirectory() as td:\n    base=pathlib.Path(td); s=Supervisor(base/'state', base/'release'); env=s.child_env()\n    assert env['OMEGA_CARRIER_REPO']==str(base/'carrier_repo')\n    assert env['OMEGA_UNIFIED_DB']==str(base/'data'/'omega_unified.db')\nprint(json.dumps({'status':'PASS','receipt_reconciler_child':CHILDREN['receipt_reconciler'],'no_live_runtime_mutation':True},sort_keys=True))\nPY\nrm -rf \"$TMP\""
+}

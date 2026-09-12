@@ -1,0 +1,31 @@
+===RESOLVE===
+===SSH CONFIG===
+Host github.com
+Host github-clay
+Host github-frankenstein
+Host github-selfintegration
+Host github-clay-research-entity
+===SSH BATCH===
+--ai-core-node
+ssh: Could not resolve hostname ai-core-node: Temporary failure in name resolution
+--ai-core-node-projekt-frankenstein
+ssh: Could not resolve hostname ai-core-node-projekt-frankenstein: Temporary failure in name resolution
+===LOCAL BRIDGE PATH===
+42:# laeuft -- nur die Umgebung (und damit REPO/STATE_DIR/Branchnamen, die daraus
+50:REPO = STATE_DIR / "repo"
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+56:RESULTS_PATH = pathlib.Path("local_bridge/results")
+87:def _git(*args, cwd=REPO, timeout=300, check=True):
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+98:def sync_and_push_results(message: str):
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+177:    d = REPO / RESULTS_PATH
+243:    """Ein Durchlauf: Control-Branch holen, neue Befehle ausfuehren, Ergebnisse pushen."""
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+246:    cmd_dir = REPO / QUEUE
+250:            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+254:    p = subprocess.run(["git", "-C", str(REPO), "ls-tree", "-r", "--name-only",
+255:                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+258:        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56-andreas-to-gabriel-path-20260912T0344Z",
+  "command_sha256": "9875ae3f82e9cc84100dfd5516b19ba645e3c8e463656dc47e6bf691ac1f8157",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:43:41.177797+00:00",
+  "finished_at": "2026-09-12T03:43:41.550610+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e9ca85074994c6294e8a273126dc10ff5485eb3e5c52482766eb03b9d92d5a85",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===RESOLVE===\n===SSH CONFIG===\nHost github.com\nHost github-clay\nHost github-frankenstein\nHost github-selfintegration\nHost github-clay-research-entity\n===SSH BATCH===\n--ai-core-node\nssh: Could not resolve hostname ai-core-node: Temporary failure in name resolution\r\n--ai-core-node-projekt-frankenstein\nssh: Could not resolve hostname ai-core-node-projekt-frankenstein: Temporary failure in name resolution\r\n===LOCAL BRIDGE PATH===\n42:# laeuft -- nur die Umgebung (und damit REPO/STATE_DIR/Branchnamen, die daraus\n50:REPO = STATE_DIR / \"repo\"\n53:CONTROL_BRANCH = os.environ.get(\"LOCAL_BRIDGE_CONTROL_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-control\")\n54:RESULTS_BRANCH = os.environ.get(\"LOCAL_BRIDGE_RESULTS_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-results\")\n56:RESULTS_PATH = pathlib.Path(\"local_bridge/results\")\n87:def _git(*args, cwd=REPO, timeout=300, check=True):\n95:    _git(\"fetch\", \"origin\", f\"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}\", check=False)\n98:def sync_and_push_results(message: str):\n103:    _git(\"push\", \"-u\", \"origin\", f\"HEAD:{RESULTS_BRANCH}\", timeout=180)\n177:    d = REPO / RESULTS_PATH\n243:    \"\"\"Ein Durchlauf: Control-Branch holen, neue Befehle ausfuehren, Ergebnisse pushen.\"\"\"\n245:    _git(\"checkout\", \"-B\", RESULTS_BRANCH, f\"origin/{RESULTS_BRANCH}\", check=False)\n246:    cmd_dir = REPO / QUEUE\n250:            [\"git\", \"-C\", str(REPO), \"show\", f\"origin/{CONTROL_BRANCH}:{QUEUE}\"],\n254:    p = subprocess.run([\"git\", \"-C\", str(REPO), \"ls-tree\", \"-r\", \"--name-only\",\n255:                        f\"origin/{CONTROL_BRANCH}\"], capture_output=True)\n258:        show = subprocess.run([\"git\", \"-C\", str(REPO), \"show\", f\"origin/{CONTROL_BRANCH}:{n}\"],\n269:        sync_and_push_results(f\"local bridge: {processed} command(s) executed on {MACHINE_ID}\")\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

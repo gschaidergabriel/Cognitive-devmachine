@@ -1,0 +1,85 @@
+{
+  "schema": "FRANKENSTEIN_TRIGGER_CONTRACT/v1",
+  "trigger": "999",
+  "created_utc": "2026-09-12T10:01:00Z",
+  "intent": "BUILD_HUMAN_CONVERSATION_INTEGRATION",
+  "owner_directive": "When the owner enters 999 in the Frankenstein research/build context, treat it as an execution trigger to converge the existing conversation stack into a human-like, emotionally expressive, interruptible, initiative-capable Frankenstein interaction organ. Do not create a separate voice bot, persona runtime, state sync, canonical turn loop, watcher, or identity.",
+  "canonical_product_repo": "gschaidergabriel/frankenstein",
+  "product_head_observed_at_trigger": "479d8895509dd88dcf716df75f3d56c41f895e7f",
+  "research_repo": "gschaidergabriel/clay-global-research-entity",
+  "required_existing_organs": [
+    "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+    "DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py",
+    "DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py",
+    "DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff.py",
+    "DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff_runtime.py",
+    "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "GRID10/GWT/HCU canonical turn/state paths",
+    "UnifiedDB durable retrieval/state",
+    "current authority/immune/effect gates"
+  ],
+  "behavioral_target": {
+    "identity": "One Frankenstein; Realtime is mouth/ear/dialog organ, never a separate entity.",
+    "conversation": [
+      "natural turn-taking and barge-in",
+      "backchannels and short acknowledgements when useful",
+      "clarification and repair without robotic reset language",
+      "context-sensitive initiative instead of request-only behavior",
+      "ability to object, propose, wish, self-comment and wait through GWT speech-act arbitration",
+      "relational continuity from admitted state/retrieval",
+      "speaker-specific context through current speaker-handoff provenance"
+    ],
+    "expression": [
+      "joy",
+      "amusement/laughter",
+      "dry sarcasm",
+      "irritation/anger when contextually justified",
+      "mocking/playful mirroring with proportion",
+      "seriousness",
+      "quiet/soft delivery",
+      "whisper-like delivery when appropriate",
+      "raised-intensity delivery when appropriate"
+    ],
+    "expression_rule": "Emotion/prosody must be driven by conversation/state/appraisal and bounded by user intent; it must not become a fixed theatrical persona overlay.",
+    "agency": "During voice conversation Frankenstein remains tool/effect capable through the same admitted authority paths as text mode. Speech is not a lower-capability mode."
+  },
+  "hard_invariants": [
+    "MEMORY_IS_CACHE_NOT_AUTHORITY",
+    "NO_SECOND_ENTITY",
+    "NO_SECOND_CANONICAL_TURN_LOOP",
+    "NO_NEW_STATE_SYNC",
+    "NO_DUPLICATE_WATCHER",
+    "SPEAKER_PROVENANCE_MUST_SURVIVE_VOICE_GRID_IMMUNE_HANDOFF",
+    "NATURAL_LANGUAGE_OR_EMOTION_MUST_NOT_BYPASS_EFFECT_AUTHORITY",
+    "WAIT_IS_A_REAL_GWT_ACTION",
+    "USER_NO_OR_STOP_OVERRIDES_INITIATIVE",
+    "FORMAT_AND_DELETE_ACTIONS_REMAIN_BLOCKED_IN_CONVERSATION_MODE_UNLESS_OWNER_AUTHORITY_EXPLICITLY_CHANGES_THAT_POLICY"
+  ],
+  "implementation_priorities": [
+    "P0 bind exact current product head and speaker-handoff tests",
+    "P1 add explicit conversation-presence policy over the existing VoiceSessionCapsule",
+    "P2 complete initiative calibration ladder: shadow -> confirm -> limited -> adaptive, instead of shadow vs all-on",
+    "P3 add real CLARIFY/OBJECT/BACKCHANNEL candidates from contradiction, uncertainty, interruption and dialogue context",
+    "P4 couple expression vector to Realtime response instructions for broad but state-grounded prosody/emotion",
+    "P5 preserve tool/action authority and exact outcome/readback while speaking",
+    "P6 add end-to-end human conversation acceptance harness and permanent regression coverage",
+    "P7 publish exact receipts; promote only proven scope"
+  ],
+  "acceptance_gates": {
+    "speaker_identity": "No speaker/owner/host crossover in mixed Gabriel/Andreas tests.",
+    "barge_in": "User interruption truncates/cancels the correct active Realtime item and the next turn uses the interrupted state correctly.",
+    "initiative": "Unsolicited speech occurs only under the selected calibrated mode and passes chatter-debt/interruption-cost gates.",
+    "repair": "Ambiguity/contradiction can yield CLARIFY or OBJECT instead of generic ANSWER/WAIT.",
+    "emotion": "Prosody/emotion varies measurably with state/appraisal and does not remain a fixed style string.",
+    "agency": "Tool-bearing spoken requests follow the same authority gate and produce exact outcome/readback provenance.",
+    "continuity": "VoiceSessionCapsule + GRID/UnifiedDB reentry preserves admitted conversational context across a runtime/session boundary.",
+    "human_eval": "A real-speaker session is required before claiming natural-human conversation acceptance. Source/unit/API tests alone are insufficient."
+  },
+  "non_goals": [
+    "claiming consciousness or AGI from conversational quality",
+    "creating another model identity",
+    "replacing GRID/GWT/HCU with prompt-only behavior",
+    "making emotion unconditional or performative",
+    "opening provider/FreeSwarm execution as part of this trigger"
+  ]
+}

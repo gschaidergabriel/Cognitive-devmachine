@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-quarantine-wrong-browser-20260912-2016",
+  "command_sha256": "4180f7ea11e5e4dfc051a27a32ba26d5cca89aedb35d128f0c46eb7d5df04370",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T12:58:14.503395+00:00",
+  "finished_at": "2026-09-12T12:58:16.765185+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "23d922d1fd38b52e0178f1ee8a602f695c9c0680d9e1b8de223ec33d46b6a710",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "STATE_EXISTS=yes\nGSTACK_SERVER_PID=3647502\nTREE_BEFORE\nbun,3647502 run /home/andreas/.claude/skills/gstack/browse/src/server.ts\n  |-chrome-headless,3647545\n  |   |-chrome-headless,3647560\n  |   |   `-chrome-headless,3647594\n  |   |       |-{chrome-headless},3647634\n  |   |       |-{chrome-headless},3647635\n  |   |       |-{chrome-headless},3647636\n  |   |       |-{chrome-headless},3647637\n  |   |       |-{chrome-headless},3647638\n  |   |       |-{chrome-headless},3647639\n  |   |       |-{chrome-headless},3647640\n  |   |       |-{chrome-headless},3647641\n  |   |       |-{chrome-headless},3647642\n  |   |       |-{chrome-headless},3647643\n  |   |       |-{chrome-headless},3647644\n  |   |       |-{chrome-headless},3647645\n  |   |       |-{chrome-headless},3647646\n  |   |       |-{chrome-headless},3647647\n  |   |       |-{chrome-headless},3647648\n  |   |       |-{chrome-headless},3647649\n  |   |       |-{chrome-headless},3647650\n  |   |       |-{chrome-headless},3647652\n  |   |       |-{chrome-headless},3647672\n  |   |       |-{chrome-headless},3647674\n  |   |       |-{chrome-headless},3647675\n  |   |       |-{chrome-headless},3647676\n  |   |       |-{chrome-headless},3647679\n  |   |       `-{chrome-headless},3647680\n  |   |-chrome-headless,3647564\n  |   |   `-chrome-headless,3647576\n  |   |       `-chrome-headless,3647614\n  |   |           |-{chrome-headless},3647619\n  |   |           |-{chrome-headless},3647620\n  |   |           |-{chrome-headless},3647621\n  |   |           |-{chrome-headless},3647622\n  |   |           |-{chrome-headless},3647623\n  |   |           |-{chrome-headless},3647628\n  |   |           `-{chrome-headless},3647629\n  |   |-chrome-headless,3647599\n  |   |   |-{chrome-headless},3647610\nSERVER_ALIVE=no\nHUMAN_BRAVE\n8400 /bin/bash /usr/bin/brave-browser --restore-last-session\n8462 /opt/brave.com/brave/brave --restore-last-session\n3710783 bash -lc set +e; STATE=/home/andreas/.gstack/browse.json; echo STATE_EXISTS=$([ -f \"$STATE\" ] && echo yes || echo no); PID=$(python3 - <<'PY' import json,os p=os.path.expanduser('~/.gstack/browse.json') try: print(int(json.load(open(p)).get('pid') or 0)) except Exception: print(0) PY ); echo GSTACK_SERVER_PID=$PID; if [ \"$PID\" -gt 1 ] 2>/dev/null; then echo TREE_BEFORE; pstree -ap \"$PID\" 2>/dev/null | head -40; kill \"$PID\" 2>/dev/null || true; sleep 2; kill -9 \"$PID\" 2>/dev/null || true; fi; rm -f \"$STATE\"; echo SERVER_ALIVE=$([ \"$PID\" -gt 1 ] 2>/dev/null && kill -0 \"$PID\" 2>/dev/null && echo yes || echo no); echo HUMAN_BRAVE; pgrep -af '^/opt/brave.com/brave/brave --restore-last-session$|/usr/bin/brave-browser --restore-last-session' | head -10; echo QUARANTINED_NO_BROWSER_COMMANDS_RUN\nQUARANTINED_NO_BROWSER_COMMANDS_RUN\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

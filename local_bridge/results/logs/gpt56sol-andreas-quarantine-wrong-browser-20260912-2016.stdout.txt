@@ -1,0 +1,49 @@
+STATE_EXISTS=yes
+GSTACK_SERVER_PID=3647502
+TREE_BEFORE
+bun,3647502 run /home/andreas/.claude/skills/gstack/browse/src/server.ts
+  |-chrome-headless,3647545
+  |   |-chrome-headless,3647560
+  |   |   `-chrome-headless,3647594
+  |   |       |-{chrome-headless},3647634
+  |   |       |-{chrome-headless},3647635
+  |   |       |-{chrome-headless},3647636
+  |   |       |-{chrome-headless},3647637
+  |   |       |-{chrome-headless},3647638
+  |   |       |-{chrome-headless},3647639
+  |   |       |-{chrome-headless},3647640
+  |   |       |-{chrome-headless},3647641
+  |   |       |-{chrome-headless},3647642
+  |   |       |-{chrome-headless},3647643
+  |   |       |-{chrome-headless},3647644
+  |   |       |-{chrome-headless},3647645
+  |   |       |-{chrome-headless},3647646
+  |   |       |-{chrome-headless},3647647
+  |   |       |-{chrome-headless},3647648
+  |   |       |-{chrome-headless},3647649
+  |   |       |-{chrome-headless},3647650
+  |   |       |-{chrome-headless},3647652
+  |   |       |-{chrome-headless},3647672
+  |   |       |-{chrome-headless},3647674
+  |   |       |-{chrome-headless},3647675
+  |   |       |-{chrome-headless},3647676
+  |   |       |-{chrome-headless},3647679
+  |   |       `-{chrome-headless},3647680
+  |   |-chrome-headless,3647564
+  |   |   `-chrome-headless,3647576
+  |   |       `-chrome-headless,3647614
+  |   |           |-{chrome-headless},3647619
+  |   |           |-{chrome-headless},3647620
+  |   |           |-{chrome-headless},3647621
+  |   |           |-{chrome-headless},3647622
+  |   |           |-{chrome-headless},3647623
+  |   |           |-{chrome-headless},3647628
+  |   |           `-{chrome-headless},3647629
+  |   |-chrome-headless,3647599
+  |   |   |-{chrome-headless},3647610
+SERVER_ALIVE=no
+HUMAN_BRAVE
+8400 /bin/bash /usr/bin/brave-browser --restore-last-session
+8462 /opt/brave.com/brave/brave --restore-last-session
+3710783 bash -lc set +e; STATE=/home/andreas/.gstack/browse.json; echo STATE_EXISTS=$([ -f "$STATE" ] && echo yes || echo no); PID=$(python3 - <<'PY' import json,os p=os.path.expanduser('~/.gstack/browse.json') try: print(int(json.load(open(p)).get('pid') or 0)) except Exception: print(0) PY ); echo GSTACK_SERVER_PID=$PID; if [ "$PID" -gt 1 ] 2>/dev/null; then echo TREE_BEFORE; pstree -ap "$PID" 2>/dev/null | head -40; kill "$PID" 2>/dev/null || true; sleep 2; kill -9 "$PID" 2>/dev/null || true; fi; rm -f "$STATE"; echo SERVER_ALIVE=$([ "$PID" -gt 1 ] 2>/dev/null && kill -0 "$PID" 2>/dev/null && echo yes || echo no); echo HUMAN_BRAVE; pgrep -af '^/opt/brave.com/brave/brave --restore-last-session$|/usr/bin/brave-browser --restore-last-session' | head -10; echo QUARANTINED_NO_BROWSER_COMMANDS_RUN
+QUARANTINED_NO_BROWSER_COMMANDS_RUN

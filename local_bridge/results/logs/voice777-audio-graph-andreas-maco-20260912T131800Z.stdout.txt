@@ -1,0 +1,69 @@
+SERVER
+SOURCES
+SINKS
+WPCTL
+PipeWire 'pipewire-0' [1.6.2, andreas@andreas-MACO, cookie:1709583931]
+ └─ Clients:
+        33. pipewire                            [1.6.2, andreas@andreas-MACO, pid:7290]
+        34. pw-cat                              [1.0.5, root@andreas-MACO, pid:291022]
+        35. WirePlumber                         [1.6.2, andreas@andreas-MACO, pid:7280]
+        40. WirePlumber [export]                [1.6.2, andreas@andreas-MACO, pid:7280]
+        48. GNOME Volume Control Media Keys     [1.6.2, andreas@andreas-MACO, pid:8292]
+        49. gnome-shell                         [1.6.2, andreas@andreas-MACO, pid:7683]
+        50. GNOME Shell Volume Control          [1.6.2, andreas@andreas-MACO, pid:7683]
+        62. WirePlumber                         [1.6.2, andreas@andreas-MACO, pid:7280]
+        86. wpctl                               [1.6.2, andreas@andreas-MACO, pid:3711550]
+        98. WirePlumber                         [1.6.2, andreas@andreas-MACO, pid:7280]
+       105. WirePlumber                         [1.6.2, andreas@andreas-MACO, pid:7280]
+       108. nemo                                [1.6.2, andreas@andreas-MACO, pid:2790247]
+       124. xdg-desktop-portal                  [1.6.2, andreas@andreas-MACO, pid:8628]
+       125. Brave input                         [1.6.2, andreas@andreas-MACO, pid:10099]
+       131. Mutter                              [1.6.2, andreas@andreas-MACO, pid:7683]
+       135. WirePlumber                         [1.6.2, andreas@andreas-MACO, pid:7280]
+
+Audio
+ ├─ Devices:
+ │      51. Radeon High Definition Audio Controller [alsa]
+ │      53. Ryzen HD Audio Controller           [alsa]
+ │     101. M Series                            [alsa]
+ │  
+ ├─ Sinks:
+ │      72. Ryzen HD Audio Controller Analoges Stereo [vol: 0.46]
+ │     106. M Series 0                          [vol: 1.00]
+ │  
+ ├─ Sources:
+ │      69. M Series 0                          [vol: 1.00]
+ │      73. Ryzen HD Audio Controller Analoges Stereo [vol: 1.00]
+ │  
+ ├─ Filters:
+ │    - loopback-7280-20                                            
+ │      47. alsa_input.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line5__source     [Audio/Source]
+ │      94. alsa_input.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line5__source.split [Stream/Input/Audio/Internal]
+ │    - loopback-7280-19                                            
+ │      78. alsa_output.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line1__sink.split [Stream/Output/Audio/Internal]
+ │  *  137. alsa_output.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line1__sink      [Audio/Sink]
+ │    - loopback-7280-21                                            
+ │      81. alsa_input.usb-MOTU_M4_M4AE0DD064-00.HiFi__Mic1__source.split [Stream/Input/Audio/Internal]
+ │  *  128. alsa_input.usb-MOTU_M4_M4AE0DD064-00.HiFi__Mic1__source      [Audio/Source]
+ │    - loopback-7280-18                                            
+ │     120. alsa_output.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line2__sink      [Audio/Sink]
+ │     161. alsa_output.usb-MOTU_M4_M4AE0DD064-00.HiFi__Line2__sink.split [Stream/Output/Audio/Internal]
+ │  
+ └─ Streams:
+        84. pw-record                                                   
+            132. monitor_MONO   
+            154. input_MONO      < Mic In 1L:capture_MONO	[active]
+
+Video
+ ├─ Devices:
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:

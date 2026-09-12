@@ -1,0 +1,104 @@
+# Which layer does each artifact belong in?
+
+Architect session, 2026-09-07. Every size and timestamp below was measured on
+andreas-MACO, not estimated.
+
+The VM has three layers and they are not interchangeable:
+
+| | layer | wiped? | what belongs there |
+|---|---|---|---|
+| 1 | `ENTITYOS_ROOTFS_BASE` | no, rebuilt deliberately | the image: code and build products |
+| 2 | `ENTITYOS_ROOTFS_RUN` | **yes, every start and stop** | nothing you want to keep |
+| 3 | persistent binds | no | durable state and data |
+
+Layer 2 being wiped is the design working, not failing. It is what makes two
+installations provably identical. It stays.
+
+## Per artifact
+
+| artifact | measured size | correct layer | why |
+|---|---|---|---|
+| `models/` (Qwen3-ASR, piper de_DE-thorsten, Qwen3.5-4B gguf) | 4.4G | **3** | Not mine to overturn: `vm/voice/README.md` decides this explicitly and gives reasons. Weights are fetched and sha256-verified by `fetch-models.sh`, never shipped in the image, because a file over 100 MiB breaks the repo self-containment test. Baking them would also put 4.4G into every CoW clone. |
+| `venv/` | 2.1G | **1** | A build product of pip against a pinned requirement set. Reproducible, identical for every install, holds no state. Belongs in `build-rootfs.sh`. |
+| `tmp_test/llama.cpp/` build | 522M | **1** | Compiled output of a pinned source revision. Same argument as the venv. It sits in layer 2 today only because it was built ad hoc in place. |
+| voice code: `gespraech_loop.py`, `memory_abruf.py`, `asr_infer_once.py`, `start_gespraech.sh`, `asr_run.py`, `piper_*.py`, `vendor/` | ~450K | **1**, via the repo | It is source. Source belongs in `vm/voice/` and gets installed. It must not be edited live inside a container, which is exactly how it came to be at risk. |
+| `__pycache__/`, `*.log`, `proof_output.wav`, `silence_test.wav` | small | **2** | Genuinely ephemeral. Correct where it is. |
+| `unified.db` | 20M | **3** | Already correct. |
+| `cognition/` | 600K | **1** | Code. Today it is on the host and in **no** layer of the VM at all. The flip armed the turn loop, but the turn loop runs host-side. |
+| `dashboard/` | 304K | host service, deliberately outside | It is the socket-activated thing that *starts* the VM. It cannot live inside what it starts. |
+
+## What is being done now, and what is not
+
+Now, before the restart: **bind the whole voice tree from a persistent host
+directory.** This is a holding action. It is reversible, it loses nothing, and
+it makes a restart survivable. It is explicitly *not* the final layering — it
+parks build products in layer 3, where they do not belong.
+
+Not done, named here so it does not get quietly forgotten:
+
+1. voice code into `vm/voice/` in the entityos repo, installed by `install.sh`
+2. venv and llama.cpp built by `build-rootfs.sh` into layer 1, from pinned revisions
+3. `models/` left in layer 3 but fetched by `fetch-models.sh` rather than
+   whatever ad-hoc path put them there
+4. cognition into layer 1, so the VM finally contains the thing it is meant to run
+
+Until 1 to 3 are done, `ENTITYOS_VOICE_DIR` holds a mix of image and data. That
+is a compromise taken deliberately to avoid losing work, not an oversight.
+
+## The general rule this came from
+
+`/opt/entityos/voice` looked persistent. It had a stable absolute path, it
+survived restarts of the processes inside it, it accumulated a morning of work.
+Nothing about using it suggested it was scratch. The only way to know was to
+read the unit — and three agents, plus the coordinator, did not.
+
+Writing into a container rootfs is writing into `/tmp` with extra steps, and
+that is not visible from inside.
+
+
+---
+
+## Addendum, written after the restart: I missed a layer of my own
+
+The restart passed all 19 checks and the voice pipeline was still broken.
+
+`llama-server` died immediately with `libgomp.so.1: cannot open shared object
+file`. `libgomp1`, `libvulkan1` and `mesa-vulkan-drivers` (which carries the
+RADV ICD) had been `apt`-installed **inside the running container** — that is,
+into layer 2. The restart wiped them exactly as designed.
+
+So the table above was right about the artifacts and incomplete about the
+system underneath them. Preserving `/opt/entityos/voice` preserved the code and
+its models; it did not preserve the libraries the code links against. The
+binary came back and could not load.
+
+| artifact | correct layer | why |
+|---|---|---|
+| `libgomp1`, `libvulkan1`, `mesa-vulkan-drivers` (+ transitive: `libdrm-amdgpu1`, `libllvm17t64`, `libxcb-*`, `libwayland-client0`, …) | **1** | Runtime dependencies of something the VM is expected to run. Reproducible from a package list, no state, identical for every install. |
+
+Fixed where it belongs: `vm/build-rootfs.sh` now carries all three in its
+`debootstrap --include` list. That takes effect when the base is rebuilt.
+
+**Until the base is rebuilt, a restart breaks voice again.** That is a live
+trap, so it has a named 30-second recovery rather than a comment:
+`03-restore-voice-deps.sh`. Delete that script once the base carries the
+packages — it exists only to cover the gap.
+
+### The part worth generalising
+
+I found the layer bug in the voice tree, wrote a document about layer bugs,
+staged a fix for it, and still shipped a restart that hit the same bug one
+level down. Knowing the rule did not make me apply it exhaustively — I checked
+the artifact I had been looking at and not the ground it stood on.
+
+The check that would have caught it costs one command and belongs in the
+pre-flight of any restart of this kind:
+
+```sh
+ldd <every binary the VM must run> | grep "not found"
+```
+
+A restart verification that only asks "did my files survive" cannot see this.
+`02-verify.sh` asked exactly that, and answered honestly and uselessly. The
+question it should also ask is "does what survived still run", and the only way
+to answer that is to run it.

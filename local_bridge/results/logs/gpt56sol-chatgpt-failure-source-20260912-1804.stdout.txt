@@ -1,0 +1,83 @@
+STERN /home/ai-core-node/.claude/star/stern.py sha256 0d5b7764cebe8c9e4f3ce2a697ae390c0c1b5cde99ac051eb662260735c808a1
+=== _chatgpt_ausfall_erkannt ===
+def _chatgpt_ausfall_erkannt(zusammenfassung: Optional[dict], *, log_text: Optional[str] = None,
+                              log_pfad: Optional[str] = None) -> dict:
+    """Erkennt harten ChatGPT-Ausfall TROTZ bestaetigtem Login -- Ergaenzung
+    zu PHASE 46b (siehe Abschnittskommentar oben). Zwei Bedingungen MUESSEN
+    beide zutreffen, sonst kein Ausfall-Befund (verhindert dass ein
+    einzelner Flake unter vielen erfolgreichen Sends faelschlich den
+    teuren Fallback ausloest):
+
+      1. harte Fehlschlagsrate in `zusammenfassung`:
+         - Sende-Phase (Schluessel attempted/sent/failed, aus
+           SUMMARY_v2_*.json): attempted>0, sent==0, failed>=attempted.
+         - Ernte-Phase (Schluessel done/pending): gesamt (done+pending)>0
+           und done==0.
+      2. Log (direkt uebergebener `log_text`, sonst `log_pfad`, sonst
+         `zusammenfassung['log_file']`, sonst das neueste burst_v2_*.log)
+         zeigt ein bekanntes 403/Cloudflare-Muster.
+
+    Reine Werte-Funktion, kein eigener ChatGPT-Aufruf -- darum isoliert
+    testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+    zweiter Fallback-Ausloeser genutzt (gleicher harness_aider.py-Pfad wie
+    PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+    laut ihrem eigenen Docstring bewusst KEINEN neuen Fallback-Lauf aus --
+    es gibt dort keinen neuen Prompt-Text zu beantworten). Rueckgabe immer
+    {'ausfall': bool, 'grund': str, 'muster': str|None}."""
+    if not zusammenfassung:
+        return {"ausfall": False, "grund": "keine Zusammenfassung vorhanden", "muster": None}
+
+    if {"attempted", "sent", "failed"} <= zusammenfassung.keys():
+        attempted = zusammenfassung.get("attempted") or 0
+        sent = zusammenfassung.get("sent") or 0
+        failed = zusammenfassung.get("failed") or 0
+        harte_fehlschlagsrate = attempted > 0 and sent == 0 and failed >= attempted
+        rate_grund = f"Sende-Phase attempted={attempted} sent={sent} failed={failed}"
+    elif {"done", "pending"} <= zusammenfassung.keys():
+        done = zusammenfassung.get("done") or 0
+        pending = zusammenfassung.get("pending") or 0
+        gesamt = done + pending
+        harte_fehlschlagsrate = gesamt > 0 and done == 0
+        rate_grund = f"Ernte-Phase done={done} pending={pending}"
+    else:
+        return {"ausfall": False, "grund": f"unbekannte Zusammenfassungs-Form: {sorted(zusammenfassung.keys())}",
+                "muster": None}
+
+    if not harte_fehlschlagsrate:
+        return {"ausfall": False, "grund": f"keine harte Fehlschlagsrate ({rate_grund})", "muster": None}
+
+    text = log_text
+    if text is None:
+        pfad = log_pfad or zusammenfassung.get("log_file") or _chatgpt_neuestes_burst_log_pfad()
+        if not pfad:
+            return {"ausfall": False,
+                    "grund": f"harte Fehlschlagsrate ({rate_grund}), aber kein Log zum Bestaetigen",
+                    "muster": None}
+        try:
+            text = Path(pfad).read_text(encoding="utf-8", errors="replace")
+        except Exception as e:
+            return {"ausfall": False,
+                    "grund": f"harte Fehlschlagsrate ({rate_grund}), Log '{pfad}' nicht lesbar: {e}",
+                    "muster": None}
+
+    for muster in _CHATGPT_AUSFALL_LOG_MUSTER:
+        if muster in (text or ""):
+            return {"ausfall": True, "muster": muster,
+                    "grund": f"{rate_grund} (harte Fehlschlagsrate) UND Log zeigt Muster '{muster}' -- "
+                             f"403/Cloudflare-Block trotz bestaetigtem Login"}
+    return {"ausfall": False,
+            "grund": f"harte Fehlschlagsrate ({rate_grund}), aber kein 403/Cloudflare-Muster im Log",
+            "muster": None}
+
+=== _chatgpt_zusammenfassung_neueste ===
+def _chatgpt_zusammenfassung_neueste() -> Optional[dict]:
+    if not _CHATGPT_STATE_DIR.is_dir():
+        return None
+    kandidaten = sorted(_CHATGPT_STATE_DIR.glob("SUMMARY_v2_*.json"), key=lambda p: p.stat().st_mtime)
+    if not kandidaten:
+        return None
+    try:
+        return json.loads(kandidaten[-1].read_text())
+    except Exception:
+        return None
+

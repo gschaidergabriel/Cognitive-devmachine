@@ -1,0 +1,50 @@
+=== wrapper ===
+#!/usr/bin/env bash
+set -u
+
+export DISPLAY="${DISPLAY:-:0}"
+export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
+
+# Existing visible Free Frank window wins. Never create duplicates.
+wid=""
+if command -v wmctrl >/dev/null 2>&1; then
+  wid="$(wmctrl -lpGx 2>/dev/null | awk '$8=="cool-retro-term.cool-retro-term" && /crush ~\/frankenstein-repo|Free Frank/ {print $1; exit}')"
+fi
+
+if [ -z "$wid" ] && command -v xdotool >/dev/null 2>&1; then
+  wid="$(xdotool search --class 'cool-retro-term' --name 'crush ~/frankenstein-repo|Free Frank' 2>/dev/null | head -n1 || true)"
+fi
+
+if [ -n "$wid" ]; then
+  if command -v wmctrl >/dev/null 2>&1; then
+    wmctrl -ia "$wid" 2>/dev/null || true
+  fi
+  if command -v xdotool >/dev/null 2>&1; then
+    xdotool windowmap "$wid" 2>/dev/null || true
+    xdotool windowactivate --sync "$wid" 2>/dev/null || true
+    xdotool windowraise "$wid" 2>/dev/null || true
+  fi
+  exit 0
+fi
+
+# A process without a mapped window is stale/headless for desktop purposes.
+# Terminate only the exact Free Frank launcher chain, never unrelated terminals.
+if pgrep -f '^/usr/bin/cool-retro-term -T Free Frank ' >/dev/null 2>&1; then
+  pkill -TERM -f '^/usr/bin/cool-retro-term -T Free Frank ' 2>/dev/null || true
+  sleep 0.4
+fi
+
+exec /usr/bin/cool-retro-term -T "Free Frank" -e "$HOME/.claude/star/harness_crush_knopf.sh"
+=== desktop ===
+[Desktop Entry]
+Type=Application
+Name=Free Frank
+Comment=Open or focus the single Free Frank harness terminal
+Icon=/home/ai-core-node/.claude/star/daten/free-frank-icon.png
+Exec=/home/ai-core-node/.local/bin/free-frank-open
+Terminal=false
+Categories=Development;
+StartupNotify=true
+=== activate test ===
+before=1 after=1
+0x03600010 -1 355944 200  200  1024 768  cool-retro-term.cool-retro-term  ai-core-node-projekt-frankenstein crush ~/frankenstein-repo

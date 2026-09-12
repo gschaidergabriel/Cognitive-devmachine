@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-reentry-inspect-20260912-0744",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\necho '===SUBJECT==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\necho '===SERVICE==='\nsystemctl --user is-active frankenstein-buehne.service || true\necho '===GIT==='\ngit status --short 2>/dev/null | head -80 || true\necho '===HTML_KEY_LINES==='\ngrep -nE 'parallax|blink|eye|gaze|roll|shoulder|body|pose|ausdruck_erweitert|relief2|canvas|filmlook' buehne.html | head -220 || true\necho '===ASSET_COUNTS==='\nfor d in kopf_* head_* augen* eyes* ausdruck_erweitert ausdruck_erweitert_ai ausdruck_erweitert_relief2 body* koerper* schultern* shoulder* depth* *relief*; do if test -e \"$d\"; then printf '%s ' \"$d\"; find \"$d\" -type f 2>/dev/null | wc -l; fi; done | head -100\necho '===TOP_LEVEL==='\nfind . -maxdepth 1 -mindepth 1 -printf '%f\\n' | sort | head -160\necho '===RESOURCE==='\nps -eo pid,pcpu,pmem,comm,args --sort=-pcpu | head -18\necho SCOPE=READ_ONLY_GO_REENTRY_INSPECTION"
+}

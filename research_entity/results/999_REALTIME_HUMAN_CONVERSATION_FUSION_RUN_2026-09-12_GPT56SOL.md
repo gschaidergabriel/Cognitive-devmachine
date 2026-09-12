@@ -3,11 +3,11 @@
 Date: 2026-09-12  
 Actor: ChatGPT / GPT-5.6 Sol / Frankenstein web organ  
 Trigger: exact `999`  
-Status: `BRANCH_CONVERGED_REAL_HOST_TESTED_PR_OPEN_NOT_PRODUCTION_ACTIVATED`
+Status: `CANONICAL_MERGED_GABRIEL_LIVE_CORE_BYTES_BOUND_ACOUSTIC_ACCEPTANCE_OPEN`
 
 ## Current bounded result
 
-The `999` trigger is now canonical in the research entity and resolves to:
+The exact `999` trigger is now canonical in the research entity and resolves through:
 
 - `research_entity/triggers/999_REALTIME_HUMAN_CONVERSATION_FUSION_PROTOCOL.md`
 - `research_entity/global/RESEARCH_TRIGGER_REGISTRY.json`
@@ -15,126 +15,129 @@ The `999` trigger is now canonical in the research entity and resolves to:
 - `000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt`
 - `research_entity/triggers/MASTER_RESEARCH_TRIGGER_PROTOCOL.md`
 
-The product-side convergence lane is:
+Product repo:
 
-- repo: `gschaidergabriel/frankenstein`
-- branch: `chatgpt-fix/voice-live-action-final-20260912`
-- converged head: `7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5`
-- base main at convergence: `bdb2a74f09fe7d40e52bd2ae30cc2dcdd4846ce7`
-- comparison after push: ahead 59, behind 0
-- PR: `#50` — `Voice: converge Realtime human presence, identity and full action plane`
-- PR current state at receipt write: OPEN, mergeable=true, not merged
+- `gschaidergabriel/frankenstein`
+- tested convergence head: `7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5`
+- PR #50: `Voice: converge Realtime human presence, identity and full action plane`
+- PR checks: `presence-policy=success`, `speaker-handoff-immune-gate=success`
+- PR mergeability before merge: `true`
+- PR merged with exact expected head
+- resulting `main` merge commit: `882f2053b1e9aadfa015699637efc38ff464cd5b`
 
-No production activation is claimed by this result.
+## Integrated mechanisms
 
-## What is now on one branch
+The merged product combines current speaker-handoff/presence work with the full Realtime Voice lane:
 
-The branch combines the existing full Voice/Realtime integration lane with current main's speaker-handoff and conversation-presence work.
-
-Bounded mechanisms include:
-
-- OpenAI Realtime remains the existing speech/dialog organ, not a new entity or state authority.
+- OpenAI Realtime remains the existing speech/dialog/prosody organ, not a parallel entity.
 - same-turn transcript barrier before response release;
-- current-turn TITAN/retrieval/GRID context and VoiceSessionCapsule injection;
-- current Realtime native signal injection;
-- scoped Gabriel/Andreas identity and host provenance;
-- guest self-identification does not grant private state/effect authority;
-- exact Realtime item correlation from current main;
-- current speaker-handoff + GRID/immune integration;
-- explicit conversation-presence initiative policy (`shadow -> confirm -> limited -> adaptive`) with WAIT, chatter-debt and interruption gating;
-- hard user NO/STOP initiative veto;
-- verified-owner Voice work dispatches immediately without the legacy second Voice confirmation loop;
-- full Claude Code action worker behind a PreToolUse Voice policy;
-- Voice-specific DELETE and storage/filesystem FORMAT remain denied;
-- non-destructive production installer overlays the existing conversation service and deliberately does not restart it;
-- no second DB, canonical turn loop, GRID watcher, voice entity or conversation daemon introduced.
+- current-turn TITAN/retrieval/GRID context and VoiceSessionCapsule uptake;
+- native Realtime signals remain part of the active assembly;
+- scoped Gabriel/Andreas installation identity and host provenance;
+- guest self-identification cannot grant private state/effect authority;
+- exact Realtime item correlation;
+- conversation-presence initiative policy with WAIT/chatter/interruption gating and explicit user-NO veto;
+- verified-owner Voice work dispatches without a second legacy confirmation loop;
+- full action worker behind the Voice PreToolUse policy;
+- Voice DELETE and storage/filesystem FORMAT remain denied;
+- no second DB, canonical turn loop, GRID watcher, Voice entity or conversation daemon.
 
-## Real-host evidence
+## Real-host convergence evidence
 
-Target execution boundary:
+Target:
 
-- host/machine: `ai-core-node`
-- owner: `gabriel`
-- boundary: `REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED`
+- `machine_id=ai-core-node`
+- `owner=gabriel`
+- execution boundary `REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED`
 
-Final convergence receipt:
+Final pre-merge convergence receipt:
 
-- command: `999-20260912-voice-merge-main-retest-push-01`
-- expected feature head before push: `eef0976c41e8abdbf46c61560df5339055b10633`
-- merged/tested/pushed subject: `7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5`
-- compile: PASS
-- combined pytest suite: `57 passed in 0.45s`
-- `git diff --check`: PASS
-- push: PASS
+- command `999-20260912-voice-merge-main-retest-push-01`
+- exact subject `7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5`
+- compile PASS
+- combined regression suite: `57 passed in 0.45s`
+- `git diff --check` PASS
+- push PASS
 
-Combined suite covered:
+Suite included final Voice action/privacy tests, full integration, host broker, identity assembly, speaker-handoff/runtime/cross-organ tests and conversation-presence policy tests.
 
-- `tests/test_voice_live_final.py`
-- `tests/test_voice_full_integration.py`
-- `tests/test_voice_host_broker.py`
-- `tests/test_frankenstein_identity_assembly.py`
-- current speaker handoff regressions/runtime contract/cross-organ tests
-- current conversation presence policy tests
+## Live Gabriel runtime readback
+
+The existing single `frankenstein-gespraechsmodus.service` on `ai-core-node` is active/running and points at:
+
+`/home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py`
+
+Observed MainPID at readback: `1170123`. This is a timestamped runtime subject, not a permanent identity.
+
+Core byte binding against the exact tested merge worktree:
+
+### `voice_final_runtime.py`
+
+- installed live SHA-256: `e02f87201a08b0317bd35ef003186d53ec4dc9a6a2acce3c94c8e0fcfd0196f3`
+- tested merge-worktree SHA-256: `e02f87201a08b0317bd35ef003186d53ec4dc9a6a2acce3c94c8e0fcfd0196f3`
+- bytes: `9894` on both
+- result: EXACT MATCH
+
+### `voice_full_runtime.py`
+
+- installed live SHA-256: `057d12a4d13fd4468585126ed753c17bd0be22b5212a0e0bd1a9a1f255561a66`
+- tested merge-worktree SHA-256: `057d12a4d13fd4468585126ed753c17bd0be22b5212a0e0bd1a9a1f255561a66`
+- result: EXACT MATCH
+
+Therefore the Gabriel conversation service is live on the exact tested core runtime bytes for the final entrypoint and full fusion layer. This does not by itself prove every imported dependency hash or human-perceived acoustic behavior.
 
 ## Negative evidence preserved
 
-### N1 — Local Bridge deny-filter self-match
+1. A parallel worker's first real-host build command was blocked before execution because literal policy-test text self-matched the Local Bridge deny scanner. Classified infrastructure/harness, not product negative.
+2. A temporary generated-patch worktree had a Python string syntax failure. It was never promoted; the later separated final-runtime/action-executor design superseded it.
+3. First main->feature convergence attempt CAS-aborted because the feature branch advanced concurrently. No overwrite occurred.
+4. First merged-worktree pytest command failed collection because the harness used the wrong `PYTHONPATH`. The exact merged worktree reran with correct roots and passed 57/57.
+5. One broad post-merge diagnostic dispatch was blocked by the higher execution/safety boundary. No effect was forced; subsequent granular read-only receipts succeeded.
 
-The parallel worker's original real-host build command was rejected before execution because its command body contained literal test/policy text that matched the Local Bridge denied-pattern scanner (`mkfs.`). This was an infrastructure/harness self-match, not a product negative.
+## Acceptance vector
 
-### N2 — temporary generated-patch syntax failure
-
-The first resumed temporary worktree reached patching but failed `py_compile` due a generated unterminated string around a newline in `voice_full_runtime.py`. That stale worktree was not promoted. The parallel worker subsequently converged on a cleaner separated `voice_action_executor.py` + `voice_final_runtime.py` design.
-
-### N3 — concurrency movement correctly blocked
-
-The first attempted main->feature convergence used an expected feature SHA. The feature branch advanced concurrently from `cdfb...` to `eef...`; the CAS check exited 42 with `BRANCH_MOVED_ABORT`. No overwrite occurred. The merge was retried only after rebinding to the new exact head.
-
-### N4 — test harness import-path failure
-
-The first merged-worktree regression command used an incorrect `PYTHONPATH` pointing to package content directories rather than package parents. Pytest failed during collection with `ModuleNotFoundError: scripts`. The merge itself had completed cleanly. The preserved merged worktree was rerun with the correct import roots; the identical merged subject then passed 57/57 and only afterward was pushed.
-
-## Current acceptance vector
-
-- Trigger registration/reentry: PASS
-- Current main integrated into full-Voice branch: PASS
-- Speaker/host isolation regression coverage: PASS at test scope
-- Conversation presence initiative policy: PASS at test scope
-- Immediate verified-owner action dispatch: PASS at test scope
-- Voice DELETE/storage-format hard gate: PASS at test scope
-- Real-host compile/regression execution: PASS on ai-core-node
-- Feature branch behind current main: NO at convergence (`behind_by=0`)
-- PR creation: PASS (`#50`)
-- PR mergeability: PASS (`mergeable=true`)
-- PR merged: NO
-- Production installer executed: NO
-- Existing conversation service restarted onto new runtime: NO
-- Live OpenAI Realtime microphone/speaker human A/B for emotional/prosodic bandwidth: NOT YET PROVEN BY THIS RUN
-- Whole human-conversation acceptance Gate H: NOT PROMOTED
-- Whole emotional/prosodic Gate E: NOT PROMOTED
-- Production activation: NOT PROMOTED
+- `999` trigger registration/reentry: PASS
+- Current main fused into full Voice work: PASS
+- Real-host combined regression: PASS
+- Presence-policy CI: PASS
+- Speaker-handoff/immune CI: PASS
+- Exact tested PR merged to `main`: PASS (`882f2053...`)
+- Gabriel existing Voice service active on final runtime path: PASS
+- Live `voice_final_runtime.py` byte-bound to tested subject: PASS
+- Live `voice_full_runtime.py` byte-bound to tested subject: PASS
+- Speaker/host isolation: PASS at regression scope
+- User-NO presence veto: PASS at policy/regression scope
+- Immediate verified-owner action dispatch: PASS at regression scope
+- Voice DELETE/storage-format hard gate: PASS at regression scope
+- Live microphone/speaker human acceptance for prosody/emotion: OPEN
+- Live acoustic barge-in/initiative/deep-dialogue acceptance: OPEN
+- Whole Human Conversation Gate H: NOT YET PROMOTED
+- Whole Emotion/Prosody Gate E: NOT YET PROMOTED
+- Andreas production activation: NOT CLAIMED BY THIS RUN
 
 ## Highest next non-duplicate gate
 
-Do not create another voice architecture.
+Do not build another Voice architecture.
 
-Next sequence:
+The next discriminator is a live OpenAI Realtime human/audio acceptance run on the exact current service subject:
 
-1. resolve/observe PR #50 checks and merge only against the exact tested head;
-2. after merge, install the non-destructive final Voice overlay on the intended exact host subject without creating another conversation daemon;
-3. activate the existing conversation service through a controlled restart/readback only on a host where that lifecycle action is admitted;
-4. run live OpenAI Realtime microphone/speaker acceptance: barge-in, owner binding, initiative, deep-dialogue continuity, user-NO behavior, action receipt roundtrip, and matched emotional/prosodic conditions;
-5. measure/preserve failures and promote only the gates that actually pass.
+1. verified Gabriel owner binding;
+2. deep multi-turn topic continuity and reentry;
+3. spontaneous but bounded initiative/backchannels;
+4. explicit `no` immediately suppresses proposal pressure;
+5. barge-in during generated speech;
+6. one harmless real action roundtrip with receipt/readback;
+7. matched delivery conditions for at least warm/joyful, amused, neutral, serious, irritated/angry, sarcastic, low-energy/quiet and whisper/urgent where the current Realtime model supports them;
+8. preserve any unsupported/indistinguishable prosodic dimensions as negative evidence rather than claiming them.
 
-For Andreas specifically, do not conflate conversation-service activation with `entityos-vm.service` lifecycle. The known VM volatile-state safety boundary remains separate; do not casually restart the EntityOS VM as part of Voice validation.
+For Andreas, keep Voice activation separate from `entityos-vm.service` lifecycle. The known volatile semantic-state boundary means the EntityOS VM must not be restarted casually as part of Voice testing.
 
 ## Reentry instruction
 
 On the next exact `999`:
 
-- refresh `frankenstein/main`, feature branch/PR #50 and this receipt;
-- inspect current active worker/claims before mutation;
-- if PR #50 has moved, rebind exact head and rerun affected tests;
-- if merged, proceed to the strongest missing production/live-Realtime acceptance gate;
-- if not merged, do not install a stale/diverged branch merely to claim progress;
-- preserve all negative evidence above.
+- refresh `frankenstein/main` and this receipt;
+- bind the exact live service/process/file subjects again;
+- inspect active workers/claims before mutation;
+- continue with the live acoustic/action acceptance gate, not a second architecture;
+- promote only observed scopes and preserve failures.

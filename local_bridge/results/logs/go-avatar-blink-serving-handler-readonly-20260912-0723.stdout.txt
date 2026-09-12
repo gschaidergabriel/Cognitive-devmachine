@@ -1,0 +1,73 @@
+HOST=ai-core-node-projekt-frankenstein
+===ROUTE_MATCHES===
+73:BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+202:        with open(ZUSTAND_PFAD, "r", encoding="utf-8") as f:
+215:    with open(tmp, "w", encoding="utf-8") as f:
+678:    with open(pfad, "rb") as f:
+679:        return f.read()
+756:            self.send_header("Content-Type", "application/json; charset=utf-8")
+757:            self.send_header("Content-Length", str(len(b)))
+758:            self.send_header("Cache-Control", "no-store")
+759:            self.end_headers()
+764:            # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+772:                self.send_response(404); self.end_headers(); return
+777:                self.send_header("Cache-Control", "no-cache")
+778:                self.end_headers()
+780:            with open(voller_pfad, "rb") as f:
+781:                daten = f.read()
+783:            self.send_header("Content-Type", "image/png")
+784:            self.send_header("Content-Length", str(len(daten)))
+785:            self.send_header("Cache-Control", "no-cache")
+786:            self.send_header("Last-Modified", last_mod)
+787:            self.end_headers()
+790:        def do_GET(self):
+800:                self.send_header("Content-Type", "text/html; charset=utf-8")
+801:                self.send_header("Content-Length", str(len(aktuelle_seite)))
+802:                self.send_header("Cache-Control", "no-store")
+803:                self.end_headers()
+820:                    with open(pfad, "rb") as fh:
+821:                        inhalt = fh.read()
+823:                    self.send_header("Content-Type",
+825:                    self.send_header("Content-Length", str(len(inhalt)))
+826:                    self.send_header("Cache-Control", "no-store")
+827:                    self.end_headers()
+833:                    self.send_header("Content-Type",
+835:                    self.send_header("Content-Length", "0")
+836:                    self.end_headers()
+843:                    or path.startswith("/augen_blink/")
+858:                elif path.startswith("/augen_blink/"):
+890:                    self.end_headers()
+906:                            self.end_headers()
+909:                        self.end_headers()
+912:                    self.end_headers()
+935:                            self.end_headers()
+938:                        self.end_headers()
+941:                    self.end_headers()
+956:                self.end_headers()
+962:                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+982:                daten = self.rfile.read(n)
+983:                with open(ziel, "wb") as f:
+993:                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+1007:                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+1015:                self.end_headers()
+1022:    t = threading.Thread(target=srv.serve_forever, daemon=True)
+1037:            with open(PID_DATEI, "r") as f:
+1038:                alte_pid = int(f.read().strip())
+1059:        log = open(LOG_DATEI, "ab")
+1060:        self.proc = subprocess.Popen(
+1106:        with open(PID_DATEI, "w") as f:
+1109:        threading.Thread(target=self._fenstergroesse_erzwingen, daemon=True).start()
+===GET_HEADERS===
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Sat, 12 Sep 2026 00:23:13 GMT
+Content-Type: image/png
+Content-Length: 95777
+Cache-Control: no-cache
+Last-Modified: Fri, 11 Sep 2026 11:35:58 GMT
+
+===PROCESS_CWD===
+PID=1544465
+/home/ai-core-node
+===LISTEN===
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=1544465,fd=3))     

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-mcp-fallback-test2-20260912",
+  "command_sha256": "d02c903c57cbf2a4c15d8ce1107f7070160a07a3148ae5e28c67688ff37931fd",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:38:58.956819+00:00",
+  "finished_at": "2026-09-12T12:39:52.682654+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "2a866e4e1e09ace1183476bc75ef307597dc9e48595aa5380d4b829820d7d91b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=29d94d94b9e8e1b4e79d9633b93a67dbc1b07323\nF...................                                                     [100%]\n=================================== FAILURES ===================================\n___________ test_initialize_and_tool_list_expose_real_bridge_surface ___________\n\n    def test_initialize_and_tool_list_expose_real_bridge_surface():\n        init = mcp.handle_rpc({\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {\"protocolVersion\": mcp.PROTOCOL_VERSION}})\n        assert init[\"result\"][\"serverInfo\"][\"name\"] == \"omega-frankenstein-bridge\"\n        listed = mcp.handle_rpc({\"jsonrpc\": \"2.0\", \"id\": 2, \"method\": \"tools/list\", \"params\": {}})\n        names = {tool[\"name\"] for tool in listed[\"result\"][\"tools\"]}\n>       assert names == {\"omega_status\", \"omega_read\", \"omega_execute\", \"omega_write_text\", \"omega_screenshot\", \"omega_receipt\"}\nE       AssertionError: assert {'omega_execu..._status', ...} == {'omega_execu...a_write_text'}\nE         \nE         Extra items in the left set:\nE         'omega_transport_status'\nE         Use -v to get more diff\n\ntests/test_omega_chatgpt_mcp.py:52: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_omega_chatgpt_mcp.py::test_initialize_and_tool_list_expose_real_bridge_surface\n1 failed, 19 passed in 0.18s\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

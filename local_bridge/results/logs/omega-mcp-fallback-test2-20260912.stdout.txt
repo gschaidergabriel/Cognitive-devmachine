@@ -1,0 +1,21 @@
+HEAD=29d94d94b9e8e1b4e79d9633b93a67dbc1b07323
+F...................                                                     [100%]
+=================================== FAILURES ===================================
+___________ test_initialize_and_tool_list_expose_real_bridge_surface ___________
+
+    def test_initialize_and_tool_list_expose_real_bridge_surface():
+        init = mcp.handle_rpc({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": mcp.PROTOCOL_VERSION}})
+        assert init["result"]["serverInfo"]["name"] == "omega-frankenstein-bridge"
+        listed = mcp.handle_rpc({"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}})
+        names = {tool["name"] for tool in listed["result"]["tools"]}
+>       assert names == {"omega_status", "omega_read", "omega_execute", "omega_write_text", "omega_screenshot", "omega_receipt"}
+E       AssertionError: assert {'omega_execu..._status', ...} == {'omega_execu...a_write_text'}
+E         
+E         Extra items in the left set:
+E         'omega_transport_status'
+E         Use -v to get more diff
+
+tests/test_omega_chatgpt_mcp.py:52: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_chatgpt_mcp.py::test_initialize_and_tool_list_expose_real_bridge_surface
+1 failed, 19 passed in 0.18s

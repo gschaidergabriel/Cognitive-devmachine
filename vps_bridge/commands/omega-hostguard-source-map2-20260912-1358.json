@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-hostguard-source-map2-20260912-1358",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/carrier_repo",
+  "timeout_seconds": 60,
+  "command": "set -eu\ngit fetch --quiet --no-tags origin refs/heads/main\nSHA=$(git rev-parse FETCH_HEAD)\nprintf 'MAIN=%s\\n' \"$SHA\"\nprintf '%s\\n' '--- CURRENT EFFECT SOURCE PATHS ---'\ngit ls-tree -r --name-only \"$SHA\" | grep -Ei '(^|/)(omega[^/]*|.*local_bridge.*|.*effect.*|.*sandbox.*|.*alignment.*|.*interlock.*)(/|$|\\.)' | grep -Ev '(^|/)(dump|research_sources|research_entity/trigger_runs|free swarm)/' | tail -n 260 || true\nprintf '%s\\n' '--- CURRENT POLICY SYMBOLS ---'\ngit grep -n -E 'DELETE_REMOVAL_DENIED|STORAGE_FORMAT_DENIED|EXACT_BOUND_REQUEST_ADMITTED|NOT_YET_GRANTED|EffectGate|effect authority|execution boundary' \"$SHA\" -- 'tools/**' 'runtime_checks/**' 'governance/**' 'DEV_SOURCE_RESEARCH/**' 'research_entity/coordination/**' 2>/dev/null | head -n 280 || true"
+}

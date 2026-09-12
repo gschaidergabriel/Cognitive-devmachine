@@ -1,0 +1,30 @@
+--- voice unit ---
+MainPID=2334921
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:25:18 +07] ; stop_time=[n/a] ; pid=2334921 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+--- client unit ---
+MainPID=3687487
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 20:36:51 +07] ; stop_time=[n/a] ; pid=3687487 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+--- omega installed files ---
+MISSING /home/ai-core-node/.local/lib/frankenstein/scripts/omega_arm_bus.py
+4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py
+MISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_local_audio_arm.py
+MISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_omni_presence.py
+MISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_pocket_renderer.py
+057d12a4d13fd4468585126ed753c17bd0be22b5212a0e0bd1a9a1f255561a66  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_runtime.py
+2bc6dd6f54f20f0676cf0fa3b9c2261d1d3caa884ba3413f7530de03197f1f91  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal.py
+83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py
+--- dropins ---
+FILE /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+FILE /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py

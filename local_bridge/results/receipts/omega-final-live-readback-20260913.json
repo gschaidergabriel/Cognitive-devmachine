@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-live-readback-20260913",
+  "command_sha256": "110a5d0cb85d75cffc7db74c7a3cbd6fa38b864c18ad003e3f125ea2491f4888",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:26:31.674236+00:00",
+  "finished_at": "2026-09-12T17:26:31.717249+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9fa17a16be71e0852beff027823bded159eb1abfb1dde1e71d2e5f1b7db80cd6",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "--- voice unit ---\nMainPID=2334921\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:25:18 +07] ; stop_time=[n/a] ; pid=2334921 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- client unit ---\nMainPID=3687487\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 20:36:51 +07] ; stop_time=[n/a] ; pid=3687487 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- omega installed files ---\nMISSING /home/ai-core-node/.local/lib/frankenstein/scripts/omega_arm_bus.py\n4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7  /home/ai-core-node/.local/lib/frankenstein/scripts/omega_organ_activity.py\nMISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_local_audio_arm.py\nMISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_omni_presence.py\nMISSING /home/ai-core-node/.local/lib/frankenstein/scripts/voice777_pocket_renderer.py\n057d12a4d13fd4468585126ed753c17bd0be22b5212a0e0bd1a9a1f255561a66  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_full_runtime.py\n2bc6dd6f54f20f0676cf0fa3b9c2261d1d3caa884ba3413f7530de03197f1f91  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal.py\n83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py\n8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py\nd9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e  /home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py\n--- dropins ---\nFILE /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py\nFILE /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

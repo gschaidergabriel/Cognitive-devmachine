@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-continuation-locate-repo-20260912-2018",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; printf 'HOST='; hostname; printf 'OMEGA_DIRS\\n'; find /home/ai-core-node /workspace -maxdepth 4 -type d -name oMEGA -print 2>/dev/null | head -20; printf 'PY='; python3 --version; printf 'GIT='; git --version",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30
+}

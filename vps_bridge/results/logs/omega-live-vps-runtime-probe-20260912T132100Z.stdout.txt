@@ -1,0 +1,40 @@
+=== CURRENT_HEAD ===
+=== OUTBOX ===
+msg_1525669a778643cfbfc6b32d90385f0c.json {"effect_id": null, "keys": ["created_at", "kind", "message_id", "payload", "schema"], "kind": "GRID_ROUTE_BLOCKED", "payload_effect_id": null, "schema": "OMEGA_OUTBOX/v1"}
+msg_3be9cec3b7054ad88af6877c8728be25.json {"effect_id": null, "keys": ["created_at", "kind", "message_id", "payload", "schema"], "kind": "GRID_ROUTE_BLOCKED", "payload_effect_id": null, "schema": "OMEGA_OUTBOX/v1"}
+msg_74287d31d48b4e82a669ea8cb96662f2.json {"effect_id": null, "keys": ["created_at", "kind", "message_id", "payload", "schema"], "kind": "GRID_ROUTE_BLOCKED", "payload_effect_id": null, "schema": "OMEGA_OUTBOX/v1"}
+msg_b07097ddf588445f8ef50fc935c0bae7.json {"effect_id": null, "keys": ["created_at", "kind", "message_id", "payload", "schema"], "kind": "GRID_ROUTE_BLOCKED", "payload_effect_id": null, "schema": "OMEGA_OUTBOX/v1"}
+msg_c3001fb05dbc4206a7001efbc5dd357b.json {"effect_id": null, "keys": ["created_at", "kind", "message_id", "payload", "schema"], "kind": "MASTER_COGNITION_UPDATE", "payload_effect_id": null, "schema": "OMEGA_OUTBOX/v1"}
+=== STATUS ===
+{
+  "schema": "OMEGA_GRID_STATUS/v1",
+  "updated_at": "2026-09-12T13:17:34.462297+00:00",
+  "epoch_id": "epoch_c697d83e078e4972b77dfa6d1d8fd201",
+  "frame_id": "frame_9c88ce337a8346ddb138c5d315f2d117",
+  "winner": {
+    "cell": "REENTRY",
+    "score": 0.3,
+    "task": {
+      "task_id": "background_host_scout",
+      "required_capabilities": [
+        "local_state"
+      ],
+      "max_organs": 1
+    },
+    "free": false
+  },
+  "result": {
+    "cell": "REENTRY"
+  }
+}
+
+=== PROCESSES ===
+944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944589 python3 /workspace/omega_runtime/omega_daemon.py
+946926 bash -lc set -eu; echo '=== CURRENT_HEAD ==='; git -C /workspace/omega_runtime/current rev-parse HEAD 2>/dev/null || true; echo '=== OUTBOX ==='; python3 - <<'PY' import json,pathlib root=pathlib.Path('/workspace/omega_runtime/state/outbox') for p in sorted(root.glob('*.json'))[-12:]:     try:         d=json.loads(p.read_text())         print(p.name, json.dumps({'schema':d.get('schema'),'kind':d.get('kind'),'keys':sorted(d.keys()),'effect_id':d.get('effect_id'),'payload_effect_id':(d.get('payload') or {}).get('effect_id') if isinstance(d.get('payload'),dict) else None},sort_keys=True))     except Exception as e: print(p.name,'ERR',type(e).__name__,e) PY echo '=== STATUS ==='; cat /workspace/omega_runtime/state/STATUS.json 2>/dev/null || true; echo; echo '=== PROCESSES ==='; pgrep -af 'omega|grid_runtime|bridge_relay' || true; echo '=== TMUX ==='; tmux ls 2>/dev/null || true; echo '=== DBS ==='; ls -l /workspace/omega_runtime/state/omega.sqlite3 /workspace/omega_runtime/data/omega_unified.db 2>/dev/null || true
+=== TMUX ===
+omega-grid: 1 windows (created Sat Sep 12 10:50:32 2026)
+=== DBS ===
+-rw-r--r-- 1 root root 208896 Sep 12 11:26 /workspace/omega_runtime/data/omega_unified.db
+-rw-r--r-- 1 root root  36864 Sep 12 10:50 /workspace/omega_runtime/state/omega.sqlite3

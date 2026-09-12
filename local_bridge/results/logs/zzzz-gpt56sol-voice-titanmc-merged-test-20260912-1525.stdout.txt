@@ -1,0 +1,25 @@
+HEAD=1a3845d368512a2c3c39f7383ed6e2a358246be5
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_voice_full_integration.py _____________
+tests/test_voice_full_integration.py:7: in <module>
+    spec.loader.exec_module(mod)
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+scripts/voice_full_integration.py:44: in <module>
+    @dataclasses.dataclass(frozen=True)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1258: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+/usr/lib/python3.12/dataclasses.py:983: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+/usr/lib/python3.12/dataclasses.py:749: in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+=========================== short test summary info ============================
+ERROR tests/test_voice_full_integration.py - AttributeError: 'NoneType' objec...
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.13s

@@ -1,0 +1,36 @@
+{
+  "schema": "CLAY_AVATAR_EYE_RESULT/v1",
+  "created_at": "2026-09-12T02:35:30Z",
+  "status": "ACCEPTED_AT_DIAGNOSTIC_SCOPE",
+  "subject": {
+    "live_buehne_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
+    "semantic_shadow_sha256": "4fb62046e650f993edb89be24c40262fb8e7202e2c7cda14df7aa0113cfbfb4d",
+    "open_eye_plate_sha256": "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9"
+  },
+  "execution": {
+    "machine": "ai-core-node",
+    "receipt": "chatgpt-local-ai-core-node-results:local_bridge/results/receipts/go-avatar-eye-scheduler-attribution-v3-20260912-0933-gpt56sol.json",
+    "branch_head": "8e16861ff8a172b794718fcb93d9ce54a807be6a",
+    "live_source_unchanged": true
+  },
+  "measurements": {
+    "idle": {"raf_fps": 6.575702778234424, "raf_mean_ms": 152.075, "raf_p95_ms": 166.70000000000005, "raf_samples": 8, "timer_ticks": 121, "elapsed_ms": 6185.899999976158},
+    "normal_blink": {"raf_fps": 6.400512040963276, "raf_mean_ms": 156.2375, "raf_p95_ms": 200.0, "raf_samples": 8, "timer_ticks": 124, "elapsed_ms": 6679.199999988079},
+    "special_raw": {"raf_fps": 5.333688912594172, "raf_mean_ms": 187.4875, "raf_p95_ms": 216.79999999999973, "raf_samples": 8, "timer_ticks": 151, "elapsed_ms": 7338.699999988079},
+    "special_predecoded": {"raf_fps": 6.206896551724138, "raf_mean_ms": 161.11111111111111, "raf_p95_ms": 166.69999999999982, "raf_samples": 9, "timer_ticks": 131, "elapsed_ms": 6291.0, "predecode_complete": true}
+  },
+  "classification": {
+    "headless_shadow_timing_surface": "EVIDENCE_INVALID_FOR_PRODUCT_FPS_OR_RAF_PROMOTION",
+    "reason": "The idle exact-shadow baseline is already globally scheduler-starved. Normal blink is not materially worse, and complete predecode does not restore a normal frame cadence. Therefore the surface cannot distinguish production animation timing from headless/software-render scheduling behavior.",
+    "special_expression_cold_decode_as_primary_cause": "NOT_SUPPORTED",
+    "semantic_or_pixel_validation_on_shadow": "STILL_ADMISSIBLE_WHEN_INDEPENDENT_OF_WALL_CLOCK_CADENCE"
+  },
+  "zero_credit": [
+    "no production-visible-browser FPS credit",
+    "no eye identity product acceptance",
+    "no live buehne mutation",
+    "no claim that special expression is performance-safe in production",
+    "no claim that blink is performance-safe in production"
+  ],
+  "next_exact_action": "Discover and attach read-only instrumentation to the actual visible production browser/session on ai-core-node. Measure idle versus canonical blink versus special-expression cadence there without changing buehne.html. Use the headless shadow only for semantic/pixel invariants, not timing promotion."
+}

@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""retina_pruefen.py -- FranKenstein-Avatar per digital-retina pruefen, NICHT
+per Hand mit xdotool/import + numpy-Pixel-Diff.
+
+WARUM DAS DIESES DING GIBT (Gabriel, 2026-09-11):
+Heutige Bau-Agenten haben Blink-Erkennung, Geisterkopf-Check, Nahtcheck am
+Hals und FPS/Pop-Checks alle per rohem Pixel-Diff selbst gebaut -- obwohl
+`digital-retina` (systemd-Dienst `digital-retina.service`, seit 3+ Tagen
+oben) genau dafuer ein CPU-Vision-System bereithaelt, das natuersprachliche
+Beschreibungen UND CLIP-Phrasen-Scores liefert. Der HTTP-Weg (Port 8000,
+/v1/analyze, /v1/score) braucht einen Postgres-API-Key. Der DIREKTE
+Python-Weg braucht KEINEN Key:
+
+    import sys; sys.path.insert(0, '/home/ai-core-node/digital-retina')
+    from retina.vision.frank_eye import get_eye
+    eye = get_eye()
+    text = eye.analyze(bildpfad)                # ~100ms
+    text = eye.analyze(bildpfad, deep=True)      # +~300ms, GoL-Textur
+
+Fuer CLIP-Phrasen-Scoring (das Aequivalent zu /v1/score) OHNE HTTP/Key:
+
+    from retina.vision import clip_classifier as cc
+    cc.text_similarity(bild_bgr_numpy, ["a second head visible", ...])
+    -> [{"query": ..., "score": float}, ...]   # Kosinus, ~0.22 = Relevanzschwelle
+
+Dieses Modul buendelt beides zu EINEM Aufruf fuer Avatar-Checks und ist so
+gebaut, dass ANDERE Agenten es re-nutzen statt wieder Pixel-Diff-Code zu
+schreiben.
+
+Nutzung als Bibliothek:
+    import sys; sys.path.insert(0, '/home/ai-core-node/.claude/star/visual')
+    from retina_pruefen import pruefe_avatar, AVATAR_PHRASEN
+    ergebnis = pruefe_avatar('/tmp/screenshot.png')
+    print(ergebnis['beschreibung'])
+    print(ergebnis['phrasen'])   # {phrase: score}
+
+Nutzung als CLI:
+    python3 retina_pruefen.py /tmp/screenshot.png [--deep] \
+        [--phrase "eigene phrase" ...]
+
+HARTE REGEL: nichts wird hier schoener oder schlechter umformuliert als was
+frank_eye/CLIP wirklich zurueckgibt. Wer das Ergebnis weiterreicht, gibt den
+Originaltext weiter.
+
+⚠️ GEMESSEN am echten FranKenstein-Avatar-Fenster (2026-09-11, 10 reale
+Frames -- 2 idle + 8 im Schnelltakt): `faces_total`/`people_count` aus dem
+`[VISION-FACTS]`-JSON (Haar/DNN-Gesichtserkennung) waren auf allen 10 Frames
+STABIL 1/1 -- kein Geisterkopf, deckt sich mit dem menschlichen Blick auf
+dieselben Bilder. Die CLIP-Phrasen-Scores dagegen waren auf allen 10 Frames
+NICHT trennscharf: "a person's face with two heads visible" lag konstant
+~0.23 (>= Schwelle 0.22, also "relevant") UND gleichzeitig "a clean,
+undistorted human face" ebenfalls ~0.23 relevant -- unabhaengig vom
+tatsaechlichen Bildinhalt. Das ist dieselbe CLIP-Selbstwidersprueche, die
+`sehen.py` in seinem eigenen Kopf dokumentiert ("full beard" UND "shaved
+head" im selben Bild). SCHLUSS: fuer den Geisterkopf-Check ist
+`faces_total` das verlaessliche Signal, die CLIP-Phrase ist hier nur ein
+schwacher Zusatzhinweis, kein Beweis. Deshalb liefert `pruefe_avatar()`
+`fakten` (faces_total/people_count/objects/...) IMMER separat mit, nicht
+nur den Rohtext.
+"""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+from typing import Optional
+
+RETINA_DIR = "/home/ai-core-node/digital-retina"
+if RETINA_DIR not in sys.path:
+    sys.path.insert(0, RETINA_DIR)
+
+# ---------------------------------------------------------------- Phrasen
+# Genau die Dinge, die heutige Agenten per Hand (Pixel-Diff) geprueft haben:
+# Geisterkopf-Bug, Nahtcheck Hals, Blink-Erkennung, "ist es ein sauberes
+# Portrait". 0.22 ist die von clip_classifier/region_clip selbst dokumentierte
+# Relevanzschwelle (siehe classify()-Docstring: "<0.18 = weak/noise").
+AVATAR_PHRASEN = [
+    "a person's face with two heads visible",
+    "a second, ghostly duplicate head overlapping the face",
+    "a visible seam or line across the neck",
+    "eyes closed in a blink",
+    "a smooth single portrait of one face",
+    "a clean, undistorted human face",
+]
+
+RELEVANZ_SCHWELLE = 0.22
+
+
+def _lade_eye():
+    from retina.vision.frank_eye import get_eye
+    return get_eye()
+
+
+def _lade_clip():
+    from retina.vision import clip_classifier as cc
+    return cc
+
+
+def analysiere(bildpfad: str, deep: bool = False, hint: str = "") -> str:
+    """Frank_eye's natuersprachliche Beschreibung -- unveraendert, Original-
+    text. Kein Umschreiben, kein Beschoenigen."""
+    eye = _lade_eye()
+    return eye.analyze(bildpfad, deep=deep, hint=hint)
+
+
+def fakten_aus_beschreibung(beschreibung: str) -> dict:
+    """Das `[VISION-FACTS]`-JSON aus der Beschreibung ziehen -- faces_total,
+    people_count, objects, lighting etc. Das GEMESSENE Signal (Haar/DNN-
+    Gesichtszahl), nicht die geratene CLIP-Prosa. Leeres dict wenn nicht
+    gefunden."""
+    for zeile in (beschreibung or "").split("\n"):
+        if zeile.startswith("[VISION-FACTS]"):
+            try:
+                return json.loads(zeile.split("]", 1)[1].strip())
+            except Exception:
+                return {}
+    return {}
+
+
+def phrasen_bewerten(bildpfad: str, phrasen: Optional[list] = None) -> dict:
+    """CLIP-Kosinus-Score je Phrase gegen das Bild -- der direkte Python-Weg
+    zu dem, was /v1/score per HTTP+Key macht. Ohne CLIP-Modell (nicht
+    verfuegbar) -> leeres dict, KEIN Erfinden von Zahlen."""
+    import cv2
+
+    cc = _lade_clip()
+    if not cc.is_available():
+        return {}
+    phrasen = phrasen if phrasen is not None else AVATAR_PHRASEN
+    img = cv2.imread(bildpfad)
+    if img is None:
+        return {}
+    treffer = cc.text_similarity(img, phrasen)
+    return {t["query"]: t["score"] for t in treffer}
+
+
+def pruefe_avatar(bildpfad: str, deep: bool = False,
+                   phrasen: Optional[list] = None) -> dict:
+    """Ein Aufruf, beides: Beschreibung + Phrasen-Scores + welche Phrasen
+    ueber der Relevanzschwelle liegen. Fuer Avatar-QA gedacht (Geisterkopf,
+    Nahtcheck, Blink), aber generisch -- jede Phrasenliste geht."""
+    pfad = str(Path(bildpfad).expanduser())
+    beschreibung = analysiere(pfad, deep=deep)
+    scores = phrasen_bewerten(pfad, phrasen=phrasen)
+    relevant = {p: s for p, s in scores.items() if s >= RELEVANZ_SCHWELLE}
+    return {
+        "bild": pfad,
+        "beschreibung": beschreibung,
+        "fakten": fakten_aus_beschreibung(beschreibung),
+        "phrasen": scores,
+        "relevant": relevant,
+    }
+
+
+def _main():
+    args = sys.argv[1:]
+    if not args:
+        print(__doc__)
+        sys.exit(1)
+    bildpfad = args[0]
+    deep = "--deep" in args
+    eigene_phrasen = []
+    i = 1
+    while i < len(args):
+        if args[i] == "--phrase" and i + 1 < len(args):
+            eigene_phrasen.append(args[i + 1])
+            i += 2
+        else:
+            i += 1
+    phrasen = eigene_phrasen if eigene_phrasen else None
+    ergebnis = pruefe_avatar(bildpfad, deep=deep, phrasen=phrasen)
+    print("=== BESCHREIBUNG (frank_eye, Originaltext) ===")
+    print(ergebnis["beschreibung"])
+    print()
+    print("=== GEMESSENE FAKTEN (faces_total/people_count -- verlaesslicher als CLIP-Phrasen) ===")
+    print(json.dumps(ergebnis["fakten"], ensure_ascii=False))
+    print()
+    print("=== PHRASEN-SCORES (CLIP-Kosinus, Schwelle %.2f -- schwach trennscharf, siehe Modul-Docstring) ===" % RELEVANZ_SCHWELLE)
+    for p, s in ergebnis["phrasen"].items():
+        marker = " <-- RELEVANT" if s >= RELEVANZ_SCHWELLE else ""
+        print(f"  {s:.3f}  {p}{marker}")
+    print()
+    print(json.dumps(ergebnis, ensure_ascii=False, indent=2))
+
+
+if __name__ == "__main__":
+    _main()

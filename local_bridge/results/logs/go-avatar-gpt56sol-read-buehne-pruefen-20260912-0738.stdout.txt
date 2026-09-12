@@ -1,0 +1,362 @@
+#!/usr/bin/env python3
+"""buehne_pruefen.py -- das Buehnenbild MESSEN statt anschauen und meinen.
+
+Gabriel, 2026-09-11: "hilf du auch zyklisch mit, dass der Avatar so wird wie wir
+ihn uns vorstellen und noch 10000x besser."
+
+Warum das hier und nicht noch ein Paar Augen: heute sind an genau dieser Stelle
+drei Fehleinschaetzungen passiert, jede davon haette dieses Skript in zwei
+Sekunden gefunden --
+
+  1. "Der Schleier ist ein CSS-Overlay."  War er nicht: er steckte IM Bild, ab
+     56 % der Hoehe. Gefunden erst durch zeilenweise Helligkeitsmessung.
+  2. "Der Bildausschnitt ist schon richtig."  War er nicht: der Kopf begann bei
+     24 % der Panelhoehe, ein Viertel leere Luft darueber.
+  3. "Der Avatar ist vom Hintergrund entkoppelt."  War er nicht: ueber der
+     eigenen Hintergrundebene lag ein voll deckendes Flachbild mit
+     eingebackenem Hintergrund. Zwei Hintergruende, einer davon wirkungslos.
+
+Alle drei sind SICHTBARE Eigenschaften, die man ZAEHLEN kann. Solange niemand
+sie zaehlt, entscheidet der Eindruck -- und der Eindruck lag dreimal daneben.
+
+AUFRUF
+    python3 buehne_pruefen.py              # misst das laufende Fenster
+    python3 buehne_pruefen.py --bild X.png # misst eine vorhandene Aufnahme
+    python3 buehne_pruefen.py --json       # maschinenlesbar, fuer Vergleiche
+
+WAS ES MISST
+    kopf_beginn_prozent   ab welcher Hoehe des Buehnen-Panels der Kopf anfaengt.
+                          Gabriels Vorgabe: wenig Luft oben -> Richtwert 8-12 %.
+    querstreifen          waagrechte Helligkeitsspruenge = Schleier/Wasserlinie.
+                          Soll leer sein.
+    hintergrund_bewegt    zwei Aufnahmen im Abstand: aendert sich der Rand des
+                          Bildes? Wenn der Hintergrund eine eigene, morphende
+                          Ebene ist, MUSS er sich bewegen. Bleibt er starr,
+                          ist er verdeckt -- genau Befund 3.
+    panel                 die erkannte Buehnenflaeche, damit man sieht, worauf
+                          sich die Prozente beziehen.
+
+Reines Lesen. Aendert nichts, startet nichts, stoppt nichts.
+"""
+import argparse
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import time
+
+try:
+    from PIL import Image
+    import numpy as np
+except Exception as e:                      # pragma: no cover
+    print(f"Braucht PIL und numpy ({e})", file=sys.stderr)
+    sys.exit(2)
+
+FENSTERNAME = "FranKenstein -- live"
+
+
+def aufnehmen(ziel: str) -> bool:
+    """Nimmt das laufende Buehnenfenster auf. False, wenn es nicht da ist."""
+    # ⚠️ DRITTER FEHLALARM DIESES WERKZEUGS, 2026-09-11 -- gefunden vom
+    # QA-Agenten: `kopf_beginn_prozent` schwankte 15/12/6 auf praktisch
+    # demselben Bild. Ursache war NICHT das Bild, sondern DIESE Funktion.
+    #
+    # `xdotool search --name "FranKenstein -- live"` liefert ZWEI Treffer:
+    #     16777220  PID  738655  Chrome selbst          746x449
+    #     12585692  PID 1532367  mutter-x11-frames      774x515
+    # Der zweite ist der FENSTERRAHMEN, den GNOME als eigenes X-Fenster um
+    # das Chrome-Fenster legt -- mitsamt Titelleiste, deshalb 28 px groesser.
+    # Er traegt denselben Titel. `head -1` erwischte mal den einen, mal den
+    # anderen, und jede Prozentangabe verschob sich entsprechend.
+    #
+    # RICHTIG: nur das Fenster nehmen, dessen PID wirklich Chrome ist.
+    env = dict(os.environ, DISPLAY=os.environ.get("DISPLAY", ":0"))
+    try:
+        ids = subprocess.run(["xdotool", "search", "--name", FENSTERNAME],
+                             capture_output=True, text=True, env=env,
+                             timeout=10).stdout.split()
+        if not ids:
+            return False
+        echtes = None
+        for wid in ids:
+            pid = subprocess.run(["xdotool", "getwindowpid", wid],
+                                 capture_output=True, text=True, env=env,
+                                 timeout=5).stdout.strip()
+            if not pid.isdigit():
+                continue
+            try:
+                with open(f"/proc/{pid}/cmdline", "rb") as f:
+                    befehl = f.read().replace(b"\0", b" ").decode("utf-8", "replace")
+            except OSError:
+                continue
+            if "chrome" in befehl and "8788" in befehl:
+                echtes = wid
+                break
+        if echtes is None:              # kein Chrome gefunden -- lieber nichts
+            return False                # als das falsche Fenster vermessen
+        subprocess.run(["import", "-window", echtes, ziel],
+                       check=True, capture_output=True, env=env, timeout=20)
+        return True
+    except Exception:
+        return False
+
+
+def _panel_finden(a):
+    """Die Buehnenflaeche links vom Chatpanel.
+
+    ⚠️ ERSTER VERSUCH WAR FALSCH und hat 727 von 774 px als "Buehne" genommen,
+    also Chat mit eingerechnet. Folge: die Chat-Textzeilen wurden als
+    "Querstreifen" gemeldet und der Kopfbeginn landete bei 39 % statt bei den
+    tatsaechlichen Werten. Die Regel "ab hier bleibt es hell" greift nicht, weil
+    die Buehne in der Mitte (Gesicht) HELLER ist als das Chatpanel.
+
+    Die belastbare Trennung, an der echten Aufnahme abgelesen:
+        Buehne    0-35 %   stark schwankend (dunkler Rand, helles Gesicht)
+        Luecke   ~35 %     dunkelste Stelle des ganzen Bildes
+        Chat     40-95 %   gleichmaessig ~36-40, kaum Schwankung
+    Also: die dunkelste Spalte im mittleren Drittel ist die Fuge.
+    """
+    h, w = a.shape
+    spalten = a.mean(axis=0)
+    such_von, such_bis = int(w * 0.25), int(w * 0.60)
+    fuge = such_von + int(np.argmin(spalten[such_von:such_bis]))
+    # Rand abschneiden: Fensterrahmen oben/unten, Titelzeile, Panelkante
+    return (int(h * 0.08), int(h * 0.95), int(w * 0.04), int(fuge * 0.96))
+
+
+def messen(pfad: str) -> dict:
+    im = Image.open(pfad).convert("L")
+    a = np.asarray(im).astype(float)
+    y0, y1, x0, x1 = _panel_finden(a)
+    panel = a[y0:y1, x0:x1]
+    ph, pw = panel.shape
+    ergebnis = {"bild": pfad,
+                "panel": {"x": [x0, x1], "y": [y0, y1], "groesse": [pw, ph]}}
+
+    # --- Kopfbeginn: erster dauerhafte Helligkeitsanstieg von oben -----------
+    streifen = [(p, panel[int(ph * p / 100):int(ph * (p + 3) / 100)].mean())
+                for p in range(0, 70, 3)]
+    ergebnis["profil"] = [[p, round(m, 1)] for p, m in streifen]
+    kopf = None
+    for i in range(2, len(streifen) - 1):
+        p, m = streifen[i]
+        # dauerhaft: dieser UND der naechste Streifen deutlich ueber dem Anfang
+        if m > streifen[0][1] + 10 and streifen[i + 1][1] > streifen[0][1] + 10:
+            kopf = p
+            break
+    ergebnis["kopf_beginn_prozent"] = kopf
+
+    # --- Querstreifen: eine FLAECHE, kein Gesichtsmerkmal -------------------
+    # ⚠️ ERSTER VERSUCH MELDETE STAENDIG FALSCHEN ALARM: er nahm jeden
+    # Helligkeitssprung ueber die Zeilenmittelwerte -- und traf damit Titelzeile,
+    # Haaransatz, Augen und Mund. Vier Warnungen pro Bild, alle falsch. Ein
+    # Melder, der immer piept, wird ignoriert; genau so ist der echte
+    # Wasserstreifen heute frueh monatelang uebersehen worden.
+    #
+    # DER UNTERSCHIED IST MESSBAR: ein Schleier liegt GLEICHMAESSIG ueber die
+    # ganze Breite (niedrige Streuung entlang x), ein Gesichtsmerkmal nicht --
+    # Augen sind zwei Flecken, der Mund einer, der Haaransatz folgt der
+    # Schaedelform. Also: Sprung ODER nicht ist zu wenig, es muss ein Sprung in
+    # einer FLACHEN Zeile sein.
+    zeilen = panel.mean(axis=1)
+    streuung = panel.std(axis=1)            # wie ungleichmaessig ist die Zeile?
+    bezug = float(np.median(streuung)) or 1.0
+    spruenge = []
+    fenster = max(3, ph // 100)
+    for y in range(fenster, ph - fenster):
+        davor = zeilen[y - fenster:y].mean()
+        danach = zeilen[y:y + fenster].mean()
+        sprung = danach - davor
+        if sprung <= 12:
+            continue
+        flachheit = float(streuung[y:y + fenster].mean()) / bezug
+        if flachheit > 0.75:                # zu ungleichmaessig -> Gesicht
+            continue
+        spruenge.append({"prozent": round(y / ph * 100, 1),
+                         "sprung": round(sprung, 1),
+                         "gleichmaessigkeit": round(1 - flachheit, 2)})
+    gefiltert = []
+    for s in sorted(spruenge, key=lambda s: -s["sprung"]):
+        if all(abs(s["prozent"] - g["prozent"]) > 5 for g in gefiltert):
+            gefiltert.append(s)
+    ergebnis["querstreifen"] = sorted(gefiltert, key=lambda s: s["prozent"])[:4]
+    return ergebnis
+
+
+def entkopplung_pruefen() -> dict:
+    """Ist die Hauptebene des Gesichts wirklich freigestellt?
+
+    ⚠️ DAS HIER ERSETZT EINEN FEHLALARM MEINES EIGENEN WERKZEUGS.
+    Erster Versuch: zwei Aufnahmen vergleichen und aus Bewegung am Bildrand auf
+    "eigene Hintergrundebene sichtbar" schliessen. Das ist FALSCH -- ueber dem
+    Bild laufen zwei Regen-Canvas (#regen, #regen-hinten), die sich IMMER
+    bewegen, auch wenn darunter ein voll deckendes Flachbild liegt. Der Test
+    meldete gruen, waehrend die Entkopplung gar nicht gebaut war.
+    Ein Abnahmekriterium, das faelschlich gruen meldet, ist schlimmer als
+    keines -- es bestaetigt den Fehler, den es finden soll.
+
+    Richtig ist die DIREKTE Frage: hat das Bild, das der Daemon als Gesicht
+    ausliefert, einen echten Alphakanal? Freigestellt heisst durchsichtig.
+    Ein Flachbild mit eingebackenem Hintergrund ist RGB oder RGBA mit
+    durchgehend 255 -- beides faellt hier auf.
+    """
+    import io
+    import re as _re
+    import urllib.request
+
+    # ⚠️ ZWEITER FEHLALARM DESSELBEN TESTS, 2026-09-11: die erste Fassung hier
+    # fragte ZWEI FEST VERDRAHTETE Pfade ab (/gesicht.png und
+    # /ausdruck/01_ruhig_neutral.png) und meldete "NICHT entkoppelt". Die
+    # Entkopplung WAR da -- die Seite war inzwischen auf /kopf_rgba/ und
+    # /koerper_rgba/ umgestellt, und meine Adressen zeigten auf Altlasten, die
+    # es zwar noch gibt, die aber mit opacity:0 gar nicht mehr sichtbar sind.
+    # Ein Test mit geratenen Endpunkten ist keine Messung, sondern eine
+    # Vermutung mit Zahlen dran -- und er widersprach Gabriel, der recht hatte.
+    # RICHTIG: die Seite selbst fragen, welche Bilder sie laedt, und GENAU DIE
+    # pruefen. Dann wandert der Test automatisch mit, wenn jemand umbaut.
+    aus = {}
+    quellen = []
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8788/", timeout=8) as r:
+            html = r.read().decode("utf-8", "replace")
+        # nur die <img>-Ebenen INNERHALB des Gesichtsrahmens interessieren
+        for m in _re.finditer(r'<img\s+id="([a-z0-9-]+)"\s+src="([^"]+\.png)"', html):
+            ident, src = m.group(1), m.group(2)
+            if ident in ("hg-frame",):
+                continue                    # Hintergrund DARF deckend sein
+            quellen.append((ident, src))
+    except Exception as e:
+        aus["fehler_seite"] = f"{type(e).__name__}"
+    if not quellen:                          # Rueckfall, falls die Seite schweigt
+        quellen = [("gesicht", "/gesicht.png")]
+
+    for name, pfad in quellen:
+        try:
+            with urllib.request.urlopen(f"http://127.0.0.1:8788{pfad}",
+                                        timeout=8) as r:
+                roh = r.read()
+            im = Image.open(io.BytesIO(roh))
+            modus, groesse = im.mode, im.size
+            if modus in ("RGBA", "LA"):
+                al = np.asarray(im.convert("RGBA"))[:, :, 3]
+                durchsichtig = float((al == 0).mean() * 100)
+            else:
+                durchsichtig = 0.0
+            unsichtbar = bool(_re.search(
+                r"#" + _re.escape(name) + r"\b[^{]*\{[^}]*opacity:\s*0\b", html)
+                or _re.search(r"#[a-z0-9,#-]*\b" + _re.escape(name)
+                              + r"\b[^{]*\{[^}]*opacity:\s*0\b", html))
+            aus[name] = {"modus": modus, "groesse": list(groesse),
+                         "durchsichtig_prozent": round(durchsichtig, 1),
+                         "freigestellt": durchsichtig > 5.0,
+                         "unsichtbar": unsichtbar}
+        except Exception as e:
+            aus[name] = {"fehler": f"{type(e).__name__}"}
+    # Entkoppelt = die SICHTBAREN Ebenen sind freigestellt. Eine Altlast mit
+    # opacity:0 (z.B. #gesicht, das nur noch Sonderausdruecke zeigt) darf das
+    # Urteil nicht kippen -- sie verdeckt nichts.
+    sichtbar = {k: v for k, v in aus.items()
+                if isinstance(v, dict) and not v.get("unsichtbar")
+                and "modus" in v}
+    aus["entkoppelt"] = bool(sichtbar) and all(v.get("freigestellt")
+                                               for v in sichtbar.values())
+    return aus
+
+
+def hintergrund_bewegt(pause_s: float = 1.5) -> dict:
+    """Zwei Aufnahmen im Abstand -- bewegt sich der Bildrand?
+
+    Wenn der Hintergrund eine eigene, laufende Ebene ist, aendert er sich.
+    Bleibt er starr, liegt ein deckendes Bild darueber (oder er laeuft nicht).
+    Gemessen wird der linke Randstreifen des Panels, wo selten das Gesicht
+    liegt.
+    """
+    with tempfile.TemporaryDirectory() as d:
+        p1, p2 = os.path.join(d, "a.png"), os.path.join(d, "b.png")
+        if not aufnehmen(p1):
+            return {"fehler": "Fenster nicht gefunden"}
+        time.sleep(pause_s)
+        if not aufnehmen(p2):
+            return {"fehler": "zweite Aufnahme fehlgeschlagen"}
+        a = np.asarray(Image.open(p1).convert("L")).astype(float)
+        b = np.asarray(Image.open(p2).convert("L")).astype(float)
+        if a.shape != b.shape:
+            return {"fehler": "Fenstergroesse hat sich geaendert"}
+        y0, y1, x0, x1 = _panel_finden(a)
+        rand = (slice(y0, y1), slice(x0, x0 + max(8, (x1 - x0) // 12)))
+        d_rand = float(np.abs(a[rand] - b[rand]).mean())
+        d_ganz = float(np.abs(a[y0:y1, x0:x1] - b[y0:y1, x0:x1]).mean())
+        return {"aenderung_rand": round(d_rand, 3),
+                "aenderung_panel": round(d_ganz, 3),
+                "bewegt": d_rand > 0.5,
+                "pause_s": pause_s}
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bild")
+    ap.add_argument("--json", action="store_true")
+    ap.add_argument("--kein-bewegungstest", action="store_true")
+    ns = ap.parse_args()
+
+    if ns.bild:
+        pfad = ns.bild
+    else:
+        pfad = "/tmp/buehne_pruefen.png"
+        if not aufnehmen(pfad):
+            print("Buehnenfenster nicht gefunden (laeuft frankenstein-buehne?)")
+            return 1
+
+    e = messen(pfad)
+    if not ns.bild:
+        e["entkopplung"] = entkopplung_pruefen()
+    if not ns.bild and not ns.kein_bewegungstest:
+        e["hintergrund"] = hintergrund_bewegt()
+
+    if ns.json:
+        print(json.dumps(e, indent=2, ensure_ascii=False))
+        return 0
+
+    pw, ph = e["panel"]["groesse"]
+    print(f"Buehnen-Panel: {pw}x{ph} px")
+    k = e["kopf_beginn_prozent"]
+    if k is None:
+        print("  Kopfbeginn      : NICHT ERKANNT -- Bild pruefen")
+    else:
+        urteil = "gut" if k <= 14 else ("zu viel Luft oben" if k > 14 else "")
+        print(f"  Kopfbeginn      : {k} %   (Richtwert 8-12 %)  -> {urteil}")
+    if e["querstreifen"]:
+        print("  Querstreifen    : ⚠️ gefunden -- moegliche Schleier/Wasserlinie")
+        for s in e["querstreifen"]:
+            print(f"      bei {s['prozent']:5.1f} %  Helligkeitssprung +{s['sprung']}")
+    else:
+        print("  Querstreifen    : keine")
+    ent = e.get("entkopplung")
+    if ent:
+        if ent.get("entkoppelt"):
+            print("  Entkopplung     : JA -- Gesichtsebene ist freigestellt")
+        else:
+            print("  Entkopplung     : ⚠️ NEIN -- Gesichtsebene ist ein deckendes Flachbild")
+        for name, v in ent.items():
+            if not isinstance(v, dict):
+                continue                      # "entkoppelt": bool
+            if "fehler" in v:
+                print(f"      {name:<16} {v['fehler']}")
+                continue
+            marke = "  (unsichtbar, opacity:0)" if v.get("unsichtbar") else ""
+            print(f"      {name:<16} {v['modus']:<5} "
+                  f"{v['groesse'][0]}x{v['groesse'][1]}"
+                  f"  durchsichtig {v['durchsichtig_prozent']:>5} %{marke}")
+    hg = e.get("hintergrund")
+    if hg and "fehler" not in hg:
+        # NUR noch als Nebeninfo -- sagt fuer sich genommen NICHTS ueber die
+        # Entkopplung aus (die Regen-Canvas bewegen sich immer). Siehe
+        # entkopplung_pruefen().
+        print(f"  Bildbewegung    : Rand {hg['aenderung_rand']} "
+              f"(inkl. Regen-Animation -- kein Entkopplungsnachweis)")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

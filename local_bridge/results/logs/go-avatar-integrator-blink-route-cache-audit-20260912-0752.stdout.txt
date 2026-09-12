@@ -1,0 +1,282 @@
+===SUBJECT===
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+===ROUTES===
+65-# Sie lagen im ZIP unter augen/blink/, wurden aber NIE ausgepackt -- nur
+66-# augen/gaze/ war deployt. Deshalb konnte die Buehne seit dem RGBA-Umbau
+67-# ueberhaupt nicht blinzeln: blinzeln() setzte Variablen, aber es gab kein
+68-# Bild, das man haette zeigen koennen. Gemessen: 2,4 % bewegte Gesichtsflaeche
+69-# ueber 24 s, kein einziger Lidschlag. Geometrie IDENTISCH zu den gaze-Flicken
+70-# (319x152 RGBA) -- passt ohne Umbau in dieselbe Ebene.
+71-# Ablauf geprueft: Rotanteil der Augen 0,61 % -> 0,00 % (Frame 08) -> 0,61 %,
+72-# also auf -> zu -> auf. Frame 00 und 11 sind byte-gleich (Schleifenpunkt).
+73:BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+74-MUND_DIR = os.path.join(VISUAL_DIR, "mund_keyframes")
+75-# ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): ECHTE Alpha-PNGs aus
+76-# FRANK_AVATAR_RIG_V2 (1536x1024, gleicher Leinwand-Koordinatenraum fuer Kopf
+77-# UND Koerper -- head_neck_anchor{768,600} und Koerper neck_anchor{768,505}
+78-# liegen im selben Raster, deshalb keine manuelle Versatz-Rechnung noetig,
+79-# beide Ebenen einfach deckungsgleich stapeln). Ersetzt AUSDRUCK_DIR/AUGEN_DIR/
+80-# KOPF_DIR als HAUPT-Kopfebene -- jene alten Ordner bleiben nur fuer
+81-# Sonderausdruck-Faelle/Altlast bestehen, siehe buehne.html.
+82-KOPF_RGBA_DIR = os.path.join(VISUAL_DIR, "kopf_rgba")
+83-KOERPER_RGBA_DIR = os.path.join(VISUAL_DIR, "koerper_rgba")
+84-HINTERGRUND_DIR = os.path.join(VISUAL_DIR, "hintergrund")
+85-# Feste Allowlist statt Ordnerinhalt zur Laufzeit zu vertrauen -- 5 Stimmungen
+86-# aus dem Rig-v2-Datensatz, je 60 Frames (nahtlose Schleife).
+87-HINTERGRUND_STIMMUNGEN = ("ruhig", "wach", "angespannt", "bedrohlich", "heiter")
+88-# ⭐ 2026-09-11: zweiter Datensatz (FRANK_EXPRESSION_RIG_EXTRA_V1, vom
+89-# Koordinator geliefert). NUR die 16 ECHT generierten Endpunkte uebernommen
+90-# (serious_dystopian + demonic) -- die Anime/Meme/Comic-Komposite wurden
+91-# nach Sichtpruefung NICHT uebernommen: leere/tote Augen, sichtbar
+--
+163-        return pfad
+164-    kandidat = pfad + "_ai"
+165-    return kandidat if os.path.isdir(kandidat) else pfad
+166-
+167-
+168-KOPF_RGBA_DIR = _vielleicht_ai(KOPF_RGBA_DIR)
+169-KOERPER_RGBA_DIR = _vielleicht_ai(KOERPER_RGBA_DIR)
+170-GAZE_DIR = _vielleicht_ai(GAZE_DIR)
+171:BLINK_DIR = _vielleicht_ai(BLINK_DIR)
+172-MUND_DIR = _vielleicht_ai(MUND_DIR)
+173-AUSDRUCK_ERWEITERT_DIR = _vielleicht_ai(AUSDRUCK_ERWEITERT_DIR)
+174-# ⭐ Default-Fenstergeometrie (Gabriel 2026-09-11, siehe oeffnen()) -- EINE
+175-# Quelle fuer Start-Flags UND fuer die xdotool-Erzwingung danach.
+176-# Y=0 ist der WUNSCH, nicht das Ergebnis: mutter/GNOME reserviert oben
+177-# einen Arbeitsbereich-Rand (_NET_WORKAREA meldet y>=40) plus eigene
+178-# Fenster-Dekoration/Schatten -- gemessen 2026-09-11 landet JEDES an
+179-# dieses Fenster gerichtete windowmove-Y (0, 3, 40 probiert) am Ende bei
+180-# y≈86-89, nie tiefer. Das ist eine harte WM-Grenze, keine Code-Luecke --
+181-# Gabriels eigentliche Vorgabe war nur "Groesse 746x449, nicht Vollbild",
+182-# keine exakte Pixelposition. Groesse (das Wichtige) sitzt exakt.
+183-FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449
+184-UNIFIED_DB = os.environ.get(
+185-    "UDB_DB_PATH",
+186-    os.path.expanduser("~/.local/share/agentzero/unified.db"))
+187-WELT_DB = os.environ.get(
+188-    "FRANKENSTEIN_WELT_DB",
+189-    os.path.expanduser("~/.local/share/frank/db/world_experience.db"))
+--
+750-        def log_message(self, fmt, *args):
+751-            pass  # keine Zugriffs-Logs auf Disk
+752-
+753-        def _json(self, obj, code=200):
+754-            b = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+755-            self.send_response(code)
+756-            self.send_header("Content-Type", "application/json; charset=utf-8")
+757-            self.send_header("Content-Length", str(len(b)))
+758:            self.send_header("Cache-Control", "no-store")
+759-            self.end_headers()
+760-            self.wfile.write(b)
+761-
+762-        def _bild_ausliefern(self, voller_pfad):
+763-            # Bedingtes GET statt Stunden-Cache. LEHRE (2026-09-11): vorher
+764:            # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+765-            # hat eine Stunde lang NIE nachgefragt, egal was auf der Platte
+766-            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+767-            # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+768-            # -> genauso billig wie vorher, aber Aenderungen wirken sofort.
+769-            try:
+770-                mtime = os.path.getmtime(voller_pfad)
+771-            except OSError:
+772-                self.send_response(404); self.end_headers(); return
+773-            last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+774-            ims = self.headers.get("If-Modified-Since")
+775-            if ims and ims == last_mod:
+776-                self.send_response(304)
+777:                self.send_header("Cache-Control", "no-cache")
+778-                self.end_headers()
+779-                return
+780-            with open(voller_pfad, "rb") as f:
+781-                daten = f.read()
+782-            self.send_response(200)
+783-            self.send_header("Content-Type", "image/png")
+784-            self.send_header("Content-Length", str(len(daten)))
+785:            self.send_header("Cache-Control", "no-cache")
+786-            self.send_header("Last-Modified", last_mod)
+787-            self.end_headers()
+788-            self.wfile.write(daten)
+789-
+790-        def do_GET(self):
+791-            u = urllib.parse.urlsplit(self.path)
+792-            path, qs = u.path, urllib.parse.parse_qs(u.query)
+793-            if path == "/":
+794-                # Immer frisch von Disk lesen -- sonst serviert der laufende
+795-                # Prozess auf ewig den Stand von seinem eigenen Start
+796-                # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+797-                # sonst prueft man bei jeder Aenderung eine alte Version).
+798-                aktuelle_seite = _seite()
+799-                self.send_response(200)
+800-                self.send_header("Content-Type", "text/html; charset=utf-8")
+801-                self.send_header("Content-Length", str(len(aktuelle_seite)))
+802:                self.send_header("Cache-Control", "no-store")
+803-                self.end_headers()
+804-                self.wfile.write(aktuelle_seite)
+805-            elif path == "/filmlook.js":
+806-                # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+807-                # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+808-                # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+809-                # dem Animations-Agenten -- zwei Agenten in derselben Datei
+810-                # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+811-                # (<script src="/filmlook.js">), und der Look kann unabhaengig
+812-                # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+813-                # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+814-                # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+815-                # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+816-                # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+817-                # die <defs> ins Dokument selbst, per Skript.
+818-                pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+819-                if os.path.isfile(pfad):
+820-                    with open(pfad, "rb") as fh:
+821-                        inhalt = fh.read()
+822-                    self.send_response(200)
+823-                    self.send_header("Content-Type",
+824-                                     "application/javascript; charset=utf-8")
+825-                    self.send_header("Content-Length", str(len(inhalt)))
+826:                    self.send_header("Cache-Control", "no-store")
+827-                    self.end_headers()
+828-                    self.wfile.write(inhalt)
+829-                else:
+830-                    # Fehlt die Datei, liefert der Server eine leere Antwort
+831-                    # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+832-                    self.send_response(200)
+833-                    self.send_header("Content-Type",
+834-                                     "application/javascript; charset=utf-8")
+835-                    self.send_header("Content-Length", "0")
+836-                    self.end_headers()
+837-            elif path == "/api/mtime":
+838-                self._json({"mtime": _seite_mtime()})
+839-            elif path == "/gesicht.png":
+840-                self._bild_ausliefern(GESICHT_BILD)
+841-            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+842-                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+843:                    or path.startswith("/augen_blink/")
+844-                    or path.startswith("/mund_keyframes/")
+845-                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+846-                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+847-                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+848-                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+849-                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+850-                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+851-                # oben und buehne.html.
+852-                if path.startswith("/ausdruck/"):
+853-                    verzeichnis = AUSDRUCK_DIR
+854-                elif path.startswith("/augen/"):
+855-                    verzeichnis = AUGEN_DIR
+856-                elif path.startswith("/augen_gaze/"):
+857-                    verzeichnis = GAZE_DIR
+858:                elif path.startswith("/augen_blink/"):
+859:                    verzeichnis = BLINK_DIR
+860-                elif path.startswith("/mund_keyframes/"):
+861-                    verzeichnis = MUND_DIR
+862-                elif path.startswith("/kopf_rgba/"):
+863-                    verzeichnis = KOPF_RGBA_DIR
+864-                elif path.startswith("/koerper_rgba/"):
+865-                    verzeichnis = KOERPER_RGBA_DIR
+866-                else:
+867-                    verzeichnis = KOPF_DIR
+868-                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+869-                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+870-                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+871-                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+872-                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+873-                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+874-                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+875-                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+876-                # "." und ".." fliegen raus, damit bleibt der Zugriff im
+877-                # zustaendigen Verzeichnis.
+===HTML_BLINK_SRC===
+300-     echten Signals (opacity bleibt am echten "anwesend&&nah"-Zustand
+301-     haengen, siehe gazeSchritt() im Skript) -- keine neue Behauptung. */
+302-  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+303-    transform-origin:70.38% 241.32%;
+304-    z-index:4;pointer-events:none;opacity:0;
+305-    filter:drop-shadow(0 0 5px rgba(255,63,45,.6)) drop-shadow(0 0 11px rgba(255,90,40,.35));
+306-    transition:opacity .35s ease-in-out;will-change:transform}
+307-  /* ⭐ 2026-09-11 (Animations-Agent): echtes Blinzeln aus 12 fotografierten
+308:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+309-     dieselbe Geometrie/Verankerung wie der /augen_gaze/-Flicken oben, deshalb
+310-     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+311-     das Lid das Auge inkl. Glimmer verdeckt. Läuft UNABHAENGIG von der
+312-     Gesichtserkennung (Blinzeln ist kein Blick -- es behauptet keine
+313-     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+314-     bleibt. */
+315-  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+316-    transform-origin:70.38% 241.32%;
+--
+416-                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+417-                 Flicken stur an der Null-Grad-Stelle stehen, waehrend das Kopf-
+418-                 foto darunter tatsaechlich gekippt war -- die harte Rechteckkante
+419-                 des Flickens schnitt sichtbar durch die schraege Stirn/Wange =
+420-                 genau der "zweite Kopf, der durchscheint". Fix: beide jetzt HIER
+421-                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+422-                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+423-            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+425-            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+426-          </div>
+427-        </div>
+428-        <canvas id="regen"></canvas>
+429-        <div id="farbschicht"></div>
+430-        <div id="wasserlinie"></div>
+431-        <div id="vignette"></div>
+432-      </div>
+--
+1172-// Schliessen (halb1+zu-Haltezeit) zusammen ~65-100ms, Oeffnen (halb2) allein
+1173-// ~130-170ms -- grobe Zielwerte ~80ms zu / ~150ms auf, mit Streuung gegen
+1174-// Gleichfoermigkeit.
+1175-function blinzelDauerSchliessen(){ return 15 + Math.random()*5; }
+1176-function blinzelDauerGeschlossenHalten(){ return 30 + Math.random()*20; }
+1177-function blinzelDauerOeffnen(){ return 40 + Math.random()*12; }
+1178-// ⭐⭐ 2026-09-11 (Animations-Agent) ECHTES BLINZELN: statt nur einer
+1179-// Zustands-Phasen-Meldung spielt blinzeln() jetzt die 12 fotografierten
+1180:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1181-// geschlossen -> 11 offen, 00 und 11 identisch = Loop-Punkt) als echtes
+1182-// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1183-// Frames 00-08 SCHLIESSEN (deshalb 9 kurze Schritte), 09-11 OEFFNEN (3
+1184-// laengere) -- ein echtes Lid faellt schnell und geht langsamer auf.
+1185-// Gesamt ~300-340ms (Gabriels Vorgabe 250-350ms).
+1186-// ⚠️ Galton-Watson-Regel UNVERAENDERT (siehe LECK-FIX oben): EINE
+1187-// Selbstartende-Kette, der Doppelschlag bleibt ein einmaliger Bonus ohne
+1188-// eigene Fortpflanzung (zeitplanNeu=false). blinzelAbspielen() ist eine
+1189-// ENDLICHE Kette -- sie erzeugt nie eine neue Kette, sie liefert nur an
+1190-// blinzelWeiterPlanen() zurueck. Blinzeln bleibt unabhaengig von der
+1191-// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1192-// bleibt erkennungs-gekoppelt. Läuft NICHT ueber einem Sonderausdruck
+1193-// (dessen Frames tragen ihre eigenen Augen).
+1194:function blinzeln(zeitplanNeu = true){
+1195-  if(_sonderLaeuft){
+1196-    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+1197-    return;
+1198-  }
+1199-  const schritte = [];
+1200-  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+1201-  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+1202-  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+--
+1208-    blinzelPhase = null; gesichtNeuZeichnen(false);
+1209-    if(zeitplanNeu){
+1210-      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1211-      blinzelWeiterPlanen();
+1212-    }
+1213-    return;
+1214-  }
+1215-  const [frame, dauer, phase] = schritte[idx];
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217-  $("augen-blink").style.opacity = "1";
+1218-  blinzelPhase = phase; gesichtNeuZeichnen(false);
+1219-  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1220-}
+1221-function blinzelWeiterPlanen(){
+1222-  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1223-}
+1224-blinzelWeiterPlanen();
+===HTTP_HEADERS===
+HTTP/1.0 501 Unsupported method ('HEAD')
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Sat, 12 Sep 2026 00:36:22 GMT
+Connection: close
+Content-Type: text/html;charset=utf-8
+Content-Length: 357
+

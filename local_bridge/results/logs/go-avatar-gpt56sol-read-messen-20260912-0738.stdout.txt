@@ -1,0 +1,106 @@
+#!/usr/bin/env python3
+"""
+Messer fuer den AI-Face-Filter (Auftrag 2026-09-11, harte Bedingungen):
+
+  1. Alpha byte-identisch (np.array_equal) mit dem Original
+  2. sichtbare bbox (alpha>128) unverschoben
+  3. Kontrast (std Grau im bbox) und Kantenstaerke ((|dx|+|dy|)/2 im bbox)
+     duerfen NICHT sinken
+  4. Helligkeitsverschiebung <= 10 %
+
+Misst Original / _ai / _relief2 / _relief3 / detail-Varianten auf >= 20 Dateien.
+Schreibt tiefe_report.json + druckt die Tabelle.
+"""
+import os
+import json
+import numpy as np
+import cv2
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+
+KOPF = ["kopf_zero_mit_augen.png"] + [f"roll/gier_+00_nick_+00_roll_{s}{v:02d}.png"
+                                      for s, n in [("+", [5, 10, 15, 20, 25]), ("-", [5, 10, 15, 20, 25])]
+                                      for v in n]
+KOERPER = ["master__koerper_zero.png", "atmen__atmen_000.png", "atmen__atmen_006.png",
+           "lehnen__lehnen_+20.png", "lehnen__lehnen_-20.png",
+           "schulterdrehung__schulter_+25.png", "schulterdrehung__schulter_-25.png",
+           "gewicht__gewicht_+15.png", "gewicht__gewicht_-15.png",
+           "schulterzucken__zucken_007.png", "aufrichten__aufrichten_003.png"]
+
+
+def masse(pfad):
+    arr = np.array(Image.open(pfad).convert("RGBA"))
+    al = arr[..., 3]
+    grau = cv2.cvtColor(arr[..., :3], cv2.COLOR_RGB2GRAY)
+    ys, xs = np.where(al > 128)
+    if len(xs) == 0:
+        return None
+    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+    g = grau[y0:y1 + 1, x0:x1 + 1].astype(np.float32)
+    dx = np.abs(np.diff(g, axis=1)).mean()
+    dy = np.abs(np.diff(g, axis=0)).mean()
+    return dict(alpha=al.tobytes(), bbox=(int(x0), int(y0), int(x1), int(y1)),
+                kontrast=round(float(g.std()), 2), kante=round(float((dx + dy) / 2), 3),
+                helligkeit=round(float(g.mean()), 2))
+
+
+def haupt():
+    varianten = [("original", ""), ("ai", "_ai"), ("relief2", "_relief2"), ("relief3", "_relief3")]
+    bericht = {}
+    gruppen = [("kopf", "kopf_rgba", KOPF), ("koerper", "koerper_rgba", KOERPER)]
+    extra_varianten = []
+    for suffix in ("_detail_esrgan", "_detail_bilateral"):
+        if os.path.isdir(os.path.join(VISUAL, "kopf_rgba" + suffix)):
+            extra_varianten.append(("detail" + suffix.replace("_detail", ""), suffix))
+    for gname, quelle, dateien in gruppen:
+        for rel in dateien:
+            p0 = os.path.join(VISUAL, quelle, rel)
+            if not os.path.isfile(p0):
+                continue
+            base = masse(p0)
+            if base is None:
+                continue
+            zeile = {"original": {k: base[k] for k in ("kontrast", "kante", "helligkeit")}}
+            fuer_varianten = varianten + extra_varianten
+            for name, ordner in fuer_varianten:
+                if name == "original":
+                    continue
+                p = os.path.join(VISUAL, quelle + ordner, rel)
+                if not os.path.isfile(p):
+                    continue
+                m = masse(p)
+                gleich_alpha = m["alpha"] == base["alpha"]
+                zeile[name] = {
+                    "alpha_identisch": bool(gleich_alpha),
+                    "bbox_verschoben": m["bbox"] != base["bbox"],
+                    "kontrast": m["kontrast"], "kante": m["kante"], "helligkeit": m["helligkeit"],
+                    "kontrast_%": round((m["kontrast"] / base["kontrast"] - 1) * 100, 1),
+                    "kante_%": round((m["kante"] / base["kante"] - 1) * 100, 1),
+                    "helligkeit_%": round((m["helligkeit"] / base["helligkeit"] - 1) * 100, 1),
+                }
+            bericht[f"{gname}/{rel}"] = zeile
+    out = os.path.join(VISUAL, "tiefe_report.json")
+    with open(out, "w") as f:
+        json.dump(bericht, f, indent=1)
+    # Tabelle
+    print(f"{'datei':52s} {'satz':10s} {'alpha':6s} {'bbox':6s} "
+          f"{'kontrast':>9s} {'kante':>8s} {'helligk':>8s}")
+    for datei, zeile in bericht.items():
+        for name, m in zeile.items():
+            if name == "original":
+                print(f"{datei:52s} {name:10s} {'-':6s} {'-':6s} "
+                      f"{m['kontrast']:9.2f} {m['kante']:8.3f} {m['helligkeit']:8.2f}")
+                continue
+            print(f"{datei:52s} {name:10s} "
+                  f"{'OK' if m['alpha_identisch'] else 'FEHLER':6s} "
+                  f"{'OK' if not m['bbox_verschoben'] else 'VERSHOBEN':6s} "
+                  f"{m['kontrast']:7.2f}({m['kontrast_%']:+5.1f}%) "
+                  f"{m['kante']:6.3f}({m['kante_%']:+5.1f}%) "
+                  f"{m['helligkeit']:6.2f}({m['helligkeit_%']:+5.1f}%)")
+        print()
+    print("->", out)
+
+
+if __name__ == "__main__":
+    haupt()

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-andreas-runtime-route-20260912T0349Z",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "command": "set -u; systemctl is-active entityos-vm.service || true; for p in /home/andreas/frankenstein-repo/scripts/stern.py /opt/entityos/cognition/stern.py /var/lib/entityos/rootfs-run/opt/entityos/cognition/stern.py; do if [ -f \"$p\" ]; then echo FOUND:$p; sha256sum \"$p\"; else echo MISSING:$p; fi; done; git -C /home/andreas/frankenstein-repo rev-parse HEAD 2>/dev/null || true; git -C /home/andreas/frankenstein-repo status --porcelain 2>/dev/null | head -20 || true",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 30
+}

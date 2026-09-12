@@ -1,0 +1,101 @@
+=== HOST ===
+2026-09-12T04:05:08+02:00
+andreas-MACO
+andreas
+=== CHECKOUT ===
+## main...origin/main
+2d0bab710a0b229cbf07c443db2da71e552ab6e3
+=== BLOB IDS ===
+werkzeug/selbsttests.sh 15a040543e3d883103cdd73e6e58c51bb9ab4018
+werkzeug/selbsttests-waechter.py db933c8a9ac154beee31802b5a19b862f61fecdc
+werkzeug/rueckstand_maschinenstatus_selbsttest.sh MISSING
+werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py MISSING
+=== USER TIMER ===
+● grid10-selbsttests.timer - Den Selbsttestsatz stuendlich laufen lassen (meldet nur bei Aenderung)
+     Loaded: loaded (/home/andreas/.config/systemd/user/grid10-selbsttests.timer; enabled; preset: enabled)
+     Active: active (waiting) since Fri 2026-09-11 20:23:17 CEST; 7h ago
+ Invocation: da1cca4977414afaa158b1e410de7840
+    Trigger: Sat 2026-09-12 04:47:53 CEST; 42min left
+   Triggers: ● grid10-selbsttests.service
+
+Sep 11 20:23:17 andreas-MACO systemd[6988]: Started grid10-selbsttests.timer - Den Selbsttestsatz stuendlich laufen lassen (meldet nur bei Aenderung).
+○ grid10-selbsttests.service - GRID10-Selbsttestwaechter — laesst den Selbsttestsatz laufen und meldet Aenderungen
+     Loaded: loaded (/home/andreas/.config/systemd/user/grid10-selbsttests.service; linked; preset: enabled)
+     Active: inactive (dead) since Sat 2026-09-12 03:48:21 CEST; 16min ago
+ Invocation: d31e40099c47421490aea99c7a25a58b
+TriggeredBy: ● grid10-selbsttests.timer
+    Process: 3997924 ExecStart=/usr/bin/python3 /home/andreas/self-integration/werkzeug/selbsttests-waechter.py --still (code=exited, status=0/SUCCESS)
+   Main PID: 3997924 (code=exited, status=0/SUCCESS)
+   Mem peak: 714.9M
+        CPU: 22.746s
+
+Sep 12 03:48:09 andreas-MACO sudo[4004118]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/sqlite3 file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db?mode=ro SELECT count(*) FROM \"reward_log\";
+Sep 12 03:48:09 andreas-MACO sudo[4004118]: pam_unix(sudo:session): session closed for user root
+Sep 12 03:48:09 andreas-MACO sudo[4004122]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+Sep 12 03:48:09 andreas-MACO sudo[4004122]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/stat -c %s /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+Sep 12 03:48:09 andreas-MACO sudo[4004122]: pam_unix(sudo:session): session closed for user root
+Sep 12 03:48:09 andreas-MACO sudo[4004125]: pam_unix(sudo:session): session opened for user root(uid=0) by andreas(uid=1000)
+Sep 12 03:48:09 andreas-MACO sudo[4004125]: andreas :  PWD=/home/andreas/self-integration/werkzeug ; USER=root ; COMMAND=/usr/bin/lsof -F pn -- /var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+Sep 12 03:48:10 andreas-MACO sudo[4004125]: pam_unix(sudo:session): session closed for user root
+Sep 12 03:48:21 andreas-MACO systemd[6988]: Finished grid10-selbsttests.service - GRID10-Selbsttestwaechter — laesst den Selbsttestsatz laufen und meldet Aenderungen.
+Sep 12 03:48:21 andreas-MACO systemd[6988]: grid10-selbsttests.service: Consumed 22.746s CPU time over 28.210s wall clock time, 714.9M memory peak.
+NEXT                          LEFT LAST                            PASSED UNIT                     ACTIVATES
+Sat 2026-09-12 04:47:53 CEST 42min Sat 2026-09-12 03:47:53 CEST 17min ago grid10-selbsttests.timer grid10-selbsttests.service
+
+1 timers listed.
+Pass --all to see loaded but inactive timers, too.
+=== INSTALLED UNIT ===
+# /home/andreas/.config/systemd/user/grid10-selbsttests.service -> /home/andreas/self-integration/werkzeug/systemd/grid10-selbsttests.service
+[Unit]
+Description=GRID10-Selbsttestwaechter — laesst den Selbsttestsatz laufen und meldet Aenderungen
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/self-integration/werkzeug/selbsttests-waechter.py --still
+Nice=15
+IOSchedulingClass=idle
+
+# TMPDIR steht hier NICHT. selbsttests.sh sucht sich seine Temp-Grundlage
+# selbst und sieht dabei nach, ob sie im RAM liegt (Eintrag 076). Wuerde die
+# Unit den Wert vorgeben, haette dieselbe Entscheidung zwei Orte -- und der
+# in der Unit waere der, an den beim naechsten Umbau niemand denkt.
+
+# Gemessen 2026-09-11 (076), auf dieser Maschine:
+#   Laufzeit des Satzes   17-22 s (11 Selbsttests)
+#   Temp-Spitze           339-484 MiB, seit 076 auf Platte statt in tmpfs
+# Der Timer steht auf 60 Minuten. Der Regressionswaechter laeuft alle 30 und
+# braucht 3-6 s; diesen Satz dort mit hineinzuhaengen haette dessen Budget
+# vervierfacht. Das war der Grund, warum 074 die Frage offen gelassen hat --
+# sie ist jetzt beantwortet, nicht umgangen: eigener Timer, eigene Kadenz.
+
+# Dieselbe Unterscheidung wie beim Regressionswaechter (073):
+#   rc=0 gelaufen, nichts Neues
+#   rc=1 der Satz war nicht startbar oder nicht auswertbar -- WERKZEUGFEHLER
+#   rc=2 ein Selbsttest ist gefallen -- DIESES WERKZEUG ARBEITET RICHTIG
+# rc=2 darf die Unit nicht rot faerben, sonst sieht ein echter Werkzeugfehler
+# von aussen genauso aus wie ein gefundener Befund.
+#
+# KOSTEN, damit sie nicht unbemerkt bleiben: python beendet sich bei einem
+# Argumentfehler ebenfalls mit 2 und saehe ab hier erfolgreich aus. Auffangen
+# wuerde das der Verlauf: ein Lauf, der keine Zeile in selbsttestverlauf.tsv
+# schreibt, hat nichts gemessen -- unabhaengig vom Exit-Code.
+SuccessExitStatus=2
+=== HISTORY TAIL ===
+2026-09-11T23:45:50+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T00:47:51+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T01:47:55+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T02:48:08+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T03:48:21+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+=== MESSAGE TAIL ===
+2026-09-11T12:26:51+02:00	datei	Selbsttest-Befund geaendert -- satz: 11/11 -> 12/12
+2026-09-11T16:35:08+02:00	datei	Selbsttest-Befund geaendert -- satz: 12/12 -> 13/13
+=== FAILED USER UNITS ===
+  UNIT                           LOAD   ACTIVE SUB    DESCRIPTION
+● frankenstein-architekt.service loaded failed failed FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)
+● ydotool.service                loaded failed failed Starts ydotoold service
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+2 loaded units listed.

@@ -1,62 +1,66 @@
 {
   "schema": "FRANK_AVATAR_EXPRESSION_EYE_IDENTITY_CANDIDATE/v1",
   "created_at": "2026-09-12T07:34:00+07:00",
-  "status": "SOURCE_CANDIDATE_NOT_LIVE",
+  "updated_at": "2026-09-12T08:04:00+07:00",
+  "status": "REVIEW_ONLY_SUPERSEDED_BY_HOST_DERIVED_EYE_MASK",
   "boundary": "special_expression_eye_identity",
   "live_subject": {
     "host": "ai-core-node",
     "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED",
     "buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
     "buehne_daemon_sha256": "5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2",
-    "neutral_head_sha256": "489e928fd436253c087183a25b01d685d4ba138bc75bc1b3c4c70a415762f261",
     "canonical_gaze_master_sha256": "e9222dde99c5bf84adf838cde2c23284ed1d7b4a5d05c24fe48954871cf64ced"
   },
   "defect": {
     "expression_frames_own_eye_pixels": true,
     "canonical_gaze_suppressed_during_special_expression": true,
     "canonical_blink_suppressed_during_special_expression": true,
-    "source_evidence": [
-      "live buehne.html: sonderausdruckZeigen loads ausdruck_erweitert full-head RGBA frames",
-      "live buehne.html: gazeSchritt forces pupillen-glow opacity 0 while _sonderLaeuft",
-      "live buehne.html: blinzeln returns early while _sonderLaeuft"
-    ]
+    "still_present_after_blink_live_promotion": true
   },
-  "mask": {
-    "source": "validated blink identity candidate e8d09af9b3fb3df9020ee3956111f3ba99a1ce5d",
-    "measured_eye_bbox_patch_319x152": [42, 50, 274, 118],
-    "hard_box_canvas_1536x1024": [513, 170, 851, 294],
-    "soft_box_canvas_1536x1024": [500, 157, 864, 307],
-    "feather_canvas_px": 12
-  },
-  "candidate": {
+  "original_prototype": {
     "builder": "handoff/avatar-expression-eye-identity-20260912/build_canonical_eye_expressions.py",
     "html_patcher": "handoff/avatar-expression-eye-identity-20260912/patch_buehne_canonical_eye_identity.py",
-    "expected_expression_dirs": 44,
-    "expected_frames": 308,
-    "output_is_shadow_tree": true,
-    "source_tree_mutated_by_builder": false
+    "classification": "REVIEW_ONLY_DO_NOT_PROMOTE",
+    "reason": "a stronger independently derived real-host eye mask now exists; maintaining a second eye-mask authority would create duplicate mutation and identity drift risk"
   },
-  "local_static_validation": {
-    "python_compile_builder": "PASS",
-    "python_compile_html_patcher": "PASS",
-    "synthetic_rgba_outside_mask_identity": "PASS",
-    "synthetic_rgba_hard_core_neutral_identity": "PASS",
-    "html_replacement_pattern_unit_probe": "PASS"
+  "superseding_host_candidate": {
+    "command_id": "go-avatar-review-eye-mask-shadow-v1-20260912-0732",
+    "scope": "SHADOW_EYE_ONLY_ASSET_CANDIDATE_NO_LIVE_MUTATION",
+    "mask_derivation": "open-vs-closed RGB delta >=70 inside measured gaze focus; two largest eye components; union real gaze alpha; hard dilation; feather",
+    "mask_sha256": "321ef6fa09c6dfb72ab9eb486d623b49d5a4e9c512ace80bfd09ef4e7f3867b0",
+    "open_plate_sha256": "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9",
+    "manifest_sha256": "2e16c2fb6f7ed3b204a093707492826dd81bd146677604f3c07430ff9db41d95",
+    "patch_bbox": [39, 52, 273, 117],
+    "full_canvas_nonzero_fraction": 0.009863,
+    "live_files_mutated_by_shadow_build": 0
   },
-  "dependency_fence": {
-    "requires_blink_identity_candidate_live_acceptance": true,
-    "blink_candidate_commit": "e8d09af9b3fb3df9020ee3956111f3ba99a1ce5d",
-    "reason": "old blink frames have high alpha coverage and can reintroduce noncanonical eye/skin pixels"
+  "independent_expression_validation": {
+    "command_id": "go-avatar-review-eye-identity-variance-20260912-0734",
+    "expression_frames": 308,
+    "core_variance_reduction_pct": 99.811,
+    "mid_variance_reduction_pct": 98.728,
+    "outside_mask_max_delta": 0,
+    "classification": "REAL_HOST_READ_ONLY_SUPPORTS_MASK_METHOD"
+  },
+  "blink_dependency": {
+    "command_id": "go-avatar-gpt56sol-blink-relief2-live-promote-20260912-0744",
+    "status": "PASS",
+    "active_relief2_http_readback": "PASS",
+    "fps_median": 60.0,
+    "fps_min": 60.0,
+    "live_runtime_gate": "PASS"
   },
   "credit": {
-    "source_candidate": 1,
-    "real_asset_build": 0,
-    "live_runtime": 0,
-    "live_visual_acceptance": 0,
+    "this_branch_source_candidate": 1,
+    "this_branch_mutation_authority": 0,
+    "host_mask_read_only_evidence": 1,
+    "blink_real_host_runtime": 1,
+    "special_expression_live_runtime": 0,
+    "special_expression_live_visual_acceptance": 0,
     "grid10": 0,
     "gwt_jspace": 0,
     "training": 0,
     "whole_product": 0
   },
-  "next_exact_gate": "after blink identity live acceptance, run builder on the exact live asset subject in staging; require 44x7 manifest and zero pixel-invariant failures before any live write"
+  "next_exact_gate": "reuse the single host-derived eye_identity_mask/open plate and current accepted relief2 blink subject; repair or replace the isolated-browser special-expression A/B harness, then only if it passes perform a reversible live integration of canonical eye identity during special expressions"
 }

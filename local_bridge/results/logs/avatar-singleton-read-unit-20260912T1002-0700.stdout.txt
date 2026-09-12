@@ -1,0 +1,17 @@
+# /home/ai-core-node/.config/systemd/user/frankenstein-buehne.service
+[Unit]
+Description=FranKenstein Buehne / Livestream-Fenster (paket-1789069809553-3831a7, Port 8788, persistent)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+Environment=UDB_DB_PATH=/home/ai-core-node/.local/share/agentzero/unified.db
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

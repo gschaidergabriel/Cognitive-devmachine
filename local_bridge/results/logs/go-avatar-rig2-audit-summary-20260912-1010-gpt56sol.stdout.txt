@@ -1,0 +1,104 @@
+=== RIG2 ROOT ===
+rig2/manifest.json size=168696 mtime=2026-09-12 03:15:53.643702416 +0700
+rig_referenz/build_rig_v2.py size=24544 mtime=2026-09-11 18:35:40.952391835 +0700
+642240b97975e2fa4cab268d30259cccd176476383d4aeff3b44d8a9ccf6953d  rig2/manifest.json
+e08f53af71b253c8dcb8f655f65c6f68395a27bf30c860e50a25856c871cf2af  rig_referenz/build_rig_v2.py
+=== TOP MANIFEST ===
+{
+  "schema": "frankenstein-avatar-rig-v2",
+  "canvas": {
+    "width": 1536,
+    "height": 1024
+  },
+  "neutral_pose": {
+    "yaw": 0,
+    "pitch": 0,
+    "roll": 0,
+    "description": "slightly forward, chin subtly lowered"
+  },
+  "head_neck_anchor": {
+    "x": 768,
+    "y": 600
+  },
+  "assets": [
+    {
+      "path": "kopf/master/kopf_zero_mit_augen.png",
+      "layer": "head",
+      "rgba": true,
+      "quality": "rig_ready",
+      "anchor": {
+        "x": 768,
+        "y": 600
+      }
+    },
+    {
+      "path": "kopf/master/kopf_zero_ohne_rotes_augenglow.png",
+      "layer": "head",
+      "rgba": true,
+      "quality": "rig_ready",
+      "anchor": {
+        "x": 768,
+        "y": 600
+      }
+    },
+    {
+      "path": "koerper/master/koerper_zero.png",
+      "layer": "body",
+      "rgba": true,
+      "quality": "rig_ready",
+      "neck_anchor": {
+        "x": 768,
+        "y": 505
+      }
+    },
+    {
+      "path": "kopf/roll/gier_+00_nick_+00_roll_-25.png",
+      "layer": "head",
+      "rgba": true,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": -25,
+      "anchor": {
+        "x": 768,
+        "y": 600
+      },
+      "quality": "rig_ready_2d_roll"
+    },
+    {
+      "path": "kopf/roll/gier_+00_nick_+00_roll_-20.png",
+      "layer": "head",
+      "rgba": true,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": -20,
+      "anchor": {
+        "x": 768,
+        "y": 600
+      },
+      "quality": "rig_ready_2d_roll"
+    },
+    {
+      "path": "kopf/roll/gier_+00_nick_+00_roll_-15.png",
+      "layer": "head",
+      "rgba": true,
+      "yaw": 0,
+      "pitch": 0,
+      "roll": -15,
+=== FILE COUNTS ===
+augen_anker_exakt.json 1
+manifest.json 1
+messen_augenanker_exakt.py 1
+TOTAL_FILES=3
+184K	rig2
+=== QA FILES ===
+=== STATUS/README ===
+=== INCOMING IDENTITY ===
+=== IMAGE QA SUMMARY ===
+MANIFEST_ASSETS 659
+QUALITY_COUNTS {"experimental_2d_proxy_not_true_3d": 39, "rig_ready": 13, "rig_ready_2d_roll": 11, "rig_ready_crossfade": 192, "rig_ready_generated_patch": 36, "rig_ready_procedural_2d": 68, "rig_ready_seamless_periodic": 300}
+MISSING_OR_BROKEN 659 ['kopf/master/kopf_zero_mit_augen.png', 'kopf/master/kopf_zero_ohne_rotes_augenglow.png', 'koerper/master/koerper_zero.png', 'kopf/roll/gier_+00_nick_+00_roll_-25.png', 'kopf/roll/gier_+00_nick_+00_roll_-20.png', 'kopf/roll/gier_+00_nick_+00_roll_-15.png', 'kopf/roll/gier_+00_nick_+00_roll_-10.png', 'kopf/roll/gier_+00_nick_+00_roll_-05.png', 'kopf/roll/gier_+00_nick_+00_roll_+00.png', 'kopf/roll/gier_+00_nick_+00_roll_+05.png']
+DIMS {}
+RGBA_COUNT 0 RGBA_WITH_TRANSPARENCY 0 RGBA_ALL_OPAQUE 0
+QA_SUMMARY=FAIL
+=== LIVE HASH UNTOUCHED ===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html

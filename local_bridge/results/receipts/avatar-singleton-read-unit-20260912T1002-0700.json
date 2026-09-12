@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "avatar-singleton-read-unit-20260912T1002-0700",
+  "command_sha256": "89d0835c25d36a8b04bc370a16aa7f8cc40276a5e5f86da553e7c3f6b4bfc086",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:06:03.483753+00:00",
+  "finished_at": "2026-09-12T03:06:03.483899+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "1d21942527e39bb4d6fdef4b29b8c3c814ec1758ffb2910fb66cf20d1e314c44",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "# /home/ai-core-node/.config/systemd/user/frankenstein-buehne.service\n[Unit]\nDescription=FranKenstein Buehne / Livestream-Fenster (paket-1789069809553-3831a7, Port 8788, persistent)\nAfter=network-online.target\nWants=network-online.target\nStartLimitIntervalSec=600\nStartLimitBurst=5\n\n[Service]\nType=simple\nEnvironment=UDB_DB_PATH=/home/ai-core-node/.local/share/agentzero/unified.db\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py\nRestart=on-failure\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "1d21942527e39bb4d6fdef4b29b8c3c814ec1758ffb2910fb66cf20d1e314c44",
+    "bytes": 533,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

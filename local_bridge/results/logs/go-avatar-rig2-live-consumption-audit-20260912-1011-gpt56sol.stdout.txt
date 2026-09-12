@@ -1,0 +1,32 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+=== DIRECT RIG2 REFERENCES ===
+839:// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt
+=== CURRENT ASSET ROOT REFERENCES ===
+139:     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --
+396:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+398:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+399:            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+404:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+416:                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+689:  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+718:// Feder. /kopf_rgba/roll/ enthaelt 11 echte Posen (gier_+00_nick_+00_roll_+NN,
+732:  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? "-" : "+"}${String(Math.abs(w)).padStart(2,"0")}.png`;
+894:// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+1523:// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+1712:  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+1733:// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+1743:      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+1745:      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+1748:      `/koerper_rgba/lehnen/${n}.png`) },
+1752:      `/koerper_rgba/gewicht/${n}.png`) },
+1756:      `/koerper_rgba/schulterdrehung/${n}.png`) }
+=== RIG2 LIVE HTTP PROBE ===
+/rig2/manifest.json HTTP=404 BYTES=0
+/rig2/kopf/master/kopf_zero_mit_augen.png HTTP=404 BYTES=0
+/rig2/koerper/master/koerper_zero.png HTTP=404 BYTES=0
+LIVE_POST_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+RIG2_CONSUMPTION_AUDIT=PASS

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-rig2-live-consumption-audit-20260912-1011-gpt56sol",
+  "command_sha256": "206adad359ca18fb768de3989245814d136d9bbf868bbb653111e5cfde7cb7a0",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:06:57.489844+00:00",
+  "finished_at": "2026-09-12T03:06:57.552444+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9d896133f121fc1db4f80a3223a99a7a9f351ea8d84a8a18ed09f7a28c127959",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\n=== DIRECT RIG2 REFERENCES ===\n839:// rig2/messen_augenanker_exakt.py + rig2/augen_anker_exakt.json) statt\n=== CURRENT ASSET ROOT REFERENCES ===\n139:     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --\n396:          <div id=\"koerper-dreh\"><img id=\"koerper-schicht\" src=\"/koerper_rgba/koerper_zero.png\" alt=\"\"><img id=\"koerper-schicht2\" src=\"/koerper_rgba/koerper_zero.png\" alt=\"\"></div>\n398:            <img id=\"kopf-schicht\" src=\"/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png\" alt=\"\">\n399:            <!-- \u2b50 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte\n404:            <img id=\"kopf-schicht2\" src=\"/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png\" alt=\"\">\n416:                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-\n425:            <img id=\"mund-effekt\" src=\"/mund_keyframes/mund_00_rest.png\" alt=\"\">\n519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)\n520:    .concat([`/mund_keyframes/${name}.png`]);\n689:  $(\"hg-frame\").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;\n718:// Feder. /kopf_rgba/roll/ enthaelt 11 echte Posen (gier_+00_nick_+00_roll_+NN,\n732:  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? \"-\" : \"+\"}${String(Math.abs(w)).padStart(2,\"0\")}.png`;\n894:// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind\n975:    if(!mundAktivFrames) $(\"mund-effekt\").src = `/mund_keyframes/${MUND_RUHE}.png`;\n1523:// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und\n1712:  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,\"0\")}.png`);\n1733:// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).\n1743:      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,\"0\")}.png`) },\n1745:      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,\"0\")}.png`) },\n1748:      `/koerper_rgba/lehnen/${n}.png`) },\n1752:      `/koerper_rgba/gewicht/${n}.png`) },\n1756:      `/koerper_rgba/schulterdrehung/${n}.png`) }\n=== RIG2 LIVE HTTP PROBE ===\n/rig2/manifest.json HTTP=404 BYTES=0\n/rig2/kopf/master/kopf_zero_mit_augen.png HTTP=404 BYTES=0\n/rig2/koerper/master/koerper_zero.png HTTP=404 BYTES=0\nLIVE_POST_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nRIG2_CONSUMPTION_AUDIT=PASS\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,7 +1,8 @@
 {
-  "schema": "AVATAR_DOM_WEBGL_DISCRIMINATOR/v1",
+  "schema": "AVATAR_DOM_WEBGL_DISCRIMINATOR/v2",
   "created_at": "2026-09-12T02:08:00Z",
-  "status": "PARTIAL_CAUSE_PROVEN_REMAINDER_OPEN",
+  "updated_at": "2026-09-12T02:09:00Z",
+  "status": "Y_ORIENTATION_PARTIAL_CAUSE_PROVEN_SAMPLING_NOT_SUFFICIENT_COLOR_PREMULTIPLY_NEXT",
   "scope": "read-only scratch discriminators on REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED; no live avatar source mutation; no promotion to live/WebGL/product credit",
   "subject": {
     "live_buehne_html_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e",
@@ -52,19 +53,42 @@
         "rgb_mae_ratio_vs_original": 0.483366060594253
       },
       "causal_conclusion": "The double Y-flip/orientation contradiction is a real causal defect in the screenshot gate/harness, responsible for roughly half of the observed mismatch by these metrics. It is not the complete cause."
+    },
+    {
+      "name": "production_geometry_sampling_discriminator",
+      "result": "SAMPLING_NOT_SUFFICIENT",
+      "source": "parallel worker receipt committed on chatgpt-local-ai-core-node-results",
+      "evidence_commit": "764a450a6b9a2df47b7b132a117f6e5a8a0c3ae9",
+      "command_id": "go-avatar-gpt56sol-dom-webgl-sampling-discriminator-20260912-0906",
+      "geometry": [620, 414],
+      "cases": 6,
+      "key_metrics": {
+        "raw_max_changed_frac_ge3": 0.30587501947950757,
+        "raw_max_rgb_mae": 10.36408368396447,
+        "raw_max_rgb_p99": 168.0,
+        "resized_max_changed_frac_ge3": 0.30587501947950757,
+        "resized_max_rgb_mae": 10.36408368396447,
+        "resized_to_raw_mae_ratio": 1.0,
+        "resized_to_raw_changed_ratio": 1.0
+      },
+      "causal_conclusion": "Moving to production-like 620x414 geometry does not collapse the residual mismatch. Extreme 120x80 downsampling/resampling is therefore not sufficient to explain the remaining error."
     }
   ],
+  "coordination": {
+    "redundant_command_cancelled": "go-avatar-gpt56sol-dom-webgl-scale-discriminator-20260912-0906",
+    "control_branch_cancel_commit": "356293b38d0ae2c2e9761afcaf4a9c7261e9be69",
+    "reason": "A parallel worker closed the same sampling boundary first with a stronger production-geometry discriminator; duplicate execution was removed before opening further breadth."
+  },
   "remaining_hypotheses_ranked": [
     {
       "rank": 1,
-      "hypothesis": "The gate's 1536x1024 -> 120x80 extreme downscale compares Chrome DOM image-resampling against WebGL LINEAR texture sampling, creating a large final-pixel confound independent of source-over correctness.",
-      "discriminator": "Repeat the same gate with only Y fixed and substantially larger render size; do not mutate live source.",
-      "pending_command_id": "go-avatar-gpt56sol-dom-webgl-scale-discriminator-20260912-0906"
+      "hypothesis": "Residual DOM-vs-WebGL color/compositing semantics differ, especially premultiplication/alpha/color-space handling between DOM compositor and manual WebGL shader path.",
+      "discriminator": "At production-like geometry and fixed Y orientation, run opaque-control, alpha-control, premultiplied-vs-straight upload/shader variants and a same-texture identity control. Keep live source read-only."
     },
     {
       "rank": 2,
-      "hypothesis": "Residual DOM-vs-WebGL color/compositing semantics differ (color space, premultiplication, browser raster path).",
-      "discriminator": "Only if scale does not explain the remainder: isolate same-size/no-resample and opaque-vs-alpha controls before any production integration."
+      "hypothesis": "The screenshot comparison includes an unmodeled geometry/rasterization offset unrelated to scale (pixel-center convention, viewport/canvas CSS-vs-backing-store mapping, alpha backdrop interaction).",
+      "discriminator": "If premultiply/color controls do not collapse the error, compare one identical opaque source in DOM and WebGL and estimate spatial registration before any blend."
     }
   ],
   "negative_credit_boundaries": {
@@ -74,5 +98,5 @@
     "whole_avatar_credit": 0,
     "whole_product_credit": 0
   },
-  "next_exact_action": "Resolve pending scale discriminator receipt; if mismatch collapses, repair the measurement gate before judging WebGL composition. If it does not collapse, isolate browser compositing/color semantics with no live mutation."
+  "next_exact_action": "Use the already-signaled COLOR_PREMULTIPLY discriminator lane; do not patch live body rendering until a same-subject read-only control identifies which compositor semantic causes the residual ~30 percent changed-pixel field."
 }

@@ -1,0 +1,272 @@
+===SUBJECT===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+===SERVICE===
+active
+===GIT===
+===HTML_KEY_LINES===
+19:  html,body{margin:0;height:100%;background:#050308;color:var(--text);
+79:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+129:     anderes. Loesung: #kopf-canvas ist eine per JS (kopfCanvasAnpassen(),
+146:  #kopf-canvas{position:absolute;pointer-events:none;filter:drop-shadow(4px 7px 10px rgba(0,0,0,0.28))}
+177:     existieren in /ausdruck_erweitert/ als echte 1536x1024-RGBA mit
+228:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+229:  #gesicht-rahmen.pose-wechsel{animation:pose-overshoot .38s cubic-bezier(.32,1.55,.6,1)}
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+272:     Alle vier Prozent gelten relativ zu #kopf-canvas (der vollen Leinwand),
+283:     manifest.json (eyes_glow center 610,207 auf 1536x1024) umgerechnet auf
+286:     gazeSchritt() unten. "nichts erfinden": ohne echte Erkennung kein Glow. */
+301:     haengen, siehe gazeSchritt() im Skript) -- keine neue Behauptung. */
+308:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+309:     dieselbe Geometrie/Verankerung wie der /augen_gaze/-Flicken oben, deshalb
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+364:<body>
+383:      <canvas id="regen-hinten"></canvas>
+387:        <!-- ⭐⭐ 2026-09-11 #kopf-canvas: siehe CSS-Kommentar oben ("KOPF-LEINWAND").
+390:             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+395:        <div id="kopf-canvas">
+399:            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+400:                 Posen (gier_+00_nick_+00_roll_+NN, ±25° in 5°-Schritten, PIL:
+401:                 roll_+00 pixelgleich mit kopf_zero_ohne_rotes_augenglow).
+404:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+412:                 Ursache selbst gefunden per Screenshot waehrend Testrolle 'k'):
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+415:                 wenn #kopf-schicht/#kopf-schicht2 auf eine echte Rollpose
+416:                 (/kopf_rgba/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+423:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+428:        <canvas id="regen"></canvas>
+458:// Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+459:// wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+469:// zurueckscrollt; aeltere fallen vorne raus (Livestream-Logik, kein Archiv --
+473:  const amBoden = (chatZeilen.scrollHeight - chatZeilen.scrollTop - chatZeilen.clientHeight) < 24;
+487:  if(amBoden) chatZeilen.scrollTop = chatZeilen.scrollHeight;
+594:    body: JSON.stringify({text})});
+614:      body: datei});
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+648:  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+650:// ⭐ 2026-09-11 LAZY-BILDCACHE: grosse RGBA-Frames (Kopfrollen, Koerper-Aktionen)
+701:let kopfPose = null; // null | "roll" -- siehe kopfWeiterPlanen()/kopfRollTick()
+718:// Feder. /kopf_rgba/roll/ enthaelt 11 echte Posen (gier_+00_nick_+00_roll_+NN,
+719:// ±25° in 5°-Schritten; PIL-Nachweis: roll_+00 ist pixelgleich mit dem
+732:  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? "-" : "+"}${String(Math.abs(w)).padStart(2,"0")}.png`;
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+785:// Rollpose (bis ±25°, siehe KOPF_ROLL_POOL) nicht -- die Feder zielt bewusst
+805://       einer echten Rollpose) um kDrehRot Grad (bis 3°) hinter dem echten
+828:// TRANSLATION: kopf/roll/*.png entstehen laut Erzeugungsskript per
+857:  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+883:  $("augen-blink").style.transform =
+899:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+934:// Jetzt: dieselben /ausdruck_erweitert/.../frontal/stufe_NN.png-Sequenzen
+940:// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+949:  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+966:      rahmen.classList.remove("pose-wechsel");
+967:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+968:      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+1180:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1207:    $("augen-blink").style.opacity = "0";
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217:  $("augen-blink").style.opacity = "1";
+1287:// Glimmer-Spielraum wie bisher (siehe maxPx in gazeSchritt()), nur ein
+1298:function gazeBasisSichtbar(){
+1311:  if(gazeBasisSichtbar() && gespraechsFokus !== "thema"){
+1333:let gazeSichtbar = false;
+1349:// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+1379:function gazeZielBestimmen(){
+1380:  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+1385:function gazeSchritt(){
+1386:  const ziel = gazeZielBestimmen();
+1394:  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1406:  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+1434:  kopfPose = "roll"; kopfRollSoll = ziel;
+1462:  // Mikro-Pause), wird jetzt PRO FRAME in gazeZielBestimmen()/gazeSchritt()
+1495:const canvas = $("regen");           // vorne, ueber dem Gesicht
+1496:const ctx = canvas.getContext("2d");
+1497:const canvasHinten = $("regen-hinten"); // hinten, hinter dem Rahmen
+1498:const ctxHinten = canvasHinten.getContext("2d");
+1504:  canvas.width = r.width; canvas.height = r.height;
+1510:  canvasHinten.width = b.width; canvasHinten.height = b.height;
+1515:// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+1541:  const kc = $("kopf-canvas");
+1562:    x: Math.random() * canvas.width, y: -10,
+1573:    x: Math.random() * canvasHinten.width, y: -10,
+1592:  regenZeichnenEbene(ctx, canvas, tropfenVorne, 0.5, 1.4);
+1593:  tropfenVorne = tropfenVorne.filter(t => t.y < canvas.height + 20);
+1594:  regenZeichnenEbene(ctxHinten, canvasHinten, tropfenHinten, 0.28, 1.0);
+1595:  tropfenHinten = tropfenHinten.filter(t => t.y < canvasHinten.height + 20);
+1626:// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+1854:// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+1881:  gazeSchritt();
+1904:    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+1966:      kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+2004:       Abschalten: Datei filmlook.js leeren -- die Seite laeuft ohne. -->
+2005:  <script src="/filmlook.js"></script>
+2006:</body>
+===ASSET_COUNTS===
+kopf_ausrichten.py 1
+kopf_rgba 63
+kopf_rgba_ai 63
+kopf_rgba_detail 12
+kopf_rgba_detail_bilateral 13
+kopf_rgba_detail_esrgan 13
+kopf_rgba_parallax 48
+kopf_rgba_proxy 31
+kopf_rgba_relief 63
+kopf_rgba_relief2 63
+kopf_rgba_relief3 63
+kopf_rgba_tiefe 112
+kopf_rgba_tiefe_bilateral 0
+kopf_rgba_tiefe_detail 12
+kopf_rgba_tiefe_esrgan 0
+kopf_yaw_neu 4
+kopf_zugeschnitten 5
+augen 9
+augen_anker_gemessen.json 1
+augen_blink 12
+augen_blink_ai 12
+augen_blink_relief2 12
+augen_gaze 10
+augen_gaze_ai 22
+augen_gaze_relief 10
+augen_gaze_relief2 22
+augen_zugeschnitten 9
+ausdruck_erweitert 396
+ausdruck_erweitert_ai 396
+ausdruck_erweitert_relief2 396
+koerper_rgba 138
+koerper_rgba_ai 138
+koerper_rgba_detail 1
+koerper_rgba_detail_bilateral 2
+koerper_rgba_detail_esrgan 2
+koerper_rgba_relief 138
+koerper_rgba_relief2 138
+koerper_rgba_relief3 138
+koerper_rgba_tiefe 138
+koerper_rgba_tiefe_detail 1
+koerper_rgba_tiefe_esrgan 0
+augen_blink_relief2 12
+augen_gaze_relief 10
+augen_gaze_relief2 22
+ausdruck_erweitert_relief 792
+ausdruck_erweitert_relief2 396
+koerper_rgba_relief 138
+koerper_rgba_relief2 138
+koerper_rgba_relief3 138
+kopf_rgba_relief 63
+kopf_rgba_relief2 63
+kopf_rgba_relief3 63
+mund_keyframes_relief 221
+mund_keyframes_relief2 401
+===TOP_LEVEL===
+artifacts
+augen
+augen_anker_gemessen.json
+augen_blink
+augen_blink_ai
+augen_blink_relief2
+augen_gaze
+augen_gaze_ai
+augen_gaze_relief
+augen_gaze_relief2
+augen_zugeschnitten
+ausdruck
+ausdruck_erweitert
+ausdruck_erweitert_ai
+ausdruck_erweitert_relief
+ausdruck_erweitert_relief2
+ausdruck_zugeschnitten
+beobachtung.py
+blick.py
+blick_waechter.py
+buehne_daemon.py
+buehne_daemon.py.go-gpu-backup-20260912T0708
+buehne.html
+buehne.html.go-roll-atomic-backup-20260912T0724
+buehne_lokal.db
+buehne_pruefen.py
+chrome.log
+chrome.pid
+chrome-profile
+detail_bauen.py
+filmlook.js
+FILTER_KONZEPT.md
+gesichtsfilter.py
+.go_backups
+.go_evidence
+hintergrund
+kamera.lock
+koerper_rgba
+koerper_rgba_ai
+koerper_rgba_detail
+koerper_rgba_detail_bilateral
+koerper_rgba_detail_esrgan
+koerper_rgba_relief
+koerper_rgba_relief2
+koerper_rgba_relief3
+koerper_rgba_tiefe
+koerper_rgba_tiefe_detail
+koerper_rgba_tiefe_esrgan
+kopf
+kopf_ausrichten.py
+kopf_rgba
+kopf_rgba_ai
+kopf_rgba_detail
+kopf_rgba_detail_bilateral
+kopf_rgba_detail_esrgan
+kopf_rgba_parallax
+kopf_rgba_proxy
+kopf_rgba_relief
+kopf_rgba_relief2
+kopf_rgba_relief3
+kopf_rgba_tiefe
+kopf_rgba_tiefe_bilateral
+kopf_rgba_tiefe_detail
+kopf_rgba_tiefe_esrgan
+kopf_yaw_neu
+kopf_zugeschnitten
+liveblick_10.png
+liveblick_11.png
+messen_augenanker.py
+messen.py
+models
+mund_keyframes
+mund_keyframes_ai
+mund_keyframes_relief
+mund_keyframes_relief2
+__pycache__
+retina_pruefen.py
+rig2
+rig_referenz
+rig_v2_incoming
+test_augen_offset.py
+tiefe_bauen.py
+tiefe_report.json
+uploads
+venv_ai
+visual_cli.py
+zustand.json
+===RESOURCE===
+    PID %CPU %MEM COMMAND         COMMAND
+1633094 55.9  0.8 chrome          /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1633059 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,14452861201029787924,5038481208618509750,262144 --field-trial-handle=3,i,5391559506304839707,764965427800182910,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,996463095315345332,17637274377469731050,4 --trace-process-track-uuid=3190708988185955192
+1632280 53.5  0.6 python3         /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+2285086 47.5  2.0 python3         /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+1633246 39.2  1.2 chrome          /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1633059 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=375515047789 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7824572247070827228,10314862039897205174,2097152 --field-trial-handle=3,i,5391559506304839707,764965427800182910,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,996463095315345332,17637274377469731050,4 --trace-process-track-uuid=3190708990997080739
+1903884 32.0  2.9 Isolated Web Co /snap/firefox/8863/usr/lib/firefox/firefox -contentproc -isForBrowser -prefsHandle 0:52015 -prefMapHandle 1:297087 -jsInitHandle 2:160936 -parentBuildID 20260904071051 -sandboxReporter 3 -chrootClient 4 -ipcHandle 5 -initialChannelId {957b511f-b16a-4dc9-86ca-fd898ab8dacd} -parentPid 1901088 -crashHelperPid 1901888 -crashHelper 6 -crashReporter 7 -greomni /snap/firefox/8863/usr/lib/firefox/omni.ja -appomni /snap/firefox/8863/usr/lib/firefox/browser/omni.ja -appDir /snap/firefox/8863/usr/lib/firefox/browser 8 tab
+1901088 27.7  2.8 firefox         /snap/firefox/8863/usr/lib/firefox/firefox
+1528353  7.8  0.3 Xorg            /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+4078427  7.1  0.0 python3         /usr/bin/python3 -m services.nerd_physics.main
+1633095  6.6  0.3 chrome          /opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=1633059 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,7118149224122267177,10865436031146273372,524288 --field-trial-handle=3,i,5391559506304839707,764965427800182910,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,996463095315345332,17637274377469731050,4 --trace-process-track-uuid=3190708989122997041
+1532239  6.1  0.5 gnome-shell     /usr/bin/gnome-shell
+1016794  5.9  0.7 python3         /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+1533496  5.5  2.9 claude          claude --dangerously-skip-permissions
+1073846  5.3  1.9 claude          claude --dangerously-skip-permissions
+1939975  4.6  0.0 ssh             ssh -o ConnectTimeout=6 -o BatchMode=yes frank-api /usr/bin/python3 /usr/local/sbin/clay-herzschlag-empfang ai-core-node-projekt-frankenstein
+2237670  3.4  0.0 python3         /usr/bin/python3 /home/ai-core-node/.claude/star/cortex_dashboard.py
+1939954  3.5  0.0 python3         /usr/bin/python3 /usr/local/sbin/clay-herzschlag
+   2491  3.2  0.1 pipewire-pulse  /usr/bin/pipewire-pulse
+SCOPE=READ_ONLY_GO_REENTRY_INSPECTION

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-pr2179-vps-locate-20260912-1328",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nimport json, pathlib, subprocess\ncandidates=[]\nfor raw in ['/workspace/omega_runtime','/workspace','/opt/omega','/srv/omega','/home/omega','/root/clay-global-research-entity']:\n    p=pathlib.Path(raw)\n    if not p.exists():\n        continue\n    item={'path':raw,'exists':True,'is_dir':p.is_dir()}\n    if (p/'.git').exists():\n        item['git']=True\n        try:\n            item['head']=subprocess.check_output(['git','-C',raw,'rev-parse','HEAD'],text=True,timeout=5).strip()\n            item['remote']=subprocess.check_output(['git','-C',raw,'remote','get-url','origin'],text=True,timeout=5).strip()\n        except Exception as e:\n            item['git_error']=type(e).__name__\n    candidates.append(item)\nprint(json.dumps({'candidates':candidates},separators=(',',':')))\nPY"
+}

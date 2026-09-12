@@ -1,0 +1,32 @@
+UNITS
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+DROPINS
+/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+
+ENV_FILES
+/home/ai-core-node/.config/frankenstein/chatgpt-client.env
+ENV_NAMES

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-fallback-broker-env-probe-20260912",
+  "command_sha256": "61e640a87c0d38f327047effe8ffa79e3d652bb01f751bbd010280a0b9126aec",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T12:40:20.526723+00:00",
+  "finished_at": "2026-09-12T12:40:20.586218+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1ec728860a915ad31e8f338e5b2d88ff546608c4433d019257329fce0305467e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "UNITS\n# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service\n[Unit]\nDescription=FranKenstein Persistent Headless ChatGPT Client\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=simple\nExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py\nRestart=always\nRestartSec=2\nEnvironment=PYTHONUNBUFFERED=1\nEnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\n\n# This process owns no browser and starts no Chrome. It is the typed,\n# persistent session/context endpoint behind the already-existing ChatGPT\n# bridge. The loader hard-binds canonical runtime authority to the live\n# ~/.claude/star/stern.py used by production; effects remain behind existing\n# Frankenstein authority/effect fences.\n\n[Install]\nWantedBy=default.target\nDROPINS\n/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service\n\nENV_FILES\n/home/ai-core-node/.config/frankenstein/chatgpt-client.env\nENV_NAMES\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

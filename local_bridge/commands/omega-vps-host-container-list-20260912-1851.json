@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-host-container-list-20260912-1851",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 seimensch-vps 'hostname; id; podman ps --format \"{{.ID}} {{.Names}} {{.Status}}\" 2>/dev/null || true; systemctl list-units --type=service --all --no-pager | grep -Ei \"bridge|clay|podman\" | head -n 50 || true'"
+}

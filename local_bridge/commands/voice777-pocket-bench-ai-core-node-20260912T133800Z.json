@@ -1,0 +1,6 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"voice777-pocket-bench-ai-core-node-20260912T133800Z","op":"exec","command":"set -e; V=/tmp/voice777-pocket-venv; python3 -m venv \"$V\"; . \"$V/bin/activate\"; python -m pip install -q --upgrade pip; python -m pip install -q --index-url https://download.pytorch.org/whl/cpu 'torch>=2.5.0'; python -m pip install -q 'pocket-tts==3.1.0' --no-deps; python -m pip install -q 'numpy>=2' 'pydantic>=2' 'sentencepiece>=0.2.1' 'safetensors>=0.4.0' 'typer>=0.10.0' 'typing_extensions>=4.10.0' 'fastapi>=0.100' 'uvicorn>=0.13.0' 'python-multipart>=0.0.21' 'scipy>=1.5.0' 'einops>=0.4.0' 'huggingface_hub>=0.13.0' 'requests>=2.20.0'; /usr/bin/time -f 'WALL=%e MAXRSS_KB=%M' pocket-tts generate --language german --voice juergen --text 'Guten Abend. Ich bin OMEGA. Ich höre dir zu und antworte ohne künstliche Pause.' --output-path /tmp/voice777-pocket-de.wav; python - <<'PY'
+import wave, os
+p='/tmp/voice777-pocket-de.wav'
+with wave.open(p,'rb') as w:
+ print('WAV',w.getframerate(),w.getnchannels(),w.getsampwidth(),round(w.getnframes()/w.getframerate(),3),os.path.getsize(p))
+PY","cwd":"/home/ai-core-node","timeout_seconds":900}

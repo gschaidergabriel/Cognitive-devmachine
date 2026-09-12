@@ -1,0 +1,66 @@
+{
+  "schema": "OMEGA_FREE_PROVIDER_CURRENT_POLICY/v1",
+  "observed_date": "2026-09-13",
+  "scope": "OMEGA continuous free-worker successor lane only",
+  "authority": "ECONOMIC_ROUTE_GUARD_NOT_COGNITIVE_TRUTH",
+  "default": "FAIL_CLOSED",
+  "providers": {
+    "groq": {
+      "status": "FREE_PLAN_PUBLICLY_DOCUMENTED",
+      "source": "https://console.groq.com/docs/rate-limits",
+      "allowed_default_models": [
+        "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b",
+        "qwen/qwen3.6-27b"
+      ],
+      "runtime_requirement": "typed FREE admission + CLAY_FREE_ONLY_ATTESTED + CLAY_GROQ_FREE_ATTESTED + credential",
+      "cost_escape": "DENY"
+    },
+    "nvidia": {
+      "status": "FREE_NIM_PROTOTYPING_PUBLICLY_DOCUMENTED",
+      "sources": [
+        "https://developer.nvidia.com/nim",
+        "https://build.nvidia.com/explore/discover"
+      ],
+      "runtime_requirement": "typed FREE admission + CLAY_FREE_ONLY_ATTESTED + CLAY_NVIDIA_FREE_ATTESTED + credential",
+      "scope_limit": "NVIDIA-hosted NIM development/testing/prototyping; no enterprise/dedicated paid route",
+      "cost_escape": "DENY"
+    },
+    "mistral": {
+      "status": "FREE_MODE_EXISTS_BUT_API_KEY_IS_NOT_PLAN_SCOPED",
+      "sources": [
+        "https://docs.mistral.ai/admin/billing-usage/subscriptions",
+        "https://docs.mistral.ai/admin/identity-access/api-keys",
+        "https://docs.mistral.ai/getting-started/quickstarts/studio/activate-and-generate-api-key"
+      ],
+      "runtime_requirement": "typed FREE admission + CLAY_FREE_ONLY_ATTESTED + CLAY_MISTRAL_FREE_ATTESTED + CLAY_MISTRAL_PAYG_DISABLED_ATTESTED + credential",
+      "reason": "Free mode has included usage, but API keys inherit organization plan/pay-as-you-go settings; key presence alone does not prove zero-cost execution",
+      "cost_escape": "DENY"
+    },
+    "openrouter": {
+      "status": "EXPLICIT_ZERO_PRICE_FREE_ROUTER_PUBLICLY_DOCUMENTED",
+      "sources": [
+        "https://openrouter.ai/openrouter/free/",
+        "https://openrouter.ai/pricing"
+      ],
+      "allowed_route": "openrouter/free",
+      "runtime_requirement": "dedicated bounded adapter required before autonomous enablement",
+      "current_successor_runtime_enabled": false,
+      "reason": "existing run_free_go_swarm provider implementation does not yet define an OpenRouter ProviderSpec; do not silently add an untested route",
+      "cost_escape": "DENY"
+    }
+  },
+  "forbidden": {
+    "together": true,
+    "paid_fallback": true,
+    "unknown_cost_fallback": true,
+    "key_rotation_to_evade_429": true,
+    "worker_self_promotion": true
+  },
+  "evidence_semantics": {
+    "provider_public_documentation": "economic route evidence only",
+    "successful_model_output": "MODEL_GENERATED candidate only",
+    "canonical_credit_from_provider_output": 0,
+    "effect_authority_from_provider_output": false
+  }
+}

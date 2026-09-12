@@ -1,0 +1,165 @@
+PASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+........................F..............F................................ [ 84%]
+...........FF                                                            [100%]
+=================================== FAILURES ===================================
+_ FloorProcessEnforcementTest.test_same_surface_process_fence_is_independent_of_realtime_launcher _
+
+self = <test_omega_floor_process_enforcement.FloorProcessEnforcementTest testMethod=test_same_surface_process_fence_is_independent_of_realtime_launcher>
+
+    def test_same_surface_process_fence_is_independent_of_realtime_launcher(self) -> None:
+        """The presentation cache protects its own users, not provider Realtime.
+    
+        `voice_777_runtime.py` is deliberately a compatibility launcher over the
+        canonical `omega_arm_bus` Realtime path.  The process fence must remain
+        valid without requiring that launcher to reintroduce a second floor
+        wrapper around the same acoustic subject.
+        """
+        voice_source = (ROOT / "scripts" / "voice_777_runtime.py").read_text(encoding="utf-8")
+>       self.assertNotIn("omega_organ_activity", voice_source)
+E       AssertionError: 'omega_organ_activity' unexpectedly found in '#!/usr/bin/env python3\n"""777 OMEGA compatibility launcher for the canonical Realtime/OMNI voice.\n\nOMEGA has exactly one acoustic authority: ``omega_arm_bus``.\n``voice_full_runtime`` already binds the existing OpenAI Realtime session to\n``omni_voice``, publishes/retrieves same-SELF arm context, owns the OMNI\nacoustic lease with heartbeat/release, and projects barge-in state.\n\nThe independent Pocket renderer is ``local_voice`` behind\n``voice777_local_audio_arm.LocalAudioArm``. ``omega_organ_activity`` remains an\nephemeral presentation/focus cache for surfaces that need it, but this launcher\nmust not wrap the already-canonical Realtime response/session/tool lifecycle.\n\nThis file is therefore only a compatibility entrypoint over the established\nfull/999 runtime stack. It creates no second state path, GRID loop, identity,\neffect authority, presentation arbiter, or acoustic arbiter.\n"""\nfrom __future__ import annotations\n\nimport sys\nfrom pathlib import Path\n\nHERE = Path(__file__).resolve().parent\nLEGACY = HERE.parent / "DEV_SOURCE_RESEARCH" / "repository" / "scripts"\nfor p in (HERE, LEGACY):\n    if str(p) not in sys.path:\n        sys.path.insert(0, str(p))\n\nimport voice_full_runtime as full  # noqa: E402\nimport gespraechsmodus as gm  # noqa: E402\n\n_PATCHED = False\n\n\ndef patch_777() -> None:\n    """Install the one canonical full Realtime runtime patch stack once."""\n    global _PATCHED\n    if _PATCHED:\n        return\n    full.patch_runtime()\n    _PATCHED = True\n\n\ndef main() -> int:\n    patch_777()\n    gm.hoeren()\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'
+
+tests/test_omega_floor_process_enforcement.py:71: AssertionError
+_________ test_provider_realtime_wrapper_is_omni_presentation_surface __________
+
+    def test_provider_realtime_wrapper_is_omni_presentation_surface():
+        path = SCRIPTS / "voice_777_runtime.py"
+>       assert _string_assignment(path, "VOICE_SURFACE") == "omni"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_voice777_arm_identity_contract.py:24: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/omega777-final-id.J5sguA/repo/scripts/voice_777_runtime.py')
+name = 'VOICE_SURFACE'
+
+    def _string_assignment(path: Path, name: str) -> str:
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in tree.body:
+            if not isinstance(node, ast.Assign):
+                continue
+            if any(isinstance(target, ast.Name) and target.id == name for target in node.targets):
+                if isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                    return node.value.value
+>       raise AssertionError(f"{name} string assignment not found in {path}")
+E       AssertionError: VOICE_SURFACE string assignment not found in /tmp/omega777-final-id.J5sguA/repo/scripts/voice_777_runtime.py
+
+tests/test_voice777_arm_identity_contract.py:19: AssertionError
+__________ test_release_failure_never_blocks_canonical_session_close ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x735cdc2e9220>
+
+    def test_release_failure_never_blocks_canonical_session_close(monkeypatch) -> None:
+        calls: list[tuple[str, str]] = []
+    
+        def original_close(session_id: str, reason: str):
+            calls.append((session_id, reason))
+            return {"closed": session_id, "reason": reason}
+    
+        agent = _agent(close_impl=original_close)
+        monkeypatch.setattr(mod.organ, "release", lambda *args, **kwargs: (_ for _ in ()).throw(RuntimeError("cache unavailable")))
+    
+>       mod._install_omni_projection(agent)
+
+tests/test_voice_host_777_live_client.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/voice_host_777_live_client.py:53: in _install_omni_projection
+    _install_omega_identity(agent)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+agent = namespace(_canonical_turn_context=<function _agent.<locals>.<lambda> at 0x735cdc379d20>, _session_close=<function test...n _agent.<locals>.<lambda> at 0x735cdc379dd0>, _neutral_identity=<function _agent.<locals>.<lambda> at 0x735cdc379e80>)
+
+    def _install_omega_identity(agent) -> None:
+        """Make the existing host-agent identity projection resolve to OMEGA.
+    
+        `voice_host_agent` imported `canonical_identity_block` into its module
+        globals. Its neutral, bound and session-select paths all resolve that
+        global at call time, so rebinding one builder closes the identity seam
+        without copying those paths or creating another state assembly. An
+        explicit future caller-provided self_id still wins.
+        """
+>       original = agent.canonical_identity_block
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'canonical_identity_block'
+
+scripts/voice_host_777_live_client.py:40: AttributeError
+________________ test_canonical_close_failure_still_propagates _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x735cdc2aeb10>
+
+    def test_canonical_close_failure_still_propagates(monkeypatch) -> None:
+        def original_close(session_id: str, reason: str):
+            raise ValueError("canonical close failed")
+    
+        agent = _agent(close_impl=original_close)
+        monkeypatch.setattr(mod.organ, "release", lambda *args, **kwargs: True)
+>       mod._install_omni_projection(agent)
+
+tests/test_voice_host_777_live_client.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/voice_host_777_live_client.py:53: in _install_omni_projection
+    _install_omega_identity(agent)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+agent = namespace(_canonical_turn_context=<function _agent.<locals>.<lambda> at 0x735cdc37a770>, _session_close=<function test...n _agent.<locals>.<lambda> at 0x735cdc37a820>, _neutral_identity=<function _agent.<locals>.<lambda> at 0x735cdc37a8d0>)
+
+    def _install_omega_identity(agent) -> None:
+        """Make the existing host-agent identity projection resolve to OMEGA.
+    
+        `voice_host_agent` imported `canonical_identity_block` into its module
+        globals. Its neutral, bound and session-select paths all resolve that
+        global at call time, so rebinding one builder closes the identity seam
+        without copying those paths or creating another state assembly. An
+        explicit future caller-provided self_id still wins.
+        """
+>       original = agent.canonical_identity_block
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'types.SimpleNamespace' object has no attribute 'canonical_identity_block'
+
+scripts/voice_host_777_live_client.py:40: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_omega_floor_process_enforcement.py::FloorProcessEnforcementTest::test_same_surface_process_fence_is_independent_of_realtime_launcher
+FAILED tests/test_voice777_arm_identity_contract.py::test_provider_realtime_wrapper_is_omni_presentation_surface
+FAILED tests/test_voice_host_777_live_client.py::test_release_failure_never_blocks_canonical_session_close
+FAILED tests/test_voice_host_777_live_client.py::test_canonical_close_failure_still_propagates
+4 failed, 81 passed in 0.43s

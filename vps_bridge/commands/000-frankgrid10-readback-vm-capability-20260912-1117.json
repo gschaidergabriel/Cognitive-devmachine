@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "000-frankgrid10-readback-vm-capability-20260912-1117",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; BASE=/workspace/frankgrid10-organ; echo '=== FRANKGRID SOURCE ==='; test -f \"$BASE/code/frankgrid10_v2.py\"; sha256sum \"$BASE/code/frankgrid10_v2.py\"; echo '=== SELFTEST RECEIPT ==='; cat \"$BASE/receipts/selftest-v02.json\"; echo '=== SQLITE ==='; python3 - \"$BASE/state/frankgrid10.sqlite3\" <<'PY'\nimport sqlite3,sys,json\np=sys.argv[1]; c=sqlite3.connect(p); c.row_factory=sqlite3.Row\nprint('integrity_check',c.execute('PRAGMA integrity_check').fetchone()[0])\nfor k in ('schema_version','rehydrated_checkpoint_id','rehydrated_checkpoint_state_sha256','rehydration_scope'):\n r=c.execute('SELECT v FROM meta WHERE k=?',(k,)).fetchone(); print(k, None if r is None else r[0])\nprint('cells',json.dumps([dict(r) for r in c.execute('SELECT cell_id,state,wins FROM cell_state ORDER BY cell_id')],sort_keys=True))\nPY\necho '=== PROCESS PERSISTENCE BASELINE ==='; ps -eo pid,ppid,etimes,cmd | grep -E 'frankgrid10|python' | grep -v grep || true; echo '=== VM CAPABILITY ==='; ls -l /dev/kvm 2>&1 || true; for x in qemu-system-x86_64 qemu-kvm systemd-nspawn unshare firejail bwrap; do printf '%s=' \"$x\"; command -v \"$x\" || true; done; echo -n 'virt_flags='; grep -m1 -oE 'vmx|svm' /proc/cpuinfo || true; echo '=== NAMESPACE ==='; cat /proc/1/cgroup || true; echo FRANKGRID_READBACK_VM_CAPABILITY_DONE"
+}

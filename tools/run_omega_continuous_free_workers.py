@@ -8,7 +8,9 @@ noncanonical OMEGA candidate envelopes.
 
 Hard laws:
 - FREE_ONLY admission must pass on every epoch.
+- The current economic-route policy must be no older than seven days.
 - Together / paid / unknown-cost fallback is never attempted.
+- Mistral additionally requires an explicit pay-as-you-go-disabled attestation.
 - HTTP 402 remains a hard-stop for that credential inside the delegated runner.
 - HTTP 429 remains provider-wide cooldown; no key rotation to evade provider limits.
 - Worker text is MODEL_GENERATED candidate material, never observation/truth/effect authority.
@@ -25,8 +27,6 @@ import json
 import os
 from pathlib import Path
 import signal
-import sys
-import time
 from typing import Any
 
 # Script directory is on sys.path when executed directly.
@@ -35,6 +35,8 @@ import run_free_go_swarm as base
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ROOT = Path("/artifacts/clay-omega-free-workers")
+CURRENT_POLICY_PATH = ROOT / "governance/OMEGA_FREE_PROVIDER_CURRENT_POLICY_2026-09-13.json"
+MAX_POLICY_AGE_DAYS = 7
 
 OMEGA_FOCUS = r"""
 CURRENT OWNER FOCUS — OMEGA CONTINUOUS BUILD/RESEARCH LANE
@@ -58,13 +60,26 @@ For every output, attack one current assumption and produce the smallest high-in
 """.strip()
 
 _ORIGINAL_PROMPT = base.worker_prompt
+_ORIGINAL_PROVIDER_EXECUTION_ADMITTED = base.provider_execution_admitted
 
 
 def omega_worker_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
     return _ORIGINAL_PROMPT(protocol, role, task, state_context, serial) + "\n\n" + OMEGA_FOCUS + "\n"
 
 
+def omega_provider_execution_admitted(spec: base.ProviderSpec) -> bool:
+    """Add OMEGA economic guards without weakening the delegated FREE gate."""
+    if not _ORIGINAL_PROVIDER_EXECUTION_ADMITTED(spec):
+        return False
+    if spec.name == "mistral" and not base.truthy(os.getenv("CLAY_MISTRAL_PAYG_DISABLED_ATTESTED")):
+        return False
+    return True
+
+
+# Scoped monkey patches: only this successor process gets the OMEGA focus and the
+# stricter Mistral execution gate. The historical swarm source remains unchanged.
 base.worker_prompt = omega_worker_prompt
+base.provider_execution_admitted = omega_provider_execution_admitted
 
 
 def utc_now() -> str:
@@ -82,7 +97,40 @@ def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
+def load_current_economic_policy() -> dict[str, Any]:
+    try:
+        raw = CURRENT_POLICY_PATH.read_text(encoding="utf-8")
+        policy = json.loads(raw)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise admission.ProviderAdmissionError(
+            f"OMEGA_FREE_POLICY_UNAVAILABLE_OR_INVALID:{exc.__class__.__name__}"
+        ) from exc
+    if not isinstance(policy, dict) or policy.get("schema") != "OMEGA_FREE_PROVIDER_CURRENT_POLICY/v1":
+        raise admission.ProviderAdmissionError("OMEGA_FREE_POLICY_SCHEMA_UNSUPPORTED")
+    if policy.get("default") != "FAIL_CLOSED":
+        raise admission.ProviderAdmissionError("OMEGA_FREE_POLICY_MUST_FAIL_CLOSED")
+    forbidden = policy.get("forbidden") if isinstance(policy.get("forbidden"), dict) else {}
+    for key in ("together", "paid_fallback", "unknown_cost_fallback", "key_rotation_to_evade_429", "worker_self_promotion"):
+        if forbidden.get(key) is not True:
+            raise admission.ProviderAdmissionError(f"OMEGA_FREE_POLICY_FORBIDDEN_GUARD_MISSING:{key}")
+    try:
+        observed = dt.date.fromisoformat(str(policy.get("observed_date") or ""))
+    except ValueError as exc:
+        raise admission.ProviderAdmissionError("OMEGA_FREE_POLICY_DATE_INVALID") from exc
+    age = (dt.datetime.now(dt.timezone.utc).date() - observed).days
+    if age < 0 or age > MAX_POLICY_AGE_DAYS:
+        raise admission.ProviderAdmissionError(f"OMEGA_FREE_POLICY_STALE:{age}d")
+    return {
+        "schema": policy["schema"],
+        "observed_date": str(observed),
+        "age_days": age,
+        "sha256": hashlib.sha256(raw.encode("utf-8")).hexdigest(),
+        "path": str(CURRENT_POLICY_PATH.relative_to(ROOT)),
+    }
+
+
 def validate_admission() -> dict[str, Any]:
+    policy = load_current_economic_policy()
     payload = admission.load_provider_admission()
     admitted = admission.admitted_provider_names()
     if not admitted:
@@ -91,6 +139,7 @@ def validate_admission() -> dict[str, Any]:
         "authority_epoch": payload.get("authority_epoch"),
         "admitted_free_providers": list(admitted),
         "mode": payload.get("mode"),
+        "economic_policy": policy,
     }
 
 

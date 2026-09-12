@@ -1,0 +1,209 @@
+=== HARNESS INTERFACE ===
+2026-09-12T09:56:51,378052654+07:00
+ai-core-node-projekt-frankenstein
+ai-core-node
+--- HELP ---
+usage: harness_aider.py [-h] {visible-start,fallback-start} ...
+
+Harness fuer kontrollierten Aufruf von aider
+
+positional arguments:
+  {visible-start,fallback-start}
+    visible-start       PHASE 48: sichtbarer, interaktiver Terminal-Harness im
+                        echten Repo (kein Sandbox-Versteck mehr)
+    fallback-start      ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft
+                        im Forschungsmodus (echtes Repo, allowlist+audit-
+                        gated)
+
+options:
+  -h, --help            show this help message and exit
+--- ARGPARSE / ENTRYPOINT ---
+476:        "provider": "NVIDIA NIM / Mistral AI (free-tier pool)",
+477:        "runtime_model": modell_id,
+478:        "paket_id": paket_id,
+481:        "auftrag": auftrag,
+489:    rel = os.path.join(FORSCHUNG_ERLAUBTER_PRAEFIX, paket_id, "PROVENANCE.json")
+492:                   f"harness(freepool-fallback): provenance fuer {paket_id} ({modell_id})",
+497:def _werkraum_git_identitaet(werkraum, modell_id):
+499:    _git(werkraum, "config", "user.name", f"harness-{modell_id}", check=False)
+531:def _grid_zustand_block(session_id=None, auftrag=None):
+545:         Modul-Docstring, paket-1789133830613-17102f).
+546:      2. entityos_arbeitspaket (unified.db) -- offene/laufende Pakete
+556:         Enthaelt darin BEREITS die GRID-Koordinationspakete aus
+557:         grid_packet_bridge.py (_paket_zeile) und die Anweisung/Zusicherung
+583:    kritischen (offene Arbeitspakete anderer Sitzungen) zuletzt -- ein
+590:            (auftrag or "Free-Pool-Harness-Sitzung, Kontext-Abruf")[:400],
+651:    pakete_teil = None
+655:                "SELECT paket_id, auftrag, womit, stand FROM entityos_arbeitspaket "
+663:            pakete_teil = (
+664:                "Andere gerade offene/laufende Arbeitspakete (unified.db, echt "
+670:    teile = [t for t in (grid_teil, immun_teil, pool_teil, ziele_teil, pakete_teil) if t]
+681:def _hinweis_ordner_aufraeumen(aktueller_paket_id=None):
+685:    passiert, ein uralter show_greeting.py-Testauftrag aus
+686:    paket-1789163559288-39f0c6/paket-1789168285368-4b2301 kam als
+689:    Ordner harness-hinweise/paket-<id>/ an und hat nie einen davon geloescht
+691:    vorhandenen Ordner, dessen paket_id in entityos_arbeitspaket NICHT mehr
+700:                "SELECT paket_id FROM entityos_arbeitspaket WHERE stand IN ('offen','laeuft')")}
+707:        if not eintrag.startswith("paket-"):
+709:        if eintrag == aktueller_paket_id:
+723:def _persona_hinweis_schreiben(paket_id, modell_id, berechtigung, kapsel="",
+724:                                session_id=None, auftrag=None, ziel_pfad=None):
+730:    modell_katalog.py 'kontextfenster').
+735:    Menschen im sichtbaren Terminal verwirrend/irrelevant, gehoert NICHT roh
+736:    ins Terminal gedruckt (siehe visible_run()). Sie bleibt aber technisch
+743:    sagen ja das modell kann ich fuer das verwenden oder ... lass es uns
+748:          Koordinationspaketen), statt nur eines Identitaets-Banners.
+755:    `session_id`/`auftrag` (optional) fliessen NUR in (a) (die hyperGRID-
+769:        _hinweis_ordner_aufraeumen(aktueller_paket_id=paket_id)
+796:    kapsel_block = f"\n---\n\n## Kontinuitaets-Kontext (Koordinator-Uebergabe, nur fuer dich, nicht im Terminal sichtbar, gekuerzt)\n\n{kapsel_kurz}\n" if kapsel_kurz else ""
+799:    # Koordinationspaketen aus grid_packet_bridge.py), siehe
+802:    zustand_text, hat_hypergrid = _grid_zustand_block(session_id=session_id, auftrag=auftrag)
+845:    # wissen und sagen ja das modell kann ich fuer das verwenden oder hey
+859:        "Kleinigkeit, aber sichtbar bei echten Aufgaben.\n\n"
+869:        "# Hinweis fuer diese Sitzung (automatisch eingefuegt, harness_aider.py visible-start)\n\n"
+873:        f"({MODELL_MAP.get(modell_id, {}).get('aider_model', modell_id)}) ueber einen "
+881:        zielordner = os.path.join(SICHTBAR_HINWEIS_BASIS, paket_id)
+890:# fuer das sichtbare Terminal, WIEDERVERWENDET aus dem etablierten Look
+895:# unterdrueckbarem, siehe Docstring visible_run()) Start-Boilerplate.
+903:def _terminal_banner(modell_id, berechtigung, paket_id):
+918:    aider_model = MODELL_MAP.get(modell_id, {}).get("aider_model", modell_id)
+923:    model_str = f"{_ANSI_HELLGRAU}{modell_id} ({aider_model}){_ANSI_RESET}"
+927:    paket_str = f"{_ANSI_HELLGRAU}paket:{paket_id}{_ANSI_RESET}"
+928:    parts = [smiley, label, model_str, stufe_str, repo_str, kontext_str, paket_str]
+973:def _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad):
+977:    (modell_katalog.py), OHNE dass das eingeschraenkte Modell selbst
+986:    rel = os.path.join(SICHTBAR_NOTIZ_PRAEFIX, f"{paket_id}.md")
+989:        f.write(f"# Notiz -- {modell_id} ({paket_id})\n\n"
+994:                   f"harness(freepool-sichtbar): Notiz {modell_id} {paket_id}", check=False)
+998:def visible_run(modell_id):
+999:    """PHASE 48 (Gabriel-Auftrag 2026-08-27) -- sichtbarer, interaktiver
+1003:    (SICHTBAR_REPO) -- sichtbar, auditierbar per `git log`, kein Versteck.
+1009:    if modell_id not in MODELL_MAP:
+1010:        grund = f"unbekannte modell_id: {modell_id}"
+1014:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1015:    if modell_id != aktiv_modell:
+1016:        grund = (f"Modell {modell_id} ist nicht das aktive Modell "
+1017:                  f"(aktiv: {aktiv_modell or '(keins)'}) -- erst auf /modelle aktivieren")
+1021:    berechtigung = MODELL_MAP[modell_id]["berechtigung"]
+1023:    # Startmodells -- sonst scheitert ein spaeterer '/model <anderer-
+1024:    # provider>'-Wechsel MITTEN in der Sitzung an einer fehlenden Env-Var
+1025:    # (siehe _alle_api_keys_laden()-Docstring). Der Key des Startmodells
+1028:    if not geladen.get(modell_id):
+1029:        grund = (f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1030:                  f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})")
+1033:    fehlend = [mid for mid, ok in geladen.items() if not ok and mid != modell_id]
+1036:              f"'/model' dorthin waere aktuell nicht nutzbar.{_ANSI_RESET}")
+1058:    paket_id, kapsel = None, ""
+1061:            session_id=session_id, auftrag=f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})",
+1062:            womit=f"harness:sichtbar:{modell_id}",
+1063:            warum="Free-Pool-Coding-Harness, sichtbares Terminal (Gabriel-Auftrag Modell-Dashboard Umbau)",
+1064:            thema=f"Sichtbarer Harness {modell_id} ({berechtigung})",
+1067:            paket_id = handoff_result.get("paket_id")
+1071:    if not paket_id:
+1072:        paket_id = _s._uid("harness-sichtbar")
+1074:    _werkraum_git_identitaet(werkraum, modell_id)
+1075:    _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "START",
+1076:                            f"paket_id={paket_id} berechtigung={berechtigung} werkraum={werkraum}")
+1082:    # PHASE 51: session_id/auftrag mitgeben, damit der hyperGRID-Turn (in
+1085:    _anfangsauftrag = f"Sichtbarer Free-Pool-Terminal-Lauf ({modell_id})"
+1087:        paket_id, modell_id, berechtigung, kapsel=kapsel,
+1088:        session_id=session_id, auftrag=_anfangsauftrag)
+1090:    # PHASE 51 (Punkt 1, "bei jedem /model-Wechsel"): Umgebungsvariablen fuer
+1098:    os.environ["FRANKENSTEIN_HARNESS_PAKET_ID"] = paket_id
+1099:    os.environ["FRANKENSTEIN_HARNESS_MODELL_ID"] = modell_id
+1103:    os.environ["FRANKENSTEIN_HARNESS_AUFTRAG"] = _anfangsauftrag
+1106:    buchfuehrung_dir = os.path.join(_AIDER_BUCHFUEHRUNG_BASIS, paket_id)
+1111:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1118:        "--no-show-model-warnings",
+1145:    print(_terminal_banner(modell_id, berechtigung, paket_id))
+1161:        _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad)
+1164:        checkpoint_result = git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=vor_head)
+1181:        _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "VERSTOSS_VERWORFEN",
+1182:                                f"paket_id={paket_id} grund={verworfen_grund} -- git reset --hard {vor_head}")
+1189:    audit_cmd = ["python3", audit_script, "--werkraum", werkraum, "--paket-id", paket_id,
+1204:    beleg = f"test:{0 if gesamt_ok else 1}:sichtbarer_harness paket_id={paket_id} modell={modell_id}"
+1206:        _s.reconcile(paket_id=paket_id, ergebnis=reconcile_text, beleg=beleg, session_id=session_id)
+1216:    return {"ok": gesamt_ok, "paket_id": paket_id, "modell": modell_id, "berechtigung": berechtigung,
+1222:def _aider_ausfuehren(werkraum, modell_id, nachricht, timeout=600, map_tokens=None, paket_id=None):
+1230:    wird. Der Forschungsmodus braucht das nicht (gezielter Einzelschreibauftrag
+1234:    paket_id gesetzt (Bugfix 2026-08-27, real gefunden -- siehe
+1240:    if not geladen.get(modell_id):
+1241:        print(f"Kein API-Schluessel fuer {modell_id} in keys.env gefunden "
+1242:              f"(Schluessel: {MODELL_MAP[modell_id]['keys_env_quelle']})", file=sys.stderr)
+1246:        *_aider_kommando_praefix(), "--model", MODELL_MAP[modell_id]["aider_model"],
+1249:        "--no-show-model-warnings",
+1254:    if paket_id:
+1255:        buchfuehrung_dir = os.path.join(_AIDER_BUCHFUEHRUNG_BASIS, paket_id)
+1270:                print(f"[{modell_id}|aider] {line}", end="")
+1278:            print(f"\n[{modell_id}|aider] PROZESS GEKILLT NACH {timeout}S TIMEOUT", file=sys.stderr)
+1301:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1304:    (modus=forschung). Gibt IMMER ein dict mit mindestens 'ok'/'paket_id'/
+1308:    if modell_id not in MODELL_MAP:
+1309:        return {"ok": False, "grund": f"unbekannte modell_id: {modell_id}"}
+1312:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1313:    if modell_id != aktiv_modell:
+1314:        return {"ok": False, "grund": f"Modell {modell_id} ist nicht das aktive Modell "
+1315:                f"(aktiv: {aktiv_modell or '(keins)'}) -- erst aktivieren"}
+1329:            session_id=session_id, auftrag=auftrag,
+1330:            womit=f"harness:aider:{modell_id}",
+1332:            thema=f"Harness {modell_id} ({modus})",
+1334:        if not handoff_result or handoff_result.get("paket_id") is None:
+1335:            return {"ok": False, "grund": "Handoff fehlgeschlagen: keine paket_id erhalten"}
+1336:        paket_id = handoff_result["paket_id"]
+1345:        antwort_rel = os.path.join(FORSCHUNG_ERLAUBTER_PRAEFIX, paket_id, "ANTWORT.md")
+1349:                           f"Aenderung ausserhalb von '{FORSCHUNG_ERLAUBTER_PRAEFIX}{paket_id}/' "
+1353:        werkraum = os.path.join(WERKRAUM_BASIS, paket_id)
+1359:    _werkraum_git_identitaet(werkraum, modell_id)
+1361:    _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "START",
+1362:                            f"paket_id={paket_id} modus={modus} werkraum={werkraum} auftrag={auftrag[:200]}")
+1365:    nachricht = f"{kapsel}\n---\n{anweisung_pfad}\n---\n{auftrag}".strip()
+1366:    aider_exit = _aider_ausfuehren(werkraum, modell_id, nachricht,
+1368:                                    paket_id=paket_id)
+1382:            werkraum, paket_id, modell_id, seit=(vor_head if modus == "forschung" else None))
+1397:            _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "ALLOWLIST_VERLETZUNG",
+1398:                                    f"paket_id={paket_id} verstoesse={allowlist_verstoesse} -- "
+1405:            _forschung_provenance_schreiben(werkraum, paket_id, modell_id, auftrag,
+1411:                    werkraum, paket_id, modell_id, seit=vor_head)
+1420:    audit_cmd = ["python3", audit_script, "--werkraum", werkraum, "--paket-id", paket_id]
+1440:    # zero_raum_ruf-Rekonstruktion (paket-1787841564031-f1f2d6) -- der Push
+1472:        _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "PUSH" if gepusht else "PUSH_FEHLGESCHLAGEN",
+1473:                                f"paket_id={paket_id} rc={push.returncode if push else '?'} "
+1488:    # Zweiter Teilbefund aus demselben Peer-Vorfall: in paket-1787841564031-
+1504:    beleg = f"test:{0 if gesamt_ok else 1}:harness_audit paket_id={paket_id} modus={modus}"
+1506:        reconcile_result = _s.reconcile(paket_id=paket_id, ergebnis=reconcile_text,
+1513:        "ok": gesamt_ok, "paket_id": paket_id, "modell": modell_id, "modus": modus,
+1524:def cmd_visible_start(args):
+1525:    """PHASE 48: sichtbarer Terminal-Harness. Ersetzt das alte 'start'
+1528:    im sichtbaren Terminal-Fenster, ein Mensch liest mit) -- Exit-Code
+1530:    ergebnis = visible_run(args.modell)
+1540:    for modell_id in kandidaten:
+1541:        if modell_id not in MODELL_MAP:
+1542:            versuche.append({"modell": modell_id, "ok": False, "grund": "unbekannte modell_id"})
+1544:        if _api_key_laden(modell_id) is None:
+1545:            versuche.append({"modell": modell_id, "ok": False, "grund": "kein API-Schluessel in keys.env"})
+1547:        aktiviert = _s.modell_aktiv_setzen(modell_id, von="chatgpt-fallback")
+1549:            versuche.append({"modell": modell_id, "ok": False, "grund": f"Aktivierung fehlgeschlagen: {aktiviert}"})
+1560:            ergebnis = einen_lauf(modell_id, args.auftrag, modus="forschung",
+1562:        ergebnis["modell"] = modell_id
+1565:            # Gewinner-Felder (paket_id/antwort/...) direkt auf oberster Ebene
+1571:            ausgabe["gewonnen_mit"] = modell_id
+1579:def main():
+1580:    parser = argparse.ArgumentParser(description="Harness fuer kontrollierten Aufruf von aider")
+1583:    p_vis = sub.add_parser("visible-start", help="PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)")
+1584:    p_vis.add_argument("--modell", required=True)
+1587:    p_fb.add_argument("--auftrag", required=True)
+1588:    p_fb.add_argument("--kandidaten", default="nvidia-nemotron,mistral-small",
+1589:                       help="Komma-getrennte modell_id-Liste, Reihenfolge = Prioritaet")
+1590:    p_fb.add_argument("--grund", default=None, help="Warum der Fallback aktiviert wurde (fuer Provenance)")
+1593:    if args.command == "visible-start":
+1594:        return cmd_visible_start(args)
+1601:if __name__ == "__main__":
+--- RELATED HARNESS FILES ---
+harness_aider_knopf.py
+harness_aider_knopf.sh
+harness_aider.py
+harness_audit.py
+harness_crush_knopf.py
+harness_crush_knopf.sh
+harness_crush.py
+=== END ===

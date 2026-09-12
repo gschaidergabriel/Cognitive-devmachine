@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "777-omega-effect-provenance-readonly-ai-core-node-20260913T0031Z",
+  "command_sha256": "1c5f69ac5fffca2f698c18c4f3e63ed253dfef1443b22ea3056dea57f916bc28",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:32:14.279488+00:00",
+  "finished_at": "2026-09-12T17:33:41.429185+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "015e9428b19f0c6ca662f4f880ea1e84f8f9c0128e81b5ac6ccb7a67603e0de9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\"file_hits\": [{\"bytes\": 3190, \"matched\": [\"effect_ee236aaa650c46b0a003607f71d3c7c5\", \"omega-e2e-status-ai-core-node-20260912T135200Z\", \"5bda8241cc4ea12d0d10e0540f4fd4c691009a495fb12ff28e806fe72bb00803\"], \"matching_lines\": [\"{\\\"schema\\\":\\\"CLAY_LOCAL_COMMAND/v1\\\",\\\"command_id\\\":\\\"777-omega-effect-provenance-readonly-ai-core-node-20260913T0031Z\\\",\\\"machine_id\\\":\\\"ai-core-node\\\",\\\"owner\\\":\\\"gabriel\\\",\\\"op\\\":\\\"exec\\\",\\\"cwd\\\":\\\"/home/ai-core-node\\\",\\\"timeout_seconds\\\":120,\\\"command\\\":\\\"python3 - <<'PY'\\\\nimport hashlib,json,os,pathlib,sqlite3,time\\\\nTOKENS=['effect_ee236aaa650c46b0a003607f71d3c7c5','omega-e2e-status-ai-core-node-20260912T135200Z','5bda8241cc4ea12d0d10e0540f4fd4c691009a495fb12ff28e806fe72bb00803']\\\\nout={'schema':'OMEGA_EFFECT_PROVENANCE_READBACK/v1','machine_id':'ai-core-node','owner':'gabriel','observed_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'policy':'READ_ONLY_NO_REPLAY_NO_RESTART_NO_DEPLOY','tokens':TOKENS,'file_hits':[],'sqlite_hits':[]}\\\\nroots=[pathlib.Path('/home/ai-core-node/.claude/star/local_bridge_state/repo/local_bridge/results'),pathlib.Path('/home/ai-core-node/.claude/star')]\\\\nseen=set()\\\\nfor root in roots:\\\\n if not root.exists(): continue\\\\n for p in root.rglob('*'):\\\\n  try:\\\\n   if not p.is_file(): continue\\\\n   sp=str(p)\\\\n   if '/.git/' in sp or '/chrome-profile/' in sp or '/screenshots/' in sp: continue\\\\n   if p.stat().st_size>2_000_000: continue\\\\n   key=(p.stat().st_dev,p.stat().st_ino)\\\\n   i\"], \"path\": \"/home/ai-core-node/.claude/star/local_bridge_state/repo/local_bridge/commands/777-omega-effect-provenance-readonly-ai-core-node-20260913T0031Z.json\", \"sha256\": \"1c5f69ac5fffca2f698c18c4f3e63ed253dfef1443b22ea3056dea57f916bc28\"}], \"machine_id\": \"ai-core-node\", \"observed_at\": \"2026-09-12T17:32:14Z\", \"owner\": \"gabriel\", \"policy\": \"READ_ONLY_NO_REPLAY_NO_RESTART_NO_DEPLOY\", \"schema\": \"OMEGA_EFFECT_PROVENANCE_READBACK/v1\", \"sqlite_hits\": [], \"tokens\": [\"effect_ee236aaa650c46b0a003607f71d3c7c5\", \"omega-e2e-status-ai-core-node-20260912T135200Z\", \"5bda8241cc4ea12d0d10e0540f4fd4c691009a495fb12ff28e806fe72bb00803\"]}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

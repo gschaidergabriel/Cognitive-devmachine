@@ -1,0 +1,1 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"go084-claude-provider-health-20260912-0903-andreas","op":"exec","cwd":"/home/andreas","timeout_seconds":90,"command":"set +e; echo '=== CLAUDE PROVIDER HEALTH ==='; date -Is; /home/andreas/.local/bin/claude --model opus -p 'Reply with exactly PROVIDER_OK and nothing else.'; rc=$?; echo CLAUDE_RC=$rc; echo '=== END ==='; exit $rc"}

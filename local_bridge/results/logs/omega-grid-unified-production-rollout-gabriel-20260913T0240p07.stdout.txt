@@ -1,0 +1,13 @@
+SOURCE_HEAD=fc8a877b94f808704855b6d58c5e3737aba45e35
+OMEGA_GRID_UNIFIED_INGEST_SELFTEST_PASS
+...                                                                      [100%]
+3 passed in 0.06s
+BACKUP=278585344|600
+OMEGA_GRID_SOURCE_GUARD_PASS trigger=f2_guard_omega_source_grid_only
+LEGACY_BYPASS_BLOCKED=1
+EPOCH=6deb07282f4641f69316964db8ce3be7
+{"compressor": "ollama", "counters": {"failed": 0, "inserted": 1, "seen": 1, "skipped": 0, "unchanged": 0, "updated": 0}, "db": "/home/ai-core-node/.local/share/agentzero/unified.db", "model": "qwen2.5:0.5b", "policy": {"authority": "canonical_grid10", "paid_fallback": false, "prestage": false, "provenance_separated": true, "raw_source_persisted": false}, "receipts": [{"compressor": "ollama:qwen2.5:0.5b", "grid_broadcast_value": 0.9387822226693069, "grid_frame_id": "eef5a6365e0bc29c08d4adaafcdd5ff239892cc4efd355486a4e091cc45d514b", "grid_pointer_id": "c442ecd6a57f47b5995a945f8c0a79d2", "grid_turn_event_id": "omega-grid-source-prod-20260913:1", "grid_winner": "G8", "machine_id": "ai-core-node", "owner": "gabriel", "path": ".claude-plugin/marketplace.json", "ref": "fc8a877b94f808704855b6d58c5e3737aba45e35", "repo": "frankenstein", "schema": "OMEGA_GRID_SOURCE_RECEIPT/v1", "scope": "repo", "source_sha256": "012df0f1885f65bf22e14e22a84de47cb6626924781e7f394ce065316dc781db", "state": "inserted"}], "runtime_epoch_id": "6deb07282f4641f69316964db8ce3be7", "schema": "OMEGA_GRID_UNIFIED_INGEST/v1", "session_id": "omega-grid-source-prod-20260913"}
+COUNTS=0,1,0,1,PRESTAGE=53
+gabriel|ai-core-node|frankenstein|ollama:qwen2.5:0.5b|G8|ADMITTED|eef5a6365e0bc29c08d4adaafcdd5ff239892cc4efd355486a4e091cc45d514b
+INSTALLED=/home/ai-core-node/.local/lib/frankenstein-grid-source/fc8a877b94f808704855b6d58c5e3737aba45e35
+OMEGA_GRID_UNIFIED_PRODUCTION_PASS=1

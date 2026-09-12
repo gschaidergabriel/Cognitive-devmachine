@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Build a non-live HTML candidate for canonical eye identity semantics.
 
-The builder is intentionally fail-closed and writes only to --out.  It does not
-modify the visual root.  It is bound to the exact live buehne.html subject that
-was measured on 2026-09-12.
+Fail-closed and writes only to --out. The canonical public URL remains
+/augen_blink/...; the daemon's current BLINK_DIR authority resolves that route
+to augen_blink_relief2. This avoids creating a second serving authority.
 """
 
 from __future__ import annotations
@@ -35,6 +35,12 @@ def replace_one(text: str, old: str, new: str, name: str) -> tuple[str, int]:
     if count != 1:
         raise RuntimeError(f"{name}: expected exactly one occurrence, got {count}")
     return text.replace(old, new, 1), 1
+
+
+def require_one(text: str, needle: str, name: str) -> None:
+    count = text.count(needle)
+    if count != 1:
+        raise RuntimeError(f"{name}: expected exactly one occurrence, got {count}")
 
 
 def rewrite_css_rule(text: str, selector: str, transform, name: str) -> tuple[str, int]:
@@ -118,18 +124,14 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
     text = raw.decode("utf-8")
     changes: dict[str, object] = {}
 
-    text, changes["blink_img_src"] = replace_one(
-        text,
-        '<img id="augen-blink" src="/augen_blink/blink_000.png" alt="">',
-        '<img id="augen-blink" src="/augen_blink_relief2/blink_000.png" alt="">',
-        "blink img src",
-    )
-    text, changes["blink_array_path"] = replace_one(
-        text,
-        '`/augen_blink/blink_${String(i).padStart(3,"0")}.png`',
-        '`/augen_blink_relief2/blink_${String(i).padStart(3,"0")}.png`',
-        "BLINK_BILDER path",
-    )
+    # Preserve the canonical route. buehne_daemon.py resolves /augen_blink/*
+    # through BLINK_DIR, which is currently _vielleicht_ai(...)->relief2.
+    # Rewriting the URL to /augen_blink_relief2 would create/bypass authority.
+    blink_img = '<img id="augen-blink" src="/augen_blink/blink_000.png" alt="">'
+    blink_array = '`/augen_blink/blink_${String(i).padStart(3,"0")}.png`'
+    require_one(text, blink_img, "canonical blink img route")
+    require_one(text, blink_array, "canonical BLINK_BILDER route")
+    changes["blink_route_preserved"] = True
 
     text, changes["blink_css_open"] = rewrite_css_rule(
         text,
@@ -160,7 +162,7 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
 
     text = text.replace(
         "</head>",
-        '<meta name="go-eye-shadow" content="v3">\n</head>',
+        '<meta name="go-eye-shadow" content="v4-canonical-route">\n</head>',
         1,
     )
 
@@ -168,9 +170,9 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
         "old_special_glow_coupling_absent": (
             '_sonderLaeuft ? "0" : String(ziel.opazitaet)' not in text
         ),
-        "relief2_blink_array_present": (
-            '/augen_blink_relief2/blink_${String(i).padStart(3,"0")}.png' in text
-        ),
+        "canonical_blink_img_route_present": blink_img in text,
+        "canonical_blink_array_route_present": blink_array in text,
+        "explicit_relief2_url_absent": "/augen_blink_relief2/" not in text,
         "blink_css_open": bool(
             re.search(r"#augen-blink\{[^}]*opacity\s*:\s*1", text, re.S)
         ),
@@ -184,11 +186,16 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text, encoding="utf-8")
     manifest: dict[str, object] = {
-        "schema": "GO_AVATAR_EYE_SEMANTIC_SHADOW/v1",
+        "schema": "GO_AVATAR_EYE_SEMANTIC_SHADOW/v2",
         "source_sha256": source_sha,
         "candidate_sha256": sha256_file(out),
         "relief2_open_sha256": sha256_file(relief2_open),
         "relief2_frame_count": len(relief2_frames),
+        "serving_authority": {
+            "public_route": "/augen_blink/",
+            "productive_backing_dir": "augen_blink_relief2",
+            "route_rewrite": False,
+        },
         "changes": changes,
         "invariants": invariants,
         "live_mutation": False,

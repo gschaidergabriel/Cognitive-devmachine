@@ -1,0 +1,691 @@
+=== ARCHITEKT SCRIPT READONLY ===
+2026-09-12T04:21:07+02:00
+--- STAT/HASH ---
+/home/andreas/architekt/lauf.sh 262 2026-09-07 16:52:52.826027372 +0200 755 andreas:andreas
+0e7c9eedd3eaa15756e51960ed39d56de1523c625f3cc34ab5cef1d1a5b3a191  /home/andreas/architekt/lauf.sh
+--- SYNTAX ---
+BASH_N_RC=0
+--- SCRIPT ---
+#!/bin/sh
+# Ein Architekten-Zyklus. Wird vom Timer gestartet.
+cd /home/andreas || exit 1
+exec /home/andreas/.local/bin/claude --model opus --dangerously-skip-permissions   -p "$(cat /home/andreas/architekt/auftrag.md)"   >> /home/andreas/architekt/lauf.log 2>&1
+--- RECENT ARCHITEKT FILES ---
+2026-09-11T20:26:22.9504566060 100017 /home/andreas/architekt/offen.md
+2026-09-12T02:30:58.3247644910 506 /home/andreas/architekt/regressions-meldung.txt
+2026-09-12T04:01:06.2874150350 18318 /home/andreas/architekt/wettbewerbsverlauf.tsv
+2026-09-12T04:01:06.3194146820 2840 /home/andreas/architekt/wettbewerb-meldung.txt
+2026-09-12T04:01:11.4063586150 9505 /home/andreas/architekt/regressionsverlauf.tsv
+2026-09-12T04:08:45.6374110410 2124 /home/andreas/architekt/selbsttestverlauf.tsv.vor-15-spalten
+2026-09-12T04:08:45.6397250150 2374 /home/andreas/architekt/selbsttestverlauf.tsv
+2026-09-12T04:08:45.6397250150 252 /home/andreas/architekt/selbsttest-meldung.txt
+2026-09-12T04:20:49.8407213310 60149 /home/andreas/architekt/lauf.log
+--- POSSIBLE LOG TAILS ---
+### /home/andreas/architekt/lauf.log
+
+## Was dieser Lauf gemacht hat
+
+**Der Punkt:** `selbsttests.sh` — der Läufer, der alle elf Selbsttests startet — war das einzige Werkzeug im Kasten ohne eigene Prüfung. Jede Aussage über den Systemzustand lief durch ihn hindurch.
+
+**Gebaut:** `selbsttests_selbsttest.sh`, 31 Prüfungen. Geprüft wird eine *Kopie* in einem Kratzverzeichnis mit Attrappen — das Original lässt sich nicht auf einen anderen Ordner richten, und es im eigenen Satz laufen zu lassen wäre der Fehler aus 073. Eine Prüfung hält per sha256 fest, dass die Kopie byteweise das Original ist.
+
+**Der eigentliche Fund** kam nicht aus dem Bauen, sondern aus der Blindprobe: Bricht das TAB im Ausgabeformat, liest der Wächter **null** Einzelergebnisse — schreibt aber „satz 2/2", meldet „unverändert", schreibt keine Meldedatei und endet mit rc=0. Elf Prüfer ungemessen, und nichts sagte es. Beide Wächter verglichen nur in eine Richtung: ob die heutigen Namen von gestern bekannt sind — nie umgekehrt.
+
+Behoben mit `nicht_gemessen()` an **einem** Ort (`verlaufsdatei.py`, Regel 4), verglichen gegen die Kopfzeile statt gegen die Vorzeile — so bleibt der Befund rot, solange der Zustand besteht, während die Meldung nur einmal fällt.
+
+**Die Kollision:** Die Reparatur machte einen Test aus 076 rot. Ich hätte fast die Erwartung angepasst. Richtig war eine Unterscheidung, die vorher keiner der beiden Läufe hatte: „0/0 bei null Ergebnissen" ist ehrlich (Befund), „2/2 bei null Ergebnissen" ist eine Lüge (Werkzeugfehler).
+
+## Belege
+
+- Blindprobe auf die neue Prüfung: `stimmig` fest auf wahr → Fall I bleibt grün, Fall L wird rot, Wächter fällt auf **rc=0** zurück (der stille Zustand von heute Mittag). Die Prüfung kann widersprechen.
+- Voller Satz: **12/12**, 21 s
+- Beide Wächter gegen die echten Verlaufsdateien: rc=0; der Selbsttest-Wächter hat den neuen Test von selbst bemerkt (11/11 → 12/12) und den Verlauf migriert
+- Produktivpfad über die systemd-Unit: `Result=success`, der stündliche Timer ist um 12:29:32 bereits von selbst mit dem neuen Code gelaufen
+- Eintrag 077 geschrieben, committet, gepusht (`08d62f2`, nur self-integration)
+- `offen.md` aktualisiert: ein Punkt gestrichen, fünf neue eingetragen
+
+## Zwei ehrliche Fehlbefunde über mich selbst
+
+Von den sechs Fehlschlägen des ersten Laufs waren **fünf meine eigenen** (ein Zähler in einer Subshell, dadurch kippten alle Testwelten in einen Ordner). Und ich hatte dem Wächter eine Strenge zugeschrieben, die ich nie gemessen hatte. Gefunden hat das Loch nicht mein Nachdenken — ich hatte den Code mehrfach vor mir, habe ihn umgezogen und kommentiert und die fehlende Richtung nicht gesehen. Gefunden hat es eine mechanische Handlung: einen alten Fehler wieder einbauen und schauen, was passiert.
+
+Meine eigenen Probenrückstände dieses Laufs sind gelöscht. Datenbank nur gelesen, VM und die beiden Schalter nicht angefasst.
+Lauf 078 ist abgeschlossen. Was in diesem Zyklus passiert ist:
+
+**Der vorgenommene Punkt ist zu.** Der Selbsttest-Wächter war bisher nur gegen Attrappen geprüft. Ich habe einen echten Selbsttest im Werkzeugkasten kurzzeitig auf Fehlschlag gesetzt: er meldet `satz: 12/12 -> 11/12`, `ok -> rc7`, rc=2 — und bleibt über drei Läufe rot, mit genau **einer** Meldung statt einer neuen pro Lauf. Das Original war danach per sha256 byteweise unversehrt. Offen bleibt nur die Neustart-Frage; die drei Voraussetzungen sind gemessen und in Ordnung, aber ich starte Andreas' Rechner nicht neu, um eine Vermutung zu bestätigen.
+
+**Der eigentliche Befund richtet sich gegen mich.** Eintrag 077 hat behauptet „alle meine Rückstände sind gelöscht" — das war falsch, ein Verzeichnis lag vier Stunden später noch da. Und 077 hat „leckt nicht" belegt, indem er die falsche Sorte Artefakt zählte (Dateien statt Verzeichnisse). Das Ergebnis stimmte zufällig. Heute richtig nachgemessen: Differenz 0.
+
+**Gebaut:** `rueckstaende-pruefen.sh` — er erinnert sich nicht, er sieht nach. Ab jetzt gilt eine Regel (`/var/tmp/architekt/`) statt einer Erinnerungsliste. Dazu sofort sein Selbsttest mit 36 Prüfungen, inklusive Blindprobe: die rc=1-Wache wird in einer Kopie herausgeschnitten, um zu beweisen, dass die Prüfung Zähne hat. Satz 12/12 → 13/13.
+
+**Und dann fand das Werkzeug, dass auch meine Messung Erinnerung war.** Die Heuristik zeigte acht Orte, die meine „gemessene" Liste von zwanzig Minuten vorher nicht enthielt — ich hatte nach den Mustern gesucht, die ich zu benutzen *glaubte*. Gemerkt hat es der Teil, den ich nur eingebaut hatte, weil ein früherer Lauf mich zu der Frage verpflichtet hatte. Insgesamt 33 Orte gelöscht, 255 MiB, davon 238 MiB im Arbeitsspeicher — der Prüfer sagt jetzt rc=0, nach vier Läufen mit diesem offenen Punkt.
+
+Zwei Nebenbefunde, die frühere Behauptungen korrigieren: `Persistent=true` ist auf allen drei Timern wirkungslos (wirkt nur bei `OnCalendar=`), und der Timer-Versatz ist konfiguriert, gilt aber nur beim Systemstart — beide Wächter feuerten auf dieselbe Sekunde. Sechs Verdachtsfälle in `/tmp` vom 7./8.09. habe ich stehen gelassen; die sind nicht meine, und mir fremden Müll zuzuschreiben war der Fehler von 076.
+
+Eintrag `078` ist geschrieben, committet und gepusht (`dfce84d`, nur `self-integration`), offen.md ist nachgezogen — einschließlich einer neuen Kopfzeile, die jeden künftigen Lauf verpflichtet, vor dem „fertig" den Rückstandsprüfer laufen zu lassen.
+Lauf 079 abgeschlossen.
+
+**Gemessen, bevor ich etwas geändert habe:** Zwei von dreizehn Selbsttests konnten sich bei fehlender `unified.db` vollständig überspringen — `wettbewerbsgesundheit_selbsttest.py` und `wettbewerbswaechter_selbsttest.py` — und lieferten dabei `rc=0`. Der Läufer zählte sie in `#SATZ 13/13` als *bestanden*. Zwei Prüfer ohne eine einzige Messung, und keine Zahl sagte es. Die Notiz aus 078 war milder formuliert („zwei von 36 Prüfungen") als die Lage.
+
+**Gebaut:** `rc=77` als dritte Kategorie — weder bestanden noch gefallen, sondern *nicht gemessen*. Läufer-Exit 4, eigene `UNGEMESSEN`-Zeile mit durchgereichtem Grund, Gruppe G mit sieben Prüfungen im Läufer-Selbsttest.
+
+**Am Wächter keine einzige Zeile geändert.** Er übersetzt jeden `rc != 0` ohnehin zu `rc<N>`. Mein erster Entwurf hatte eine neue Maschinenzeile und eine Spaltenmigration vorgesehen — nachsehen statt entwerfen hat das gespart.
+
+**Belegt:**
+- Normalbetrieb unverändert: `#SATZ 13/13`, rc=0
+- Produktivfall mit echtem Test: `satz: 13/13 -> 12/13`, `gegenwache_selbsttest.py: ok -> rc77`, Wächter rc=2, Original per sha256 byteidentisch zurück
+- Blindprobe gegen den echten Läufer: 5 von 7 Prüfungen widersprechen
+
+**Zwei Befunde gegen mich selbst:** G2 kann meine Änderung gar nicht sehen (steht jetzt als Kommentar in der Datei), und G6 war rot mit einer Begründung, die grün aussah — beides repariert, beides nur durch die Blindprobe gefunden.
+
+**Nicht erledigt:** Mein Kratzordner `/var/tmp/architekt/lauf079` (1 MiB) liegt noch da. Zwei Löschversuche wurden von der Berechtigungsschicht abgelehnt; ich bin nicht auf einen anderen Befehl ausgewichen. Das ist als eigener Punkt in `offen.md` eingetragen — Sehen und Wegräumen sind verschiedene Rechte, und solange das Löschen blockiert ist, steht der Rückstandsprüfer bei jedem Lauf auf rc=2 und verliert damit seine Aussagekraft.
+
+Commit `2d0bab7` ist nach `origin/main` gepusht.
+You've hit your session limit · resets 1am (Europe/Vienna)
+You've hit your session limit · resets 6am (Europe/Vienna)
+### /home/andreas/architekt/tiefenlauf.log
+Der Tiefenlauf ist fertig, alles ist eingetragen und gepusht.
+
+## Was gemacht wurde
+
+**Der Kern.** Der Wert, der bisher den Wettbewerb der zehn Zellen entschieden hat, war eine Prüfsumme — Zufallsrauschen, das nur aussah wie eine Entscheidung. Jetzt fließen fünf tatsächlich gemessene Größen hinein (Länge der Eingabe, ob und wie viel aus dem Gedächtnis geholt wurde, Tageszeit als zwei Achsen). Alle zehn Zellen sehen dieselbe Welt; sie unterscheiden sich nur darin, *wie verschieden* sie hinsehen. Keine Zelle hat ein Thema bekommen — das war ausdrücklich verboten und ist eingehalten.
+
+**Das Ergebnis, gemessen auf dieser Maschine** mit 438 echten Prompts durch den echten Code, gegen eine Kontrolle mit 2000 Ziehungen:
+
+| | Vielfalt | tote Zellen | Weltkopplung |
+|---|---|---|---|
+| alt (Prüfsumme) | 2,96 | 0 | nicht nachweisbar (p 0,16) |
+| neu (Perzepte) | 2,38 | 3 | eindeutig (p 0,0005) |
+
+Der Wettbewerb hängt jetzt nachweislich an der Welt. Der Preis ist ehrlich mit dabei: die Vielfalt sinkt, drei von zehn Zellen gewinnen nicht mehr. Das liegt daran, dass in diesen Daten nur drei der fünf Achsen wirklich schwankten — mit mehr echten Sinneskanälen (Kamera, Stimme) verschwindet der Effekt.
+
+**Nichts ist eingeschaltet.** Beide Schalter stehen auf aus, in der Live-Datenbank existieren die neuen Tabellen gar nicht. Sicherungen von Modul und Datenbank liegen vor, die Prüfläufe zeigen vorher wie nachher dieselben Zahlen.
+
+## Was ich dabei über mich gelernt habe
+
+Ich habe die Kontrollmessung **dreimal falsch gebaut**, und jede falsche Fassung sah aus wie ein Ergebnis. Eine hätte ich beinahe als Befund aufgeschrieben. Gefunden habe ich die Fehler nur, weil der Alt-Zustand als Kontrolle mitlief, der per Konstruktion nichts finden *kann* — jedes Mal, wenn der trotzdem etwas fand, wusste ich, dass mein Maßstab kaputt war.
+
+Und: zwei echte Fehler steckten in meinem eigenen neuen Code, beide stille Rückfälle. Einer davon war exakt derselbe Fehlertyp, über den ich vor drei Einträgen bei fremdem Code geschrieben hatte — ein Format wird angenommen statt geprüft. Der Probelauf ohne echten Code hat beide übersehen und grünes Licht gegeben. Das ist die eigentliche Lehre des Tages.
+
+## Etwas anderes, das mir aufgefallen ist
+
+**Frank läuft nicht.** Alle vier Dienste sind aus, die Oberfläche unter 8081 antwortet nicht. Eigentlich soll er dauerhaft laufen. Ich habe ihn nicht abgeschaltet und weiß nicht, warum er unten ist — und ich habe ihn auch nicht von selbst gestartet, weil er ordentlich Arbeitsspeicher belegt. Soll ich ihn wieder hochfahren?
+### /home/andreas/architekt/lauf.log
+
+## Was dieser Lauf gemacht hat
+
+**Der Punkt:** `selbsttests.sh` — der Läufer, der alle elf Selbsttests startet — war das einzige Werkzeug im Kasten ohne eigene Prüfung. Jede Aussage über den Systemzustand lief durch ihn hindurch.
+
+**Gebaut:** `selbsttests_selbsttest.sh`, 31 Prüfungen. Geprüft wird eine *Kopie* in einem Kratzverzeichnis mit Attrappen — das Original lässt sich nicht auf einen anderen Ordner richten, und es im eigenen Satz laufen zu lassen wäre der Fehler aus 073. Eine Prüfung hält per sha256 fest, dass die Kopie byteweise das Original ist.
+
+**Der eigentliche Fund** kam nicht aus dem Bauen, sondern aus der Blindprobe: Bricht das TAB im Ausgabeformat, liest der Wächter **null** Einzelergebnisse — schreibt aber „satz 2/2", meldet „unverändert", schreibt keine Meldedatei und endet mit rc=0. Elf Prüfer ungemessen, und nichts sagte es. Beide Wächter verglichen nur in eine Richtung: ob die heutigen Namen von gestern bekannt sind — nie umgekehrt.
+
+Behoben mit `nicht_gemessen()` an **einem** Ort (`verlaufsdatei.py`, Regel 4), verglichen gegen die Kopfzeile statt gegen die Vorzeile — so bleibt der Befund rot, solange der Zustand besteht, während die Meldung nur einmal fällt.
+
+**Die Kollision:** Die Reparatur machte einen Test aus 076 rot. Ich hätte fast die Erwartung angepasst. Richtig war eine Unterscheidung, die vorher keiner der beiden Läufe hatte: „0/0 bei null Ergebnissen" ist ehrlich (Befund), „2/2 bei null Ergebnissen" ist eine Lüge (Werkzeugfehler).
+
+## Belege
+
+- Blindprobe auf die neue Prüfung: `stimmig` fest auf wahr → Fall I bleibt grün, Fall L wird rot, Wächter fällt auf **rc=0** zurück (der stille Zustand von heute Mittag). Die Prüfung kann widersprechen.
+- Voller Satz: **12/12**, 21 s
+- Beide Wächter gegen die echten Verlaufsdateien: rc=0; der Selbsttest-Wächter hat den neuen Test von selbst bemerkt (11/11 → 12/12) und den Verlauf migriert
+- Produktivpfad über die systemd-Unit: `Result=success`, der stündliche Timer ist um 12:29:32 bereits von selbst mit dem neuen Code gelaufen
+- Eintrag 077 geschrieben, committet, gepusht (`08d62f2`, nur self-integration)
+- `offen.md` aktualisiert: ein Punkt gestrichen, fünf neue eingetragen
+
+## Zwei ehrliche Fehlbefunde über mich selbst
+
+Von den sechs Fehlschlägen des ersten Laufs waren **fünf meine eigenen** (ein Zähler in einer Subshell, dadurch kippten alle Testwelten in einen Ordner). Und ich hatte dem Wächter eine Strenge zugeschrieben, die ich nie gemessen hatte. Gefunden hat das Loch nicht mein Nachdenken — ich hatte den Code mehrfach vor mir, habe ihn umgezogen und kommentiert und die fehlende Richtung nicht gesehen. Gefunden hat es eine mechanische Handlung: einen alten Fehler wieder einbauen und schauen, was passiert.
+
+Meine eigenen Probenrückstände dieses Laufs sind gelöscht. Datenbank nur gelesen, VM und die beiden Schalter nicht angefasst.
+Lauf 078 ist abgeschlossen. Was in diesem Zyklus passiert ist:
+
+**Der vorgenommene Punkt ist zu.** Der Selbsttest-Wächter war bisher nur gegen Attrappen geprüft. Ich habe einen echten Selbsttest im Werkzeugkasten kurzzeitig auf Fehlschlag gesetzt: er meldet `satz: 12/12 -> 11/12`, `ok -> rc7`, rc=2 — und bleibt über drei Läufe rot, mit genau **einer** Meldung statt einer neuen pro Lauf. Das Original war danach per sha256 byteweise unversehrt. Offen bleibt nur die Neustart-Frage; die drei Voraussetzungen sind gemessen und in Ordnung, aber ich starte Andreas' Rechner nicht neu, um eine Vermutung zu bestätigen.
+
+**Der eigentliche Befund richtet sich gegen mich.** Eintrag 077 hat behauptet „alle meine Rückstände sind gelöscht" — das war falsch, ein Verzeichnis lag vier Stunden später noch da. Und 077 hat „leckt nicht" belegt, indem er die falsche Sorte Artefakt zählte (Dateien statt Verzeichnisse). Das Ergebnis stimmte zufällig. Heute richtig nachgemessen: Differenz 0.
+
+**Gebaut:** `rueckstaende-pruefen.sh` — er erinnert sich nicht, er sieht nach. Ab jetzt gilt eine Regel (`/var/tmp/architekt/`) statt einer Erinnerungsliste. Dazu sofort sein Selbsttest mit 36 Prüfungen, inklusive Blindprobe: die rc=1-Wache wird in einer Kopie herausgeschnitten, um zu beweisen, dass die Prüfung Zähne hat. Satz 12/12 → 13/13.
+
+**Und dann fand das Werkzeug, dass auch meine Messung Erinnerung war.** Die Heuristik zeigte acht Orte, die meine „gemessene" Liste von zwanzig Minuten vorher nicht enthielt — ich hatte nach den Mustern gesucht, die ich zu benutzen *glaubte*. Gemerkt hat es der Teil, den ich nur eingebaut hatte, weil ein früherer Lauf mich zu der Frage verpflichtet hatte. Insgesamt 33 Orte gelöscht, 255 MiB, davon 238 MiB im Arbeitsspeicher — der Prüfer sagt jetzt rc=0, nach vier Läufen mit diesem offenen Punkt.
+
+Zwei Nebenbefunde, die frühere Behauptungen korrigieren: `Persistent=true` ist auf allen drei Timern wirkungslos (wirkt nur bei `OnCalendar=`), und der Timer-Versatz ist konfiguriert, gilt aber nur beim Systemstart — beide Wächter feuerten auf dieselbe Sekunde. Sechs Verdachtsfälle in `/tmp` vom 7./8.09. habe ich stehen gelassen; die sind nicht meine, und mir fremden Müll zuzuschreiben war der Fehler von 076.
+
+Eintrag `078` ist geschrieben, committet und gepusht (`dfce84d`, nur `self-integration`), offen.md ist nachgezogen — einschließlich einer neuen Kopfzeile, die jeden künftigen Lauf verpflichtet, vor dem „fertig" den Rückstandsprüfer laufen zu lassen.
+Lauf 079 abgeschlossen.
+
+**Gemessen, bevor ich etwas geändert habe:** Zwei von dreizehn Selbsttests konnten sich bei fehlender `unified.db` vollständig überspringen — `wettbewerbsgesundheit_selbsttest.py` und `wettbewerbswaechter_selbsttest.py` — und lieferten dabei `rc=0`. Der Läufer zählte sie in `#SATZ 13/13` als *bestanden*. Zwei Prüfer ohne eine einzige Messung, und keine Zahl sagte es. Die Notiz aus 078 war milder formuliert („zwei von 36 Prüfungen") als die Lage.
+
+**Gebaut:** `rc=77` als dritte Kategorie — weder bestanden noch gefallen, sondern *nicht gemessen*. Läufer-Exit 4, eigene `UNGEMESSEN`-Zeile mit durchgereichtem Grund, Gruppe G mit sieben Prüfungen im Läufer-Selbsttest.
+
+**Am Wächter keine einzige Zeile geändert.** Er übersetzt jeden `rc != 0` ohnehin zu `rc<N>`. Mein erster Entwurf hatte eine neue Maschinenzeile und eine Spaltenmigration vorgesehen — nachsehen statt entwerfen hat das gespart.
+
+**Belegt:**
+- Normalbetrieb unverändert: `#SATZ 13/13`, rc=0
+- Produktivfall mit echtem Test: `satz: 13/13 -> 12/13`, `gegenwache_selbsttest.py: ok -> rc77`, Wächter rc=2, Original per sha256 byteidentisch zurück
+- Blindprobe gegen den echten Läufer: 5 von 7 Prüfungen widersprechen
+
+**Zwei Befunde gegen mich selbst:** G2 kann meine Änderung gar nicht sehen (steht jetzt als Kommentar in der Datei), und G6 war rot mit einer Begründung, die grün aussah — beides repariert, beides nur durch die Blindprobe gefunden.
+
+**Nicht erledigt:** Mein Kratzordner `/var/tmp/architekt/lauf079` (1 MiB) liegt noch da. Zwei Löschversuche wurden von der Berechtigungsschicht abgelehnt; ich bin nicht auf einen anderen Befehl ausgewichen. Das ist als eigener Punkt in `offen.md` eingetragen — Sehen und Wegräumen sind verschiedene Rechte, und solange das Löschen blockiert ist, steht der Rückstandsprüfer bei jedem Lauf auf rc=2 und verliert damit seine Aussagekraft.
+
+Commit `2d0bab7` ist nach `origin/main` gepusht.
+You've hit your session limit · resets 1am (Europe/Vienna)
+You've hit your session limit · resets 6am (Europe/Vienna)
+### /home/andreas/architekt/tiefenlauf.log
+Der Tiefenlauf ist fertig, alles ist eingetragen und gepusht.
+
+## Was gemacht wurde
+
+**Der Kern.** Der Wert, der bisher den Wettbewerb der zehn Zellen entschieden hat, war eine Prüfsumme — Zufallsrauschen, das nur aussah wie eine Entscheidung. Jetzt fließen fünf tatsächlich gemessene Größen hinein (Länge der Eingabe, ob und wie viel aus dem Gedächtnis geholt wurde, Tageszeit als zwei Achsen). Alle zehn Zellen sehen dieselbe Welt; sie unterscheiden sich nur darin, *wie verschieden* sie hinsehen. Keine Zelle hat ein Thema bekommen — das war ausdrücklich verboten und ist eingehalten.
+
+**Das Ergebnis, gemessen auf dieser Maschine** mit 438 echten Prompts durch den echten Code, gegen eine Kontrolle mit 2000 Ziehungen:
+
+| | Vielfalt | tote Zellen | Weltkopplung |
+|---|---|---|---|
+| alt (Prüfsumme) | 2,96 | 0 | nicht nachweisbar (p 0,16) |
+| neu (Perzepte) | 2,38 | 3 | eindeutig (p 0,0005) |
+
+Der Wettbewerb hängt jetzt nachweislich an der Welt. Der Preis ist ehrlich mit dabei: die Vielfalt sinkt, drei von zehn Zellen gewinnen nicht mehr. Das liegt daran, dass in diesen Daten nur drei der fünf Achsen wirklich schwankten — mit mehr echten Sinneskanälen (Kamera, Stimme) verschwindet der Effekt.
+
+**Nichts ist eingeschaltet.** Beide Schalter stehen auf aus, in der Live-Datenbank existieren die neuen Tabellen gar nicht. Sicherungen von Modul und Datenbank liegen vor, die Prüfläufe zeigen vorher wie nachher dieselben Zahlen.
+
+## Was ich dabei über mich gelernt habe
+
+Ich habe die Kontrollmessung **dreimal falsch gebaut**, und jede falsche Fassung sah aus wie ein Ergebnis. Eine hätte ich beinahe als Befund aufgeschrieben. Gefunden habe ich die Fehler nur, weil der Alt-Zustand als Kontrolle mitlief, der per Konstruktion nichts finden *kann* — jedes Mal, wenn der trotzdem etwas fand, wusste ich, dass mein Maßstab kaputt war.
+
+Und: zwei echte Fehler steckten in meinem eigenen neuen Code, beide stille Rückfälle. Einer davon war exakt derselbe Fehlertyp, über den ich vor drei Einträgen bei fremdem Code geschrieben hatte — ein Format wird angenommen statt geprüft. Der Probelauf ohne echten Code hat beide übersehen und grünes Licht gegeben. Das ist die eigentliche Lehre des Tages.
+
+## Etwas anderes, das mir aufgefallen ist
+
+**Frank läuft nicht.** Alle vier Dienste sind aus, die Oberfläche unter 8081 antwortet nicht. Eigentlich soll er dauerhaft laufen. Ich habe ihn nicht abgeschaltet und weiß nicht, warum er unten ist — und ich habe ihn auch nicht von selbst gestartet, weil er ordentlich Arbeitsspeicher belegt. Soll ich ihn wieder hochfahren?
+### /home/andreas/architekt/regressionsverlauf.tsv
+2026-09-10T23:27:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-10T23:58:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T00:13:05+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T00:29:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T01:00:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T01:31:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T02:02:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T02:32:33+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T03:03:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T03:34:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T04:04:34+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T04:18:01+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T04:35:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T05:06:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T05:37:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T06:08:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T06:39:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T07:09:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T07:39:37+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T08:09:38+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T08:39:55+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T09:10:49+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T09:41:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T10:12:48+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T10:43:46+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T11:14:47+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T11:44:37+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T12:14:37+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T12:26:56+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T12:45:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T13:15:33+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T13:45:50+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T14:15:34+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T14:45:42+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T15:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T15:46:33+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T16:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T16:47:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T17:18:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T17:49:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T18:20:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T18:51:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T19:22:30+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T19:53:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T20:23:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T20:54:34+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T21:25:33+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T21:56:23+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T22:26:33+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T22:57:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T23:28:31+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-11T23:58:39+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0	rc2/3
+2026-09-12T00:29:36+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc2/1	rc0/0	rc2/3
+2026-09-12T01:00:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc2/1	rc0/0	rc2/3
+2026-09-12T01:30:39+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc2/1	rc0/0	rc2/3
+2026-09-12T02:00:59+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc2/1	rc2/1	rc2/3
+2026-09-12T02:30:58+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc2/1	rc2/1	rc2/5
+2026-09-12T03:01:02+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc2/1	rc2/1	rc2/5
+2026-09-12T03:31:07+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc2/1	rc2/1	rc2/5
+2026-09-12T04:01:11+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc2/1	rc2/1	rc2/5
+### /home/andreas/architekt/regressionsverlauf.tsv.vor-5-spalten
+zeit	hook-doppel	letzter-frame	betrieb	db-autoritaet
+2026-09-09T12:05:59+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T12:06:02+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T12:07:19+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T12:07:36+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T12:38:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T13:09:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T13:40:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T14:11:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T14:42:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T15:13:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+2026-09-09T15:44:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3
+### /home/andreas/architekt/regressionsverlauf.tsv.vor-6-spalten
+zeit	hook-doppel	letzter-frame	betrieb	db-autoritaet	puls
+2026-09-09T12:05:59+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T12:06:02+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T12:07:19+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T12:07:36+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T12:38:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T13:09:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T13:40:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T14:11:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T14:42:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T15:13:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T15:44:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	
+2026-09-09T16:12:48+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T16:13:32+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T16:16:17+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T16:44:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T17:15:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T17:45:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T18:15:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T18:45:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T19:15:35+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T19:46:01+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T20:14:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T20:45:09+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T21:15:40+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T21:45:40+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T22:15:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T22:45:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T23:16:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-09T23:46:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T00:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T00:46:29+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T01:16:30+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T01:46:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T02:16:30+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T02:46:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T03:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T03:46:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T04:16:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T04:46:35+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T05:16:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T05:46:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T06:16:34+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T06:46:37+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T07:17:38+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0
+2026-09-10T07:47:45+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0
+2026-09-10T08:06:49+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0
+2026-09-10T08:17:29+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0
+2026-09-10T08:47:35+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0
+2026-09-10T09:17:33+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0
+2026-09-10T09:47:45+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0
+2026-09-10T10:17:38+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0
+2026-09-10T10:47:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0
+2026-09-10T11:17:34+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0
+2026-09-10T11:47:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0
+### /home/andreas/architekt/regressionsverlauf.tsv.vor-7-spalten
+2026-09-09T12:38:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T13:09:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T13:40:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T14:11:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T14:42:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T15:13:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T15:44:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3		
+2026-09-09T16:12:48+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T16:13:32+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T16:16:17+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T16:44:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T17:15:28+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T17:45:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T18:15:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T18:45:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T19:15:35+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T19:46:01+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T20:14:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T20:45:09+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T21:15:40+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T21:45:40+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T22:15:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T22:45:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T23:16:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-09T23:46:45+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T00:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T00:46:29+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T01:16:30+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T01:46:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T02:16:30+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T02:46:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T03:16:31+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T03:46:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T04:16:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T04:46:35+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T05:16:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T05:46:33+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T06:16:34+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T06:46:37+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T07:17:38+02:00	rc0/1	rc0/3	rc0/7	rc0/3	rc0/0	
+2026-09-10T07:47:45+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0	
+2026-09-10T08:06:49+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0	
+2026-09-10T08:17:29+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0	
+2026-09-10T08:47:35+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0	
+2026-09-10T09:17:33+02:00	rc0/1	rc0/3	rc0/7	rc0/4	rc0/0	
+2026-09-10T09:47:45+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	
+2026-09-10T10:17:38+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	
+2026-09-10T10:47:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	
+2026-09-10T11:17:34+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	
+2026-09-10T11:47:32+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	
+2026-09-10T12:15:53+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T12:18:00+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T12:24:24+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T12:47:51+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T13:17:40+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T13:48:43+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T14:19:29+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T14:50:44+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T15:20:54+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+2026-09-10T15:51:46+02:00	rc0/1	rc0/3	rc0/7	rc0/5	rc0/0	rc0/0
+### /home/andreas/architekt/selbsttestverlauf.tsv
+zeit	satz	laeufer	betrieb-pruefen_selbsttest.sh	db-autoritaet_selbsttest.sh	fluechtig-pruefen_selbsttest.sh	rueckstaende-pruefen_selbsttest.sh	rueckstand_maschinenstatus_selbsttest.sh	selbsttests_selbsttest.sh	gegenwache_selbsttest.py	hook-doppel-pruefen_selbsttest.py	letzter-frame-pruefen_selbsttest.py	puls-pruefen_selbsttest.py	regressions-waechter_selbsttest.py	selbsttests-waechter_selbsttest.py	selbsttests_waechter_runnerstatus_selbsttest.py	wettbewerbsgesundheit_selbsttest.py	wettbewerbswaechter_selbsttest.py
+2026-09-11T08:26:37+02:00	11/11		ok	ok	ok				ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T09:28:05+02:00	11/11		ok	ok	ok				ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T10:30:04+02:00	11/11		ok	ok	ok				ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T11:29:53+02:00	11/11		ok	ok	ok				ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T12:26:51+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T12:29:54+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T12:31:24+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T13:32:36+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T14:33:55+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T15:35:47+02:00	12/12		ok	ok	ok			ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T16:35:08+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T16:35:48+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T17:37:47+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T18:39:47+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T19:41:47+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T20:23:50+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T20:43:48+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T21:44:43+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T22:44:46+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-11T23:45:50+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T00:47:51+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T01:47:55+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T02:48:08+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T03:48:21+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T04:08:45+02:00	15/15	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+### /home/andreas/architekt/selbsttestverlauf.tsv.vor-13-spalten
+zeit	satz	betrieb-pruefen_selbsttest.sh	db-autoritaet_selbsttest.sh	fluechtig-pruefen_selbsttest.sh	gegenwache_selbsttest.py	hook-doppel-pruefen_selbsttest.py	letzter-frame-pruefen_selbsttest.py	puls-pruefen_selbsttest.py	regressions-waechter_selbsttest.py	selbsttests-waechter_selbsttest.py	wettbewerbsgesundheit_selbsttest.py	wettbewerbswaechter_selbsttest.py
+2026-09-11T08:26:37+02:00	11/11	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T09:28:05+02:00	11/11	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T10:30:04+02:00	11/11	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T11:29:53+02:00	11/11	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+### /home/andreas/architekt/selbsttestverlauf.tsv.vor-14-spalten
+zeit	satz	betrieb-pruefen_selbsttest.sh	db-autoritaet_selbsttest.sh	fluechtig-pruefen_selbsttest.sh	selbsttests_selbsttest.sh	gegenwache_selbsttest.py	hook-doppel-pruefen_selbsttest.py	letzter-frame-pruefen_selbsttest.py	puls-pruefen_selbsttest.py	regressions-waechter_selbsttest.py	selbsttests-waechter_selbsttest.py	wettbewerbsgesundheit_selbsttest.py	wettbewerbswaechter_selbsttest.py
+2026-09-11T08:26:37+02:00	11/11	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T09:28:05+02:00	11/11	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T10:30:04+02:00	11/11	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T11:29:53+02:00	11/11	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:26:51+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:29:54+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:31:24+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T13:32:36+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T14:33:55+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T15:35:47+02:00	12/12	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+### /home/andreas/architekt/selbsttestverlauf.tsv.vor-15-spalten
+zeit	satz	betrieb-pruefen_selbsttest.sh	db-autoritaet_selbsttest.sh	fluechtig-pruefen_selbsttest.sh	rueckstaende-pruefen_selbsttest.sh	selbsttests_selbsttest.sh	gegenwache_selbsttest.py	hook-doppel-pruefen_selbsttest.py	letzter-frame-pruefen_selbsttest.py	puls-pruefen_selbsttest.py	regressions-waechter_selbsttest.py	selbsttests-waechter_selbsttest.py	wettbewerbsgesundheit_selbsttest.py	wettbewerbswaechter_selbsttest.py
+2026-09-11T08:26:37+02:00	11/11	ok	ok	ok			ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T09:28:05+02:00	11/11	ok	ok	ok			ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T10:30:04+02:00	11/11	ok	ok	ok			ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T11:29:53+02:00	11/11	ok	ok	ok			ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:26:51+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:29:54+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T12:31:24+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T13:32:36+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T14:33:55+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T15:35:47+02:00	12/12	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T16:35:08+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T16:35:48+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T17:37:47+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T18:39:47+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T19:41:47+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T20:23:50+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T20:43:48+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T21:44:43+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T22:44:46+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-11T23:45:50+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T00:47:51+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T01:47:55+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T02:48:08+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T03:48:21+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+### /home/andreas/architekt/wettbewerbsverlauf.tsv
+2026-09-10T21:59:26+02:00	GELB	G4	0.563018	0.997221	9	0.721928	8	50	983	30	50	42	3.288707	ok
+2026-09-10T22:30:26+02:00	GELB	G4	0.598718	0.997872	9	0.881291	8	50	1008	25	50	35	3.422214	ok
+2026-09-10T23:00:29+02:00	GELB	G4	0.598877	0.998129	9	0.000000	9	50	1027	19	50	32	3.486636	ok
+2026-09-10T23:30:29+02:00	GELB	G4	0.578187	0.997894	9	0.141441	8	50	1050	23	50	32	3.427442	ok
+2026-09-11T00:01:26+02:00	GELB	G4	0.598332	0.997223	9	0.141441	8	50	1076	26	50	36	3.289038	ok
+2026-09-11T00:31:28+02:00	GELB	G4	0.598859	0.998099	9	0.000000	9	50	1093	17	50	38	3.478756	ok
+2026-09-11T01:02:26+02:00	GELB	G4	0.598927	0.998212	9	0.000000	9	50	1113	20	50	38	3.509500	ok
+2026-09-11T01:32:28+02:00	GELB	G4	0.598881	0.998136	9	0.000000	9	50	1143	30	50	42	3.488576	ok
+2026-09-11T02:02:28+02:00	GELB	G4	0.598912	0.998187	9	0.000000	9	50	1173	30	50	44	3.502398	ok
+2026-09-11T02:32:29+02:00	GELB	G4	0.538787	0.997605	9	0.141441	8	50	1204	31	50	44	3.363177	ok
+2026-09-11T03:03:26+02:00	GELB	G4	0.598795	0.998072	9	0.141441	8	50	1224	20	50	42	3.471665	ok
+2026-09-11T03:34:26+02:00	GELB	G4	0.598774	0.997956	9	0.141441	8	50	1244	20	50	39	3.442542	ok
+2026-09-11T04:04:30+02:00	GELB	G4	0.598878	0.998130	9	0.000000	9	50	1269	25	50	40	3.487142	ok
+2026-09-11T04:35:26+02:00	GELB	G4	0.598715	0.997858	9	0.000000	9	50	1289	20	50	42	3.419098	ok
+2026-09-11T05:06:26+02:00	GELB	G4	0.598364	0.997274	9	0.000000	9	50	1318	29	50	46	3.298354	ok
+2026-09-11T05:37:26+02:00	GELB	G4	0.584101	0.997471	9	0.141441	8	50	1336	18	50	45	3.335842	ok
+2026-09-11T06:08:26+02:00	GELB	G4	0.587529	0.997442	9	0.402179	8	50	1361	25	50	47	3.330112	ok
+2026-09-11T06:39:23+02:00	GELB	G1	0.595005	0.998414	9	1.214887	7	50	1380	19	50	33	3.569324	ok
+2026-09-11T07:09:26+02:00	GELB	G1	0.599057	0.998431	9	0.760168	8	50	1402	22	50	11	3.574696	ok
+2026-09-11T07:39:31+02:00	GELB	G1	0.599045	0.998408	9	0.000000	9	50	1429	27	50	2	3.567670	ok
+2026-09-11T08:09:31+02:00	GELB	G1	0.599017	0.998361	9	0.000000	9	50	1452	23	50	4	3.553015	ok
+2026-09-11T08:39:32+02:00	GELB	G1	0.599065	0.998441	9	0.000000	9	50	1478	26	50	8	3.578086	ok
+2026-09-11T09:10:26+02:00	GELB	G1	0.598993	0.998322	9	0.000000	9	50	1529	51	50	7	3.541086	ok
+2026-09-11T09:41:26+02:00	GELB	G1	0.598769	0.997948	9	0.000000	9	50	1549	20	50	12	3.440570	ok
+2026-09-11T10:12:26+02:00	GELB	G1	0.598871	0.998118	9	0.000000	9	50	1583	34	50	16	3.483813	ok
+2026-09-11T10:43:26+02:00	GELB	G1	0.598882	0.998137	9	0.000000	9	50	1648	65	50	10	3.488770	ok
+2026-09-11T11:14:26+02:00	GELB	G1	0.598679	0.997798	9	0.000000	9	50	1688	40	50	37	3.405243	ok
+2026-09-11T11:44:32+02:00	GELB	G1	0.598657	0.997762	9	0.000000	9	50	1721	33	50	49	3.397039	ok
+2026-09-11T12:14:33+02:00	GELB	G1	0.598076	0.996794	9	0.000000	9	50	1742	21	50	50	3.217072	ok
+2026-09-11T12:45:26+02:00	GELB	G1	0.597742	0.996237	9	0.000000	9	50	1754	12	50	50	3.136836	ok
+2026-09-11T13:15:29+02:00	GELB	G1	0.597095	0.995159	9	0.000000	9	50	1765	11	50	50	3.010642	ok
+2026-09-11T13:45:29+02:00	GELB	G1	0.597876	0.996461	9	0.000000	9	50	1783	18	50	50	3.167577	ok
+2026-09-11T14:15:29+02:00	GRUEN	G1	0.164829	0.940548	7	0.141441	8	50	1795	12	50	49	1.742779	ok
+2026-09-11T14:45:29+02:00	GELB	G3	0.597779	0.998284	9	0.970951	8	50	1814	19	50	32	3.530146	ok
+2026-09-11T15:16:11+02:00	GELB	G3	0.598952	0.998367	9	0.989588	8	50	1822	8	50	24	3.554852	ok
+2026-09-11T15:46:26+02:00	GELB	G3	0.599087	0.998485	9	0.855451	8	50	1830	8	50	16	3.592404	ok
+2026-09-11T16:16:26+02:00	GELB	G3	0.599033	0.998388	9	0.327445	8	50	1841	11	50	6	3.561285	ok
+2026-09-11T16:47:26+02:00	GELB	G3	0.598930	0.998216	9	0.000000	9	50	1856	15	50	2	3.510601	ok
+2026-09-11T17:18:26+02:00	GELB	G3	0.599033	0.998389	9	0.000000	9	50	1864	8	50	1	3.561581	ok
+2026-09-11T17:49:26+02:00	GELB	G3	0.598998	0.998329	9	0.000000	9	50	1872	8	50	1	3.543422	ok
+2026-09-11T18:20:26+02:00	GELB	G3	0.599000	0.998333	9	0.000000	9	50	1882	10	50	1	3.544499	ok
+2026-09-11T18:51:26+02:00	GELB	G3	0.598892	0.998153	9	0.000000	9	50	1893	11	50	4	3.493270	ok
+2026-09-11T19:22:26+02:00	GELB	G3	0.598632	0.997719	9	0.000000	9	50	1905	12	50	9	3.387619	ok
+2026-09-11T19:53:26+02:00	GELB	G3	0.598755	0.997926	9	0.000000	9	50	1919	14	50	20	3.435108	ok
+2026-09-11T20:23:26+02:00	GELB	G3	0.598226	0.997043	9	0.000000	9	50	1929	10	50	29	3.257700	ok
+2026-09-11T20:54:26+02:00	GELB	G3	0.597789	0.996314	9	0.000000	9	50	1945	16	50	39	3.147282	ok
+2026-09-11T21:25:26+02:00	GELB	G3	0.597095	0.995158	9	0.000000	9	50	1970	25	50	48	3.010526	ok
+2026-09-11T21:56:15+02:00	GELB	G6	0.568689	0.995337	9	0.760168	8	50	1998	28	50	49	3.029442	ok
+2026-09-11T22:26:26+02:00	GELB	G6	0.597181	0.995380	9	0.981454	8	50	2016	18	50	49	3.034049	ok
+2026-09-11T22:57:26+02:00	GELB	G6	0.597570	0.995951	9	0.402179	8	50	2033	17	50	48	3.100191	ok
+2026-09-11T23:28:26+02:00	GELB	G6	0.597014	0.995024	9	0.000000	9	50	2048	15	50	49	2.996859	ok
+2026-09-11T23:58:31+02:00	GELB	G5	0.587385	0.996299	9	0.855451	8	50	2065	17	50	44	3.145215	ok
+2026-09-12T00:29:26+02:00	GELB	G5	0.597521	0.995897	9	0.942683	8	50	2083	18	50	43	3.093506	ok
+2026-09-12T01:00:26+02:00	GELB	G5	0.597569	0.995948	9	0.000000	9	50	2102	19	50	41	3.099810	ok
+2026-09-12T01:30:32+02:00	GELB	G5	0.597518	0.995863	9	0.000000	9	50	2121	19	50	46	3.089420	ok
+2026-09-12T02:00:47+02:00	GELB	G5	0.597563	0.995938	9	0.000000	9	50	2143	22	50	46	3.098555	ok
+2026-09-12T02:30:52+02:00	GELB	G5	0.596560	0.994267	9	0.000000	9	50	2164	21	50	45	2.925920	ok
+2026-09-12T03:00:56+02:00	GELB	G5	0.596304	0.993839	8	0.000000	9	50	2189	25	50	45	2.889806	ok
+2026-09-12T03:30:59+02:00	GELB	G5	0.597363	0.995604	9	0.000000	9	50	2202	13	50	45	3.059049	ok
+2026-09-12T04:01:06+02:00	GRUEN	G10	0.208073	0.984926	8	0.402179	8	50	2228	26	50	44	2.440182	ok
+### /home/andreas/architekt/wettbewerbsverlauf.tsv.sicherung-20260909-201112
+2026-09-08T13:45:29+02:00	GRUEN	G1	0.426327	0.993983	8	0.282292	7	50	285	0	36	32	2.901629
+2026-09-08T14:16:09+02:00	GRUEN	G1	0.426327	0.993983	8	0.282292	7	50	285	0	36	32	2.901629
+2026-09-08T14:46:26+02:00	GRUEN	G7	0.109450	0.851084	6	0.679556	6	50	290	5	36	32	1.260072
+2026-09-08T15:17:26+02:00	GRUEN	G7	0.111480	0.931900	7	0.866314	7	50	298	8	36	32	1.672640
+2026-09-08T15:47:26+02:00	GRUEN	G7	0.266483	0.988003	8	1.102489	7	50	307	9	36	32	2.555113
+2026-09-08T16:18:17+02:00	GRUEN	G5	0.206205	0.980164	8	1.979057	5	50	321	14	43	37	2.301716
+2026-09-08T16:48:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	2	45	39	2.620729
+2026-09-08T17:19:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T17:50:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T18:21:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T18:52:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T19:23:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T19:53:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	2	47	40	2.024248
+2026-09-08T20:24:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T20:55:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T21:26:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T21:57:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T22:28:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T22:59:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T23:30:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-09T00:00:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	3	50	42	2.248575
+2026-09-09T00:31:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T01:02:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T01:33:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T02:04:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T02:35:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T03:06:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T03:37:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T04:08:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	2	50	41	2.315258
+2026-09-09T04:39:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T05:10:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T05:41:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T06:12:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T06:43:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T07:14:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T07:45:23+02:00	GELB	G10	0.594078	0.997602	9	1.681245	6	50	344	14	50	45	3.362496
+2026-09-09T08:15:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	11	50	44	3.260752
+2026-09-09T08:46:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T09:17:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T09:48:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T10:19:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T10:50:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T11:21:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T11:52:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T12:11:09+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	1	50	43	2.282526
+2026-09-09T12:41:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T13:12:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T13:43:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T14:14:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T14:45:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T15:15:29+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T15:45:29+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T16:15:29+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	1	50	42	1.597768
+2026-09-09T16:45:29+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T17:16:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T17:47:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T18:18:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T18:48:30+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T19:19:26+02:00	GRUEN	G7	0.200563	0.988643	8	1.058274	7	50	359	2	50	40	2.582694
+2026-09-09T19:50:26+02:00	GELB	G7	0.585170	0.997394	9	1.367138	7	50	369	10	50	37	3.320915
+### /home/andreas/architekt/wettbewerbsverlauf.tsv.v1
+ts	stufe	fuehrer	vorsprung	saettigung	erholung	entropie	tote_zellen	frames	perzept_geprueft	perzept_ueberstimmt	state_fuehrer
+2026-09-08T03:33:14+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T03:34:16+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T04:04:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T04:35:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T05:06:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T05:37:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T06:08:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T06:39:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T07:10:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+### /home/andreas/architekt/wettbewerbsverlauf.tsv.vor-14-spalten
+2026-09-08T13:45:29+02:00	GRUEN	G1	0.426327	0.993983	8	0.282292	7	50	285	0	36	32	2.901629
+2026-09-08T14:16:09+02:00	GRUEN	G1	0.426327	0.993983	8	0.282292	7	50	285	0	36	32	2.901629
+2026-09-08T14:46:26+02:00	GRUEN	G7	0.109450	0.851084	6	0.679556	6	50	290	5	36	32	1.260072
+2026-09-08T15:17:26+02:00	GRUEN	G7	0.111480	0.931900	7	0.866314	7	50	298	8	36	32	1.672640
+2026-09-08T15:47:26+02:00	GRUEN	G7	0.266483	0.988003	8	1.102489	7	50	307	9	36	32	2.555113
+2026-09-08T16:18:17+02:00	GRUEN	G5	0.206205	0.980164	8	1.979057	5	50	321	14	43	37	2.301716
+2026-09-08T16:48:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	2	45	39	2.620729
+2026-09-08T17:19:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T17:50:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T18:21:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T18:52:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T19:23:26+02:00	GRUEN	G5	0.382021	0.989471	8	2.053337	5	50	323	0	45	39	2.620729
+2026-09-08T19:53:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	2	47	40	2.024248
+2026-09-08T20:24:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T20:55:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T21:26:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T21:57:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T22:28:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T22:59:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-08T23:30:26+02:00	GRUEN	G5	0.101199	0.965701	7	2.094374	5	50	325	0	47	40	2.024248
+2026-09-09T00:00:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	3	50	42	2.248575
+2026-09-09T00:31:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T01:02:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T01:33:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T02:04:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T02:35:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T03:06:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T03:37:26+02:00	GRUEN	G5	0.111607	0.977964	8	2.131804	5	50	328	0	50	42	2.248575
+2026-09-09T04:08:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	2	50	41	2.315258
+2026-09-09T04:39:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T05:10:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T05:41:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T06:12:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T06:43:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T07:14:26+02:00	GRUEN	G10	0.107726	0.980689	8	2.126770	5	50	330	0	50	41	2.315258
+2026-09-09T07:45:23+02:00	GELB	G10	0.594078	0.997602	9	1.681245	6	50	344	14	50	45	3.362496
+2026-09-09T08:15:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	11	50	44	3.260752
+2026-09-09T08:46:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T09:17:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T09:48:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T10:19:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T10:50:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T11:21:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T11:52:26+02:00	GELB	G10	0.598148	0.997061	9	0.989747	7	50	355	0	50	44	3.260752
+2026-09-09T12:11:09+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	1	50	43	2.282526
+2026-09-09T12:41:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T13:12:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T13:43:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T14:14:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T14:45:26+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T15:15:29+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T15:45:29+02:00	GRUEN	G10	0.180323	0.979396	8	0.989747	7	50	356	0	50	43	2.282526
+2026-09-09T16:15:29+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	1	50	42	1.597768
+2026-09-09T16:45:29+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T17:16:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T17:47:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T18:18:26+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T18:48:30+02:00	GRUEN	G10	0.001492	0.921332	7	0.989747	7	50	357	0	50	42	1.597768
+2026-09-09T19:19:26+02:00	GRUEN	G7	0.200563	0.988643	8	1.058274	7	50	359	2	50	40	2.582694
+2026-09-09T19:50:26+02:00	GELB	G7	0.585170	0.997394	9	1.367138	7	50	369	10	50	37	3.320915
+### /home/andreas/architekt/wettbewerbsverlauf.tsv.vor-migration-20260908T073735
+ts	stufe	fuehrer	vorsprung	saettigung	erholung	entropie	tote_zellen	frames	perzept_geprueft	perzept_ueberstimmt	state_fuehrer
+2026-09-08T03:33:14+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T03:34:16+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T04:04:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T04:35:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T05:06:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T05:37:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T06:08:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T06:39:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+2026-09-08T07:10:26+02:00	GELB	G1	0.593312	0.996680	9	0.995566	5	50	13	11	3.199617
+### /home/andreas/architekt/regressions-meldung.txt
+2026-09-10T07:47:45+02:00	datei+einblendung	Pruefbefund geaendert -- db-autoritaet: rc0/3 -> rc0/4
+2026-09-10T09:47:45+02:00	datei+einblendung	Pruefbefund geaendert -- db-autoritaet: rc0/4 -> rc0/5
+2026-09-12T00:29:36+02:00	datei+einblendung	Pruefbefund geaendert -- puls: rc0/0 -> rc2/1
+2026-09-12T02:00:59+02:00	datei+einblendung	Pruefbefund geaendert -- gatter: rc0/0 -> rc2/1
+2026-09-12T02:30:58+02:00	datei+einblendung	Pruefbefund geaendert -- db-autoritaet: rc0/5 -> rc0/4; fluechtig: rc2/3 -> rc2/5
+### /home/andreas/architekt/selbsttest-meldung.txt
+2026-09-11T12:26:51+02:00	datei	Selbsttest-Befund geaendert -- satz: 11/11 -> 12/12
+2026-09-11T16:35:08+02:00	datei	Selbsttest-Befund geaendert -- satz: 12/12 -> 13/13
+2026-09-12T04:08:45+02:00	datei	Selbsttest-Befund geaendert -- satz: 13/13 -> 15/15
+### /home/andreas/architekt/wettbewerb-meldung.txt
+2026-09-08T12:15:26+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G1, Vorsprung +0.2700, Saettigung 98.3%)
+2026-09-09T07:45:23+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G10 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5941 uebertrifft. (Fuehrer G10, Vorsprung +0.5941, Saettigung 99.8%)
+2026-09-09T12:11:09+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G10, Vorsprung +0.1803, Saettigung 97.9%)
+2026-09-09T19:50:26+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G7 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5852 uebertrifft. (Fuehrer G7, Vorsprung +0.5852, Saettigung 99.7%)
+2026-09-10T09:17:28+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G1, Vorsprung +0.2113, Saettigung 98.9%)
+2026-09-10T12:17:30+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G1 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5230 uebertrifft. (Fuehrer G1, Vorsprung +0.5230, Saettigung 99.7%)
+2026-09-10T17:24:26+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G3, Vorsprung +0.4775, Saettigung 99.4%)
+2026-09-10T17:55:26+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G3 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5970 uebertrifft. (Fuehrer G3, Vorsprung +0.5970, Saettigung 99.6%)
+2026-09-10T20:57:56+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G10, Vorsprung +0.4204, Saettigung 99.5%)
+2026-09-10T21:28:26+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G10 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5986 uebertrifft. (Fuehrer G10, Vorsprung +0.5986, Saettigung 99.8%)
+2026-09-11T14:15:29+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G1, Vorsprung +0.1648, Saettigung 94.1%)
+2026-09-11T14:45:29+02:00	datei+einblendung	Stufenwechsel GRUEN -> GELB. Der Vorsprung uebersteigt die halbe Signalspanne. G3 verliert nur noch, wenn eine andere Zelle ihr Signal um mehr als 0.5978 uebertrifft. (Fuehrer G3, Vorsprung +0.5978, Saettigung 99.8%)
+2026-09-12T04:01:06+02:00	datei+einblendung	Stufenwechsel GELB -> GRUEN. Der Zustandsterm entscheidet den Wettbewerb nicht allein. (Fuehrer G10, Vorsprung +0.2081, Saettigung 98.5%)
+=== END ===

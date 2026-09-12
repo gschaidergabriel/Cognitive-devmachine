@@ -1,0 +1,80 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+  1758	let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+  1759	let _letzteKoerperAktion = null;
+  1760	function koerperAktionStarten(fertig){
+  1761	  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  1762	  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  1763	  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  1764	  _letzteKoerperAktion = wahl.name;
+  1765	  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+  1766	}
+  1767	function koerperAktionWeiterPlanen(){
+  1768	  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  1769	  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  1770	  // weiterreicht, kein Verzweigen.
+  1771	  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+  1772	    22000 + Math.random()*28000);
+  1773	}
+  1774	koerperAktionWeiterPlanen();
+  1775	function koerperSchritt(jetzt){
+  1776	  if(koerperAktion){
+  1777	    const a = koerperAktion;
+  1778	    if(jetzt - a.letzterT < a.ms) return;
+  1779	    const eintrag = bildLaden(a.bilder[a.idx]);
+  1780	    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+  1781	    a.letzterT = jetzt;
+  1782	    koerperCrossfade(a.bilder[a.idx]);
+  1783	    a.idx++;
+  1784	    if(a.idx >= a.bilder.length){
+  1785	      koerperAktion = null;
+  1786	      const f = a.fertig; a.fertig = null;
+  1787	      if(f) f();
+  1788	    }
+  1789	    return;
+  1790	  }
+  1791	  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  1792	  atmenLetzterWechsel = jetzt;
+  1793	  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  1794	  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+  1795	}
+  1796	
+  1797	// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+  1798	// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+  1799	// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+  1800	// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+  1801	// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+  1802	// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+  1803	// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+  1804	// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+  1805	//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+  1806	//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+  1807	//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+  1808	//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+  1809	//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+  1810	//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+  1811	//  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+  1812	//     linear.
+  1813	// Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+  1814	// (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+  1815	// Hintergrund bewegt sich minimal weniger als der Vordergrund").
+  1816	// ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("er zittert, schaut
+  1817	// relativ shit aus"): die 8-10Hz-Mikrozitter-Komponente unten war zu schnell
+  1818	// UND zu stark -- auf einem kleinen Panel (~296px breit), mit dem neuen
+  1819	// engeren Kopf-Crop, UND auf einem Chrome-Fenster ohne GPU-Kompositing
+  1820	// (--disable-gpu, siehe Fensterstart) liest sich eine 8-10Hz-Oszillation
+  1821	// nicht als sanftes Handzittern, sondern als sichtbares Vibrieren/Ruckeln --
+  1822	// das Auge ist fuer zeitliches Flackern empfindlicher als fuer die reine
+  1823	// Pixelamplitude. Fix: Frequenz UND Amplitude aller drei Komponenten deutlich
+  1824	// gesenkt (Tremor von ~10/8Hz auf ~3/2.3Hz, Drift/Rotation-Amplitude
+  1825	// grob halbiert). Ziel ist jetzt spuerbar ruhiger -- lieber zu wenig als
+  1826	// wieder "zittert".
+  1827	let driftPhaseX = Math.random() * Math.PI * 2;
+  1828	let driftPhaseY = Math.random() * Math.PI * 2;
+  1829	let tremorPhaseA = Math.random() * Math.PI * 2;
+  1830	let tremorPhaseB = Math.random() * Math.PI * 2;
+  1831	let rotPhase = Math.random() * Math.PI * 2;
+  1832	function kameraWackeln(){
+  1833	  const t = Math.max(0.4, Math.min(1.6, tempo)); // "passend zur Bewegung": etwas mehr Schub bei hoeherem Tempo
+  1834	  driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+  1835	  driftPhaseY += 0.0105; // ~9.6s Periode -- absichtlich versetzt zu X (war ~4.9s)
+SCOPE=READ_ONLY_BODY_SCHEDULER

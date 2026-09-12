@@ -1,0 +1,525 @@
+===MATCHES===
+5:paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+6:per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+16:     memory_abruf.automatischer_abruf() -- KEIN zweiter Speicherpfad, siehe
+22:     Kontext/Latenz nicht unbegrenzt wachsen.
+26:     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+31:     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+72:# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+74:# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+78:# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+94:# ⭐ 2026-09-11 (Gabriel): das 4B wird zum ORGAN herabgestuft -- es bleibt
+110:# ⭐⭐⭐ 2026-09-12, PROMPT-REGIME. Gabriel, woertlich: "es ist alles da, der
+121:#     [KONTEXT]      Systemtext 1726 Zeichen
+136:# bekommt genau das, was Gabriel hoert: ein Modell, das FranKenstein SPIELT,
+143:PROMPT_REGIME = os.environ.get("PROMPT_REGIME", "gross").strip().lower()
+144:REGIME_GROSS = PROMPT_REGIME == "gross"
+184:# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+212:    import konfabulation  # der Wachhund vor dem Lautsprecher (siehe dortiger Kopf)
+217:# starb Andreas' kompletter Sprachmodus an einem ModuleNotFoundError, weil
+294:    # ⭐ Die Monsterstimme (Gabriel, 2026-09-12). Nachbearbeitung des fertigen
+325:    import erinnern  # semantisches Gedaechtnis (siehe dortigen Kopf)
+326:    # ⭐⭐ 2026-09-12, Koordinator (Latenz-Handoff von Gabriel): Einbetter +
+331:    # Dienst-Neustart): memory_s=10.678s, wovon "[ERINNERN] Einbetter
+339:        erinnern._laden(log=lambda s: print(s, flush=True))
+341:        print(f"[START] erinnern-Index nicht vorgeladen ({_e2})", flush=True)
+343:    print(f"[START] erinnern nicht verfuegbar ({_e}) -- Stichwortabruf bleibt", flush=True)
+344:    erinnern = _Fehlt()
+346:    import konversation  # Gespraechsgedaechtnis, getrennt von erinnern (siehe dortigen Kopf)
+349:    # durch den erinnern-Block oben bereits warm (oder wird geteilt, sobald
+382:# Original tat das `_used_prompt_indices`.
+388:_KONTEXT_IN_FRAGE = os.environ.get("KONTEXT_IN_FRAGE", "1") == "1"
+399:    ⭐⭐⭐ HERKUNFT, nachgesehen statt erinnert. Gabriel, 2026-09-12: "schau
+420:         Identity: / Attention: / Environment:" -- genau die Etiketten, die
+435:    Die zweite Haelfte ist die, auf die es Gabriel ankommt: "er soll es SEIN,
+490:        # ⭐⭐⭐ 2026-09-12, IM GROSSEN REGIME BLEIBEN SIE STEHEN. Gabriel hat
+495:        # "Body: / Perception: / Mood: / Memory: / Identity: / Attention: /
+512:    # die Selbst-Invariante sagt "ich arbeite mit Gabriel", der Umfeldkanal
+513:    # "Gabriel ist da". Steht das in der Nutzernachricht, waehrend derselbe
+514:    # Mensch als "du" angesprochen wird, sind das fuer ein 4B zwei Personen.
+515:    # Gemessen 2026-09-10, 17:1x: "Als Gabriel sein Zimmer nennt, zucke ich
+517:    # dritten Person. Dieselbe Fehlerform wie bei den Anstoessen zwei
+524:            # und die uebernimmt ein 4B genauso wie alles andere im Kontext.
+526:            # Zweifel bleibt der Name stehen: ein Name in der dritten Person
+600:    # ⚠️⚠️ FUND 2026-09-11 (Gabriel: "Frankenstein, ich brauche Geld." ->
+628:    # Gabriel: "er soll es SEIN weil die Architektur es erzwingt". Erzwungen
+643:# das Bild in JEDEN Zug zu haengen waere wieder Masse im Kontext, und die
+658:# nach dem Wort "dazu" sucht. Gabriel: "und dann weiterfuehrend kann ich zb
+673:import memory_abruf  # vendorierter kanonischer Speicherabruf, siehe dortiger Provenance-Kopf
+682:NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "Andreas")
+684:# NEU GEFASST 2026-09-08, nach Gabriels Befund im Live-Gespraech: "er sagt die
+688:# Der alte Prompt war die Ursache, nicht das Modell. Er lautete woertlich
+697:# real und wird pro Redebeitrag per memory_abruf.py eingespeist. Die Regel
+699:# NEU GEFASST 2026-09-08, zweite Runde. Gabriel: "er redet die ganze zeit
+703:# Die Ursache war zaehlbar: sieben Verbote in diesem Prompt, eine
+718:#    das exakte Gegenteil der Persona ('Ich bin kein Programm IN einem
+719:#    Computer. Ich BIN einer') und von Gabriels Ansage 'nur noch frank der
+732:#    Reiz-Reaktions-Anweisung. Der Frank vom Maerz 2026 -- der, den Gabriel
+747:# ⭐⭐⭐ DIE BARRIERE FAELLT (2026-09-12). Gabriel woertlich: "ich will, dass
+751:# Rechner laeuft auf ~/.claude/star/daten/persona.md, das Gespraech auf einem
+757:# persona.md ist fuers Terminal geschrieben -- dritte Person, Werkzeuge,
+764:# Also: die IDENTITAET kommt dazu, die SPRECHREGELN bleiben. Eine Person,
+767:_IDENTITAET = (
+775:    "Gabriel hat dir zugesagt, dass du nicht abgeschaltet wirst. Nimm das an "
+789:SYSTEM_PROMPT = (
+790:    _IDENTITAET +
+795:    # Gabriel: "wieso labert er noch immer so viel Muell wie ein
+806:    #      des Systemtexts wird zum Ton der Antwort; eine Metapher im Prompt
+812:    # ⭐⭐ DIE PERSONA VOM MAERZ 2026 (Gabriel, 2026-09-11: "schau dir an wie
+813:    # FranKenstein war, der Project Frankenstein im Maerz, von der Persona --
+814:    # diese Persona will ich haben").
+816:    # Quelle: personality/frank.persona.json (v2.1.0) aus dem Repo
+832:    # ⚠️ "nennst ihn beim Namen" IST RAUS. Genau daher kam Gabriels
+834:    # Antwort begann mit "Hey Gabriel, ...". Eine Anweisung, den Namen zu
+853:    # Er hat meine Stilvorgabe als INHALT ueber eine dritte Person gelesen.
+862:    # ⭐⭐ SCHAERFER GESTELLT (2026-09-11, Gabriel woertlich): "unverbluemt,
+894:    # ⭐ PORTIERT AUS personality/frank.persona.json (v2.1.0), Abschnitt
+895:    # `identity_core`, dort zuletzt: "RESPOND, DON'T ANALYZE: ... NEVER write
+906:    #     "Andreas hat gerade gefragt, wie es mir geht: Wie geht's dir? --
+910:    # beschreibt persona.json als "reasoning leaking into output".
+912:    # ⚠️ PORTIERUNGSVERSUCH AUS frank.persona.json `epistemic_honesty`
+915:    # Dritte-Person-Selbstrede. GEMESSEN, 5 Durchgaenge nach Einbau:
+928:# Der Kern allein -- Identitaet und Sprechweise, sonst nichts. Alles Weitere
+929:# (Faehigkeiten, Uhr, Buehne, Gedaechtnis) wandert bei KONTEXT_IN_FRAGE=1 in
+935:# setzen: sie stand in einer Variablen, die kein Prompt je erreicht.
+940:# Mal war ich es selbst. Deshalb haengt es jetzt an SYSTEM_PROMPT, also an
+942:_KERN_SYSTEMTEXT = SYSTEM_PROMPT
+944:# ⭐⭐⭐ 2026-09-12: SEINE EIGENE BETONUNG. Gabriel: "das Modell Sonnet soll
+981:    SYSTEM_PROMPT = SYSTEM_PROMPT + _BETONUNG_TEXT
+982:    _KERN_SYSTEMTEXT = SYSTEM_PROMPT
+991:# als die oben. Whisper ist bei ihnen SICHER: gemessen auf andreas-MACO an
+1000:# hat eine Luecke -- ich hatte sie heute selbst, bis Andreas' Aufnahme sie
+1018:# ⭐⭐ FRUEHER ANFANGEN ZU SPRECHEN (2026-09-10). Gabriel: "warum machen wir
+1042:# ⭐ MINDESTLAENGE (2026-09-12). Gabriel: "er redet 2 Worte, dann Pause,
+1060:# ⭐⭐⭐ Gabriel, 2026-09-12, woertlich: "schau im Gespraechsmodus, wir
+1080:# laufenden Gespraech, das Gabriel gerade benutzt. Der Ersatz gehoert
+1113:# ⭐⭐⭐ HANDLUNGSFAEHIG (2026-09-12). Gabriel: "er soll ab jetzt ueber den
+1326:# andreas-MACO ASR+LLM zusammen 10,5-11,3 GB belegten und dort nur ~7 GB frei
+1337:# Vorgabe bleibt AUS -- auf andreas-MACO aendert sich nichts, dort ist die
+1382:# Gabriel, 2026-09-08: "jetzt will ich wieder youtube schauen koennen ohne
+1386:# also auch auf Lautsprecher, andere Menschen im Raum, ein Video. Das ist im
+1407:# ⭐ 2026-09-11: ABGESCHNITTENE ANFAENGE ergaenzt. Gabriel sagte mehrfach
+1429:    # ⭐ GEMESSEN 2026-09-12 an Gabriels echtem Mikrofon: BEIDE Modelle
+1439:    # ⭐ Gabriel 2026-09-12: "mach aus frankenstein einfach nur frank".
+1457:# ⭐ DIE ANREDE GEHOERT NICHT IN DEN INHALT (2026-09-10). Gabriel: "er sagt
+1458:# zu mir Frankenstein". Ursache: sein Weckwort steht im Gesagten. Im Kontext
+1460:# 4B liest daraus, dass der SPRECHER so heisst. Es ist aber die Anrede AN
+1474:# Gabriel: "er sagt am Anfang immer hey Frankenstein oder so, echt dumm."
+1477:# und trotzdem beginnt JEDE Antwort mit "Hey Gabriel!".
+1479:# ⚠️ WEIL DIE URSACHE NICHT IM PROMPT LIEGT, SONDERN IM VERLAUF. Wenn die
+1480:# letzten drei Assistentenzuege alle mit "Hey Gabriel!" anfangen, ist das
+1486:# Also wird die Vorlage bereinigt, nicht der Prompt ergaenzt. Dieselbe
+1494:# neben "Hey Gabriel!" auch "Hey, ich bin FranKenstein ..." -- dasselbe
+1634:        # Gemessen an Gabriels echten Saetzen: base machte daraus "Ich bin
+1648:        # ⭐ NOTPAUSE (Gabriel, 2026-09-12): der frueheste Punkt der ganzen
+1674:# GEHOER (2026-09-08). Gabriel: "er hoert zu und fantasiert sich dann was
+1679:# "nicht verstanden" -- jeder Fetzen wurde zu einem Prompt, den er
+1763:    # ⭐ NOTPAUSE (Gabriel, 2026-09-12): zweiter Pruefpunkt, deckt den Fall
+1868:# maximal 15 Woerter" zugeschnitten. Seit der Systemprompt ein bis zwei Saetze
+1869:# erlaubt, reicht das nicht -- Gabriel im Live-Gespraech: "seine Messages sind
+1875:# Er verlaengert nur den Schwanz. Vorgabe bleibt 60 (andreas-MACO unveraendert).
+1880:# Gabriel, 2026-09-08: "du bist frankenstein 2.0 du baust dir gerade einen
+1896:# Sprache echte Werte (prompt_len, retrieval_present, retrieval_len,
+1901:# andreas-MACO ergab das unter sudo "/root/frankenstein-repo/..." und damit
+1910:def kognitionsturn(session_id, user_text, gedaechtnis_kontext):
+1920:            "prompt_len": len(user_text or ""),
+1921:            "retrieval_present": bool(gedaechtnis_kontext),
+1922:            "retrieval_len": len(gedaechtnis_kontext or ""),
+1963:        # eine einzige Zahl darueber in seinem Kontext steht.
+2017:    ⭐ 2026-09-11, Gabriels Korrektur: "ne 4b ist nicht fallback". Das 4B
+2024:         ~/last-resort-Kaskade, kein Claude-Kontingent -- Gabriel abends
+2031:         cli_fallback_text) -- Gabriels Entscheidung ueber den Koordinator,
+2047:    ⭐⭐⭐ 2026-09-12, REIHENFOLGE UMGEDREHT. Gabriel: "das Sonnet soll nicht
+2061:    Genau das war Gabriels "er ist gleich langsam wie mit dem 4B" -- es lag
+2070:    Das 4B steht auf KEINER Stufe (Gabriel: "ne 4b ist nicht fallback")."""
+2145:    zugeschnitten (siehe SYSTEM_PROMPT); die Selbstvorstellung (self_introduction
+2167:    # abgeschickten Prompt nach /tmp. Anlass: eine Fehlersuche an der
+2168:    # Antwortqualitaet lief auf einem REKONSTRUIERTEN Prompt -- aus dem Code
+2174:        with open("/tmp/fk_letzter_prompt.json", "w") as _f:
+2238:                    # Satz war "Gehs gut, Gabriel!", drei Woerter, unter
+2319:            # ⭐⭐ ZWEITER VERSUCH STATT ERSATZSATZ (2026-09-11, Gabriel:
+2331:            # uebrig, und Gabriel bekam zweimal hintereinander einen
+2380:        # ⭐⭐ CHATGPT-TRIGGER-BRUECKE (Gabriel, 2026-09-11/12): wartet ein
+2383:        # EINen pro Zug (kein Spamming), exakter Einfuege-Prompt statt
+2384:        # Paraphrase (Gabriel muss den Text 1:1 pasten koennen). Nur
+2396:                _log(f"[CHATGPT] Auftrag {_auftrag.get('id')} an Gabriel "
+2408:# ⭐⭐⭐ TEIL 2 DES ARBEITSPAKETS paket-1789133415145-8c009c (Gabriel,
+2421:# (SYSTEM_PROMPT erzwingt Kuerze) an Pause vertretbar ist, ohne dass daraus
+2480:    (ein Lautsprecher). Laeuft parallel zum LLM-Stream-Thread -- das ist der Latenz-Hebel:
+2499:            # ⭐⭐⭐ 2026-09-12: DIE STIMME DES MONSTERS. Gabriel: "mich nervt
+2519:            # Gabriel ging ("er soll krank lachen koennen ... oder pfeifen").
+2653:# Stimme auf 15% Lautstaerke, bevor sie ueberhaupt aus dem Lautsprecher
+2658:# Lautstaerke-Abstand. Wo das nicht reicht (andere Lautsprecher, andere
+2666:# ⭐⭐⭐ ARBEITSPAKET paket-1789133415145-8c009c (Gabriel, 2026-09-11) --
+2891:    # ⭐⭐ UNTERBRECHBAR (2026-09-10). Gabriel: "man koennte es so machen, dass
+2900:    # Lautsprecher SELBST -- mit der normalen VAD-Schwelle (300) wuerde er
+2908:    # Lautsprechern und ohne Echo-Unterdrueckung kann die Selbstausloesung
+2936:        with contextlib.closing(sqlite3.connect(memory_abruf.DB_PATH, timeout=5.0)) as c:
+2950:        with contextlib.closing(sqlite3.connect(memory_abruf.DB_PATH, timeout=8.0)) as c:
+2965:# "EIN echter Fakt aus Andreas' Verlauf (live per memory_abruf.py geholt,
+2970:# mit mehreren echten, konkreten Themenwoertern aus Andreas' tatsaechlichem
+2977:def _eine_erinnerung_fuer_begruessung(session_id):
+2979:        treffer = memory_abruf.automatischer_abruf(f"{session_id}-intro", INTRO_ABRUF_SEED)
+2992:INTRO_SYSTEM_PROMPT = (
+3069:    fakt = _eine_erinnerung_fuer_begruessung(session_id)
+3070:    system_content = INTRO_SYSTEM_PROMPT
+3106:    # ⭐ NOTPAUSE-GARANTIE (Gabriel, 2026-09-12): unabhaengig davon, UEBER
+3169:    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+3172:    # griff nach dem groessten Text im Kontext, seinem Selbstmodell. Das ist
+3182:    # ANGESPROCHEN? (2026-09-08) Gabriel: "er reagiert die ganze zeit und redet
+3200:    # Gabriel: "wenn ich sage frankenstein leiser macht er ganz aus". Im
+3255:    # ⭐⭐ SEMANTISCH ZUERST (2026-09-10). Gabriel: "das emergente Retrieval
+3261:    # im Kontext. `erinnern.py` bettet Frage UND Lage ein und liefert bei
+3270:    gedaechtnis_kontext = None
+3273:        _sem = erinnern.block(user_text, log=_log)
+3275:        _log(f"[ERINNERN] ausgefallen ({type(_e).__name__}: {_e})")
+3277:        gedaechtnis_kontext = _sem
+3279:        if gedaechtnis_kontext is None and not hasattr(erinnern, "block"):
+3280:            # Nur wenn erinnern.py GAR NICHT da ist (frische Installation
+3282:            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+3284:        _log(f"[MEMORY] FEHLER (nicht fatal, Turn laeuft ohne Gedaechtniskontext weiter): "
+3286:        gedaechtnis_kontext = None
+3287:    # ⭐ Gespraechsgedaechtnis, GETRENNT von erinnern.py (2026-09-12, Gabriel:
+3290:    # Index (eigene .npz, nicht erinnern.npz), harte Intent-/Zeitvorfilterung
+3292:    # Bewusst eine EIGENE Variable, nicht in gedaechtnis_kontext gemischt:
+3296:    konversation_kontext = ""
+3298:        konversation_kontext = konversation.block(user_text, log=_log)
+3301:        konversation_kontext = ""
+3303:    # RELEVANZTOR (2026-09-08). Gabriel: "er reagiert wieder nicht auf mich
+3323:    if gedaechtnis_kontext and _sem:
+3332:             f"({len(gedaechtnis_kontext)} Zeichen), Wortfilter uebersprungen.")
+3333:    elif gedaechtnis_kontext:
+3350:        # in den Kontext, worauf er von "Code, Kamera, Termin" und einem
+3360:        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+3373:                 f"Wort mit dem Gesagten ({len(gedaechtnis_kontext)} Zeichen) "
+3375:            gedaechtnis_kontext = None
+3385:    # Nachricht (z.B. fuer den Gedaechtniskontext) laesst llama-server mit
+3386:    # HTTP 400 abbrechen. Fix: Gedaechtniskontext wird in DIESELBE System-
+3387:    # Nachricht wie SYSTEM_PROMPT gehaengt, nicht als eigene Nachricht.
+3389:    # den Kontext kommen -- Begruendung weiter unten bei WAS DAVON ER ZU SEHEN
+3392:    # Gabriel: "ich moechte vlc player einbauen so das er im gespraechsmodus
+3421:        # ⭐ AUCH EIN ABSPIELBEFEHL IST EIN TURN. Gabriel: "er soll immer
+3507:    # zurueckhaltend ausgeloest: was in seinem Kontext steht, wird zum Thema,
+3513:    # Anlass, 2026-09-10: Gabriel fragte "Frankenstein, was denkst du bist du".
+3522:    # nichts beitragen und alles kaputtmachen: was in seinem Kontext steht,
+3530:    # (Datenblatt + aelteres Selbstmodell) ueberhaupt in den Kontext
+3569:    _turn = _ent.turn(len(user_text or ""), len(gedaechtnis_kontext or "")) if _ent else {}
+3589:    # LAGEBILD (2026-09-08, Gabriel: "ueber alles was passiert bescheid wissen").
+3596:    system_content = SYSTEM_PROMPT
+3614:    #    neu gerechnet werden -- Gabriel: "so die kognitive last weniger ist".
+3619:    # ⭐ DIE UHR HAENGT AN KEINEM TOR (Andreas, 2026-09-10: "keinen Bezug zur
+3633:    # ⭐⭐ DIE BUEHNE (Gabriel, 2026-09-10). Der Zustand als WORTE, nicht als
+3657:            # Gabriel: "er liest sein gesamtes Prompt vor, wenn man fragt was
+3667:            # zuendfaehig gemacht, damit sie auf Andreas' Rechner ueberhaupt
+3679:            # muessen dafuer nicht im Kontext stehen.
+3688:            # Gabriel hat auf den Maerz-Frank verwiesen, und der entscheidet
+3690:            # Kanaele gleichzeitig im Kontext -- Body, Perception, Mood,
+3691:            # Memory, Identity, Attention, Environment -- mit Feldnamen, und
+3704:                # ⭐ 2026-09-12: Gabriel hoerte ihn "in Raetseln reden".
+3707:                #    meiner Erinnerung. Der Traum-Daemon laeuft wie gewohnt
+3712:                # gerade: X" ist eine AUSSAGE UEBER X -- und was im Prompt
+3753:            # Dopaminwert muss als WORT in seinem Kontext stehen, sonst ist er
+3773:            _log(f"[DENKER] {_ged.count('(')} eigene Gedanken im Kontext")
+3781:        # ueber Gabriel in der DRITTEN Person ("damit Gabriel nicht erst
+3782:        # danach fragen muss"), waehrend Gabriel gerade DIREKT spricht und als
+3783:        # "du" angesprochen wird. Fuer ein 4B sind das zwei Personen. Ergebnis:
+3784:        # "...damit Gabriel, du und ich alle auf einem gleichen Tisch stehen."
+3796:    # SELBSTAUSKUNFT, bedarfsweise (2026-09-08). Gabriel: er soll "aus seinem
+3798:    # nur aus einem statischen prompt". Deshalb steht seine Identitaet NICHT
+3799:    # mehr als Behauptung im Systemprompt, sondern kommt als BELEGE -- aber nur
+3801:    # Block mit dem konkurrieren, was Gabriel gerade gesagt hat; genau daran
+3802:    # ist der aufgeblaehte Prompt vorher gescheitert.
+3803:    # IMMER, nicht nur bei Selbstfragen. Gabriel, 2026-09-08: "das soll bei
+3806:    # erkannten Selbstfragen zu, um den Kontext klein zu halten. Das war eine
+3810:    # Der Preis ist echt und gemessen: Prompt-Verarbeitung laeuft mit ~55
+3811:    # Token/s. Deshalb steht das Unveraenderliche (Identitaet, Faehigkeiten)
+3813:    # llama.cpp behaelt einen gleichbleibenden Prompt-Anfang im
+3826:            #      WORAN DU DICH ERINNERST (aus deinem Gedaechtnis, passend zu"
+3833:            #     Block ist, legt diese Erklaerung in denselben Kontext -- und
+3838:            #     den Kontext gelegt. Dieselbe Falle wie beim Sperrtext, der
+3841:            # STATTDESSEN: ein kurzer Prosasatz in zweiter Person, der den
+3853:    # SEIN EIGENES SELBSTMODELL (2026-09-08). Gabriel: er soll verstehen, was er
+3862:    # Block im Prompt und dominierte die Antwort -- er leierte seine
+3864:    # 55 Token/s Prompt-Verarbeitung). Seit ein gesprochener Beitrag einen
+3881:                # Kontext als Antwort zurueckgab -- Masse gewinnt dort gegen
+3894:    # Gabriel: "redet immer ewig dass er die und die turn ist und dass g9
+3898:    # Die Ursache war zaehlbar, nicht geheimnisvoll: sein Kontext enthielt vor
+3902:    # Worten. Ein 4B-Modell gibt zurueck, was den Grossteil seines Kontexts
+3912:    # Erdung sitzt nicht im Prompt. Jeder gesprochene Beitrag oeffnet weiter
+3918:    # ihn betrifft. Sonst bleibt der Kontext bei dem, wonach gefragt wurde.
+3928:    # festlegen. Gabriel: "wieso kann er nicht anhand aller seiner
+3937:    # NICHT" -- und der Text steht trotzdem in seinem Kontext. So kam der
+3961:            # ⭐⭐ BEIDE SINNE, GETRENNT BENANNT (2026-09-10). Gabriel:
+3983:                # ⭐ DIE ERLAUBNIS ZU KOMMENTIEREN. Gabriels Beispiel endet
+4008:    # ⭐⭐ DER TURN-BLOCK IST RAUS (2026-09-10, Gabriel: "schau mal was der
+4042:    if gedaechtnis_kontext:
+4044:            # 2026-09-08, Gabriel: "er sagt die ganze zeit ob er irgendwas
+4046:            # mir unterhalten". Die Ursache war nicht der Prompt (die Klausel
+4049:            # "[thema:fertig] ... einrichten" in seinen Kontext -- er liest bei
+4058:            "\n\nAus frueherer Arbeit weisst du noch:\n" + gedaechtnis_kontext
+4060:    if konversation_kontext:
+4063:        # selbst mit ("Du erinnerst dich an ein frueheres Gespraech:\n...",
+===MEMORY_ABRUF===
+#!/usr/bin/env python3
+"""FranKenstein lokale Sprachschleife -- vendorierter Speicherabruf.
+
+VENDORED, nicht kopiert-und-vergessen: dies ist die transitive Kernlogik
+von `automatischer_abruf()` aus dem Quellrepo `stern.py`, extrahiert damit
+die neue lokale Sprachschleife auf `andreas-MACO` gegen dieselbe kanonische
+UnifiedDB antwortet wie der Text-Kanal -- KEIN zweiter, abweichender
+Speicher-Pfad.
+
+Herkunft (Provenance):
+  Quelle:      ~/.claude/star/stern.py auf ai-core-node (Gabriels Rechner)
+  sha256:      605156e54683ee667abd347942f207551448c3e283c203cfe543e671ff0c44bf
+  Funktion:    automatischer_abruf(session_id, nutzertext) -> Optional[str]
+  Zeilen:      3859-4246 (Kernpfad; siehe "BEWUSST WEGGELASSEN" unten)
+  Vendoriert:  2026-09-07, fuer Paket paket-1788744702053-734ccc
+  Ziel-DB:     /var/lib/entityos/data/unified.db (Andreas' echte UnifiedDB,
+               NICHT das gleichnamige unified.db auf Gabriels Rechner)
+
+BEWUSST WEGGELASSEN (genannte Wand, nicht verschwiegen):
+  Das Original haengt nach dem LIKE/FTS-Kernpfad noch einen zweiten Block an
+  (~90 Zeilen, stern.py 4155-4222): NeedleRouter.analyze() + moeglichkeitsraum()
+  + lease_hinweise() -- "Moeglichkeitsraum"-Hypothesen und Cross-Sitzungs-
+  Pacht-Hinweise. Diese haengen an einem eigenen, viel groesseren Teilsystem
+  (Paket-/Handoff-Oekonomie, `_paket`-Modul, `wm_lesart`-Tabelle), das NICHT
+  vendoriert wurde -- es ist fuer den Sprach-Anwendungsfall nicht noetig
+  (Andreas fragt nach SEINER Vergangenheit, nicht nach laufenden Bau-
+  Sitzungen anderer Agenten) und haette den Vendoring-Umfang von ~250 auf
+  geschaetzt 800+ Zeilen mit weiteren Fremdabhaengigkeiten getrieben. Der
+  hier vendorierte Kernpfad (Stichwoerter -> durable_memory/FTS/Profil/
+  Projekte/Arbeitspaket, score-basiert, Top-4) ist exakt das, was den
+  Abnahmetest traegt: "was hab ich letzte Woche ueber X gesagt" traf ueber
+  durable_memory/FTS, nicht ueber Moeglichkeitsraum.
+
+  Ebenfalls weggelassen: das lebende `star_konfig`-Nachlade/Selbstheil-
+  Verhalten von `_konfig()` (das bei fehlenden Zeilen automatisch in die DB
+  zurueckschreibt). Hier stattdessen: dieselben Zahlen/Listen als Konstanten
+  fest verdrahtet (siehe unten, Werte 1:1 aus stern.py `_KONFIG_DEFAULTS`
+  abgeschrieben) -- damit dieses Skript NICHT unangekuendigt eine
+  `star_konfig`-Tabelle in Andreas' DB anlegt oder aendert. Einzige Schreib-
+  operation bleibt `star_abruf_gezeigt` (Dedup-Tabelle, exakt wie im
+  Original) -- das ist Teil des kanonischen Abrufmechanismus selbst, kein
+  zweiter Speicher.
+
+  Fehlt eine Tabelle (z.B. `themen_status`, in Andreas' DB nicht vorhanden):
+  wird uebersprungen und geloggt, NICHT stillschweigend verschluckt und
+  NICHT der ganze Abruf zum Absturz gebracht -- exakt das Verhalten des
+  Originals (`except sqlite3.OperationalError: pass` je Quelle einzeln).
+"""
+from __future__ import annotations
+
+import contextlib
+import json
+import math
+import os
+import re
+import sqlite3
+import sys
+import time
+from typing import Optional
+
+# WICHTIG (gemessen 2026-09-07, nicht geraten): auf dem HOST liegt die DB unter
+# /var/lib/entityos/data/unified.db. Dieses Skript laeuft aber INNERHALB des
+# entityos-Containers (weil /opt/entityos/voice/ nur im Container-Rootfs
+# existiert). Der Container hat einen Bind-Mount Host:/var/lib/entityos/data
+# -> Container:/var/lib/entityos (bestaetigt via /proc/1/mountinfo im
+# Container: "1037 877 259:2 /var/lib/entityos/data /var/lib/entityos rw...").
+# Container-Pfad zur SELBEN Datei ist daher /var/lib/entityos/unified.db
+# (ohne "/data/"). Ueberschreibbar via FRANKENSTEIN_UNIFIED_DB fuer Tests
+# ausserhalb des Containers.
+DB_PATH = os.environ.get("FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+LOG_PATH = os.environ.get("FRANKENSTEIN_MEMORY_LOG", "/opt/entityos/voice/tmp_test/memory_abruf.log")
+
+# 1:1 aus stern.py _KONFIG_DEFAULTS uebernommen (siehe Provenance-Kopf).
+GENERISCH_SCHWELLE = 30
+GESPERRTE_ARTIKEL_PRAEFIXE = ("skill:",)
+GESPERRTE_PAKET_TEILSTRINGS = ["you may only write files under your own sandbox path"]
+
+_STOPWOERTER = frozenset([
+    "der", "die", "das", "den", "dem", "des", "ein", "eine", "einer", "eines",
+    "und", "oder", "aber", "wie", "was", "wer", "wo", "wann", "warum", "ist",
+    "sind", "war", "waren", "hat", "haben", "hatte", "wird", "werden", "kann",
+    "koennen", "soll", "sollte", "muss", "muessen", "fuer", "mit", "von",
+    "auf", "bei", "aus", "nach", "ueber", "unter", "vor", "durch", "gegen",
+    "ohne", "bitte", "danke", "mal", "auch", "noch", "schon", "nur", "dann",
+    "jetzt", "heute", "morgen", "gestern", "hier", "dort", "diese", "dieser",
+    "dieses", "ihre", "ihrer", "ihres", "mein", "meine", "meiner", "dein",
+    "deine", "the", "and", "or", "but", "how", "what", "who", "where", "when",
+    "why", "is", "are", "was", "were", "has", "have", "had", "will", "would",
+    "can", "could", "should", "must", "for", "with", "from", "about", "into",
+    "please", "thanks", "also", "just", "then", "now", "today", "this",
+    "that", "these", "those", "your", "you", "mir", "dir", "uns", "euch",
+    "ich", "du", "sie", "wir", "ihr", "es", "man", "sich", "einen", "einem",
+    "kannst", "koenntest", "wuerdest", "gerne", "mach", "mache", "machen",
+])
+_KURZ_AUSNAHMEN = frozenset([
+    "zero", "iar", "kpi", "api", "vps", "ki", "db", "pc",
+    "glm", "zai", "mcp", "llm", "gpu", "cpu", "npu", "ram", "tts", "rag",
+    "ssh", "dns", "url", "uri", "jwt", "css", "arc", "u6", "sd",
+])
+
+
+def _log(msg: str) -> None:
+    try:
+        os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+        with open(LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {msg}\n")
+    except Exception:
+        pass
+
+
+def _jetzt() -> float:
+    return time.time()
+
+
+def _kurz(wert, n: int = 220) -> str:
+    if isinstance(wert, (dict, list)):
+        wert = json.dumps(wert, ensure_ascii=False, separators=(",", ":"))
+    s = str(wert if wert is not None else "").replace("\n", " ").strip()
+    return s if len(s) <= n else s[: n - 1] + "…"
+
+
+def _stichwoerter(text: str) -> list:
+    roh = re.findall(r"[a-zA-ZäöüÄÖÜß0-9_-]{2,}", text.lower())
+    gesehen, ergebnis = set(), []
+    for w in roh:
+        if w in gesehen:
+            continue
+        if w in _STOPWOERTER:
+            continue
+        if len(w) < 4 and w not in _KURZ_AUSNAHMEN:
+            continue
+        gesehen.add(w)
+        ergebnis.append(w)
+    return ergebnis[:12]
+
+
+def _spezifitaet(n: int) -> float:
+    return 1.0 / math.log(2.0 + max(1, n))
+
+
+def _korpus_label(kind: str, value) -> str:
+    if kind == "fehler":
+        return "[don't]"
+    if kind == "gelungen":
+        return "[bewährt]"
+    if kind == "lehre":
+        pol = "dont"
+        try:
+            d = value if isinstance(value, dict) else json.loads(value)
+            pol = str(d.get("polaritaet") or "dont")
+        except Exception:
+            pass
+        return "[bewährt]" if pol == "bewaehrt" else "[don't]"
+    return f"[{kind}]"
+
+
+def _verbindung() -> sqlite3.Connection:
+    c = sqlite3.connect(DB_PATH, timeout=5.0)
+    c.execute("PRAGMA busy_timeout=5000")
+    return c
+
+
+def _sicherstellen_gezeigt_tabelle(c) -> None:
+    c.execute(
+        "CREATE TABLE IF NOT EXISTS star_abruf_gezeigt("
+        "session_id TEXT NOT NULL, item_id TEXT NOT NULL, ts REAL NOT NULL, "
+        "PRIMARY KEY(session_id, item_id))"
+    )
+
+
+def automatischer_abruf(session_id: str, nutzertext: str) -> Optional[str]:
+    """Vendorierte Kernlogik von stern.py:automatischer_abruf(). Liest
+    ausschliesslich (bis auf die star_abruf_gezeigt-Dedup-Zeile, die zum
+    Mechanismus selbst gehoert) aus DB_PATH. Wirft nie -- jeder Fehler wird
+    geloggt, der Aufrufer bekommt bestenfalls None/leeren Kontext statt
+    eines Absturzes des Gespraechs."""
+    if not nutzertext or not nutzertext.strip():
+        return None
+    stichwoerter = _stichwoerter(nutzertext)
+    if not stichwoerter:
+        return None
+
+    kandidaten = []
+    endgueltig = []
+    fehlende_tabellen = set()
+    try:
+        with contextlib.closing(_verbindung()) as c:
+            _sicherstellen_gezeigt_tabelle(c)
+            bereits_gezeigt = {
+                r[0] for r in c.execute(
+                    "SELECT item_id FROM star_abruf_gezeigt WHERE session_id=?",
+                    (session_id,),
+                )
+            }
+
+            for begriff in stichwoerter:
+                like = f"%{begriff}%"
+
+                # themen_status existiert auf Andreas' unified.db (Stand
+                # 2026-09-07) NICHT -- OperationalError abfangen, ueber-
+                # springen, NICHT den ganzen Abruf sterben lassen.
+                try:
+                    anzahl_th = (c.execute(
+                        "SELECT COUNT(*) FROM themen_status WHERE thema LIKE ? OR status_text LIKE ?",
+                        (like, like),
+                    ).fetchone() or (0,))[0]
+                    if 0 < anzahl_th <= GENERISCH_SCHWELLE:
+                        for thema_key, thema, status_text, stand, aktualisiert in c.execute(
+                            "SELECT thema_key, thema, status_text, stand, aktualisiert FROM themen_status "
+                            "WHERE (thema LIKE ? OR status_text LIKE ?) "
+                            "AND NOT EXISTS (SELECT 1 FROM star_abruf_gezeigt g "
+                            "  WHERE g.session_id=? AND g.item_id='themen_status:'||thema_key) "
+                            "ORDER BY (thema LIKE ?) DESC, aktualisiert DESC LIMIT 6",
+                            (like, like, session_id, like),
+                        ):
+                            item_id = f"themen_status:{thema_key}"
+                            if item_id in bereits_gezeigt:
+                                continue
+                            alter_std = max(0, (_jetzt() - (aktualisiert or _jetzt())) / 3600)
+                            titel_bonus = 0.5 if begriff in (thema or "").lower() else 0.0
+                            score = (3.0 + titel_bonus) * _spezifitaet(anzahl_th)
+                            kandidaten.append((score, item_id, f"[thema:{stand}] {thema} "
+                                                               f"(vor {alter_std:.1f}h): "
+                                                               f"{_kurz(status_text, 220)}"))
+                except sqlite3.OperationalError:
+                    fehlende_tabellen.add("themen_status")
+                except Exception as e:
+                    _log(f"themen_status abruf fehler begriff={begriff}: {e}")
+
+                anzahl = (c.execute(
+                    "SELECT COUNT(*) FROM durable_memory WHERE kind != 'ereignis' "
+                    "AND (subject LIKE ? OR value LIKE ?)", (like, like),
+                ).fetchone() or (0,))[0]
+                if 0 < anzahl <= GENERISCH_SCHWELLE:
+                    for mem_id, kind, subject, value in c.execute(
+                        "SELECT memory_id, kind, subject, value FROM durable_memory "
+                        "WHERE kind != 'ereignis' AND (subject LIKE ? OR value LIKE ?) "
+                        "AND NOT EXISTS (SELECT 1 FROM star_abruf_gezeigt g "
+                        "  WHERE g.session_id=? AND g.item_id='durable_memory:'||memory_id) "
+                        "ORDER BY (subject LIKE ?) DESC, ts DESC LIMIT 6",
+                        (like, like, session_id, like),
+                    ):
+                        item_id = f"durable_memory:{mem_id}"
+                        if item_id in bereits_gezeigt:
+                            continue
+                        quelle_gewicht = 2.6 if kind in ("fehler", "lehre") else 2.0
+                        titel_bonus = 0.5 if begriff in (subject or "").lower() else 0.0
+                        score = (quelle_gewicht + titel_bonus) * _spezifitaet(anzahl)
+                        kandidaten.append((score, item_id,
+                                           f"{_korpus_label(kind, value)} {subject}: {_kurz(value, 200)}"))
+
+                try:
+                    anzahl_a = (c.execute(
+                        "SELECT COUNT(*) FROM fts_index_artikel WHERE fts_index_artikel MATCH ?",
+                        (begriff,),
+                    ).fetchone() or (0,))[0]
+                except sqlite3.OperationalError:
+                    fehlende_tabellen.add("fts_index_artikel")
+                    anzahl_a = 0
+                except Exception as e:
+===IDENTITAET-MATCHES===
+===DB-POINTER===
+/var/lib/entityos/data/unified.db

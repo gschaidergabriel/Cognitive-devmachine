@@ -1,0 +1,261 @@
+===ROUTES===
+73:BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+202:        with open(ZUSTAND_PFAD, "r", encoding="utf-8") as f:
+215:    with open(tmp, "w", encoding="utf-8") as f:
+678:    with open(pfad, "rb") as f:
+755:            self.send_response(code)
+756:            self.send_header("Content-Type", "application/json; charset=utf-8")
+757:            self.send_header("Content-Length", str(len(b)))
+758:            self.send_header("Cache-Control", "no-store")
+772:                self.send_response(404); self.end_headers(); return
+776:                self.send_response(304)
+777:                self.send_header("Cache-Control", "no-cache")
+780:            with open(voller_pfad, "rb") as f:
+782:            self.send_response(200)
+783:            self.send_header("Content-Type", "image/png")
+784:            self.send_header("Content-Length", str(len(daten)))
+785:            self.send_header("Cache-Control", "no-cache")
+786:            self.send_header("Last-Modified", last_mod)
+790:        def do_GET(self):
+791:            u = urllib.parse.urlsplit(self.path)
+799:                self.send_response(200)
+800:                self.send_header("Content-Type", "text/html; charset=utf-8")
+801:                self.send_header("Content-Length", str(len(aktuelle_seite)))
+802:                self.send_header("Cache-Control", "no-store")
+820:                    with open(pfad, "rb") as fh:
+822:                    self.send_response(200)
+823:                    self.send_header("Content-Type",
+825:                    self.send_header("Content-Length", str(len(inhalt)))
+826:                    self.send_header("Cache-Control", "no-store")
+832:                    self.send_response(200)
+833:                    self.send_header("Content-Type",
+835:                    self.send_header("Content-Length", "0")
+843:                    or path.startswith("/augen_blink/")
+858:                elif path.startswith("/augen_blink/"):
+889:                    self.send_response(404)
+905:                            self.send_response(404)
+908:                        self.send_response(404)
+911:                    self.send_response(404)
+934:                            self.send_response(404)
+937:                        self.send_response(404)
+940:                    self.send_response(404)
+955:                self.send_response(404)
+959:            if self.path == "/api/send":
+973:            elif self.path == "/api/upload":
+983:                with open(ziel, "wb") as f:
+990:            elif self.path == "/api/fps":
+1001:            elif self.path == "/api/schalten":
+1014:                self.send_response(404)
+1037:            with open(PID_DATEI, "r") as f:
+1059:        log = open(LOG_DATEI, "ab")
+1060:        self.proc = subprocess.Popen(
+1106:        with open(PID_DATEI, "w") as f:
+===HANDLER===
+   770	                mtime = os.path.getmtime(voller_pfad)
+   771	            except OSError:
+   772	                self.send_response(404); self.end_headers(); return
+   773	            last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+   774	            ims = self.headers.get("If-Modified-Since")
+   775	            if ims and ims == last_mod:
+   776	                self.send_response(304)
+   777	                self.send_header("Cache-Control", "no-cache")
+   778	                self.end_headers()
+   779	                return
+   780	            with open(voller_pfad, "rb") as f:
+   781	                daten = f.read()
+   782	            self.send_response(200)
+   783	            self.send_header("Content-Type", "image/png")
+   784	            self.send_header("Content-Length", str(len(daten)))
+   785	            self.send_header("Cache-Control", "no-cache")
+   786	            self.send_header("Last-Modified", last_mod)
+   787	            self.end_headers()
+   788	            self.wfile.write(daten)
+   789	
+   790	        def do_GET(self):
+   791	            u = urllib.parse.urlsplit(self.path)
+   792	            path, qs = u.path, urllib.parse.parse_qs(u.query)
+   793	            if path == "/":
+   794	                # Immer frisch von Disk lesen -- sonst serviert der laufende
+   795	                # Prozess auf ewig den Stand von seinem eigenen Start
+   796	                # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+   797	                # sonst prueft man bei jeder Aenderung eine alte Version).
+   798	                aktuelle_seite = _seite()
+   799	                self.send_response(200)
+   800	                self.send_header("Content-Type", "text/html; charset=utf-8")
+   801	                self.send_header("Content-Length", str(len(aktuelle_seite)))
+   802	                self.send_header("Cache-Control", "no-store")
+   803	                self.end_headers()
+   804	                self.wfile.write(aktuelle_seite)
+   805	            elif path == "/filmlook.js":
+   806	                # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+   807	                # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+   808	                # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+   809	                # dem Animations-Agenten -- zwei Agenten in derselben Datei
+   810	                # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+   811	                # (<script src="/filmlook.js">), und der Look kann unabhaengig
+   812	                # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+   813	                # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+   814	                # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+   815	                # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+   816	                # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+   817	                # die <defs> ins Dokument selbst, per Skript.
+   818	                pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+   819	                if os.path.isfile(pfad):
+   820	                    with open(pfad, "rb") as fh:
+   821	                        inhalt = fh.read()
+   822	                    self.send_response(200)
+   823	                    self.send_header("Content-Type",
+   824	                                     "application/javascript; charset=utf-8")
+   825	                    self.send_header("Content-Length", str(len(inhalt)))
+   826	                    self.send_header("Cache-Control", "no-store")
+   827	                    self.end_headers()
+   828	                    self.wfile.write(inhalt)
+   829	                else:
+   830	                    # Fehlt die Datei, liefert der Server eine leere Antwort
+   831	                    # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+   832	                    self.send_response(200)
+   833	                    self.send_header("Content-Type",
+   834	                                     "application/javascript; charset=utf-8")
+   835	                    self.send_header("Content-Length", "0")
+   836	                    self.end_headers()
+   837	            elif path == "/api/mtime":
+   838	                self._json({"mtime": _seite_mtime()})
+   839	            elif path == "/gesicht.png":
+   840	                self._bild_ausliefern(GESICHT_BILD)
+   841	            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+   842	                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+   843	                    or path.startswith("/augen_blink/")
+   844	                    or path.startswith("/mund_keyframes/")
+   845	                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+   846	                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+   847	                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+   848	                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+   849	                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+   850	                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+   851	                # oben und buehne.html.
+   852	                if path.startswith("/ausdruck/"):
+   853	                    verzeichnis = AUSDRUCK_DIR
+   854	                elif path.startswith("/augen/"):
+   855	                    verzeichnis = AUGEN_DIR
+   856	                elif path.startswith("/augen_gaze/"):
+   857	                    verzeichnis = GAZE_DIR
+   858	                elif path.startswith("/augen_blink/"):
+   859	                    verzeichnis = BLINK_DIR
+   860	                elif path.startswith("/mund_keyframes/"):
+   861	                    verzeichnis = MUND_DIR
+   862	                elif path.startswith("/kopf_rgba/"):
+   863	                    verzeichnis = KOPF_RGBA_DIR
+   864	                elif path.startswith("/koerper_rgba/"):
+   865	                    verzeichnis = KOERPER_RGBA_DIR
+   866	                else:
+   867	                    verzeichnis = KOPF_DIR
+   868	                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+   869	                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+   870	                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+   871	                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+   872	                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+   873	                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+   874	                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+   875	                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+   876	                # "." und ".." fliegen raus, damit bleibt der Zugriff im
+   877	                # zustaendigen Verzeichnis.
+   878	                teile = [t for t in path.split("/") if t][1:]
+   879	                sicher = (1 <= len(teile) <= 2
+   880	                          and all(t not in (".", "..") and "\\" not in t
+   881	                                  for t in teile)
+   882	                          and all(t == os.path.basename(t) for t in teile))
+   883	                name = "/".join(teile) if sicher else ""
+   884	                voller_pfad = os.path.join(verzeichnis, *teile) if sicher else ""
+   885	                if (sicher and name.endswith(".png")
+   886	                        and os.path.isfile(voller_pfad)):
+   887	                    self._bild_ausliefern(voller_pfad)
+   888	                else:
+   889	                    self.send_response(404)
+   890	                    self.end_headers()
+   891	            elif path.startswith("/hintergrund/"):
+   892	                # /hintergrund/<stimmung>/<datei>.png -- Stimmung per fester
+   893	                # Allowlist (kein Pfad-Traversal ueber den Ordnernamen
+   894	                # moeglich), Datei zusaetzlich per Basisname+Endung geprueft.
+   895	                teile = [t for t in path.split("/") if t]
+   896	                if len(teile) == 3:
+   897	                    _, stimmung, datei = teile
+   898	                    if stimmung in HINTERGRUND_STIMMUNGEN:
+   899	                        name = os.path.basename(datei)
+   900	                        voller_pfad = os.path.join(HINTERGRUND_DIR, stimmung, name)
+   901	                        if (name.endswith(".png") and "/" not in name
+   902	                                and os.path.isfile(voller_pfad)):
+   903	                            self._bild_ausliefern(voller_pfad)
+   904	                        else:
+   905	                            self.send_response(404)
+   906	                            self.end_headers()
+   907	                    else:
+   908	                        self.send_response(404)
+   909	                        self.end_headers()
+   910	                else:
+   911	                    self.send_response(404)
+   912	                    self.end_headers()
+   913	            elif path.startswith("/ausdruck_erweitert/"):
+   914	                # /ausdruck_erweitert/<register>/<ausdruck>/<frontal|yaw_proxy>/<datei>.png
+   915	                # Register UND Unterordner per fester Allowlist (kein
+   916	                # Pfad-Traversal ueber Ordnernamen moeglich); <ausdruck> ist
+   917	                # ein freier Ordnername, wird aber nur ueber os.path.isdir
+   918	                # gegen den echten Baum geprueft, nie direkt in einen Pfad
+   919	                # ausserhalb von AUSDRUCK_ERWEITERT_DIR aufgeloest, weil
+   920	                # os.path.join+os.path.isfile am Ende trotzdem greift.
+   921	                teile = [t for t in path.split("/") if t]
+   922	                if len(teile) == 5:
+   923	                    _, register, ausdruck, unterordner, datei = teile
+   924	                    name = os.path.basename(datei)
+   925	                    if (register in ERWEITERT_REGISTER
+   926	                            and unterordner in ERWEITERT_UNTERORDNER
+   927	                            and "/" not in ausdruck and ".." not in ausdruck
+   928	                            and name.endswith(".png") and "/" not in name):
+   929	                        voller_pfad = os.path.join(
+   930	                            AUSDRUCK_ERWEITERT_DIR, register, ausdruck, unterordner, name)
+   931	                        if os.path.isfile(voller_pfad):
+   932	                            self._bild_ausliefern(voller_pfad)
+   933	                        else:
+   934	                            self.send_response(404)
+   935	                            self.end_headers()
+   936	                    else:
+   937	                        self.send_response(404)
+   938	                        self.end_headers()
+   939	                else:
+   940	                    self.send_response(404)
+   941	                    self.end_headers()
+   942	            elif path == "/api/chat":
+   943	                since = (qs.get("since") or [""])[0]
+   944	                zeilen, letzter = chat_seit(since)
+   945	                self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+   946	            elif path == "/api/status":
+   947	                z = zustand_lesen()
+   948	                z["buehne"] = buehnen_zustand()
+   949	                z["zuschauer"] = 1  # ⭐ ehrlich fest, keine Messung, siehe Docstring
+   950	                z["fps"] = fps_lesen()  # ⭐ echte Selbstmeldung der Seite, siehe fps_melden()
+   951	                self._json(z)
+   952	            elif path == "/live":
+   953	                self._json({"ok": True, "dienst": "buehne_daemon", "ts": time.time()})
+   954	            else:
+   955	                self.send_response(404)
+   956	                self.end_headers()
+   957	
+   958	        def do_POST(self):
+   959	            if self.path == "/api/send":
+   960	                n = int(self.headers.get("Content-Length") or 0)
+   961	                try:
+   962	                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+   963	                except Exception:
+   964	                    d = {}
+   965	                text = str(d.get("text") or "").strip()[:2000]
+   966	                if not text:
+   967	                    return self._json({"ok": False, "grund": "leerer Text"}, 400)
+   968	                # ⚠️ EHRLICHKEIT: das landet NUR im Buehnen-Chat, NICHT im
+   969	                # echten Sprachmodus (gespraech_loop.py wird nicht angefasst).
+   970	                # Deshalb eigene Beschriftung "(Chat)" statt gesprochener Name.
+===SUBJECT===
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+===STATE===
+active
+60.0

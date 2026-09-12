@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-static-cache-discriminator-20260912-0722",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail\nVIS=/home/ai-core-node/.claude/star/visual; BR=/home/ai-core-node/.claude/star/local_bridge_state/repo; C=e8d09af9b3fb3df9020ee3956111f3ba99a1ce5d; TMP=$(mktemp -d /var/tmp/blink-cache-test-XXXXXX); ORIG=$TMP/orig.png\ncd \"$VIS\"; cp -a augen_blink/blink_006.png \"$ORIG\"; restore(){ cp -a \"$ORIG\" augen_blink/blink_006.png; rm -rf \"$TMP\"; }; trap 'rc=$?; restore; exit $rc' ERR; trap restore EXIT\ntest \"$(sha256sum augen_blink/blink_006.png|awk '{print $1}')\" = f7cc3fc538478c9a0f5748f2139a8bba7234f74aa59b634dc3f266caa237d0fa\ngit -C \"$BR\" show \"$C:handoff/frank-avatar-round2-candidate/build_blink_eye_local_mask.py\" > \"$TMP/build.py\"; python3 \"$TMP/build.py\" \"$VIS\" \"$TMP/out\" >/dev/null\nNEW=$(sha256sum \"$TMP/out/blink_006.png\"|awk '{print $1}'); test \"$NEW\" = 06f160a42e396f7c80a633c8954458f09e64f904c7345b5722d9639f030e0c46\nOLDHTTP=$(curl -fsS http://127.0.0.1:8788/augen_blink/blink_006.png|sha256sum|awk '{print $1}')\ncp -a \"$TMP/out/blink_006.png\" augen_blink/blink_006.png; FILE=$(sha256sum augen_blink/blink_006.png|awk '{print $1}'); HTTP1=$(curl -fsS http://127.0.0.1:8788/augen_blink/blink_006.png|sha256sum|awk '{print $1}'); HTTP2=$(curl -fsS -H 'Cache-Control: no-cache' 'http://127.0.0.1:8788/augen_blink/blink_006.png?go_cb=1'|sha256sum|awk '{print $1}'); echo OLDHTTP=$OLDHTTP; echo FILE_AFTER_SWAP=$FILE; echo HTTP_PLAIN=$HTTP1; echo HTTP_NOCACHE_QUERY=$HTTP2; if [ \"$HTTP1\" = \"$NEW\" ]; then echo STATIC_BEHAVIOR=LIVE_FILE_READ; elif [ \"$HTTP1\" = \"$OLDHTTP\" ]; then echo STATIC_BEHAVIOR=SERVER_OR_ROUTE_CACHE; else echo STATIC_BEHAVIOR=OTHER; fi\n"
+}

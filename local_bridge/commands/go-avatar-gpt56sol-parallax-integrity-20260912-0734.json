@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-parallax-integrity-20260912-0734",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\necho '=== GENERATOR ==='\nsha256sum tiefe_bauen.py\nsed -n '1,90p;205,280p' tiefe_bauen.py\necho '=== MANIFESTS ==='\nfind . -type f -path '*parallax*/manifest.json' -not -path './chrome-profile/*' -not -path './.go_backups/*' -print -exec sha256sum {} \\; -exec cat {} \\;\necho '=== RECONSTRUCTION ==='\npython3 - <<'PY'\nfrom pathlib import Path\nfrom PIL import Image\nimport numpy as np, hashlib\np=Path('kopf_rgba_parallax')\nfor d in sorted(x for x in p.iterdir() if x.is_dir()):\n    fs=sorted(d.glob('slice_*.png'))\n    imgs=[np.asarray(Image.open(f).convert('RGBA'),dtype=np.uint16) for f in fs]\n    a=np.stack([x[:,:,3] for x in imgs])\n    # RGB disagreement where >1 layer carries alpha should be zero if slices came from one source image.
+    rgb=np.stack([x[:,:,:3] for x in imgs])\n    mask=a>0\n    # weighted reconstruction and alpha aggregate; soft masks are expected to partition source alpha when summed/clipped.
+    asum=a.sum(axis=0)\n    nz=asum>0\n    vals=[]\n    for c in range(3):\n        num=(rgb[:,:,:,c]*a).sum(axis=0)
+        rec=np.zeros_like(asum); rec[nz]=num[nz]//asum[nz]; vals.append(rec)
+    # compare pairwise RGB only where both layers have nonzero alpha
+    maxdiff=0; pairs=0
+    for i in range(len(imgs)):
+        for j in range(i+1,len(imgs)):
+            m=mask[i]&mask[j]
+            if m.any():
+                diff=np.abs(rgb[i].astype(np.int32)-rgb[j].astype(np.int32)).max(axis=2)
+                maxdiff=max(maxdiff,int(diff[m].max()));pairs+=int(m.sum())
+    print('DIR',d.name,'FILES',len(fs),'ALPHA_SUM_MAX',int(asum.max()),'UNION',round(float(nz.mean()),6),'OVERLAP_PIX',int((mask.sum(axis=0)>1).sum()),'RGB_OVERLAP_MAXDIFF',maxdiff,'RGB_PAIRPIX',pairs)
+print('INTEGRITY_DONE=1')\nPY\n"
+}

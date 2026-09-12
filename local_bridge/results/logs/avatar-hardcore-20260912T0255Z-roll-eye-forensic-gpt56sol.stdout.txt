@@ -1,0 +1,21 @@
+421:                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+750:function kopfRollTick(jetzt){
+817://       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+822:let kopfRollAusgleichDeg = 0;
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+855:function kopfKoerperDrehSchritt(){
+877:  kopfRollAusgleichDeg = kopfRollWert;
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879:  augenOffsetDx = zielOffset.dx;
+880:  augenOffsetDy = zielOffset.dy;
+881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+884:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1394:  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+1397:  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+1400:  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+1401:  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+1402:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1877:  kopfRollTick(t);
+1879:  kopfKoerperDrehSchritt();

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "avatar-hardcore-20260912T0255Z-roll-eye-forensic-gpt56sol",
+  "command_sha256": "3269d8c0c275cc0c8741ab8e122e90b72420079b3f51a94b67c1f75f525b315f",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:54:50.243348+00:00",
+  "finished_at": "2026-09-12T02:54:50.267522+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a301ec4aa259b2b5a7f6c172db77bf0c030f695653eacebf1a7865d52f7fe016",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "421:                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()\n750:function kopfRollTick(jetzt){\n817://       Maske\"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt\n822:let kopfRollAusgleichDeg = 0;\n841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt\n849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg\n855:function kopfKoerperDrehSchritt(){\n877:  kopfRollAusgleichDeg = kopfRollWert;\n878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};\n879:  augenOffsetDx = zielOffset.dx;\n880:  augenOffsetDy = zielOffset.dy;\n881:  const augenDxCss = augenOffsetDx * _kopfCanvasScale;\n882:  const augenDyCss = augenOffsetDy * _kopfCanvasScale;\n884:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;\n1394:  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim\n1397:  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst\n1400:  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;\n1401:  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;\n1402:  $(\"pupillen-glow\").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;\n1877:  kopfRollTick(t);\n1879:  kopfKoerperDrehSchritt();\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

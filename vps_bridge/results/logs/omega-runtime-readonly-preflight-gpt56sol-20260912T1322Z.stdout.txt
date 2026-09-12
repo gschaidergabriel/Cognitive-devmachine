@@ -1,0 +1,58 @@
+===IDENTITY===
+877d9128ca5a
+root
+2026-09-12T13:24:23+00:00
+===TMUX===
+omega-grid: 1 windows (created Sat Sep 12 13:23:54 2026)
+===PROCESSES===
+947104 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+947105 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+947107 python3 /workspace/omega_runtime/omega_daemon.py
+947131 bash -lc set -u; echo ===IDENTITY===; hostname; id -un; date -Is; echo ===TMUX===; tmux ls 2>&1 || true; echo ===PROCESSES===; pgrep -af omega || true; echo ===RUNTIME_DIRS===; for p in /workspace/omega_runtime /workspace/omega_runtime/current /workspace/oMEGA; do if [ -e $p ]; then printf '%s ' $p; stat -c '%F %U:%G %a' $p; else echo MISSING_$p; fi; done; echo ===HEADS===; for p in /workspace/omega_runtime/current /workspace/oMEGA; do if [ -d $p/.git ]; then echo REPO=$p; git -C $p rev-parse HEAD; git -C $p status --porcelain=v1 -uno; fi; done; echo ===RELEASE===; if [ -f /workspace/omega_runtime/CURRENT_RELEASE.json ]; then cat /workspace/omega_runtime/CURRENT_RELEASE.json; else echo NO_CURRENT_RELEASE; fi; echo ===SUPERVISOR_STATUS===; if [ -f /workspace/omega_runtime/state/SUPERVISOR_STATUS.json ]; then cat /workspace/omega_runtime/state/SUPERVISOR_STATUS.json; else echo NO_SUPERVISOR_STATUS; fi; echo ===GRID_STATUS===; if [ -f /workspace/omega_runtime/state/STATUS.json ]; then cat /workspace/omega_runtime/state/STATUS.json; else echo NO_GRID_STATUS; fi; echo ===MASTER_ERROR===; if [ -f /workspace/omega_runtime/state/master_bridge/LAST_ERROR.json ]; then cat /workspace/omega_runtime/state/master_bridge/LAST_ERROR.json; else echo NO_MASTER_ERROR; fi; echo ===MASTER_DIR_COUNTS===; for p in /workspace/omega_runtime/state/master_bridge/submitted /workspace/omega_runtime/state/master_bridge/responses /workspace/omega_runtime/state/master_bridge/submitted_messages /workspace/omega_runtime/state/outbox; do printf '%s=' $p; if [ -d $p ]; then find $p -maxdepth 1 -type f | wc -l; else echo MISSING; fi; done; echo ===CARRIER===; if [ -d /workspace/omega_runtime/carrier_repo/.git ]; then echo CARRIER_PRESENT; git -C /workspace/omega_runtime/carrier_repo rev-parse HEAD; git -C /workspace/omega_runtime/carrier_repo status --porcelain=v1 -uno; else echo CARRIER_MISSING; fi
+===RUNTIME_DIRS===
+/workspace/omega_runtime directory root:root 755
+/workspace/omega_runtime/current symbolic link root:root 777
+MISSING_/workspace/oMEGA
+===HEADS===
+===RELEASE===
+{
+  "schema": "OMEGA_CURRENT_RELEASE/v1",
+  "omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "release_path": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "activated_at": "2026-09-12T11:25:41.761800+00:00",
+  "carrier_branch": "omega-vps-deploy"
+}
+===SUPERVISOR_STATUS===
+NO_SUPERVISOR_STATUS
+===GRID_STATUS===
+{
+  "schema": "OMEGA_GRID_STATUS/v1",
+  "updated_at": "2026-09-12T13:23:54.768565+00:00",
+  "epoch_id": "epoch_f764c90853754809adacb394906e5b24",
+  "frame_id": "frame_270344e1aa9c4fbeb30a47b0bbf61190",
+  "winner": {
+    "cell": "REENTRY",
+    "score": 0.3,
+    "task": {
+      "task_id": "background_host_scout",
+      "required_capabilities": [
+        "local_state"
+      ],
+      "max_organs": 1
+    },
+    "free": false
+  },
+  "result": {
+    "cell": "REENTRY"
+  }
+}
+===MASTER_ERROR===
+NO_MASTER_ERROR
+===MASTER_DIR_COUNTS===
+/workspace/omega_runtime/state/master_bridge/submitted=0
+/workspace/omega_runtime/state/master_bridge/responses=0
+/workspace/omega_runtime/state/master_bridge/submitted_messages=MISSING
+/workspace/omega_runtime/state/outbox=5
+===CARRIER===
+CARRIER_PRESENT
+238b24d780d7b72bc6a7264f3e93ded7cf6b979c

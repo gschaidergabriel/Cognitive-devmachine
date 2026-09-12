@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-eye-semantic-shadow-20260912-0800",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":120,
+  "command":"set -euo pipefail\nREPO=/home/ai-core-node/.claude/star/local_bridge_state/repo\nCOMMIT=3b73ef8c208ba890842ea0fc4e3cec60aba05bde\nSCRIPT=/tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\nOUTDIR=/home/ai-core-node/.claude/star/visual/.go_evidence/eye_semantic_shadow_20260912_0800\nOUT=$OUTDIR/buehne.shadow.html\ntest ! -e \"$OUTDIR\"\nmkdir -p \"$OUTDIR\"\ngit -C \"$REPO\" fetch --quiet origin \"$COMMIT\"\ngit -C \"$REPO\" show \"$COMMIT:research_entity/avatar_eye_identity/build_semantic_shadow_html.py\" > \"$SCRIPT\"\nprintf 'BUILDER_SHA256 '; sha256sum \"$SCRIPT\"\npython3 \"$SCRIPT\" --source buehne.html --visual-root . --out \"$OUT\" | tee \"$OUTDIR/manifest.stdout.json\"\necho '===CANDIDATE_HASH==='\nsha256sum buehne.html \"$OUT\"\necho '===DIFF_STAT==='\ndiff -u buehne.html \"$OUT\" | diffstat 2>/dev/null || true\necho '===DIFF_RELEVANT==='\ndiff -u buehne.html \"$OUT\" | grep -E '^[+-].*(augen-blink|pupillen-glow|_sonderLaeuft|blinzelPhase|go-eye-shadow)' | head -80 || true\necho '===CANONICAL_ROUTE_COUNTS==='\nprintf 'blink_route='; grep -o '/augen_blink/' \"$OUT\" | wc -l\nprintf 'explicit_relief2='; grep -o '/augen_blink_relief2/' \"$OUT\" | wc -l\necho '===LIVE_UNCHANGED==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\nprintf 'SERVICE '; systemctl --user is-active frankenstein-buehne.service\necho SCOPE=SHADOW_ONLY_NO_LIVE_MUTATION"
+}

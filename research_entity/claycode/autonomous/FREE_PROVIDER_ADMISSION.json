@@ -1,60 +1,57 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "9.13+OWNER_2026-09-11_FREE_SWARM_REAUTHORIZED",
-  "mode": "FREE_ONLY_EXCEPT_EXPLICIT_OWNER_GLM53_FLASH_CODING_TEST_ROUTE",
+  "authority_epoch": "9.13",
+  "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
-  "source": "CURRENT_OWNER_DIRECTIVE_2026-09-11_REAFFIRMED_2026-09-12_AVATAR_SWARM",
-  "default_policy": "OWNER_REAUTHORIZED_FREE_SWARM_2026-09-11; REAFFIRMED_FOR_AVATAR_SWARM_WORK_2026-09-12; FREE_PROVIDER_ADMISSION_ENABLED_GROQ_NVIDIA_MISTRAL_OPENROUTER; TOGETHER_FORBIDDEN; NO_UNKNOWN_PROVIDER_OR_IMPLICIT_PAID_FALLBACK",
+  "source": "ENTITYOS_HCU_CONTROL_PLANE",
+  "owner_directive": "2026-09-13: keep zero-cost research/build workers running continuously for OMEGA development; candidate output only; no paid or unknown-cost fallback",
+  "supersedes_provider_policy_scope": "provider execution only; does not alter evidence, effect, truth, training-credit, or canonical-semantics authority",
   "providers": {
     "groq": {
       "admitted": true,
       "cost_class": "FREE",
-      "owner_authorized": true
+      "owner_authorized": true,
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#providers.groq"
     },
     "mistral": {
       "admitted": true,
       "cost_class": "FREE",
-      "owner_authorized": true
+      "owner_authorized": true,
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#providers.mistral"
     },
     "nvidia": {
       "admitted": true,
       "cost_class": "FREE",
-      "owner_authorized": true
+      "owner_authorized": true,
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#providers.nvidia"
     },
     "openrouter": {
       "admitted": true,
       "cost_class": "FREE",
-      "owner_authorized": true
-    },
-    "zai_glm_5_3_flash": {
-      "admitted": true,
       "owner_authorized": true,
-      "scope": "CODING_AGENT_TEST_SUPPORT_AND_SANDBOX_ENGINEERING_ONLY",
-      "model_family": "GLM-5.3-Flash",
-      "credential_policy": "SECRET_ENV_OR_PROVIDER_SECRET_STORE_ONLY",
-      "credential_names_allowed": [
-        "ZAI_API_KEY",
-        "GLM_API_KEY"
-      ],
-      "credential_value_must_never_be_persisted": true,
-      "billing_policy": "OWNER_EXPLICIT_ROUTE_AUTHORIZATION_ONLY; VERIFY_CURRENT_PROVIDER_TERMS_BEFORE_NETWORK_USE; NO_OTHER_PAID_FALLBACK",
-      "may_substitute_for_claude_code": true,
-      "canonical_truth_authority": false,
-      "runtime_provider_credit": 0,
-      "training_credit": 0,
-      "canonical_semantics_credit": 0
+      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#providers.openrouter"
     }
   },
-  "runtime_provider_credit": 0,
-  "execution_state": "FREE_SWARM_REAUTHORIZED_GROQ_NVIDIA_MISTRAL_OPENROUTER_WITH_GLM53_FLASH_CODING_TEST_EXCEPTION; TOGETHER_FORBIDDEN",
   "route_level_gate": {
-    "implementation": "tools/free_provider_admission.py canonical provider admission boundary where applicable",
-    "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1 where applicable",
-    "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json plus current owner GLM-5.3-Flash exception",
+    "implementation": "tools/free_provider_admission.py",
+    "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0,
-    "glm53_flash_exception_does_not_admit_other_routes": true
+    "provider_label_alone_is_not_cost_proof": true,
+    "provider_specific_runtime_attestation_still_required": true,
+    "http_402": "HARD_STOP_KEY",
+    "http_429": "PROVIDER_WIDE_COOLDOWN"
+  },
+  "worker_authority": {
+    "output_evidence_class": "MODEL_GENERATED",
+    "canonical_truth_authority": false,
+    "effect_authority": false,
+    "promotion_authority": false,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_system_credit": 0,
+    "required_reentry": "INDEPENDENT_HARNESS_OR_CANONICAL_OMEGA_GRID_EVIDENCE_PATH"
   },
   "secret_handling": {
     "repository_secret_literal_allowed": false,
@@ -65,67 +62,30 @@
     "required_injection": "ENVIRONMENT_OR_PROVIDER_SECRET_STORE",
     "redact_on_error": true
   },
-  "quarantined_external_diagnostics": {
-    "together_finetune_run1_2026_08_27": {
-      "status": "HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0
-    },
-    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0
-    },
-    "together_finetune_run3_ft_5b6d4ced_21d1_2026_08_27": {
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0
-    },
-    "together_finetune_run4_ft_343aff86_a5c1_2026_08_27": {
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0
-    }
-  },
   "together": {
     "admitted": false,
     "quantity_authorized": 0,
-    "note": "Together remains forbidden. Free-Swarm reauthorization and the GLM-5.3-Flash owner exception do not generalize to Together."
+    "note": "Together remains forbidden. Continuous free workers do not authorize paid fallback."
+  },
+  "separate_owner_exception": {
+    "zai_glm_5_3_flash": {
+      "inside_free_swarm_provider_set": false,
+      "scope": "CODING_AGENT_TEST_SUPPORT_AND_SANDBOX_ENGINEERING_ONLY",
+      "may_be_used_only_under_its_own_explicit_owner_route": true,
+      "does_not_admit_any_other_paid_or_unknown_route": true,
+      "runtime_provider_credit": 0,
+      "training_credit": 0,
+      "canonical_semantics_credit": 0
+    }
   },
   "free_swarm": {
     "admitted": true,
     "owner_emergency_stop": false,
-    "providers": [
-      "groq",
-      "mistral",
-      "nvidia",
-      "openrouter"
-    ],
-    "note": "Owner reauthorized the free-provider swarm on 2026-09-11 and reaffirmed swarm use for Avatar work on 2026-09-12. Route-level free-cost/provenance gates and secret isolation remain mandatory; Together remains forbidden."
+    "legacy_6000_swarm_restart_authorized": false,
+    "continuous_successor_worker_lane_authorized": true,
+    "providers": ["groq", "mistral", "nvidia", "openrouter"],
+    "note": "The legacy kill-only 6000-worker activation entrypoint remains untouched. OMEGA uses a new bounded continuous successor loop with typed FREE admission and candidate-only output."
   },
-  "quarantined_relayed_directive_20260828_second_confirmation": {
-    "source_commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
-    "status": "NON_OPERATIVE_EXCEPT_WHERE_SUPERSEDED_BY_CURRENT_OWNER_FREE_SWARM_REAUTHORIZATION_OR_GLM53_FLASH_EXCEPTION",
-    "provider_execution_authority": false,
-    "paid_execution_authority": false
-  },
-  "note": "Newest explicit owner direction reauthorizes the zero-cost Free Swarm routes Groq/NVIDIA/Mistral/OpenRouter and reaffirms their use for Avatar work. GLM-5.3-Flash remains a bounded coding/test-agent exception. Together and paid/unknown-cost fallback remain forbidden; credentials must never be persisted."
+  "runtime_provider_credit": 0,
+  "execution_state": "FREE_ONLY_CONTINUOUS_SUCCESSOR_WORKER_LANE_AUTHORIZED; LEGACY_6000_SWARM_STAYS_OFF; TOGETHER_FORBIDDEN"
 }

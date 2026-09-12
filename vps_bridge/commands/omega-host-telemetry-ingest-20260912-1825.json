@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v3",
+  "command_id":"omega-host-telemetry-ingest-20260912-1825",
+  "op":"exec",
+  "cwd":"/workspace/omega_runtime/state",
+  "timeout_seconds":60,
+  "command":"set -eu; mkdir -p telemetry; printf '%s\\n' '{\"schema\":\"OMEGA_ORGAN_TELEMETRY/v1\",\"organ_id\":\"host:ai-core-node\",\"machine_id\":\"ai-core-node\",\"owner_id\":\"gabriel\",\"observed_at\":\"2026-09-12T10:48:26Z\",\"health\":\"GREEN\",\"cpu_load\":0.354888916015625,\"ram_load\":0.622156227194691,\"capabilities\":[\"shell\",\"files\",\"desktop\",\"browser\",\"avatar\",\"gpu\",\"local_state\",\"sensors\"],\"data_domains\":[\"gabriel-local\",\"production-avatar\"],\"bridge_health\":1.0,\"source_receipt\":\"omega-grid-telemetry-gabriel-20260912-1812\"}' > telemetry/gabriel.json; printf '%s\\n' '{\"schema\":\"OMEGA_ORGAN_TELEMETRY/v1\",\"organ_id\":\"host:andreas-maco\",\"machine_id\":\"andreas-maco\",\"owner_id\":\"andreas\",\"observed_at\":\"2026-09-12T10:48:29.646490+00:00\",\"health\":\"GREEN\",\"capabilities\":[\"shell\",\"files\",\"entityos\",\"self_integration\",\"local_state\",\"services\"],\"data_domains\":[\"andreas-local\",\"entityos-runtime\",\"self-integration\"],\"bridge_health\":1.0,\"source_receipt\":\"omega-grid-status-andreas-20260912-1813\"}' > telemetry/andreas.json; python3 -m json.tool telemetry/gabriel.json >/dev/null; python3 -m json.tool telemetry/andreas.json >/dev/null; ls -l telemetry"
+}

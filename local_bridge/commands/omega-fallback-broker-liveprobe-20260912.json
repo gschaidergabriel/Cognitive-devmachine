@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-fallback-broker-liveprobe-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":60,
+  "command":"set -eu; F=\"$HOME/.config/frankenstein/chatgpt-client.env\"; echo ENV_KEYS; awk -F= '/^[A-Za-z_][A-Za-z0-9_]*=/{print $1}' \"$F\" | grep -E 'FRANK_VOICE|BROKER|MACHINE|OWNER|PERSON' || true; set -a; . \"$F\"; set +a; URL=${FRANK_VOICE_BROKER_GABRIEL:-http://127.0.0.1:8765}; TOK=${FRANK_VOICE_BROKER_GABRIEL_TOKEN:-${FRANK_VOICE_BROKER_TOKEN:-}}; test -n \"$TOK\"; python3 - <<'PY'\nimport json,os,urllib.request\nurl=os.environ.get('FRANK_VOICE_BROKER_GABRIEL','http://127.0.0.1:8765').rstrip('/')\ntok=os.environ.get('FRANK_VOICE_BROKER_GABRIEL_TOKEN') or os.environ.get('FRANK_VOICE_BROKER_TOKEN')\ndef req(path,body=None):\n d=None if body is None else json.dumps(body).encode(); r=urllib.request.Request(url+path,data=d,method='GET' if body is None else 'POST',headers={'Authorization':'Bearer '+tok,'Content-Type':'application/json'}); return json.loads(urllib.request.urlopen(r,timeout=2).read())\nout={'health':req('/health')}\ntry: out['state']=req('/v1/state-snapshot',{'person':'gabriel'})\nexcept Exception as e: out['state_error']=type(e).__name__+':'+str(e)[:200]\nprint(json.dumps(out,separators=(',',':')))\nPY"
+}

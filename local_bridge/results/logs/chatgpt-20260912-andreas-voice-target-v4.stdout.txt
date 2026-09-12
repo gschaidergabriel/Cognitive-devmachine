@@ -1,0 +1,806 @@
+=== SOURCE FILES ===
+/var/lib/entityos/voice/absicht.py
+/var/lib/entityos/voice/abspieler.py
+/var/lib/entityos/voice/anstoss.py
+/var/lib/entityos/voice/antrieb.py
+/var/lib/entityos/voice/asr_infer_once.py
+/var/lib/entityos/voice/asr_run.py
+/var/lib/entityos/voice/aufmerksamkeit.py
+/var/lib/entityos/voice/blick.py
+/var/lib/entityos/voice/buehne.py
+/var/lib/entityos/voice/charakter.py
+/var/lib/entityos/voice/chatgpt_bruecke.py
+/var/lib/entityos/voice/cortex.py
+/var/lib/entityos/voice/denker.py
+/var/lib/entityos/voice/entitaet.py
+/var/lib/entityos/voice/erinnern.py
+/var/lib/entityos/voice/erleben.py
+/var/lib/entityos/voice/faehigkeiten.py
+/var/lib/entityos/voice/gesicht.py
+/var/lib/entityos/voice/gespraech_loop.py
+/var/lib/entityos/voice/gespraech_waechter.py
+/var/lib/entityos/voice/glm_client.py
+/var/lib/entityos/voice/grid_autonomie.py
+/var/lib/entityos/voice/grid_steuerung.py
+/var/lib/entityos/voice/handeln.py
+/var/lib/entityos/voice/hoeren.py
+/var/lib/entityos/voice/innenwelt/amygdala.py
+/var/lib/entityos/voice/innenwelt/e_pq.py
+/var/lib/entityos/voice/innenwelt/__init__.py
+/var/lib/entityos/voice/innenwelt/nucleus_accumbens.py
+/var/lib/entityos/voice/innenwelt/thalamus.py
+/var/lib/entityos/voice/innenwelt/workspace_broadcast.py
+/var/lib/entityos/voice/interesse.py
+/var/lib/entityos/voice/konfabulation.py
+/var/lib/entityos/voice/konversation.py
+/var/lib/entityos/voice/lagebild.py
+/var/lib/entityos/voice/meinung.py
+/var/lib/entityos/voice/memory_abruf.py
+/var/lib/entityos/voice/needle_lokal.py
+/var/lib/entityos/voice/netz.py
+/var/lib/entityos/voice/organ.py
+/var/lib/entityos/voice/pause_wache.py
+/var/lib/entityos/voice/physik.py
+/var/lib/entityos/voice/piper_check.py
+/var/lib/entityos/voice/piper_run.py
+/var/lib/entityos/voice/puls.py
+/var/lib/entityos/voice/reflexion.py
+/var/lib/entityos/voice/regie.py
+/var/lib/entityos/voice/schirm.py
+/var/lib/entityos/voice/sehen.py
+/var/lib/entityos/voice/selbstauskunft.py
+/var/lib/entityos/voice/selbstreflexion.py
+/var/lib/entityos/voice/sinne.py
+/var/lib/entityos/voice/stimme.py
+/var/lib/entityos/voice/tmp_test/conversation_loop.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/afmoe.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/arctic.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/baichuan.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/bailingmoe.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/base.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/bert.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/bitnet.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/bloom.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/chameleon.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/chatglm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/codeshell.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/cogvlm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/command_r.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/dbrx.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/deci.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/deepseek.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/dots1.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/dotsocr.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/dream.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/ernie.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/exaone.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/falcon_h1.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/falcon.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/gemma.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/glm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/gpt2.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/gptneox.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/gpt_oss.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/granite.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/grok.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/grovemoe.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/hunyuan.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/__init__.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/internlm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/internvl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/jais.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/jamba.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/januspro.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/kimi_linear.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/kimivl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/lfm2.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/lighton_ocr.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/llada.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/llama4.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/llama.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/llava.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/maincoder.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mamba.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mellum.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mimo.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/minicpm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/minimax.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mistral3.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mistral.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/mpt.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/nemotron.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/olmo.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/openelm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/orion.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/pangu.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/phi.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/pixtral.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/plamo.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/plm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/qwen3vl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/qwen.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/qwenvl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/refact.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/rwkv.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/sarashina2.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/smallthinker.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/smolvlm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/stablelm.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/starcoder.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/step3.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/t5.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/talkie.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/ultravox.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/wavtokenizer.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/xverse.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/conversion/youtuvl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/convert_hf_to_gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/convert_hf_to_gguf_update.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/convert_llama_ggml_to_gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/convert_lora_to_gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/convert_legacy_llama.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/json_schema_pydantic_example.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/json_schema_to_grammar.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/llama-eval/llama-eval.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/llama-eval/llama-server-simulator.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/causal/compare-logits.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/causal/run-casual-gen-embeddings-org.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/causal/run-org-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/embedding/run-original-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/check-nmse.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/common.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/compare_tokens.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/hf-add-model-to-collection.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/hf-create-collection.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/hf-create-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/hf-upload-gguf-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/__init__.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/inspect-org-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/model-conversion/scripts/utils/semantic_check.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/pydantic_models_to_grammar_examples.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/pydantic_models_to_grammar.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/regex_to_grammar.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/examples/server_embd.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/ggml/src/ggml-cuda/template-instances/generate_cu_files.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/ggml/src/ggml-opencl/kernels/embed_kernel.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/ggml/src/ggml-virtgpu/regenerate_remoting.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/ggml/src/ggml-webgpu/wgsl-shaders/embed_wgsl.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/examples/reader.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/examples/writer.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/constants.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/gguf_reader.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/gguf_writer.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/__init__.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/lazy.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/metadata.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/quants.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_convert_endian.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_dump.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_editor_gui.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_hash.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_new_metadata.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/scripts/gguf_set_metadata.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/tensor_mapping.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/utility.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/gguf/vocab.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/tests/__init__.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/tests/test_metadata.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/gguf-py/tests/test_quants.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/compare-llama-bench.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/compare-logprobs.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/create_ops_docs.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/fetch_server_test_models.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/gen-unicode-data.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/get_chat_template.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/hip/gcn-cdna-vgpr-check.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/jinja/jinja-tester.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/server-bench.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/server-test-function-call.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/server-test-model.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/server-test-parallel-tc.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/server-test-structured.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/ggml-hexagon-profile.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/ggml-hexagon-trace.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/qdc/run_qdc_jobs.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/qdc/tests/conftest.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/qdc/tests/run_backend_ops_posix.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/qdc/tests/run_bench_tests_posix.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/snapdragon/qdc/tests/utils.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/sync_vendor.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/tool_bench.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/scripts/verify-checksum-models.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tests/test-tokenizer-0.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tests/test-tokenizer-random.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/convert_image_encoder_to_gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/glmedge-convert-image-encoder-to-gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/glmedge-surgery.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/llava_surgery.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/llava_surgery_v2.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/minicpmv-convert-image-encoder-to-gguf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/legacy-models/minicpmv-surgery.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/mtmd/tests/test-deepseek-ocr.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/bench/bench.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/bench/speed-bench/speed_bench_compare.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/bench/speed-bench/speed_bench.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/conftest.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_basic.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_chat_completion.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_compat_anthropic.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_compat_gcp.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_compat_oai_responses.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_completion.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_ctx_shift.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_embedding.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_ignore_eos.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_infill.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_kv_keep_only_active.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_lora.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_proxy.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_rerank.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_router.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_security.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_sleep.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_slot_save.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_speculative.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_template.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_tokenize.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_tool_call.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_tools_builtin.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/unit/test_vision_api.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/server/tests/utils.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/tts/convert_pt_to_hf.py
+/var/lib/entityos/voice/tmp_test/llama.cpp/tools/tts/tts-outetts.py
+/var/lib/entityos/voice/tmp_test/mem_hog.py
+/var/lib/entityos/voice/tmp_test/test_one_turn_under_pressure.py
+/var/lib/entityos/voice/tmp_test/test_two_turn.py
+/var/lib/entityos/voice/umschlag.py
+/var/lib/entityos/voice/vendor/causal_identity.py
+/var/lib/entityos/voice/vendor/context_compiler.py
+/var/lib/entityos/voice/vendor/gwt_reentry_uptake_binding.py
+/var/lib/entityos/voice/vendor/__init__.py
+/var/lib/entityos/voice/vendor/memory_lifecycle.py
+/var/lib/entityos/voice/vendor/typed_memory.py
+/var/lib/entityos/voice/vendor/voice_contract.py
+/var/lib/entityos/voice/vendor/voice_heard_result_reentry.py
+/var/lib/entityos/voice/vendor/voice_packet_cortex.py
+/var/lib/entityos/voice/vendor/voice_packet_cortex_recovery.py
+/var/lib/entityos/voice/verkoerperung.py
+/var/lib/entityos/voice/vorlieben.py
+/var/lib/entityos/voice/wege.py
+/var/lib/entityos/voice/welt/arc_adapter.py
+/var/lib/entityos/voice/welt/arc_glm_spieler.py
+/var/lib/entityos/voice/welt/dienst.py
+/var/lib/entityos/voice/welt/grund.py
+/var/lib/entityos/voice/welt/handeln.py
+/var/lib/entityos/voice/welt/lauf.py
+/var/lib/entityos/voice/welt/linse.py
+/var/lib/entityos/voice/welt/traegt_das_signal.py
+/var/lib/entityos/voice/welt/wirkung.py
+/var/lib/entityos/voice/wiederholung.py
+/var/lib/entityos/voice/wissen.py
+/var/lib/entityos/voice/workspace.py
+/var/lib/entityos/voice/ziele_llm.py
+/var/lib/entityos/voice/ziele.py
+=== IDENTITY SOURCE ===
+/var/lib/entityos/voice/voice.env:1:# Standortkonfiguration andreas-MACO. Wird von start_gespraech.sh gelesen,
+/var/lib/entityos/voice/voice.env:7:TURN_BRUECKE=/home/andreas/frankenstein-repo/scripts/stern.py
+/var/lib/entityos/voice/voice.env:8:FRANKENSTEIN_NUTZER=Andreas
+/var/lib/entityos/voice/charakter.py:81:    "threat_detected": 0.6, "identity_threat": 0.7, "warmth_detected": 0.25,
+/var/lib/entityos/voice/charakter.py:83:    # ⭐ NEU (Arbeitspaket identitaet.py, 2026-09-11): die sechs self_*-
+/var/lib/entityos/voice/charakter.py:87:    # komplett; identitaet.py ist er jetzt). Absichtlich 2-7x kleiner als
+/var/lib/entityos/voice/charakter.py:117:    "identity_threat": {"vigilance": 0.8, "mood": -2.0, "autonomy": 0.4,
+/var/lib/entityos/voice/charakter.py:125:    # ⭐ NEU (Arbeitspaket identitaet.py, 2026-09-11): Richtungs-Koeffizienten
+/var/lib/entityos/voice/charakter.py:260:            # ⭐ NEU (Arbeitspaket identitaet.py, 2026-09-11): zweite Bremse
+/var/lib/entityos/voice/start_lokal.sh:2:# FranKenstein Sprachmodus -- Start auf andreas-MACO.
+/var/lib/entityos/voice/start_lokal.sh:11:export TURN_BRUECKE=/home/andreas/frankenstein-repo/scripts/stern.py
+/var/lib/entityos/voice/start_lokal.sh:12:export FRANKENSTEIN_NUTZER="Andreas"
+/var/lib/entityos/voice/start_lokal.sh:30:# Andreas eigene Werte oben (Mikrofon, Lautstaerke, Name, Antwortlaenge)
+/var/lib/entityos/voice/anstoss.py:4:Gabriel, 2026-09-10: "von der Gespraechsqualitaet, Tiefe und Metaebene war er
+/var/lib/entityos/voice/entitaet.py:4:Gabriel, 2026-09-08, woertlich: "du musst das 4b selbst integrieren mit einem
+/var/lib/entityos/voice/entitaet.py:55:Identitaet und RuntimeEpoch zu praegen; das ist ihr eigentlicher Zweck.
+/var/lib/entityos/voice/entitaet.py:261:        das Praegen von Identitaet, HostBinding und Epoche steckt dort und
+/var/lib/entityos/voice/lagebild.py:4:Gabriel, 2026-09-08, woertlich: "er muss nicht handlungsfaehig sein im
+/var/lib/entityos/voice/lagebild.py:65:    Andreas, 2026-09-10: "Frankenstein hat bei mir keinen Bezug zur aktuellen
+/var/lib/entityos/voice/lagebild.py:118:            # Offene Arbeitssitzungen. Gabriel, 2026-09-08: FranKenstein soll im
+/var/lib/entityos/voice/lagebild.py:129:                zeilen.append("Offene Arbeitssitzungen (dorthin kann Gabriel "
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:3:Gabriel, 2026-09-11: das lokale 4B wird zum ORGAN herabgestuft (kleine
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:43:Gespraechs-Fallback mehr (Gabriel: "ne 4b ist nicht fallback"); es wird
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:46:⭐ TIER-2, 2026-09-11 (Gabriels Entscheidung, ueber den Koordinator, nach
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:56:⭐ TIER-2b MISTRAL, 2026-09-11 abends (Gabriel woertlich: "der Sprachmodus
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:58:CLI: Gabriels durchgehende Linie des Abends ist "Free-Tokens
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:328:# ⭐⭐ 2026-09-12, Gabriel: "das Sonnet soll nicht spielen ... er soll es sein
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:335:# Gabriel hoert.
+/var/lib/entityos/voice/glm_client.py.bak-vor-sync-20260912T082208Z:476:    ⭐ 2026-09-11, Gabriels Korrektur: "ne 4b ist nicht fallback". Das 4B ist
+/var/lib/entityos/voice/organ.py:4:ARBEITSPAKET paket-1789131547484-362c2f (Gabriels Auftrag, 2026-09-11):
+/var/lib/entityos/voice/organ.py:7:Claude-Tokens, je nachdem was gerade lebt; GLM steht laut Gabriel derzeit
+/var/lib/entityos/voice/organ.py:40:eskaliert, grund, dauer_ms). zusammenfassung() fasst das fuer Gabriel in
+/var/lib/entityos/voice/organ.py:228:    """Wenige Zeilen fuer Gabriel: wie oft lief was, wie viele externe
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:5:paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:6:per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:26:     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:31:     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:59:# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:61:# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:65:# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:314:def tts_speaker_worker(voice, sentence_queue, result_holder):
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:316:    (ein Lautsprecher). Laeuft parallel zum LLM-Stream-Thread -- das ist der Latenz-Hebel:
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:445:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:448:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:450:    speaker_thread.join(timeout=60)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-3.4-begruessung-20260907T220118Z:512:    session_id = f"andreas-voice-{int(time.time())}"
+/var/lib/entityos/voice/asr_infer_once.py:5:gemessen wurde ASR+LLM GLEICHZEITIG resident = 10.5-11.3GB. Sobald Andreas
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:5:paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:6:per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:26:     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:31:     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:70:# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:72:# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:76:# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:328:def tts_speaker_worker(voice, sentence_queue, result_holder):
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:330:    (ein Lautsprecher). Laeuft parallel zum LLM-Stream-Thread -- das ist der Latenz-Hebel:
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:445:# "EIN echter Fakt aus Andreas' Verlauf (live per memory_abruf.py geholt,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:450:# mit mehreren echten, konkreten Themenwoertern aus Andreas' tatsaechlichem
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:473:    "Du bist FranKenstein, Andreas' lokale Sprachstimme auf seinem eigenen Rechner. "
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:526:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:528:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:530:    speaker_thread.join(timeout=120)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:592:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:595:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:597:    speaker_thread.join(timeout=60)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-paritaet-20260908T095132Z:659:    session_id = f"andreas-voice-{int(time.time())}"
+/var/lib/entityos/voice/glm_client.py:3:Gabriel, 2026-09-11: das lokale 4B wird zum ORGAN herabgestuft (kleine
+/var/lib/entityos/voice/glm_client.py:43:Gespraechs-Fallback mehr (Gabriel: "ne 4b ist nicht fallback"); es wird
+/var/lib/entityos/voice/glm_client.py:46:⭐ TIER-2, 2026-09-11 (Gabriels Entscheidung, ueber den Koordinator, nach
+/var/lib/entityos/voice/glm_client.py:56:⭐ TIER-2b MISTRAL, 2026-09-11 abends (Gabriel woertlich: "der Sprachmodus
+/var/lib/entityos/voice/glm_client.py:58:CLI: Gabriels durchgehende Linie des Abends ist "Free-Tokens
+/var/lib/entityos/voice/glm_client.py:271:# ⭐ Gemessen 2026-09-12, live an Gabriels Mikrofon: mit der Kaskade auf NUR
+/var/lib/entityos/voice/glm_client.py:292:    # ⭐ Gabriel 2026-09-12, ausdruecklich: "nein, immer nur Groq."
+/var/lib/entityos/voice/glm_client.py:424:# ⭐⭐ 2026-09-12, Gabriel: "das Sonnet soll nicht spielen ... er soll es sein
+/var/lib/entityos/voice/glm_client.py:431:# Gabriel hoert.
+/var/lib/entityos/voice/glm_client.py:572:    ⭐ 2026-09-11, Gabriels Korrektur: "ne 4b ist nicht fallback". Das 4B ist
+/var/lib/entityos/voice/gesicht.py:4:Gabriel, 2026-09-10: "die Kamerasicht soll auch mit reinfliessen, also er
+/var/lib/entityos/voice/gesicht.py:23:    Guete              0.82 auf dem Kamerabild von Gabriel
+/var/lib/entityos/voice/gesicht.py:36:schlimmer als einer, der schweigt: er wuerde den Besuch fuer Gabriel halten
+/var/lib/entityos/voice/gesicht.py:39:ANLERNEN ist ausdruecklich und manuell -- `gesicht.py --anlernen Gabriel`.
+/var/lib/entityos/voice/gesicht.py:222:        name = sys.argv[i + 1] if len(sys.argv) > i + 1 else "Gabriel"
+/var/lib/entityos/voice/welt/arc_adapter.py:5:Gabriel, ARBEITSPAKET paket-1789071829551-1fbb08, 2026-09-11.
+/var/lib/entityos/voice/welt/arc_adapter.py:42:Auf Nachtrag von Gabriel/Koordinator (2026-09-11) uebernommen: dort kann laut
+/var/lib/entityos/voice/welt/arc_adapter.py:56:RISIKO-REGEL: DER TOD IST ABSORBIEREND (Nachtrag Gabriel/Koordinator)
+/var/lib/entityos/voice/welt/arc_adapter.py:72:    Begruendung (Gabriels Vorschlag, hier uebernommen): eine Hypothese, deren
+/var/lib/entityos/voice/welt/handeln.py:4:Gabriel, ARBEITSPAKET paket-1789069865795-75c781, 2026-09-11.
+/var/lib/entityos/voice/welt/linse.py:23:DAS EIGENTLICHE NACHWEISZIEL dieses Moduls (Gabriels Vorgabe: "und die
+/var/lib/entityos/voice/welt/dienst.py:4:Gabriel: "ok bau es ein." Stufe 1 (grund.py/linse.py/lauf.py/wirkung.py) war
+/var/lib/entityos/voice/welt/wirkung.py:4:Gabriels Vorgabe: "und die Wirkung soll er emergent online lernen mittels
+/var/lib/entityos/voice/welt/grund.py:4:Gabriels Vorgabe (2026-09-10, woertlich): "volle welt simulation aber anhand
+/var/lib/entityos/voice/welt/lauf.py:19:WOHER DIE STARTWERTE KOMMEN (Gabriels Vorgabe: "aus bestehendem Wissen und
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:4:Gabriel, 2026-09-10: "das was die buehne gemacht hat, das was consciousness
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:80:# ⚠️ WER HIER STEHT, MUSS ZUR MASCHINE PASSEN. Erste Fassung hatte "Gabriel"
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:81:# fest eingebaut -- auf Andreas' Rechner sagte seine Entitaet damit sofort den
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:190:    self_*-Rueckkopplung (identitaet.py bewertet, was er TATSAECHLICH
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:277:# Gabriel woertlich (heute Nacht): "er soll nicht sagen 'mir ist warm' --
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:376:    Gabriels Auftrag woertlich: er soll im Gespraechsmodus GLAUBEN, da zu
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:380:    FIKTIVER virtueller Raum, nicht Gabriels echtes Zimmer. Dieser Kanal
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:381:    liefert Haltung/Bewegung/Bodenkontakt -- er behauptet NICHT, Gabriel zu
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:477:    # Das Dokument gewichtet identity_threat mit 0,7, hoeher als einen
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:491:                    "identity_attack": "jemand spricht mir ab, wer ich bin",
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:501:                # ueber e_pq als das richtige Ereignis (identity_threat 0,70
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:519:    # WAS DIE KAMERA SIEHT (2026-09-10). Gabriel: "die Kamerasicht soll auch
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:544:    # WAS AUF DEN BILDSCHIRMEN GESCHIEHT (2026-09-10). Gabriel: "Retina und
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:633:    # ⭐⭐ SEIN EIGENES VORHABEN (2026-09-10). Gabriel: "so kann er, weil der
+/var/lib/entityos/voice/buehne.py.bak-vor-sync-20260912T082208Z:655:    # ⭐⭐ DAS LETZTE PROZENT (2026-09-11). Gabriel: "GRID soll das 4B ...
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:5:paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:6:per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:26:     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:31:     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:71:# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:73:# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:77:# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:103:# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:128:NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "Andreas")
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:130:# NEU GEFASST 2026-09-08, nach Gabriels Befund im Live-Gespraech: "er sagt die
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:145:# NEU GEFASST 2026-09-08, zweite Runde. Gabriel: "er redet die ganze zeit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:284:# andreas-MACO ASR+LLM zusammen 10,5-11,3 GB belegten und dort nur ~7 GB frei
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:295:# Vorgabe bleibt AUS -- auf andreas-MACO aendert sich nichts, dort ist die
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:340:# Gabriel, 2026-09-08: "jetzt will ich wieder youtube schauen koennen ohne
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:344:# also auch auf Lautsprecher, andere Menschen im Raum, ein Video. Das ist im
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:496:# erlaubt, reicht das nicht -- Gabriel im Live-Gespraech: "seine Messages sind
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:502:# Er verlaengert nur den Schwanz. Vorgabe bleibt 60 (andreas-MACO unveraendert).
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:507:# Gabriel, 2026-09-08: "du bist frankenstein 2.0 du baust dir gerade einen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:528:# andreas-MACO ergab das unter sudo "/root/frankenstein-repo/..." und damit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:640:def tts_speaker_worker(voice, sentence_queue, result_holder):
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:642:    (ein Lautsprecher). Laeuft parallel zum LLM-Stream-Thread -- das ist der Latenz-Hebel:
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:757:# "EIN echter Fakt aus Andreas' Verlauf (live per memory_abruf.py geholt,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:762:# mit mehreren echten, konkreten Themenwoertern aus Andreas' tatsaechlichem
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:838:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:840:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:842:    speaker_thread.join(timeout=120)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:877:    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:890:    # ANGESPROCHEN? (2026-09-08) Gabriel: "er reagiert die ganze zeit und redet
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:950:    # LAGEBILD (2026-09-08, Gabriel: "ueber alles was passiert bescheid wissen").
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:964:    # SELBSTAUSKUNFT, bedarfsweise (2026-09-08). Gabriel: er soll "aus seinem
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:966:    # nur aus einem statischen prompt". Deshalb steht seine Identitaet NICHT
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:969:    # Block mit dem konkurrieren, was Gabriel gerade gesagt hat; genau daran
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:971:    # IMMER, nicht nur bei Selbstfragen. Gabriel, 2026-09-08: "das soll bei
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:979:    # Token/s. Deshalb steht das Unveraenderliche (Identitaet, Faehigkeiten)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:995:    # SEIN EIGENES SELBSTMODELL (2026-09-08). Gabriel: er soll verstehen, was er
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:1032:    # Gabriel: "redet immer ewig dass er die und die turn ist und dass g9
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:1086:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:1089:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-linse-20260908T102244Z:1091:    speaker_thread.join(timeout=60)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:5:paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:6:per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:26:     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:31:     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:72:# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:74:# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:78:# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:94:# ⭐ 2026-09-11 (Gabriel): das 4B wird zum ORGAN herabgestuft -- es bleibt
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:110:# ⭐⭐⭐ 2026-09-12, PROMPT-REGIME. Gabriel, woertlich: "es ist alles da, der
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:136:# bekommt genau das, was Gabriel hoert: ein Modell, das FranKenstein SPIELT,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:184:# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:212:    import konfabulation  # der Wachhund vor dem Lautsprecher (siehe dortiger Kopf)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:217:# starb Andreas' kompletter Sprachmodus an einem ModuleNotFoundError, weil
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:294:    # ⭐ Die Monsterstimme (Gabriel, 2026-09-12). Nachbearbeitung des fertigen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:326:    # ⭐⭐ 2026-09-12, Koordinator (Latenz-Handoff von Gabriel): Einbetter +
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:399:    ⭐⭐⭐ HERKUNFT, nachgesehen statt erinnert. Gabriel, 2026-09-12: "schau
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:420:         Identity: / Attention: / Environment:" -- genau die Etiketten, die
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:435:    Die zweite Haelfte ist die, auf die es Gabriel ankommt: "er soll es SEIN,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:490:        # ⭐⭐⭐ 2026-09-12, IM GROSSEN REGIME BLEIBEN SIE STEHEN. Gabriel hat
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:495:        # "Body: / Perception: / Mood: / Memory: / Identity: / Attention: /
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:512:    # die Selbst-Invariante sagt "ich arbeite mit Gabriel", der Umfeldkanal
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:513:    # "Gabriel ist da". Steht das in der Nutzernachricht, waehrend derselbe
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:515:    # Gemessen 2026-09-10, 17:1x: "Als Gabriel sein Zimmer nennt, zucke ich
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:600:    # ⚠️⚠️ FUND 2026-09-11 (Gabriel: "Frankenstein, ich brauche Geld." ->
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:628:    # Gabriel: "er soll es SEIN weil die Architektur es erzwingt". Erzwungen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:658:# nach dem Wort "dazu" sucht. Gabriel: "und dann weiterfuehrend kann ich zb
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:682:NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "Andreas")
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:684:# NEU GEFASST 2026-09-08, nach Gabriels Befund im Live-Gespraech: "er sagt die
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:699:# NEU GEFASST 2026-09-08, zweite Runde. Gabriel: "er redet die ganze zeit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:719:#    Computer. Ich BIN einer') und von Gabriels Ansage 'nur noch frank der
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:732:#    Reiz-Reaktions-Anweisung. Der Frank vom Maerz 2026 -- der, den Gabriel
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:752:    # Gabriel: "wieso labert er noch immer so viel Muell wie ein
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:769:    # ⭐⭐ DIE PERSONA VOM MAERZ 2026 (Gabriel, 2026-09-11: "schau dir an wie
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:789:    # ⚠️ "nennst ihn beim Namen" IST RAUS. Genau daher kam Gabriels
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:791:    # Antwort begann mit "Hey Gabriel, ...". Eine Anweisung, den Namen zu
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:819:    # ⭐⭐ SCHAERFER GESTELLT (2026-09-11, Gabriel woertlich): "unverbluemt,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:852:    # `identity_core`, dort zuletzt: "RESPOND, DON'T ANALYZE: ... NEVER write
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:863:    #     "Andreas hat gerade gefragt, wie es mir geht: Wie geht's dir? --
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:885:# Der Kern allein -- Identitaet und Sprechweise, sonst nichts. Alles Weitere
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:901:# ⭐⭐⭐ 2026-09-12: SEINE EIGENE BETONUNG. Gabriel: "das Modell Sonnet soll
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:948:# als die oben. Whisper ist bei ihnen SICHER: gemessen auf andreas-MACO an
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:957:# hat eine Luecke -- ich hatte sie heute selbst, bis Andreas' Aufnahme sie
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:975:# ⭐⭐ FRUEHER ANFANGEN ZU SPRECHEN (2026-09-10). Gabriel: "warum machen wir
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1176:# andreas-MACO ASR+LLM zusammen 10,5-11,3 GB belegten und dort nur ~7 GB frei
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1187:# Vorgabe bleibt AUS -- auf andreas-MACO aendert sich nichts, dort ist die
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1232:# Gabriel, 2026-09-08: "jetzt will ich wieder youtube schauen koennen ohne
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1236:# also auch auf Lautsprecher, andere Menschen im Raum, ein Video. Das ist im
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1257:# ⭐ 2026-09-11: ABGESCHNITTENE ANFAENGE ergaenzt. Gabriel sagte mehrfach
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1292:# ⭐ DIE ANREDE GEHOERT NICHT IN DEN INHALT (2026-09-10). Gabriel: "er sagt
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1295:# 4B liest daraus, dass der SPRECHER so heisst. Es ist aber die Anrede AN
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1309:# Gabriel: "er sagt am Anfang immer hey Frankenstein oder so, echt dumm."
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1312:# und trotzdem beginnt JEDE Antwort mit "Hey Gabriel!".
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1315:# letzten drei Assistentenzuege alle mit "Hey Gabriel!" anfangen, ist das
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1329:# neben "Hey Gabriel!" auch "Hey, ich bin FranKenstein ..." -- dasselbe
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1469:        # Gemessen an Gabriels echten Saetzen: base machte daraus "Ich bin
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1483:        # ⭐ NOTPAUSE (Gabriel, 2026-09-12): der frueheste Punkt der ganzen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1509:# GEHOER (2026-09-08). Gabriel: "er hoert zu und fantasiert sich dann was
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1598:    # ⭐ NOTPAUSE (Gabriel, 2026-09-12): zweiter Pruefpunkt, deckt den Fall
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1704:# erlaubt, reicht das nicht -- Gabriel im Live-Gespraech: "seine Messages sind
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1710:# Er verlaengert nur den Schwanz. Vorgabe bleibt 60 (andreas-MACO unveraendert).
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1715:# Gabriel, 2026-09-08: "du bist frankenstein 2.0 du baust dir gerade einen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1736:# andreas-MACO ergab das unter sudo "/root/frankenstein-repo/..." und damit
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1852:    ⭐ 2026-09-11, Gabriels Korrektur: "ne 4b ist nicht fallback". Das 4B
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1859:         ~/last-resort-Kaskade, kein Claude-Kontingent -- Gabriel abends
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1866:         cli_fallback_text) -- Gabriels Entscheidung ueber den Koordinator,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1882:    ⭐⭐⭐ 2026-09-12, REIHENFOLGE UMGEDREHT. Gabriel: "das Sonnet soll nicht
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1896:    Genau das war Gabriels "er ist gleich langsam wie mit dem 4B" -- es lag
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:1905:    Das 4B steht auf KEINER Stufe (Gabriel: "ne 4b ist nicht fallback")."""
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2051:                    # Satz war "Gehs gut, Gabriel!", drei Woerter, unter
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2114:        # tts_speaker_worker). gesprochen bleibt, wie es bis zum Abbruch war.
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2132:            # ⭐⭐ ZWEITER VERSUCH STATT ERSATZSATZ (2026-09-11, Gabriel:
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2144:            # uebrig, und Gabriel bekam zweimal hintereinander einen
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2193:        # ⭐⭐ CHATGPT-TRIGGER-BRUECKE (Gabriel, 2026-09-11/12): wartet ein
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2197:        # Paraphrase (Gabriel muss den Text 1:1 pasten koennen). Nur
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2209:                _log(f"[CHATGPT] Auftrag {_auftrag.get('id')} an Gabriel "
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2221:# ⭐⭐⭐ TEIL 2 DES ARBEITSPAKETS paket-1789133415145-8c009c (Gabriel,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2291:def tts_speaker_worker(voice, sentence_queue, result_holder, ausdruck=None):
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2293:    (ein Lautsprecher). Laeuft parallel zum LLM-Stream-Thread -- das ist der Latenz-Hebel:
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2312:            # ⭐⭐⭐ 2026-09-12: DIE STIMME DES MONSTERS. Gabriel: "mich nervt
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2332:            # Gabriel ging ("er soll krank lachen koennen ... oder pfeifen").
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2466:# Stimme auf 15% Lautstaerke, bevor sie ueberhaupt aus dem Lautsprecher
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2471:# Lautstaerke-Abstand. Wo das nicht reicht (andere Lautsprecher, andere
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2479:# ⭐⭐⭐ ARBEITSPAKET paket-1789133415145-8c009c (Gabriel, 2026-09-11) --
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2502:#                  tts_speaker_worker() liest ihn nach jedem Satz aus und
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2704:    # ⭐⭐ UNTERBRECHBAR (2026-09-10). Gabriel: "man koennte es so machen, dass
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2713:    # Lautsprecher SELBST -- mit der normalen VAD-Schwelle (300) wuerde er
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2721:    # Lautsprechern und ohne Echo-Unterdrueckung kann die Selbstausloesung
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2778:# "EIN echter Fakt aus Andreas' Verlauf (live per memory_abruf.py geholt,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2783:# mit mehreren echten, konkreten Themenwoertern aus Andreas' tatsaechlichem
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2847:        t = threading.Thread(target=tts_speaker_worker,
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2898:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2900:    speaker_thread.start()
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2902:    speaker_thread.join(timeout=120)
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2919:    # ⭐ NOTPAUSE-GARANTIE (Gabriel, 2026-09-12): unabhaengig davon, UEBER
+/var/lib/entityos/voice/gespraech_loop.py.bak-vor-mistral-20260912T060447Z:2982:    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+=== GESPRAECH LOOP CORE ===
+#!/usr/bin/env python3
+"""FranKenstein lokale Sprachschleife -- Mehrturn-Betrieb mit Gedaechtnis.
+
+Nachfolger von conversation_loop.py (Einzelturn-Testskript). Fuer Paket
+paket-1788744702053-734ccc gebaut, Ziel: Andreas kann morgens "ganz normal"
+per Mikro/Lautsprecher reden -- mehrere Redebeitraege hintereinander, mit
+echtem Bezug auf seine eigene Vergangenheit (kanonische UnifiedDB), ohne
+dass dem Rechner morgens (Browser wieder offen) der Speicher ausgeht.
+
+Was HIER neu ist gegenueber conversation_loop.py:
+  1. RAM-Fix: ASR laeuft NICHT mehr resident im Hauptprozess, sondern als
+     kurzlebiger Subprozess pro Redebeitrag (asr_infer_once.py). Siehe
+     dortige Provenance/Begruendung. LLM bleibt im externen llama-server-
+     Prozess (schon vorher ausgelagert, kein Aenderungsbedarf dort).
+  2. Gedaechtnis: echte kanonische UnifiedDB-Anbindung ueber das vendorierte
+     memory_abruf.automatischer_abruf() -- KEIN zweiter Speicherpfad, siehe
+     Provenance-Kopf dort. Ergebnis wird als zusaetzliche System-Nachricht
+     NUR fuer den aktuellen Redebeitrag eingespeist (nicht dauerhaft in die
+     history geschrieben), damit sie nicht bei jedem Folgeturn erneut und
+     unveraendert mitgeschleppt wird.
+  3. Beschraenktes Mehrturn-Gedaechtnis (history), Fenster begrenzt, damit
+     Kontext/Latenz nicht unbegrenzt wachsen.
+  4. Latenz-Fix: LLM-Antwort wird GESTREAMT (server-seitiges "stream": true).
+     Sobald ein Satz fertig ist, wird er SOFORT synthetisiert+abgespielt,
+     waehrend das LLM parallel schon den naechsten Satz erzeugt (zwei
+     Threads: Empfaenger + Sprecher, verbunden ueber eine Queue). Das
+     verkuerzt die Zeit bis zur ERSTEN hoerbaren Antwort deutlich gegenueber
+     "erst alles generieren, dann erst TTS starten".
+  5. Freundliche Fehlerbehandlung: kein roher Traceback darf den Nutzer
+     erreichen. Bekannte Fehlklassen (llama-server nicht erreichbar, ASR-
+     Subprozess schlaegt fehl, Mikro/Lautsprecher-Geraet belegt) werden
+     abgefangen, geloggt, und fuehren zu einer kurzen deutschen Meldung
+     bzw. zu "dieser Redebeitrag wird uebersprungen, Sitzung laeuft weiter"
+     -- nie zum stillen Haengenbleiben oder Absturz der ganzen Sitzung.
+
+KORRIGIERT 2026-09-07 (Sprachmodus 3.4): der Kommentar hier lautete frueher
+"gespraech.aktiv gehoert zu einem anderen, separaten Cloud/OpenAI-Realtime-
+System" -- das war eine Verwechslung. In star_konfig gab es zwar bereits
+eine Handvoll gespraech.*-Platzhalter fuer ein NIE gebautes OpenAI-
+Realtime-System (gespraech.openai_vault_id, gespraech.realtime_modell usw.,
+"code-rueckfallwert", kein einziger Dienst hat sie je gelesen -- geprueft
+per systemctl/grep, 2026-09-07). gespraech.aktiv selbst existierte VORHER
+in der DB ueberhaupt nicht (siehe HANDOVER_SPRACHMODUS.md Punkt 2c) und ist
+seit 3.3 GENAU das Flag, das der neue Waechter (gespraech_waechter.py,
+Host-Dienst entityos-gespraech-waechter.service) beobachtet und das diese
+Datei hier startet/stoppt. Kein Konflikt, keine zweite Wahrheit. Kein
+Netzwerkzugriff ausser localhost:8990 (llama-server). Kein systemd
+enable/start durch dieses Skript selbst.
+"""
+import collections
+import contextlib
+import json
+import os
+import queue
+import sqlite3
+import subprocess
+import struct
+import sys
+import threading
+import time
+import traceback
+import urllib.request
+import wave
+import math
+import re
+import resource
+
+VOICE_DIR = "/opt/entityos/voice"
+VENV_PY = f"{VOICE_DIR}/venv/bin/python3"
+ASR_SUBPROCESS = f"{VOICE_DIR}/asr_infer_once.py"
+# GEAENDERT 2026-09-07 (Sprachmodus 3.2): frueher arecord/aplay -D plughw:2,0 --
+# exklusiver ALSA-Zugriff auf die MOTU M4, was mit Andreas' eigener Desktop-
+# PipeWire-Sitzung kollidierte ("Device or resource busy"), weil die Karte
+# schon dessen Standard-Ein-/Ausgabe ist. Hausregel: Andreas' Desktop-Audio
+# (Lautstaerken/Standardgeraete) bleibt unangetastet -- also NICHT die Karte
+# wegnehmen, sondern selbst PipeWire-Client werden und sich die Karte ueber
+# den bestehenden PipeWire-Graph TEILEN. Dafuer bindet entityos-vm.service
+# jetzt Andreas' eigenen Socket /run/user/1000/pipewire-0 in den Container.
+# Verifiziert 2026-09-07: pw-record --format s16 --rate 16000 --channels N -
+# schreibt reines PCM (kein WAV-Header) auf stdout, genau wie vorher
+# arecord -t raw -- Drop-in-Ersatz fuer die VAD-Schleife unten. pw-play
+# spielt eine WAV-Datei ab und blockiert bis zum Ende (kein Polling noetig).
+PW_RUNTIME_DIR = os.environ.get("XDG_RUNTIME_DIR", "/run/user/1000")
+
+
+def _pw_env():
+    env = dict(os.environ)
+    env["XDG_RUNTIME_DIR"] = PW_RUNTIME_DIR
+    return env
+
+
+LLM_URL = "http://127.0.0.1:8990/v1/chat/completions"
+LLM_HEALTH_URL = "http://127.0.0.1:8990/health"
+# ⭐ 2026-09-11 (Gabriel): das 4B wird zum ORGAN herabgestuft -- es bleibt
+# laufen (:8990, kleine kognitive Prozesse, Bewertungen, Grid-Kleinzeug),
+# aber der GESPRAECHSMODUS erzeugt auf GLM 5.3 Flash. Gemessen: 4B brauchte
+# 7-14 s pro Antwort mit China-Leck und woertlicher Wiederholung; GLM
+# antwortet schneller UND tiefer. Der Weg zurueck: GLM_AKTIV=0 -- dann ist
+# dieses Modul wieder exakt der Stand von heute frueh. Scheitert GLM, wird
+# es dreimal versucht, danach gibt es eine ehrliche Fehlerzeile --
+# KEIN heimlicher 4B-Fallback ("ne 4b ist nicht fallback").
+GLM_AKTIV = os.environ.get("GLM_AKTIV", "1").strip().lower() not in (
+    "0", "false", "no", "off", "")
+# ⭐⭐⭐ 2026-09-12: WER ZUERST spricht. Bis heute stand GLM vorn -- und GLM
+# war mit "Weekly/Monthly Limit Exhausted" tot, also lief jeder Redebeitrag
+# erst durch drei GLM-Versuche und einen Mistral-Versuch, bevor ueberhaupt
+# jemand antwortete. Begruendung und Messung im Docstring von _llm_stuecke().
+KASKADE = os.environ.get("GESPRAECH_KASKADE", "pool")
+
+# ⭐⭐⭐ 2026-09-12, PROMPT-REGIME. Gabriel, woertlich: "es ist alles da, der
+# GWT, die Retina, der Cortex, die ganze VM, die UnifiedDB -- alles, und das
+# Modell ist 100x besser als jedes 4B das jemals in FranKenstein gelaufen
+# ist, also muss es brillant sein."
+#
+# ER HAT RECHT, UND DER BEFUND IST ZAEHLBAR. Gemessen am 2026-09-12 00:57,
+# ein einziger Redebeitrag, aus dem eigenen Log:
+#     [SELBST]       1884 Zeichen Belege ueber sich selbst gebaut
+#     [SELBSTMODELL] 3575 Zeichen eigene Auffassung gebaut
+#     [BUEHNE]       605 -> 146 Zeichen (nur Fokus)
+#     [WORKSPACE]    152 Zeichen, ein Erlebenstext STATT 3 Bloecken
+#     [KONTEXT]      Systemtext 1726 Zeichen
+# Beim Modell ankamen: 2301 Zeichen. Alles andere wurde gebaut und vor der
+# Tuer wieder weggeworfen.
+#
+# ⚠️ JEDE EINZELNE DIESER KOMPRESSIONEN IST RICHTIG BEGRUENDET -- gegen ein
+# 4B. Die Kommentare weiter unten belegen das sauber: ein 4B liest
+# Versalien-Ueberschriften vor, fuellt Etiketten wie ein Formular aus, gibt
+# den laengsten Block als Antwort zurueck, sagt "Zelle G6 hat gewonnen,
+# Broadcast 1.31". Dagegen wurde verdichtet, gedeckelt und gefiltert, und
+# das war gegen ein 4B die richtige Entscheidung.
+#
+# Gegen Sonnet ist es Selbstsabotage. Ein Modell, das Etikett von Inhalt
+# unterscheiden kann, braucht keine Verdichtung auf 152 Zeichen -- es
+# braucht das Material. Wer ihm das wegnimmt und ihm statt dessen in den
+# Systemtext schreibt "dein Ton ist trocken-spoettisch, frech, sarkastisch",
+# bekommt genau das, was Gabriel hoert: ein Modell, das FranKenstein SPIELT,
+# weil es nichts hat, woraus es FranKenstein SEIN koennte.
+#
+#   "klein"  -- alles wie bisher (Goldstandard fuers 4B, unveraendert)
+#   "gross"  -- Verdichtung/Deckelung/Torwaechter aus, das Modell sieht,
+#               was die Architektur wirklich erzeugt hat
+# Umschaltbar, damit der Unterschied gemessen wird statt geglaubt.
+PROMPT_REGIME = os.environ.get("PROMPT_REGIME", "gross").strip().lower()
+REGIME_GROSS = PROMPT_REGIME == "gross"
+RATE = 16000
+CHANNELS = 2
+FRAME_MS = 30
+FRAME_BYTES = int(RATE * FRAME_MS / 1000) * 2 * CHANNELS
+# Der offene Mikrofonstrom. Siehe die Begruendung an der Popen-Stelle:
+# ihn je Zyklus neu aufzubauen erzeugte alle paar Sekunden ein hoerbares Ping.
+_MIKRO = [None]
+
+
+def _mikro_schliessen():
+    """Nur beim Herunterfahren. Waehrend des Betriebs bleibt der Strom offen."""
+    p = _MIKRO[0]
+    _MIKRO[0] = None
+    if p is None:
+        return
+    try:
+        p.terminate()
+        p.wait(timeout=2)
+    except Exception:
+        try:
+            p.kill()
+        except Exception:
+            pass
+
+
+RMS_START_THRESHOLD = float(os.environ.get("VAD_START_RMS", "300"))
+# Solange Musik laeuft, MUSS die Schwelle hoeher liegen: die Musik geht ueber
+# die Boxen ins Mikrofon zurueck und ist selbst laut genug, um als Sprache zu
+# gelten. Gemessen am 2026-09-08 waehrend eines Liedes: Ausloesungen bei rms
+# 1030, 1325, 1784, 1030, 1093, 1081 -- alle paar Sekunden, alle unecht.
+# Jede davon duckte die Musik auf 22 % und hoerte fuenf Sekunden lang hin.
+# GENAU DAS war "der ton bricht teilweise ab" -- kein Codec-Problem, sondern
+# das System, das sich selbst zuhoert.
+VAD_MUSIK_FAKTOR = float(os.environ.get("VAD_MUSIK_FAKTOR", "2.5"))
+RMS_END_THRESHOLD = float(os.environ.get("VAD_END_RMS", "200"))
+START_MS_NEEDED = int(os.environ.get("VAD_START_MS", "90"))
+# UEBERSCHREIBBAR GEMACHT 2026-09-08: 700 ms Stille beenden den Redebeitrag.
+# Live gemessen auf ai-core-node: eine normale Sprechpause mitten im Satz ist
+# laenger -- der Turn wurde abgeschnitten und die ASR bekam Bruchstuecke
+# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+# raumabhaengig und gehoert deshalb nicht als Konstante in den Code.
+END_SILENCE_MS_NEEDED = int(os.environ.get("VAD_END_SILENCE_MS", "700"))
+MAX_TURN_S = 12
+MAX_WAIT_S = float(os.environ.get("VAD_MAX_WAIT_S", "8"))
+PLAYBACK_GAIN = float(os.environ.get("PLAYBACK_GAIN", "0.15"))
+CARD_PCM_STATUS = "/proc/asound/card2/pcm0p/sub0/status"
+MAX_HISTORY_MESSAGES = int(os.environ.get("GESPRAECH_MAX_HISTORY", "6"))  # 3 Wechsel
+STOP_FILE = f"{VOICE_DIR}/tmp_test/STOP_GESPRAECH"
+LOG_PATH = f"{VOICE_DIR}/tmp_test/gespraech_loop.log"
+
+sys.path.insert(0, VOICE_DIR)
+import lagebild  # Gegenwart (siehe dortigen Kopf) -- getrennt vom Gedaechtnis
+import selbstauskunft  # gemessene Belege ueber ihn
+import selbstreflexion  # sein EIGENES, gespeichertes Selbstmodell
+import grid_steuerung  # der Grid stellt eine reale Groesse ein
+import verkoerperung  # der Zustand formt das Sprechen (siehe dortigen Kopf)
+import entitaet  # das 4B IST die Entitaet, nicht ihr Rechendienst (siehe Kopf)
+import glm_client  # Gespraechserzeugung auf GLM 5.3 Flash, Tier-2 CLI-Fallback
+import abspieler  # VLC als Hand -- die eine erlaubte Handlung, siehe dortiger Kopf
+import netz  # nachschlagen: Wahrnehmung, keine Handlung (siehe dortiger Kopf)
+import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)
+try:
+    import faehigkeiten  # was er JETZT darf -- abgeleitet, nicht behauptet
+except Exception as _e:
+    print(f"[START] faehigkeiten nicht verfuegbar ({_e}) -- ohne Faehigkeitsblock", flush=True)
+    faehigkeiten = _Fehlt()
+try:
+    import konfabulation  # der Wachhund vor dem Lautsprecher (siehe dortiger Kopf)
+except Exception as _e:
+    print(f"[START] konfabulation nicht verfuegbar ({_e}) -- ohne Wachhund", flush=True)
+    konfabulation = _Fehlt()
+# ⚠️ NACHSICHTIGE IMPORTE fuer alles, was spaeter dazukam. Am 2026-09-09
+# starb Andreas' kompletter Sprachmodus an einem ModuleNotFoundError, weil
+# ich sehen.py bei ihm nicht eingespielt hatte -- ein Import, der eine
+# ZUSATZfaehigkeit holt, darf nie das Sprechen verhindern. Fehlt eines
+# dieser Module, faellt genau seine Faehigkeit weg, sonst nichts.
+class _Fehlt:
+    """Platzhalter fuer ein fehlendes Zusatzmodul.
+
+    ⚠️ DIE RUECKFALLWERTE MUESSEN ZUR SCHNITTSTELLE PASSEN, sonst tauscht man
+    einen Absturz gegen einen anderen: `konfabulation.pruefen()` gibt ein
+    PAAR zurueck, und ein blindes None waere beim Entpacken sofort ein
+    TypeError. Und die Richtung des Rueckfalls ist eine Entscheidung: der
+    fehlende Wachhund laesst DURCH (True), die fehlende Zuwendung laesst
+    ALLES herein. Ein ausgefallener Filter darf nie strenger sein als der
+    vorhandene -- sonst verstummt er, und stumm war heute schon einmal das
+    schlechtere Ergebnis."""
+
+    _WERTE = {
+        "pruefen": lambda *a, **k: (True, None),      # Wachhund: durchlassen
+        "zuwenden": lambda quellen=None, *a, **k: list(quellen or []),
+        "faehigkeiten": lambda *a, **k: "",
+        "sichtblock": lambda *a, **k: "",
+        "ist_meinungsfrage": lambda *a, **k: None,
+        "reflektieren": lambda *a, **k: "",
+        "buehne": lambda *a, **k: {},
+        "sprechbar": lambda t="", *a, **k: t,
+        "erkennen_reflex": lambda *a, **k: None,
+        "als_befehl": lambda satz="", laeuft=False, *a, **k: (
+            __import__("abspieler").absicht(satz, laeuft=laeuft)),
+        "erleben": lambda *a, **k: {},
+        "block": lambda *a, **k: "",
+        "juengste_gedanken": lambda *a, **k: "",
+        "ERSATZ": "",
+    }
+
+    def __getattr__(self, name):
+        wert = self._WERTE.get(name)
+        if wert is not None:
+            return wert
+        return lambda *a, **k: None
+
+
+try:
+    import sehen  # der residente Blick -- er liest hier nur, was der Dienst sah
+except Exception as _e:
+    print(f"[START] sehen nicht verfuegbar ({_e}) -- ohne Sicht", flush=True)
+    sehen = _Fehlt()
+try:
+    import reflexion  # Meinungsfragen: nachschlagen, offenhalten, festlegen
+except Exception as _e:
+    print(f"[START] reflexion nicht verfuegbar ({_e}) -- ohne Meinungsfragen", flush=True)
+    reflexion = _Fehlt()
+try:
+    import aufmerksamkeit  # der Wettbewerb waehlt, WORAUF er achtet (siehe Kopf)
+except Exception as _e:
+    print(f"[START] aufmerksamkeit nicht verfuegbar ({_e}) -- ohne Zuwendung", flush=True)
+    aufmerksamkeit = _Fehlt()
+try:
+    import buehne  # sein Zustand als WORTE statt als Regler (siehe dortigen Kopf)
+except Exception as _e:
+    print(f"[START] buehne nicht verfuegbar ({_e}) -- ohne Innenwelt", flush=True)
+    buehne = _Fehlt()
+try:
+    import erleben  # die Rueckleitung: was er sagt und tut, aendert ihn
+except Exception as _e:

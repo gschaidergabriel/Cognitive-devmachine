@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v3",
+  "command_id":"omega-heavy-telemetry-guard-fix-20260912-1824",
+  "op":"exec",
+  "cwd":"/workspace/omega_runtime",
+  "timeout_seconds":60,
+  "command":"set -eu; cp omega_daemon.py archive/omega_daemon.pre-heavy-guard.$(date -u +%Y%m%dT%H%M%SZ).py; python3 - <<'PY'\nfrom pathlib import Path\np=Path('omega_daemon.py');s=p.read_text()\nold=\"if heavy and is_host and a>180:continue\\n  fit=\"\nnew=\"if heavy and is_host and a>180:continue\\n  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue\\n  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue\\n  fit=\"\nif old not in s: raise SystemExit('EXPECTED_PATTERN_NOT_FOUND')\np.write_text(s.replace(old,new,1))\nPY\npython3 -m py_compile omega_daemon.py; grep -n 'heavy and is_host' omega_daemon.py | head"
+}

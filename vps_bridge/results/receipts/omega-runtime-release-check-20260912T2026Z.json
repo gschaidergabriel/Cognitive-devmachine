@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-runtime-release-check-20260912T2026Z",
+  "command_sha256": "8ca4006ef8b5e04415a61e535b6f2881b1dfa382832aab3f09734ec2698c00b9",
+  "started_at": "2026-09-12T13:21:24.731043+00:00",
+  "finished_at": "2026-09-12T13:21:24.920578+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "5fae44d53ba26a4e415d0ff3e66765e46684eefe81cdf0adbb44cab865599fd3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "RELEASE\n{\n  \"schema\": \"OMEGA_CURRENT_RELEASE/v1\",\n  \"omega_head\": \"572a07d2d6b69b1faeb747faab9b2b3f221b2e69\",\n  \"release_path\": \"/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69\",\n  \"activated_at\": \"2026-09-12T11:25:41.761800+00:00\",\n  \"carrier_branch\": \"omega-vps-deploy\"\n}\nPROCESSES\n944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n944589 python3 /workspace/omega_runtime/omega_daemon.py\n947017 bash -lc set -u; echo RELEASE; cat /workspace/omega_runtime/CURRENT_RELEASE.json 2>/dev/null || true; echo PROCESSES; pgrep -af 'outer_bridge_worker|bridge_relay|omega_daemon' || true; echo OUTER_STATUS; cat /workspace/omega_runtime/state/OUTER_WORKER_STATUS.json 2>/dev/null || echo absent; echo SPOOL; find /workspace/omega_runtime/state -maxdepth 2 -type d -name '*outer*' -o -name '*spool*' 2>/dev/null | sort\nOUTER_STATUS\nabsent\nSPOOL\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

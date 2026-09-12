@@ -1,0 +1,16 @@
+RELEASE
+{
+  "schema": "OMEGA_CURRENT_RELEASE/v1",
+  "omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "release_path": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "activated_at": "2026-09-12T11:25:41.761800+00:00",
+  "carrier_branch": "omega-vps-deploy"
+}
+PROCESSES
+944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944589 python3 /workspace/omega_runtime/omega_daemon.py
+947017 bash -lc set -u; echo RELEASE; cat /workspace/omega_runtime/CURRENT_RELEASE.json 2>/dev/null || true; echo PROCESSES; pgrep -af 'outer_bridge_worker|bridge_relay|omega_daemon' || true; echo OUTER_STATUS; cat /workspace/omega_runtime/state/OUTER_WORKER_STATUS.json 2>/dev/null || echo absent; echo SPOOL; find /workspace/omega_runtime/state -maxdepth 2 -type d -name '*outer*' -o -name '*spool*' 2>/dev/null | sort
+OUTER_STATUS
+absent
+SPOOL

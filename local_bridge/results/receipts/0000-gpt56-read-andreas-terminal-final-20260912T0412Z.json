@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56-read-andreas-terminal-final-20260912T0412Z",
+  "command_sha256": "9f45ed1143570bde33ac363d09a776574a64636a734208f7ce15e2654f57c83a",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:55:07.459526+00:00",
+  "finished_at": "2026-09-12T03:55:07.616683+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "355007921d26fe39c1ea55bf14bc58877496d7c36cf7e6b36eca7c88c2107eab",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "ENTRY\n-rwxr-xr-x 755 andreas:andreas /home/andreas/.local/bin/frank\nusage: frank_chatgpt_terminal_remote.py [-h] [--session-id SESSION_ID]\n                                        [text ...]\n\nRemote FranKenstein GRID10 -> ChatGPT organ -> GRID10\n\npositional arguments:\n  text\n\noptions:\n  -h, --help            show this help message and exit\n  --session-id SESSION_ID\nPROXY\n9:TARGET_MACHINE_ID='ai-core-node'\n10:TARGET_OWNER='gabriel'\n33:  payload={'prompt':prompt,'num_workers':1}\n37:  doc={'schema':'CLAY_LOCAL_COMMAND/v1','command_id':cid,'machine_id':TARGET_MACHINE_ID,'owner':TARGET_OWNER,'op':'exec','command':shell,'timeout_seconds':min(3600,int(self.timeout_s))}\n59:      if receipt.get('machine_id')!=TARGET_MACHINE_ID or receipt.get('owner')!=TARGET_OWNER:raise ProxyError('receipt attribution mismatch')\n61:      result=_last_json(receipt.get('stdout_tail') or '');result['bridge_receipt']={'command_id':cid,'command_sha256':receipt.get('command_sha256'),'machine_id':receipt.get('machine_id'),'owner':receipt.get('owner'),'execution_boundary':receipt.get('execution_boundary')};return result\nROLE\n374:        _insert_message(conn, run_id=run_id, direction=\"USER\", role=f\"user:{os.environ.get(chr(39)+chr(70)+chr(82)+chr(65)+chr(78)+chr(75)+chr(95)+chr(79)+chr(87)+chr(78)+chr(69)+chr(82)+chr(39)) or os.environ.get(chr(39)+chr(85)+chr(83)+chr(69)+chr(82)+chr(39)) or chr(117)+chr(110)+chr(107)+chr(110)+chr(111)+chr(119)+chr(110)}@{socket.gethostname()}\",\nDB\n/var/lib/entityos/data/unified.db\nWIP\n M scripts/__pycache__/stern.cpython-312.pyc\n M scripts/f2wp1207_grid10_turn_loop.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

@@ -1,0 +1,27 @@
+ENTRY
+-rwxr-xr-x 755 andreas:andreas /home/andreas/.local/bin/frank
+usage: frank_chatgpt_terminal_remote.py [-h] [--session-id SESSION_ID]
+                                        [text ...]
+
+Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10
+
+positional arguments:
+  text
+
+options:
+  -h, --help            show this help message and exit
+  --session-id SESSION_ID
+PROXY
+9:TARGET_MACHINE_ID='ai-core-node'
+10:TARGET_OWNER='gabriel'
+33:  payload={'prompt':prompt,'num_workers':1}
+37:  doc={'schema':'CLAY_LOCAL_COMMAND/v1','command_id':cid,'machine_id':TARGET_MACHINE_ID,'owner':TARGET_OWNER,'op':'exec','command':shell,'timeout_seconds':min(3600,int(self.timeout_s))}
+59:      if receipt.get('machine_id')!=TARGET_MACHINE_ID or receipt.get('owner')!=TARGET_OWNER:raise ProxyError('receipt attribution mismatch')
+61:      result=_last_json(receipt.get('stdout_tail') or '');result['bridge_receipt']={'command_id':cid,'command_sha256':receipt.get('command_sha256'),'machine_id':receipt.get('machine_id'),'owner':receipt.get('owner'),'execution_boundary':receipt.get('execution_boundary')};return result
+ROLE
+374:        _insert_message(conn, run_id=run_id, direction="USER", role=f"user:{os.environ.get(chr(39)+chr(70)+chr(82)+chr(65)+chr(78)+chr(75)+chr(95)+chr(79)+chr(87)+chr(78)+chr(69)+chr(82)+chr(39)) or os.environ.get(chr(39)+chr(85)+chr(83)+chr(69)+chr(82)+chr(39)) or chr(117)+chr(110)+chr(107)+chr(110)+chr(111)+chr(119)+chr(110)}@{socket.gethostname()}",
+DB
+/var/lib/entityos/data/unified.db
+WIP
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py

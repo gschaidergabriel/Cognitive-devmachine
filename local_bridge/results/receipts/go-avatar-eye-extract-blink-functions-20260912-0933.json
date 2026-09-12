@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-eye-extract-blink-functions-20260912-0933",
+  "command_sha256": "5aa4b5e1e5a03f3507be33b62cc1896bf092cde6a5f44d8020d50688c54169e5",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:27:56.928699+00:00",
+  "finished_at": "2026-09-12T02:28:03.558302+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "98c789c60ea53e6265cd0759ef00a7805bf2a8f2d3e0635ac929547381d68087",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\"anchors\": [{\"line\": 648, \"text\": \"const BLINK_BILDER = Array.from({length:12}, (_,i) =>\"}, {\"line\": 650, \"text\": \"BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });\"}, {\"line\": 701, \"text\": \"let blinzelPhase = null; // null | \\\"halb1\\\" | \\\"zu\\\" | \\\"halb2\\\"\"}, {\"line\": 909, \"text\": \"  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;\"}, {\"line\": 1205, \"text\": \"    $(\\\"augen-blink\\\").src = BLINK_BILDER[0];\"}, {\"line\": 1207, \"text\": \"    blinzelPhase = null; gesichtNeuZeichnen(false);\"}, {\"line\": 1215, \"text\": \"  $(\\\"augen-blink\\\").src = BLINK_BILDER[frame];\"}, {\"line\": 1217, \"text\": \"  blinzelPhase = phase; gesichtNeuZeichnen(false);\"}, {\"line\": 1406, \"text\": \"  $(\\\"pupillen-glow\\\").style.opacity = blinzelPhase ? \\\"0\\\" : String(ziel.opazitaet);\"}], \"functions\": {\"blinzelAbspielen\": {\"body\": \"function blinzelAbspielen(schritte, idx, zeitplanNeu){\\n  if(idx >= schritte.length){\\n    $(\\\"augen-blink\\\").src = BLINK_BILDER[0];\\n    $(\\\"augen-blink\\\").style.opacity = \\\"1\\\";\\n    blinzelPhase = null; gesichtNeuZeichnen(false);\\n    if(zeitplanNeu){\\n      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }\\n      blinzelWeiterPlanen();\\n    }\\n    return;\\n  }\\n  const [frame, dauer, phase] = schritte[idx];\\n  $(\\\"augen-blink\\\").src = BLINK_BILDER[frame];\\n  $(\\\"augen-blink\\\").style.opacity = \\\"1\\\";\\n  blinzelPhase = phase; gesichtNeuZeichnen(false);\\n  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);\\n}\", \"sha256\": \"91165a7dc4820a37d5c0c5c7194015960da702739b6accc509b287df170e226a\"}, \"blinzelWeiterPlanen\": {\"body\": \"function blinzelWeiterPlanen(){\\n  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)\\n}\", \"sha256\": \"d25fb26fdc3640589284500e94479b5c1334a9d441b951740e7d386d5e8477e9\"}, \"blinzeln\": {\"body\": \"function blinzeln(zeitplanNeu = true){\\n  \\n  const schritte = [];\\n  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? \\\"halb1\\\" : \\\"zu\\\"]);\\n  schritte.push([8, blinzelDauerGeschlossenHalten(), \\\"zu\\\"]);\\n  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), \\\"halb2\\\"]);\\n  blinzelAbspielen(schritte, 0, zeitplanNeu);\\n}\", \"sha256\": \"eacd716801505508d60d067a5404a306b7ccb9082edcfbcdaecc13708f60a4f8\"}}, \"schema\": \"GO_AVATAR_EYE_BLINK_FUNCTION_FORENSICS/v1\", \"source_sha256\": \"4fb62046e650f993edb89be24c40262fb8e7202e2c7cda14df7aa0113cfbfb4d\"}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

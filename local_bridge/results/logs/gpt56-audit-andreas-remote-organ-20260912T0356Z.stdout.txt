@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""Remote-host FranKenstein terminal.
+
+GRID10/unified.db remain local to this host. Only ChatGPT inference is proxied
+to Gabriel's existing browser harness over the already-deployed GitHub bridge.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import socket
+import sys
+import uuid
+from pathlib import Path
+
+RUNTIME = Path(__file__).resolve().parent
+REPO_SCRIPTS = Path.home() / "frankenstein-repo" / "scripts"
+for p in (RUNTIME, REPO_SCRIPTS):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+import stern
+from f2wp1207_chatgpt_organ import execute_terminal_turn
+from f2wp1207_chatgpt_github_proxy import GabrielGitHubHarness
+
+BACKEND = GabrielGitHubHarness()
+stern.chatgpt_senden = BACKEND.send
+stern.chatgpt_ernten = BACKEND.harvest
+
+
+def _session_id(explicit: str | None) -> str:
+    return explicit or f"terminal-chatgpt-{socket.gethostname()}-{uuid.uuid4().hex[:12]}"
+
+
+def run_once(text: str, session_id: str) -> int:
+    result = execute_terminal_turn(text, session_id=session_id, stern_module=stern)
+    if result.get("ok"):
+        print(result.get("response") or "")
+        meta = {k: result.get(k) for k in (
+            "run_id", "user_frame_id", "response_frame_id", "runtime_epoch_id", "workers"
+        )}
+        print("\n[FRANK/GRID10 " + json.dumps(meta, ensure_ascii=False, separators=(",", ":")) + "]",
+              file=sys.stderr)
+        return 0
+    print(json.dumps(result, ensure_ascii=False, indent=2, default=str), file=sys.stderr)
+    return 1
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description="Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10")
+    ap.add_argument("text", nargs="*")
+    ap.add_argument("--session-id", default=None)
+    args = ap.parse_args()
+    sid = _session_id(args.session_id)
+    if args.text:
+        return run_once(" ".join(args.text), sid)
+    print(f"FranKenstein ChatGPT organ | host={socket.gethostname()} | session={sid}")
+    print("GRID10/unified.db stay local; ChatGPT inference backend=ai-core-node via GitHub bridge.\n")
+    while True:
+        try:
+            text = input("frank> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return 0
+        if not text:
+            continue
+        if text.lower() in {"/exit", "/quit", "exit", "quit"}:
+            return 0
+        run_once(text, sid)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

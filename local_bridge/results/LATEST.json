@@ -1,22 +1,23 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "gpt56-write-andreas-frank-wrapper-20260912T0402Z",
-  "command_sha256": "400cd5a54678265cd6b864703de4f4631f3e2d2f3a5b3935ee178a291c6cec14",
+  "command_id": "gpt56-audit-andreas-remote-organ-20260912T0356Z",
+  "command_sha256": "618b77d5d11cdac082362f0c95e557dabaf175eb0a33f12ec6e37a9cba8749f4",
   "host": "andreas-maco",
   "owner": "andreas",
   "machine_id": "andreas-maco",
-  "started_at": "2026-09-12T03:51:01.400932+00:00",
-  "finished_at": "2026-09-12T03:51:01.401891+00:00",
+  "started_at": "2026-09-12T03:52:11.101430+00:00",
+  "finished_at": "2026-09-12T03:52:11.101471+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "write_text",
-  "stdout_sha256": "80acf182c653e9ad307181588d64dafa3cf76bb0422da49922c2cd4464b3faed",
+  "op": "read_file",
+  "stdout_sha256": "17b345360d8689ea7d3a050c3cfd5b1163b35ee6eab4f1962e958ca100c890e6",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "WROTE /home/andreas/.local/bin/frank\n",
+  "stdout_tail": "#!/usr/bin/env python3\n\"\"\"Remote-host FranKenstein terminal.\n\nGRID10/unified.db remain local to this host. Only ChatGPT inference is proxied\nto Gabriel's existing browser harness over the already-deployed GitHub bridge.\n\"\"\"\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport os\nimport socket\nimport sys\nimport uuid\nfrom pathlib import Path\n\nRUNTIME = Path(__file__).resolve().parent\nREPO_SCRIPTS = Path.home() / \"frankenstein-repo\" / \"scripts\"\nfor p in (RUNTIME, REPO_SCRIPTS):\n    if str(p) not in sys.path:\n        sys.path.insert(0, str(p))\n\nimport stern\nfrom f2wp1207_chatgpt_organ import execute_terminal_turn\nfrom f2wp1207_chatgpt_github_proxy import GabrielGitHubHarness\n\nBACKEND = GabrielGitHubHarness()\nstern.chatgpt_senden = BACKEND.send\nstern.chatgpt_ernten = BACKEND.harvest\n\n\ndef _session_id(explicit: str | None) -> str:\n    return explicit or f\"terminal-chatgpt-{socket.gethostname()}-{uuid.uuid4().hex[:12]}\"\n\n\ndef run_once(text: str, session_id: str) -> int:\n    result = execute_terminal_turn(text, session_id=session_id, stern_module=stern)\n    if result.get(\"ok\"):\n        print(result.get(\"response\") or \"\")\n        meta = {k: result.get(k) for k in (\n            \"run_id\", \"user_frame_id\", \"response_frame_id\", \"runtime_epoch_id\", \"workers\"\n        )}\n        print(\"\\n[FRANK/GRID10 \" + json.dumps(meta, ensure_ascii=False, separators=(\",\", \":\")) + \"]\",\n              file=sys.stderr)\n        return 0\n    print(json.dumps(result, ensure_ascii=False, indent=2, default=str), file=sys.stderr)\n    return 1\n\n\ndef main() -> int:\n    ap = argparse.ArgumentParser(description=\"Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10\")\n    ap.add_argument(\"text\", nargs=\"*\")\n    ap.add_argument(\"--session-id\", default=None)\n    args = ap.parse_args()\n    sid = _session_id(args.session_id)\n    if args.text:\n        return run_once(\" \".join(args.text), sid)\n    print(f\"FranKenstein ChatGPT organ | host={socket.gethostname()} | session={sid}\")\n    print(\"GRID10/unified.db stay local; ChatGPT inference backend=ai-core-node via GitHub bridge.\\n\")\n    while True:\n        try:\n            text = input(\"frank> \").strip()\n        except (EOFError, KeyboardInterrupt):\n            print()\n            return 0\n        if not text:\n            continue\n        if text.lower() in {\"/exit\", \"/quit\", \"exit\", \"quit\"}:\n            return 0\n        run_once(text, sid)\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
   "stderr_tail": "",
   "meta": {
-    "sha256": "b4ac50c2bc3739c11b1ee1d14545b8e947847034d87f4bde21e48de591df5b20",
-    "bytes": 157
+    "sha256": "17b345360d8689ea7d3a050c3cfd5b1163b35ee6eab4f1962e958ca100c890e6",
+    "bytes": 2455,
+    "truncated": false
   },
   "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
 }

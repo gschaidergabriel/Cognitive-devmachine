@@ -1,0 +1,83 @@
+IDENTITY_HOST=andreas-MACO
+IDENTITY_USER=andreas
+MAIN=2f9fa1004ab140eb312302f799bf2e6165c4aff6
+CANDIDATE=0686738c4719806f0f140e1eacaa67b2568f42f9
+CANDIDATE_SUBJECT_BEGIN
+0686738 088: include active welt.db in semantic cutover authority
+ werkzeug/semantic-state-cutover.py            | 1 +
+ werkzeug/semantic-state-cutover_selbsttest.py | 2 ++
+ 2 files changed, 3 insertions(+)
+CANDIDATE_SUBJECT_END
+DIFF_NAMES_BEGIN
+D	.github/workflows/semantic-state-fence-installer-selftest.yml
+M	werkzeug/fluechtig-zustand-sichern.py
+M	werkzeug/fluechtig-zustand-sichern_selbsttest.py
+M	werkzeug/semantic-state-cutover.py
+M	werkzeug/semantic-state-cutover_selbsttest.py
+M	werkzeug/semantic-state-schutz-installieren.sh
+D	werkzeug/semantic-state-schutz-installieren_selbsttest.sh
+DIFF_NAMES_END
+CUTOVER_DIFF_BEGIN
+diff --git a/werkzeug/semantic-state-cutover.py b/werkzeug/semantic-state-cutover.py
+index 1927114..b9cb6f3 100644
+--- a/werkzeug/semantic-state-cutover.py
++++ b/werkzeug/semantic-state-cutover.py
+@@ -43,25 +43,24 @@ DEFAULT_CONFIG = Path("/etc/entityos/entityos.conf")
+ DEFAULT_SERVICE = "entityos-vm.service"
+ HOLDING_GUARD = Path("/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh")
+ HOLDING_DROPIN = Path("/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf")
+ CUTOVER_TOOL = Path("/usr/local/libexec/entityos/semantic-state-cutover.py")
+ CUTOVER_DROPIN = Path("/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf")
+ 
+ DB_LAYOUT = (
+     ("agentzero/consciousness.db", "root/.local/share/agentzero/consciousness.db"),
+     ("agentzero/unified.db", "root/.local/share/agentzero/unified.db"),
+     ("agentzero/welt.db", "root/.local/share/agentzero/welt.db"),
+     ("frank/db/amygdala.db", "root/.local/share/frank/db/amygdala.db"),
+     ("frank/db/world_experience.db", "root/.local/share/frank/db/world_experience.db"),
+-    ("frank/db/world_experience.db.vor-maerz-20260910", "root/.local/share/frank/db/world_experience.db.vor-maerz-20260910"),
+ )
+ 
+ 
+ class CutoverError(RuntimeError):
+     pass
+ 
+ 
+ @dataclasses.dataclass(frozen=True)
+ class Layout:
+     config: Path
+     service: str
+     rootfs_run: Path
+diff --git a/werkzeug/semantic-state-cutover_selbsttest.py b/werkzeug/semantic-state-cutover_selbsttest.py
+index fb5f88e..db8ba02 100644
+--- a/werkzeug/semantic-state-cutover_selbsttest.py
++++ b/werkzeug/semantic-state-cutover_selbsttest.py
+@@ -26,24 +26,26 @@ def mkdb(path: Path, table: str, rows):
+ 
+ with tempfile.TemporaryDirectory() as td:
+     root = Path(td)
+     rootfs = root / "rootfs-run"
+     data = root / "data"
+     config = root / "entityos.conf"
+     config.write_text(
+         f'ENTITYOS_ROOTFS_RUN="{rootfs}"\n'
+         f'ENTITYOS_DATA_DIR="{data}"\n'
+         'ENTITYOS_IDENTITY_BINDS="--bind=/x:/x"\n'
+     )
+     layout = m.layout_from_config(config, "fake.service")
++    assert len(layout.sources()) == 5
++    assert any(str(src).endswith("agentzero/welt.db") for src, _ in layout.sources())
+     for idx, (src, _dst) in enumerate(layout.sources()):
+         mkdb(src, f"t{idx}", [f"v{idx}-a", f"v{idx}-b"])
+ 
+     ok, reason = m.condition(layout)
+     assert not ok and "volatile_semantic_state" in reason
+ 
+     dry = m.stage(layout, execute=False, require_systemd=False)
+     assert dry["execute"] is False
+     assert not layout.manifest.exists()
+ 
+     staged = m.stage(layout, execute=True, require_systemd=False)
+     assert staged["staged"] is True
+CUTOVER_DIFF_END
+DONE=1

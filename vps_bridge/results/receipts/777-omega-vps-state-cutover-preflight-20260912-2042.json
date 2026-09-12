@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "777-omega-vps-state-cutover-preflight-20260912-2042",
+  "command_sha256": "0048d4fb6332adc591fc1f596c1ac059d0f1bf15c29de6f1d52661e04519ff78",
+  "started_at": "2026-09-12T13:37:28.979965+00:00",
+  "finished_at": "2026-09-12T13:37:29.137447+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "d98544608f7c1dd01fc166f4fe0689f141bdda2cb0cc56414c785ef916651179",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== LEGACY /workspace/omega_runtime/state/omega.sqlite3 ===\nTABLES [\"effect\",\"epoch\",\"frame\",\"task\"]\nCOUNT effect 1\nCOUNT epoch 3\nCOUNT frame 336\nCOUNT task 1\nSTATES task [[\"DISPATCHED\",1]]\nSTATES effect [[\"PROPOSED\",1]]\n=== UNIFIED /workspace/omega_runtime/data/omega_unified.db ===\nTABLES [\"bridge_message\",\"claim\",\"claim_evidence\",\"cognition_epoch\",\"cognition_frame\",\"effect_intent\",\"effect_receipt\",\"improvement_candidate\",\"observation\",\"organ_telemetry\",\"policy_decision\",\"proposal\",\"reentry_snapshot\",\"relay_ledger\",\"source_subject\",\"task\",\"worker_run\",\"world_entity\",\"world_projection_checkpoint\",\"world_relation\"]\nCOUNT bridge_message 0\nCOUNT claim 0\nCOUNT claim_evidence 0\nCOUNT cognition_epoch 0\nCOUNT cognition_frame 0\nCOUNT effect_intent 0\nCOUNT effect_receipt 0\nCOUNT improvement_candidate 0\nCOUNT observation 1\nCOUNT organ_telemetry 4\nCOUNT policy_decision 0\nCOUNT proposal 0\nCOUNT reentry_snapshot 0\nCOUNT relay_ledger 0\nCOUNT source_subject 10\nCOUNT task 0\nCOUNT worker_run 0\nCOUNT world_entity 0\nCOUNT world_projection_checkpoint 0\nCOUNT world_relation 0\nSTATES task []\nSTATES effect_intent []\nSTATES relay_ledger []\nFILES inbox 0\nFILES outbox 6\nFILES master_bridge/submitted 0\nFILES master_bridge/responses 0\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

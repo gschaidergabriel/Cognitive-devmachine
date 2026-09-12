@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-gpu-postmortem-readonly-20260912-0714",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 60,
+  "command": "set -u\ncd /home/ai-core-node/.claude/star/visual\necho '=== IDENTITY TIME ==='; hostname; date -Is\necho '=== HASHES ==='; sha256sum buehne_daemon.py buehne_daemon.py.go-gpu-backup-20260912T0708 buehne.html filmlook.js 2>&1 || true\necho '=== SERVICE ==='; systemctl --user is-active frankenstein-buehne.service 2>&1 || true; systemctl --user status frankenstein-buehne.service --no-pager -n 30 2>&1 || true\necho '=== HTTP STATUS ==='; curl -m 4 -fsS http://127.0.0.1:8788/api/status 2>&1 || true; echo\necho '=== EXACT CHROME ARGV ==='\npython3 - <<'PY'\nfrom pathlib import Path\nfor p in Path('/proc').iterdir():\n    if not p.name.isdigit(): continue\n    try: argv=[x.decode('utf-8','replace') for x in (p/'cmdline').read_bytes().split(b'\\0') if x]\n    except Exception: continue\n    if argv and argv[0]=='/opt/google/chrome/chrome' and ('--app=http://127.0.0.1:8788/' in argv or '--user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile' in argv):\n        print(p.name, ' '.join(argv))\nPY\necho '=== RESOURCE ==='; free -h; ps -eo pid,ppid,pcpu,pmem,rss,stat,args --sort=-rss | head -25\necho '=== USER JOURNAL ==='; journalctl --user -u frankenstein-buehne.service --since '2026-09-12 07:12:30' --no-pager -n 80 2>&1 || true\necho '=== KERNEL OOM HINTS ==='; journalctl -k --since '2026-09-12 07:12:30' --no-pager 2>&1 | grep -Ei 'oom|out of memory|killed process|amdgpu|gpu|drm' | tail -80 || true\n"
+}

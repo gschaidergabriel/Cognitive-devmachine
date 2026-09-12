@@ -1,0 +1,30 @@
+SOURCE_SHA256=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645
+OUTPUT_SHA256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+OUTPUT=/var/tmp/avatar-roll-live-4EAq5g/buehne.new
+PATCH_SCOPE=ROLL_PHOTO_TO_EYE_OVERLAY_ATOMIC_GEOMETRY_ONLY
+LIVE_HTML_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+BACKUP=/home/ai-core-node/.claude/star/visual/buehne.html.go-roll-atomic-backup-20260912T0724
+DAEMON_SHA=5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2
+SERVICE=active
+HTTP_OK=1
+===GPU_FLAGS===
+===FPS===
+60.0
+60.0
+60.0
+60.0
+60.0
+===CODE===
+871-  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+872-  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()
+874-  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+875-  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang
+876-  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+877-  kopfRollAusgleichDeg = kopfRollWert;
+878-  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+879-  augenOffsetDx = zielOffset.dx;
+880-  augenOffsetDy = zielOffset.dy;
+881-  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+882-  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+LIVE_PROMOTION_OK=1

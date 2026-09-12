@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-20260912-0724-avatar-roll-atomic-live",
+  "command_sha256": "95a37bccf8ba426c7fa270f8c529a1e155b2b0935f2beb8c00dc2abacdf746d0",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:18:55.702374+00:00",
+  "finished_at": "2026-09-12T00:19:12.807269+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "f0bfa4459bacc58ba2355fbeaaf444b26d5b86e5f096c494cc6b2b9f1ec4983c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "SOURCE_SHA256=87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645\nOUTPUT_SHA256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nOUTPUT=/var/tmp/avatar-roll-live-4EAq5g/buehne.new\nPATCH_SCOPE=ROLL_PHOTO_TO_EYE_OVERLAY_ATOMIC_GEOMETRY_ONLY\nLIVE_HTML_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\nBACKUP=/home/ai-core-node/.claude/star/visual/buehne.html.go-roll-atomic-backup-20260912T0724\nDAEMON_SHA=5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2\nSERVICE=active\nHTTP_OK=1\n===GPU_FLAGS===\n===FPS===\n60.0\n60.0\n60.0\n60.0\n60.0\n===CODE===\n871-  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel\n872-  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).\n873:  // Geometrische Registrierung ist atomar mit dem bereits in kopfRollTick()\n874-  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper\n875-  // darf federn. Eine lokale Lerp-Verzoegerung erzeugt sonst 2-3 Frames lang\n876-  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.\n877-  kopfRollAusgleichDeg = kopfRollWert;\n878-  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};\n879-  augenOffsetDx = zielOffset.dx;\n880-  augenOffsetDy = zielOffset.dy;\n881-  const augenDxCss = augenOffsetDx * _kopfCanvasScale;\n882-  const augenDyCss = augenOffsetDy * _kopfCanvasScale;\nLIVE_PROMOTION_OK=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

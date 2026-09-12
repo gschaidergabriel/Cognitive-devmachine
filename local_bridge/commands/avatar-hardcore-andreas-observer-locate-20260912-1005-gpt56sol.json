@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "avatar-hardcore-andreas-observer-locate-20260912-1005-gpt56sol",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "effect_class": "READ_ONLY",
+  "op": "exec",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; echo HOST=$(hostname); echo USER=$(whoami); date -Is; echo HOME=$HOME; echo REPOS_BEGIN; find \"$HOME\" -maxdepth 4 -type d -name .git -print 2>/dev/null | sed 's#/.git$##' | head -80; echo REPOS_END; echo AVATAR_PATHS_BEGIN; find \"$HOME\" -maxdepth 5 -type f \( -name 'buehne.html' -o -name 'filmlook.js' -o -name 'depthwarp_webgl_realtime_ab.py' \) -print 2>/dev/null | head -80; echo AVATAR_PATHS_END; echo ANDREAS_AVATAR_OBSERVER_LOCATE=PASS"
+}

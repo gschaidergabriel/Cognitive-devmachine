@@ -1,0 +1,56 @@
+VISUAL_DEF
+48:VISUAL_DIR = os.path.dirname(os.path.abspath(__file__))
+73:BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+171:BLINK_DIR = _vielleicht_ai(BLINK_DIR)
+ROUTE_TAIL
+                self._json({"mtime": _seite_mtime()})
+            elif path == "/gesicht.png":
+                self._bild_ausliefern(GESICHT_BILD)
+            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+                    or path.startswith("/augen_blink/")
+                    or path.startswith("/mund_keyframes/")
+                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+                # oben und buehne.html.
+                if path.startswith("/ausdruck/"):
+                    verzeichnis = AUSDRUCK_DIR
+                elif path.startswith("/augen/"):
+                    verzeichnis = AUGEN_DIR
+                elif path.startswith("/augen_gaze/"):
+                    verzeichnis = GAZE_DIR
+                elif path.startswith("/augen_blink/"):
+                    verzeichnis = BLINK_DIR
+                elif path.startswith("/mund_keyframes/"):
+                    verzeichnis = MUND_DIR
+                elif path.startswith("/kopf_rgba/"):
+                    verzeichnis = KOPF_RGBA_DIR
+                elif path.startswith("/koerper_rgba/"):
+                    verzeichnis = KOERPER_RGBA_DIR
+                else:
+                    verzeichnis = KOPF_DIR
+                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+                # "." und ".." fliegen raus, damit bleibt der Zugriff im
+                # zustaendigen Verzeichnis.
+                teile = [t for t in path.split("/") if t][1:]
+                sicher = (1 <= len(teile) <= 2
+                          and all(t not in (".", "..") and "\\" not in t
+                                  for t in teile)
+                          and all(t == os.path.basename(t) for t in teile))
+                name = "/".join(teile) if sicher else ""
+                voller_pfad = os.path.join(verzeichnis, *teile) if sicher else ""
+                if (sicher and name.endswith(".png")
+PROC_EXE_CWD
+/usr/bin/python3.12
+/home/ai-core-node

@@ -1,0 +1,24 @@
+===RUNTIME_SCHEMA===
+0|runtime_epoch_id|TEXT|0||1
+1|state_root_id|TEXT|1||0
+2|installation_id|TEXT|1||0
+3|host_binding_id|TEXT|1||0
+4|started_at|TEXT|1||0
+5|predecessor_epoch_id|TEXT|0||0
+6|termination_reason|TEXT|0||0
+7|schema|TEXT|1||0
+8|session_id|TEXT|0||0
+9|boot_id|TEXT|0||0
+10|ended_at|TEXT|0||0
+11|termination_evidence|TEXT|0||0
+12|successor_epoch_id|TEXT|0||0
+13|confidence|REAL|0||0
+===LATEST_EPOCHS===
+6deb07282f4641f69316964db8ce3be7|da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1|fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|254e878c5eccfa5abb120306f05b352a|2026-09-12T10:52:43Z|||F2WP1207_RUNTIME_EPOCH/v1|crush-knopf-1664052|3825dc09-52b0-4934-82e2-727c9a8921e7||||
+b130d72babc149a58a1cca9d3d4cd336|da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1|fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|254e878c5eccfa5abb120306f05b352a|2026-09-12T10:24:17Z||UNKNOWN_UNCLEAN_TERMINATION|F2WP1207_RUNTIME_EPOCH/v1|crush-knopf-1296430|3825dc09-52b0-4934-82e2-727c9a8921e7|2026-09-12T10:52:43Z|{"source": "none", "method": "no CLEAN_EXIT/boot-boundary/liveness-gap evidence found for this session_id/epoch -- reason left unknown rather than guessed"}|6deb07282f4641f69316964db8ce3be7|0.2
+2d450b9f8b5a42ee86b59668b1cba6fc|da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1|fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|254e878c5eccfa5abb120306f05b352a|2026-09-12T10:15:33Z||CLEAN_EXIT|F2WP1207_RUNTIME_EPOCH/v1|300dd746-198f-495e-86f7-99d1ef022259|3825dc09-52b0-4934-82e2-727c9a8921e7|2026-09-12T10:24:17Z|{"source": "zero_raum_ruf", "row_id": 8268, "ts": 1789208136.5763433, "text": "LEAVE session=300dd746-198f-495e-86f7-99d1ef022259", "method": "LEAVE row written by raum_verlassen(), SessionEnd-only call site"}|b130d72babc149a58a1cca9d3d4cd336|0.95
+36612c96b5aa4964bcd95cf018d366c4|da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1|fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|254e878c5eccfa5abb120306f05b352a|2026-09-12T08:42:24Z||UNKNOWN_UNCLEAN_TERMINATION|F2WP1207_RUNTIME_EPOCH/v1|crush-knopf-4173412|3825dc09-52b0-4934-82e2-727c9a8921e7|2026-09-12T10:15:33Z|{"source": "none", "method": "no CLEAN_EXIT/boot-boundary/liveness-gap evidence found for this session_id/epoch -- reason left unknown rather than guessed"}|2d450b9f8b5a42ee86b59668b1cba6fc|0.2
+9a1bcacb531f486da5d20876fc903caa|da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1|fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|254e878c5eccfa5abb120306f05b352a|2026-09-12T07:41:07Z||CLEAN_EXIT|F2WP1207_RUNTIME_EPOCH/v1|smoke-hardened-20260912-1442|3825dc09-52b0-4934-82e2-727c9a8921e7|2026-09-12T08:42:24Z|{"source": "zero_raum_ruf", "row_id": 8266, "ts": 1789199188.9659226, "text": "LEAVE session=smoke-hardened-20260912-1442", "method": "LEAVE row written by raum_verlassen(), SessionEnd-only call site"}|36612c96b5aa4964bcd95cf018d366c4|0.95
+===IDENTITY===
+fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84|7a1bd3f56160ce514659f8c9117484057f1e7a8fb77696e5c7a55cee3e94f8ae
+DONE=1

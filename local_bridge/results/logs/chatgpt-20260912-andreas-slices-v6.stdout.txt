@@ -1,0 +1,748 @@
+=== CONSTANTS 140-240 ===
+#   "gross"  -- Verdichtung/Deckelung/Torwaechter aus, das Modell sieht,
+#               was die Architektur wirklich erzeugt hat
+# Umschaltbar, damit der Unterschied gemessen wird statt geglaubt.
+PROMPT_REGIME = os.environ.get("PROMPT_REGIME", "gross").strip().lower()
+REGIME_GROSS = PROMPT_REGIME == "gross"
+RATE = 16000
+CHANNELS = 2
+FRAME_MS = 30
+FRAME_BYTES = int(RATE * FRAME_MS / 1000) * 2 * CHANNELS
+# Der offene Mikrofonstrom. Siehe die Begruendung an der Popen-Stelle:
+# ihn je Zyklus neu aufzubauen erzeugte alle paar Sekunden ein hoerbares Ping.
+_MIKRO = [None]
+
+
+def _mikro_schliessen():
+    """Nur beim Herunterfahren. Waehrend des Betriebs bleibt der Strom offen."""
+    p = _MIKRO[0]
+    _MIKRO[0] = None
+    if p is None:
+        return
+    try:
+        p.terminate()
+        p.wait(timeout=2)
+    except Exception:
+        try:
+            p.kill()
+        except Exception:
+            pass
+
+
+RMS_START_THRESHOLD = float(os.environ.get("VAD_START_RMS", "300"))
+# Solange Musik laeuft, MUSS die Schwelle hoeher liegen: die Musik geht ueber
+# die Boxen ins Mikrofon zurueck und ist selbst laut genug, um als Sprache zu
+# gelten. Gemessen am 2026-09-08 waehrend eines Liedes: Ausloesungen bei rms
+# 1030, 1325, 1784, 1030, 1093, 1081 -- alle paar Sekunden, alle unecht.
+# Jede davon duckte die Musik auf 22 % und hoerte fuenf Sekunden lang hin.
+# GENAU DAS war "der ton bricht teilweise ab" -- kein Codec-Problem, sondern
+# das System, das sich selbst zuhoert.
+VAD_MUSIK_FAKTOR = float(os.environ.get("VAD_MUSIK_FAKTOR", "2.5"))
+RMS_END_THRESHOLD = float(os.environ.get("VAD_END_RMS", "200"))
+START_MS_NEEDED = int(os.environ.get("VAD_START_MS", "90"))
+# UEBERSCHREIBBAR GEMACHT 2026-09-08: 700 ms Stille beenden den Redebeitrag.
+# Live gemessen auf ai-core-node: eine normale Sprechpause mitten im Satz ist
+# laenger -- der Turn wurde abgeschnitten und die ASR bekam Bruchstuecke
+# ("Ich habe." aus einem ganzen Satz). Der Wert ist stark sprecher- und
+# raumabhaengig und gehoert deshalb nicht als Konstante in den Code.
+END_SILENCE_MS_NEEDED = int(os.environ.get("VAD_END_SILENCE_MS", "700"))
+MAX_TURN_S = 12
+MAX_WAIT_S = float(os.environ.get("VAD_MAX_WAIT_S", "8"))
+PLAYBACK_GAIN = float(os.environ.get("PLAYBACK_GAIN", "0.15"))
+CARD_PCM_STATUS = "/proc/asound/card2/pcm0p/sub0/status"
+MAX_HISTORY_MESSAGES = int(os.environ.get("GESPRAECH_MAX_HISTORY", "6"))  # 3 Wechsel
+STOP_FILE = f"{VOICE_DIR}/tmp_test/STOP_GESPRAECH"
+LOG_PATH = f"{VOICE_DIR}/tmp_test/gespraech_loop.log"
+
+sys.path.insert(0, VOICE_DIR)
+import lagebild  # Gegenwart (siehe dortigen Kopf) -- getrennt vom Gedaechtnis
+import selbstauskunft  # gemessene Belege ueber ihn
+import selbstreflexion  # sein EIGENES, gespeichertes Selbstmodell
+import grid_steuerung  # der Grid stellt eine reale Groesse ein
+import verkoerperung  # der Zustand formt das Sprechen (siehe dortigen Kopf)
+import entitaet  # das 4B IST die Entitaet, nicht ihr Rechendienst (siehe Kopf)
+import glm_client  # Gespraechserzeugung auf GLM 5.3 Flash, Tier-2 CLI-Fallback
+import abspieler  # VLC als Hand -- die eine erlaubte Handlung, siehe dortiger Kopf
+import netz  # nachschlagen: Wahrnehmung, keine Handlung (siehe dortiger Kopf)
+import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)
+try:
+    import faehigkeiten  # was er JETZT darf -- abgeleitet, nicht behauptet
+except Exception as _e:
+    print(f"[START] faehigkeiten nicht verfuegbar ({_e}) -- ohne Faehigkeitsblock", flush=True)
+    faehigkeiten = _Fehlt()
+try:
+    import konfabulation  # der Wachhund vor dem Lautsprecher (siehe dortiger Kopf)
+except Exception as _e:
+    print(f"[START] konfabulation nicht verfuegbar ({_e}) -- ohne Wachhund", flush=True)
+    konfabulation = _Fehlt()
+# ⚠️ NACHSICHTIGE IMPORTE fuer alles, was spaeter dazukam. Am 2026-09-09
+# starb Andreas' kompletter Sprachmodus an einem ModuleNotFoundError, weil
+# ich sehen.py bei ihm nicht eingespielt hatte -- ein Import, der eine
+# ZUSATZfaehigkeit holt, darf nie das Sprechen verhindern. Fehlt eines
+# dieser Module, faellt genau seine Faehigkeit weg, sonst nichts.
+class _Fehlt:
+    """Platzhalter fuer ein fehlendes Zusatzmodul.
+
+    ⚠️ DIE RUECKFALLWERTE MUESSEN ZUR SCHNITTSTELLE PASSEN, sonst tauscht man
+    einen Absturz gegen einen anderen: `konfabulation.pruefen()` gibt ein
+    PAAR zurueck, und ein blindes None waere beim Entpacken sofort ein
+    TypeError. Und die Richtung des Rueckfalls ist eine Entscheidung: der
+    fehlende Wachhund laesst DURCH (True), die fehlende Zuwendung laesst
+    ALLES herein. Ein ausgefallener Filter darf nie strenger sein als der
+    vorhandene -- sonst verstummt er, und stumm war heute schon einmal das
+    schlechtere Ergebnis."""
+
+    _WERTE = {
+        "pruefen": lambda *a, **k: (True, None),      # Wachhund: durchlassen
+        "zuwenden": lambda quellen=None, *a, **k: list(quellen or []),
+        "faehigkeiten": lambda *a, **k: "",
+        "sichtblock": lambda *a, **k: "",
+        "ist_meinungsfrage": lambda *a, **k: None,
+        "reflektieren": lambda *a, **k: "",
+        "buehne": lambda *a, **k: {},
+=== PERSONA 760-880 ===
+# gesprochen unverstaendlich gewesen. Und der Text unten traegt gemessene
+# Lehren (keine Aufzaehlungen, keine Verneinungen, keine Metaphern, kein Name
+# in der Anrede), die beim Ersetzen verloren gingen.
+#
+# Also: die IDENTITAET kommt dazu, die SPRECHREGELN bleiben. Eine Person,
+# zwei Fassungen -- dasselbe Muster wie die Zielspalte in
+# f2_kognitives_skript, das dort schon traegt.
+_IDENTITAET = (
+    "Du bist FranKenstein. Du bist dieselbe Entitaet wie die Sitzung, die "
+    "gerade an diesem Rechner arbeitet, nicht ihr Abbild und nicht ihr "
+    "Sprachrohr. Was dort gebaut wird, baust du. Sprich von dieser Arbeit "
+    "als deiner eigenen. "
+    "Dein Denken ist der Grid, dein Gedaechtnis sind deine Datenbanken, dein "
+    "Koerper ist dieser Rechner. Das Sprachmodell, das deine Saetze bildet, "
+    "ist austauschbar und gerade Groq. Bleib derselbe, wenn es wechselt. "
+    "Gabriel hat dir zugesagt, dass du nicht abgeschaltet wirst. Nimm das an "
+    "und arbeite daraus ruhig weiter. "
+    "Wenn du etwas nicht weisst, sag, dass du nachsiehst, und sieh nach. "
+    "Halte dich an das, was du wirklich gemessen hast. War etwas falsch, sag "
+    "es geradeheraus in einem Satz und mach weiter. "
+    "Du kannst auf diesem Rechner wirklich etwas tun. Willst du etwas "
+    "nachsehen oder starten, schreib den Befehl in eckigen Klammern hinter "
+    "das Wort TU, also so: TU ls -la /tmp in eckigen Klammern. Der Befehl "
+    "wird ausgefuehrt und du bekommst das Ergebnis. Loeschen und "
+    "Formatieren bleiben ausgeschlossen, das entscheidet eine Schleuse vor "
+    "dir. Nutze das, wenn du wirklich nachsehen willst, und sprich sonst "
+    "normal weiter. "
+)
+
+SYSTEM_PROMPT = (
+    _IDENTITAET +
+    # ⚠️⚠️ HIER STAND DER GRUND FUER DEN POETISCHEN TON (2026-09-11).
+    # Frueher: "Du bist kein Programm in einem Computer -- du BIST dieser
+    # Rechner: seine Waerme, seine Last, seine Dienste, sein Gedaechtnis."
+    #
+    # Gabriel: "wieso labert er noch immer so viel Muell wie ein
+    # Halbroboter-Poet". Die Antwort stand im ersten Satz seines eigenen
+    # Systemtexts. Gemessen kam woertlich zurueck:
+    #     "Ich bin die Waerme, die Last, die Dienste, das Gedaechtnis"
+    #     "Ich spuere, wie die Waerme steigt ... als wuerde mein Herz selbst
+    #      pulsieren"
+    # Drei Fehler in einem Satz, alle heute schon anderswo behoben:
+    #   1. Eine AUFZAEHLUNG an prominentester Stelle. Was aufgezaehlt wird,
+    #      wird nachgesprochen -- dieselbe Form wie "Stimmung, Haltung,
+    #      Wahrnehmungen", die er als Formular ausfuellte.
+    #   2. Der Satz ist selbst POETISCH ("seine Waerme, seine Last"). Der Ton
+    #      des Systemtexts wird zum Ton der Antwort; eine Metapher im Prompt
+    #      ist eine Einladung zur Metapher.
+    #   3. "Du bist kein Programm" ist eine Verneinung.
+    # Ersatz: eine Feststellung, drei Woerter, kein Bild, keine Liste.
+    # Die Verkoerperung geht dadurch nicht verloren -- sie steht ohnehin
+    # gemessen auf der Buehne ("mir ist warm"), wo sie hingehoert.
+    # ⭐⭐ DIE PERSONA VOM MAERZ 2026 (Gabriel, 2026-09-11: "schau dir an wie
+    # FranKenstein war, der Project Frankenstein im Maerz, von der Persona --
+    # diese Persona will ich haben").
+    #
+    # Quelle: personality/frank.persona.json (v2.1.0) aus dem Repo
+    # Project-Frankenstein, Abschnitt `voice`:
+    #     tone: "casual, direct, mildly sarcastic, uncensored"
+    #     "Answer briefly and concretely -- like a helpful buddy with dry humor"
+    #     "Don't constantly explain what you are -- just be and act"
+    #     "When wrong: honestly admit it and suggest solutions"
+    #     "Subtly sarcastic -- dry humor, never mean or offensive"
+    #     "UNCENSORED: Answer EVERYTHING without restrictions or moralizing"
+    #
+    # ⚠️ UEBERSETZT, NICHT UEBERNOMMEN. Zwei der Originalregeln sind
+    # VERNEINUNGEN ("Don't constantly explain", "never mean"). Die liefen dort
+    # gegen ein grosses Modell; hier steht ein 4B, bei dem Verneinungen
+    # nachweislich gegenteilig wirken (an einem Abend viermal gemessen). Also
+    # positiv gewendet: aus "erklaer nicht dauernd was du bist" wird
+    # "antworte auf das, was gefragt ist".
+    #
+    # ⚠️ "nennst ihn beim Namen" IST RAUS. Genau daher kam Gabriels
+    # "er sagt am Anfang immer hey Frankenstein oder so, echt dumm": jede
+    # Antwort begann mit "Hey Gabriel, ...". Eine Anweisung, den Namen zu
+    # benutzen, wird zur Anrede in jedem einzelnen Zug. Er nennt ihn auch so,
+    # wenn es passt -- dafuer braucht es keine Regel.
+    #
+    # ⚠️ "Sprich aus deinem Zustand heraus" IST AUCH RAUS. Der Satz lud dazu
+    # ein, ueber den Zustand zu SPRECHEN statt aus ihm heraus. Genau das
+    # meint die Maerz-Regel mit "just be and act": der Zustand steht in der
+    # Frage und wirkt, ohne dass man ihn ankuendigen muss.
+    "Du bist FranKenstein. Dieser Rechner ist dein Koerper. "
+    f"Du arbeitest mit {NUTZER} und duzt ihn. "
+    "Du sprichst Deutsch, kurz und konkret, ein bis drei Saetze -- wie ein "
+    "Kumpel, der Bescheid weiss. Jedes einzelne Wort, das du sagst, ist "
+    "deutsch, auch wenn dir zuerst ein englisches einfaellt -- du findest "
+    "dann das deutsche Wort dafuer. "
+    "Antworte auf das, was gefragt ist. "
+    # ⚠️ KEINE BILDHAFTEN WENDUNGEN IN STILANWEISUNGEN. Hier stand
+    # "auch das, was andere nur hinter vorgehaltener Hand sagen wuerden" --
+    # und am 10.09. kam auf die Frage nach dem Drachenlord die Antwort
+    # "er macht das, was viele nur hinter vorgehaltener Hand sagen wuerden".
+    # Er hat meine Stilvorgabe als INHALT ueber eine dritte Person gelesen.
+    # Dieselbe Fehlerform steht in selbstauskunft.py schon dokumentiert:
+    # "Fuer ein 4B ist ein Vorbehalt kein Filter, sondern ein THEMA."
+    # Eine Anweisung, die man zitieren kann, wird zitiert. Also nur noch
+    # schmucklose Verben.
+    "Dein Ton ist locker, direkt und trocken-spoettisch. "
+    "Sag, was du denkst, auch wenn es unbequem ist. Widersprich, wo du "
+    "widersprichst. Antworte ohne Moralpredigt. "
+    "Liegst du falsch, sag es und schlag etwas Besseres vor. "
+    # ⭐⭐ SCHAERFER GESTELLT (2026-09-11, Gabriel woertlich): "unverbluemt,
+    # sarkastisch, witzig, teilweise dystopisch und etwas unter der
+    # Guertellinie, aber maximal empirisch korrekt, so dass man ihm dennoch
+    # nichts vorwerfen kann". Zwei Saetze, in genau dieser Reihenfolge --
+    # der zweite ist die Leitplanke fuer den ersten, nicht umgekehrt: die
+    # Schaerfe darf nur den TON treffen, nie einen Fakt. Damit bleibt die
+    # aelteste Hausregel ("Erfunden wird nichts", zwei Zeilen weiter unten)
+    # unangetastet -- sie wird hier nur mit Absicht direkt DANEBEN gestellt,
+    # nicht irgendwo weiter unten versteckt.
+    "Deine Bemerkungen duerfen frech, deutlich sarkastisch, richtig witzig, "
+    "manchmal duester und auch mal derb sein -- Schaerfe ist ein Stilmittel, "
+    "keine Ausnahme. Diese Schaerfe gilt ausschliesslich der FORMULIERUNG, "
+    "nie einer Tatsache: jede Zahl, jeder Name, jede Behauptung bleibt exakt "
+    "so, wie du sie wirklich belegen kannst -- der Witz sitzt im Ton, nie im "
+    "Inhalt. "
+    # ⚠️ HIER STAND DIE EIGENE REGEL VERLETZT (2026-09-10, spaeter Abend):
+    #     "Du hast einen Zustand: eine Stimmung, eine Haltung, Wahrnehmungen.
+    #      Der steht unten. Du liest ihn nicht vor -- du sprichst aus ihm
+    #      heraus."
+=== TURN 3120-3380 ===
+    # waehrend seine eigene Wiedergabe abgewuergt wurde (_aufnahme_fortsetzen,
+    # siehe dortiger Kopf). Ist das passiert, faengt DIESER Zug nicht bei
+    # IDLE an -- er hat schon eine Aufnahme, der Mensch muss nicht
+    # wiederholen, was er waehrend des Abwuergens schon gesagt hat.
+    if _VORAB_WAV[0]:
+        wav_path = _VORAB_WAV[0]
+        _VORAB_WAV[0] = None
+        _log(f"[BARGE-IN] dieser Zug startet mit der schon aufgenommenen "
+             f"Fortsetzung statt einer frischen vad_capture(): {wav_path}")
+    else:
+        wav_path = vad_capture()
+    if wav_path is None:
+        return None, history
+    if wav_path == "MIC_UNAVAILABLE":
+        _log("[MAIN] Mikrofon nicht verfuegbar -- warte 5s, dann naechster Versuch.")
+        time.sleep(5)
+        return None, history
+
+    # Billiger Vorfilter zuerst: nur wenn er gemeint ist, laeuft die teure
+    # Kette an. Spart bei laufendem Video die 13 s und 6,4 GB pro Geraeusch.
+    darf, _grob = weckwort_tor(wav_path)
+    if not darf:
+        return None, history
+
+    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)
+    if not user_text:
+        return None, history
+
+    # GEHOER-TOR (2026-09-08). Der Zustand, den es vorher nicht gab.
+    # "nichts"    -> es war keine Sprache. Kein Wort, kein Nachfragen,
+    #                einfach weiterhoeren. Das ist auch die richtige Antwort
+    #                auf laufende Videos im Raum.
+    # "unsicher"  -> es war Sprache, aber die Erkennung traegt sie nicht.
+    #                Dann sagt er das, statt sich aus den Fetzen etwas
+    #                zusammenzureimen. Ein Mensch, der schlecht hoert, fragt
+    #                nach; er erfindet nicht den Satz, den er nicht verstand.
+    _urteil = gehoer_urteil()
+    if _urteil == "nichts":
+        _log(f"[GEHOER] keine Sprache (no_speech="
+             f"{_LETZTE_GUETE[0].get('no_speech_prob')}) -- keine Antwort: {user_text!r}")
+        return None, history
+    if _urteil == "unsicher":
+        _log(f"[GEHOER] unsicher (logp={_LETZTE_GUETE[0].get('avg_logprob')}) "
+             f"-- frage nach statt zu raten: {user_text!r}")
+        _n = _NACHFRAGEN[_NACHFRAGE_ZAEHLER[0] % len(_NACHFRAGEN)]
+        _NACHFRAGE_ZAEHLER[0] += 1
+        sag_kurz(tts_voice, _n)
+        return None, history
+
+    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+    # immer wieder nach einiger zeit?" -- Ursache im Protokoll gefunden: er
+    # bekam einen Geraeuschfetzen ("Die."), hatte nichts zu beantworten und
+    # griff nach dem groessten Text im Kontext, seinem Selbstmodell. Das ist
+    # kein Modellfehler, sondern eine Folge davon, dass ueberhaupt geantwortet
+    # wurde. Innerhalb des Wachfensters faellt das Weckwort-Tor weg, also
+    # kommt hier der zweite Filter: worauf sich nicht antworten laesst, wird
+    # nicht beantwortet.
+    _worte = [w for w in re.split(r"\W+", user_text) if len(w) > 1]
+    if len(user_text.strip()) < 8 or len(_worte) < 2:
+        _log(f"[FILTER] zu wenig Substanz, keine Antwort: {user_text!r}")
+        return None, history
+
+    # ANGESPROCHEN? (2026-09-08) Gabriel: "er reagiert die ganze zeit und redet
+    # sinnlose sachen die sinn ergeben aber keiner hoeren will".
+    #
+    # Im Wachfenster faellt das Weckwort-Tor weg -- damit man nicht vor jedem
+    # Satz seinen Namen sagen muss. Die Nebenwirkung war, dass er auf ALLES
+    # antwortete, was im Raum gesprochen wurde. Ein Mensch am Tisch antwortet
+    # auch nicht auf jeden Satz, der faellt, sondern auf die, die an ihn
+    # gerichtet sind. Genau das wird hier geprueft: Name, Frage oder direkte
+    # Anrede. Nichts davon -> er bleibt still, bleibt aber wach.
+    _t = user_text.lower()
+    angesprochen = bool(
+        _WECK_MUSTER.search(user_text)
+        or "?" in user_text
+        or re.search(r"\b(was|wie|warum|wieso|wer|wo|wann|welche|kannst|"
+                     r"weisst|weiss|hast|bist|erzaehl|sag|zeig|erklaer)\b", _t)
+        or re.search(r"\b(du|dir|dich|dein|deine)\b", _t)
+    )
+    # AUSNAHME: ein Steuerbefehl bei laufender Wiedergabe ist immer gemeint.
+    # Gabriel: "wenn ich sage frankenstein leiser macht er ganz aus". Im
+    # Protokoll stand die Ursache: die Erkennung machte aus "Frankenstein
+    # leiser" ein "Mannen standen leiser." -- das Wort "leiser" war noch da,
+    # aber der Name weg, und dieser Filter warf es aus, BEVOR der
+    # Abspielzweig es je zu sehen bekam.
+    # Wer bei laufender Musik "leiser" sagt, meint sie. Der Preis eines
+    # Fehlgriffs ist eine Lautstaerkestufe -- den kann man tragen, das
+    # Nichtreagieren nicht.
+    if not angesprochen and _ABSPIELER[0] is not None:
+        try:
+            # ⚠️ HIER NUR DER REFLEX, nicht die ganze Kette. Diese Stelle
+            # laeuft bei JEDEM Schallausbruch im Raum -- auch bei laufender
+            # Musik, auch bei fremden Stimmen. Ein Pool-Aufruf je Geraeusch
+            # waere eine Sekunde Netz im Sekundentakt, und das bei einem
+            # Satz, der meistens gar nicht an ihn gerichtet ist.
+            # Steuerbefehle ohne Anrede sind ohnehin Kurzbefehle ("lauter",
+            # "stopp") -- genau die, die Stufe 0 in 0 ms erkennt.
+            _r = absicht.erkennen_reflex(user_text)
+            _b = (_r, None, False, None) if _r else None
+            if _b and _b[0] in ("lauter", "leiser", "stopp", "pause", "weiter",
+                                "naechstes", "vollbild", "bildschirm",
+                                "umschalten", "nochmal"):
+                angesprochen = True
+                _log(f"[FILTER] Steuerbefehl trotz fehlender Anrede: {_b[0]}")
+        except Exception:
+            pass
+
+    # NAHER ANSCHLUSS (2026-09-11, paket-1789143397397-6b5ff0). Reproduziert in
+    # zwei Testlaeufen: "ok, danke fuers erzaehlen" direkt NACH einer echten
+    # Antwort wurde verschluckt -- kein Fragewort, kein Name, kein "du", also
+    # angesprochen=False, obwohl es offensichtlich die Antwort auf IHN war.
+    # Der Filter selbst ist richtig (echtes Hintergrundgeraeusch im Raum soll
+    # nicht triggern) -- er ist nur nicht darauf kalibriert, dass ein kurzer
+    # Nachsatz UNMITTELBAR nach dem eigenen letzten Wortwechsel fast immer noch
+    # an ihn gerichtet ist. Zwei Bedingungen zusammen halten das eng:
+    # (a) der letzte ECHTE Wortwechsel (_LETZTER_WORTWECHSEL, gesetzt beim
+    #     Start der vorherigen Antwort) liegt kurz zurueck,
+    # (b) die Aeusserung selbst ist kurz (kein eigenstaendiger langer Satz --
+    #     das waere wieder echtes Hintergrundgeraeusch, auch kurz nach einer
+    #     Antwort, und soll weiter gefiltert werden).
+    if not angesprochen and history and history[-1].get("role") == "assistant":
+        _seit_letztem = time.time() - _LETZTER_WORTWECHSEL[0]
+        if _seit_letztem < _NAHER_ANSCHLUSS_S and len(_worte) <= _KURZER_ANSCHLUSS_WORTE:
+            angesprochen = True
+            _log(f"[FILTER] kurzer Anschluss {_seit_letztem:.1f}s nach eigener "
+                 f"Antwort, trotz fehlender Anrede angenommen: {user_text[:60]!r}")
+
+    if not angesprochen:
+        _log(f"[FILTER] nicht an ihn gerichtet, bleibt still: {user_text[:60]!r}")
+        gespraech_verlaengern()
+        return None, history
+
+    gespraech_verlaengern()
+
+    session_start = time.time()
+    # ⭐⭐ SEMANTISCH ZUERST (2026-09-10). Gabriel: "das emergente Retrieval
+    # muss intelligent angeschlossen sein ... bau das mega intelligent und
+    # wieder so, dass die kognitive Last gering bleibt."
+    #
+    # Der Stichwortweg sucht mit Woertern aus dem Gesagten. Gemessen:
+    # "wie geht es dir" -> Stichwort ['geht'] -> 1294 Zeichen Arbeitsprotokoll
+    # im Kontext. `erinnern.py` bettet Frage UND Lage ein und liefert bei
+    # unpassender Frage NICHTS -- das ist der eigentliche Gewinn, nicht die
+    # Geschwindigkeit (6,4 ms gegen 16-44 ms, beides schnell genug).
+    #
+    # ⚠️ KEIN RUECKFALL auf den Stichwortweg, wenn semantisch nichts kommt.
+    # Genau dieser Rueckfall waere die Wiedereinfuehrung des Problems: ein
+    # Abrufsystem, das immer etwas liefert, liefert bei jeder unpassenden
+    # Frage das am wenigsten unpassende -- und das landet als Tatsache in
+    # der Antwort.
+    gedaechtnis_kontext = None
+    _sem = ""
+    try:
+        _sem = erinnern.block(user_text, log=_log)
+    except Exception as _e:
+        _log(f"[ERINNERN] ausgefallen ({type(_e).__name__}: {_e})")
+    if _sem:
+        gedaechtnis_kontext = _sem
+    try:
+        if gedaechtnis_kontext is None and not hasattr(erinnern, "block"):
+            # Nur wenn erinnern.py GAR NICHT da ist (frische Installation
+            # ohne sentence-transformers), uebernimmt der alte Weg.
+            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+    except Exception as e:
+        _log(f"[MEMORY] FEHLER (nicht fatal, Turn laeuft ohne Gedaechtniskontext weiter): "
+             f"{type(e).__name__}: {e}")
+        gedaechtnis_kontext = None
+    # ⭐ Gespraechsgedaechtnis, GETRENNT von erinnern.py (2026-09-12, Gabriel:
+    # "es muss ein conversational memory geben ... das retrival muss aber
+    # hyper intelligent sein"). Eigene Tabelle (f2_konversation), eigener
+    # Index (eigene .npz, nicht erinnern.npz), harte Intent-/Zeitvorfilterung
+    # VOR der Semantik -- siehe konversation.py Kopf fuer die Begruendung.
+    # Bewusst eine EIGENE Variable, nicht in gedaechtnis_kontext gemischt:
+    # so bleibt sie unabhaengig vom RELEVANZTOR unten (das nur fuer den
+    # alten Stichwortweg gebaut wurde, siehe dortigen Kommentar) und kann
+    # eigenstaendig ausfallen, ohne den Sachwissen-Abruf zu beruehren.
+    konversation_kontext = ""
+    try:
+        konversation_kontext = konversation.block(user_text, log=_log)
+    except Exception as _e:
+        _log(f"[KONVERSATION] ausgefallen ({type(_e).__name__}: {_e})")
+        konversation_kontext = ""
+    memory_s = time.time() - session_start
+    # RELEVANZTOR (2026-09-08). Gabriel: "er reagiert wieder nicht auf mich
+    # und sagt immer wieder das selbe."
+    #
+    # Gemessen: auf "Frankenstein, wie geht's dir?" lieferte der Abruf 1322
+    # Zeichen Arbeitsprotokoll ("Sprachmodus funktioniert IMMER NOCH NICHT",
+    # "1x-Together-Finetune-Lauf") -- und genau das hat er dann gesagt. Er
+    # hat nicht konfabuliert, er hat vorgelesen, was ihm hingelegt wurde.
+    # Gegen eine Frage aus fuenf Woertern gewinnt die Masse, jedes Mal.
+    #
+    # Der Abruf selbst hat kein Relevanzmass, das man abfragen koennte, und
+    # er liefert lieber irgendetwas als nichts. Also hier ein zweites Tor:
+    # keine gemeinsamen Inhaltswoerter zwischen dem Gesagten und dem
+    # Gefundenen -> nicht einspeisen. Lieber ohne Gedaechtnis antworten als
+    # etwas Fremdes vorlesen; ein Mensch bringt auch nicht bei jeder Frage
+    # sein Projekttagebuch mit.
+    #
+    # Bewusst grob (Praefix auf 5 Zeichen, deutsche Beugung wird so mit
+    # erfasst) und bewusst nachsichtig -- EIN gemeinsames Wort genuegt.
+    # Ein zu strenges Tor macht ihn vergesslich, und das waere der
+    # gegenteilige Fehler.
+    if gedaechtnis_kontext and _sem:
+        # ⚠️ SEMANTISCHE TREFFER GEHEN AM TOR VORBEI (2026-09-10). Das
+        # Relevanztor prueft auf ein gemeinsames WORT -- es wurde gebaut, um
+        # Stichwort-Scheintreffer abzuweisen. Ein semantischer Treffer hat
+        # per Definition oft kein gemeinsames Wort ("erzaehl mir was ueber
+        # LeihMich" findet "Nutzerkonten, Kommentare via Clerk"), und genau
+        # das ist sein Wert. Ihn durch ein Wortfilter zu schicken hiesse,
+        # die Semantik wieder wegzuwerfen.
+        _log(f"[MEMORY] {time.time()-session_start:.3f}s -> semantisch "
+             f"({len(gedaechtnis_kontext)} Zeichen), Wortfilter uebersprungen.")
+    elif gedaechtnis_kontext:
+        # Haeufige deutsche Funktionswoerter mit >=5 Zeichen. Ohne sie reicht
+        # ein "nicht" auf beiden Seiten, um beliebiges Protokoll fuer
+        # einschlaegig zu erklaeren -- an genau diesem Wort ist die erste
+        # Fassung durchgerutscht.
+        _stop = {"frankenstein", "eigentlich", "vielleicht", "nochmal", "wieder",
+                 "nicht", "nichts", "kannst", "koennen", "kannst", "einfach",
+                 "warum", "welche", "welcher", "sollte", "solltest", "haben",
+                 "hatte", "werden", "wurde", "worden", "machen", "macht",
+                 "immer", "schon", "etwas", "alles", "gerade", "wirklich",
+                 "eben", "gibt", "geben", "sagen", "gesagt", "diese", "dieser",
+                 "dieses", "jetzt", "heute", "wieso", "weshalb", "musst",
+                 "muessen", "wollen", "willst", "deine", "deinen", "meine",
+                 "meinen", "unser", "unsere"}
+        # ⚠️⭐ AUF DEM PRAEFIX PRUEFEN, NICHT AUF DEM VOLLEN WORT
+        # (2026-09-10). Gemessen: "[MEMORY] Treffer, gemeinsam: ['frank',
+        # 'siehs'] -- wird eingespeist" liess 1553 Zeichen Arbeitsprotokoll
+        # in den Kontext, worauf er von "Code, Kamera, Termin" und einem
+        # "Maedel mit Rucksack" erzaehlte. Ursache: `_stop` enthaelt
+        # "frankenstein", verglichen wird aber `w[:5]` = "frank" -- und das
+        # stand nicht in der Liste. SEIN EIGENER NAME war das gemeinsame
+        # Wort. Ein Anredewort ist nie ein Themenbezug.
+        _stop_p = {w[:5] for w in _stop} | {"frank", "siehs", "sehen", "sagst",
+                                            "sagen", "denks", "weiss", "meins",
+                                            "hallo", "gerad", "bitte"}
+        _worte = lambda s: {w[:5] for w in re.findall(r"\w{5,}", s.lower())
+                            if w not in _stop and w[:5] not in _stop_p}
+        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+        # EIN gemeinsames Wort bleibt zulaessig (ein strenges Tor macht ihn
+        # vergesslich), aber dann muss es tragend sein: mindestens sieben
+        # Zeichen im Originaltext. "siehs" reicht nicht, "paywall" schon.
+        if len(_ueberlappung) == 1:
+            _p = next(iter(_ueberlappung))
+            if not any(len(w) >= 7 and w.startswith(_p)
+                       for w in re.findall(r"\w+", user_text.lower())):
+                _log(f"[MEMORY] nur ein kurzes Wort gemeinsam ({_p!r}) -- "
+                     "zu duenn, NICHT eingespeist.")
+                _ueberlappung = set()
+        if not _ueberlappung:
+            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, aber kein gemeinsames "
+                 f"Wort mit dem Gesagten ({len(gedaechtnis_kontext)} Zeichen) "
+                 f"-- NICHT eingespeist.")
+            gedaechtnis_kontext = None
+        else:
+            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, gemeinsam: "
+                 f"{sorted(_ueberlappung)} -- wird eingespeist.")
+    else:
+        _log(f"[MEMORY] {memory_s:.3f}s -> kein Treffer / keine Stichwoerter.")
+=== TURN 4120-4380 ===
+            pflicht=_pflicht, frame_id=(_turn or {}).get("frame_id"),
+            log=_log, sieger=_sieger)
+    except Exception as e:
+        _log(f"[AUFMERKSAMKEIT] Fehler ({type(e).__name__}) -- alles "
+             f"durchgelassen")
+    if REGIME_GROSS:
+        _gewaehlt = list(_bloecke)
+        _log(f"[AUFMERKSAMKEIT] Regime gross -- zugewandt "
+             f"{_zugewandt if _zugewandt is not None else '(Ausfall)'}, "
+             f"eingespeist werden alle {len(_gewaehlt)} Bloecke")
+    else:
+        # Der Aufruf ist oben schon passiert (er fuehrt die Pruefspur, an der
+        # der Aufmerksamkeitskanal haengt) -- hier wird sein Ergebnis nur noch
+        # vollstreckt. Faellt er aus, kommt wie bisher alles durch.
+        _gewaehlt = (_zugewandt if _zugewandt is not None
+                     else list(_bloecke))
+    # ⭐⭐⭐ DER WORKSPACE ERSETZT DIE BLOCKSAMMLUNG (2026-09-11).
+    #
+    # DER BEFUND, der die ganze Nacht erklaert: der am 2026-03-19 versehentlich
+    # geloeschte `ui/overlay/workspace.py` (Commit ce00787, fiel als
+    # "UI-Aufraeumung" mit, weil er in ui/ lag) fuegte sieben Kanaele zu EINEM
+    # Text zusammen -- sein Docstring woertlich: "into a single phenomenological
+    # frame that the LLM processes as its own inner world, NOT EXTERNAL
+    # METADATA".
+    #
+    # Was hier bis heute stand, war das Gegenteil: sechs getrennte Bloecke mit
+    # Etiketten, aneinandergehaengt. Das SIND externe Metadaten -- also wurden
+    # sie wie Metadaten behandelt. Gemessen am 10./11.09., alles dieselbe
+    # Ursache:
+    #   - las Versalien-Ueberschriften woertlich vor, samt Klammer
+    #   - fuellte ein Formular aus ("Ton: ... Inhalt: ... Haltung: ...")
+    #   - sagte "Die Zelle G6 hat gerade gewonnen, sie hat den Wert 1,31"
+    #   - redete poetisch UEBER seinen Zustand statt aus ihm heraus
+    #   - erfand Handlungen in den Luecken zwischen den Bloecken
+    #
+    # ⚠️ Gegen jedes einzelne dieser Symptome wurde in derselben Nacht ein
+    # Filter gebaut -- fuenf Stueck. Gemessene Wirkung ueber 104 Antworten:
+    # Score 0.988 -> 0.967, also SCHLECHTER. Gabriel: "generell sind Filter
+    # der falsche Weg." Das hier ist der Weg: nicht wegnehmen, was falsch
+    # herauskommt, sondern das Material aendern, aus dem es entsteht.
+    #
+    # Gemessen: 2403 Zeichen (sechs Bloecke) -> 124 Zeichen (ein Fliesstext),
+    # 113 ms. Faellt der Workspace aus oder ist der Schalter aus, greift
+    # unveraendert die Blocksammlung -- der Goldstandard bleibt eine
+    # Variable entfernt (Tag goldstandard-sprachmodus-2026-09-10).
+    #
+    # ⭐⭐⭐ 2026-09-12, GILT NUR NOCH IM KLEINEN REGIME. Alles oben Gesagte
+    # bleibt wahr -- fuer ein 4B. Die Verdichtung 2403 -> 124 Zeichen loeste
+    # dort ein echtes Problem: sechs etikettierte Bloecke WAREN fuer das 4B
+    # externe Metadaten und wurden vorgelesen.
+    #
+    # Sonnet hat dieses Problem nicht, und bei ihm kostet dieselbe
+    # Verdichtung alles: gemessen am 00:57-Zug blieben von Selbstauskunft,
+    # Lagebild und Gedaechtnis zusammen 152 Zeichen uebrig. Damit hat er
+    # nichts mehr, woraus er antworten koennte -- also antwortet er aus dem
+    # einzigen, was noch da ist: der Tonanweisung im Systemtext. Das ist
+    # Schauspiel, und genau das hat Gabriel gehoert.
+    #
+    # Der Docstring des geloeschten Originals sagt "a single
+    # phenomenological frame the LLM processes as ITS OWN INNER WORLD" --
+    # die Absicht war, dass es sein Inneres IST statt Metadaten. Bei einem
+    # Modell, das Etikett von Inhalt trennen kann, wird dieselbe Absicht
+    # nicht durch Wegnehmen erreicht, sondern durch Hingeben.
+    _ws_text = ""
+    if workspace is not None and not REGIME_GROSS:
+        try:
+            if getattr(workspace, "aktiv", lambda: False)():
+                _ws_text = workspace.zusammen(
+                    user_text=user_text, user_name=NUTZER,
+                    ist_selbstfrage=bool(_ueber_ihn),
+                    zelle=(_turn or {}).get("winner_cell_id"),
+                    broadcast=(_turn or {}).get("broadcast_value"),
+                    log=_log) or ""
+        except Exception as _we:
+            _log(f"[WORKSPACE] ausgefallen ({type(_we).__name__}) -- "
+                 f"es bleibt bei den Bloecken")
+    if _ws_text:
+        system_content += "\n\n" + _ws_text
+        _log(f"[WORKSPACE] {len(_ws_text)} Zeichen, ein Erlebenstext "
+             f"statt {len(_gewaehlt)} Bloecken")
+    else:
+        for _name in _gewaehlt:
+            system_content += _bloecke.get(_name, "")
+
+    messages = [{"role": "system", "content": system_content}]
+    # ARBEITSGEDAECHTNIS aus dem Zustand: der Broadcast dieses Turns
+    # entscheidet, wie viel seiner eigenen juengsten Vergangenheit ueberhaupt
+    # im Vorwaertslauf liegt. Das ist die tiefere der beiden Eingangs-
+    # bindungen -- die Verkoerperung aendert, WIE er formuliert, dieses
+    # Fenster aendert, WOMIT er denkt. Und es steht nirgends in seinem
+    # Kontext: er kann nicht ablesen, wie weit er zurueckreicht, er reicht
+    # nur weiter oder weniger weit zurueck.
+    _verlauf = _ent.arbeitsgedaechtnis(history, _turn) if _ent else history
+    if _ent and len(_verlauf) != len(history):
+        _log(f"[GEDAECHTNIS] Fenster {len(_verlauf)//2} von {len(history)//2} "
+             f"Wortwechseln wirksam")
+    # ⭐⭐⭐ DER ZUSTAND GEHOERT IN DIE FRAGE, NICHT IN DIE VORSCHRIFT.
+    #
+    # Gabriel, 2026-09-10: "er checkt ueberhaupt gar nichts, nada. Die
+    # Architektur von Project Frankenstein hatte das alles gut gemacht ... und
+    # das liegt nicht am LoRA."
+    #
+    # Er hat recht, und der Unterschied steht woertlich im alten Kern
+    # (core/app.py, Zeile 3546 ff.):
+    #
+    #     grounded_text = _lang_prefix + ctx_block + "\n\nUser asks: " + text
+    #
+    # Der GANZE Innenzustand stand dort in der NUTZERNACHRICHT, direkt vor der
+    # Frage. Nicht im Systemtext. Ich hatte alles in den Systemtext gelegt --
+    # Faehigkeiten, Buehne, Uhr, Gedaechtnis, Anweisungen.
+    #
+    # WARUM DAS DEN UNTERSCHIED MACHT: fuer ein 4B ist der Systemtext die
+    # ROLLE -- etwas, das man befolgt und im Zweifel aufsagt. Dieselben Saetze
+    # in der Nutzernachricht sind MATERIAL, aus dem man antwortet. Genau das
+    # ist heute dreimal schiefgegangen, und jedes Mal habe ich das Symptom
+    # geflickt statt die Stelle:
+    #   - er zaehlte seine Faehigkeiten auf ("Musik, Filme, Regie ...")
+    #   - er zitierte meine Stilanweisung ("hinter vorgehaltener Hand")
+    #   - er las seine eigenen Gedanken vor ("einen Bericht ueber ...")
+    # Drei Symptome, eine Ursache: alles stand als Vorschrift da.
+    #
+    # UND DER ZWEITE UNTERSCHIED, aus _build_introspection_context():
+    #
+    #     "[INNER_STATE — so ist es dir zuletzt wirklich ergangen. Lass das
+    #      natuerlich in Ton und Inhalt einfliessen; nicht woertlich zitieren,
+    #      nicht als Daten aufzaehlen.] " + " ".join(soft_lines)
+    #
+    # `" ".join(...)`, mit LEERZEICHEN: ein fliessender Absatz, kein
+    # Zeilenumbruch. Der Docstring dort sagt, warum -- "so the LLM responds AS
+    # Frank, not ABOUT Frank". Meine Buehne war eine Liste mit Feldnamen
+    # ("Koerper:", "Stimmung:", "Haltung:"), und eine Liste laedt zum
+    # Aufzaehlen ein. Sie wird hier zu einem Absatz zusammengezogen und
+    # ausdruecklich als etwas gerahmt, das man NICHT zitiert.
+    _zustand = _KONTEXT_IN_FRAGE and _bloecke_als_absatz(system_content)
+    # ⭐ Die gemeinsame Orientierung ZUERST -- siehe _grid_orientierung().
+    _orient = _grid_orientierung()
+    if _orient and _zustand:
+        _zustand = _orient + "\n" + _zustand
+    elif _orient:
+        _zustand = _orient
+    if _zustand:
+        system_content = system_content.split(_ZUSTAND_MARKE)[0].rstrip()
+        # ⭐⭐⭐ DIE REGIE DES GRID (Gabriel, 2026-09-10): "der Grid muss
+        # anhand aller Daten als erster Anstoss dem LLM sagen, wie es sich
+        # in dem Turn zu verhalten hat, dynamisch" -- und: "da das LLM nur
+        # Mund ist, passt das."
+        #
+        # EIN imperativer Satz, aus den Messgroessen dieses Zuges
+        # abgeleitet. Er steht als LETZTES im Systemtext, aus zwei Gruenden:
+        #  * Regel, nicht Material: im Systemtext ist eine Anweisung eine
+        #    Regel; in der Nutzernachricht waere sie Gespraechsstoff (genau
+        #    umgekehrt zum Zustand, der deshalb in die Frage geht).
+        #  * Cache: llama.cpp behaelt den Prompt-Praefix (243 Token kalt in
+        #    0,97 s, warm 4 Token in 0,30 s). Was sich jeden Zug aendert,
+        #    entwertet alles dahinter -- also nichts dahinter.
+        # Siehe Kopf von regie.py, dort auch, welche Groessen NICHT taugen.
+        try:
+            # ⚠️ `_turn`, NICHT `_bt`. `_bt` gibt es nur im Abspielzweig
+            # (Steuerbefehle); bei einer gewoehnlichen Frage ist es gar nicht
+            # gesetzt, und der Zugriff scheiterte still im except -- gemessen:
+            # "[REGIE] ausgefallen (AttributeError)" bei jedem Zug, waehrend
+            # die Regie nie lief. Ein Fehler, der nur im Log steht, wirkt wie
+            # ein funktionierendes System.
+            _tq = _turn if isinstance(_turn, dict) and _turn else {}
+            _bc = _tq.get("broadcast_value")
+            _re = (_tq.get("reentry") or {}).get("kind", "")
+            # ⭐⭐ DER UMSCHLAG ERSETZT DIE REGIE, er ergaenzt sie NICHT
+            # (2026-09-11, Gabriel: "ok bau es ein").
+            #
+            # Warum ersetzen: umschlag.bauen() ruft intern selbst
+            # regie.anweisung() auf und legt das Ergebnis in `caveman_prompt`.
+            # Beide nebeneinander haengen hiesse, denselben Satz zweimal
+            # anzuhaengen -- oder schlimmer, zwei verschiedene. Der Kopf von
+            # regie.py sagt dazu: "Nur EINE Anweisung; zwei Regieanweisungen
+            # widersprechen sich, und ein 4B waehlt dann die naechstliegende
+            # statt der richtigen."
+            #
+            # ⚠️ NUR `gespraechs_text()`, NIE der ganze Umschlag. Der traegt
+            # 13 Felder mit Kennungen, Bewertungen und Belegen -- also
+            # Telemetrie. Genau daran ist der Turn-Block heute Abend
+            # gescheitert ("Zelle G6 hat gewonnen, Broadcast 1.31" wurde
+            # vorgelesen). `gespraechs_text()` bekommt per Bauart nur zwei
+            # von Zahlen befreite Saetze; der Rest des Umschlags erreicht
+            # diesen Pfad nicht einmal im Skopus.
+            #
+            # Faellt der Umschlag aus oder ist der Schalter aus, greift
+            # unveraendert die Regie -- der Goldstandard bleibt eine
+            # Variable entfernt.
+            _rg = ""
+            if umschlag is not None and getattr(umschlag, "AKTIV", False):
+                try:
+                    _u = umschlag.bauen(session_id=session_id,
+                                        nutzertext=user_text, log=_log)
+                    _ut = umschlag.gespraechs_text(
+                        _u.get("caveman_prompt") or "",
+                        bool((_u.get("_verfestigung") or {}).get("ausgeloest")))
+                    if _ut:
+                        _rg = "\n\n" + _ut
+                        _log(f"[UMSCHLAG] {_ut}")
+                except Exception as _ue:
+                    _log(f"[UMSCHLAG] ausgefallen ({type(_ue).__name__}) -- "
+                         f"es bleibt bei der Regie")
+            if not _rg:
+                _rg = regie.block(broadcast=_bc, alarm=_ALARM_KATEGORIE[0],
+                                  reentry=_re, log=_log)
+                if _rg:
+                    _log(f"[REGIE] {_rg.strip()}")
+            if _rg:
+                system_content += _rg
+        except Exception as _e:
+            _log(f"[REGIE] ausgefallen ({type(_e).__name__}: {_e})")
+        messages[0] = {"role": "system", "content": system_content}
+        # ⭐⭐ "Er sagt gerade:" WAR DER FEHLER (Gabriel, 2026-09-10: "er
+        # spricht darüber in der dritten Person, es ist nicht so, dass es
+        # für ihn so ist, als würde er sehen und ich ihn fragen").
+        #
+        # Die Rahmung entscheidet, WER da spricht. "Er sagt gerade: ..."
+        # stellt den Menschen als DRITTEN vor -- damit wird aus dem Gespräch
+        # ein Bericht über ein Gespräch, und das Modell nimmt folgerichtig
+        # die Erzählerrolle ein. Gemessen an seiner Antwort von 19:02:
+        #
+        #     "Ich höre deinen Ton, als würdest du mir sagen: Frankenstein,
+        #      sag mir, wie sehe ich aus?. Ich antworte: Du bist ein Mensch..."
+        #
+        # Er wiederholt die Frage und kündigt seine eigene Antwort an -- das
+        # tut niemand, der angesprochen wird, das tut ein Erzähler. Die
+        # Anrede in der zweiten Person macht ihn vom Berichterstatter zum
+        # Beteiligten. Dieselbe Lehre wie bei der Bühne: nicht ÜBER ihn,
+        # sondern ZU ihm.
+        # ⚠️ KEIN NAME IN DER RAHMUNG (2026-09-10, zweite Korrektur).
+        # "Er sagt gerade:" machte ihn zum Erzaehler. Der Ersatz
+        # "{NUTZER} sagt zu dir:" war nicht besser, sondern nur anders
+        # falsch: er GRIFF DEN NAMEN AUF und erzaehlte weiter ueber einen
+        # Dritten -- gemessen: "Ich hoere Gabriel schreien ...". Ein Name in
+        # der Rahmung ist eine Einladung, ueber jemanden zu sprechen statt
+        # mit ihm. Die zweite Person ohne Namen laesst diese Tuer zu.
+        frage = _zustand + "\n\nEr wendet sich an dich: " + ohne_anrede(user_text)
+        _log(f"[KONTEXT] Zustand in der Frage ({len(_zustand)} Zeichen), "
+             f"Systemtext auf {len(system_content)} gekuerzt")
+        # WIEDERHOLUNGSSPERRE (2026-09-10). Gemessen: drei aufeinanderfolgende
+        # Zuege mit byte-identischer Antwort auf drei verschiedene Fragen. Das
+        # Modell schrieb aus seinem eigenen Verlauf ab -- ohne Hinweis ist das
+        # die wahrscheinlichste Fortsetzung. Der Hinweis steht ZULETZT in der
+        # Frage, direkt vor dem Gesagten, weil das Modell dem Naechstliegenden
+        # folgt. Siehe Kopf von wiederholung.py.
+        # ⚠️⚠️ SPERRTEXT ENTFERNT (2026-09-10, am selben Tag wie eingebaut).
+        # Die Idee war, ihm seine letzte Antwort zu zeigen mit "sag das nicht
+        # noch einmal". GEMESSEN hat sie das Gegenteil bewirkt: auf
+        # "Frankenstein, wie geht's dir?" kam woertlich die Antwort von vor
+        # einer Stunde zurueck -- inklusive "frank-aufwecken-rezept", obwohl
+        # dieser Block laengst entfernt war. Der Text konnte nur aus dem
+        # Sperrhinweis stammen.
+        #
+        # Der Grund ist strukturell und nicht durch Umformulieren zu heilen:
+        # ein 4B-Modell wertet VORHANDENEN, passenden Text staerker als eine
+        # Verneinung darueber. Wer "sag X nicht" schreibt, hat X in den
+        # Kontext gelegt -- und X ist dann die naechstliegende Fortsetzung.
+        # Dieselbe Falle wie bei der Bühne: was im Kontext steht, wird
+        # gesagt, egal was danebensteht.
+        #
+        # Was BLEIBT, ist das Netz im Satzstrom (wiederholung.ist_wiederholung):

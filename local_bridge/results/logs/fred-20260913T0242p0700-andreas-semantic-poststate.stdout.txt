@@ -1,0 +1,25 @@
+IDENTITY_HOST=andreas-MACO
+IDENTITY_USER=andreas
+ActiveState=inactive
+SubState=dead
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=0
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+CONFIG_BEGIN
+ENTITYOS_DATA_DIR=/var/lib/entityos/data
+ENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run
+ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix"
+CONFIG_END
+ROOTFS_BEGIN
+PATH=/var/lib/entityos/rootfs-run TYPE=directory MODE=755 UID=0 GID=0 MTIME=2026-09-07 21:25:29.064901426 +0200
+ROOTFS_END
+DURABLE_SEMANTIC_BEGIN
+CUTOVER_MANIFEST_MISSING=1
+DURABLE_SEMANTIC_END
+RESCUE_BEGIN
+RESCUE_END
+MOUNTS_BEGIN
+MOUNTS_END
+PROCESS_ROOT=MISSING
+DONE=1

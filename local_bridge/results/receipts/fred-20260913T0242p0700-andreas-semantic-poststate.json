@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0242p0700-andreas-semantic-poststate",
+  "command_sha256": "d52226e627994f08dea241795c6e55f5181eab64894e278558153a2584d1655d",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:39:22.013073+00:00",
+  "finished_at": "2026-09-12T19:39:22.103549+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "4d40c3ddc65bd6ea93a17d5577066e75c58f3ae02ca6886a19e23262625749e8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "IDENTITY_HOST=andreas-MACO\nIDENTITY_USER=andreas\nActiveState=inactive\nSubState=dead\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST\nMainPID=0\nExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nCONFIG_BEGIN\nENTITYOS_DATA_DIR=/var/lib/entityos/data\nENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run\nENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix\"\nCONFIG_END\nROOTFS_BEGIN\nPATH=/var/lib/entityos/rootfs-run TYPE=directory MODE=755 UID=0 GID=0 MTIME=2026-09-07 21:25:29.064901426 +0200\nROOTFS_END\nDURABLE_SEMANTIC_BEGIN\nCUTOVER_MANIFEST_MISSING=1\nDURABLE_SEMANTIC_END\nRESCUE_BEGIN\nRESCUE_END\nMOUNTS_BEGIN\nMOUNTS_END\nPROCESS_ROOT=MISSING\nDONE=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

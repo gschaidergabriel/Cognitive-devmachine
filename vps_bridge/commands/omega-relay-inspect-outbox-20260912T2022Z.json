@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-relay-inspect-outbox-20260912T2022Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nimport json,pathlib,os\nroot=pathlib.Path('/workspace/omega_runtime/state')\nprint('FILES')\nfor p in sorted((root/'outbox').glob('*.json')):\n    try:\n        d=json.loads(p.read_text())\n    except Exception as e:\n        print(p.name,'INVALID',type(e).__name__); continue\n    q=d.get('payload') if isinstance(d.get('payload'),dict) else {}\n    print(json.dumps({'file':p.name,'kind':d.get('kind'),'effect_id':q.get('effect_id'),'organ_id':q.get('organ_id'),'authority':q.get('authority'),'task_id':(q.get('task') or {}).get('task_id'),'bridge_op':(q.get('task') or {}).get('bridge_op'),'request_sha256':q.get('request_sha256')},sort_keys=True))\nprint('RELAY_PATHS')\nfor base in ['/workspace','/opt','/root']:\n    for p in pathlib.Path(base).rglob('omega_grid_relay.py'):\n        print(p)\nprint('RUNTIME_DIR')\nfor p in sorted(pathlib.Path('/workspace/omega_runtime').iterdir()): print(p)\nPY"
+}

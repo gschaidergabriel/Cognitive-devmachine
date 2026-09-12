@@ -1,0 +1,193 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-12T07:09:49+07:00
+===SERVICE===
+active
+MainPID=2665680
+ExecMainStartTimestamp=Sat 2026-09-12 03:21:17 +07
+ActiveEnterTimestamp=Sat 2026-09-12 03:21:17 +07
+===FILES===
+87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645  buehne.html
+buehne.html 113597 2026-09-12 06:51:02.058688077 +0700
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+filmlook.js 8383 2026-09-12 06:48:27.160712257 +0700
+0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9  buehne_daemon.py
+buehne_daemon.py 62140 2026-09-11 21:25:47.087265826 +0700
+===RIG2===
+rig2/augen_anker_exakt.json
+rig2/manifest.json
+rig2/messen_augenanker_exakt.py
+===ANCHOR_TOOL_HEAD===
+#!/usr/bin/env python3
+"""messen_augenanker_exakt.py -- EXAKTE (nicht gemessene/geschaetzte) Position
+des Augen-Ankers pro Rollwinkel, per Reproduktion derselben PIL-Transform, die
+docs/build_rig_v2.py fuer die Kopf-Rollposen benutzt hat
+(transform_crop_about_anchor: rotate(angle=-roll, expand=True) um die
+Bildmitte, dann bottom-center-Pin auf den Anker (768,600)).
+
+Statt die Bilder zu vergleichen (Template-Matching, ungenau bei starker
+Verzerrung), wird ein einzelner Marker-Punkt an der bekannten Augen-Anker-
+Position durch EXAKT dieselbe Transformation geschickt wie das Kopfbild
+selbst -- das Ergebnis ist geometrisch exakt, kein Schaetzwert.
+"""
+import json
+import os
+
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+KOPF_MASTER = os.path.join(VISUAL, "kopf", "master", "kopf_zero_mit_augen.png")
+MANIFEST = os.path.join(VISUAL, "manifest.json")
+AUSGABE = os.path.join(VISUAL, "augen_anker_exakt.json")
+
+HEAD_ANCHOR = (768, 600)  # aus manifest.json head_neck_anchor
+
+
+def transform_crop_about_anchor(canvas_1536x1024, head_bbox, angle=0.0, anchor=HEAD_ANCHOR):
+    """1:1 Nachbau von build_rig_v2.py's transform_crop_about_anchor, aber mit
+    dem EXPLIZIT bekannten head_bbox statt Auto-Detektion -- fuer den echten
+    Kopf ist das identisch (dessen Alpha-bbox IST head_bbox), fuer den
+    Marker-Layer (fast leer bis auf einen Punkt) muss die Crop-Box explizit
+    vorgegeben werden, sonst croppt PIL auf den fast-leeren Inhalt statt auf
+    dieselbe Region wie beim echten Kopf."""
+    crop = canvas_1536x1024.crop(head_bbox)
+    if angle:
+        crop = crop.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True)
+    x = round(anchor[0] - crop.width / 2)
+    y = round(anchor[1] - crop.height)
+    out = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    out.alpha_composite(crop, (x, y))
+    return out
+
+
+def main():
+    with open(MANIFEST, encoding="utf-8") as f:
+        manifest = json.load(f)
+    eyes_glow_anchor = None
+    for a in manifest["assets"]:
+        if a["path"] == "augen/gaze/rotglow_tracking_master.png":
+            eyes_glow_anchor = (a["anchor"]["x"], a["anchor"]["y"])
+    if eyes_glow_anchor is None:
+        raise RuntimeError("augen/gaze/rotglow_tracking_master.png nicht im Manifest gefunden")
+    print("Augen-Anker (roll=0, aus Manifest):", eyes_glow_anchor)
+
+    head = Image.open(KOPF_MASTER).convert("RGBA")
+    head_bbox = head.getchannel("A").getbbox()
+    bx0, by0, bx1, by1 = head_bbox
+    print("Kopf-Crop-Box (roll=0):", head_bbox, "Groesse:", (bx1 - bx0, by1 - by0))
+
+    # Marker: volle 1536x1024-Leinwand (wie das echte roll=0-Kopfbild), ein
+    # 5x5-Punkt an der ABSOLUTEN Augen-Anker-Position auf dieser Leinwand --
+    # exakt analog dazu, wie der echte Kopf-Layer auf derselben Leinwand liegt.
+    marker = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    for dx in range(-2, 3):
+        for dy in range(-2, 3):
+            xx, yy = eyes_glow_anchor[0] + dx, eyes_glow_anchor[1] + dy
+            marker.putpixel((xx, yy), (255, 0, 0, 255))
+
+    ergebnis = {}
+    for roll in range(-25, 26, 5):
+        out = transform_crop_about_anchor(marker, head_bbox, angle=-roll, anchor=HEAD_ANCHOR)
+        bbox_out = out.getchannel("A").getbbox()
+        if bbox_out is None:
+            raise RuntimeError(f"Marker bei roll={roll} verschwunden -- Transform-Fehler")
+        cx = (bbox_out[0] + bbox_out[2]) / 2
+        cy = (bbox_out[1] + bbox_out[3]) / 2
+        dx = cx - eyes_glow_anchor[0]
+        dy = cy - eyes_glow_anchor[1]
+        ergebnis[str(roll)] = {"dx_px": round(dx, 2), "dy_px": round(dy, 2)}
+        print(f"roll={roll:+3d}  dx={dx:+7.2f}px  dy={dy:+7.2f}px")
+
+    with open(AUSGABE, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "quelle": "messen_augenanker_exakt.py -- exakte Reproduktion der Erzeugungs-Transform, kein Schaetzwert",
+                "head_anchor": {"x": HEAD_ANCHOR[0], "y": HEAD_ANCHOR[1]},
+                "augen_anker_roll0": {"x": eyes_glow_anchor[0], "y": eyes_glow_anchor[1]},
+                "werte": ergebnis,
+            },
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
+    print("\ngespeichert:", AUSGABE)
+
+
+if __name__ == "__main__":
+    main()
+===ROLL_REFS===
+107:  #gesicht-rahmen{position:absolute;inset:28px;z-index:2;
+125:     zweiten Mund ins Auge). CSS-Prozente auf #gesicht-rahmen konnten das
+126:     nicht treffen, weil #gesicht-rahmen der SICHTBARE, bereits zugeschnittene
+132:     #gesicht-rahmen beschneidet sie per overflow:hidden auf den sichtbaren
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+156:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+165:  #kopf-dreh{transform-origin:50% 58.59%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+179:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+203:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+229:  #gesicht-rahmen.pose-wechsel{animation:pose-overshoot .38s cubic-bezier(.32,1.55,.6,1)}
+273:     NICHT zu #gesicht-rahmen -- deshalb jetzt dort drin, kein bottom/right,
+288:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+292:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+302:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+310:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+313:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+384:      <div id="gesicht-rahmen">
+393:             #gesicht-rahmen (z-index:2) gebildeten Stapelkontext zaehlt --
+397:          <div id="kopf-dreh">
+408:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+414:                 also fest bei links 31%/oben 12% relativ zu #gesicht-rahmen --
+423:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+511:// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+533:  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+731:function kopfRollDatei(w){
+744:    schritte.push({w, src: kopfRollDatei(w)});
+765:  // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+783:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+796://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+817://       Maske"-Optik aus dem Befund. Fix: kopfRollAusgleichDeg ist jetzt
+822:let kopfRollAusgleichDeg = 0;
+849:let augenOffsetDx = 0, augenOffsetDy = 0; // geglaettete ANZEIGE, siehe kopfRollAusgleichDeg
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+873:  kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;
+883:    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+898:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+936:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+964:      const rahmen = $("gesicht-rahmen");
+966:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+1190:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1349:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1401:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1406:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1502:  const r = $("gesicht-rahmen").getBoundingClientRect();
+1520:// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+1532:  const rahmen = $("gesicht-rahmen");
+1643:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1853:// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+1861:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1873:function schleife(t){
+1886:  requestAnimationFrame(schleife);
+1888:requestAnimationFrame(schleife);
+1906:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+===PROCS===
+1199400 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate --disable-gpu --disable-gpu-compositing --disable-software-rasterizer
+1199408 /opt/google/chrome/chrome_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=5 --shared-client-connection
+1199410 /opt/google/chrome/chrome_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/google-chrome/Crash Reports --url=https://clients2.google.com/cr/report --annotation=channel= --annotation=lsb-release=Ubuntu 24.04.4 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=150.0.7871.186 --initial-client-fd=4 --shared-client-connection
+1199416 /opt/google/chrome/chrome --type=zygote --no-zygote-sandbox --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1199417 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1199419 /opt/google/chrome/chrome --type=zygote --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable
+1199445 /opt/google/chrome/chrome --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --gpu-preferences=WAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAgAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --use-gl=disabled --shared-files --metrics-shmem-handle=4,i,7386521472012198634,7028824504288758517,262144 --field-trial-handle=3,i,4998926017085861808,17983924174862152758,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,7518847428150799779,4316642307908801108,4 --trace-process-track-uuid=3190708988185955192
+1199446 /opt/google/chrome/chrome --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,1147994573398329858,15052741058637894497,524288 --field-trial-handle=3,i,4998926017085861808,17983924174862152758,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,7518847428150799779,4316642307908801108,4 --trace-process-track-uuid=3190708989122997041
+1199449 /opt/google/chrome/chrome --type=broker
+1199465 /opt/google/chrome/chrome --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14611023005333537519,10555280275660301242,524288 --field-trial-handle=3,i,4998926017085861808,17983924174862152758,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,7518847428150799779,4316642307908801108,4 --trace-process-track-uuid=3190708990060038890
+1199481 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --disable-gpu-compositing --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=6 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=373608013029 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,11142915577303877329,1536621396758626223,2097152 --field-trial-handle=3,i,4998926017085861808,17983924174862152758,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,7518847428150799779,4316642307908801108,4 --trace-process-track-uuid=3190708991934122588
+1199483 /opt/google/chrome/chrome --type=renderer --crashpad-handler-pid=1199408 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --change-stack-guard-on-fork=enable --ozone-platform=x11 --disable-gpu-compositing --lang=en-US --num-raster-threads=4 --enable-main-frame-before-activation --renderer-client-id=5 --time-ticks-at-unix-epoch=-1788797195117020 --launch-time-ticks=373608015092 --shared-files=v8_context_snapshot_data:100 --metrics-shmem-handle=4,i,14931365479834651959,9125006793208723642,2097152 --field-trial-handle=3,i,4998926017085861808,17983924174862152758,262144 --disable-features=Translate,TranslateUI --variations-seed-version --pseudonymization-salt-handle=7,i,7518847428150799779,4316642307908801108,4 --trace-process-track-uuid=3190708990997080739
+1432541 bash -lc set -u; echo '===IDENTITY==='; hostname; whoami; date -Iseconds; echo '===SERVICE==='; systemctl --user is-active frankenstein-buehne.service || true; systemctl --user show frankenstein-buehne.service -p MainPID -p ActiveEnterTimestamp -p ExecMainStartTimestamp --no-pager || true; echo '===FILES==='; for f in buehne.html filmlook.js buehne_daemon.py; do [ -f "$f" ] && sha256sum "$f" && stat -c '%n %s %y' "$f"; done; echo '===RIG2==='; find rig2 -maxdepth 2 -type f 2>/dev/null | sort | sed -n '1,120p'; echo '===ANCHOR_TOOL_HEAD==='; [ -f rig2/messen_augenanker_exakt.py ] && sed -n '1,220p' rig2/messen_augenanker_exakt.py || true; echo '===ROLL_REFS==='; grep -nE 'kopfRollDatei|kopfRollAusgleichDeg|kopf-dreh|gesicht-rahmen|pupillen-glow|requestAnimationFrame|schleife\(' buehne.html | sed -n '1,220p' || true; echo '===PROCS==='; pgrep -af 'buehne_daemon|chromium|chrome' | sed -n '1,80p' || true
+2665680 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py

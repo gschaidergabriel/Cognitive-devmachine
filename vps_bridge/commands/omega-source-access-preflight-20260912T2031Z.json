@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-source-access-preflight-20260912T2031Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 30,
+  "command": "set -eu; printf 'OMEGA_REMOTE_HEAD='; git ls-remote https://github.com/gschaidergabriel/oMEGA.git refs/heads/main 2>/dev/null | cut -f1 || true; printf 'CARRIER_HEAD='; git -C /workspace/omega_runtime/carrier_repo rev-parse HEAD 2>/dev/null || true; printf 'CURRENT_TREE='; git -C /workspace/omega_runtime/current rev-parse HEAD 2>/dev/null || true"
+}

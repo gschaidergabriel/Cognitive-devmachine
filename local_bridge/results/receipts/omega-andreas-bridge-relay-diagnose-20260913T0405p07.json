@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-andreas-bridge-relay-diagnose-20260913T0405p07",
+  "command_sha256": "ec0b67db4fbaf6422793ae7d9a8496da846d32004c5bd1e8cddaffa33df5503e",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T20:02:03.815784+00:00",
+  "finished_at": "2026-09-12T20:02:07.844416+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "6d5dc084f828d4e535950ca2b2df065d44c5e9a432bca5f4e0c5f429f5a5e1a2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HOST=andreas-MACO\nUSER=andreas\nactive\nActiveState=active\nSubState=running\nMainPID=1094928\nExecMainStatus=0\nENV_BEGIN\nEnvironment=LOCAL_BRIDGE_MACHINE_ID=andreas-maco LOCAL_BRIDGE_OWNER=andreas\nENV_END\nPROCS\n1094928 /usr/bin/python3 /home/andreas/.claude/star/local_bridge_daemon.py\n1127662 bash -c set -e; echo HOST=$(hostname); echo USER=$(whoami); systemctl --user is-active frankenstein-local-bridge.service || true; systemctl --user show frankenstein-local-bridge.service -p ActiveState -p SubState -p MainPID -p ExecMainStatus --no-pager || true; echo ENV_BEGIN; systemctl --user show frankenstein-local-bridge.service -p Environment --no-pager | sed -E \"s/(TOKEN|KEY|SECRET|PASSWORD)=[^ ]+/\\1=REDACTED/g\"; echo ENV_END; echo PROCS; pgrep -af local_bridge_daemon.py || true\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,13 @@
+HOST=andreas-MACO
+USER=andreas
+active
+ActiveState=active
+SubState=running
+MainPID=1094928
+ExecMainStatus=0
+ENV_BEGIN
+Environment=LOCAL_BRIDGE_MACHINE_ID=andreas-maco LOCAL_BRIDGE_OWNER=andreas
+ENV_END
+PROCS
+1094928 /usr/bin/python3 /home/andreas/.claude/star/local_bridge_daemon.py
+1127662 bash -c set -e; echo HOST=$(hostname); echo USER=$(whoami); systemctl --user is-active frankenstein-local-bridge.service || true; systemctl --user show frankenstein-local-bridge.service -p ActiveState -p SubState -p MainPID -p ExecMainStatus --no-pager || true; echo ENV_BEGIN; systemctl --user show frankenstein-local-bridge.service -p Environment --no-pager | sed -E "s/(TOKEN|KEY|SECRET|PASSWORD)=[^ ]+/\1=REDACTED/g"; echo ENV_END; echo PROCS; pgrep -af local_bridge_daemon.py || true

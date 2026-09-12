@@ -1,0 +1,521 @@
+=== gespraechsmodus.py ===
+--- chunk = mic_puffer.get(timeout=0.5) @ 1020 ---
+1002:             voice = fvl.get_voice_lite()
+1003:             _log(f"Unterbau-Status: {voice.get_status()}")
+1004:             raum_text = _stern("gespraech-raum-beitreten", "--session-id", raum_session_id,
+1005:                                 "--model", "realtime-gespraech").get("text", "")
+1006:             raum_beigetreten = True
+1007:             letzter_raum_puls = time.time()
+1008:             # Einzeilig loggen (kein eingebettetes \n) -- journald behandelt
+1009:             # mehrzeilige Nachrichten aus einer einzelnen print()-Zeile
+1010:             # inkonsistent, real beim Diagnostizieren dieses Bugs beobachtet.
+1011:             _log("'Der Raum' beigetreten (session=" + raum_session_id + "): "
+1012:                  + raum_text.replace("\n", " | "))
+1013:             _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf Sprache (reaktiv)")
+1014: 
+1015:         if time.time() - letzter_raum_puls > 30.0:
+1016:             _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf Sprache (reaktiv)")
+1017:             letzter_raum_puls = time.time()
+1018: 
+1019:         try:
+1020:             chunk = mic_puffer.get(timeout=0.5)
+1021:         except queue.Empty:
+1022:             continue
+1023:         ergebnis = voice.process_chunk(chunk)
+1024:         if ergebnis["action"] != "speech_end":
+1025:             # Bugfix Beobachtbarkeit (2026-08-27, real waehrend E2E-Test
+1026:             # gefunden -- s. reconcile-Ergebnis paket-1787834121065-3f01da):
+1027:             # eine per Sprecher-Gate abgelehnte Aeusserung (sprecher_abgelehnt
+1028:             # =True, s. frank_voice_lite.process_chunk()) landete bisher HIER
+1029:             # komplett spurlos im `continue` -- kein Log, kein Hinweis, warum
+1030:             # gesprochene Sprache ignoriert wurde. Fuer Gabriel/Diagnose nicht
+1031:             # von "Mikrofon hoert nichts" unterscheidbar. Jetzt EINMAL pro
+1032:             # abgelehntem Segment sichtbar (nicht bei jedem Nicht-Sprache-
+1033:             # Frame -- process_chunk() liefert sprecher_abgelehnt nur am Ende
+1034:             # eines erkannten, aber zurueckgewiesenen Sprachsegments).
+1035:             if ergebnis.get("sprecher_abgelehnt"):
+1036:                 _log(f"Sprachsegment erkannt, aber Sprecher NICHT verifiziert "
+1037:                      f"(beste Aehnlichkeit={ergebnis.get('sprecher_sim')!r}, "
+1038:                      f"Schwelle 0.75) -- verworfen, kein Whisper-Aufruf")
+1039:             continue
+1040: 
+1041:         text = ergebnis.get("text") or ""
+1042:         if not text:
+1043:             continue
+1044: 
+1045:         # PHASE 48 (Gabriel-Auftrag 2026-08-27, Sprecher-Verifikation):
+1046:         # voice.process_chunk() liefert bei erlaubter Sprache sprecher_name/
+1047:         # sprecher_rolle mit (None/None, wenn kein Voiceprint angelegt ist --
+1048:         # frank_voice_lite.VoiceLite._sprecher_pruefen() laesst dann
+1049:         # unveraendert altes Verhalten durch). Fremdstimmen/Encoder-
+1050:         # Fail-Closed-Faelle erreichen diese Zeile GAR NICHT (das Gate in
+1051:         # process_chunk() gibt dafuer bereits action="none" zurueck, oben
+1052:         # per `if ergebnis["action"] != "speech_end": continue` verworfen).
+1053:         sprecher_name = ergebnis.get("sprecher_name")
+1054:         sprecher_rolle = ergebnis.get("sprecher_rolle")
+1055: 
+1056:         # Gabriel-Korrektur (2026-08-27, live waehrend P4V-Test): KEIN
+1057:         # Weckwort-Zwang mehr -- der zentrale Dashboard-Schalter
+1058:         # (gespraech.aktiv, /stat) ist die einzige Ein/Aus-Bedingung.
+1059:         # Ist der Schalter an (dieser Codepfad laeuft nur dann ueberhaupt,
+1060:         # siehe `if not cfg.get("aktiv")` oben), loest JEDE erkannte
+1061:         # Sprache (echtes speech_end mit nicht-leerem Text) direkt die
+1062:         # Realtime-Session aus -- reaktiv, kein "Hey FranKenstein" mehr
+1063:         # noetig. `weckwort_treffer()`/`_WECKWORT_RE` bleiben im Modul
+1064:         # (test-weckwort-CLI, moegliches spaeteres Opt-in), werden hier
+--- ergebnis_gespraech = realtime_gespraech.fuehren_gespraech @ 1084 ---
+1066:         _log(f'Sprache erkannt (reaktiver Modus, kein Weckwort noetig, Sprecher='
+1067:              f'{sprecher_name!r} Rolle={sprecher_rolle!r}): "{text}"')
+1068:         _pieps()
+1069: 
+1070:         # ── ECHTES Gespraech beginnt: an die Realtime-API uebergeben
+1071:         #    (PHASE 42b) -- blockiert HIER synchron bis das Gespraech
+1072:         #    endet (Nutzerabsicht per Tool-Call ODER 5s-Beidseitig-Stille,
+1073:         #    siehe realtime_gespraech.py). Der lokale 16kHz-Wachstream
+1074:         #    laeuft im Hintergrund-Thread WEITER (Mikrofon bleibt offen),
+1075:         #    seine Queue wird danach explizit geleert (siehe unten).
+1076:         api_key = _openai_key()
+1077:         if api_key is None:
+1078:             _log("kein lokaler OpenAI-Schluessel -- 'stern.py openai-schluessel-cachen' EINMALIG "
+1079:                  "interaktiv ausfuehren. Erkannte Aeusserung ignoriert, bleibe im Wachmodus.")
+1080:             continue
+1081: 
+1082:         _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "im Gespraech mit Gabriel")
+1083:         _log("Realtime-Session wird gestartet (PHASE 42b) ...")
+1084:         ergebnis_gespraech = realtime_gespraech.fuehren_gespraech(
+1085:             api_key, cfg, session_id, raum_session_id=raum_session_id,
+1086:             sprecher_name=sprecher_name, sprecher_rolle=sprecher_rolle,
+1087:         )
+1088:         session_id = ergebnis_gespraech.get("claude_session_id") or session_id
+1089:         if session_id:
+1090:             _session_merken(session_id)
+1091:         _log(f"Realtime-Session beendet: grund={ergebnis_gespraech.get('grund_ende')} "
+1092:              f"dauer_s={ergebnis_gespraech.get('dauer_s')}")
+1093: 
+1094:         verworfen = _puffer_leeren(mic_puffer)
+1095:         if verworfen:
+1096:             _log(f"{verworfen} veraltete 16kHz-Audio-Chunks aus der Gespraechsdauer verworfen "
+1097:                  "(kein Retrigger aus Gespraechsresten)")
+1098:         _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf 'Hey FranKenstein'")
+1099:         letzter_raum_puls = time.time()
+1100: 
+1101: 
+1102: def _session_merken(session_id: str) -> None:
+1103:     # PHASE 42c-Bugfix: direkter In-Prozess-Aufruf statt Subprozess, siehe
+1104:     # _stern()-Docstring (fork()-Haenger-Risiko bei aktivem Mikrofon-Thread).
+1105:     ergebnis = _stern("gespraech-session-merken", "--id", session_id)
+1106:     if not ergebnis.get("ok"):
+1107:         _log(f"Session-ID merken fehlgeschlagen (nicht kritisch, naechste Runde neu versucht): "
+1108:              f"{ergebnis.get('grund')}")
+1109: 
+1110: 
+1111: # ══════════════════════════════════════════════════════════════════
+1112: #  CLI -- Dauerprozess + isolierte, echte Komponententests (kein
+1113: #  Fake/Mock -- entweder eine echte Datei/ein echter API-Aufruf oder ein
+1114: #  ehrlicher Fehler).
+1115: # ══════════════════════════════════════════════════════════════════
+1116: 
+1117: def main() -> None:
+1118:     import argparse
+1119:     ap = argparse.ArgumentParser(description="gespraechsmodus -- PHASE 42 echter Gespraechsmodus")
+1120:     sub = ap.add_subparsers(dest="cmd", required=True)
+1121: 
+1122:     sub.add_parser("listener", help="Dauerprozess -- ExecStart von frankenstein-gespraechsmodus.service")
+1123:     sub.add_parser("status", help="Kurzer Bereitschaftscheck (VAD/STT-Unterbau, OpenAI-Schluessel)")
+1124: 
+1125:     lv = sub.add_parser("live", help="PHASE 42b, Gabriel-Nachtrag 'Live-Sichtbarkeit im Terminal': "
+1126:                                        "tailt den laufenden Dienst-Log OHNE dass du den vollen "
+1127:                                        "journalctl-Befehl selbst tippen musst (folgt Wach-Erkennung, "
+1128:                                        "Session-Start/-Ende, Nutzer-/FranKenstein-Aeusserungen, "
+=== realtime_gespraech.py ===
+--- if still_s >= self.waechter.timeout_s: @ 1505 ---
+1487:                     sprecher_rolle=self.sprecher_rolle))))
+1488: 
+1489:                 sender_stop = threading.Event()
+1490:                 sender = threading.Thread(target=self._mic_sender, args=(ws, mic_puffer, sender_stop), daemon=True)
+1491:                 sender.start()
+1492: 
+1493:                 antwort_text_buf = ""
+1494:                 # Bugfix Runde 2 FIXER-Befund #2: jetzt self._offene_tool_calls
+1495:                 # (Instanzattribut), s. __init__-Kommentar -- pro Session frisch
+1496:                 # geleert, damit ein Rest aus einer evtl. vorigen fuehren()-
+1497:                 # Runde nicht mitgeschleppt wird.
+1498:                 self._offene_tool_calls: dict = {}
+1499: 
+1500:                 while True:
+1501:                     if time.monotonic() - start > max_dauer_s:
+1502:                         grund_ende = "max_dauer_erreicht"
+1503:                         break
+1504:                     still_s = self.waechter.sekunden_still()
+1505:                     if still_s >= self.waechter.timeout_s:
+1506:                         _log("5s-Beidseitig-Stille erreicht -- Session wird beendet")
+1507:                         grund_ende = "stille_timeout"
+1508:                         break
+1509:                     # Kernmechanismus 8 (PHASE 42c) -- kein simpler Countdown:
+1510:                     # in der Mitte des Reopen-Fensters (Default 2.5s) EINMAL
+1511:                     # pruefen, ob ein wirklich hochwertiger Kandidat das
+1512:                     # Gespraech von sich aus wieder aufnehmen sollte.
+1513:                     if (still_s >= self._vl_reopen_fenster_s * 0.5 and still_s < self.waechter.timeout_s
+1514:                             and not self.waechter.reopen_versucht_diese_stille):
+1515:                         self.waechter.reopen_versucht_diese_stille = True
+1516:                         # Bugfix (2026-08-27, Runde-1-Review): lief bisher
+1517:                         # SYNCHRON auf demselben Thread, der auch ws.recv()
+1518:                         # aufruft -- vlc.qwen_appraisal() ruft intern `curl`
+1519:                         # per subprocess auf (dessen eigener Docstring nennt
+1520:                         # "haeufig ~1.5s"), was ws.recv() genau waehrend des
+1521:                         # Reopen-Fensters verzoegert, dessen ganzer Zweck die
+1522:                         # zeitnahe Erkennung neuer Nutzer-Sprache ist. Senden
+1523:                         # (ws.send()) aus einem Hintergrund-Thread ist bei
+1524:                         # websockets.sync sicher (das Connection-Objekt
+1525:                         # betreibt selbst schon einen eigenen Empfangs-Thread
+1526:                         # und schuetzt send()/recv() intern per Lock, siehe
+1527:                         # websockets.sync.connection.Connection).
+1528:                         threading.Thread(target=self._stille_reopen_pruefen, args=(ws,), daemon=True).start()
+1529:                     if self.ende_gewuenscht:
+1530:                         grund_ende = f"nutzer_absicht:{self.grund or ''}"
+1531:                         break
+1532:                     if time.monotonic() - letzte_zk_aktualisierung > self.zustandskontext_refresh_s:
+1533:                         # NUR die lokale Variable auffrischen -- KEIN
+1534:                         # session.update mehr (siehe _session_config()-
+1535:                         # Kommentar: wird vom Modell oft ignoriert). Die
+1536:                         # naechste _response_erstellen()-Antwort (naechster
+1537:                         # Sprecherwechsel/Tool-Ergebnis) nimmt den frischen
+1538:                         # Wert automatisch mit.
+1539:                         zk = _stern("gespraech-zustandskontext")
+1540:                         if zk.get("ok"):
+1541:                             self._zustandskontext_dict = zk
+1542:                             vektor = vlc.ausdrucksvektor_berechnen(zk)
+1543:                             self._zustandstext = zk["text"] + "\n" + vlc.ausdruckssatz(vektor)
+1544:                             _log(f"Zustandskontext aufgefrischt (wirkt ab naechster Antwort): {self._zustandstext}")
+1545:                         letzte_zk_aktualisierung = time.monotonic()
+1546: 
+1547:                         # PHASE 43c P1V -- Kapsel im selben Ritt neu ziehen
+1548:                         # (Docstring dort: "kein gecachtes Feld, echter
+1549:                         # Refresh-Mechanismus"). Nicht kritisch fuer den
+--- def fuehren_gespraech( @ 2297 ---
+2279: 
+2280: def _kurz_dict(d: dict) -> str:
+2281:     try:
+2282:         return _kurz(json.dumps(d, ensure_ascii=False), 300)
+2283:     except Exception:
+2284:         return str(d)[:300]
+2285: 
+2286: 
+2287: # einfache thread-sichere Queue ohne zusaetzliche Abhaengigkeit
+2288: import queue as _queue_mod
+2289: _Queue = _queue_mod.Queue
+2290: _QueueEmpty = _queue_mod.Empty
+2291: 
+2292: 
+2293: # ══════════════════════════════════════════════════════════════════
+2294: #  Oeffentlicher Einstiegspunkt fuer gespraechsmodus.py
+2295: # ══════════════════════════════════════════════════════════════════
+2296: 
+2297: def fuehren_gespraech(api_key: str, cfg: dict, claude_session_id: Optional[str],
+2298:                        raum_session_id: Optional[str] = None,
+2299:                        sprecher_name: Optional[str] = None,
+2300:                        sprecher_rolle: Optional[str] = None) -> dict:
+2301:     # PHASE 48 (Gabriel-Auftrag 2026-08-27, Sprecher-Verifikation +
+2302:     # Rollen-Durchsetzung "user kann mit sprache alles machen guest nur
+2303:     # fragen stellen"): sprecher_name/sprecher_rolle kommen aus
+2304:     # gespraechsmodus.hoeren()'s VoiceLite.process_chunk()-Gate durch --
+2305:     # None/None, wenn (noch) kein Voiceprint angelegt ist.
+2306:     sitzung = RealtimeSession(
+2307:         api_key, modell=cfg.get("realtime_modell") or "gpt-realtime-2.1",
+2308:         stimme=cfg.get("realtime_stimme") or "cedar",
+2309:         berechtigung=cfg.get("berechtigung") or "acceptEdits",
+2310:         claude_session_id=claude_session_id,
+2311:         stille_timeout_s=float(cfg.get("stille_timeout_sekunden") or 5),
+2312:         raum_session_id=raum_session_id,
+2313:         sprecher_name=sprecher_name, sprecher_rolle=sprecher_rolle,
+2314:         # PHASE 49b Kaskaden-Fix -- s. RealtimeSession.__init__/stern.py
+2315:         # _KONFIG_DEFAULTS fuer die reale A/B-Messung dahinter.
+2316:         reasoning_effort=cfg.get("realtime_reasoning_effort") or "minimal",
+2317:     )
+2318:     return sitzung.fuehren()
+2319: 
+2320: 
+2321: # ══════════════════════════════════════════════════════════════════
+2322: #  CLI -- echte, isolierte Komponententests (kein Mock -- entweder ein
+2323: #  echter API-Aufruf/eine echte Mikrofonaufnahme oder ein ehrlicher Fehler)
+2324: # ══════════════════════════════════════════════════════════════════
+2325: 
+2326: def _openai_key() -> Optional[str]:
+2327:     import gespraechsmodus as _gm
+2328:     return _gm._openai_key()
+2329: 
+2330: 
+2331: def main() -> None:
+2332:     import argparse
+2333:     ap = argparse.ArgumentParser(description="realtime_gespraech -- PHASE 42b OpenAI-Realtime-Pivot")
+2334:     sub = ap.add_subparsers(dest="cmd", required=True)
+2335: 
+2336:     sub.add_parser("test-connect", help="Echter WS-Handshake + session.update, prueft session.updated")
+2337: 
+2338:     ttc = sub.add_parser("test-tool-call", help="Echter Function-Calling-Roundtrip gegen die "
+2339:                                                   "PRODUKTIONS-Dispatch-Funktionen (Status-Tool)")
+2340:     ttc.add_argument("--frage", default="Wie spaet ist es und was machst du gerade?")
+2341: 
+=== perception_l0.py ===
+--- if orch is None: @ 251 ---
+0233:     letzte_eskalation = 0.0
+0234:     letzte_cfg_lesung = 0.0
+0235:     cfg = cfg_lesen() if cfg_lesen else {"aktiv": True, "min_eskalation_sekunden": min_eskalation_sekunden}
+0236: 
+0237:     try:
+0238:         while not stop_event.is_set():
+0239:             if cfg_lesen and (time.monotonic() - letzte_cfg_lesung > cfg_refresh_sekunden):
+0240:                 cfg = cfg_lesen()
+0241:                 letzte_cfg_lesung = time.monotonic()
+0242: 
+0243:             if not cfg.get("aktiv", True):
+0244:                 if orch is not None:
+0245:                     _log("cortex.aktiv=0 erkannt -- Kamera freigeben, Dauerschleife pausiert")
+0246:                     orch.stop()
+0247:                     orch = None
+0248:                 stop_event.wait(10.0)
+0249:                 continue
+0250: 
+0251:             if orch is None:
+0252:                 _log(f"cortex.aktiv=1 -- L0Orchestrator startet ({geraet}, tick_hz={tick_hz})")
+0253:                 orch = L0Orchestrator(geraet=geraet, ziel_fps=max(tick_hz, 5.0)).start()
+0254: 
+0255:             grenze = float(cfg.get("min_eskalation_sekunden", min_eskalation_sekunden))
+0256:             darf_eskalieren = (time.monotonic() - letzte_eskalation) >= grenze
+0257:             ergebnis = visueller_zyklus_l0(orch, force=False) if darf_eskalieren else None
+0258: 
+0259:             if ergebnis is None:
+0260:                 # kein neuer Frame ODER Cooldown noch aktiv -- trotzdem einen
+0261:                 # reinen L0-Tick machen (MotionGate/Stale-Erkennung soll nicht
+0262:                 # stehen bleiben, nur weil P0 gerade im Cooldown ist).
+0263:                 orch.tick()
+0264:             elif ergebnis["decision"] == "L0_ESCALATED":
+0265:                 letzte_eskalation = time.monotonic()
+0266:                 p0 = ergebnis.get("p0_zyklus") or {}
+0267:                 _log(f"L0_ESCALATED -- visueller_zyklus() decision={p0.get('decision')} "
+0268:                      f"reason={p0.get('reason')}")
+0269: 
+0270:             stop_event.wait(1.0 / tick_hz if tick_hz > 0 else 1.0)
+0271:     finally:
+0272:         if orch is not None:
+0273:             orch.stop()
+0274:         _log("Dauerschleife beendet, Kamera freigegeben")
+0275: 
+0276: 
+0277: # ══════════════════════════════════════════════════════════════════
+0278: #  CLI -- real acceptance tests, real camera, real v4l2-ctl toggling.
+0279: # ══════════════════════════════════════════════════════════════════
+0280: 
+0281: def _watch(sekunden: float, geraet: str, fps: float) -> dict:
+0282:     verlauf = []
+0283:     with L0Orchestrator(geraet=geraet, ziel_fps=fps) as orch:
+0284:         t0 = time.monotonic()
+0285:         while time.monotonic() - t0 < sekunden:
+0286:             e = orch.tick()
+0287:             if e is not None:
+0288:                 verlauf.append(e)
+0289:                 _log(f"seq={e['seq']} status={e['motion_status']} stufe={e['stufe_entschieden']} "
+0290:                      f"stale={e['stale_frame']}")
+0291:             time.sleep(0.05)
+0292:         stats = orch.stats()
+0293:     return {"stats": stats, "verlauf": verlauf}
+0294: 
+0295: 
+--- ergebnis = visueller_zyklus_l0 @ 257 ---
+0239:             if cfg_lesen and (time.monotonic() - letzte_cfg_lesung > cfg_refresh_sekunden):
+0240:                 cfg = cfg_lesen()
+0241:                 letzte_cfg_lesung = time.monotonic()
+0242: 
+0243:             if not cfg.get("aktiv", True):
+0244:                 if orch is not None:
+0245:                     _log("cortex.aktiv=0 erkannt -- Kamera freigeben, Dauerschleife pausiert")
+0246:                     orch.stop()
+0247:                     orch = None
+0248:                 stop_event.wait(10.0)
+0249:                 continue
+0250: 
+0251:             if orch is None:
+0252:                 _log(f"cortex.aktiv=1 -- L0Orchestrator startet ({geraet}, tick_hz={tick_hz})")
+0253:                 orch = L0Orchestrator(geraet=geraet, ziel_fps=max(tick_hz, 5.0)).start()
+0254: 
+0255:             grenze = float(cfg.get("min_eskalation_sekunden", min_eskalation_sekunden))
+0256:             darf_eskalieren = (time.monotonic() - letzte_eskalation) >= grenze
+0257:             ergebnis = visueller_zyklus_l0(orch, force=False) if darf_eskalieren else None
+0258: 
+0259:             if ergebnis is None:
+0260:                 # kein neuer Frame ODER Cooldown noch aktiv -- trotzdem einen
+0261:                 # reinen L0-Tick machen (MotionGate/Stale-Erkennung soll nicht
+0262:                 # stehen bleiben, nur weil P0 gerade im Cooldown ist).
+0263:                 orch.tick()
+0264:             elif ergebnis["decision"] == "L0_ESCALATED":
+0265:                 letzte_eskalation = time.monotonic()
+0266:                 p0 = ergebnis.get("p0_zyklus") or {}
+0267:                 _log(f"L0_ESCALATED -- visueller_zyklus() decision={p0.get('decision')} "
+0268:                      f"reason={p0.get('reason')}")
+0269: 
+0270:             stop_event.wait(1.0 / tick_hz if tick_hz > 0 else 1.0)
+0271:     finally:
+0272:         if orch is not None:
+0273:             orch.stop()
+0274:         _log("Dauerschleife beendet, Kamera freigegeben")
+0275: 
+0276: 
+0277: # ══════════════════════════════════════════════════════════════════
+0278: #  CLI -- real acceptance tests, real camera, real v4l2-ctl toggling.
+0279: # ══════════════════════════════════════════════════════════════════
+0280: 
+0281: def _watch(sekunden: float, geraet: str, fps: float) -> dict:
+0282:     verlauf = []
+0283:     with L0Orchestrator(geraet=geraet, ziel_fps=fps) as orch:
+0284:         t0 = time.monotonic()
+0285:         while time.monotonic() - t0 < sekunden:
+0286:             e = orch.tick()
+0287:             if e is not None:
+0288:                 verlauf.append(e)
+0289:                 _log(f"seq={e['seq']} status={e['motion_status']} stufe={e['stufe_entschieden']} "
+0290:                      f"stale={e['stale_frame']}")
+0291:             time.sleep(0.05)
+0292:         stats = orch.stats()
+0293:     return {"stats": stats, "verlauf": verlauf}
+0294: 
+0295: 
+0296: def _exposure_jump_test(sekunden_baseline: float, sekunden_nach_sprung: float, geraet: str) -> dict:
+0297:     """Akzeptanzkriterium 1: reale Belichtungs-Rettungskaskade (dieselben
+0298:     verifizierten Werte wie visual_cortex._MANUELLE_RETTUNG) darf MotionGate
+0299:     NICHT als CHANGED lesen. IMMER (try/finally) zurueck auf Auto, egal was
+0300:     passiert -- gleiche Kamera-Etikette wie visual_cortex.
+0301:     capture_frame_mit_fallback()."""
+=== capture_worker.py ===
+--- KAMERA_GERAET = @ 64 ---
+0046: from typing import Optional
+0047: 
+0048: import numpy as np
+0049: 
+0050: try:
+0051:     import cv2
+0052: except ImportError as e:  # pragma: no cover -- surfaced loudly, not swallowed
+0053:     raise ImportError(
+0054:         "capture_worker.py requires opencv-python (cv2) -- "
+0055:         "install with `pip install opencv-python`"
+0056:     ) from e
+0057: 
+0058: 
+0059: def _log(msg: str) -> None:
+0060:     zeit = time.strftime("%Y-%m-%d %H:%M:%S")
+0061:     print(f"[{zeit}] capture_worker: {msg}", file=sys.stderr, flush=True)
+0062: 
+0063: 
+0064: KAMERA_GERAET = "/dev/video0"  # "Rapoo Camera" -- NIEMALS /dev/video2 ("Estelle
+0065:                                 # Cam", v4l2loopback-Synthetik-Feed eines ANDEREN
+0066:                                 # Projekts). Literal gleiche Konstante wie
+0067:                                 # visual_cortex.KAMERA_GERAET (keine zweite Wahrheit).
+0068: 
+0069: 
+0070: def geraet_beschriftung(geraet: str = KAMERA_GERAET) -> Optional[str]:
+0071:     """Real device-name resolution via v4l2-ctl -- used by the acceptance
+0072:     check ('verify with v4l2-ctl --list-devices before assuming device
+0073:     numbers, they can shift'). Returns the human label (e.g. 'Rapoo Camera')
+0074:     or None if v4l2-ctl is unavailable/the device isn't listed (e.g. on a
+0075:     machine without a camera -- andreas-maco, verified 2026-08-27: no
+0076:     /dev/video* at all there)."""
+0077:     try:
+0078:         p = subprocess.run(["v4l2-ctl", "--list-devices"], capture_output=True,
+0079:                             text=True, timeout=5)
+0080:     except (FileNotFoundError, subprocess.TimeoutExpired) as e:
+0081:         _log(f"geraet_beschriftung: v4l2-ctl nicht verfuegbar ({e})")
+0082:         return None
+0083:     if p.returncode != 0:
+0084:         return None
+0085:     aktuelles_label = None
+0086:     for zeile in p.stdout.splitlines():
+0087:         if zeile and not zeile.startswith("\t"):
+0088:             aktuelles_label = zeile.split("(")[0].strip()
+0089:         elif zeile.strip() == geraet:
+0090:             return aktuelles_label
+0091:     return None
+0092: 
+0093: 
+0094: class KameraBesitzFehler(RuntimeError):
+0095:     """Raised when a second CaptureWorker tries to open a device already
+0096:     owned by another CaptureWorker in this process -- single-owner rule
+0097:     (1.1: 'Single owner of the camera device, multiple readers via
+0098:     FrameRefs')."""
+0099: 
+0100: 
+0101: @dataclasses.dataclass(frozen=True)
+0102: class FrameRef:
+0103:     """Immutable handle to one captured frame, RAM-only. `frame` is a BGR
+0104:     numpy array (cv2 convention) -- cv2.VideoCapture.read() allocates a FRESH
+0105:     array on every call, so handing out this reference without copying is
+0106:     safe: no other code path ever mutates it after capture. `monotonic_ts` is
+0107:     time.monotonic() (spec: 'Use time.monotonic() for internal ordering/TTL
+0108:     comparisons, not wall clock') -- `wall_ts` (time.time()) is kept only for
+=== visual_cortex.py ===
+--- KAMERA_GERAET = @ 164 ---
+0146: 
+0147: 
+0148: def phase43_defaults() -> dict:
+0149:     for p in _PHASE43_DEFAULTS_KANDIDATEN:
+0150:         try:
+0151:             if p.is_file():
+0152:                 return json.loads(p.read_text(encoding="utf-8"))
+0153:         except Exception as e:
+0154:             _log(f"phase43_defaults: {p} unlesbar ({e}), naechster Kandidat")
+0155:     _log("phase43_defaults: keine Datei gefunden -- Hardcode-Rueckfall (docs/04+06 woertlich)")
+0156:     return dict(_PHASE43_DEFAULTS_HARDCODE_RUECKFALL)
+0157: 
+0158: 
+0159: # ══════════════════════════════════════════════════════════════════
+0160: #  Schritt 1 -- Kamera-Capture mit Low-Light-Fallback-Kaskade
+0161: #  ECHTE, HEUTE (2026-08-25/27) VERIFIZIERTE WERTE -- siehe Auftragskontext.
+0162: # ══════════════════════════════════════════════════════════════════
+0163: 
+0164: KAMERA_GERAET = "/dev/video0"  # "Rapoo Camera" -- NICHT /dev/video2 ("Estelle
+0165:                                 # Cam", v4l2loopback-Synthetik-Feed eines
+0166:                                 # ANDEREN Projekts, siehe Auftragskontext.
+0167:                                 # Nur auf ai-core-node vorhanden (Kamera-Host).
+0168: 
+0169: # Schwelle, ab der ein Auto-Belichtungs-Frame als "sehr dunkel, wahrscheinlich
+0170: # nicht auswertbar" gilt -- real gemessen 2026-08-27: dunkler Raum lieferte
+0171: # mean_brightness=1.03 (von 255). Grosszuegig bei 15 gesetzt (deutlich ueber
+0172: # dem realen Dunkelwert, deutlich unter einem normal beleuchteten Raum, damit
+0173: # echte Grenzfaelle noch die Kaskade ausloesen statt sie zu verpassen).
+0174: _DUNKEL_SCHWELLE_MEAN = 15.0
+0175: 
+0176: # Verifizierte manuelle Rettungswerte (Auftragskontext, real getestet
+0177: # 2026-08-25: Person klar erkennbar danach -- Kopf, Schulter, Arm).
+0178: _MANUELLE_RETTUNG = {
+0179:     "auto_exposure": 1,          # Manual Mode
+0180:     "exposure_time_absolute": 5000,
+0181:     "gain": 100,
+0182:     "brightness": 64,
+0183: }
+0184: _AUTO_RUECKSTELLUNG = {
+0185:     "auto_exposure": 3,
+0186:     "gain": 0,
+0187:     "brightness": 0,
+0188: }
+0189: 
+0190: 
+0191: class KameraFehler(RuntimeError):
+0192:     pass
+0193: 
+0194: 
+0195: def _v4l2_setzen(geraet: str, werte: dict) -> None:
+0196:     args = ["v4l2-ctl", "-d", geraet] + [f"--set-ctrl={k}={v}" for k, v in werte.items()]
+0197:     p = subprocess.run(args, capture_output=True, text=True, timeout=10)
+0198:     if p.returncode != 0:
+0199:         raise KameraFehler(f"v4l2-ctl fehlgeschlagen ({werte}): {p.stderr.strip()}")
+0200: 
+0201: 
+0202: # PHASE 43c P4 -- ehemals ein eigener `ffmpeg -f v4l2 -i {geraet} ...`-Aufruf
+0203: # hier (_ffmpeg_capture(), entfernt). Das war der zweite, konkurrierende
+0204: # Device-Oeffner neben presence_bridge.PresenceBridge's cv2.VideoCapture --
+0205: # real reproduzierter KameraFehler "Device or resource busy" wenn beide
+0206: # gleichzeitig liefen (siehe visual_need_lesion_test.py-Docstring, VOR
+0207: # diesem Fix geschrieben). _frame_von_geteiltem_worker() unten ersetzt ihn:
+0208: # zieht einen Frame aus demselben geteilten capture_worker.CaptureWorker,
+===BYID===
+total 0
+lrwxrwxrwx 1 root root 12 Sep 10 02:20 usb-Rapoo_Camera_Rapoo_Camera_SN0001-video-index0 -> ../../video1
+lrwxrwxrwx 1 root root 12 Sep 10 02:20 usb-Rapoo_Camera_Rapoo_Camera_SN0001-video-index1 -> ../../video3

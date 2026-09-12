@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-parallax-structure-20260912-0739",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\necho '=== SUBJECT ==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\necho '=== HEAD MARKUP/STYLE REFS ==='\ngrep -nE 'id=\"[^\"]*(kopf|auge)|#(kopf|auge)|kopf-dreh|augen|kopfBild|kopfImg|kopfRoll|KOPF_ROLL' buehne.html | head -260\necho '=== ROLL SOURCE ASSIGNMENTS ==='\ngrep -nE 'kopf[^ ]*\\.src|\.src.*kopf|roll/|kopf_rgba' buehne.html | head -220\necho '=== STATIC SERVER/DEBUG ==='\ngrep -nE '8788|http.server|SimpleHTTPRequestHandler|send_header|Cache-Control|ETag|chrom|remote-debug|playwright' buehne_daemon.py buehne.html | head -220 || true\necho '=== CURRENT +00 / SLICES ==='\nsha256sum kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png kopf_rgba_parallax/gier_+00_nick_+00_roll_+00/*.png\necho STRUCTURE_DONE=1\n"
+}

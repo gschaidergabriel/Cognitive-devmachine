@@ -1,0 +1,161 @@
+SERVICES
+  alignment-wache.service                                                                                                       loaded    inactive dead      FranKenstein -- Ausrichtung ueberwachen, bei dauerhafter Abweichung anhalten
+  claude-cli-shim.service                                                                                                       loaded    active   running   Lokale OpenAI-kompatible HTTP-Bruecke vor der echten claude-CLI (fuer Crush/Free-Frank)
+  clay-local-bridge-watchdog.service                                                                                            loaded    inactive dead      Clay local bridge self-heal check
+  clay-local-bridge.service                                                                                                     loaded    active   running   Clay ChatGPT local development bridge
+  doppelbau-detektor.service                                                                                                    loaded    inactive dead      FranKenstein -- Doppelbau-Detektor: Modul-Index scannen und Absichtssuche aktuell halten
+  frankenstein-agentenwache.service                                                                                             loaded    inactive dead      FranKenstein -- Agentensteuerung des GRID (Monitoring + Umschaltung)
+  frankenstein-blick-waechter.service                                                                                           loaded    inactive dead      FranKenstein Buehne -- Sicherheitsnetz fuer die Kamera-Uebernahme (blick.py)
+  frankenstein-buehne.service                                                                                                   loaded    active   running   FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+  frankenstein-chatgpt-client.service                                                                                           loaded    active   running   FranKenstein Persistent Headless ChatGPT Client
+  frankenstein-cortex-dashboard.service                                                                                         loaded    active   running   FranKenstein /cortex Dashboard (paket-1788623631586-d5b2f3, fixer Port 8781, persistent)
+  frankenstein-cortex-perception-cycle.service                                                                                  loaded    inactive dead      FranKenstein Cortex Perception Cycle — one real camera perception cycle (F2-WP1207, exposure-warmup-scheduler 2026-09-06)
+  frankenstein-cortex.service                                                                                                   loaded    active   running   FranKenstein Cortex -- die Bildschirme, verschmolzen zu einem Zustand
+  frankenstein-denker.service                                                                                                   loaded    active   running   FranKenstein Denker — er denkt, auch wenn niemand da ist
+  frankenstein-erinnerungsdienst.service                                                                                        loaded    active   running   FranKenstein Erinnerungsdienst (semantisches Retrieval, resident)
+  frankenstein-gespraech.service                                                                                                loaded    active   running   FranKenstein Gespraechsmodus -- Mikrofon, ASR, Antwort, Stimme
+  frankenstein-gespraechsmodus.service                                                                                          loaded    active   running   FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+  frankenstein-grid-autonomie.service                                                                                           loaded    inactive dead      FranKenstein GRID-Autonomie -- verfolgt eigene Ziele, 24/7, ohne Claude-Tokens
+  frankenstein-immunsystem.service                                                                                              loaded    active   running   FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+  frankenstein-koerperpflege.service                                                                                            loaded    active   running   FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+  frankenstein-local-bridge-webui.service                                                                                       loaded    active   running   Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                                                                             loaded    active   running   Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  frankenstein-puls.service                                                                                                     loaded    active   running   FranKenstein Puls -- fortlaufende Kognition im Grid, auch ohne Gespraech
+  frankenstein-sehen.service                                                                                                    loaded    inactive dead      FranKenstein Sehen -- residenter Blick (digital-retina), schreibt nach f2_sicht
+  frankenstein-taeglicher-check.service                                                                                         loaded    inactive dead      FranKenstein taeglicher, GRID-priorisierter Architect-Gesundheitscheck (Gabriel, 2026-09-12)
+  frankenstein-verwaiste.service                                                                                                loaded    inactive dead      FranKenstein -- verwaiste Arbeitspakete schliessen, damit das Lagebild nicht luegt
+  frankenstein-wege.service                                                                                                     loaded    inactive dead      FranKenstein Wegehierarchie -- ernten + verfallen (F94)
+  frankenstein-welt.service                                                                                                     loaded    active   running   FranKenstein Welt -- Linse aus Stufe 1 laeuft im Takt mit, ohne anzubinden
+  quota-uebergabe.service                                                                                                       loaded    inactive dead      FranKenstein -- bei erschoepftem Claude-Kontingent in den Free-Pool uebergeben
+  tagebuch.service                                                                                                              loaded    inactive dead      FranKenstein -- Daybooks of an Innocent fortschreiben
+  tote-anschluesse.service                                                                                                      loaded    inactive dead      FranKenstein -- tote Anschluesse (geschrieben/nie gelesen) scannen und in der GRID-DB fortschreiben
+  clay-local-bridge-watchdog.timer                                                                                              loaded    active   waiting   Run Clay local bridge self-heal check every minute
+  frankenstein-agentenwache.timer                                                                                               loaded    active   waiting   Prueft alle 5 Minuten auf haengende/limitierte Agenten
+  frankenstein-blick-waechter.timer                                                                                             loaded    active   waiting   Prueft alle 60s, ob eine abgestuerzte Buehne die Kamera blockiert liegen liess
+  frankenstein-cortex-perception-cycle.timer                                                                                    loaded    active   waiting   FranKenstein Cortex Perception Cycle every 5 minutes (F2-WP1207, 2026-09-06)
+  frankenstein-taeglicher-check.timer                                                                                           loaded    active   waiting   Taeglich 1x, GRID-priorisierter Architect-Gesundheitscheck (Gabriel, 2026-09-12)
+  frankenstein-verwaiste.timer                                                                                                  loaded    active   waiting   Prueft stuendlich auf verwaiste 'laeuft'-Arbeitspakete
+  frankenstein-wege.timer                                                                                                       loaded    active   waiting   FranKenstein Wegehierarchie -- stuendlicher Takt
+  quota-uebergabe.timer                                                                                                         loaded    active   waiting   Prueft alle 5 Minuten, ob Claudes Kontingent erschoepft ist
+OPENAI_COMPAT_FILES
+/home/ai-core-node/.claude/star/claude_cli_shim.py
+/home/ai-core-node/.claude/star/stern.py.backup-pre-p15-canary-20260905
+/home/ai-core-node/.claude/star/stern.py.bak-20260906-cognition
+/home/ai-core-node/.claude/star/stern.py.bak-vor-werkzeugregister-20260911-211512
+/home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+/home/ai-core-node/.claude/star/backups/chatgpt-organ-pre-f045-20260912-1124/f2wp1207_chatgpt_organ.py
+/home/ai-core-node/.claude/star/backups/chatgpt-organ-pre-f045-20260912-1124/frank_chatgpt_terminal.py
+/home/ai-core-node/.claude/star/stern.py.backup-pre-p8-refpinning-20260904
+/home/ai-core-node/.claude/star/harness_crush.py
+/home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+/home/ai-core-node/.claude/star/vision_api_provider.local
+/home/ai-core-node/.claude/star/f2wp1207_chatgpt_exact_backend.py
+/home/ai-core-node/.claude/star/harness-werkraum/_aider-buchfuehrung/paket-1789198950421-bdd775/input-history
+/home/ai-core-node/.claude/star/harness-werkraum/_aider-buchfuehrung/paket-1789198950421-bdd775/chat-history.md
+/home/ai-core-node/.claude/star/harness-werkraum/_aider-buchfuehrung/paket-1789198950421-bdd775/llm-history
+/home/ai-core-node/.claude/star/f2wp1207_chatgpt_harness_adapter.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/pydantic-2.12.5.dist-info/RECORD
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai/types/batch_create_params.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai/lib/azure.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai/resources/batches.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai/resources/chat/completions/completions.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai/resources/chat/completions/messages.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/pip/_vendor/rich/_cell_widths.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/playwright-1.58.0.dist-info/RECORD
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-log1p.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-arccos.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-arccosh.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-cbrt.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-exp2.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/core/tests/data/umath-validation-set-sin.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/numpy/random/tests/data/pcg64-testset-2.csv
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/psutil-7.2.2.dist-info/METADATA
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/aider_chat-0.86.2.dist-info/RECORD
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/playwright/driver/package/lib/mcpBundleImpl/index.js
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/signal/tests/test_filter_design.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/stats/tests/test_mstats_basic.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/stats/tests/test_resampling.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/stats/tests/test_distributions.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/stats/tests/test_fit.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/tests/test_lambertw.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/tests/test_hyp2f1.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/tests/test_basic.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/_orthogonal.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/xsf/wright_bessel.h
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/xsf/cephes/k0.h
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/xsf/cephes/igami.h
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/xsf/cephes/sici.h
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/special/xsf/cephes/igam_asymp_coeff.h
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-jensenshannon-ml-iris.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-cosine-ml-iris.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-seuclidean-ml-iris.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-minkowski-3.2-ml-iris.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-minkowski-3.2-ml.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-correlation-ml-iris.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/random-double-data.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/data/pdist-double-inp.txt
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/spatial/tests/test_spherical_voronoi.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/integrate/_lebedev.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/scipy/io/arff/tests/data/test10.arff
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode11-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode16-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode15-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode17-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode12-1-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode12-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode14-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode15-1-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode13-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode10-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/rich/_unicode_data/unicode9-0-0.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/openai-2.20.0.dist-info/RECORD
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/hf_inference.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/_common.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/clarifai.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/fireworks_ai.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/zai_org.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/groq.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/novita.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/together.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_providers/cohere.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_client.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/huggingface_hub/inference/_generated/_async_client.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm-1.81.10.dist-info/METADATA
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/types/llms/openai.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/types/utils.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/watsonx/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/docker_model_runner/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/openai/chat/guardrail_translation/README.md
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/openai/chat/guardrail_translation/handler.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/openai/chat/gpt_transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/amazon_nova/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/bedrock/batches/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/datarobot/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/meta_llama/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/dashscope/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/ragflow/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/ragflow/__init__.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/hosted_vllm/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/gradient_ai/chat/transformation.py
+/home/ai-core-node/.claude/star/harness-venv/lib/python3.12/site-packages/litellm/llms/huggingface/huggingface_llms_metadata/hf_text_generation_models.txt
+LISTEN
+LISTEN 0      4096                  100.70.87.28:49084      0.0.0.0:*                                             
+LISTEN 0      32                       127.0.0.1:5998       0.0.0.0:*    users:(("x11vnc",pid=2477,fd=8))         
+LISTEN 0      2048                     127.0.0.1:8000       0.0.0.0:*    users:(("python3",pid=2285072,fd=13))    
+LISTEN 0      512                      127.0.0.1:8105       0.0.0.0:*    users:(("llama-server",pid=4078424,fd=6))
+LISTEN 0      5                        127.0.0.1:8100       0.0.0.0:*    users:(("python3",pid=4078427,fd=6))     
+LISTEN 0      100                      127.0.0.1:8114       0.0.0.0:*    users:(("python3",pid=2478,fd=3))        
+LISTEN 0      2048                     127.0.0.1:8091       0.0.0.0:*    users:(("python3",pid=4078425,fd=7))     
+LISTEN 0      5                        127.0.0.1:8088       0.0.0.0:*    users:(("python3",pid=4078426,fd=10))    
+LISTEN 0      5                        127.0.0.1:8317       0.0.0.0:*    users:(("python3",pid=3499,fd=3))        
+LISTEN 0      5                        127.0.0.1:8420       0.0.0.0:*    users:(("python3",pid=2433982,fd=3))     
+LISTEN 0      5                        127.0.0.1:8765       0.0.0.0:*    users:(("python3",pid=1075883,fd=3))     
+LISTEN 0      5                        127.0.0.1:8781       0.0.0.0:*    users:(("python3",pid=2237670,fd=4))     
+LISTEN 0      5                        127.0.0.1:8784       0.0.0.0:*    users:(("python3",pid=968051,fd=3))      
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=1632280,fd=3))     
+LISTEN 0      512                      127.0.0.1:8990       0.0.0.0:*    users:(("llama-server",pid=3773296,fd=6))
+LISTEN 0      4096                     127.0.0.1:9050       0.0.0.0:*                                             
+LISTEN 0      32                           [::1]:5998          [::]:*    users:(("x11vnc",pid=2477,fd=9))         
+LISTEN 0      4096                             *:8782             *:*                                             
+LISTEN 0      4096   [fd7a:115c:a1e0::5e01:5791]:443           [::]:*                                             
+LISTEN 0      4096   [fd7a:115c:a1e0::5e01:5791]:56164         [::]:*                                             

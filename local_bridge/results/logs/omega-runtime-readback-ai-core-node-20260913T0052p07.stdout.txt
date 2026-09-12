@@ -1,0 +1,24 @@
+===IDENTITY===
+host=ai-core-node-projekt-frankenstein
+user=ai-core-node
+2026-09-13T00:50:37+07:00
+===VOICE_SERVICE===
+MainPID=2407635
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node LOCAL_BRIDGE_OWNER=gabriel FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:29:24 +07
+===CLIENT_SERVICE===
+MainPID=2407631
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=PYTHONUNBUFFERED=1
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:29:24 +07
+VOICE_FINAL=
+===PROCESS===
+cmdline=python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py 
+proc_start=Sun Sep 13 00:29:24 2026
+cwd=/home/ai-core-node
+

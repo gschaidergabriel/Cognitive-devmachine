@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-cutover-read-patched-test-20260913a",
+  "command_sha256": "91ccea845803aab69da04ac32e5825790fd9040b5b5987f2483bb7c4b81ec6c5",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:43:40.450724+00:00",
+  "finished_at": "2026-09-12T17:43:40.450755+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "99d4d1ba9ba89a8b060cbe4822bac4688ff5ee0b53e7831e8e1c2a8991e7527d",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env python3\nimport importlib.util\nimport sqlite3\nimport sys\nimport tempfile\nfrom pathlib import Path\n\nHERE = Path(__file__).resolve().parent\nspec = importlib.util.spec_from_file_location(\"cutover\", HERE / \"semantic-state-cutover.py\")\nm = importlib.util.module_from_spec(spec)\nsys.modules[spec.name] = m\nspec.loader.exec_module(m)\n\n\ndef mkdb(path: Path, table: str, rows):\n    path.parent.mkdir(parents=True, exist_ok=True)\n    c = sqlite3.connect(path)\n    c.execute(f'create table \"{table}\" (id integer primary key, value text, blob blob)')\n    c.executemany(\n        f'insert into \"{table}\"(value,blob) values (?,?)',\n        [(v, bytes([i, 0, 255])) for i, v in enumerate(rows)],\n    )\n    c.commit()\n    c.close()\n\n\nwith tempfile.TemporaryDirectory() as td:\n    root = Path(td)\n    rootfs = root / \"rootfs-run\"\n    data = root / \"data\"\n    config = root / \"entityos.conf\"\n    config.write_text(\n        f'ENTITYOS_ROOTFS_RUN=\"{rootfs}\"\\n'\n        f'ENTITYOS_DATA_DIR=\"{data}\"\\n'\n        'ENTITYOS_IDENTITY_BINDS=\"--bind=/x:/x\"\\n'\n    )\n    layout = m.layout_from_config(config, \"fake.service\")\n    for idx, (src, _dst) in enumerate(layout.sources()):\n        mkdb(src, f\"t{idx}\", [f\"v{idx}-a\", f\"v{idx}-b\"])\n\n    assert len(layout.sources()) == 5\n    assert any(src.name == \"welt.db\" for src, _dst in layout.sources())\n    assert m.unmapped_semantic_dbs(layout) == []\n\n    # A future semantic SQLite store must never disappear merely because the\n    # hard-coded mapping forgot its filename. Discovery is the independent fence.\n    unexpected = rootfs / \"root/.local/share/agentzero/future_semantic.db\"\n    mkdb(unexpected, \"future\", [\"must-block\"])\n    try:\n        m.stage(layout, execute=False, require_systemd=False)\n    except m.CutoverError as exc:\n        assert \"unmapped semantic SQLite\" in str(exc)\n        assert \"future_semantic.db\" in str(exc)\n        assert \"rows=1\" in str(exc)\n    else:\n        raise AssertionError(\"unmapped populated semantic DB was not rejected\")\n    unexpected.unlink()\n\n    ok, reason = m.condition(layout)\n    assert not ok and \"volatile_semantic_state\" in reason\n\n    dry = m.stage(layout, execute=False, require_systemd=False)\n    assert dry[\"execute\"] is False\n    assert not layout.manifest.exists()\n\n    staged = m.stage(layout, execute=True, require_systemd=False)\n    assert staged[\"staged\"] is True\n    assert layout.manifest.exists()\n    tokens = m.current_bind_tokens(config)\n    for b in layout.binds:\n        assert b in tokens\n    ok, reason = m.condition(layout)\n    assert ok and reason == \"durable_cutover_verified\"\n\n    # Before the first cutover start, durable drift must fail closed because the\n    # volatile source still represents the staged handoff boundary.\n    _src, dest = layout.sources()[0]\n    c = sqlite3.connect(dest)\n    c.execute('insert into t0(value,blob) values (?,?)', (\"drift\", b\"x\"))\n    c.commit()\n    c.close()\n    try:\n        m.condition(layout)\n    except m.CutoverError as exc:\n        assert \"fingerprint drift\" in str(exc)\n    else:\n        raise AssertionError(\"durable drift was not rejected\")\n\n    # After the disposable clone has been rebuilt, volatile sources are gone.\n    # Durable state may then legitimately evolve; integrity + exact binds are\n    # the continuing invariant rather than the initial migration fingerprint.\n    for src, _dest in layout.sources():\n        src.unlink()\n    ok, reason = m.condition(layout)\n    assert ok and reason == \"durable_cutover_verified\"\n\nprint(\"semantic-state-cutover selftest: PASS\")\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "99d4d1ba9ba89a8b060cbe4822bac4688ff5ee0b53e7831e8e1c2a8991e7527d",
+    "bytes": 3533,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

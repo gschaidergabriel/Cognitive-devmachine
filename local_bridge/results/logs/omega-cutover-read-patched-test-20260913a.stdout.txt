@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+import importlib.util
+import sqlite3
+import sys
+import tempfile
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+spec = importlib.util.spec_from_file_location("cutover", HERE / "semantic-state-cutover.py")
+m = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = m
+spec.loader.exec_module(m)
+
+
+def mkdb(path: Path, table: str, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(path)
+    c.execute(f'create table "{table}" (id integer primary key, value text, blob blob)')
+    c.executemany(
+        f'insert into "{table}"(value,blob) values (?,?)',
+        [(v, bytes([i, 0, 255])) for i, v in enumerate(rows)],
+    )
+    c.commit()
+    c.close()
+
+
+with tempfile.TemporaryDirectory() as td:
+    root = Path(td)
+    rootfs = root / "rootfs-run"
+    data = root / "data"
+    config = root / "entityos.conf"
+    config.write_text(
+        f'ENTITYOS_ROOTFS_RUN="{rootfs}"\n'
+        f'ENTITYOS_DATA_DIR="{data}"\n'
+        'ENTITYOS_IDENTITY_BINDS="--bind=/x:/x"\n'
+    )
+    layout = m.layout_from_config(config, "fake.service")
+    for idx, (src, _dst) in enumerate(layout.sources()):
+        mkdb(src, f"t{idx}", [f"v{idx}-a", f"v{idx}-b"])
+
+    assert len(layout.sources()) == 5
+    assert any(src.name == "welt.db" for src, _dst in layout.sources())
+    assert m.unmapped_semantic_dbs(layout) == []
+
+    # A future semantic SQLite store must never disappear merely because the
+    # hard-coded mapping forgot its filename. Discovery is the independent fence.
+    unexpected = rootfs / "root/.local/share/agentzero/future_semantic.db"
+    mkdb(unexpected, "future", ["must-block"])
+    try:
+        m.stage(layout, execute=False, require_systemd=False)
+    except m.CutoverError as exc:
+        assert "unmapped semantic SQLite" in str(exc)
+        assert "future_semantic.db" in str(exc)
+        assert "rows=1" in str(exc)
+    else:
+        raise AssertionError("unmapped populated semantic DB was not rejected")
+    unexpected.unlink()
+
+    ok, reason = m.condition(layout)
+    assert not ok and "volatile_semantic_state" in reason
+
+    dry = m.stage(layout, execute=False, require_systemd=False)
+    assert dry["execute"] is False
+    assert not layout.manifest.exists()
+
+    staged = m.stage(layout, execute=True, require_systemd=False)
+    assert staged["staged"] is True
+    assert layout.manifest.exists()
+    tokens = m.current_bind_tokens(config)
+    for b in layout.binds:
+        assert b in tokens
+    ok, reason = m.condition(layout)
+    assert ok and reason == "durable_cutover_verified"
+
+    # Before the first cutover start, durable drift must fail closed because the
+    # volatile source still represents the staged handoff boundary.
+    _src, dest = layout.sources()[0]
+    c = sqlite3.connect(dest)
+    c.execute('insert into t0(value,blob) values (?,?)', ("drift", b"x"))
+    c.commit()
+    c.close()
+    try:
+        m.condition(layout)
+    except m.CutoverError as exc:
+        assert "fingerprint drift" in str(exc)
+    else:
+        raise AssertionError("durable drift was not rejected")
+
+    # After the disposable clone has been rebuilt, volatile sources are gone.
+    # Durable state may then legitimately evolve; integrity + exact binds are
+    # the continuing invariant rather than the initial migration fingerprint.
+    for src, _dest in layout.sources():
+        src.unlink()
+    ok, reason = m.condition(layout)
+    assert ok and reason == "durable_cutover_verified"
+
+print("semantic-state-cutover selftest: PASS")

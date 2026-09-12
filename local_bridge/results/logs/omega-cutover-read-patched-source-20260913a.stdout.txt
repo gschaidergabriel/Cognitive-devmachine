@@ -1,0 +1,529 @@
+#!/usr/bin/env python3
+"""Fail-closed migration/cutover helper for EntityOS semantic SQLite state.
+
+The live problem this closes is precise: EntityOS keeps its runtime rootfs in a
+reproducible disposable clone while several semantic SQLite stores historically
+fell back to /root/.local/share inside that clone. A normal VM stop/start can
+therefore erase semantic state.
+
+This tool creates one durable semantic-state authority below ENTITYOS_DATA_DIR,
+verifies logical equality, records a manifest, and prepares the exact bind
+arguments required to mount those durable trees back at the legacy paths. It
+never restarts EntityOS and never deletes the volatile source.
+
+Safety model:
+- `inspect` is read-only.
+- `stage` is dry-run unless --execute is supplied.
+- execution requires the VM inactive AND the temporary stop/start holding guard
+  effective, so the source cannot disappear while being staged.
+- SQLite backup() is used even while quiescent so WAL content is represented in
+  the durable copy; logical fingerprints cover schema and every row value.
+- after a cutover manifest exists, `condition` always verifies durable DBs and
+  exact bind tokens, even if the old volatile files have already disappeared.
+- no command here starts, stops, restarts or deletes anything.
+"""
+from __future__ import annotations
+
+import argparse
+import dataclasses
+import hashlib
+import json
+import os
+import shlex
+import sqlite3
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+from typing import Any, Iterable
+
+SCHEMA = "ENTITYOS_SEMANTIC_CUTOVER/v1"
+DEFAULT_CONFIG = Path("/etc/entityos/entityos.conf")
+DEFAULT_SERVICE = "entityos-vm.service"
+HOLDING_GUARD = Path("/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh")
+HOLDING_DROPIN = Path("/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf")
+CUTOVER_TOOL = Path("/usr/local/libexec/entityos/semantic-state-cutover.py")
+CUTOVER_DROPIN = Path("/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf")
+
+DB_LAYOUT = (
+    ("agentzero/consciousness.db", "root/.local/share/agentzero/consciousness.db"),
+    ("agentzero/unified.db", "root/.local/share/agentzero/unified.db"),
+    ("agentzero/welt.db", "root/.local/share/agentzero/welt.db"),
+    ("frank/db/amygdala.db", "root/.local/share/frank/db/amygdala.db"),
+    ("frank/db/world_experience.db", "root/.local/share/frank/db/world_experience.db"),
+)
+
+PROTECTED_ROOTS = (
+    "root/.local/share/agentzero",
+    "root/.local/share/frank",
+)
+
+
+class CutoverError(RuntimeError):
+    pass
+
+
+@dataclasses.dataclass(frozen=True)
+class Layout:
+    config: Path
+    service: str
+    rootfs_run: Path
+    data_dir: Path
+    durable_root: Path
+    manifest: Path
+
+    @property
+    def binds(self) -> tuple[str, str]:
+        return (
+            f"--bind={self.durable_root / 'agentzero'}:/root/.local/share/agentzero",
+            f"--bind={self.durable_root / 'frank'}:/root/.local/share/frank",
+        )
+
+    def sources(self) -> list[tuple[Path, Path]]:
+        return [
+            (self.rootfs_run / src_rel, self.durable_root / dst_rel)
+            for dst_rel, src_rel in DB_LAYOUT
+        ]
+
+
+def fail(msg: str) -> None:
+    raise CutoverError(msg)
+
+
+def parse_config(path: Path) -> dict[str, str]:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        fail(f"cannot read config {path}: {exc}")
+    out: dict[str, str] = {}
+    for raw in text.splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        try:
+            parts = shlex.split(value, posix=True)
+        except ValueError as exc:
+            fail(f"invalid shell-style value for {key}: {exc}")
+        out[key] = " ".join(parts) if len(parts) > 1 else (parts[0] if parts else "")
+    return out
+
+
+def layout_from_config(path: Path, service: str = DEFAULT_SERVICE) -> Layout:
+    cfg = parse_config(path)
+    root = cfg.get("ENTITYOS_ROOTFS_RUN", "").strip()
+    data = cfg.get("ENTITYOS_DATA_DIR", "").strip()
+    if not root or not data:
+        fail("ENTITYOS_ROOTFS_RUN and ENTITYOS_DATA_DIR are required")
+    durable = Path(data) / "semantic-state"
+    return Layout(path, service, Path(root), Path(data), durable, durable / "CUTOVER.json")
+
+
+def sqlite_uri(path: Path) -> str:
+    return f"file:{path}?mode=ro"
+
+
+def db_integrity(path: Path) -> str:
+    if not path.is_file():
+        fail(f"missing SQLite DB: {path}")
+    try:
+        conn = sqlite3.connect(sqlite_uri(path), uri=True)
+        row = conn.execute("PRAGMA integrity_check").fetchone()
+        conn.close()
+    except sqlite3.Error as exc:
+        fail(f"SQLite read failed for {path}: {exc}")
+    result = str(row[0] if row else "")
+    if result.lower() != "ok":
+        fail(f"integrity_check failed for {path}: {result}")
+    return result
+
+
+def _enc(value: Any) -> bytes:
+    if value is None:
+        obj = ["null"]
+    elif isinstance(value, bytes):
+        obj = ["blob", value.hex()]
+    elif isinstance(value, float):
+        obj = ["float", value.hex()]
+    elif isinstance(value, int):
+        obj = ["int", str(value)]
+    else:
+        obj = ["text", str(value)]
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+
+
+def logical_fingerprint(path: Path) -> dict[str, Any]:
+    db_integrity(path)
+    conn = sqlite3.connect(sqlite_uri(path), uri=True)
+    try:
+        schema_rows = conn.execute(
+            "SELECT type,name,tbl_name,COALESCE(sql,'') FROM sqlite_master "
+            "WHERE name NOT LIKE 'sqlite_%' ORDER BY type,name,tbl_name,sql"
+        ).fetchall()
+        h = hashlib.sha256()
+        for row in schema_rows:
+            h.update(b"S\0")
+            for v in row:
+                h.update(_enc(v))
+                h.update(b"\0")
+        tables = [r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name"
+        ).fetchall()]
+        row_counts: dict[str, int] = {}
+        for table in tables:
+            q = 'SELECT * FROM "' + str(table).replace('"', '""') + '"'
+            rows = conn.execute(q).fetchall()
+            encoded: list[bytes] = []
+            for row in rows:
+                part = bytearray()
+                for v in row:
+                    ev = _enc(v)
+                    part.extend(len(ev).to_bytes(8, "big"))
+                    part.extend(ev)
+                encoded.append(bytes(part))
+            encoded.sort()
+            row_counts[str(table)] = len(encoded)
+            h.update(b"T\0" + str(table).encode("utf-8") + b"\0")
+            for part in encoded:
+                h.update(hashlib.sha256(part).digest())
+        return {"sha256": h.hexdigest(), "tables": tables, "row_counts": row_counts}
+    finally:
+        conn.close()
+
+
+def file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def backup_sqlite(source: Path, dest: Path) -> dict[str, Any]:
+    source_fp = logical_fingerprint(source)
+    dest.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{dest.name}.", suffix=".tmp", dir=str(dest.parent))
+    os.close(fd)
+    tmp = Path(tmp_name)
+    try:
+        src = sqlite3.connect(sqlite_uri(source), uri=True)
+        dst = sqlite3.connect(tmp)
+        try:
+            src.backup(dst)
+            dst.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+            dst.commit()
+        finally:
+            dst.close()
+            src.close()
+        dest_fp = logical_fingerprint(tmp)
+        if source_fp != dest_fp:
+            fail(f"logical fingerprint mismatch after backup: {source} -> {dest}")
+        os.chmod(tmp, 0o600)
+        with tmp.open("rb") as fh:
+            os.fsync(fh.fileno())
+        os.replace(tmp, dest)
+        dfd = os.open(dest.parent, os.O_RDONLY)
+        try:
+            os.fsync(dfd)
+        finally:
+            os.close(dfd)
+        return {
+            "source": str(source),
+            "destination": str(dest),
+            "source_file_sha256": file_sha256(source),
+            "destination_file_sha256": file_sha256(dest),
+            "logical": source_fp,
+        }
+    finally:
+        try:
+            tmp.unlink()
+        except FileNotFoundError:
+            pass
+
+
+def systemctl(*args: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(["systemctl", *args], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def require_holding_guard(layout: Layout) -> None:
+    state = systemctl("is-active", layout.service)
+    if state.stdout.strip() not in {"inactive", "failed"}:
+        fail(f"{layout.service} must be inactive before staging; got {state.stdout.strip() or state.returncode}")
+    if not HOLDING_GUARD.is_file() or not HOLDING_DROPIN.is_file():
+        fail("temporary volatile-state holding guard is not installed")
+    show = systemctl("show", layout.service, "-p", "ExecCondition", "-p", "ExecStopPost", "-p", "DropInPaths")
+    text = show.stdout
+    if str(HOLDING_DROPIN) not in text or str(HOLDING_GUARD) not in text:
+        fail("effective systemd unit does not contain the holding ExecCondition")
+    for line in text.splitlines():
+        if line.startswith("ExecStopPost=") and line != "ExecStopPost=":
+            fail("effective ExecStopPost is still destructive; refusing migration")
+
+
+def current_bind_tokens(config: Path) -> list[str]:
+    value = parse_config(config).get("ENTITYOS_IDENTITY_BINDS", "")
+    try:
+        return shlex.split(value)
+    except ValueError as exc:
+        fail(f"cannot parse ENTITYOS_IDENTITY_BINDS: {exc}")
+
+
+def write_config_binds(layout: Layout) -> None:
+    text = layout.config.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    found = False
+    existing = current_bind_tokens(layout.config)
+    merged = list(existing)
+    for token in layout.binds:
+        if token not in merged:
+            merged.append(token)
+    value = " ".join(merged).replace("\\", "\\\\").replace('"', '\\"')
+    replacement = f'ENTITYOS_IDENTITY_BINDS="{value}"'
+    out: list[str] = []
+    for raw in lines:
+        if raw.strip().startswith("ENTITYOS_IDENTITY_BINDS="):
+            if found:
+                fail("multiple ENTITYOS_IDENTITY_BINDS assignments in config")
+            out.append(replacement)
+            found = True
+        else:
+            out.append(raw)
+    if not found:
+        out.append(replacement)
+    tmp = layout.config.with_name(layout.config.name + ".omega-cutover.tmp")
+    tmp.write_text("\n".join(out) + "\n", encoding="utf-8")
+    os.chmod(tmp, layout.config.stat().st_mode & 0o777)
+    with tmp.open("rb") as fh:
+        os.fsync(fh.fileno())
+    os.replace(tmp, layout.config)
+
+
+def verify_required_binds(layout: Layout) -> None:
+    tokens = current_bind_tokens(layout.config)
+    missing = [x for x in layout.binds if x not in tokens]
+    if missing:
+        fail("missing exact semantic bind token(s): " + ", ".join(missing))
+
+
+def load_manifest(layout: Layout) -> dict[str, Any] | None:
+    if not layout.manifest.is_file():
+        return None
+    try:
+        obj = json.loads(layout.manifest.read_text(encoding="utf-8"))
+    except Exception as exc:
+        fail(f"invalid cutover manifest: {exc}")
+    if not isinstance(obj, dict) or obj.get("schema") != SCHEMA:
+        fail("cutover manifest schema mismatch")
+    return obj
+
+
+def write_manifest(layout: Layout, records: list[dict[str, Any]]) -> None:
+    obj = {
+        "schema": SCHEMA,
+        "created_unix": time.time(),
+        "config": str(layout.config),
+        "rootfs_run": str(layout.rootfs_run),
+        "data_dir": str(layout.data_dir),
+        "durable_root": str(layout.durable_root),
+        "required_binds": list(layout.binds),
+        "databases": records,
+    }
+    layout.durable_root.mkdir(parents=True, exist_ok=True, mode=0o700)
+    tmp = layout.manifest.with_suffix(".tmp")
+    tmp.write_text(json.dumps(obj, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    os.chmod(tmp, 0o600)
+    with tmp.open("rb") as fh:
+        os.fsync(fh.fileno())
+    os.replace(tmp, layout.manifest)
+
+
+def discover_semantic_dbs(layout: Layout) -> list[Path]:
+    """Discover every SQLite-named store inside the protected volatile trees.
+
+    Directory/file symlinks fail closed: cutover evidence must describe the real
+    disposable tree, never an escape or alias outside it.
+    """
+    found: list[Path] = []
+    for rel in PROTECTED_ROOTS:
+        root = layout.rootfs_run / rel
+        if not root.exists():
+            continue
+        if root.is_symlink() or not root.is_dir():
+            fail(f"protected semantic root is not a real directory: {root}")
+        for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
+            here = Path(dirpath)
+            for dirname in dirnames:
+                child = here / dirname
+                if child.is_symlink():
+                    fail(f"symlink inside protected semantic tree: {child}")
+            for filename in filenames:
+                if not filename.endswith(".db"):
+                    continue
+                candidate = here / filename
+                if candidate.is_symlink() or not candidate.is_file():
+                    fail(f"semantic DB path is not a regular file: {candidate}")
+                # Opening/fingerprinting here makes a malformed/unreadable .db
+                # a hard blocker instead of silently omitting it.
+                logical_fingerprint(candidate)
+                found.append(candidate)
+    return sorted(set(found), key=lambda p: str(p))
+
+
+def unmapped_semantic_dbs(layout: Layout) -> list[Path]:
+    mapped = {source for source, _dest in layout.sources()}
+    return [p for p in discover_semantic_dbs(layout) if p not in mapped]
+
+
+def require_complete_mapping(layout: Layout) -> None:
+    unknown = unmapped_semantic_dbs(layout)
+    if unknown:
+        detail = []
+        for path in unknown:
+            fp = logical_fingerprint(path)
+            rows = sum(int(n) for n in fp["row_counts"].values())
+            detail.append(f"{path} (rows={rows})")
+        fail("unmapped semantic SQLite DB(s) in protected volatile tree: " + ", ".join(detail))
+
+
+def populated_source_dbs(layout: Layout) -> list[Path]:
+    found: list[Path] = []
+    for source, _ in layout.sources():
+        if not source.is_file():
+            continue
+        fp = logical_fingerprint(source)
+        if any(int(n) > 0 for n in fp["row_counts"].values()):
+            found.append(source)
+    return found
+
+
+def verify_manifest(layout: Layout, *, require_source_match: bool) -> dict[str, Any]:
+    manifest = load_manifest(layout)
+    if manifest is None:
+        fail("cutover manifest missing")
+    if manifest.get("required_binds") != list(layout.binds):
+        fail("manifest bind map differs from current layout")
+    verify_required_binds(layout)
+    recs = manifest.get("databases")
+    if not isinstance(recs, list) or len(recs) != len(DB_LAYOUT):
+        fail("manifest does not contain the complete DB set")
+    by_dest = {str(r.get("destination")): r for r in recs if isinstance(r, dict)}
+    pairs = layout.sources()
+    presence = [source.is_file() for source, _ in pairs]
+    if any(presence) and not all(presence):
+        fail("partial volatile source set: refusing ambiguous cutover state")
+    initial_source_present = bool(presence and all(presence))
+    for source, dest in pairs:
+        rec = by_dest.get(str(dest))
+        if rec is None:
+            fail(f"manifest missing destination {dest}")
+        if not dest.is_file():
+            fail(f"durable destination missing: {dest}")
+        current_dest = logical_fingerprint(dest)
+        if require_source_match and initial_source_present:
+            if current_dest != rec.get("logical"):
+                fail(f"durable logical fingerprint drift before first cutover: {dest}")
+            current_src = logical_fingerprint(source)
+            if current_src != rec.get("logical"):
+                fail(f"volatile source changed after staging: {source}")
+    return manifest
+
+
+def stage(layout: Layout, *, execute: bool, require_systemd: bool = True) -> dict[str, Any]:
+    if require_systemd:
+        require_holding_guard(layout)
+    require_complete_mapping(layout)
+    facts = {
+        "schema": SCHEMA,
+        "execute": execute,
+        "rootfs_run": str(layout.rootfs_run),
+        "durable_root": str(layout.durable_root),
+        "required_binds": list(layout.binds),
+        "sources": [str(s) for s, _ in layout.sources()],
+        "destinations": [str(d) for _, d in layout.sources()],
+    }
+    for source, _ in layout.sources():
+        logical_fingerprint(source)
+    if not execute:
+        return facts
+    records: list[dict[str, Any]] = []
+    for source, dest in layout.sources():
+        records.append(backup_sqlite(source, dest))
+    write_config_binds(layout)
+    verify_required_binds(layout)
+    write_manifest(layout, records)
+    verify_manifest(layout, require_source_match=True)
+    facts["staged"] = True
+    facts["manifest"] = str(layout.manifest)
+    return facts
+
+
+def condition(layout: Layout) -> tuple[bool, str]:
+    require_complete_mapping(layout)
+    manifest = load_manifest(layout)
+    if manifest is not None:
+        verify_manifest(layout, require_source_match=True)
+        return True, "durable_cutover_verified"
+    filled = populated_source_dbs(layout)
+    if filled:
+        return False, "volatile_semantic_state_without_verified_cutover: " + ", ".join(map(str, filled))
+    return True, "no_populated_volatile_semantic_state"
+
+
+def install_source_paths(repo_root: Path) -> dict[str, str]:
+    return {
+        "tool_source": str((repo_root / "werkzeug/semantic-state-cutover.py").resolve()),
+        "tool_target": str(CUTOVER_TOOL),
+        "dropin_source": str((repo_root / "werkzeug/entityos-vm-semantic-cutover.conf").resolve()),
+        "dropin_target": str(CUTOVER_DROPIN),
+    }
+
+
+def main(argv: Iterable[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    ap.add_argument("--service", default=DEFAULT_SERVICE)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("inspect")
+    p_stage = sub.add_parser("stage")
+    p_stage.add_argument("--execute", action="store_true")
+    sub.add_parser("verify")
+    sub.add_parser("condition")
+    ns = ap.parse_args(list(argv) if argv is not None else None)
+    try:
+        layout = layout_from_config(ns.config, ns.service)
+        if ns.cmd == "inspect":
+            obj = {
+                "schema": SCHEMA,
+                "layout": dataclasses.asdict(layout),
+                "required_binds": list(layout.binds),
+                "current_binds": current_bind_tokens(layout.config),
+                "manifest_present": layout.manifest.is_file(),
+                "discovered_semantic_dbs": [str(p) for p in discover_semantic_dbs(layout)],
+                "unmapped_semantic_dbs": [str(p) for p in unmapped_semantic_dbs(layout)],
+                "populated_sources": [str(p) for p in populated_source_dbs(layout)],
+            }
+            print(json.dumps(obj, default=str, indent=2, sort_keys=True))
+            return 0
+        if ns.cmd == "stage":
+            print(json.dumps(stage(layout, execute=ns.execute), indent=2, sort_keys=True))
+            return 0
+        if ns.cmd == "verify":
+            verify_manifest(layout, require_source_match=True)
+            print(json.dumps({"schema": SCHEMA, "ok": True, "reason": "manifest_and_binds_verified"}))
+            return 0
+        if ns.cmd == "condition":
+            ok, reason = condition(layout)
+            print(("START FREI -- " if ok else "START BLOCKIERT -- ") + reason,
+                  file=(sys.stdout if ok else sys.stderr))
+            return 0 if ok else 255
+    except CutoverError as exc:
+        print(f"START BLOCKIERT -- {exc}", file=sys.stderr)
+        return 255
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,122 @@
+===IDENTITY===
+host=ai-core-node-projekt-frankenstein
+user=ai-core-node
+machine_env=
+owner_env=
+===FRANKENSTEIN_REPO===
+REPO=/home/ai-core-node/frankenstein-repo
+dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+ M scripts/__pycache__/stern.cpython-312.pyc
+?? scripts/openai_api_key.local
+===VOICE_PROCESSES===
+2407635     340 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+===USER_SERVICES===
+active
+active
+===AUDIO===
+default [8, 8]
+0 'HD-Audio Generic: HDMI 1 (hw:0,7)' in=0 out=8 sr=44100.0
+1 'HD-Audio Generic: HDMI 2 (hw:0,8)' in=0 out=8 sr=44100.0
+2 'HD-Audio Generic: HDMI 3 (hw:0,9)' in=0 out=8 sr=44100.0
+3 'RODE NT-USB: USB Audio (hw:1,0)' in=0 out=2 sr=44100.0
+4 'HD-Audio Generic: ALC269VC Analog (hw:2,0)' in=2 out=2 sr=44100.0
+5 'Rapoo Camera: USB Audio (hw:3,0)' in=2 out=0 sr=44100.0
+6 'pipewire' in=64 out=64 sr=44100.0
+7 'pulse' in=32 out=32 sr=44100.0
+8 'default' in=64 out=64 sr=44100.0
+===PIPEWIRE===
+PipeWire 'pipewire-0' [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, cookie:2440926237]
+ └─ Clients:
+        32. pipewire                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2491]
+        33. gnome-shell                         [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532239]
+        34. WirePlumber                         [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2490]
+        35. WirePlumber [export]                [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2490]
+        72. GNOME Volume Control Media Keys     [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532569]
+        77. Firefox                             [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2996020]
+        78. pipewire                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2491]
+        97. pw-cat                              [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2468431]
+       108. xdg-desktop-portal                  [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532466]
+       119. GNOME Shell Volume Control          [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1532239]
+       137. Terminal                            [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:1533484]
+       138. speech-dispatcher-dummy             [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:3767140]
+       150. wpctl                               [1.0.5, ai-core-node@ai-core-node-projekt-frankenstein, pid:2469640]
+
+Audio
+ ├─ Devices:
+ │      87. Rapoo Camera                        [alsa]
+ │     111. RODE NT-USB                         [alsa]
+ │     116. Rembrandt Radeon High Definition Audio Controller [alsa]
+ │     140. Family 17h/19h HD Audio Controller  [alsa]
+ │  
+ ├─ Sinks:
+ │      62. RODE NT-USB Analog Stereo           [vol: 0.77]
+ │  *  107. Echo-Cancel Sink                    [vol: 0.78]
+ │     123. Rembrandt Radeon High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.53]
+ │  
+ ├─ Sink endpoints:
+ │  
+ ├─ Sources:
+ │      44. Rapoo Camera Analog Stereo          [vol: 1.00]
+ │      46. Family 17h/19h HD Audio Controller Analog Stereo [vol: 1.00]
+ │     100. Echo-Cancel Source                  [vol: 0.97]
+ │  *  121. RODE NT-USB Analog Stereo           [vol: 0.52]
+ │  
+ ├─ Source endpoints:
+ │  
+ └─ Streams:
+        69. pw-record                                                   
+             55. monitor_FR     
+             89. input_FR        < RODE NT-USB:capture_FR	[active]
+            112. input_FL        < RODE NT-USB:capture_FL	[active]
+            124. monitor_FL     
+        74. Firefox                                                     
+             73. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+            113. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+        81. Firefox                                                     
+            133. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+            139. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+        82. echo-cancel-playback                                        
+            106. output_FR       > eM713A:playback_FR	[active]
+            115. output_FL       > eM713A:playback_FL	[active]
+        95. echo-cancel-capture                                         
+            101. input_FL        < RODE NT-USB:capture_FL	[active]
+            103. input_FR        < RODE NT-USB:capture_FR	[active]
+            104. monitor_FR     
+            105. monitor_FL     
+       114. Firefox                                                     
+             71. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+            151. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+       120. Firefox                                                     
+            134. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+            144. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+       125. speech-dispatcher-dummy                                     
+             70. output_FL       > Echo-Cancel Sink:playback_FL	[init]
+             75. output_FR       > Echo-Cancel Sink:playback_FR	[init]
+       149. Firefox                                                     
+             94. output_FL       > Echo-Cancel Sink:playback_FL	[active]
+            147. output_FR       > Echo-Cancel Sink:playback_FR	[active]
+       153. Firefox                                                     
+            143. output_FR       > Echo-Cancel Sink:playback_FR	[paused]
+            145. output_FL       > Echo-Cancel Sink:playback_FL	[paused]
+
+Video
+ ├─ Devices:
+ │      40. Rapoo Camera                        [v4l2]
+ │      41. Estelle Cam                         [v4l2]
+ │      43. Rapoo Camera                        [v4l2]
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sink endpoints:
+ │  
+ ├─ Sources:
+ │  *   39. Rapoo Camera (V4L2)                
+ │  
+ ├─ Source endpoints:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Node Names:
+         0. Audio/Sink    frank_out_ec
+         1. Audio/Source  alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo

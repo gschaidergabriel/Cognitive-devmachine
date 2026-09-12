@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-e2e-intent-exact-read-20260912T144800Z",
+  "command_sha256": "5027bc70d3eea5363b2ae2101749a07392c7b3d81878eedb7cf99abf82f121a4",
+  "started_at": "2026-09-12T13:39:29.094100+00:00",
+  "finished_at": "2026-09-12T13:39:29.261840+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1f1c82e2b60a0de69652affc323094c244573ac43ab4d80d0af8a0e992c81723",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\n  \"schema\": \"OMEGA_OUTBOX/v1\",\n  \"message_id\": \"msg_5c952f9abebf4e5db83e7a3b60f31827\",\n  \"created_at\": \"2026-09-12T13:27:24.800402+00:00\",\n  \"kind\": \"GRID_EFFECT_INTENT\",\n  \"payload\": {\n    \"schema\": \"OMEGA_GRID_EFFECT_INTENT/v1\",\n    \"effect_id\": \"effect_ee236aaa650c46b0a003607f71d3c7c5\",\n    \"frame_id\": \"frame_d8bca98ca83749429677f21c91494687\",\n    \"organ_id\": \"host:ai-core-node\",\n    \"task\": {\n      \"bridge_args\": {},\n      \"bridge_op\": \"status\",\n      \"heavy\": false,\n      \"max_organs\": 1,\n      \"preferred_data_domains\": [\n        \"avatar\"\n      ],\n      \"required_capabilities\": [\n        \"avatar\"\n      ],\n      \"task_id\": \"omega-e2e-status-ai-core-node-20260912T135200Z\"\n    },\n    \"route\": {\n      \"selected_organs\": [\n        \"host:ai-core-node\"\n      ],\n      \"ranking\": [\n        [\n          2.665059395524778,\n          \"host:ai-core-node\"\n        ]\n      ]\n    },\n    \"authority\": \"NOT_YET_GRANTED\",\n    \"request_sha256\": \"5bda8241cc4ea12d0d10e0540f4fd4c691009a495fb12ff28e806fe72bb00803\"\n  }\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

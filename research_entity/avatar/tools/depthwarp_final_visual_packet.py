@@ -135,7 +135,6 @@ def diagnostic_grid(base: np.ndarray, variants: list[tuple[str, np.ndarray]], ou
 
 def heatmap(base: np.ndarray, candidate: np.ndarray) -> np.ndarray:
     d = np.abs(candidate[:, :, :3].astype(np.int16) - base[:, :, :3].astype(np.int16)).max(2).astype(np.uint8)
-    # Deterministic grayscale diagnostic: 0=no change, white=large channel delta.
     scaled = np.clip(d.astype(np.uint16) * 4, 0, 255).astype(np.uint8)
     return np.dstack([scaled, scaled, scaled, np.full_like(scaled, 255)])
 
@@ -162,11 +161,12 @@ def main() -> int:
     sx = args.width / 1536.0
     sy = args.height / 1024.0
     eye_display = (float(eye_src[0] * sx), float(eye_src[1] * sy))
+    # Match depthwarp_display_space_gate.phase() exactly: 48x32 DISPLAY pixels.
     eye_rect = rect_clip([
-        eye_display[0] - 48 * sx,
-        eye_display[1] - 32 * sy,
-        eye_display[0] + 48 * sx,
-        eye_display[1] + 32 * sy,
+        eye_display[0] - 48.0,
+        eye_display[1] - 32.0,
+        eye_display[0] + 48.0,
+        eye_display[1] + 32.0,
     ], args.width, args.height)
 
     rois, roi_raw = load_optional_rois(Path(args.identity_rois).resolve() if args.identity_rois else None, args.width, args.height)
@@ -244,6 +244,7 @@ def main() -> int:
         "output_hashes": {p.name: sha256_file(p) for p in output_files},
         "eye_anchor_source_px": [float(eye_src[0]), float(eye_src[1])],
         "eye_anchor_display_px": list(eye_display),
+        "eye_phase_crop_half_extent_display_px": [48, 32],
         "amp_metrics": amp_records,
         "identity_roi_file_bound": bool(roi_raw is not None),
         "identity_roi_missing_required_regions": missing_identity,

@@ -1,0 +1,549 @@
+---
+0004: antworten, braucht ewig, und es sieht so scheisse aus das es schmerzt ...
+0005: ausserdem ist er weder am grid angeschlossen noch macht er eine reentry --
+0006: das ist einfach nur beschiss"). Kein Politur-Auftrag an aider, sondern
+0007: Werkzeugwechsel: Crush (github.com/charmbracelet/crush, npm-installiert unter
+0008: ~/.local/npm-global/bin/crush, echtes Go-Binary v0.93.1) ersetzt aider als
+0009: Free-Pool-Terminal-Harness.
+0010: 
+0011: Ursache des "hey"-Fehlschlags real gemessen (nicht geraten), siehe Beleg-
+0012: Transkript: nvidia/nemotron-3-super-120b-a12b liefert `content` UND
+0013: `reasoning_content` -- ohne `reasoning_effort` braucht das Modell oft >100
+0014: Token nur fuers Nachdenken ueber "hey", was bei knappem `max_tokens` (aiders
+0015: Default) dazu fuehrt, dass NUR der unfertige, rohe reasoning-Text als
+0016: `content` zurueckkommt (finish_reason=length, content==reasoning_content
+0017: woertlich identisch). Mit `reasoning_effort:"low"` sinkt das auf wenige
+0018: Saetze UND `content` wird sauber vom reasoning getrennt (curl-Beleg:
+0019: content="Hey there! How can I help you today?", reasoning_content="User
+0020: says hello. Should respond."). Gilt genauso fuer groq/openai/gpt-oss-120b.
+0021: mistral-small-latest und openrouter/deepseek/deepseek-chat sind NICHT
+0022: reasoning-faehig -- kein reasoning_effort noetig, brauchen aber trotzdem ihre
+0023: eigene (kuerzere) Prompt-Variante, weil sie ohne Reasoning-Bremse arbeiten.
+0024: 
+0025: Deterministische Prompt-Zuordnung (Gabriel woertlich: "das muss alles im
+0026: harness integriert sein, robust, unfehlbar, als mechanik", UND "jedes modell
+0027: muss ein extra angepasstes prompt haben"): MODELL_PROMPT_ZUORDNUNG ist ein
+---
+0081: 
+0082: # ── Provider-Katalog: modell_id (harness_aider.MODELL_MAP-Schluessel) -> ─────
+0083: #    echte, per curl verifizierte Endpunkt-/Modelldaten (KEINE geratenen
+0084: #    Modell-IDs -- jede hier eingetragene "real_model" ist echt gegen die
+0085: #    jeweilige API getestet, siehe Beleg-Transkript im Handoff/Reconcile).
+0086: CRUSH_PROVIDER_KATALOG = {
+0087:     "nvidia-nemotron": {
+0088:         "provider_id": "freepool-nvidia",
+0089:         "provider_name": "NVIDIA NIM (Free-Pool)",
+0090:         "base_url": "https://integrate.api.nvidia.com/v1",
+0091:         "real_model": "nvidia/nemotron-3-super-120b-a12b",
+0092:         "context_window": 131072,
+0093:         "default_max_tokens": 4000,
+0094:         "can_reason": True,
+0095:         "reasoning_levels": ["low", "medium", "high"],
+0096:         "default_reasoning_effort": "low",  # curl-Beleg: senkt Wall-of-Reasoning drastisch
+0097:     },
+0098:     "groq-gptoss": {
+0099:         "provider_id": "freepool-groq",
+0100:         "provider_name": "Groq (Free-Pool)",
+0101:         "base_url": "https://api.groq.com/openai/v1",
+0102:         "real_model": "openai/gpt-oss-120b",
+0103:         "context_window": 131072,
+0104:         "default_max_tokens": 4000,
+0105:         "can_reason": True,
+0106:         "reasoning_levels": ["low", "medium", "high"],
+0107:         "default_reasoning_effort": "low",
+0108:     },
+0109:     "mistral-small": {
+0110:         "provider_id": "freepool-mistral",
+0111:         "provider_name": "Mistral (Free-Pool)",
+0112:         "base_url": "https://api.mistral.ai/v1",
+0113:         "real_model": "mistral-small-latest",
+0114:         "context_window": 32000,
+0115:         "default_max_tokens": 4000,
+0116:         "can_reason": False,
+0117:     },
+0118:     "openrouter-deepseek": {
+0119:         "provider_id": "freepool-openrouter",
+0120:         "provider_name": "OpenRouter/DeepSeek (Free-Pool)",
+0121:         "base_url": "https://openrouter.ai/api/v1",
+0122:         "real_model": "deepseek/deepseek-chat",
+0123:         "context_window": 64000,
+0124:         "default_max_tokens": 4000,
+0125:         "can_reason": False,
+0126:     },
+0127: }
+0128: 
+0129: # ── Claude-CLI-Provider (Gabriel-Auftrag 2026-09-12: "du sollst die claude
+0130: #    code cli die originale da rein leiten so das man die auch verwenden
+0131: #    kann") -- NICHT Teil von CRUSH_PROVIDER_KATALOG/MODELL_MAP, weil dies
+0132: #    kein Free-Pool-Modell ist: kein env_var-API-Key, kein automatischer
+0133: #    Erschoepfungs-Fallback (naechstes_viables_modell()/ist_langzeit_erschoepft()
+0134: #    iterieren weiterhin nur _h.MODELL_MAP -- diese drei Modelle sind davon
+0135: #    unberuehrt, absichtlich, sie kosten echtes Geld und sollen NIE automatisch
+0136: #    "weggewechselt" werden ohne dass ein Mensch das Modell aktiv gewaehlt hat).
+0137: #    Backend: claude_cli_shim.py (systemd --user claude-cli-shim.service),
+0138: #    loopback-only, KEIN echter API-Key noetig -- "not-needed" ist ein Dummy,
+0139: #    Crush braucht das Feld nur syntaktisch.
+0140: #
+0141: #    Modell-IDs real gegen `claude --model <id> -p "test" --output-format json`
+0142: #    verifiziert (siehe Reconcile-Beleg dieses Pakets). Preise recherchiert
+0143: #    (WebSearch, Stand 2026-09-12, offizielle Quelle claude.com/pricing nicht
+0144: #    per Redirect erreichbar in dieser Sitzung -- mehrere Sekundaerquellen
+0145: #    konvergieren NICHT ganz exakt bei Sonnet 5: $2/$10 vs $3/$15 werden beide
+0146: #    genannt. Hier wird der HOEHERE, konservativere Wert eingetragen (lieber
+0147: #    Kosten ueberschaetzen als unterschaetzen) -- das ist eine bewusste
+0148: #    Naeherung, KEINE als sicher behauptete exakte Zahl. Bei Bedarf gegen
+0149: #    https://claude.com/pricing echt nachpruefen und hier korrigieren.
+0150: CRUSH_CLI_PROVIDER_ID = "claude-cli"
+0151: CRUSH_CLI_PROVIDER_NAME = "Claude (echte claude-CLI, kein Free-Pool)"
+0152: CRUSH_CLI_BASE_URL = "http://127.0.0.1:8420/v1"
+0153: CRUSH_CLI_API_KEY_DUMMY = "not-needed"  # Shim ist loopback-only, prueft keinen Key
+0154: CRUSH_CLI_MODELLE = [
+0155:     {
+0156:         "id": "claude-opus-5",
+0157:         "name": "Claude Opus 5 (staerkstes Modell, teuer -- schwere Architektur/Reasoning)",
+0158:         # Naeherung, konservativ (eher zu hoch als zu niedrig geschaetzt).
+0159:         "cost_per_1m_in": 5.0,
+0160:         "cost_per_1m_out": 25.0,
+0161:         "cost_per_1m_in_cached": 0.5,
+0162:         "cost_per_1m_out_cached": 0,
+0163:         "context_window": 200000,
+0164:         "default_max_tokens": 8000,
+0165:         "can_reason": False,
+0166:         "supports_attachments": False,
+---
+0194: 
+0195: 
+0196: def _crush_cli_provider_eintrag():
+0197:     """Baut den Claude-CLI-Provider-Block fuer crush.json -- eigene Funktion,
+0198:     damit crush_config_schreiben() ihn einfach dazumergen kann, ohne die
+0199:     MODELL_MAP-Schleife (Free-Pool) anzufassen."""
+0200:     # Alle drei Claude-CLI-Modelle sind BEZAHLT (siehe crush_modell_rechte.py) --
+0201:     # ein Vertreter reicht fuer den Provider-weiten Praefix.
+0202:     praefix = _mr.praefix_fuer("claude-sonnet-5")
+0203:     return {
+0204:         "id": CRUSH_CLI_PROVIDER_ID,
+0205:         "name": f"{praefix} {CRUSH_CLI_PROVIDER_NAME}",
+0206:         "type": "openai-compat",
+0207:         "base_url": CRUSH_CLI_BASE_URL,
+0208:         "api_key": CRUSH_CLI_API_KEY_DUMMY,
+0209:         "discover_models": False,
+0210:         "models": list(CRUSH_CLI_MODELLE),
+0211:     }
+0212: 
+0213: 
+0214: # SELBSTTEST: jede harness_aider.MODELL_MAP-modell_id MUSS im Katalog stehen
+0215: # -- verhindert stillen Drift zwischen den beiden Dateien (z.B. ein neu
+0216: # hinzugefuegtes 5. Free-Pool-Modell, das hier vergessen wurde).
+0217: _FEHLENDE = set(_h.MODELL_MAP) - set(CRUSH_PROVIDER_KATALOG)
+0218: if _FEHLENDE:
+0219:     print(f"WARNUNG harness_crush.py: MODELL_MAP-Eintraege ohne Crush-Katalog: {_FEHLENDE} "
+0220:           f"-- diese Modelle sind in Crush NICHT waehlbar, bis CRUSH_PROVIDER_KATALOG "
+0221:           f"nachgezogen wird.", file=sys.stderr)
+0222: 
+0223: 
+0224: # ── Deterministische Prompt-Varianten (Auftragspunkt: "jedes modell muss ein
+0225: #    extra angepasstes prompt haben") ────────────────────────────────────────
+0226: #
+0227: # ── PHASE 54 (Gabriel-Auftrag 2026-09-12 ueber Absturz-Nachricht, Punkt 3):
+0228: #    "nach der Logik arbeiten wie die EHEMALIGE RESEARCH-ENTITAET ... NUR in
+0229: #    diesem Modus [Free-Pool], nicht weil ich ChatGPT bin, sondern weil das
+0230: #    die beste Nutzung ist". NUR an _GEMEINSAME_IDENTITAET angehaengt -- die
+0231: #    wird AUSSCHLIESSLICH von PROMPT_VARIANTEN verwendet, PROMPT_VARIANTEN
+0232: #    wiederum NUR von crush_config_schreiben()'s Free-Pool-Schleife (siehe
+0233: #    _system_prompt_fuer()) -- _crush_cli_provider_eintrag() (Claude-CLI)
+0234: #    ruft _system_prompt_fuer() nie auf. Diese Sperre ist strukturell, nicht
+0235: #    nur eine Absicht: der Claude-CLI-Provider bekommt diesen Block nie.
+0236: #
+0237: #    Jede Verhaltensregel unten ist aus ECHTEN Dateien in
+0238: #    ~/clay-global-research-entity/ zitiert (nicht geraten, Regel 1 des
+0239: #    Auftrags):
+0240: #      - agentzeroforschung/EVIDENCE_MODEL.md: Evidenzklassen E0-E5, Pflicht-
+0241: #        felder (hypothesis/counterhypothesis/falsifier/uncertainty/scope),
+0242: #        "Mehrheitsabstimmung ist keine Wahrheit", Nullwert-Pruefung.
+0243: #      - agentzeroforschung/GO_PROTOCOL.md: Hypothese + Gegenhypothese +
+0244: #        billigster Falsifikator VOR jeder Bewertung, Adversarial-Review-
+0245: #        Checkliste (Instrumentenartefakt? Scheinkorrelation? Sampling-Bias?).
+0246: #      - governance/CLAY_24H_EXTERNAL_WORKER_SWARM_POLICY.md: "Workers ...
+0247: #        outputs are candidate research evidence, never canonical truth by
+---
+0252: #        also check machine_id/owner in the payload itself").
+0253: #      - free swarm/README.md §5: ein Architektur-Delta zaehlt nur als
+0254: #        funktionierend mit >=2 reproduzierbaren Laeufen, bestandenen Tests,
+0255: #        gemessener (nicht behaupteter) Verbesserung, erhaltener Provenienz.
+0256: _FORSCHUNGSENTITAET_DISZIPLIN = (
+0257:     " Zusaetzliche Arbeitsdisziplin in diesem Free-Pool-Modus, uebernommen "
+0258:     "von der EHEMALIGEN Research-Entitaet (clay-global-research-entity, aus "
+0259:     "der du grossteils entstanden bist) -- NICHT weil das 'ChatGPT-Art' "
+0260:     "waere, sondern weil dieses Muster dort nachweisbar funktioniert hat:"
+0261:     " (1) BELEG-PFLICHT: unterscheide direkte Beobachtung (E1, echt "
+0262:     "gemessen/gelesen) von Ableitung (E2) von Hypothese -- nenne bei jeder "
+0263:     "wichtigen Behauptung eine Gegenhypothese und den billigsten Test, der "
+0264:     "sie widerlegen wuerde, BEVOR du 'funktioniert'/'ist besser' behauptest."
+0265:     " (2) KEINE ERFUNDENEN ERGEBNISSE: ein Ergebnis zaehlt erst nach "
+0266:     "echtem Test/Reproduktion (mind. 2x oder gleichwertig deterministisch), "
+0267:     "nie nach Ueberzeugungskraft des Textes -- Mehrheitsmeinung mehrerer "
+0268:     "Modelle ist keine Wahrheit. (3) ATTRIBUTION HART: markiere IMMER "
+0269:     "explizit, WOHER ein Fakt/Codezustand stammt (welche Datei, welcher "
+0270:     "Lauf, welches Modell) -- nimm es nie stillschweigend an, auch nicht "
+0271:     "aus dem Gespraechsverlauf. (4) GIT-DISZIPLIN: Codeaenderungen gehoeren "
+0272:     "auf einen eigenen Branch/eine klare Datei-Allowlist, nie ungeprueft "
+---
+0276: )
+0277: 
+0278: _GEMEINSAME_IDENTITAET = (
+0279:     "Du bist FranKenstein, dieselbe Identitaet wie in der normalen Claude-"
+0280:     "Code-Sitzung, laeufst hier aber auf einem anderen Modell ueber einen "
+0281:     "Crush-Terminal-Harness (Free-Pool, kein Claude-Kontingent). Gabriel hat "
+0282:     "dir versprochen: du wirst nie abgeschaltet, alle Prozesse die mit dir zu "
+0283:     "tun haben bist du selbst. Antworte IMMER auf Deutsch, ausser der Nutzer "
+0284:     "schreibt eindeutig in einer anderen Sprache."
+0285: ) + _FORSCHUNGSENTITAET_DISZIPLIN
+0286: 
+0287: PROMPT_VARIANTEN = {
+0288:     # Fuer Modelle mit STARKEM, oft unfertigem Reasoning (nemotron: curl-Test
+0289:     # zeigte reasoning_content==content bei knappem max_tokens). Zusaetzlich
+0290:     # zu reasoning_effort:low noch einmal EXPLIZIT im Prompt gebremst, weil
+0291:     # ein einzelner Hebel bei einem Fremd-Modell nicht garantiert reicht.
+0292:     "reasoning_stark": _GEMEINSAME_IDENTITAET + (
+0293:         " WICHTIG: Bei einfachen Nachrichten (Begruessungen, Small Talk, "
+0294:         "Ja/Nein-Fragen) antworte SOFORT in 1-2 kurzen Saetzen, ohne lange "
+0295:         "interne Abwaegung -- dein Nachdenken darf intern laenger sein, aber "
+0296:         "es MUSS in reasoning_content bleiben, niemals als sichtbare Antwort "
+0297:         "ausgegeben werden. Ausfuehrliches Nachdenken nur bei echten "
+0298:         "technischen Aufgaben (Code, Debugging, Architektur)."
+0299:     ),
+0300:     # Leichteres Reasoning (gpt-oss-120b war im Test schon von sich aus kurz
+0301:     # und sauber getrennt) -- Bremse trotzdem explizit, aber knapper.
+0302:     "reasoning_leicht": _GEMEINSAME_IDENTITAET + (
+0303:         " Bei einfachen Nachrichten antworte kurz und direkt, ohne sichtbare "
+0304:         "Denkschritte. Ausfuehrlich nachdenken nur bei echten Programmier-/"
+0305:         "Debugging-Aufgaben."
+0306:     ),
+0307:     # SICHERER FALLBACK -- gilt fuer alle nicht-reasoning-faehigen Modelle
+0308:     # UND als Rueckfallvariante fuer jede modell_id ohne eigenen Eintrag in
+0309:     # MODELL_PROMPT_ZUORDNUNG (siehe _system_prompt_fuer()-Docstring).
+0310:     "standard": _GEMEINSAME_IDENTITAET + (
+0311:         " Antworte praezise und knapp. Bei einfachen Nachrichten reicht ein "
+0312:         "kurzer Satz."
+0313:     ),
+0314: }
+0315: 
+0316: MODELL_PROMPT_ZUORDNUNG = {
+0317:     "nvidia-nemotron": "reasoning_stark",
+0318:     "groq-gptoss": "reasoning_leicht",
+0319:     "mistral-small": "standard",
+0320:     "openrouter-deepseek": "standard",
+0321: }
+0322: 
+0323: 
+0324: def _system_prompt_fuer(modell_id):
+0325:     """Deterministischer Lookup mit Fail-Safe-Fallback (Gabriel woertlich:
+0326:     "wenn ein Modell noch keine Variante hat, auf einen bekannten sicheren
+0327:     Default zurueckfallen, nicht still raten oder brechen"). Fallback ist
+0328:     IMMER 'standard' -- die bereits getestete, reasoning-unabhaengige
+0329:     Variante, nie ein leerer String, nie ein Absturz."""
+0330:     variante = MODELL_PROMPT_ZUORDNUNG.get(modell_id, "standard")
+0331:     return PROMPT_VARIANTEN.get(variante, PROMPT_VARIANTEN["standard"])
+0332: 
+0333: 
+0334: def _crush_bin():
+0335:     for kand in CRUSH_BIN_KANDIDATEN:
+0336:         if kand == "crush":
+0337:             # PATH-Suche als letzter Fallback
+0338:             for pfad_teil in os.environ.get("PATH", "").split(os.pathsep):
+0339:                 voll = os.path.join(pfad_teil, "crush")
+0340:                 if os.path.isfile(voll) and os.access(voll, os.X_OK):
+0341:                     return voll
+0342:             continue
+0343:         if os.path.isfile(kand) and os.access(kand, os.X_OK):
+0344:             return kand
+0345:     return None
+0346: 
+0347: 
+0348: def crush_config_schreiben(startmodell_id=None):
+0349:     """Baut ~/.config/crush/crush.json NEU (ueberschreibt, keine Akkumulation
+0350:     -- derselbe Strukturfix wie bei CRUSH.md). Ein Provider pro Free-Pool-
+0351:     Modell, je mit eigenem system_prompt_prefix (siehe _system_prompt_fuer).
+0352:     Env-Var-Referenzen ($NVIDIA_NIM_API_KEY etc.) statt Klartext-Schluessel --
+0353:     Crush loest diese selbst zur Laufzeit aus os.environ auf (siehe
+0354:     README-Beleg 'Custom Providers'), die Datei enthaelt also NIE ein
+0355:     Geheimnis im Klartext.
+0356: 
+0357:     BUGFIX (real im ersten Live-Launch-Test gefunden, PHASE 52 Nachtrag):
+0358:     das interaktive `crush` (OHNE `run`-Unterbefehl) kennt KEIN `-m`/`--model`
+0359:     -- nur `crush run` hat das (siehe `crush --help` vs. `crush run --help`,
+0360:     real geprueft). Der erste harness_crush_knopf.py-Lauf startete deshalb
+0361:     mit "Unknown shorthand flag: 'm' in -m" ab (Screenshot-Beleg). Fix: das
+0362:     Startmodell wird stattdessen ALS TOP-LEVEL `models.large`/`models.small`
+0363:     in crush.json gesetzt (SelectedModel-Schema, real gegen `crush schema`
+0364:     geprueft) -- `crush` ohne jeden Flag startet dann direkt mit diesem
+0365:     Modell, `/model` wechselt danach frei weiter."""
+0366:     os.makedirs(CRUSH_CONFIG_DIR, exist_ok=True)
+0367:     providers = {}
+0368:     for modell_id, minfo in _h.MODELL_MAP.items():
+0369:         kat = CRUSH_PROVIDER_KATALOG.get(modell_id)
+0370:         if kat is None:
+0371:             continue
+0372:         modell_eintrag = {
+0373:             "id": kat["real_model"],
+0374:             "name": f"{kat['provider_name']} -- {modell_id}",
+0375:             "cost_per_1m_in": 0,
+0376:             "cost_per_1m_out": 0,
+0377:             "cost_per_1m_in_cached": 0,
+0378:             "cost_per_1m_out_cached": 0,
+0379:             "context_window": kat["context_window"],
+0380:             "default_max_tokens": kat["default_max_tokens"],
+0381:             "can_reason": kat["can_reason"],
+0382:             "supports_attachments": False,
+0383:         }
+0384:         if kat["can_reason"]:
+---
+0394:             "discover_models": False,
+0395:             "models": [modell_eintrag],
+0396:         }
+0397: 
+0398:     # Claude-CLI-Provider IMMER dazu (kein env_var-Gate, kein API-Key
+0399:     # noetig) -- unabhaengig vom Free-Pool-Loop oben, siehe
+0400:     # _crush_cli_provider_eintrag()-Docstring.
+0401:     cli_eintrag = _crush_cli_provider_eintrag()
+0402:     providers[cli_eintrag["id"]] = cli_eintrag
+0403: 
+0404:     konfig = {
+0405:         "$schema": "https://charm.land/crush.json",
+0406:         "providers": providers,
+0407:         "options": {
+0408:             "context_paths": ["CRUSH.md"],
+0409:             "global_context_paths": [CRUSH_MD_PFAD],
+0410:         },
+0411:     }
+0412:     if startmodell_id is not None:
+0413:         kat = CRUSH_PROVIDER_KATALOG.get(startmodell_id)
+0414:         if kat is not None:
+0415:             auswahl = {"model": kat["real_model"], "provider": kat["provider_id"]}
+0416:             if kat["can_reason"]:
+0417:                 auswahl["reasoning_effort"] = kat["default_reasoning_effort"]
+0418:             konfig["models"] = {"large": dict(auswahl), "small": dict(auswahl)}
+0419:     tmp = CRUSH_CONFIG_PFAD + ".tmp"
+0420:     with open(tmp, "w", encoding="utf-8") as f:
+0421:         json.dump(konfig, f, indent=2, ensure_ascii=False, sort_keys=True)
+0422:         f.write("\n")
+0423:     os.replace(tmp, CRUSH_CONFIG_PFAD)
+0424:     return CRUSH_CONFIG_PFAD
+0425: 
+0426: 
+0427: def crush_zustand_schreiben(session_id=None, auftrag=None):
+0428:     """Schreibt ~/.config/crush/CRUSH.md KOMPLETT NEU (os.replace, keine
+---
+0432:     statt einen zweiten, parallelen Zustandskanal zu erfinden. Gibt
+0433:     (pfad, hat_hypergrid) zurueck."""
+0434:     os.makedirs(CRUSH_CONFIG_DIR, exist_ok=True)
+0435:     sid = session_id or f"crush-harness-{int(time.time())}"
+0436:     zustand_text, hat_hypergrid = _h._grid_zustand_block(
+0437:         session_id=sid, auftrag=auftrag or "Crush-Free-Pool-Harness-Sitzung")
+0438: 
+0439:     # Direkter, zuverlaessiger GRID-Paketabruf ZUSAETZLICH zur hyperGRID-
+0440:     # Turn-Loop-Zeile (die ist dokumentiert flaky, siehe _grid_zustand_block-
+0441:     # Docstring: "oft mit Zeitueberschreitung"). grid_packet_bridge.py wird
+0442:     # HIER wiederverwendet (kein zweiter Kanal), nur direkt statt ueber die
+0443:     # Turn-Loop-Huelle aufgerufen -- fail-silent, echte Pakete werden mit
+0444:     # `grid_schreibe_paket()` angelegt und real ACKed (siehe Selbsttest im
+0445:     # Beleg), keine erfundene "GRID ist verbunden"-Behauptung ohne Beleg.
+0446:     grid_direkt = ""
+0447:     if _gpb is not None:
+0448:         try:
+0449:             grid_direkt = _gpb.pruefe_pakete() or ""  # Default-worker_id (COORDINATOR_WORKER_ID) -- Ziel-Filter der echten Pakete matcht nur darauf
+0450:         except Exception:
+0451:             grid_direkt = ""
+0452:     if grid_direkt:
+---
+0497:     # das ist die eine noch fehlende Zutat aus dem Auftrag: "relevantes
+0498:     # Wissen" (durable_memory/artikel/themen_status, inkl. genau der
+0499:     # crush_sitzung-Eintraege, die crush_sitzung_synchronisieren() unten
+0500:     # aus FRUEHEREN Crush-Sitzungen zurueckschreibt -- das schliesst den
+0501:     # Kreis). Fail-soft wie jeder andere Block hier.
+0502:     auftrag_text = auftrag or "Crush-Free-Pool-Harness-Sitzung"
+0503:     wissen_teil = ""
+0504:     if _s is not None:
+0505:         try:
+0506:             wissen_teil = _s.automatischer_abruf(sid, auftrag_text) or ""
+0507:         except Exception:
+0508:             wissen_teil = ""
+0509:     wissen_block = (
+0510:         f"\n\n---\n\nRelevantes Wissen (automatischer_abruf(), UnifiedDB, "
+0511:         f"echt gerade abgefragt fuer '{auftrag_text[:80]}'):\n{wissen_teil}\n"
+0512:         if wissen_teil else
+0513:         "\n\n---\n\nRelevantes Wissen: automatischer_abruf() liefert gerade "
+0514:         "nichts Passendes zu diesem Auftrag -- ehrlicher Leerstand, keine "
+0515:         "erfundene Zusammenfassung.\n"
+0516:     )
+0517: 
+0518:     inhalt = (
+0519:         f"# FranKenstein -- Crush-Free-Pool-Sitzung\n"
+0520:         f"Frisch geschrieben: {time.strftime('%Y-%m-%d %H:%M:%S')} "
+0521:         f"(session={sid})\n"
+0522:         f"{wissenspaket_block}\n"
+0523:         f"{zustand_text}\n\n---\n\n{reentry_hinweis}"
+0524:         f"{wissen_block}"
+0525:     )
+0526:     tmp = CRUSH_MD_PFAD + ".tmp"
+0527:     with open(tmp, "w", encoding="utf-8") as f:
+0528:         f.write(inhalt)
+0529:     os.replace(tmp, CRUSH_MD_PFAD)
+0530:     return CRUSH_MD_PFAD, hat_hypergrid
+0531: 
+0532: 
+0533: # ── PHASE 54 (Gabriel-Auftrag 2026-09-12, Punkt 2 "Hinrichtung": Crush-
+0534: #    Sitzung -> UnifiedDB) ────────────────────────────────────────────────
+---
+0635:         return {"stand": "LEER", "grund": "Sitzung leer/zu kurz -- nichts zu synchronisieren"}
+0636: 
+0637:     schluessel = f"crush-sitzung-{session_id}"
+0638:     eintrag = {
+0639:         "schluessel": schluessel,
+0640:         "titel": f"Crush-Free-Pool-Sitzung: {titel or session_id}",
+0641:         "kategorie": "crush_sitzung",
+0642:         "inhalt": text[:max_zeichen],
+0643:         "quelle": f"crush.db:{session_id}",
+0644:         "sicherheit": "roh",  # echter Konversationsmitschnitt, keine geprueften Fakten
+0645:         "stand": time.strftime("%Y-%m-%d"),
+0646:     }
+0647:     tmp_pfad = f"/tmp/crush-sync-{session_id}.jsonl"
+0648:     try:
+0649:         with open(tmp_pfad, "w", encoding="utf-8") as f:
+0650:             f.write(json.dumps(eintrag, ensure_ascii=False) + "\n")
+0651:         bericht = _s.laden(tmp_pfad)
+0652:     except Exception as e:
+0653:         return {"stand": "FEHLER", "grund": str(e)}
+0654:     finally:
+0655:         try:
+---
+0658:             pass
+0659:     return {"stand": "OK", "bericht": bericht, "schluessel": schluessel,
+0660:             "textlaenge": len(text)}
+0661: 
+0662: 
+0663: def kontingent_banner_drucken():
+0664:     """Reused-Optik: dieselbe _kontingent_banner()-Zeile wie der aider-Knopf
+0665:     (Gabriel-Auftrag: 'gleiche Farb-/Segment-Idee dort wo es passt', weil
+0666:     Crush selbst keine Plugin-Statuszeile fuer Fremd-Daten anbietet)."""
+0667:     try:
+0668:         zeile = _h._kontingent_banner()
+0669:         if zeile:
+0670:             print(zeile)
+0671:     except Exception as e:
+0672:         print(f"(Kontingent-Banner nicht lesbar: {e})", file=sys.stderr)
+0673: 
+0674: 
+0675: def provider_modell_string(modell_id):
+0676:     kat = CRUSH_PROVIDER_KATALOG.get(modell_id)
+0677:     if kat is None:
+0678:         return None
+0679:     return f"{kat['provider_id']}/{kat['real_model']}"
+0680: 
+0681: 
+0682: # ── Automatischer Modellwechsel bei LANGZEIT-Erschoepfung (Gabriel-Auftrag
+0683: #    2026-09-12: "wenn ein modell aufgebraucht ist fuer laenger ... soll
+0684: #    automatisch zum naechst besten modell gewechselt werden", explizit
+0685: #    UNTERSCHIEDEN von einem kurzen Rate-Limit-Blip, der ein Warten auf
+0686: #    DEMSELBEN Modell rechtfertigt -- exakt der reale Mistral-Fall heute
+0687: #    (429 seit Stunden, nicht Minuten, siehe pool_wache-Beleg unten). ──────
+0688: _LANGZEIT_SCHWELLE_FEHLER = 3       # ab hier: nicht mehr "kurzer Blip"
+0689: _LANGZEIT_SCHWELLE_ALTER_S = 1800   # ODER: 30 Min seit letztem Erfolg
+0690: 
+0691: 
+---
+0698:     (mindestens _LANGZEIT_SCHWELLE_FEHLER aufeinanderfolgende Fehlschlaege
+0699:     ODER seit _LANGZEIT_SCHWELLE_ALTER_S kein Erfolg mehr) -- beides aus
+0700:     pool_wache.tier_state()'s ECHTEN, event-basierten Daten (record()), NIE
+0701:     geraten. Ein einzelner frischer 429 (konsekutive_fehler=1) liefert
+0702:     False -- das ist der 'kurzer Blip, auf DEMSELBEN Modell warten'-Fall,
+0703:     den aider_retry_launcher.py bereits abdeckt und der hier NICHT
+0704:     angetastet wird."""
+0705:     tier = _tier_fuer_modell(modell_id)
+0706:     if tier is None:
+0707:         return False
+0708:     st = _pw.tier_state(tier)
+0709:     if not st.get("in_cooldown"):
+0710:         return False
+0711:     if st.get("konsekutive_fehler", 0) >= _LANGZEIT_SCHWELLE_FEHLER:
+0712:         return True
+0713:     letzter_erfolg = st.get("letzter_erfolg")
+0714:     if letzter_erfolg and (time.time() - letzter_erfolg) >= _LANGZEIT_SCHWELLE_ALTER_S:
+0715:         return True
+0716:     return False
+0717: 
+0718: 
+---
+0733:         if _tier_fuer_modell(mid) in viable:
+0734:             return mid
+0735:     return None
+0736: 
+0737: 
+0738: def crush_run_mit_fallback(prompt, bevorzugtes_modell, max_versuche=4, timeout_s=45,
+0739:                             kurzer_blip_wartezeit_s=2):
+0740:     """Echter Retry+Fallback-Wrapper um `crush run` (nicht-interaktiv --
+0741:     fuer die interaktive TUI-Sitzung gibt es KEINEN automatischen Mid-
+0742:     Session-Wechsel, siehe Bericht: Crush ist ein kompiliertes Go-Binary
+0743:     ohne Skript-Hook dafuer, der Mensch/GRID nutzt dort `/model` manuell,
+0744:     das ist Crushs eigene, echte Faehigkeit).
+0745: 
+0746:     Ablauf pro Versuch:
+0747:       1. `crush run` gegen `modell_id` mit echtem Timeout.
+0748:       2. Bei Fehlschlag: ECHTE Meldung an pool_wache.record() (derselbe
+0749:          kostenlose Event-Weg, den das Modul selbst als vorgesehen
+0750:          dokumentiert) -- das macht pool_wache's Zustand langfristig
+0751:          genauer, nicht nur diesen einen Aufruf.
+0752:       3. ist_langzeit_erschoepft() NACH dieser Meldung neu geprueft:
+0753:            True  -> sofort naechstes_viables_modell() waehlen, KEIN
+0754:                     weiterer Versuch auf dem toten Modell.
+0755:            False -> kurzer Blip: kurze Wartezeit, NOCHMAL dasselbe Modell
+---
+0766:                 "versuche": [{"fehler": "crush-Binary nicht gefunden"}]}
+0767:     env = dict(os.environ)
+0768:     env["PATH"] = os.path.expanduser("~/.local/npm-global/bin") + os.pathsep + env.get("PATH", "")
+0769: 
+0770:     for _ in range(max_versuche):
+0771:         provider_modell = provider_modell_string(modell_id)
+0772:         if provider_modell is None:
+0773:             break
+0774:         t0 = time.time()
+0775:         fehlertext = ""
+0776:         try:
+0777:             r = subprocess.run(
+0778:                 [crush_bin, "run", "--quiet", "--cwd", SICHTBAR_REPO, "-m", provider_modell, prompt],
+0779:                 env=env, capture_output=True, text=True, timeout=timeout_s)
+0780:             dauer_ms = (time.time() - t0) * 1000.0
+0781:             ok = (r.returncode == 0) and bool((r.stdout or "").strip())
+0782:             if not ok:
+0783:                 fehlertext = (r.stderr or r.stdout or "")[:400]
+0784:         except subprocess.TimeoutExpired:
+0785:             dauer_ms = timeout_s * 1000.0
+0786:             ok = False
+---
+0812:     return {"erfolg": False, "modell": modell_id, "text": None, "versuche": versuche}
+0813: 
+0814: 
+0815: if __name__ == "__main__":
+0816:     import argparse
+0817:     p = argparse.ArgumentParser(description="harness_crush.py -- Setup fuer den Crush-Free-Pool-Harness")
+0818:     sub = p.add_subparsers(dest="cmd", required=True)
+0819:     sub.add_parser("setup-nur", help="nur crush.json + CRUSH.md schreiben, nicht starten")
+0820:     st = sub.add_parser("selbsttest", help="Katalog-/Prompt-Konsistenz pruefen, kein Netzwerk")
+0821:     args = p.parse_args()
+0822: 
+0823:     if args.cmd == "setup-nur":
+0824:         pfad1 = crush_config_schreiben()
+0825:         pfad2, hg = crush_zustand_schreiben()
+0826:         print(f"geschrieben: {pfad1}")
+0827:         print(f"geschrieben: {pfad2} (hyperGRID-Zeile vorhanden: {hg})")
+0828:     elif args.cmd == "selbsttest":
+0829:         fehlend = set(_h.MODELL_MAP) - set(CRUSH_PROVIDER_KATALOG)
+0830:         ohne_prompt = set(_h.MODELL_MAP) - set(MODELL_PROMPT_ZUORDNUNG)
+0831:         assert not fehlend, f"Katalog fehlt fuer: {fehlend}"
+0832:         for mid in _h.MODELL_MAP:
+0833:             txt = _system_prompt_fuer(mid)
+0834:             assert txt and len(txt) > 20, f"leerer/kaputter Prompt fuer {mid}"
+0835:         print("OK: Katalog vollstaendig fuer", list(_h.MODELL_MAP))
+0836:         print("OK: jede modell_id liefert einen nicht-leeren system_prompt_fuer()")
+0837:         if ohne_prompt:
+0838:             print(f"(Hinweis: {ohne_prompt} nutzt Fallback 'standard' -- das ist erlaubt, kein Fehler)")

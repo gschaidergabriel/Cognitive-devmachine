@@ -1,0 +1,13 @@
+models= {"large": {"model": "openai/gpt-oss-120b", "provider": "freepool-groq", "reasoning_effort": "low"}, "small": {"model": "openai/gpt-oss-120b", "provider": "freepool-groq", "reasoning_effort": "low"}}
+PROVIDER claude-cli type= openai-compat base_url= http://127.0.0.1:8420/v1 api_key_ref= not-needed
+  MODEL claude-opus-5 name= Claude Opus 5 (staerkstes Modell, teuer -- schwere Architektur/Reasoning) can_reason= False
+  MODEL claude-sonnet-5 name= Claude Sonnet 5 (stark, Tools+Reasoning -- Standardwahl fuer echtes Claude) can_reason= False
+  MODEL claude-haiku-4-5-20251001 name= Claude Haiku 4.5 (schnell, guenstig -- einfache Fragen) can_reason= False
+PROVIDER freepool-groq type= openai-compat base_url= https://api.groq.com/openai/v1 api_key_ref= $GROQ_API_KEY
+  MODEL openai/gpt-oss-120b name= Groq (Free-Pool) -- groq-gptoss can_reason= True
+PROVIDER freepool-mistral type= openai-compat base_url= https://api.mistral.ai/v1 api_key_ref= $MISTRAL_API_KEY
+  MODEL mistral-small-latest name= Mistral (Free-Pool) -- mistral-small can_reason= False
+PROVIDER freepool-nvidia type= openai-compat base_url= https://integrate.api.nvidia.com/v1 api_key_ref= $NVIDIA_NIM_API_KEY
+  MODEL nvidia/nemotron-3-super-120b-a12b name= NVIDIA NIM (Free-Pool) -- nvidia-nemotron can_reason= True
+PROVIDER freepool-openrouter type= openai-compat base_url= https://openrouter.ai/api/v1 api_key_ref= $OPENROUTER_API_KEY
+  MODEL deepseek/deepseek-chat name= OpenRouter/DeepSeek (Free-Pool) -- openrouter-deepseek can_reason= False

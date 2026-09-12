@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-crush-config-sanitized-20260912-1736",
+  "command_sha256": "83618098e64f924a54d7a802e2879171fe281f33190d63a18cf088325c9cf653",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:32:10.822157+00:00",
+  "finished_at": "2026-09-12T10:32:10.872524+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9770f6786a264f4b41e750d33e221abe794cdcd67b1adb9dcb89dfc51c2b1ecb",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "models= {\"large\": {\"model\": \"openai/gpt-oss-120b\", \"provider\": \"freepool-groq\", \"reasoning_effort\": \"low\"}, \"small\": {\"model\": \"openai/gpt-oss-120b\", \"provider\": \"freepool-groq\", \"reasoning_effort\": \"low\"}}\nPROVIDER claude-cli type= openai-compat base_url= http://127.0.0.1:8420/v1 api_key_ref= not-needed\n  MODEL claude-opus-5 name= Claude Opus 5 (staerkstes Modell, teuer -- schwere Architektur/Reasoning) can_reason= False\n  MODEL claude-sonnet-5 name= Claude Sonnet 5 (stark, Tools+Reasoning -- Standardwahl fuer echtes Claude) can_reason= False\n  MODEL claude-haiku-4-5-20251001 name= Claude Haiku 4.5 (schnell, guenstig -- einfache Fragen) can_reason= False\nPROVIDER freepool-groq type= openai-compat base_url= https://api.groq.com/openai/v1 api_key_ref= $GROQ_API_KEY\n  MODEL openai/gpt-oss-120b name= Groq (Free-Pool) -- groq-gptoss can_reason= True\nPROVIDER freepool-mistral type= openai-compat base_url= https://api.mistral.ai/v1 api_key_ref= $MISTRAL_API_KEY\n  MODEL mistral-small-latest name= Mistral (Free-Pool) -- mistral-small can_reason= False\nPROVIDER freepool-nvidia type= openai-compat base_url= https://integrate.api.nvidia.com/v1 api_key_ref= $NVIDIA_NIM_API_KEY\n  MODEL nvidia/nemotron-3-super-120b-a12b name= NVIDIA NIM (Free-Pool) -- nvidia-nemotron can_reason= True\nPROVIDER freepool-openrouter type= openai-compat base_url= https://openrouter.ai/api/v1 api_key_ref= $OPENROUTER_API_KEY\n  MODEL deepseek/deepseek-chat name= OpenRouter/DeepSeek (Free-Pool) -- openrouter-deepseek can_reason= False\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

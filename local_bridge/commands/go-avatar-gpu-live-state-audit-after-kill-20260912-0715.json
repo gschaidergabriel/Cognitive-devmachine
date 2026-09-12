@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpu-live-state-audit-after-kill-20260912-0715",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail\ncd /home/ai-core-node/.claude/star/visual\necho HOST=$(hostname)\necho DAEMON_SHA=$(sha256sum buehne_daemon.py | awk '{print $1}')\necho SERVICE=$(systemctl --user is-active frankenstein-buehne.service || true)\necho '=== MAIN ==='\npgrep -af '^/opt/google/chrome/chrome --app=http://127\\.0\\.0\\.1:8788/' || true\necho '=== GPU ==='\npgrep -af '^/opt/google/chrome/chrome --type=gpu-process' || true\necho '=== RENDERERS ==='\npgrep -af '^/opt/google/chrome/chrome --type=renderer' | head -12 || true\necho '=== HTTP ==='\ncurl -fsS -o /dev/null -w 'HTTP=%{http_code}\\n' http://127.0.0.1:8788/ || true\necho '=== BACKUPS ==='\nsha256sum buehne_daemon.py.go-gpu-backup-20260912T0708 buehne_daemon.py.go-gpu-v3-backup-20260912T0714 2>/dev/null || true\n"
+}

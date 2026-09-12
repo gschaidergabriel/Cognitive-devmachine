@@ -1,0 +1,120 @@
+HOST=ai-core-node-projekt-frankenstein USER=ai-core-node
+===FILES===
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook.py 2917 2026-09-12T10:17:01.6098809430
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook_test.py 4242 2026-09-12T10:17:01.6148991390
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_inject.py 2623 2026-09-12T10:17:01.6082192160
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_inject_test.py 2523 2026-09-12T10:17:01.6133546320
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx.py 21372 2026-09-12T10:17:01.6066848090
+/opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_test.py 5652 2026-09-12T10:17:01.6117931740
+/opt/entityos/cognition/titan_mx/TITAN_MX_PIN.json 1261 2026-09-12T10:17:01.6162207840
+===HASHES===
+fed4114cc7d26568bd7fb0a49796c71ec471e9899225c76f94ed3507f07452ff  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook.py
+a1f530cb0b9c42018ba2151518df2cf72af10ae60da0f71504086cd7b921ce14  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook_test.py
+f8870c55b53d2c5ee152624d313522d0010856b89468031e4771f2d3d8d696a7  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_inject.py
+9d2ddce962f516490c9573bc3163904722213041dcce49493c4bfae22e3b7d7a  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_inject_test.py
+e6c4a7b0714d830bfe2b71c44eb6fbe955f6888d2842d02076f30cfba18393bd  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx.py
+09c68025bb0b7a80b16f9e660c2cb5664c7e6385e6b0e12dad4d17ced729ee77  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_test.py
+===HOOK-HEAD===
+#!/usr/bin/env python3
+"""TITAN-MX HyperMirror Claude UserPromptSubmit hook.
+
+Separate from stern.py by design: MemoryX is cache/context, never truth or
+effect authority. The hook only emits additionalContext and always fails
+silent with exit 0.
+
+Activation is fail-closed. It is ON only when either:
+- TITAN_MX_INJECT is explicitly truthy, or
+- the gate file exists (default ~/.local/share/agentzero/titan_mx_inject.enabled).
+
+The continuous TITAN-MX daemon owns consolidation. This hook only reads the
+latest bounded mirror from titan_mx.db; missing/broken/stale state emits
+nothing.
+"""
+from __future__ import annotations
+
+import json
+import os
+import sys
+from pathlib import Path
+
+from f2wp1207_titan_mx_inject import injection_text
+
+TRUTHY = {"1", "true", "yes", "on"}
+FALSY = {"0", "false", "no", "off"}
+DEFAULT_STATE_DB = Path.home() / ".local/share/agentzero/titan_mx.db"
+DEFAULT_GATE_FILE = Path.home() / ".local/share/agentzero/titan_mx_inject.enabled"
+DEFAULT_MAX_CHARS = 1400
+DEFAULT_MAX_AGE_S = 900.0
+
+
+def _enabled() -> bool:
+    raw = os.environ.get("TITAN_MX_INJECT")
+    if raw is not None:
+        v = raw.strip().lower()
+        if v in TRUTHY:
+            return True
+        if v in FALSY:
+            return False
+        return False
+    gate = Path(os.environ.get("TITAN_MX_GATE_FILE", str(DEFAULT_GATE_FILE))).expanduser()
+    return gate.is_file()
+
+
+def _int_env(name: str, default: int, lo: int, hi: int) -> int:
+    try:
+        return max(lo, min(hi, int(os.environ.get(name, str(default)))))
+    except Exception:
+        return default
+
+
+def _float_env(name: str, default: float, lo: float, hi: float) -> float:
+    try:
+        return max(lo, min(hi, float(os.environ.get(name, str(default)))))
+    except Exception:
+        return default
+
+
+def run(payload: dict) -> dict | None:
+    if payload.get("hook_event_name") != "UserPromptSubmit":
+        return None
+    if not _enabled():
+        return None
+
+    state_db = Path(os.environ.get("TITAN_MX_STATE_DB", str(DEFAULT_STATE_DB))).expanduser()
+    max_chars = _int_env("TITAN_MX_MAX_CHARS", DEFAULT_MAX_CHARS, 128, 2000)
+    max_age_s = _float_env("TITAN_MX_MAX_AGE_S", DEFAULT_MAX_AGE_S, 1.0, 86400.0)
+    text = injection_text(state_db, max_chars=max_chars, max_age_s=max_age_s)
+    if not text:
+        return None
+    return {
+        "hookSpecificOutput": {
+            "hookEventName": "UserPromptSubmit",
+            "additionalContext": text,
+        }
+    }
+
+
+def main() -> int:
+    try:
+        raw = sys.stdin.read()
+        payload = json.loads(raw) if raw.strip() else {}
+        out = run(payload if isinstance(payload, dict) else {})
+        if out:
+            print(json.dumps(out, ensure_ascii=False, separators=(",", ":")))
+    except Exception:
+        # Harte Grenze: this context organ must never break the host hook chain.
+        pass
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+===SERVICE===
+===LEGACY-DB===
+path /home/ai-core-node/.local/share/agentzero/titan_mx.db exists True size 14983168
+tables ['titan_mx_claim', 'titan_mx_hyperblock', 'titan_mx_meta', 'titan_mx_mirror', 'titan_mx_pattern', 'titan_mx_pulse', 'titan_mx_transition']
+titan_mx_pulse 6308
+titan_mx_mirror 6308
+titan_mx_pattern 99
+===UNIFIED-TITAN===
+[]

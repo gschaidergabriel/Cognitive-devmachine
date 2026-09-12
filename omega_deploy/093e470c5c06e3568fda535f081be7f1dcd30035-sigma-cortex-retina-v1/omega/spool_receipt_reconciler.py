@@ -28,7 +28,26 @@ def _atomic_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 class SpoolReceiptReconciler(ReceiptReconciler):
-    """Reconcile UNKNOWN effects from the credential-free outer spool."""
+    """Reconcile UNKNOWN effects from the credential-free outer spool.
+
+    The central OMEGA sandbox deliberately does not need Git credentials for the
+    active outer-spool transport. If the sandbox relay times out before the
+    privileged outer worker finishes, the effect becomes UNKNOWN and must never be
+    replayed. The outer worker may still finish later and atomically publish a
+    COMPLETED outer receipt into ``outer_bridge/inbox``.
+
+    This reconciler consumes only that already-existing receipt. It never writes an
+    outbox command, never calls a transport and never increments the dispatch
+    attempt. All identity and digest bindings are revalidated before the inherited
+    transactional ReceiptReconciler promotes UNKNOWN -> COMPLETED.
+
+    Older UNKNOWN rows may have NULL command_id/command_digest because the original
+    relay only learned those values after dispatch returned. We do not weaken the
+    evidence gate for them: the expected command is deterministically reconstructed
+    from the immutable effect_intent + effect_id + current host binding, then matched
+    byte-for-byte/canonically against both outer-spool envelopes before the missing
+    ledger fields are backfilled. No effect is replayed during that repair.
+    """
 
     def __init__(
         self,

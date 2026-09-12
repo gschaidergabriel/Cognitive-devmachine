@@ -4,7 +4,7 @@ import dataclasses
 import hashlib
 import json
 from collections import deque
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping
 
 EVIDENCE_CLASSES = {
     "OBSERVED",
@@ -211,10 +211,17 @@ class CortexCore:
         if not capture_hash:
             raise ValueError("retina_raw_capture_hash_required")
 
-        # Retina output is derived perception from an observed frame. The cortex may not
-        # silently upgrade it to OBSERVED; source classification is preserved.
+        # The raw capture may be OBSERVED, VERIFIED_DERIVED or UNKNOWN. Derived visual
+        # interpretation can become VERIFIED_DERIVED only when its source is already
+        # OBSERVED/VERIFIED_DERIVED. UNKNOWN must remain UNKNOWN; recurrence, coherence
+        # or model output never upgrades evidence class.
         if event.evidence_class not in {"VERIFIED_DERIVED", "OBSERVED", "UNKNOWN"}:
             raise ValueError("retina_invalid_evidence_class")
+        derived_class = (
+            "VERIFIED_DERIVED"
+            if event.evidence_class in {"VERIFIED_DERIVED", "OBSERVED"}
+            else "UNKNOWN"
+        )
 
         atoms: list[StateAtom] = [
             self._atom(event, role="vision.capture_hash", value=capture_hash, confidence=1.0),
@@ -228,7 +235,7 @@ class CortexCore:
                     role="vision.description",
                     value=description.strip(),
                     confidence=float(p.get("description_confidence", 0.6)),
-                    evidence_class="VERIFIED_DERIVED",
+                    evidence_class=derived_class,
                 )
             )
 
@@ -240,7 +247,7 @@ class CortexCore:
                     role="vision.labels",
                     value=labels,
                     confidence=float(p.get("label_confidence", 0.6)),
-                    evidence_class="VERIFIED_DERIVED",
+                    evidence_class=derived_class,
                 )
             )
 
@@ -252,7 +259,7 @@ class CortexCore:
                     role="vision.ocr",
                     value=ocr,
                     confidence=float(p.get("ocr_confidence", 0.7)),
-                    evidence_class="VERIFIED_DERIVED",
+                    evidence_class=derived_class,
                 )
             )
 
@@ -263,7 +270,7 @@ class CortexCore:
                 role="vision.face_count",
                 value=max(0, faces),
                 confidence=float(p.get("face_confidence", 0.7)),
-                evidence_class="VERIFIED_DERIVED",
+                evidence_class=derived_class,
             )
         )
 
@@ -306,7 +313,7 @@ class CortexCore:
             "role": "visual_perception",
             "causal_id": event.causal_id,
             "meta_order": event.meta_order,
-            "evidence_class": "VERIFIED_DERIVED",
+            "evidence_class": derived_class,
             "utility": max(0.0, min(1.0, float(p.get("attention_priority", 0.5)))),
             "content_handles": tuple(a.atom_id for a in atoms),
             "conflict_handles": tuple(

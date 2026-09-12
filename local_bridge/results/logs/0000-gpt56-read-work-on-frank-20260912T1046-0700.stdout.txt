@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ARBEIT="$HOME/aicore/opt/aicore"
+ORGAN="$HOME/.claude/star/frank_chatgpt_terminal.py"
+if [[ ! -f "$ORGAN" ]]; then
+  notify-send "Work on Frank" "ChatGPT-Organ nicht gefunden ($ORGAN)" 2>/dev/null || true
+  exit 1
+fi
+SNAP=""
+if [[ -x "$HOME/.local/bin/frank-snapshot" ]]; then
+  SNAP="$("$HOME/.local/bin/frank-snapshot" "$ARBEIT" work-on-frank 2>/dev/null || true)"
+fi
+INNEN="cd '$ARBEIT' && echo 'FranKenstein ChatGPT-Organ — GRID10/UnifiedDB canonical'; echo 'Snapshot: \$SNAP'; python3 '$ORGAN'; echo; echo '[Sitzung beendet]'; exec bash"
+for TERM_BIN in gnome-terminal xfce4-terminal x-terminal-emulator konsole kitty alacritty; do
+  if command -v "$TERM_BIN" >/dev/null 2>&1; then
+    if [[ "$TERM_BIN" == "gnome-terminal" ]]; then
+      exec "$TERM_BIN" --title="Work on Frank — ChatGPT Organ" -- bash -lc "$INNEN"
+    else
+      exec "$TERM_BIN" -e "bash -lc '$INNEN'"
+    fi
+  fi
+done
+notify-send "Work on Frank" "Kein Terminal gefunden" 2>/dev/null || true
+exit 1

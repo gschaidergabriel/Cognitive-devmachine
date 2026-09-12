@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56-read-work-on-frank-20260912T1046-0700",
+  "command_sha256": "71f7eb9d4360510fa56e9e93a6de514dfe0f50d6e825599c8568094578aa05d5",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:42:20.314640+00:00",
+  "finished_at": "2026-09-12T03:42:20.317847+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "eecb813f687114fc0e749a66ebcecf940af79946886f627e2ba63b3f8c641382",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env bash\nset -euo pipefail\nARBEIT=\"$HOME/aicore/opt/aicore\"\nORGAN=\"$HOME/.claude/star/frank_chatgpt_terminal.py\"\nif [[ ! -f \"$ORGAN\" ]]; then\n  notify-send \"Work on Frank\" \"ChatGPT-Organ nicht gefunden ($ORGAN)\" 2>/dev/null || true\n  exit 1\nfi\nSNAP=\"\"\nif [[ -x \"$HOME/.local/bin/frank-snapshot\" ]]; then\n  SNAP=\"$(\"$HOME/.local/bin/frank-snapshot\" \"$ARBEIT\" work-on-frank 2>/dev/null || true)\"\nfi\nINNEN=\"cd '$ARBEIT' && echo 'FranKenstein ChatGPT-Organ \u2014 GRID10/UnifiedDB canonical'; echo 'Snapshot: \\$SNAP'; python3 '$ORGAN'; echo; echo '[Sitzung beendet]'; exec bash\"\nfor TERM_BIN in gnome-terminal xfce4-terminal x-terminal-emulator konsole kitty alacritty; do\n  if command -v \"$TERM_BIN\" >/dev/null 2>&1; then\n    if [[ \"$TERM_BIN\" == \"gnome-terminal\" ]]; then\n      exec \"$TERM_BIN\" --title=\"Work on Frank \u2014 ChatGPT Organ\" -- bash -lc \"$INNEN\"\n    else\n      exec \"$TERM_BIN\" -e \"bash -lc '$INNEN'\"\n    fi\n  fi\ndone\nnotify-send \"Work on Frank\" \"Kein Terminal gefunden\" 2>/dev/null || true\nexit 1\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "eecb813f687114fc0e749a66ebcecf940af79946886f627e2ba63b3f8c641382",
+    "bytes": 1016,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

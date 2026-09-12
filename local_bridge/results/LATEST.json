@@ -1,19 +1,22 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "omega-verify-install-head-1a45-ai-core-node-20260913-0034",
-  "command_sha256": "776d5f80254d62dd076e4bdc5e5f05cab509413d7eef03b7be7812146d463ada",
+  "command_id": "omega777-stage-signal-sensor-20260913T0036Z",
+  "command_sha256": "dc83e2aa86f05599a168894b08f1336bde105def60bc165e2658fdb35866d401",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-12T17:28:03.155301+00:00",
-  "finished_at": "2026-09-12T17:28:07.051427+00:00",
+  "started_at": "2026-09-12T17:28:44.933228+00:00",
+  "finished_at": "2026-09-12T17:28:44.933460+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "c8ee0827f4b0ff4bb1222e9b8db2559112412a57d1dd49e248520f1787a1a7ef",
-  "stderr_sha256": "69cea4d2132c0992acb12da660290808fd4a92b6b319dd8e24b06154dbd64360",
-  "stdout_tail": "SOURCE_HEAD=1a45da97d70b5e00e8cb9db2b06115db40ba5f89\nTEST=tests/test_omega_arm_bus.py\nTEST=tests/test_voice777_local_audio_arm.py\nTEST=tests/test_voice777_multiarm_integration.py\nTEST=tests/test_voice777_omni_presence.py\nTEST=tests/test_voice777_pocket_renderer.py\nTEST=tests/test_omega_organ_activity.py\nTEST=tests/test_voice777_installer_convergence.py\nTESTS_PASS=1\nOMEGA 777 convergence layer installed without restarting live voice.\n\nPrepared runtime composition:\n  presentation floor: OMNI > terminal > local_voice\n  acoustic authority: canonical omega_arm_bus / UnifiedDB star_konfig\n  local renderer libs: Pocket streaming + cancellable local audio arm\n  OMNI sensor lib: voice777_omni_presence.py\n  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json\n  terminal: /home/ai-core-node/.local/bin/frank-omega\n\nPrepared effective service overrides:\n  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf\n  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf\n\nVerified loaded ExecStart definitions:\n  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n\nNo production conversation process was restarted by this installer.\nApply the persistent ChatGPT-client wrapper at a controlled boundary with:\n  systemctl --user restart frankenstein-chatgpt-client.service\nApply the voice wrapper only when the current voice session is quiescent and\nhost-specific safety/readback permits the lifecycle boundary:\n  systemctl --user restart frankenstein-gespraechsmodus.service\n--- SERVICE DEFINITION READBACK ---\nMainPID=2376110\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nMainPID=2376101\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- INSTALLED VS SOURCE ---\nINSTALLED_BYTES_MATCH=1\nOMEGA_INSTALL_PASS=1\n",
-  "stderr_tail": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.000s\n\nOK\n...........\n----------------------------------------------------------------------\nRan 11 tests in 0.042s\n\nOK\n.\n----------------------------------------------------------------------\nRan 1 test in 0.111s\n\nOK\n",
-  "meta": {},
+  "op": "write_text",
+  "stdout_sha256": "793c927c157329f0c76174e258484e042452b1a4b142e3aad3a846af923e9490",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "WROTE /tmp/omega777_signal_52dff.py\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "4039a2d8ca5a97426c65832ad70b4c74711a22d04903d846a30d9c04efb98257",
+    "bytes": 12561
+  },
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

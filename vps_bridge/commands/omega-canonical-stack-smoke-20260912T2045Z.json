@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-canonical-stack-smoke-20260912T2045Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; H=49d9bb023933ee6383433e5206d4148b8082dcae; REL=/workspace/omega_runtime/releases/$H; SCR=/workspace/omega_runtime/validation/smoke-20260912T2045Z; mkdir -p \"$SCR/state\" \"$SCR/data\" \"$SCR/git\"; export PYTHONPATH=\"$REL\" OMEGA_RUNTIME_ROOT=\"$SCR/state\" OMEGA_REPO_ROOT=\"$REL\" OMEGA_UNIFIED_DB=\"$SCR/data/omega_unified.db\" OMEGA_ROUTER_CONFIG=\"$REL/config/organ_router.json\" OMEGA_AUTONOMY_POLICY=\"$REL/config/autonomy_policy.json\" OMEGA_CARRIER_REPO=/workspace/omega_runtime/carrier_repo OMEGA_OUTER_SPOOL=\"$SCR/state/outer_bridge\"; python3 -m omega.grid_runtime_v3 --once; python3 -m omega.spool_bridge_relay --once >\"$SCR/relay_once.json\"; python3 -m omega.outer_bridge_worker --spool-root \"$SCR/state/outer_bridge\" --carrier-repo /workspace/omega_runtime/carrier_repo --work-root \"$SCR/git\" --once >\"$SCR/outer_once.json\"; python3 - <<'PY'\nimport json,pathlib,sqlite3\ns=pathlib.Path('/workspace/omega_runtime/validation/smoke-20260912T2045Z')\nprint('GRID_STATUS', (s/'state/STATUS.json').exists())\nprint('RELAY_ONCE', (s/'relay_once.json').read_text().strip())\nprint('OUTER_ONCE', (s/'outer_once.json').read_text().strip())\nprint('OUTER_STATUS', (s/'state/outer_bridge/OUTER_WORKER_STATUS.json').exists())\ncon=sqlite3.connect(s/'state/omega_runtime.sqlite3'); print('FRAMES',con.execute('select count(*) from frame').fetchone()[0]); con.close()\nPY\necho CANONICAL_SMOKE_PASS"
+}

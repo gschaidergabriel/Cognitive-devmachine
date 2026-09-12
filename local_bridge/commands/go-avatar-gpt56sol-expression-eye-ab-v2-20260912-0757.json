@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-expression-eye-ab-v2-20260912-0757",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail\nREPO=/home/ai-core-node/.claude/star/local_bridge_state/repo\nCOMMIT=534da45dcbdb2e6d2d305122d8c7fa2c62f97dec\nSCRIPT=/tmp/go_avatar_expression_eye_ab_v2_20260912_0757.py\nOUT=/home/ai-core-node/.claude/star/visual/.go_evidence/expression_eye_ab_v2_20260912_0757\ntest ! -e \"$OUT\"\ngit -C \"$REPO\" fetch --quiet origin \"$COMMIT\"\ngit -C \"$REPO\" show \"$COMMIT:handoff/avatar-expression-eye-ab-harness-20260912/expression_eye_ab_harness.py\" > \"$SCRIPT\"\nprintf 'HARNESS_SHA256 '; sha256sum \"$SCRIPT\"\npython3 \"$SCRIPT\" --visual-root /home/ai-core-node/.claude/star/visual --out \"$OUT\" --port 9242\necho '===ARTIFACTS==='\nsha256sum \"$OUT\"/*\necho '===REPORT==='\ncat \"$OUT/report.json\"\necho '===LIVE_UNCHANGED==='\nsha256sum buehne.html buehne_daemon.py filmlook.js\nprintf 'SERVICE '; systemctl --user is-active frankenstein-buehne.service\necho SCOPE=ISOLATED_BROWSER_NO_SOURCE_WRITE"
+}

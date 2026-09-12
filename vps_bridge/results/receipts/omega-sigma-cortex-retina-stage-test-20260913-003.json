@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-sigma-cortex-retina-stage-test-20260913-003",
+  "command_sha256": "01b2fbc0c32ea2437a26acc7d54882731d5090dbed56286dfc63a7bd36484393",
+  "started_at": "2026-09-12T19:30:28.722452+00:00",
+  "finished_at": "2026-09-12T19:30:30.398120+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "571b1f1a493713b0bbc36b4ac87dd7ba65ba96701bd22af8c852e981a3647a5a",
+  "stderr_sha256": "b9ddc3ae82fd00e67411956676c8c786414ca843f411553722a9f0c5e6115621",
+  "stdout_tail": "Your branch is behind 'origin/omega-vps-deploy' by 2 commits, and can be fast-forwarded.\n  (use \"git pull\" to update your local branch)\nHEAD is now at ebb299ebc omega deploy: stage OMEGA-Sigma Cortex Retina runtime overlay\n",
+  "stderr_tail": "From github.com:gschaidergabriel/clay-global-research-entity\n * branch                omega-vps-deploy -> FETCH_HEAD\n   c8e300795..ebb299ebc  omega-vps-deploy -> origin/omega-vps-deploy\nAlready on 'omega-vps-deploy'\nTraceback (most recent call last):\n  File \"<stdin>\", line 3, in <module>\n  File \"/workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-001/omega/__init__.py\", line 3, in <module>\n    from .alignment import Decision, EffectBinding\nModuleNotFoundError: No module named 'omega.alignment'\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

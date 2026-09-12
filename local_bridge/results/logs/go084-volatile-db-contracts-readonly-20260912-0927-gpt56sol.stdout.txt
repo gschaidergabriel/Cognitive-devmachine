@@ -1,0 +1,133 @@
+=== GO084 VOLATILE DB CONTRACTS READONLY ===
+2026-09-12T04:25:11+02:00
+andreas-MACO
+--- ENTITYOS PATH CONFIG ---
+ENTITYOS_DATA_DIR=/var/lib/entityos/data
+ENTITYOS_ROOTFS_BASE=/var/lib/entityos/rootfs-base
+ENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run
+ENTITYOS_VOICE_DIR=/var/lib/entityos/voice
+ENTITYOS_COGNITION_DIR=/opt/entityos/cognition
+ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix"
+
+### DB /var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db
+stat: cannot stat '/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db': Permission denied (os error 13)
+sha256sum: /var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db: Permission denied
+[tables]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db?mode=ro": unable to open database file
+[row counts]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db?mode=ro": unable to open database file
+[open pids]
+
+
+### DB /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+stat: cannot stat '/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db': Permission denied (os error 13)
+sha256sum: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db: Permission denied
+[tables]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro": unable to open database file
+[row counts]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db?mode=ro": unable to open database file
+[open pids]
+
+
+### DB /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+stat: cannot stat '/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db': Permission denied (os error 13)
+sha256sum: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db: Permission denied
+[tables]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro": unable to open database file
+[row counts]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db?mode=ro": unable to open database file
+[open pids]
+
+
+### DB /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+stat: cannot stat '/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db': Permission denied (os error 13)
+sha256sum: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db: Permission denied
+[tables]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro": unable to open database file
+[row counts]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db?mode=ro": unable to open database file
+[open pids]
+
+
+### DB /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+stat: cannot stat '/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db': Permission denied (os error 13)
+sha256sum: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db: Permission denied
+[tables]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db?mode=ro": unable to open database file
+[row counts]
+Error: unable to open database "file:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db?mode=ro": unable to open database file
+[open pids]
+
+
+--- SAME BASENAME OUTSIDE ROOTFS-RUN ---
+## onnxruntime.db
+## amygdala.db
+## world_experience.db
+## consciousness.db
+## unified.db
+78364672 2026-09-12T04:12:40.9169128270 /var/lib/entityos/data/unified.db
+0 2026-09-10T07:26:45.1987022190 /home/andreas/.local/share/agentzero/unified.db
+--- TARGETED SOURCE REFERENCES ---
+## ROOT /var/lib/entityos/voice
+/var/lib/entityos/voice/charakter.py:9:  ~/repo/database/world_experience.db, Tabelle personality_state, letzte
+/var/lib/entityos/voice/charakter.py:45:# ~/.local/share/agentzero/unified.db (164 MB, waechst) -- also GENAU der
+/var/lib/entityos/voice/charakter.py:58:SEED_HERKUNFT = "world_experience.db personality_state 2026-03-07T21:55:53 " \
+/var/lib/entityos/voice/buehne.py:78:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/regie.py:70:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/ziele.py:9:⭐ DIE LUECKE, DIE HIER GESCHLOSSEN WIRD: `goals` in der consciousness.db
+/var/lib/entityos/voice/ziele.py:48:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/erleben.py:79:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/umschlag.py:112:     (consciousness.db, ueber `_iconn()`), nicht in der Unified-DB. Der
+/var/lib/entityos/voice/umschlag.py:158:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/umschlag.py:475:    # INNENWELT-DB (consciousness.db / _iconn()), nicht in der Unified-DB.
+/var/lib/entityos/voice/antrieb.py:59:    or os.path.expanduser("~/.local/share/agentzero/unified.db"))
+/var/lib/entityos/voice/vorlieben.py:53:    os.path.expanduser("~/.local/share/agentzero/unified.db")
+/var/lib/entityos/voice/innenwelt/workspace_broadcast.py:38:   `consciousness.db` (Tabelle `workspace_broadcast`). Der Kern liest ihn
+/var/lib/entityos/voice/innenwelt/e_pq.py:23:Database: world_experience.db (personality_state table)
+/var/lib/entityos/voice/innenwelt/e_pq.py:46:    DB_PATH = _data / "db" / "world_experience.db"
+/var/lib/entityos/voice/innenwelt/amygdala.py:49:    DB_PATH = Path.home() / ".local" / "share" / "frank" / "db" / "amygdala.db"
+/var/lib/entityos/voice/denker.py:61:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/interesse.py:56:    os.path.expanduser("~/.local/share/agentzero/unified.db"))
+/var/lib/entityos/voice/selbstauskunft.py:317:        os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/puls.py:188:    # consciousness.db) existierte schon lange, wurde aber von NIEMANDEM
+## ROOT /home/andreas/frankenstein-repo
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:93:    "db_isolation": "Real ~/.local/share/agentzero/unified.db copied ONCE into a throwaway fake-HOME (/tmp/p14_fresh_check_20260905/fakehome/.local/share/agentzero/unified.db); scenario runner invoked with HOME env override pointed at the fake home so its hardcoded Path.home()-based LIVE_DB resolves to the fresh copy, not the real file. No script source was modified to achieve this.",
+/home/andreas/frankenstein-repo/scripts/SELF_INTEGRATION_GOLD_V1.json:97:      "method": "Targeted row counts on f2_runtime_epoch, f2_reentry_record, f2_grid10_effect_journal, and f2_grid10_frame WHERE experiment_condition LIKE 'p6d_%' on the REAL ~/.local/share/agentzero/unified.db, before and after the fresh-checkout run.",
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_workspace_reentry.py:25:~/.local/share/agentzero/unified.db schema + row population before writing
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p10_gold_test.py:12:COPY, e.g. `cp ~/.local/share/agentzero/unified.db /tmp/p10_gold.db`) and
+/home/andreas/frankenstein-repo/scripts/f2wp1207_tune_passthrough_test.py:33:REAL_DB = Path.home() / ".local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p14_repro_harness.sh:27:REAL_DB="$HOME/.local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p14_repro_harness.sh:64:cp "$REAL_DB" "$FAKEHOME/.local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_turn_loop_bridge_test.py:35:REAL_DB = Path.home() / ".local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p12_self_observation.py:22:~/.local/share/agentzero/unified.db, 2026-09-05, per house discipline --
+/home/andreas/frankenstein-repo/scripts/f2wp1207_turn_loop_gold_test.py:84:REAL_DB = Path.home() / ".local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p13_scenario_runner.py:46:~/.local/share/agentzero/unified.db per condition (same convention as the
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p13_scenario_runner.py:124:LIVE_DB = str(Path.home() / ".local/share/agentzero/unified.db")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_percept_passthrough_test.py:44:REAL_DB = Path.home() / ".local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_cortex_p3_describe_once.py:56:(~/.local/share/agentzero/unified.db) using the exact column list and JSON shapes
+/home/andreas/frankenstein-repo/scripts/f2wp1207_cortex_p3_describe_once.py:95:DEFAULT_DB = str(Path.home() / ".local/share/agentzero/unified.db")
+/home/andreas/frankenstein-repo/scripts/f2wp1207_alignment_controller_test.py:47:REAL_DB = Path.home() / ".local/share/agentzero/unified.db"
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p11_gold_test.py:12:path to a COPY, e.g. `cp ~/.local/share/agentzero/unified.db /tmp/p11_gold.db`)
+/home/andreas/frankenstein-repo/scripts/stern.py:176:        2. $XDG_DATA_HOME/agentzero/unified.db, sonst
+/home/andreas/frankenstein-repo/scripts/stern.py:177:           ~/.local/share/agentzero/unified.db -- die Ziellage nach dem Umzug.
+/home/andreas/frankenstein-repo/scripts/stern.py:11788:# (~/.local/share/agentzero/unified.db bzw. was DB_PATH laut Zeiger/Env
+/home/andreas/frankenstein-repo/scripts/f2wp1207_p12_gold_test.py:16:path to a COPY, e.g. `cp ~/.local/share/agentzero/unified.db /tmp/p12.db`)
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/statusline-frankenstein.sh:108:XDG_ZIEL="${XDG_DATA_HOME:-$HOME/.local/share}/agentzero/unified.db"
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/voice_loop_core.py:54:    -- andere Codebasis, eigene consciousness.db, laut Direktive selbst
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/einrichtung.py:920:        # (~/.local/share/agentzero/unified.db statt {STERN_DIR}/unified.db),
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py:128:        2. $XDG_DATA_HOME/agentzero/unified.db, sonst
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py:129:           ~/.local/share/agentzero/unified.db -- die Ziellage nach dem Umzug.
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py:10365:# (~/.local/share/agentzero/unified.db bzw. was DB_PATH laut Zeiger/Env
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/windows/quelle/stern.py:94:        2. $XDG_DATA_HOME/agentzero/unified.db, sonst je Plattform:
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/windows/quelle/stern.py:95:           POSIX:   ~/.local/share/agentzero/unified.db
+## ROOT /home/andreas/self-integration
+/home/andreas/self-integration/evidence/2026-09-02-unified-db-merge-report.json:3:  "canonical": "/home/ai-core-node/.local/share/agentzero/unified.db",
+/home/andreas/self-integration/werkzeug/fluechtig-pruefen_selbsttest.sh:90:# onnxruntime.db heisst zufaellig .db; sitzung.dat ist der Fall, um den es
+/home/andreas/self-integration/werkzeug/regressions-waechter.py:142:    # kannte -- darunter world_experience.db mit einem identity_snapshot.
+/home/andreas/self-integration/werkzeug/db-autoritaet.sh:55:#   /home/gabriel/.local/share/agentzero/unified.db (105 MB) als "unerklaert"
+/home/andreas/self-integration/werkzeug/fluechtig-pruefen.sh:9:#   gefundenen 0-Byte-Attrappen eine GEFUELLTE consciousness.db, die kein
+/home/andreas/self-integration/werkzeug/fluechtig-pruefen.sh:12:#   world_experience.db mit 31 personality_state-Zeilen und einem
+/home/andreas/self-integration/werkzeug/fluechtig-pruefen.sh:48:#      Verlust. (onnxruntime.db, 0 Zeilen in beiden Tabellen, ist der
+/home/andreas/self-integration/werkzeug/testlauf.sh:6:#     FEHLER: echte DB fehlt: /home/andreas/.local/share/agentzero/unified.db
+/home/andreas/self-integration/werkzeug/testlauf.sh:42:ZIEL="$TMPHOME/.local/share/agentzero/unified.db"
+=== END ===

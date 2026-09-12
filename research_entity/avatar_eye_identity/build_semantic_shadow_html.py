@@ -67,14 +67,27 @@ def find_braced_region(text: str, open_brace: int) -> tuple[int, int]:
     raise RuntimeError("unterminated braced region")
 
 
-def rewrite_blink_function(text: str) -> tuple[str, dict[str, object]]:
-    signature = "function blinzeln(zeitplanNeu = true){"
+def extract_function(text: str, signature: str, name: str) -> tuple[int, int, str]:
     start = text.find(signature)
     if start < 0:
-        raise RuntimeError("blinzeln signature not found")
+        raise RuntimeError(f"{name} signature not found")
     brace = text.find("{", start)
+    if brace < 0:
+        raise RuntimeError(f"{name} opening brace not found")
     _, end = find_braced_region(text, brace)
-    fn = text[start:end]
+    return start, end, text[start:end]
+
+
+def rewrite_blink_function(text: str) -> tuple[str, dict[str, object]]:
+    """Remove only the special-expression early return from blinzeln().
+
+    The current live subject delegates frame playback and end-state opacity to
+    blinzelAbspielen(); keeping this rewrite scoped to the scheduler makes the
+    builder resilient to that split call graph while remaining fail-closed.
+    """
+    start, end, fn = extract_function(
+        text, "function blinzeln(zeitplanNeu = true){", "blinzeln"
+    )
 
     guard = re.search(r"if\s*\(\s*_sonderLaeuft\s*\)\s*\{", fn)
     if not guard:
@@ -86,23 +99,36 @@ def rewrite_blink_function(text: str) -> tuple[str, dict[str, object]]:
         raise RuntimeError(f"unexpected special-expression guard: {removed!r}")
     fn = fn[: guard.start()] + fn[guard_end:]
 
-    old_end = '$("augen-blink").style.opacity = "0";'
-    if fn.count(old_end) != 1:
-        raise RuntimeError(
-            f"blink end opacity: expected one occurrence inside blinzeln, got {fn.count(old_end)}"
-        )
-    fn = fn.replace(
-        old_end,
-        '$("augen-blink").src = BLINK_BILDER[0];\n'
-        '    $("augen-blink").style.opacity = "1";',
-        1,
-    )
-
     rewritten = text[:start] + fn + text[end:]
     return rewritten, {
         "removed_guard_sha256": sha256_bytes(removed.encode("utf-8")),
         "removed_guard_bytes": len(removed.encode("utf-8")),
-        "blink_function_rewritten": True,
+        "blink_scheduler_rewritten": True,
+    }
+
+
+def rewrite_blink_player(text: str) -> tuple[str, dict[str, object]]:
+    """Keep the canonical open-eye plate visible after frame playback ends."""
+    start, end, fn = extract_function(
+        text,
+        "function blinzelAbspielen(schritte, idx, zeitplanNeu){",
+        "blinzelAbspielen",
+    )
+    old_end = '$("augen-blink").style.opacity = "0";'
+    if fn.count(old_end) != 1:
+        raise RuntimeError(
+            "blink end opacity: expected one occurrence inside "
+            f"blinzelAbspielen, got {fn.count(old_end)}"
+        )
+    replacement = (
+        '$("augen-blink").src = BLINK_BILDER[0];\n'
+        '    $("augen-blink").style.opacity = "1";'
+    )
+    fn = fn.replace(old_end, replacement, 1)
+    rewritten = text[:start] + fn + text[end:]
+    return rewritten, {
+        "blink_player_end_rewritten": True,
+        "blink_player_open_plate_restored": True,
     }
 
 
@@ -152,6 +178,8 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
 
     text, blink_meta = rewrite_blink_function(text)
     changes.update(blink_meta)
+    text, player_meta = rewrite_blink_player(text)
+    changes.update(player_meta)
 
     text, changes["glow_coupling"] = replace_one(
         text,
@@ -162,7 +190,7 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
 
     text = text.replace(
         "</head>",
-        '<meta name="go-eye-shadow" content="v4-canonical-route">\n</head>',
+        '<meta name="go-eye-shadow" content="v5-split-blink-player">\n</head>',
         1,
     )
 
@@ -170,11 +198,22 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
         "old_special_glow_coupling_absent": (
             '_sonderLaeuft ? "0" : String(ziel.opazitaet)' not in text
         ),
+        "special_blink_guard_absent": not bool(
+            re.search(
+                r"function blinzeln\(zeitplanNeu = true\)\{.*?if\s*\(\s*_sonderLaeuft\s*\)",
+                text,
+                re.S,
+            )
+        ),
         "canonical_blink_img_route_present": blink_img in text,
         "canonical_blink_array_route_present": blink_array in text,
         "explicit_relief2_url_absent": "/augen_blink_relief2/" not in text,
         "blink_css_open": bool(
             re.search(r"#augen-blink\{[^}]*opacity\s*:\s*1", text, re.S)
+        ),
+        "blink_player_restores_open_plate": (
+            '$("augen-blink").src = BLINK_BILDER[0];' in text
+            and '$("augen-blink").style.opacity = "1";' in text
         ),
         "glow_z_five": bool(
             re.search(r"#pupillen-glow\{[^}]*z-index\s*:\s*5", text, re.S)
@@ -186,7 +225,7 @@ def build(source: Path, visual_root: Path, out: Path) -> dict[str, object]:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(text, encoding="utf-8")
     manifest: dict[str, object] = {
-        "schema": "GO_AVATAR_EYE_SEMANTIC_SHADOW/v2",
+        "schema": "GO_AVATAR_EYE_SEMANTIC_SHADOW/v3",
         "source_sha256": source_sha,
         "candidate_sha256": sha256_file(out),
         "relief2_open_sha256": sha256_file(relief2_open),

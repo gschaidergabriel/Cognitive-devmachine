@@ -1,0 +1,68 @@
+===BINDING===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-13T00:55:51+07:00
+LIVE=/home/ai-core-node/.local/lib/frankenstein-voice-final
+LIVE_DIR=PASS
+===CACHE_HEAD===
+065e03acca024ab03d6eb2cd036f931fc8dc11be
+===HASH_COMPARE===
+--scripts/omega_runtime.py
+4ff690ab6d84f9c868ec5d5097221d2c003abc30aa2b93bf88d640c11a073e1e  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_runtime.py
+4ff690ab6d84f9c868ec5d5097221d2c003abc30aa2b93bf88d640c11a073e1e  /home/ai-core-node/.cache/omega-convergence-065e03acca024ab03d6eb2cd036f931fc8dc11be-20260913-0057/scripts/omega_runtime.py
+--scripts/voice_final_runtime.py
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.cache/omega-convergence-065e03acca024ab03d6eb2cd036f931fc8dc11be-20260913-0057/scripts/voice_final_runtime.py
+--scripts/voice_host_777_live_client.py
+d798cb2121c17bf74411ab842efc416c8dbab0306770b543117fb38ef44f45e6  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+d798cb2121c17bf74411ab842efc416c8dbab0306770b543117fb38ef44f45e6  /home/ai-core-node/.cache/omega-convergence-065e03acca024ab03d6eb2cd036f931fc8dc11be-20260913-0057/scripts/voice_host_777_live_client.py
+--scripts/voice_full_runtime.py
+a982bd785578c7dc7df5013d463a7df3fb82d775f3f516dcbe40096bda6005b7  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+a982bd785578c7dc7df5013d463a7df3fb82d775f3f516dcbe40096bda6005b7  /home/ai-core-node/.cache/omega-convergence-065e03acca024ab03d6eb2cd036f931fc8dc11be-20260913-0057/scripts/voice_full_runtime.py
+--scripts/omega_arm_bus.py
+27b657a93e3c449378aaec321b9f9330f44468acd63af2e2c5d22c4cd0df98ef  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_arm_bus.py
+27b657a93e3c449378aaec321b9f9330f44468acd63af2e2c5d22c4cd0df98ef  /home/ai-core-node/.cache/omega-convergence-065e03acca024ab03d6eb2cd036f931fc8dc11be-20260913-0057/scripts/omega_arm_bus.py
+===PROCESS_BINDING===
+PIDS=2667899 2667903 
+2667899    2339 Sun Sep 13 00:53:41 2026     130 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+cwd=/home/ai-core-node
+exe=/usr/bin/python3.12
+cgroup=0::/user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-chatgpt-client.service 
+2667903    2339 Sun Sep 13 00:53:41 2026     130 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+cwd=/home/ai-core-node
+exe=/usr/bin/python3.12
+cgroup=0::/user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-gespraechsmodus.service 
+===UNIT_BINDING===
+● frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service; enabled; preset: enabled)
+    Drop-In: /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d
+             └─95-omega-777-organ-floor.conf, 99-omega-777-organ-floor.conf
+     Active: active (running) since Sun 2026-09-13 00:53:41 +07; 2min 10s ago
+   Main PID: 2667899 (python3)
+      Tasks: 2 (limit: 28222)
+     Memory: 18.8M (peak: 19.8M)
+        CPU: 144ms
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-chatgpt-client.service
+             └─2667899 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+● frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service; enabled; preset: enabled)
+    Drop-In: /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d
+             └─95-voice-live-final.conf
+     Active: active (running) since Sun 2026-09-13 00:53:41 +07; 2min 10s ago
+   Main PID: 2667903 (python3)
+      Tasks: 31 (limit: 28222)
+     Memory: 60.0M (peak: 62.3M)
+        CPU: 2.405s
+     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-gespraechsmodus.service
+             └─2667903 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+
+Sep 13 00:54:12 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:54:12] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:54:22 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:54:22] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:54:32 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:54:32] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:54:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:54:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:54:52 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:54:52] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:55:02 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:55:02] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+===OMEGA_HEALTH===
+OMEGA_HEALTH_RC=2

@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"chatgpt-organ-read-live-launchers-20260912T0404Z",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "command":"set -e; for f in /home/ai-core-node/.local/bin/frank /home/ai-core-node/.local/bin/frank-terminal-hilfe; do echo ===$f===; if [ -f \"$f\" ]; then cat \"$f\"; else echo MISSING; fi; done",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":20
+}

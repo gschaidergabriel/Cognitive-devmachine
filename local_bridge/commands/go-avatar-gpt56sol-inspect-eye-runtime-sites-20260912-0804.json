@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-inspect-eye-runtime-sites-20260912-0804",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":45,
+  "command":"set -euo pipefail\npython3 - <<'PY'\nfrom pathlib import Path\nimport re\ns=Path('buehne.html').read_text()\ndef func(sig):\n a=s.index(sig); b=s.index('{',a); d=0\n for i in range(b,len(s)):\n  if s[i]=='{': d+=1\n  elif s[i]=='}':\n   d-=1\n   if d==0: return s[a:i+1]\nfor sig in ['function blinzelAbspielen(', 'function gazeSchritt(']:\n print('===',sig,'==='); print(func(sig))\nfor sel in ['#augen-blink','#pupillen-glow']:\n m=re.search(re.escape(sel)+r'\\{[^}]*\\}',s,re.S); print('===CSS',sel,'==='); print(m.group(0) if m else 'MISSING')\nprint('===COUPLING_LINES===')\nfor i,l in enumerate(s.splitlines(),1):\n if 'pupillen-glow' in l and ('opacity' in l or 'style' in l): print(i,l)\n if 'augen-blink' in l and 'opacity' in l: print(i,l)\nPY\nsha256sum buehne.html\necho SCOPE=READ_ONLY_EYE_RUNTIME_SITES"
+}

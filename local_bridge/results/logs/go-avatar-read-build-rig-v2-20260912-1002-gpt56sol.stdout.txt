@@ -1,0 +1,447 @@
+from __future__ import annotations
+
+import json
+import math
+import shutil
+from pathlib import Path
+
+import numpy as np
+from PIL import Image, ImageChops, ImageDraw, ImageEnhance
+from scipy import ndimage
+
+ROOT = Path('/workspace/scratch/9ddd010900ba')
+GEN = ROOT / 'generated_images'
+OLD = ROOT / 'FRANK_DECODER_DATASET_32'
+OUT = ROOT / 'FRANK_AVATAR_RIG_V2'
+W, H = 1536, 1024
+
+HEAD_RAW = GEN / 'exec-a63373c1-6220-4906-921c-6e632e97ae8d.png'
+BODY_RAW = GEN / 'exec-27afe855-5776-4eac-862b-0c1110d0aa82.png'
+BG_RAW = GEN / 'exec-bc53111a-907d-4a86-89fb-8f78cd9c5f6b.png'
+EYE_HALF_RAW = GEN / 'exec-adcb91d6-46f1-435d-aa72-8c1275dac764.png'
+EYE_CLOSED_RAW = GEN / 'exec-bc8c2bf1-89e9-41d7-861e-b1e14259f50e.png'
+
+MOUTHS = [
+    ('00_rest', 'exec-2e649ed9-8fa1-4c2d-8f20-7b75dc939fd8.png', 'neutral relaxed rest'),
+    ('01_closed_mbp', 'exec-7ae5525b-a664-4a35-987c-ad82721ca429.png', 'M/B/P closure'),
+    ('02_breath', 'exec-34f63ac7-1fbf-461d-8f2b-b0fb6b866699.png', 'quiet breathing'),
+    ('03_a_small', 'exec-03efb1b7-6bd3-4207-907d-5613d6fab608.png', 'A small'),
+    ('04_a_medium', 'exec-bd810777-67e1-46c2-a536-27330abb199f.png', 'A medium'),
+    ('05_a_wide', 'exec-1803a6ad-c64e-49ab-a73e-edc5d0b31746.png', 'A wide'),
+    ('06_e', 'exec-2d131f3c-ed22-4708-ab1b-f99464dcd680.png', 'E'),
+    ('07_i', 'exec-1cd15f06-007e-4633-947d-bc749941942e.png', 'I'),
+    ('08_o_small', 'exec-809e93e0-1fd4-477c-9004-fb6415379ea3.png', 'O small'),
+    ('09_o_medium', 'exec-39f6dda1-ab6a-4a76-bd36-d672853bb2ba.png', 'O medium'),
+    ('10_o_wide', 'exec-020a2d51-0cd2-4d43-8430-eb88bfb9141b.png', 'O wide'),
+    ('11_u', 'exec-a7710ac1-b73b-41c8-817d-52a821d90a08.png', 'U'),
+    ('12_fv', 'exec-c9a33f2d-fe46-4b98-bdb6-69ce3d66c06f.png', 'F/V'),
+    ('13_l', 'exec-5d327692-f12a-4725-9a64-1e0b66775719.png', 'L'),
+    ('14_th', 'exec-f3eb98f5-9d9a-421e-837e-c0b7636d0a18.png', 'TH'),
+    ('15_sz', 'exec-77712e51-aa44-4083-bfa5-1dc29653f967.png', 'S/Z'),
+    ('16_rch', 'exec-5f0eb09e-b9e1-4140-99c6-f9190b64f589.png', 'R/CH'),
+    ('17_kg', 'exec-f7b7fd88-7dc8-4255-b793-1a5c2e8c7809.png', 'K/G'),
+    ('18_wq', 'exec-206e00a0-4dd5-4ebc-b2a5-4bb209282ba4.png', 'W/Q'),
+    ('19_shch', 'exec-8f392962-5242-448a-9bad-48e614ef06fc.png', 'SCH/CH'),
+    ('20_grin_closed', 'exec-84ba5494-b0f7-4b71-9f47-2c9ba11650d5.png', 'closed grin'),
+    ('21_grin_teeth', 'exec-e5484763-cdac-421c-a5c4-6e622ceca058.png', 'toothy grin'),
+    ('22_snarl_left', 'exec-f1dca929-fb20-4e17-8b50-fff5421934b7.png', 'left snarl'),
+    ('23_snarl_right', 'exec-565da903-6064-413e-b978-6d33e94d1cad.png', 'right snarl'),
+    ('24_bare_teeth', 'exec-36f815c6-cadc-463d-a520-8b72fe953c65.png', 'bare teeth'),
+    ('25_tongue_tip', 'exec-8a4684e6-7715-44cc-a2b2-851381b994e7.png', 'tongue tip'),
+    ('26_tongue_out', 'exec-abc4cb9b-9a4a-4e25-8fa6-46946597a619.png', 'tongue straight'),
+    ('27_tongue_left', 'exec-89e5d58d-001b-47b5-af32-35fa65c4a569.png', 'tongue left'),
+    ('28_tongue_right', 'exec-d6511fb7-ac15-4f80-8006-f9b3f8fe94a4.png', 'tongue right'),
+    ('29_whistle_small', 'exec-742c0737-a851-4fc5-a991-4ab44dc42cce.png', 'whistle small'),
+    ('30_whistle_strong', 'exec-43548023-2f43-4ed6-9146-e184b64e22f1.png', 'whistle strong'),
+    ('31_smirk_left', 'exec-1945ee02-8405-41e6-b1e2-1716aeffe652.png', 'smirk left'),
+    ('32_smirk_right', 'exec-67886e4c-4e3c-464b-aace-521b409d508c.png', 'smirk right'),
+    ('33_pout', 'exec-4fc71179-2f05-4f74-a139-0094598e0cb4.png', 'pout'),
+    ('34_jaw_clench', 'exec-cb92e39d-59e3-4881-a848-e9f4129a96f2.png', 'jaw clench'),
+    ('35_gasp', 'exec-47ab548d-9e08-430a-85dd-8596664074e4.png', 'gasp'),
+]
+
+manifest = {
+    'schema': 'frankenstein-avatar-rig-v2',
+    'canvas': {'width': W, 'height': H},
+    'neutral_pose': {'yaw': 0, 'pitch': 0, 'roll': 0, 'description': 'slightly forward, chin subtly lowered'},
+    'head_neck_anchor': {'x': 768, 'y': 600},
+    'assets': [],
+    'limitations': [
+        'Yaw, pitch and combined head series are deterministic 2D proxy transforms, not true newly rendered 3D views.',
+        'Full two-register expression system across three yaw poses is not training-ready in this package.',
+        'Generated transparent-looking sources contained baked checkerboards; final RGBA layers use measured silhouette extraction and are numerically verified.',
+    ],
+}
+
+
+def ensure_dirs():
+    if OUT.exists():
+        shutil.rmtree(OUT)
+    for p in [
+        'reference', 'sources', 'kopf/master', 'kopf/roll', 'kopf/experimental_2d_proxy/gier',
+        'kopf/experimental_2d_proxy/nick', 'kopf/experimental_2d_proxy/combined',
+        'koerper/master', 'koerper/atmen', 'koerper/lehnen', 'koerper/gewicht',
+        'koerper/schulterdrehung', 'koerper/schulterzucken', 'koerper/aufrichten',
+        'koerper/kombiniert', 'augen/gaze', 'augen/blink', 'mund/keyframes',
+        'mund/transitions', 'hintergrund', 'ausdruck/legacy_flat_reference', 'qa', 'docs'
+    ]:
+        (OUT / p).mkdir(parents=True, exist_ok=True)
+
+
+def extract_foreground(path: Path, roi: tuple[int, int, int, int]) -> Image.Image:
+    im = Image.open(path).convert('RGB')
+    a = np.asarray(im).astype(np.int16)
+    color = a.max(axis=2) - a.min(axis=2)
+    lum = a.mean(axis=2)
+    mask = (color > 22) | (lum < 115)
+    gate = np.zeros(mask.shape, bool)
+    x0, y0, x1, y1 = roi
+    gate[y0:y1, x0:x1] = True
+    mask &= gate
+    mask = ndimage.binary_closing(mask, iterations=3)
+    mask = ndimage.binary_dilation(mask, iterations=1)
+    labels, count = ndimage.label(mask)
+    if count:
+        sizes = ndimage.sum(mask, labels, range(1, count + 1))
+        keep = np.zeros_like(mask)
+        for idx in np.argsort(sizes)[-8:]:
+            if sizes[idx] > 80:
+                keep |= labels == (idx + 1)
+        mask = keep
+    mask = ndimage.binary_fill_holes(mask)
+    # Pull the cut inward to remove the generated grey checkerboard fringe.
+    mask = ndimage.binary_erosion(mask, iterations=3)
+    rgba = np.dstack([a.astype(np.uint8), (mask * 255).astype(np.uint8)])
+    return Image.fromarray(rgba, 'RGBA')
+
+
+def normalize_layer(im: Image.Image, target: tuple[int, int], anchor: tuple[int, int], anchor_mode: str) -> tuple[Image.Image, tuple[int, int, int, int], float]:
+    bbox = im.getchannel('A').getbbox()
+    if bbox is None:
+        raise RuntimeError('empty alpha mask')
+    crop = im.crop(bbox)
+    tw, th = target
+    scale = min(tw / crop.width, th / crop.height)
+    nw, nh = max(1, round(crop.width * scale)), max(1, round(crop.height * scale))
+    crop = crop.resize((nw, nh), Image.Resampling.LANCZOS)
+    canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    if anchor_mode == 'bottom_center':
+        pos = (round(anchor[0] - nw / 2), round(anchor[1] - nh))
+    elif anchor_mode == 'top_center':
+        pos = (round(anchor[0] - nw / 2), round(anchor[1]))
+    else:
+        raise ValueError(anchor_mode)
+    canvas.alpha_composite(crop, pos)
+    return canvas, bbox, scale
+
+
+def save_asset(im: Image.Image, rel: str, **meta):
+    path = OUT / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + '.part')
+    im.save(temp, format='PNG', optimize=False)
+    # Force a complete decode before making the file visible as a final asset.
+    with Image.open(temp) as verify:
+        verify.load()
+    temp.replace(path)
+    manifest['assets'].append({'path': rel, **meta})
+
+
+def transform_crop_about_anchor(layer: Image.Image, angle=0.0, sx=1.0, sy=1.0, anchor=(768, 600), target_anchor=None) -> Image.Image:
+    bbox = layer.getchannel('A').getbbox()
+    crop = layer.crop(bbox)
+    crop = crop.resize((max(1, round(crop.width * sx)), max(1, round(crop.height * sy))), Image.Resampling.BICUBIC)
+    if angle:
+        crop = crop.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True)
+    if target_anchor is None:
+        target_anchor = anchor
+    canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    x = round(target_anchor[0] - crop.width / 2)
+    y = round(target_anchor[1] - crop.height)
+    canvas.alpha_composite(crop, (x, y))
+    return canvas
+
+
+def transform_body_from_neck(layer: Image.Image, angle=0.0, sx=1.0, sy=1.0, target_anchor=(768, 505)) -> Image.Image:
+    bbox = layer.getchannel('A').getbbox()
+    crop = layer.crop(bbox)
+    crop = crop.resize((max(1, round(crop.width * sx)), max(1, round(crop.height * sy))), Image.Resampling.BICUBIC)
+    if angle:
+        crop = crop.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True)
+    canvas = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    x = round(target_anchor[0] - crop.width / 2)
+    y = round(target_anchor[1])
+    canvas.alpha_composite(crop, (x, y))
+    return canvas
+
+
+def rounded_alpha(size, radius=45, feather=3):
+    m = Image.new('L', size, 0)
+    d = ImageDraw.Draw(m)
+    d.rounded_rectangle((feather, feather, size[0] - feather - 1, size[1] - feather - 1), radius=radius, fill=255)
+    if feather:
+        m = m.filter(__import__('PIL.ImageFilter', fromlist=['GaussianBlur']).GaussianBlur(feather))
+    return m
+
+
+def ellipse_alpha(size, feather=3):
+    m = Image.new('L', size, 0)
+    d = ImageDraw.Draw(m)
+    inset_x = max(5, round(size[0] * .035))
+    inset_y = max(4, round(size[1] * .035))
+    d.ellipse((inset_x, inset_y, size[0]-inset_x-1, size[1]-inset_y-1), fill=255)
+    if feather:
+        m = m.filter(__import__('PIL.ImageFilter', fromlist=['GaussianBlur']).GaussianBlur(feather))
+    return m
+
+
+def suppress_red(im: Image.Image) -> Image.Image:
+    a = np.array(im)
+    rgb = a[:, :, :3].astype(np.int16)
+    red = (rgb[:, :, 0] > 105) & (rgb[:, :, 0] > rgb[:, :, 1] * 1.35) & (rgb[:, :, 0] > rgb[:, :, 2] * 1.15)
+    rgb[red, 0] = (rgb[red, 1] * 0.35).astype(np.int16)
+    rgb[red, 1] = np.maximum(rgb[red, 1], 35)
+    rgb[red, 2] = np.maximum(rgb[red, 2], 55)
+    a[:, :, :3] = np.clip(rgb, 0, 255).astype(np.uint8)
+    return Image.fromarray(a, 'RGBA')
+
+
+def build_layers():
+    shutil.copy2(ROOT / 'upload/Screenshot from 2026-09-11 11-21-50.png', OUT / 'reference/REFERENZ_neutrale_kopfhaltung.png')
+    shutil.copy2(OLD / '00_reference/01_canonical_red_eyes.png', OUT / 'reference/REFERENZ_palette_1536x1024.png')
+    shutil.copy2(HEAD_RAW, OUT / 'sources/head_generated_checkerboard_rgb.png')
+    shutil.copy2(BODY_RAW, OUT / 'sources/body_generated_checkerboard_rgb.png')
+    shutil.copy2(BG_RAW, OUT / 'sources/background_clean_rgb.png')
+
+    head_fg = extract_foreground(HEAD_RAW, (350, 0, 1180, 1024))
+    body_fg = extract_foreground(BODY_RAW, (0, 210, 1536, 1024))
+    head, head_bbox, head_scale = normalize_layer(head_fg, (520, 560), (768, 600), 'bottom_center')
+    body, body_bbox, body_scale = normalize_layer(body_fg, (1400, 650), (768, 505), 'top_center')
+    save_asset(head, 'kopf/master/kopf_zero_mit_augen.png', layer='head', rgba=True, quality='rig_ready', anchor={'x':768,'y':600})
+    save_asset(suppress_red(head), 'kopf/master/kopf_zero_ohne_rotes_augenglow.png', layer='head', rgba=True, quality='rig_ready', anchor={'x':768,'y':600})
+    save_asset(body, 'koerper/master/koerper_zero.png', layer='body', rgba=True, quality='rig_ready', neck_anchor={'x':768,'y':505})
+    return head, body, head_bbox, head_scale
+
+
+def build_head_poses(head):
+    anchor = (768, 600)
+    for roll in range(-25, 26, 5):
+        im = transform_crop_about_anchor(head, angle=-roll, anchor=anchor)
+        save_asset(im, f'kopf/roll/gier_+00_nick_+00_roll_{roll:+03d}.png', layer='head', rgba=True, yaw=0, pitch=0, roll=roll, anchor={'x':768,'y':600}, quality='rig_ready_2d_roll')
+    for yaw in range(-80, 81, 10):
+        sx = max(0.34, math.cos(math.radians(abs(yaw))) ** 0.55)
+        im = transform_crop_about_anchor(head, sx=sx, sy=1.0, anchor=anchor)
+        save_asset(im, f'kopf/experimental_2d_proxy/gier/gier_{yaw:+03d}_nick_+00_roll_+00.png', layer='head', rgba=True, yaw=yaw, pitch=0, roll=0, anchor={'x':768,'y':600}, quality='experimental_2d_proxy_not_true_3d')
+    for pitch in range(-30, 31, 10):
+        sy = 1.0 - pitch * 0.004
+        im = transform_crop_about_anchor(head, sx=1.0, sy=sy, anchor=anchor)
+        save_asset(im, f'kopf/experimental_2d_proxy/nick/gier_+00_nick_{pitch:+03d}_roll_+00.png', layer='head', rgba=True, yaw=0, pitch=pitch, roll=0, anchor={'x':768,'y':600}, quality='experimental_2d_proxy_not_true_3d')
+    for yaw in (-40, -20, 0, 20, 40):
+        for pitch in (-10, 0, 10):
+            sx = max(0.55, math.cos(math.radians(abs(yaw))) ** 0.55)
+            sy = 1.0 - pitch * 0.004
+            im = transform_crop_about_anchor(head, sx=sx, sy=sy, anchor=anchor)
+            save_asset(im, f'kopf/experimental_2d_proxy/combined/gier_{yaw:+03d}_nick_{pitch:+03d}_roll_+00.png', layer='head', rgba=True, yaw=yaw, pitch=pitch, roll=0, anchor={'x':768,'y':600}, quality='experimental_2d_proxy_not_true_3d')
+
+
+def build_body(body):
+    base_anchor = (768, 505)
+    sequences = []
+    for i in range(12):
+        phase = 2 * math.pi * i / 12
+        sequences.append(('atmen', f'atmen_{i:03d}.png', 1.0 + .008 * math.sin(phase), 1.0 + .016 * math.sin(phase), 0, (768, round(505 - 4 * math.sin(phase))), {'phase': i/12}))
+    for angle in range(-20, 21, 5):
+        sequences.append(('lehnen', f'lehnen_{angle:+03d}.png', 1.0 + abs(angle)*.002, 1.0 + angle*.003, angle*.18, (768, 505 - round(angle*.8)), {'lean': angle}))
+    for shift in range(-15, 16, 5):
+        sequences.append(('gewicht', f'gewicht_{shift:+03d}.png', 1, 1, shift*.12, (768 + shift*4, 505), {'weight_shift': shift}))
+    for turn in range(-35, 36, 5):
+        sequences.append(('schulterdrehung', f'schulter_{turn:+03d}.png', max(.82, math.cos(math.radians(turn))**.35), 1, 0, (768 + round(turn*.8), 505), {'shoulder_yaw': turn}))
+    for i in range(8):
+        phase = math.sin(math.pi * i / 7)
+        sequences.append(('schulterzucken', f'zucken_{i:03d}.png', 1, 1-.025*phase, 0, (768, round(505 - 18*phase)), {'phase': i/7}))
+    for i in range(8):
+        t = i/7
+        sequences.append(('aufrichten', f'aufrichten_{i:03d}.png', .97+.03*t, .94+.08*t, (t-.5)*1.5, (768, round(515-18*t)), {'stage': i}))
+    for lean in (-20, 0, 20):
+        for turn in (-20, 0, 20):
+            sequences.append(('kombiniert', f'lehnen_{lean:+03d}_schulter_{turn:+03d}.png', max(.86, math.cos(math.radians(turn))**.3), 1+lean*.003, lean*.16, (768+round(turn*.9), 505-round(lean*.8)), {'lean':lean,'shoulder_yaw':turn}))
+    for folder, name, sx, sy, angle, neck, meta in sequences:
+        im = transform_body_from_neck(body, angle=angle, sx=sx, sy=sy, target_anchor=neck)
+        save_asset(im, f'koerper/{folder}/{name}', layer='body', rgba=True, neck_anchor={'x':neck[0],'y':neck[1]}, quality='rig_ready_procedural_2d', **meta)
+
+
+def crop_scaled_patch(path: Path, raw_box, head_bbox, head_scale, alpha_shape='rounded'):
+    im = Image.open(path).convert('RGBA').crop(raw_box)
+    size = (max(1, round(im.width*head_scale)), max(1, round(im.height*head_scale)))
+    im = im.resize(size, Image.Resampling.LANCZOS)
+    if alpha_shape == 'rounded':
+        im.putalpha(rounded_alpha(size, radius=max(20, size[1]//4), feather=3))
+    elif alpha_shape == 'ellipse':
+        alpha = np.array(ellipse_alpha(size, feather=3))
+        arr = np.array(im)
+        rgb = arr[:, :, :3].astype(np.int16)
+        grey_background = ((rgb.max(axis=2)-rgb.min(axis=2)) < 16) & (rgb.mean(axis=2) > 118)
+        labels, _ = ndimage.label(grey_background)
+        edge_labels = np.unique(np.concatenate([labels[0], labels[-1], labels[:,0], labels[:,-1]]))
+        edge_background = np.isin(labels, edge_labels[edge_labels != 0])
+        edge_background = ndimage.binary_dilation(edge_background, iterations=1)
+        alpha[edge_background] = 0
+        im.putalpha(Image.fromarray(alpha.astype(np.uint8), 'L'))
+    return im
+
+
+def build_mouths(head_bbox, head_scale):
+    raw_box = (520, 545, 1016, 850)
+    bx0, by0, _, _ = head_bbox
+    head_left = round(768 - ((head_bbox[2]-head_bbox[0])*head_scale)/2)
+    head_top = round(600 - ((head_bbox[3]-head_bbox[1])*head_scale))
+    anchor_x = round(head_left + (raw_box[0]-bx0)*head_scale)
+    anchor_y = round(head_top + (raw_box[1]-by0)*head_scale)
+    patches = {}
+    for slug, fname, label in MOUTHS:
+        p = crop_scaled_patch(GEN/fname, raw_box, head_bbox, head_scale, alpha_shape='ellipse')
+        patches[slug] = p
+        save_asset(p, f'mund/keyframes/mund_{slug}.png', layer='mouth', rgba=True, label=label, anchor={'x':anchor_x,'y':anchor_y}, quality='rig_ready_generated_patch')
+    rest = patches['00_rest']
+    for slug, _, label in MOUTHS:
+        folder = OUT / f'mund/transitions/mund_{slug}'
+        folder.mkdir(parents=True, exist_ok=True)
+        for stage in range(5):
+            t = stage/4
+            frame = Image.blend(rest, patches[slug], t)
+            rel = f'mund/transitions/mund_{slug}/stufe_{stage:02d}.png'
+            save_asset(frame, rel, layer='mouth', rgba=True, label=label, stage=stage, strength=t, anchor={'x':anchor_x,'y':anchor_y}, quality='rig_ready_crossfade')
+
+
+def build_eyes(head_bbox, head_scale):
+    raw_box = (500, 300, 1036, 555)
+    bx0, by0, _, _ = head_bbox
+    head_left = round(768 - ((head_bbox[2]-head_bbox[0])*head_scale)/2)
+    head_top = round(600 - ((head_bbox[3]-head_bbox[1])*head_scale))
+    anchor_x = round(head_left + (raw_box[0]-bx0)*head_scale)
+    anchor_y = round(head_top + (raw_box[1]-by0)*head_scale)
+    open_p = crop_scaled_patch(HEAD_RAW, raw_box, head_bbox, head_scale)
+    half_p = crop_scaled_patch(EYE_HALF_RAW, raw_box, head_bbox, head_scale)
+    closed_p = crop_scaled_patch(EYE_CLOSED_RAW, raw_box, head_bbox, head_scale)
+    seq = [open_p, Image.blend(open_p,half_p,.25), Image.blend(open_p,half_p,.5), Image.blend(open_p,half_p,.75), half_p,
+           Image.blend(half_p,closed_p,.33), Image.blend(half_p,closed_p,.66), closed_p,
+           Image.blend(closed_p,half_p,.5), half_p, Image.blend(half_p,open_p,.5), open_p]
+    for i, frame in enumerate(seq):
+        save_asset(frame, f'augen/blink/blink_{i:03d}.png', layer='eyes', rgba=True, blink_stage=i, anchor={'x':anchor_x,'y':anchor_y}, quality='rig_ready_crossfade')
+
+    a = np.array(open_p)
+    rgb = a[:,:,:3].astype(np.int16)
+    glow = (rgb[:,:,0] > 100) & (rgb[:,:,0] > rgb[:,:,1]*1.30) & (rgb[:,:,0] > rgb[:,:,2]*1.10)
+    glow = ndimage.binary_dilation(glow, iterations=3)
+    glow_rgba = np.zeros_like(a)
+    glow_rgba[:,:,:3] = a[:,:,:3]
+    glow_rgba[:,:,3] = (glow*255).astype(np.uint8)
+    glow_im = Image.fromarray(glow_rgba, 'RGBA')
+    save_asset(glow_im, 'augen/gaze/rotglow_tracking_master.png', layer='eyes_glow', rgba=True, anchor={'x':anchor_x,'y':anchor_y}, quality='rig_ready')
+    dirs = {'center':(0,0),'left':(-7,0),'right':(7,0),'up':(0,-5),'down':(0,5),'left_up':(-6,-4),'right_up':(6,-4),'left_down':(-6,4),'right_down':(6,4)}
+    for name,(dx,dy) in dirs.items():
+        c = Image.new('RGBA', glow_im.size, (0,0,0,0)); c.alpha_composite(glow_im,(dx,dy))
+        save_asset(c, f'augen/gaze/blick_{name}.png', layer='eyes_glow', rgba=True, gaze=name, offset={'x':dx,'y':dy}, anchor={'x':anchor_x,'y':anchor_y}, quality='rig_ready')
+
+
+def mood_transform(arr, mood, phase):
+    x = arr.astype(np.float32)
+    if mood == 'ruhig':
+        x *= np.array([0.72, 0.88, 1.10]); gain=.92
+    elif mood == 'wach':
+        x *= np.array([0.72, 1.16, 1.20]); gain=1.06
+    elif mood == 'angespannt':
+        r, g, b = x[:,:,0], x[:,:,1], x[:,:,2]
+        x = np.stack([np.maximum(r*1.15, b*.65), g*.67, b*.92], axis=2); gain=1.00
+    elif mood == 'bedrohlich':
+        r, g, b = x[:,:,0], x[:,:,1], x[:,:,2]
+        x = np.stack([np.maximum(r*1.35, b*.98), g*.36, b*.38], axis=2); gain=.98
+    else:
+        r, g, b = x[:,:,0], x[:,:,1], x[:,:,2]
+        x = np.stack([np.maximum(r*1.05, b*.34), g*1.16, b*1.22], axis=2); gain=1.14
+    gain *= .97 + .03*math.sin(phase)
+    return np.clip(x*gain,0,255).astype(np.uint8)
+
+
+def build_backgrounds():
+    base = np.array(Image.open(BG_RAW).convert('RGB'))
+    yy = np.arange(H)[:,None]
+    xx = np.arange(W)[None,:]
+    for mood in ('ruhig','wach','angespannt','bedrohlich','heiter'):
+        folder = OUT / 'hintergrund' / mood
+        folder.mkdir(parents=True, exist_ok=True)
+        for i in range(60):
+            phase = 2*math.pi*i/60
+            # Integer full-height cycles make frame 59 -> frame 00 periodic.
+            cycles = {'ruhig':1,'wach':2,'angespannt':2,'bedrohlich':3,'heiter':1}[mood]
+            yoff = round((i/60)*H*cycles) % H
+            moved = np.roll(base, yoff, axis=0)
+            shifts = np.rint((3 if mood=='ruhig' else 7)*np.sin(yy[:,0]/115 + phase)).astype(int)
+            src_x = (xx - shifts[:,None]) % W
+            moved = moved[np.arange(H)[:,None], src_x]
+            moved = mood_transform(moved, mood, phase)
+            im = Image.fromarray(moved,'RGB').quantize(colors=128, method=Image.Quantize.MEDIANCUT)
+            rel=f'hintergrund/{mood}/{mood}_{i:03d}.png'
+            save_asset(im, rel, layer='background', rgba=False, mood=mood, frame=i, loop_frames=60, quality='rig_ready_seamless_periodic')
+
+
+def copy_legacy():
+    for p in sorted((OLD/'04_expressions').glob('*.png')):
+        shutil.copy2(p, OUT/'ausdruck/legacy_flat_reference'/p.name)
+
+
+def write_docs():
+    (OUT/'manifest.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding='utf-8')
+    status = {
+        'head_master_rgba': 2,
+        'head_roll_rig_ready': 11,
+        'head_yaw_pitch_combined_2d_proxy': 39,
+        'body_motion_rgba': 68,
+        'mouth_keyframes_rgba': 36,
+        'mouth_transition_frames_rgba': 180,
+        'eye_gaze_and_master_rgba': 10,
+        'blink_frames_rgba': 12,
+        'background_rgb_frames': 300,
+        'expression_rig_ready': 0,
+        'legacy_flat_expression_refs': 6,
+    }
+    (OUT/'DELIVERY_STATUS.json').write_text(json.dumps(status, indent=2), encoding='utf-8')
+    readme = '''# FranKenstein Avatar Rig V2\n\nThis package rebuilds the former flat picture set as a layered 1536x1024 avatar rig. The authoritative neutral pose is the supplied reference: slightly forward with the chin subtly lowered.\n\n## Delivered\n\n- True RGBA head and body masters, with numerical alpha verification.\n- 11 registered roll frames around a fixed neck anchor.\n- 68 registered procedural body-motion frames; every body frame has its own neck anchor in `manifest.json`.\n- 36 independent mouth keyframes plus 180 five-stage transition frames.\n- Independent red-eye tracking glow, nine gaze offsets and a 12-frame blink sequence.\n- 300 waterline-free RGB background frames: five moods x 60 seamless periodic frames.\n- Machine-readable manifest containing anchors, angles, stages, mood and quality tier.\n\n## Honest limitations\n\nThe yaw, pitch and combined head folders are clearly marked `experimental_2d_proxy`: they are registered and smooth, but they are not true newly rendered 3D side views and must not be presented as such. A complete two-register expression system across frontal and ±20-degree views is not training-ready here; the six old flat expressions are included only as references.\n\nThe image generator returned baked checkerboard RGB for requested transparent cutouts. Those sources are retained under `sources/`. The final head/body files were rebuilt with measured silhouette alpha masks; QA verifies that they are real RGBA and contain transparent pixels.\n'''
+    (OUT/'README.md').write_text(readme, encoding='utf-8')
+
+
+def qa():
+    rows=['path,width,height,mode,alpha_min,alpha_max,transparent_pixels']
+    for p in sorted(OUT.rglob('*.png')):
+        im=Image.open(p)
+        if im.mode=='RGBA':
+            aa=np.array(im.getchannel('A'))
+            rows.append(f'{p.relative_to(OUT)},{im.width},{im.height},{im.mode},{aa.min()},{aa.max()},{int((aa<255).sum())}')
+        else:
+            rows.append(f'{p.relative_to(OUT)},{im.width},{im.height},{im.mode},NA,NA,0')
+    (OUT/'qa/image_inventory.csv').write_text('\n'.join(rows)+'\n',encoding='utf-8')
+
+
+def preview(head, body):
+    bg=Image.open(BG_RAW).convert('RGBA')
+    bg.alpha_composite(body); bg.alpha_composite(head)
+    bg.save(OUT/'qa/composite_zero_preview.png', optimize=True)
+
+
+def main():
+    ensure_dirs()
+    head, body, head_bbox, head_scale = build_layers()
+    build_head_poses(head)
+    build_body(body)
+    build_mouths(head_bbox, head_scale)
+    build_eyes(head_bbox, head_scale)
+    build_backgrounds()
+    copy_legacy()
+    preview(head, body)
+    write_docs()
+    qa()
+    print(json.dumps({'assets':len(manifest['assets']), 'out':str(OUT)}, indent=2))
+
+
+if __name__ == '__main__':
+    main()

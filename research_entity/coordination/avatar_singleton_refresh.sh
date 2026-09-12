@@ -7,6 +7,7 @@ set -euo pipefail
 
 export DISPLAY="${DISPLAY:-:0}"
 TITLE='FranKenstein -- live'
+PID_FILE='/home/ai-core-node/.claude/star/visual/chrome.pid'
 SCREEN2_X0=1680
 SCREEN2_X1=2704
 TARGET_X=1847
@@ -41,19 +42,37 @@ fi
 
 ((${#wins[@]} > 0)) || { echo 'ERROR: buehne daemon did not create production window' >&2; exit 22; }
 
-# Prefer the already-existing production subject on physical screen 2.
+# Strongest identity: prefer the X11 window whose PID matches the daemon-owned chrome.pid.
+# This avoids keeping a worker-spawned duplicate merely because both windows happen to sit
+# on screen 2. Window IDs are ephemeral; PID_FILE is refreshed by the canonical daemon.
 keep=''
-for wid in "${wins[@]}"; do
-  geom="$(xdotool getwindowgeometry --shell "$wid" 2>/dev/null || true)"
-  x="$(printf '%s\n' "$geom" | sed -n 's/^X=//p' | head -1)"
-  if [[ "$x" =~ ^-?[0-9]+$ ]] && (( x >= SCREEN2_X0 && x < SCREEN2_X1 )); then
-    keep="$wid"
-    break
-  fi
-done
+tracked_pid=''
+if [[ -r "$PID_FILE" ]]; then
+  tracked_pid="$(tr -dc '0-9' < "$PID_FILE")"
+fi
+if [[ "$tracked_pid" =~ ^[0-9]+$ ]]; then
+  for wid in "${wins[@]}"; do
+    wpid="$(xdotool getwindowpid "$wid" 2>/dev/null || true)"
+    if [[ "$wpid" == "$tracked_pid" ]]; then
+      keep="$wid"
+      break
+    fi
+  done
+fi
 
-# If no matching window is currently on screen 2, preserve an existing instance:
-# move it; do not replace it with a newly-created Chrome process.
+# Second-best identity: an already-existing production-title window on physical screen 2.
+if [[ -z "$keep" ]]; then
+  for wid in "${wins[@]}"; do
+    geom="$(xdotool getwindowgeometry --shell "$wid" 2>/dev/null || true)"
+    x="$(printf '%s\n' "$geom" | sed -n 's/^X=//p' | head -1)"
+    if [[ "$x" =~ ^-?[0-9]+$ ]] && (( x >= SCREEN2_X0 && x < SCREEN2_X1 )); then
+      keep="$wid"
+      break
+    fi
+  done
+fi
+
+# Last resort: preserve an existing instance and move it; never replace it just for geometry.
 [[ -n "$keep" ]] || keep="${wins[0]}"
 
 # Close only confirmed duplicate windows with the exact production title.
@@ -73,8 +92,8 @@ xdotool key --clearmodifiers --window "$keep" ctrl+r
 sleep 0.35
 
 mapfile -t after < <(find_windows)
-printf 'AVATAR_SINGLETON_OK keep=%s windows=%s target=%sx%s+%s+%s display=%s\n' \
-  "$keep" "${#after[@]}" "$TARGET_W" "$TARGET_H" "$TARGET_X" "$TARGET_Y" "$DISPLAY"
+printf 'AVATAR_SINGLETON_OK keep=%s tracked_pid=%s windows=%s target=%sx%s+%s+%s display=%s\n' \
+  "$keep" "${tracked_pid:-unknown}" "${#after[@]}" "$TARGET_W" "$TARGET_H" "$TARGET_X" "$TARGET_Y" "$DISPLAY"
 
 # Fail closed if a duplicate somehow survived.
 ((${#after[@]} == 1)) || exit 23

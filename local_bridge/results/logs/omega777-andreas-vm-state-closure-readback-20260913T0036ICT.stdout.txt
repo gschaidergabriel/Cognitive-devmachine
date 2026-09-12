@@ -1,0 +1,162 @@
+===UNIT===
+Id=entityos-vm.service
+LoadState=loaded
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/entityos-vm.service
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MainPID=319869
+Result=success
+===CAT===
+# /etc/systemd/system/entityos-vm.service
+[Unit]
+Description=EntityOS systemd-nspawn container (the VM)
+Documentation=file:///var/lib/entityos/staging-restart/ROLLBACK.md
+# Stage 1 of the three-stage lifecycle. The VM running does NOT mean the
+# cognition runtime is switched on inside it (Stage 2, separate in-VM toggle).
+#
+# CHANGE 2026-09-07 (architect session): ADDS binds. Does not touch the
+# wipe, on purpose.
+#
+# The ExecStartPre wipe is NOT a defect -- it is immutable infrastructure and
+# it is the reason this repo can produce reproducible installs at all. Every
+# boot starts from a pristine CoW clone of the base; nothing accumulates,
+# nothing drifts, two installations are identical. Removing it would destroy
+# exactly the property it exists for. It stays.
+#
+# The actual defect was a LAYER mistake by the people building on top of it.
+# There are three layers:
+#   1 ENTITYOS_ROOTFS_BASE  pristine image, built by vm/build-rootfs.sh
+#   2 ENTITYOS_ROOTFS_RUN   ephemeral clone, correctly wiped on start+stop
+#   3 the persistent binds  durable state
+# /opt/entityos/voice was built into layer 2 -- one floor too low. Measured
+# 2026-09-07: 6.9G there, incl. the working conversation loop and a 522M
+# llama.cpp build, while the layer-1 copy was frozen at 03:01 and nothing
+# under it was newer than 03:05. /dev/snd and /dev/dri were live-bound via
+# `machinectl bind` only, so also layer-2.
+#
+# Devices: the GPU agent needs /dev/dri/renderD128 (AMD RADV, the Vulkan path
+# that took generation from 6.37 to 12.79 t/s, 2.01x) and bound /dev/kfd as
+# well. DeviceAllow is NOT optional here: measured DevicePolicy=closed with an
+# allow-list of exactly /dev/net/tun, char-pts, /dev/fuse. A bind without the
+# matching DeviceAllow leaves the device present but dead inside the container,
+# which presents as "Vulkan mysteriously broke after the reboot".
+#
+# ADDED 2026-09-07, measured after the base-image swap: --bind=/dev/dri alone
+# is NOT enough. After a clean restart the container's /dev/dri contained only
+# card1 -- renderD128 was missing, and llama-server started anyway and fell
+# back to CPU silently, exactly the failure mode start_gespraech.sh warns
+# about. The node needs its own explicit --bind. Verified by comparing host
+# (card1 + renderD128) against container (card1 only) after the restart, then
+# again after adding the line below.
+#
+# The binds below are a deliberate HOLDING ACTION, not the final layering.
+# They are reversible and lose nothing. The correct end state, per artifact
+# and per this repo's own stated conventions, is written up in
+# /var/lib/entityos/staging-restart/LAYERING.md -- in short: voice CODE, the
+# venv and the llama.cpp build belong in layer 1 via build-rootfs.sh and the
+# repo; MODELS stay layer 3 because vm/voice/README.md deliberately refuses
+# to ship weights in the image; logs and __pycache__ are layer 2 and are
+# correctly thrown away.
+#
+# ENTITYOS_IDENTITY_BINDS (optional, leer per Vorgabe), 2026-09-07:
+# zusaetzliche --bind=SRC:DST-Argumente, die der Betreiber in
+# entityos.conf setzt. Zweck ist NICHT Bequemlichkeit, sondern Identitaet.
+#
+# f2wp1207_grid10_turn_loop leitet die installation_id deterministisch ab aus
+#     sha256("F2WP1207_INSTALLATION_REF/v1:{DB_PATH}:{script_dir}")
+# also aus zwei PFAD-ZEICHENKETTEN. Zieht man die Kognition in die VM, ohne
+# dass beide Pfade drinnen exakt gleich heissen wie draussen, ergibt das eine
+# ANDERE Installation -- der Turn-Loop lehnt dann korrekt fail-closed ab
+# ("Identity/HostBinding/Epoche inkongruent") und die gesamte Kontinuitaet
+# (Epochen, Frames, Zeiger) waere abgeschnitten. Gemessen am 2026-09-07, als
+# genau das passierte.
+#
+# Wer die Kognition in die VM verlegt, bindet die beiden Host-Pfade deshalb
+# auf DENSELBEN Ort, z.B.:
+#   ENTITYOS_IDENTITY_BINDS="--bind=/home/x/.local/share/agentzero:/home/x/.local/share/agentzero --bind=/home/x/frankenstein-repo/scripts:/home/x/frankenstein-repo/scripts"
+# Bewusst unquoted unten, damit mehrere Argumente wortweise zerfallen.
+# Leer gelassen aendert sich nichts.
+After=network.target
+
+[Service]
+Type=notify
+EnvironmentFile=/etc/entityos/entityos.conf
+ExecStartPre=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN"'
+ExecStartPre=/bin/sh -c 'mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR"'
+# Fail closed: never boot into a layout where a durable path is missing and
+# would silently be recreated as empty scratch inside the rootfs.
+ExecStartPre=/bin/sh -c 'test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; }'
+ExecStart=/bin/sh -c 'exec systemd-nspawn \
+    --quiet \
+    --boot \
+    --register=yes \
+    --machine="$ENTITYOS_MACHINE_NAME" \
+    --directory="$ENTITYOS_ROOTFS_RUN" \
+    --bind="$ENTITYOS_DATA_DIR:/var/lib/entityos" \
+    --bind="$ENTITYOS_VOICE_DIR:/opt/entityos/voice" \
+    --bind-ro="$ENTITYOS_COGNITION_DIR:/opt/entityos/cognition" \
+    $ENTITYOS_IDENTITY_BINDS \
+    --bind=/dev/snd \
+    --bind=/dev/dri \
+    --bind=/dev/dri/renderD128 \
+    --bind=/dev/kfd \
+    --property=DeviceAllow="/dev/snd rwm" \
+    --property=DeviceAllow="/dev/dri rwm" \
+    --property=DeviceAllow="/dev/kfd rwm"'
+ExecStop=/bin/sh -c 'machinectl poweroff "$ENTITYOS_MACHINE_NAME" 2>/dev/null; sleep 2; machinectl terminate "$ENTITYOS_MACHINE_NAME" 2>/dev/null; true'
+ExecStopPost=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"'
+Restart=no
+TimeoutStartSec=120
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+# GO084 — fail-closed holding action for EntityOS volatile semantic state.
+#
+# Install together with fluechtig-vor-start-pruefen.sh at
+# /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh and load this as
+# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf.
+#
+# WHY TWO LINES MATTER:
+# 1) ExecCondition runs before ExecStartPre, so the existing destructive
+#    start-time `rm -rf "$ENTITYOS_ROOTFS_RUN"` cannot run while filled
+#    semantic SQLite state is still present or the guard cannot prove safety.
+# 2) The empty ExecStopPost assignment resets the base unit's unconditional
+#    stop-time wipe. Otherwise `systemctl stop entityos-vm.service` could still
+#    destroy the same state before any future start guard gets a chance.
+#
+# This is intentionally a HOLDING ACTION, not the final persistence migration.
+# It copies/migrates no database and creates no second state authority. Once
+# the volatile semantic stores are migrated/read back under an admitted durable
+# layout, the ordinary disposable-rootfs cleanup policy can be restored.
+
+[Service]
+ExecCondition=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+ExecStopPost=
+===DROPINS===
+/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+===DBS===
+/var/lib/entityos/data/unified.db bytes=91983872 mtime=2026-09-12 19:20:08.049342403 +0200
+95370e5be26f17a6c1950264f449a286b740fb72f7e2211d7b93a17beb6e5fcb  /var/lib/entityos/data/unified.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+MISSING /var/lib/entityos/rootfs-run/var/lib/entityos/unified.db
+===WRITERS===
+ 319869       1 root     systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/var/lib/entityos/data:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/opt/entityos/cognition:/opt/entityos/cognition --bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000/pipewire-0:/run/user/1000/pipewire-0 --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+1351332  319871 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+1945389       1 root     nsenter --target 319871 --mount --pid --uts --ipc --net -- /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+1945393 1945389 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+3764132  319871 andreas  /usr/bin/python3 /opt/entityos/voice/browserless_chatgpt_client/voice_host_live_client.py
+3795508  319871 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py
+3822237 1945393 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+3825578 3822237 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+4027427  319871 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+4027470  319871 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py
+4034911  319871 root     /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/grid_autonomie.py 300 dauer
+===NO_LIFECYCLE_ACTION=1===

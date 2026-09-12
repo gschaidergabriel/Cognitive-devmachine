@@ -1,0 +1,174 @@
+#!/usr/bin/env python3
+"""dienst.py -- die Linse laeuft mit, steuert aber (noch) nichts.
+
+Gabriel: "ok bau es ein." Stufe 1 (grund.py/linse.py/lauf.py/wirkung.py) war
+fertig, lief aber nirgends. Dieser Dienst schliesst genau diese Luecke --
+NICHT MEHR: er zieht im Takt den aktuellen, echten Weltzustand, laesst die
+Linse (linse.py) einen persistenten Agenten darueber lernen lassen (wie in
+linse.lernkurve(), nur online statt einmalig auf 30 gespeicherten Snapshots)
+und schreibt das Ergebnis fort. Ob daraus ein Signal wird, entscheidet
+traegt_das_signal.py -- nicht dieses Modul.
+
+WAS HIER **NICHT** PASSIERT:
+  - kein Schreiben nach unified.db oder consciousness.db. Beide werden von
+    grund.py bereits ausschliesslich `file:...?mode=ro` geoeffnet; dieser
+    Dienst haelt sich strikt daran.
+  - keine Anbindung an den Sprachmodus/Grid10-Perzeptstrom. Das ist
+    Schritt 4 des Auftrags und haengt am Urteil von traegt_das_signal.py.
+  - kein LLM, keine Textgenerierung -- reine Arithmetik + eine SQLite-Zeile
+    pro Takt, wie lauf.py es fuer welt_laeufe vormacht (Rechnung von Buchung
+    getrennt: die Gradientenschritte laufen vollstaendig im Speicher, erst
+    danach EINE INSERT).
+
+PERSISTENZ DES AGENTEN: `psi_agent` lebt nur im Prozessspeicher (ein
+Vektor der Laenge 8, ~128 Byte) -- bei einem Neustart des Dienstes beginnt
+er wieder beim uniformen Ausgangsglauben (linse._uniform_agent()). Das ist
+eine bewusste, dokumentierte Vereinfachung: ein State-File haette Nutzen,
+aber jeden Neustart nachvollziehbar zu machen ("wo genau stand psi_agent
+vorher") ist fuer Stufe 2 nicht noetig -- was zaehlt, ist die *Verteilung*
+der Ueberraschung ueber viele Takte, nicht ein einzelner Agentenzustand.
+
+FEHLERVERHALTEN: jeder Takt ist in try/except gekapselt (Vorbild puls.py).
+Ein einzelner Ausfall (DB kurz gesperrt, ein Grundvektor fehlt) wird
+geloggt und in die Zeile als `fehler` eingetragen, toetet den Dienst aber
+nicht. Der naechste Takt versucht es erneut.
+
+SPEICHERKOSTEN: numpy ist bereits durch linse.py geladen (kein Zusatzimport
+gegenueber Stufe 1). Kein Modell, kein Torch, keine Bildverarbeitung. Die
+tatsaechliche RSS wird beim Deploy gemessen und im Bericht genannt --
+diese Datei erfindet keine Zahl vorab.
+"""
+import json
+import os
+import sqlite3
+import sys
+import time
+from datetime import datetime, timezone
+
+WELT_DIR = os.path.dirname(os.path.abspath(__file__))
+if WELT_DIR not in sys.path:
+    sys.path.insert(0, WELT_DIR)
+
+import grund   # noqa: E402
+import linse   # noqa: E402
+
+WELT_DB_PATH = os.environ.get(
+    "WELT_DB_PATH", os.path.expanduser("~/.local/share/agentzero/welt.db"))
+# 30 s -- derselbe Takt wie frankenstein-puls.service (Zeros Wert), aus
+# demselben Grund: dicht genug, dass der Weltzustand nicht veraltet, weit
+# genug, dass welt.db nicht dauernd gesperrt ist.
+TAKT_S = float(os.environ.get("WELT_TAKT_S", "30"))
+
+_DDL = """
+CREATE TABLE IF NOT EXISTS welt_takte (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts TEXT NOT NULL,
+    ueberraschung_bits REAL,
+    fidelity REAL,
+    kl_bits REAL,
+    vektor_json TEXT,
+    roh_json TEXT,
+    vektor_veraendert INTEGER,
+    fehler TEXT
+)
+"""
+
+
+def _jetzt():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _log(s):
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {s}", flush=True)
+
+
+def _welt_conn():
+    os.makedirs(os.path.dirname(WELT_DB_PATH), exist_ok=True)
+    c = sqlite3.connect(WELT_DB_PATH, timeout=10.0)
+    c.execute(_DDL)
+    return c
+
+
+def _vektor_veraendert(v, letzter) -> bool:
+    """True, wenn sich mindestens eine Grundvektor-Komponente messbar
+    geaendert hat. 1e-9 ist reine Gleitkomma-Toleranz, keine inhaltliche
+    Schwelle -- selbst die kleinste echte Aenderung zaehlt als 'veraendert'."""
+    if letzter is None:
+        return True
+    if len(v) != len(letzter):
+        return True
+    return any(abs(a - b) > 1e-9 for a, b in zip(v, letzter))
+
+
+def schlag(agent, letzter_vektor, log=None):
+    """Ein Takt. Gibt (agent, vektor_oder_letzter, geschrieben) zurueck.
+
+    Reihenfolge, damit die Ueberraschung ehrlich 'vor dem Lernschritt' ist
+    (wie in linse.lernkurve dokumentiert): erst Fidelity/Ueberraschung mit
+    dem ALTEN Agenten messen, DANN die Gradientenschritte anwenden."""
+    _log_ = log or _log
+    fehler = None
+    ueb = fid = kl = None
+    v = letzter_vektor
+    veraendert = 0
+    try:
+        roh = grund.alle_rohwerte()
+        v = grund.vektor(roh)
+        veraendert = int(_vektor_veraendert(v, letzter_vektor))
+        psi_welt = linse._als_psi(v)
+        fid = linse._fidelity(psi_welt, agent)
+        ueb = linse._ueberraschung_bits(fid)
+        kl = linse._kl_bits(psi_welt, agent)
+        for _ in range(linse.SCHRITTE_PRO_SNAPSHOT):
+            agent = linse.schritt(agent, psi_welt)
+    except Exception as e:
+        fehler = f"{type(e).__name__}: {e}"
+        _log_(f"[WELT] Takt fehlgeschlagen (laeuft weiter): {fehler}")
+        roh = None
+
+    try:
+        with _welt_conn() as c:
+            c.execute(
+                "INSERT INTO welt_takte (ts, ueberraschung_bits, fidelity, "
+                "kl_bits, vektor_json, roh_json, vektor_veraendert, fehler) "
+                "VALUES (?,?,?,?,?,?,?,?)",
+                (_jetzt(), ueb, fid, kl,
+                 json.dumps(v) if v is not None else None,
+                 json.dumps(roh) if fehler is None else None,
+                 veraendert, fehler))
+    except Exception as e:
+        _log_(f"[WELT] Schreiben nach welt.db fehlgeschlagen: {e}")
+        return agent, letzter_vektor, False
+
+    if fehler is None:
+        _log_(f"[WELT] Takt: Ueberraschung {ueb:.4f} bit  Fidelity {fid:.4f}  "
+              f"veraendert={bool(veraendert)}")
+        return agent, v, True
+    return agent, letzter_vektor, True
+
+
+def lauf():
+    _log(f"[WELT] startet -- Takt {TAKT_S}s, DB {WELT_DB_PATH}")
+    agent = linse._uniform_agent()
+    letzter = None
+    n = 0
+    while True:
+        try:
+            agent, letzter, ok = schlag(agent, letzter)
+            n += 1 if ok else 0
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            _log(f"[WELT] Fehler im Takt-Loop (laeuft weiter): "
+                 f"{type(e).__name__}: {e}")
+        time.sleep(TAKT_S)
+    _log(f"[WELT] beendet nach {n} Takten")
+
+
+if __name__ == "__main__":
+    if "--einmal" in sys.argv:
+        a = linse._uniform_agent()
+        _, _, ok = schlag(a, None, log=print)
+        print("Takt geschrieben:", ok)
+    else:
+        lauf()

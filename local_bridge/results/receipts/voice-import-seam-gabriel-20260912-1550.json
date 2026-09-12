@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "voice-import-seam-gabriel-20260912-1550",
+  "command_sha256": "cdfabc59ee1300bb22f54c7e9eabc509474affb2557eebe336646d9ca86c9d25",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T08:19:03.570163+00:00",
+  "finished_at": "2026-09-12T08:19:03.592155+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "ce05d342cabd63c13a26f41001b4796743f32e2cfe74ec0ec08aacf128ebafb9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "14-     Prozess (schon vorher ausgelagert, kein Aenderungsbedarf dort).\n15-  2. Gedaechtnis: echte kanonische UnifiedDB-Anbindung ueber das vendorierte\n16:     memory_abruf.automatischer_abruf() -- KEIN zweiter Speicherpfad, siehe\n17-     Provenance-Kopf dort. Ergebnis wird als zusaetzliche System-Nachricht\n18-     NUR fuer den aktuellen Redebeitrag eingespeist (nicht dauerhaft in die\n--\n48-enable/start durch dieses Skript selbst.\n49-\"\"\"\n50:import collections\n51:import contextlib\n52:import json\n53:import os\n54:import queue\n55:import sqlite3\n56:import subprocess\n57:import struct\n58:import sys\n59:import threading\n60:import time\n61:import traceback\n62:import urllib.request\n63:import wave\n64:import math\n65:import re\n66:import resource\n67-\n68-VOICE_DIR = \"/opt/entityos/voice\"\n--\n194-\n195-sys.path.insert(0, VOICE_DIR)\n196:import lagebild  # Gegenwart (siehe dortigen Kopf) -- getrennt vom Gedaechtnis\n197:import selbstauskunft  # gemessene Belege ueber ihn\n198:import selbstreflexion  # sein EIGENES, gespeichertes Selbstmodell\n199:import grid_steuerung  # der Grid stellt eine reale Groesse ein\n200:import verkoerperung  # der Zustand formt das Sprechen (siehe dortigen Kopf)\n201:import entitaet  # das 4B IST die Entitaet, nicht ihr Rechendienst (siehe Kopf)\n202:import glm_client  # Gespraechserzeugung auf GLM 5.3 Flash, Tier-2 CLI-Fallback\n203:import abspieler  # VLC als Hand -- die eine erlaubte Handlung, siehe dortiger Kopf\n204:import netz  # nachschlagen: Wahrnehmung, keine Handlung (siehe dortiger Kopf)\n205:import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)\n206-try:\n207-    import faehigkeiten  # was er JETZT darf -- abgeleitet, nicht behauptet\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

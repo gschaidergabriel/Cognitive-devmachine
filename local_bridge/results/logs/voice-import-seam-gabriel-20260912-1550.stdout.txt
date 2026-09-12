@@ -1,0 +1,42 @@
+14-     Prozess (schon vorher ausgelagert, kein Aenderungsbedarf dort).
+15-  2. Gedaechtnis: echte kanonische UnifiedDB-Anbindung ueber das vendorierte
+16:     memory_abruf.automatischer_abruf() -- KEIN zweiter Speicherpfad, siehe
+17-     Provenance-Kopf dort. Ergebnis wird als zusaetzliche System-Nachricht
+18-     NUR fuer den aktuellen Redebeitrag eingespeist (nicht dauerhaft in die
+--
+48-enable/start durch dieses Skript selbst.
+49-"""
+50:import collections
+51:import contextlib
+52:import json
+53:import os
+54:import queue
+55:import sqlite3
+56:import subprocess
+57:import struct
+58:import sys
+59:import threading
+60:import time
+61:import traceback
+62:import urllib.request
+63:import wave
+64:import math
+65:import re
+66:import resource
+67-
+68-VOICE_DIR = "/opt/entityos/voice"
+--
+194-
+195-sys.path.insert(0, VOICE_DIR)
+196:import lagebild  # Gegenwart (siehe dortigen Kopf) -- getrennt vom Gedaechtnis
+197:import selbstauskunft  # gemessene Belege ueber ihn
+198:import selbstreflexion  # sein EIGENES, gespeichertes Selbstmodell
+199:import grid_steuerung  # der Grid stellt eine reale Groesse ein
+200:import verkoerperung  # der Zustand formt das Sprechen (siehe dortigen Kopf)
+201:import entitaet  # das 4B IST die Entitaet, nicht ihr Rechendienst (siehe Kopf)
+202:import glm_client  # Gespraechserzeugung auf GLM 5.3 Flash, Tier-2 CLI-Fallback
+203:import abspieler  # VLC als Hand -- die eine erlaubte Handlung, siehe dortiger Kopf
+204:import netz  # nachschlagen: Wahrnehmung, keine Handlung (siehe dortiger Kopf)
+205:import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)
+206-try:
+207-    import faehigkeiten  # was er JETZT darf -- abgeleitet, nicht behauptet

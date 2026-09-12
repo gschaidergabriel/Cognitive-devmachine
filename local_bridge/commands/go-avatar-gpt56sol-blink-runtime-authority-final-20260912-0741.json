@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-gpt56sol-blink-runtime-authority-final-20260912-0741",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":30,
+  "command":"set -euo pipefail; cd /home/ai-core-node/.claude/star/visual; echo ===SUBJECT===; sha256sum buehne_daemon.py buehne.html filmlook.js; echo ===RELIEF_SOURCE===; sed -n '135,180p' buehne_daemon.py; echo ===SERVICE_ENV===; PID=$(systemctl --user show frankenstein-buehne.service -p MainPID --value); printf 'PID=%s\\n' \"$PID\"; tr '\\0' '\\n' < /proc/$PID/environ | grep -E '^BUEHNE_RELIEF=' || echo BUEHNE_RELIEF_ENV=UNSET_DEFAULTS_TO_1; echo ===CANDIDATE_DIRS===; for d in augen_blink_relief2 augen_blink_ai augen_blink; do if [ -d \"$d\" ]; then echo DIR=$d EXISTS=1 REAL=$(readlink -f \"$d\"); for n in blink_000.png blink_006.png blink_011.png; do [ -f \"$d/$n\" ] && sha256sum \"$d/$n\" || true; done; else echo DIR=$d EXISTS=0; fi; done; echo ===HTTP===; for n in blink_000.png blink_006.png blink_011.png; do printf '%s ' \"$n\"; curl -fsS \"http://127.0.0.1:8788/augen_blink/$n\" | sha256sum; done; echo ===RESOLUTION===; if [ \"${BUEHNE_RELIEF:-1}\" = 1 ] && [ -d augen_blink_relief2 ]; then echo EXPECTED_RUNTIME_DIR=augen_blink_relief2; elif [ \"${BUEHNE_RELIEF:-1}\" = 1 ] && [ -d augen_blink_ai ]; then echo EXPECTED_RUNTIME_DIR=augen_blink_ai; else echo EXPECTED_RUNTIME_DIR=augen_blink; fi"
+}

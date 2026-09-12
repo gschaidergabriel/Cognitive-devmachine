@@ -1,0 +1,32 @@
+===PRE===
+PRE_PID:319869
+active
+4e61d346d277cee91c91cb14d785a72706147769913d460666eedd5ed8cdb91b  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db
+3fb71ed9e8e1018434034d2d711ce6906aee94bf034a30576cab17b237e6d17c  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+c0c4d8c04afefe6a2ddbbeed08a859ed5a0b9283b6875b6a39eea6953998e51b  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+2b39be9ac6e6b83d81db900869a129a6b5e26989fa4e044758c74c5a48c799cf  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+654ca6f69621d8fb8a7abadf709378c8d43a1fd59778e7fa64423f5a43264162  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+95370e5be26f17a6c1950264f449a286b740fb72f7e2211d7b93a17beb6e5fcb  /var/lib/entityos/data/unified.db
+===INSTALL===
+===POST_BINDING===
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  werkzeug/fluechtig-vor-start-pruefen.sh
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  werkzeug/entityos-vm-volatile-state-guard.conf
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; argv[]=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+SAME_PID:319869
+===LIVE_GUARD===
+INSTALLED_GUARD_RC:255
+===DB_INVARIANCE===
+4e61d346d277cee91c91cb14d785a72706147769913d460666eedd5ed8cdb91b  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db
+3fb71ed9e8e1018434034d2d711ce6906aee94bf034a30576cab17b237e6d17c  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+c0c4d8c04afefe6a2ddbbeed08a859ed5a0b9283b6875b6a39eea6953998e51b  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+2b39be9ac6e6b83d81db900869a129a6b5e26989fa4e044758c74c5a48c799cf  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+654ca6f69621d8fb8a7abadf709378c8d43a1fd59778e7fa64423f5a43264162  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+95370e5be26f17a6c1950264f449a286b740fb72f7e2211d7b93a17beb6e5fcb  /var/lib/entityos/data/unified.db
+DB_HASHES_IDENTICAL
+GUARD_INSTALL_PASS

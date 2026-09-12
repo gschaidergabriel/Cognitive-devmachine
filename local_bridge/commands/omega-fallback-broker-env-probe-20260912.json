@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-fallback-broker-env-probe-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":60,
+  "command":"set -eu; echo UNITS; systemctl --user cat frankenstein-chatgpt-client.service 2>/dev/null | sed -E 's/(TOKEN|KEY|SECRET)=[^[:space:]\"]+/(REDACTED_SECRET)=REDACTED/g'; echo DROPINS; systemctl --user show frankenstein-chatgpt-client.service -p DropInPaths -p FragmentPath --value 2>/dev/null; echo ENV_FILES; grep -RIl --exclude='*.pyc' -E 'FRANK_VOICE_BROKER_TOKEN|FRANK_VOICE_BROKER_GABRIEL_TOKEN' \"$HOME/.config/systemd/user\" \"$HOME/.config/frankenstein\" \"$HOME/.config/omega\" 2>/dev/null | head -20 || true; echo ENV_NAMES; systemctl --user show frankenstein-chatgpt-client.service -p Environment --value 2>/dev/null | tr ' ' '\n' | sed -E 's/=.*$/=<redacted>/' | grep -E 'FRANK_VOICE|LOCAL_BRIDGE|BROKER' || true"
+}

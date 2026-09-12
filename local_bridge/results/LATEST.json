@@ -1,19 +1,22 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "chatgpt-desktopcommander-node22-20260912-02",
-  "command_sha256": "71859a884bc50768d3a2aa2fd4899097603ca09c8a4ed23789e3de930511000a",
+  "command_id": "gpt56sol-voice-write-patcher-20260912T085400Z",
+  "command_sha256": "2b102cc1055c21147a5703475466039fed5e8de1591897da28b9a2471688b7ae",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-12T08:44:45.904265+00:00",
-  "finished_at": "2026-09-12T08:45:11.624130+00:00",
+  "started_at": "2026-09-12T08:46:10.354535+00:00",
+  "finished_at": "2026-09-12T08:46:10.354780+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "f8bafd36be00c2daaebbfdc0aa8aa11419ca8e8f2fdda291e7c2ca8a53380df5",
+  "op": "write_text",
+  "stdout_sha256": "67ead70967a9fed0769120aa2097c810eb5c3ea7661b284158146efa4b5bd923",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "NODE=v22.23.2\nNPM=10.9.8\nWS=function\n[DEBUG] Verbose mode:  false\n\ud83d\ude80 Starting MCP Device...\n - \u23f3 Connecting to Local Desktop Commander MCP using: /home/ai-core-node/.nvm/versions/node/v22.23.2/bin/node /home/ai-core-node/.npm/_npx/4b4c857f6efdfb61/node_modules/@wonderwhy-er/desktop-commander/dist/index.js\n - \ud83d\udd0c Connected to Desktop Commander MCP\n\u23f3 Connecting to Remote MCP https://mcp.desktopcommander.app\n   - \ud83d\udd0c Connected to Remote MCP\n\n\ud83d\udd10 Authenticating with Remote MCP server...\n\ud83d\udd10 Starting device authorization flow...\n\n   - \ud83d\udce1 Requesting device code...\n   - \u2705 Device code received\n\n\ud83d\udccb Please complete authentication:\n\n   1. Open this URL in your browser:\n      https://mcp.desktopcommander.app/device/verify\n\n   2. Enter this code when prompted:\n      6GRP-FFPQ\n\n   Code expires in 15 minutes.\n\n   - \u23f3 Waiting for authorization...\n\n\nSIGTERM received, initiating graceful shutdown...\n\n\ud83d\uded1 Shutting down device...\n  \u2192 Stopping heartbeat...\n  \u2713 Heartbeat stopped\n  \u2192 Unsubscribing from channel...\n  \u2192 Marking device offline...\n  \u2192 Shutting down desktop integration...\n  \u2192 Closing MCP client...\n  \u2713 MCP client closed\n  \u2192 Closing MCP transport...\n  \u2713 MCP transport closed\n  \u2713 Desktop integration shut down\n\u2713 Device shutdown complete\nREMOTE_RC=124\n",
+  "stdout_tail": "WROTE /tmp/patch_runtime_voice.py\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "sha256": "d8660f2c0261f012ed4ed55a5f7c89c61bd18dfa0422dc1334a718f1e193ffe0",
+    "bytes": 3388
+  },
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

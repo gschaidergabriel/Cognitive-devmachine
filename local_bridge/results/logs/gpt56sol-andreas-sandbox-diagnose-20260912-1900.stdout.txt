@@ -1,0 +1,40 @@
+=== userns/appamor ===
+kernel.apparmor_restrict_unprivileged_userns = 1
+kernel.unprivileged_userns_clone = 1
+/usr/sbin/apparmor_parser
+/usr/sbin/aa-status
+SUDO_N_RC=0
+apparmor module is loaded.
+=== binary perms ===
+-rwxr-xr-x 1 andreas andreas 183557344 Sep 12 13:10 /home/andreas/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell
+=== existing local userns profiles ===
+/etc/apparmor.d/plasmashell
+/etc/apparmor.d/virtiofsd
+/etc/apparmor.d/lxc-unshare
+/etc/apparmor.d/devhelp
+/etc/apparmor.d/loupe
+/etc/apparmor.d/qutebrowser
+/etc/apparmor.d/obsidian
+/etc/apparmor.d/rpm
+/etc/apparmor.d/sbuild-adduser
+/etc/apparmor.d/pageedit
+/etc/apparmor.d/wike
+/etc/apparmor.d/linux-sandbox
+/etc/apparmor.d/systemd-coredump
+/etc/apparmor.d/wpcom
+/etc/apparmor.d/sbuild-apt
+/etc/apparmor.d/sbuild
+/etc/apparmor.d/foliate
+/etc/apparmor.d/brave
+/etc/apparmor.d/msedge
+/etc/apparmor.d/kchmviewer
+/etc/apparmor.d/element-desktop
+/etc/apparmor.d/tuxedo-control-center
+/etc/apparmor.d/uwsgi-core
+/etc/apparmor.d/qmapshack
+/etc/apparmor.d/lxc-destroy
+/etc/apparmor.d/epiphany
+/etc/apparmor.d/MongoDB_Compass
+/etc/apparmor.d/userbindmount
+/etc/apparmor.d/sbuild-unhold
+/etc/apparmor.d/mmdebstrap

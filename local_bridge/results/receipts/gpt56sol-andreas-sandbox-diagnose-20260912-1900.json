@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-sandbox-diagnose-20260912-1900",
+  "command_sha256": "79e0e812c8cc87804b7d287d29b91c40afc7b8f2b357810a8c7bc4b799393c30",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T11:12:34.686270+00:00",
+  "finished_at": "2026-09-12T11:12:34.828156+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "fcb52e2acbb0e38d0173343ef1558dbf74ade7517b667059721b9fa0981cb6df",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== userns/appamor ===\nkernel.apparmor_restrict_unprivileged_userns = 1\nkernel.unprivileged_userns_clone = 1\n/usr/sbin/apparmor_parser\n/usr/sbin/aa-status\nSUDO_N_RC=0\napparmor module is loaded.\n=== binary perms ===\n-rwxr-xr-x 1 andreas andreas 183557344 Sep 12 13:10 /home/andreas/.cache/ms-playwright/chromium_headless_shell-1208/chrome-headless-shell-linux64/chrome-headless-shell\n=== existing local userns profiles ===\n/etc/apparmor.d/plasmashell\n/etc/apparmor.d/virtiofsd\n/etc/apparmor.d/lxc-unshare\n/etc/apparmor.d/devhelp\n/etc/apparmor.d/loupe\n/etc/apparmor.d/qutebrowser\n/etc/apparmor.d/obsidian\n/etc/apparmor.d/rpm\n/etc/apparmor.d/sbuild-adduser\n/etc/apparmor.d/pageedit\n/etc/apparmor.d/wike\n/etc/apparmor.d/linux-sandbox\n/etc/apparmor.d/systemd-coredump\n/etc/apparmor.d/wpcom\n/etc/apparmor.d/sbuild-apt\n/etc/apparmor.d/sbuild\n/etc/apparmor.d/foliate\n/etc/apparmor.d/brave\n/etc/apparmor.d/msedge\n/etc/apparmor.d/kchmviewer\n/etc/apparmor.d/element-desktop\n/etc/apparmor.d/tuxedo-control-center\n/etc/apparmor.d/uwsgi-core\n/etc/apparmor.d/qmapshack\n/etc/apparmor.d/lxc-destroy\n/etc/apparmor.d/epiphany\n/etc/apparmor.d/MongoDB_Compass\n/etc/apparmor.d/userbindmount\n/etc/apparmor.d/sbuild-unhold\n/etc/apparmor.d/mmdebstrap\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

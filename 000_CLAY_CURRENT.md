@@ -1,5 +1,9 @@
 # Clay — fastest current-state entrypoint
 
+## OWNER TRIGGER — `FRED` / OMEGA MAXIMUM-EFFORT RUN
+
+On an exact `FRED`, read **`research_entity/coordination/OMEGA_FRED_TRIGGER_CONTRACT.md`**. `FRED` is the owner-facing maximum-effort trigger: it invokes the existing canonical `777` convergence algorithm and drives the strongest currently admitted nonduplicate build/research/verification gates as far as current tools, authority and evidence permit. It creates no second authority or architecture.
+
 ## OWNER TRIGGER — `777` / OMEGA ABSOLUTE REENTRY
 
 On an exact `777`, read **`research_entity/coordination/OMEGA_777_TRIGGER_CONTRACT.md`** and execute its current-state convergence algorithm: refresh authority/heads/claims/receipts, bind exact owner+machine+runtime subjects, avoid duplicate systems/work, execute the strongest currently admitted nonduplicate gate, verify exact readback, then re-resolve and continue until a real authority/tool/evidence blocker is reached.

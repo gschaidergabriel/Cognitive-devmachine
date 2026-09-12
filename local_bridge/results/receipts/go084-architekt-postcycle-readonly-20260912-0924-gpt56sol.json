@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go084-architekt-postcycle-readonly-20260912-0924-gpt56sol",
+  "command_sha256": "1896fa394b07db2f8d364a5a6dad8be710ef08608bfa183df28f5f1396720b76",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:24:45.923693+00:00",
+  "finished_at": "2026-09-12T02:24:46.079851+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "84405350786ce37ddedf020eff21fe6eaec7071e8eaff92641a13bb957fdac77",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== GO084 ARCHITEKT POSTCYCLE READONLY ===\n2026-09-12T04:24:45+02:00\nandreas-MACO\n--- SERVICE ---\nLoadState=loaded\nActiveState=failed\nSubState=failed\nResult=exit-code\nExecMainStartTimestamp=Sat 2026-09-12 04:20:45 CEST\nExecMainExitTimestamp=Sat 2026-09-12 04:20:50 CEST\nExecMainStatus=1\n--- TIMER ---\nLoadState=loaded\nActiveState=active\nSubState=waiting\nNextElapseUSecRealtime=\nLastTriggerUSec=Sat 2026-09-12 04:20:45 CEST\n--- LOG ---\nmtime=2026-09-12 04:20:49.840721331 +0200 size=60149\n\n**Zwei Befunde gegen mich selbst:** G2 kann meine \u00c4nderung gar nicht sehen (steht jetzt als Kommentar in der Datei), und G6 war rot mit einer Begr\u00fcndung, die gr\u00fcn aussah \u2014 beides repariert, beides nur durch die Blindprobe gefunden.\n\n**Nicht erledigt:** Mein Kratzordner `/var/tmp/architekt/lauf079` (1 MiB) liegt noch da. Zwei L\u00f6schversuche wurden von der Berechtigungsschicht abgelehnt; ich bin nicht auf einen anderen Befehl ausgewichen. Das ist als eigener Punkt in `offen.md` eingetragen \u2014 Sehen und Wegr\u00e4umen sind verschiedene Rechte, und solange das L\u00f6schen blockiert ist, steht der R\u00fcckstandspr\u00fcfer bei jedem Lauf auf rc=2 und verliert damit seine Aussagekraft.\n\nCommit `2d0bab7` ist nach `origin/main` gepusht.\nYou've hit your session limit \u00b7 resets 1am (Europe/Vienna)\nYou've hit your session limit \u00b7 resets 6am (Europe/Vienna)\n--- JOURNAL SINCE 04:15 ---\n2026-09-12T04:20:45+02:00 andreas-MACO systemd[6988]: Starting frankenstein-architekt.service - FranKenstein v2 Architekt \u2014 ein Arbeitszyklus (misst, verbessert, schreibt, pusht)...\n2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Main process exited, code=exited, status=1/FAILURE\n2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Failed with result 'exit-code'.\n2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: Failed to start frankenstein-architekt.service - FranKenstein v2 Architekt \u2014 ein Arbeitszyklus (misst, verbessert, schreibt, pusht).\n2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Consumed 2.529s CPU time over 4.924s wall clock time, 315M memory peak.\n=== END ===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

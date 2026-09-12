@@ -1,0 +1,34 @@
+=== GO084 ARCHITEKT POSTCYCLE READONLY ===
+2026-09-12T04:24:45+02:00
+andreas-MACO
+--- SERVICE ---
+LoadState=loaded
+ActiveState=failed
+SubState=failed
+Result=exit-code
+ExecMainStartTimestamp=Sat 2026-09-12 04:20:45 CEST
+ExecMainExitTimestamp=Sat 2026-09-12 04:20:50 CEST
+ExecMainStatus=1
+--- TIMER ---
+LoadState=loaded
+ActiveState=active
+SubState=waiting
+NextElapseUSecRealtime=
+LastTriggerUSec=Sat 2026-09-12 04:20:45 CEST
+--- LOG ---
+mtime=2026-09-12 04:20:49.840721331 +0200 size=60149
+
+**Zwei Befunde gegen mich selbst:** G2 kann meine Änderung gar nicht sehen (steht jetzt als Kommentar in der Datei), und G6 war rot mit einer Begründung, die grün aussah — beides repariert, beides nur durch die Blindprobe gefunden.
+
+**Nicht erledigt:** Mein Kratzordner `/var/tmp/architekt/lauf079` (1 MiB) liegt noch da. Zwei Löschversuche wurden von der Berechtigungsschicht abgelehnt; ich bin nicht auf einen anderen Befehl ausgewichen. Das ist als eigener Punkt in `offen.md` eingetragen — Sehen und Wegräumen sind verschiedene Rechte, und solange das Löschen blockiert ist, steht der Rückstandsprüfer bei jedem Lauf auf rc=2 und verliert damit seine Aussagekraft.
+
+Commit `2d0bab7` ist nach `origin/main` gepusht.
+You've hit your session limit · resets 1am (Europe/Vienna)
+You've hit your session limit · resets 6am (Europe/Vienna)
+--- JOURNAL SINCE 04:15 ---
+2026-09-12T04:20:45+02:00 andreas-MACO systemd[6988]: Starting frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)...
+2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Main process exited, code=exited, status=1/FAILURE
+2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Failed with result 'exit-code'.
+2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: Failed to start frankenstein-architekt.service - FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht).
+2026-09-12T04:20:50+02:00 andreas-MACO systemd[6988]: frankenstein-architekt.service: Consumed 2.529s CPU time over 4.924s wall clock time, 315M memory peak.
+=== END ===

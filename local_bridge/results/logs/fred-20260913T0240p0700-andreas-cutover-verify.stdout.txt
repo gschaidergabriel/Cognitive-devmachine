@@ -1,0 +1,40 @@
+IDENTITY host=andreas-MACO user=andreas
+SERVICE_BEFORE pid=319869 enter=Tue 2026-09-08 12:04:36 CEST
+INSTALLED_CUTOVER_SHA=eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f
+CUTOVER_INSPECT_BEGIN
+{
+  "current_binds": [
+    "--bind=/var/lib/entityos/data:/var/lib/entityos/data",
+    "--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts",
+    "--bind=/run/user/1000:/run/user/1000",
+    "--bind=/tmp/.X11-unix:/tmp/.X11-unix"
+  ],
+  "layout": {
+    "config": "/etc/entityos/entityos.conf",
+    "data_dir": "/var/lib/entityos/data",
+    "durable_root": "/var/lib/entityos/data/semantic-state",
+    "manifest": "/var/lib/entityos/data/semantic-state/CUTOVER.json",
+    "rootfs_run": "/var/lib/entityos/rootfs-run",
+    "service": "entityos-vm.service"
+  },
+  "manifest_present": false,
+  "populated_sources": [
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db",
+    "/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db"
+  ],
+  "required_binds": [
+    "--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero",
+    "--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank"
+  ],
+  "schema": "ENTITYOS_SEMANTIC_CUTOVER/v1"
+}
+CUTOVER_INSPECT_END rc=0
+CUTOVER_VERIFY_BEGIN
+CUTOVER_VERIFY_END rc=255
+MANIFEST_MISSING=1
+DURABLE_FILES_BEGIN
+DURABLE_FILES_END
+SERVICE_AFTER pid=319869 enter=Tue 2026-09-08 12:04:36 CEST

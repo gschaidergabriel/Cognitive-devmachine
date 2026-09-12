@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0240p0700-andreas-cutover-verify",
+  "command_sha256": "77e6594211e23293d5b9a7b1e401b1270a4768499914182be09aded3eb05dc16",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:34:41.716888+00:00",
+  "finished_at": "2026-09-12T19:34:42.055351+00:00",
+  "status": "FAIL",
+  "exit_code": 255,
+  "op": "exec",
+  "stdout_sha256": "fd10e72cd9ed8bcd0f2a967197ede0abaaa9df369b517a78f7cbad826ab8b3e9",
+  "stderr_sha256": "6156fc72a1fe8a3f99f26c1f1d56e9619d7e3c17e8866f10850fdbfc606cf04d",
+  "stdout_tail": "IDENTITY host=andreas-MACO user=andreas\nSERVICE_BEFORE pid=319869 enter=Tue 2026-09-08 12:04:36 CEST\nINSTALLED_CUTOVER_SHA=eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f\nCUTOVER_INSPECT_BEGIN\n{\n  \"current_binds\": [\n    \"--bind=/var/lib/entityos/data:/var/lib/entityos/data\",\n    \"--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts\",\n    \"--bind=/run/user/1000:/run/user/1000\",\n    \"--bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n  ],\n  \"layout\": {\n    \"config\": \"/etc/entityos/entityos.conf\",\n    \"data_dir\": \"/var/lib/entityos/data\",\n    \"durable_root\": \"/var/lib/entityos/data/semantic-state\",\n    \"manifest\": \"/var/lib/entityos/data/semantic-state/CUTOVER.json\",\n    \"rootfs_run\": \"/var/lib/entityos/rootfs-run\",\n    \"service\": \"entityos-vm.service\"\n  },\n  \"manifest_present\": false,\n  \"populated_sources\": [\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\"\n  ],\n  \"required_binds\": [\n    \"--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero\",\n    \"--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n  ],\n  \"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\"\n}\nCUTOVER_INSPECT_END rc=0\nCUTOVER_VERIFY_BEGIN\nCUTOVER_VERIFY_END rc=255\nMANIFEST_MISSING=1\nDURABLE_FILES_BEGIN\nDURABLE_FILES_END\nSERVICE_AFTER pid=319869 enter=Tue 2026-09-08 12:04:36 CEST\n",
+  "stderr_tail": "START BLOCKIERT -- cutover manifest missing\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

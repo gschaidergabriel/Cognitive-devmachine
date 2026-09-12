@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0238p0700-andreas-cutover-inspect",
+  "command_sha256": "a5a4cc1939124fa0f8de531c9064c169a31e5ffd6bb7374b15bb6215b16bc942",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:34:41.271192+00:00",
+  "finished_at": "2026-09-12T19:34:41.710189+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "0ee1af83a1e8d39aa804fdd2a6036336048d77a0441a7355554ef4ed80abb9b0",
+  "stderr_sha256": "bbcb9ac9b786a71a70cf8aa970d412bdb4eef6abe7c9023484919e54da567754",
+  "stdout_tail": "BEFORE active=active mainpid=319869 active_enter=Tue 2026-09-08 12:04:36 CEST\n--- INSPECT ---\n{\n  \"current_binds\": [\n    \"--bind=/var/lib/entityos/data:/var/lib/entityos/data\",\n    \"--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts\",\n    \"--bind=/run/user/1000:/run/user/1000\",\n    \"--bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n  ],\n  \"layout\": {\n    \"config\": \"/etc/entityos/entityos.conf\",\n    \"data_dir\": \"/var/lib/entityos/data\",\n    \"durable_root\": \"/var/lib/entityos/data/semantic-state\",\n    \"manifest\": \"/var/lib/entityos/data/semantic-state/CUTOVER.json\",\n    \"rootfs_run\": \"/var/lib/entityos/rootfs-run\",\n    \"service\": \"entityos-vm.service\"\n  },\n  \"manifest_present\": false,\n  \"populated_sources\": [\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\"\n  ],\n  \"required_binds\": [\n    \"--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero\",\n    \"--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n  ],\n  \"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\"\n}\nINSPECT_RC=0\n--- CONDITION ---\nCONDITION_RC=255\nAFTER active=active mainpid=319869 active_enter=Tue 2026-09-08 12:04:36 CEST\n",
+  "stderr_tail": "START BLOCKIERT -- volatile_semantic_state_without_verified_cutover: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db, /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db, /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db, /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db, /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

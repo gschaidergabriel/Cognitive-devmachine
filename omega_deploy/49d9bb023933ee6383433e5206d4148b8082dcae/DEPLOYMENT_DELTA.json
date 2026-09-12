@@ -1,0 +1,17 @@
+{
+  "schema": "OMEGA_DEPLOYMENT_DELTA/v1",
+  "omega_head": "49d9bb023933ee6383433e5206d4148b8082dcae",
+  "base_omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "mode": "ADDITIVE_EXACT_DELTA",
+  "files": {
+    "omega/outer_bridge_worker.py": "2ea748324e5bb18f2edb9bfc4ac5427f3ce41b0f",
+    "omega/spool_bridge_relay.py": "adfc29c582008f8a13631170be74a98e7d84973c",
+    "omega/supervisor_outer.py": "a4c207dedae2e02858f7798845f98940027e39f9"
+  },
+  "excluded_nonruntime_additions": [
+    ".github/workflows/omega-ci.yml",
+    "tests/test_outer_bridge_worker.py",
+    "tests/test_spool_bridge_relay.py"
+  ],
+  "activation_rule": "COPY_IMMUTABLE_BASE_572A_THEN_OVERLAY_EXACT_RUNTIME_FILES; DO_NOT_RESTART_EXISTING_GRID; START_SPOOL_RELAY_AND_OUTER_WORKER_AS_SEPARATE_SIDECARS; VERIFY_BEFORE_POINTER_PROMOTION"
+}

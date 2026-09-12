@@ -1,0 +1,48 @@
+HAS_MX True
+SIDE_DBS ['unified.db']
+MX_COUNTS 80 80
+{"authority_law": "memory_is_cache;evidence_is_authority;pattern_not_truth;pattern_not_effect_authority;conflict_preserve", "claims": 0, "cursor": 80, "db": "/tmp/titan-mxmc-test-sdNjIx/unified.db", "hdc_dim": 4096, "mirrors": 80, "patterns": 1, "pulses": 80, "schema": "F2WP1207_TITAN_MX/v1", "storage_topology": "UNIFIED_DB_SINGLE_STATE", "transitions": 6}
+===VOICE-BRANCH===
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/test_voice_full_integration.py _____________
+tests/test_voice_full_integration.py:7: in <module>
+    spec.loader.exec_module(mod)
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+scripts/voice_full_integration.py:44: in <module>
+    @dataclasses.dataclass(frozen=True)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1258: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+/usr/lib/python3.12/dataclasses.py:983: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+/usr/lib/python3.12/dataclasses.py:749: in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+_____________ ERROR collecting tests/test_titan_mc_person_scope.py _____________
+tests/test_titan_mc_person_scope.py:9: in <module>
+    spec.loader.exec_module(mc)
+<frozen importlib._bootstrap_external>:995: in exec_module
+    ???
+<frozen importlib._bootstrap>:488: in _call_with_frames_removed
+    ???
+scripts/f2wp1207_titan_mc.py:36: in <module>
+    @dataclass(frozen=True)
+     ^^^^^^^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/dataclasses.py:1258: in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+/usr/lib/python3.12/dataclasses.py:983: in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+/usr/lib/python3.12/dataclasses.py:749: in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+=========================== short test summary info ============================
+ERROR tests/test_voice_full_integration.py - AttributeError: 'NoneType' objec...
+ERROR tests/test_titan_mc_person_scope.py - AttributeError: 'NoneType' object...
+!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!
+2 errors in 0.16s

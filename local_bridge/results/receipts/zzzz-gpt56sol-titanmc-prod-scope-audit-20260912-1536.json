@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "zzzz-gpt56sol-titanmc-prod-scope-audit-20260912-1536",
+  "command_sha256": "07845b1dd7628262512fa53480bc753375e3eee0e5560944e0218ca29be7fb22",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T08:10:29.037467+00:00",
+  "finished_at": "2026-09-12T08:10:29.233233+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "938330a422b57811fc204dc47d5eadf1083ae609ac54f1d2be34a01621683a76",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "DB /home/ai-core-node/.local/share/agentzero/unified.db\ndurable_memory scope= user_id cols= memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance\nCOUNTS [('gabriel', 44607)]\nturns scope= user_id cols= turn_id,session_id,user_id,ordinal,ts,role,content,fidelity,compression_generation,resource_refs,causal_refs,provenance\nCOUNTS [('gabriel', 4173)]\nmemory_tabelle scope= user_id cols= id,artikel_id,memory_text,quelle,erstellt_am,priority,tag,user_id\nCOUNTS []\nretrieval_episodes_semantisch scope= user_id cols= retrieval_id,session_id,user_id,generation,modell,query_hash,kandidaten_anzahl,ausgewaehlt_json,mechanisch_selected_json,weicht_ab,status,ts\nCOUNTS [('gabriel', 34)]\nworkspace_episodes scope= None cols= episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state\nf2_person_memory MISSING\nperson_memory MISSING\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

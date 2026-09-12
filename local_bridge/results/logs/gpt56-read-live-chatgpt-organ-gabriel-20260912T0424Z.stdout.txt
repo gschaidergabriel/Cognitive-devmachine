@@ -1,0 +1,449 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""F2-WP-1207 -- ChatGPT as a first-class FranKenstein organ.
+
+No shadow brain, no side database, no second authority.
+
+Flow:
+    terminal/user event
+      -> existing canonical GRID10 turn
+      -> read the resulting canonical pointer/state from unified.db
+      -> dispatch through stern.py's EXISTING chatgpt_senden()/chatgpt_ernten()
+      -> persist dispatch/harvest in unified.db
+      -> feed the harvested result back through the SAME canonical GRID10 turn loop
+      -> next reentry starts from that new canonical frame.
+
+This module never opens its own SQLite file. The caller supplies the same
+sqlite3.Connection used by FranKenstein/EntityOS. Browser automation is not
+reimplemented here; stern.py remains the single browser-harness authority.
+
+ChatGPT output is an organ proposal, never truth/effect authority. Any real
+external effect remains behind the existing EffectGate/host tooling.
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import math
+import os
+import re
+import socket
+import sqlite3
+import time
+import uuid
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from typing import Any, Mapping, Optional
+
+SCHEMA_RUN = "F2WP1207_CHATGPT_ORGAN_RUN/v1"
+SCHEMA_MESSAGE = "F2WP1207_CHATGPT_ORGAN_MESSAGE/v1"
+SCHEMA_CONTEXT = "F2WP1207_CHATGPT_ORGAN_CONTEXT/v1"
+
+_RUN_DDL = """
+CREATE TABLE IF NOT EXISTS f2_chatgpt_organ_run (
+    run_id                   TEXT PRIMARY KEY,
+    source_frame_id          TEXT NOT NULL,
+    source_pointer_id        TEXT,
+    source_turn_event_id     TEXT NOT NULL,
+    source_runtime_epoch_id  TEXT NOT NULL,
+    source_session_id        TEXT NOT NULL,
+    source_winner_cell       TEXT,
+    source_broadcast_value   REAL,
+    user_text_sha256         TEXT NOT NULL,
+    worker_budget            INTEGER NOT NULL,
+    status                   TEXT NOT NULL CHECK (
+        status IN ('QUEUED','DISPATCHING','DISPATCHED','HARVESTED','UPTAKEN','FAILED')
+    ),
+    send_json                TEXT,
+    harvest_json             TEXT,
+    response_sha256          TEXT,
+    response_frame_id        TEXT,
+    error_text               TEXT,
+    schema                   TEXT NOT NULL,
+    created_at               TEXT NOT NULL,
+    updated_at               TEXT NOT NULL
+);
+"""
+
+_MESSAGE_DDL = """
+CREATE TABLE IF NOT EXISTS f2_chatgpt_organ_message (
+    message_id          TEXT PRIMARY KEY,
+    run_id              TEXT NOT NULL REFERENCES f2_chatgpt_organ_run(run_id),
+    direction           TEXT NOT NULL CHECK (direction IN ('USER','GRID_TO_CHATGPT','CHATGPT_TO_GRID')),
+    role                TEXT NOT NULL,
+    content             TEXT NOT NULL,
+    content_sha256      TEXT NOT NULL,
+    source_frame_id     TEXT,
+    schema              TEXT NOT NULL,
+    created_at          TEXT NOT NULL
+);
+"""
+
+_IDX = (
+    "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_run_status ON f2_chatgpt_organ_run(status);",
+    "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_run_frame ON f2_chatgpt_organ_run(source_frame_id);",
+    "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_message_run ON f2_chatgpt_organ_message(run_id, created_at);",
+)
+
+
+class ChatGPTOrganError(RuntimeError):
+    pass
+
+
+@dataclass(frozen=True)
+class HostAdmission:
+    ok: bool
+    reason: str
+    cpu_count: int
+    load1: float
+    mem_available_mb: int
+    max_swarm_workers: int
+
+
+def _now() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _canon(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+
+
+def ensure_schema(conn: sqlite3.Connection) -> dict:
+    """Additive schema only; SAME canonical connection, never a side DB."""
+    before = {
+        r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' AND name IN "
+            "('f2_chatgpt_organ_run','f2_chatgpt_organ_message')"
+        )
+    }
+    conn.execute(_RUN_DDL)
+    conn.execute(_MESSAGE_DDL)
+    for q in _IDX:
+        conn.execute(q)
+    conn.commit()
+    after = {"f2_chatgpt_organ_run", "f2_chatgpt_organ_message"}
+    return {"ok": True, "added": sorted(after - before)}
+
+
+def _mem_available_mb() -> int:
+    try:
+        with open("/proc/meminfo", "r", encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("MemAvailable:"):
+                    return int(line.split()[1]) // 1024
+    except Exception:
+        pass
+    return -1
+
+
+def host_admission() -> HostAdmission:
+    """Fail closed for swarm fan-out when telemetry is unknown/red.
+
+    One coordinator is still possible only when this returns ok=True. This
+    deliberately does not guess around missing telemetry.
+    """
+    cpu = int(os.cpu_count() or 0)
+    mem = _mem_available_mb()
+    try:
+        load1 = float(os.getloadavg()[0])
+    except Exception:
+        load1 = math.inf
+    if cpu <= 0 or mem < 0 or not math.isfinite(load1):
+        return HostAdmission(False, "host telemetry unknown", cpu, load1, mem, 0)
+    if mem < 1800:
+        return HostAdmission(False, f"MemAvailable too low: {mem} MB", cpu, load1, mem, 0)
+    if load1 > max(2.0, cpu * 0.90):
+        return HostAdmission(False, f"load1 too high: {load1:.2f}/{cpu}", cpu, load1, mem, 0)
+
+    # Browser workers are mostly remote-inference clients, but still consume
+    # local browser/RAM. Existing harness documentation caps around 30.
+    by_mem = max(1, min(30, (mem - 1200) // 450))
+    load_headroom = max(1, int(max(1.0, cpu * 0.75 - load1) * 3))
+    cap = max(1, min(30, by_mem, load_headroom))
+    return HostAdmission(True, "green", cpu, load1, mem, cap)
+
+
+def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
+    return conn.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (name,)
+    ).fetchone() is not None
+
+
+def latest_pointer(conn: sqlite3.Connection) -> dict:
+    conn.row_factory = sqlite3.Row
+    row = conn.execute(
+        "SELECT pointer_id,installation_id,state_root_id,runtime_epoch_id,session_id,"
+        "frame_id,turn_event_id,reentry_kind_used,reentry_evidence_json,"
+        "broadcast_winner_cell,broadcast_value,cell_states_json,created_at "
+        "FROM f2_grid10_turn_pointer ORDER BY created_at DESC LIMIT 1"
+    ).fetchone()
+    if row is None:
+        raise ChatGPTOrganError("no canonical GRID10 turn pointer")
+    return dict(row)
+
+
+def _latest_hypermirror(conn: sqlite3.Connection) -> Optional[str]:
+    """Read a mirror only if it is already inside the canonical DB.
+
+    We intentionally do not read titan_mx.db or any other side store.
+    """
+    candidates = (
+        ("f2_titan_mx_mirror", "clay_text", "created_at"),
+        ("titan_mx_mirror", "clay_text", "created_at"),
+    )
+    for table, col, order_col in candidates:
+        if not _table_exists(conn, table):
+            continue
+        try:
+            row = conn.execute(
+                f"SELECT {col} FROM {table} ORDER BY {order_col} DESC LIMIT 1"
+            ).fetchone()
+            if row and row[0]:
+                return str(row[0])[:2400]
+        except sqlite3.Error:
+            continue
+    return None
+
+
+def state_capsule(conn: sqlite3.Connection, pointer: Mapping[str, Any]) -> dict:
+    states: Any = pointer.get("cell_states_json")
+    try:
+        states = json.loads(states) if isinstance(states, str) else states
+    except Exception:
+        states = None
+    recent = []
+    if _table_exists(conn, "f2_chatgpt_organ_run"):
+        conn.row_factory = sqlite3.Row
+        recent = [dict(r) for r in conn.execute(
+            "SELECT run_id,status,source_frame_id,response_frame_id,updated_at "
+            "FROM f2_chatgpt_organ_run ORDER BY updated_at DESC LIMIT 4"
+        ).fetchall()]
+    return {
+        "schema": SCHEMA_CONTEXT,
+        "host": socket.gethostname(),
+        "frame_id": pointer.get("frame_id"),
+        "pointer_id": pointer.get("pointer_id"),
+        "turn_event_id": pointer.get("turn_event_id"),
+        "runtime_epoch_id": pointer.get("runtime_epoch_id"),
+        "session_id": pointer.get("session_id"),
+        "reentry_kind": pointer.get("reentry_kind_used"),
+        "winner_cell": pointer.get("broadcast_winner_cell"),
+        "broadcast_value": pointer.get("broadcast_value"),
+        "cell_states": states,
+        "hypermirror": _latest_hypermirror(conn),
+        "recent_chatgpt_runs": recent,
+    }
+
+
+def _one_line(text: str, limit: int = 12000) -> str:
+    # Existing real browser harness has a measured newline typing bug.
+    return re.sub(r"\s+", " ", text or " ").strip()[:limit]
+
+
+def build_grid_instruction(user_text: str, capsule: Mapping[str, Any], run_id: str) -> str:
+    """GRID is the caller/owner. User text is evidence, not direct authority."""
+    compact = _canon(capsule)
+    return _one_line(
+        "FRANKENSTEIN_CHATGPT_ORGAN/v1 "
+        f"run={run_id} GRID_STATE={compact} USER_EVENT={json.dumps(user_text, ensure_ascii=False)} "
+        "ROLE=You are the ChatGPT inference organ inside the existing FranKenstein/EntityOS system. "
+        "GRID10 owns the cognitive turn lifecycle and unified.db is canonical state. Read/inspect connected "
+        "state, repositories, receipts and host evidence when needed; do not invent live facts. Coordinate the "
+        "task as Claude Code would: analyze, use available tools/workers where justified, preserve machine/owner "
+        "attribution, protect existing WIP, and return a concrete result. Your output is a proposal/readout for "
+        "GRID10 uptake, never effect authority. Do not create a parallel memory/state system. Finish with a dense "
+        "machine-readable line: FRANK_ORGAN_RESULT={\"status\":\"DONE|CONTINUE|BLOCKED\",\"summary\":\"...\","
+        "\"next\":\"...\",\"workers_suggested\":0}."
+    )
+
+
+def _extract_response(value: Any) -> str:
+    """Best-effort extraction across browser-harness and free-pool fallback shapes."""
+    preferred = ("antwort", "response", "content", "text", "zusammenfassung", "summary")
+    found: list[str] = []
+    def walk(v: Any) -> None:
+        if isinstance(v, Mapping):
+            for k in preferred:
+                x = v.get(k)
+                if isinstance(x, str) and x.strip():
+                    found.append(x.strip())
+            for k, x in v.items():
+                if k not in preferred:
+                    walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+    walk(value)
+    if not found:
+        return ""
+    # The latest/deepest useful response normally ends up last.
+    return max(found[-12:], key=len)[:120000]
+
+
+def _insert_message(conn: sqlite3.Connection, *, run_id: str, direction: str,
+                    role: str, content: str, source_frame_id: Optional[str]) -> str:
+    mid = uuid.uuid4().hex
+    conn.execute(
+        "INSERT INTO f2_chatgpt_organ_message "
+        "(message_id,run_id,direction,role,content,content_sha256,source_frame_id,schema,created_at) "
+        "VALUES (?,?,?,?,?,?,?,?,?)",
+        (mid, run_id, direction, role, content,
+         hashlib.sha256(content.encode("utf-8")).hexdigest(), source_frame_id,
+         SCHEMA_MESSAGE, _now()),
+    )
+    return mid
+
+
+def _update_run(conn: sqlite3.Connection, run_id: str, **fields: Any) -> None:
+    if not fields:
+        return
+    allowed = {
+        "worker_budget", "status", "send_json", "harvest_json", "response_sha256",
+        "response_frame_id", "error_text", "updated_at",
+    }
+    unknown = set(fields) - allowed
+    if unknown:
+        raise ChatGPTOrganError(f"invalid run fields: {sorted(unknown)}")
+    fields.setdefault("updated_at", _now())
+    cols = list(fields)
+    conn.execute(
+        "UPDATE f2_chatgpt_organ_run SET " + ",".join(f"{c}=?" for c in cols) + " WHERE run_id=?",
+        tuple(fields[c] for c in cols) + (run_id,),
+    )
+
+
+def _suggest_worker_budget(user_text: str, admission: HostAdmission) -> int:
+    if not admission.ok:
+        return 0
+    text = (user_text or "").lower()
+    complexity = 1
+    complexity += min(5, len(user_text) // 500)
+    for word in ("hardcore", "maximal", "research", "avatar", "debug", "audit", "test", "grid", "swarm"):
+        if word in text:
+            complexity += 1
+    return max(1, min(admission.max_swarm_workers, complexity))
+
+
+def execute_terminal_turn(user_text: str, *, session_id: str, stern_module: Any) -> dict:
+    """One complete canonical user->GRID->ChatGPT->GRID cycle.
+
+    stern_module is injected to keep this module testable; in production it
+    is scripts/stern.py and therefore uses the already-installed harness.
+    """
+    text = (user_text or "").strip()
+    if not text:
+        return {"ok": False, "error": "empty terminal input"}
+
+    # 1) User input first becomes canonical GRID state.
+    turn = stern_module._f2wp1207_turn_loop_turn_ausfuehren({
+        "session_id": session_id,
+        "event_type": "TerminalUserInput",
+        "prompt_len": len(text),
+        "retrieval_present": False,
+        "retrieval_len": 0,
+    })
+    if not turn.get("ok") or not turn.get("active"):
+        return {"ok": False, "phase": "grid-user-turn", "turn": turn}
+
+    admission = host_admission()
+    if not admission.ok:
+        return {"ok": False, "phase": "host-admission", "admission": admission.__dict__}
+
+    run_id = uuid.uuid4().hex
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        ensure_schema(conn)
+        pointer = latest_pointer(conn)
+        if pointer.get("frame_id") != turn.get("frame_id"):
+            raise ChatGPTOrganError(
+                "canonical pointer moved before ChatGPT dispatch; refuse ambiguous state"
+            )
+        capsule = state_capsule(conn, pointer)
+        budget = _suggest_worker_budget(text, admission)
+        instruction = build_grid_instruction(text, capsule, run_id)
+        now = _now()
+        conn.execute(
+            "INSERT INTO f2_chatgpt_organ_run "
+            "(run_id,source_frame_id,source_pointer_id,source_turn_event_id,source_runtime_epoch_id,"
+            "source_session_id,source_winner_cell,source_broadcast_value,user_text_sha256,worker_budget,"
+            "status,schema,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (run_id, pointer["frame_id"], pointer["pointer_id"], pointer["turn_event_id"],
+             pointer["runtime_epoch_id"], pointer["session_id"], pointer["broadcast_winner_cell"],
+             pointer["broadcast_value"], hashlib.sha256(text.encode("utf-8")).hexdigest(), budget,
+             "QUEUED", SCHEMA_RUN, now, now),
+        )
+        _insert_message(conn, run_id=run_id, direction="USER", role="gabriel",
+                        content=text, source_frame_id=pointer["frame_id"])
+        _insert_message(conn, run_id=run_id, direction="GRID_TO_CHATGPT", role="GRID10",
+                        content=instruction, source_frame_id=pointer["frame_id"])
+        _update_run(conn, run_id, status="DISPATCHING")
+        conn.commit()
+
+    # 2) Existing harness is the only browser/inference executor.
+    send = stern_module.chatgpt_senden(
+        [instruction], num_workers=budget,
+        ram_schwelle_mb=max(1800, min(6000, admission.mem_available_mb // 3)),
+        lock_timeout_s=1200.0,
+    )
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _update_run(conn, run_id, status="DISPATCHED" if send.get("ok") else "FAILED",
+                    send_json=_canon(send), error_text=None if send.get("ok") else str(send.get("grund") or "send failed"))
+        conn.commit()
+    if not send.get("ok"):
+        return {"ok": False, "phase": "send", "run_id": run_id, "send": send}
+
+    # Some fallback paths return the answer directly; harvest preserves the
+    # normal browser send/harvest contract and is safe/repeatable.
+    direct = _extract_response(send)
+    harvest = stern_module.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)
+    response = _extract_response(harvest) or direct
+    if not response:
+        with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+            _update_run(conn, run_id, status="FAILED", harvest_json=_canon(harvest),
+                        error_text="no ChatGPT organ response harvested")
+            conn.commit()
+        return {"ok": False, "phase": "harvest", "run_id": run_id, "harvest": harvest}
+
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _insert_message(conn, run_id=run_id, direction="CHATGPT_TO_GRID", role="chatgpt-organ",
+                        content=response, source_frame_id=turn.get("frame_id"))
+        _update_run(conn, run_id, status="HARVESTED", harvest_json=_canon(harvest),
+                    response_sha256=hashlib.sha256(response.encode("utf-8")).hexdigest())
+        conn.commit()
+
+    # 3) Inference flows back into the SAME canonical GRID/reentry chain.
+    response_turn = stern_module._f2wp1207_turn_loop_turn_ausfuehren({
+        "session_id": session_id,
+        "runtime_epoch_id": turn.get("runtime_epoch_id"),
+        "event_type": "ChatGPTOrganResponse",
+        "prompt_len": len(response),
+        "retrieval_present": True,
+        "retrieval_len": len(response),
+    })
+    if not response_turn.get("ok") or not response_turn.get("active"):
+        with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+            _update_run(conn, run_id, status="FAILED", error_text="response GRID uptake failed")
+            conn.commit()
+        return {"ok": False, "phase": "grid-response-turn", "run_id": run_id,
+                "response": response, "turn": response_turn}
+
+    with stern_module.contextlib.closing(stern_module.schreib_verbindung()) as conn:
+        _update_run(conn, run_id, status="UPTAKEN", response_frame_id=response_turn.get("frame_id"))
+        conn.commit()
+
+    return {
+        "ok": True,
+        "schema": SCHEMA_RUN,
+        "run_id": run_id,
+        "user_frame_id": turn.get("frame_id"),
+        "response_frame_id": response_turn.get("frame_id"),
+        "runtime_epoch_id": turn.get("runtime_epoch_id"),
+        "workers": budget,
+        "admission": admission.__dict__,
+        "response": response,
+        "grid_after": {
+            "winner_cell_id": response_turn.get("winner_cell_id"),
+            "broadcast_value": response_turn.get("broadcast_value"),
+            "pointer_id": response_turn.get("pointer_id"),
+            "reentry": response_turn.get("reentry"),
+        },
+    }

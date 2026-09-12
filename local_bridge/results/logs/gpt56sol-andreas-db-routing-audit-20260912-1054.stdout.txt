@@ -1,0 +1,132 @@
+=== STERN LOCATE ===
+/home/andreas/frankenstein-repo/scripts/stern.py
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py
+/home/andreas/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/windows/quelle/stern.py
+=== DB POINTERS ===
+/home/andreas/.claude/udb/unified.db
+/home/andreas/.config/agentzero/db_pfad.txt
+/home/andreas/.local/share/agentzero/unified.db
+/home/andreas/unified.db
+/var/lib/entityos/data/unified.db
+/var/lib/entityos/unified.db
+=== HOST STERN ROUTING ===
+10:                                    die es in unified.db nicht gibt)
+46:    6. Das Modell schreibt nie selbst in unified.db. Nur diese Datei,
+144:# PHASE 19 Punkt 3 -- Zeiger MUSS vor _db_pfad_aufloesen() stehen: DB_PATH
+146:# der Datei (inkl. der spaeteren PHASE-19-Sektion mit db_pfad_setzen() etc.)
+148:# AUSSERHALB von unified.db selbst (kann also gelesen werden, auch wenn die
+154:    return ziel_dir / "db_pfad.txt"
+165:def _db_pfad_aufloesen() -> str:
+167:        0. Zeigerdatei ~/.config/agentzero/db_pfad.txt (PHASE 19) -- NUR
+174:        1. $AGENTZERO_DB (Sonderfall/Test) -- $UDB_DB_PATH bleibt als
+176:        2. $XDG_DATA_HOME/agentzero/unified.db, sonst
+177:           ~/.local/share/agentzero/unified.db -- die Ziellage nach dem Umzug.
+179:           STERN_DIR/unified.db, NUR solange dort TATSAECHLICH schon eine DB
+200:    env = os.environ.get("AGENTZERO_DB") or os.environ.get("UDB_DB_PATH")
+205:    ziel = ziel_dir / "unified.db"
+208:    legacy = STERN_DIR / "unified.db"
+217:DB_PATH = _db_pfad_aufloesen()
+317:# dauerhaft im Klartext in unified.db -- unabhaengig vom Tresor (PHASE 18),
+397:# wa_snapshot -- Zero/ClayVerse-Herzschlagtabellen) existiert in unified.db
+405:def _verbinden(pfad: str = DB_PATH) -> sqlite3.Connection:
+420:def verbindung(pfad: Optional[str] = None) -> sqlite3.Connection:
+422:    liest das Modul-Global DB_PATH bei JEDEM Aufruf frisch nach, statt einen
+424:    Selbstheilung (_db_selbstheilung_sicherstellen()) kann DB_PATH innerhalb
+428:    return _verbinden(pfad if pfad is not None else DB_PATH)
+431:def _verbinden_schreibend(pfad: str = DB_PATH) -> sqlite3.Connection:
+444:def schreib_verbindung(pfad: Optional[str] = None) -> sqlite3.Connection:
+447:    return _verbinden_schreibend(pfad if pfad is not None else DB_PATH)
+1008:_FEUERSCHNEISE_DB_PATH = os.environ.get("UDB_DB_PATH", "/var/lib/clay/wiki.db")
+1046:def validiere_db_schema(pfad: str = _FEUERSCHNEISE_DB_PATH) -> dict:
+2353:    quelle = "unified.db sicht_* (PHASE 14)"
+3360:    Tabelle `bahn_livestreak`. Dieser Name existiert in `unified.db` bereits
+5020:            # geprueft]: JEDE der 106 vorhandenen Sitzungen in unified.db hat
+5085:        with contextlib.closing(sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)) as c:
+5096:        with contextlib.closing(sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True)) as c:
+5326:    an DB_PATH (welche unified.db) + den Checkout-Pfad dieser Datei (welche
+5329:    basis = f"F2WP1207_INSTALLATION_REF/v1:{DB_PATH}:{Path(__file__).resolve().parent}"
+5409:            state_root_id = hashlib.sha256(f"F2WP1207_STATE_ROOT_REF/v1:{DB_PATH}".encode()).hexdigest()
+5545:        # ueber den bereits von v1 aufgeloesten DB_PATH), NICHT das echte
+5548:            f"F2WP1207_STATE_ROOT_REF/v1:{DB_PATH}".encode()
+5582:            "persisted_in_unified_db": grid10_persisted,
+6157:                # DB_PATH + Checkout-Pfad), legte aber NIE eine
+6178:                    f"F2WP1207_STATE_ROOT_REF/v1:{DB_PATH}".encode()
+6388:    Broadcast -> Persist in unified.db), kein zweiter Retrieval-Aufruf,
+6468:# unified.db. Sein Urteil ist Kandidatenevidenz, exakt wie Claude Codes
+6718:# ('SHADOW','ACTIVE'))` [LIVE, unified.db-Schema] und ihre uebrigen Spalten
+7738:# *.json) durch DB-Zeilen (unified.db: star_waechter/star_quota_zustand) --
+7739:# PHASE 19s "Zustand lebt in unified.db"-Linie, EIN Zustandsort statt zwei.
+7773:#      der bei JEDER neuen Sitzung automatisch echten Kontext aus unified.db
+8372:# reversibel, DB-Backup zusaetzlich unter unified.db.bak-phase4-pre-*).
+8623:    quelle = "unified.db sqlite_master + COUNT(*) je Tabelle"
+8884:# unified.db migriert. Grund, offen gelegt: Konzeptdokument PHASE 13 nennt
+8889:# ZUSTAND ist (Zaehler, Marken, Flags), bleibt wie ueberall in unified.db.
+8983:    jede Maschine hat ihre eigene unified.db/eigenes sprache_default, ai-core-
+9280:# stern/unified.db" (§1.6) UND unter "Entfernt" in den beruehrten Dateien
+9294:# zero_raum/zero_raum_ruf existieren bereits leer in unified.db (fuer genau
+9450:    Themen, ueber ALLE Sitzungen/Projekte hinweg (unified.db ist
+10315:        # verbindung() ohne pfad-Argument auf, die beide DB_PATH bei jedem
+10409:                                "unified.db selbst wird davon nie ueberschrieben)."
+10683:            # siehe dort), reiner Seiteneffekt in unified.db, kein Einfluss
+11788:# (~/.local/share/agentzero/unified.db bzw. was DB_PATH laut Zeiger/Env
+11789:# auflöst). Die alte STERN_DIR/unified.db ist historische Quelle und wird
+11792:# schreibt nie selbst in unified.db" gilt fuer die Vorstufe erst recht.
+11795:    """Kennzeichnet, wenn DB_PATH NICHT auf die Ziellage zeigt (Bestands-
+11798:    pfad = str(DB_PATH)
+11799:    if Path(pfad).resolve() == (STERN_DIR / "unified.db").resolve():
+11800:        _log("verdichtung zielpfad: DB_PATH ist die HISTORISCHE Quelle "
+11801:             "STERN_DIR/unified.db (Umzug nicht ausgefuehrt) -- Zeilen "
+11811:    c = sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True, timeout=2.0)
+12563:    quelle = "unified.db mv_prestage_turns (PHASE 15)"
+13028:    in unified.db, siehe Abschnittskopf PERSONA/SEBUKKU weiter oben)."""
+13127:# in unified.db, nicht in hook.log, nicht in einer sonstigen Konfigdatei,
+13137:#   2. Tabelle vault_uebersicht in unified.db -- UNVERSCHLUESSELT, enthaelt
+13331:    unified.db/argv/Logs -- die urspruengliche Sorge "sichtbar per ps aux
+13846:# "unified.db ist der eigentliche Kern des Harness -- State, Sehmodul,
+13853:#   GEPRUEFT, was stern.py/dieses Haus AUSSERHALB von unified.db an echtem
+13865:#     - env-Variablen (AGENTZERO_DB/UDB_DB_PATH) -- falls gesetzt, zeigen sie
+13873:#   FUND A -- Schnappschuesse (Punkt 4 unten) SIND außerhalb von unified.db
+13874:#   liegender Inhalt (Kopien der DB!). Ein reines "unified.db loeschen"
+13880:#   (deinstallieren(), unten) tut das -- ein reines `rm unified.db` von Hand
+13888:#   unified.db, nur eine unverschluesselte Status-Uebersicht
+13889:#   (vault_uebersicht) tut das. Ein geloeschtes unified.db nimmt die
+13918:    """Liegt NEBEN der aktuell aufgeloesten DB (Path(DB_PATH).parent), nicht
+13924:    d = Path(DB_PATH).parent / "schnappschuesse"
+13942:        for p in _schnappschuss_verzeichnis().glob("unified.db.snapshot-*"):
+13983:    if not Path(DB_PATH).is_file():
+13984:        return {"genommen": False, "grund": "DB_PATH existiert nicht -- kein Schnappschuss von Nichts"}
+13985:    ziel = _schnappschuss_verzeichnis() / f"unified.db.snapshot-{heute}-{anzahl + 1}"
+13987:        shutil.copy2(DB_PATH, ziel)
+14000:# oben in der Datei (vor _db_pfad_aufloesen(), siehe dortiger Kommentar).
+14009:def db_pfad_setzen(pfad: str) -> dict:
+14011:    FranKensteinಠ_ಠ explizit, wohin unified.db verschoben wurde. Sichtbarer
+14018:    _log(f"db_pfad_setzen: {ziel}")
+14022:def db_pfad_zeigen() -> dict:
+14029:        "db_path_aufgeloest": DB_PATH,
+14030:        "existiert": Path(DB_PATH).is_file(),
+14042:_DB_FEHLT_NACHRICHT = (
+14048:_DB_FALLBACK_ORTE = ("Desktop", "Downloads")  # + Home-Wurzel selbst, siehe unten
+14054:    riskant"). Nur EINE Ebene tief, nur der exakte Dateiname 'unified.db'."""
+14055:    kandidaten = [Path.home() / ort / "unified.db" for ort in _DB_FALLBACK_ORTE]
+14056:    kandidaten.append(Path.home() / "unified.db")  # Home-Wurzel selbst
+14068:    (fehlenden) DB_PATH UND zusaetzlich in STERN_DIR/schnappschuesse als
+14069:    zweitem, festen Ort -- deckt den Uebergangsfall ab, dass DB_PATH gerade
+14072:    orte, gesehen = [Path(DB_PATH).parent / "schnappschuesse", STERN_DIR / "schnappschuesse"], set()
+14080:            for p in ort.glob("unified.db.snapshot-*"):
+14096:    _db_pfad_aufloesen()-Docstring "Uebergangsfall"). Ersatz, in dieser
+14103:    unified.db -- siehe Kommentarkopf in daten/schema_leer.sql selbst fuer
+14132:    schreib_verbindung() ohne pfad-Argument) liest DB_PATH danach frisch
+14153:    global DB_PATH
+14155:        if Path(DB_PATH).is_file():
+14160:    _log(f"selbstheilung: DB fehlt am aufgeloesten Pfad {DB_PATH!r} -- beginne Heilungskette")
+14165:        DB_PATH = zeiger
+14166:        _log(f"selbstheilung: Zeiger fuehrte zu {DB_PATH} -- leise uebernommen")
+14172:        DB_PATH = gefunden
+14177:        _log(f"selbstheilung: Rueckfallsuche fand {DB_PATH}, Zeiger aktualisiert -- leise uebernommen")
+14183:        ziel = DB_PATH
+14197:    if _leere_db_erzeugen(DB_PATH):
+14198:        _log(f"selbstheilung: frische leere Schema-DB angelegt unter {DB_PATH}")
+14200:        _log(f"selbstheilung: konnte nicht einmal eine leere DB anlegen unter {DB_PATH} -- "
+14202:    return _DB_FEHLT_NACHRICHT
+14300:      1. unified.db (Punkt-DB-Inhalt) als Zip auf ~/Desktop/, gpg-
+14311:         gegen eine falsch aufgeloeste DB_PATH-Variable, die sonst die

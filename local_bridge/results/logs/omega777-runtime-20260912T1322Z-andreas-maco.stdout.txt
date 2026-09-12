@@ -1,0 +1,29 @@
+SELF_INTEGRATION_HEAD
+5b06f6c40eefb9b2bb058c8117f8705cdff50a6a
+WATCHER
+active
+ActiveState=active
+SubState=waiting
+UnitFileState=enabled
+ENTITYOS_VM
+active
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/entityos-vm.service
+MainPID=319869
+INTERLOCK_LINES
+11:# The ExecStartPre wipe is NOT a defect -- it is immutable infrastructure and
+75:ExecStartPre=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN"'
+76:ExecStartPre=/bin/sh -c 'mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR"'
+79:ExecStartPre=/bin/sh -c 'test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; }'
+VOLATILE_DBS
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db 442368 bytes
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db 24576 bytes
+/var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db 282624 bytes
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db 36864 bytes
+/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db 249856 bytes
+DURABLE_DBS
+/var/lib/entityos/data/backup-vor-erstem-perzept-turn-20260907T174027Z.db 24260608 bytes
+/var/lib/entityos/data/backup-vor-perzept-20260907-172159.db 23965696 bytes
+/var/lib/entityos/data/backup-vor-perzept-an-20260907T163920Z.db 24260608 bytes
+/var/lib/entityos/data/unified.db 87711744 bytes

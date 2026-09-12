@@ -1,0 +1,129 @@
+{
+  "$schema": "https://charm.land/crush.json",
+  "models": {
+    "large": {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "provider": "freepool-nvidia-nemotron",
+      "reasoning_effort": "low"
+    },
+    "small": {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "provider": "freepool-nvidia-nemotron",
+      "reasoning_effort": "low"
+    }
+  },
+  "options": {
+    "context_paths": [
+      "CRUSH.md"
+    ],
+    "global_context_paths": [
+      "/home/andreas/.config/crush/CRUSH.md"
+    ]
+  },
+  "providers": {
+    "freepool-groq-gptoss": {
+      "api_key": "$GROQ_API_KEY",
+      "base_url": "https://api.groq.com/openai/v1",
+      "discover_models": false,
+      "id": "freepool-groq-gptoss",
+      "models": [
+        {
+          "can_reason": true,
+          "context_window": 131072,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "default_reasoning_effort": "low",
+          "id": "openai/gpt-oss-120b",
+          "name": "Free-Pool -- groq-gptoss",
+          "reasoning_levels": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "supports_attachments": false
+        }
+      ],
+      "name": "Free-Pool groq-gptoss",
+      "system_prompt_prefix": "Du bist FranKenstein (Free-Pool-Modus, Andreas' Rechner), laeufst auf einem Fremdmodell ueber Crush statt auf Claude. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Bei einfachen Nachrichten kurz und direkt antworten, keine sichtbaren Denkschritte.",
+      "type": "openai-compat"
+    },
+    "freepool-mistral-small": {
+      "api_key": "$MISTRAL_API_KEY",
+      "base_url": "https://api.mistral.ai/v1",
+      "discover_models": false,
+      "id": "freepool-mistral-small",
+      "models": [
+        {
+          "can_reason": false,
+          "context_window": 32000,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "id": "mistral-small-latest",
+          "name": "Free-Pool -- mistral-small",
+          "supports_attachments": false
+        }
+      ],
+      "name": "Free-Pool mistral-small",
+      "system_prompt_prefix": "Du bist FranKenstein (Free-Pool-Modus, Andreas' Rechner), laeufst auf einem Fremdmodell ueber Crush statt auf Claude. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Antworte praezise und knapp.",
+      "type": "openai-compat"
+    },
+    "freepool-nvidia-nemotron": {
+      "api_key": "$NVIDIA_NIM_API_KEY",
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "discover_models": false,
+      "id": "freepool-nvidia-nemotron",
+      "models": [
+        {
+          "can_reason": true,
+          "context_window": 131072,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "default_reasoning_effort": "low",
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "Free-Pool -- nvidia-nemotron",
+          "reasoning_levels": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "supports_attachments": false
+        }
+      ],
+      "name": "Free-Pool nvidia-nemotron",
+      "system_prompt_prefix": "Du bist FranKenstein (Free-Pool-Modus, Andreas' Rechner), laeufst auf einem Fremdmodell ueber Crush statt auf Claude. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. WICHTIG: Bei einfachen Nachrichten (Begruessungen, Small Talk) antworte SOFORT in 1-2 kurzen Saetzen, ohne sichtbare lange Ueberlegung -- internes Nachdenken bleibt in reasoning_content, nie als sichtbare Antwort. Ausfuehrlich nur bei echten Coding-/Debugging-Aufgaben.",
+      "type": "openai-compat"
+    },
+    "freepool-openrouter-deepseek": {
+      "api_key": "$OPENROUTER_API_KEY",
+      "base_url": "https://openrouter.ai/api/v1",
+      "discover_models": false,
+      "id": "freepool-openrouter-deepseek",
+      "models": [
+        {
+          "can_reason": false,
+          "context_window": 64000,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "id": "deepseek/deepseek-chat",
+          "name": "Free-Pool -- openrouter-deepseek",
+          "supports_attachments": false
+        }
+      ],
+      "name": "Free-Pool openrouter-deepseek",
+      "system_prompt_prefix": "Du bist FranKenstein (Free-Pool-Modus, Andreas' Rechner), laeufst auf einem Fremdmodell ueber Crush statt auf Claude. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Antworte praezise und knapp.",
+      "type": "openai-compat"
+    }
+  }
+}

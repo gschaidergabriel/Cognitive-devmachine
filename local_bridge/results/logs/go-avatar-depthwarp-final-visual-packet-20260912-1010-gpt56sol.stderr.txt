@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/research_entity/avatar/tools/depthwarp_final_visual_packet.py", line 267, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/research_entity/avatar/tools/depthwarp_final_visual_packet.py", line 176, in main
+    base_src, _, _, _ = gate.build(root, args.roll, tuple(eye_src), DEFAULT_AMPS[0])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ai-core-node/.claude/star/visual/.go_evidence/depthwarp_final_visual_20260912_1010_gpt56sol/src/research_entity/avatar/tools/depthwarp_display_space_gate.py", line 33, in build
+    rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.13.0) /io/opencv/modules/imgproc/src/imgwarp.cpp:1670: error: (-215:Assertion failed) ((map1.type() == CV_32FC2 || map1.type() == CV_16SC2) && map2.empty()) || (map1.type() == CV_32FC1 && map2.type() == CV_32FC1) in function 'remap'
+

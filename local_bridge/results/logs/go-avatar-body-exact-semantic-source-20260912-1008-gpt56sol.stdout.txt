@@ -1,0 +1,125 @@
+=== BODY EXACT SEMANTIC SOURCE READONLY ===
+2026-09-12T10:07:22+07:00
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  if(_sonderLaeuft){
+    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+    $(ausdruckSichtbar).style.transform = transform;
+    $(ausdruckSichtbar).style.filter = filter;
+  }
+}
+
+// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eintrag = bildLaden(a.bilder[a.idx]);
+    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+    a.letzterT = jetzt;
+    koerperCrossfade(a.bilder[a.idx]);
+    a.idx++;
+    if(a.idx >= a.bilder.length){
+      koerperAktion = null;
+      const f = a.fertig; a.fertig = null;
+      if(f) f();
+    }
+    return;
+  }
+  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  atmenLetzterWechsel = jetzt;
+  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+}
+
+// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+=== END BODY SEMANTIC SOURCE ===

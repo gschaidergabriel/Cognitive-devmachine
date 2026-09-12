@@ -1,0 +1,323 @@
+#!/usr/bin/env python3
+"""
+Tiefen-Baecker fuer Franks Buehnen-Bilder (alles OFFLINE, CPU, einmal gebacken).
+
+Was das macht (Auftrag 2026-09-11, AI-Face-Filter ohne Laufzeitkosten):
+
+  depth    : Echte Tiefenkarte mit Depth-Anything-V2-Small (HF-Cache, kein Download)
+             fuer jede Quelldatei in kopf_rgba/ und koerper_rgba/ -> 16-bit PNG
+             in <out>_tiefe/depth_raw/.  Ersetzt die FAKE-Hoehe "Helligkeit = Höhe"
+             aus _relief2 (dort standen dunkle Augenhöhlen falsch heraus).
+
+  relief   : Drop-in-Ersatzsatz <src>_relief3/ -- dieselbe Relief-Idee wie _relief2
+             (Normale aus Höhenkarte + Lambert-Shading), ABER mit der echten Tiefe
+             statt der Helligkeit. Shading wird auf Mittelwert 1 normalisiert,
+             damit die Helligkeit NICHT sinkt (der -9.6%-Fehler von _relief2).
+
+  parallax : Tiefenscheiben <out>_tiefe/parallax/ -- Kopf in N Tiefenbänder
+             geschnitten (Nase vorn, Haar hinten). Jede Scheibe eigenes RGBA-PNG.
+             Die Summe der Scheiben-Alphas ist BYTE-IDENTISCH mit dem Original-Alpha
+             (geprüft mit np.array_equal). Laufzeit: nur CSS-Transform.
+
+  messen   : Kontrast (np.std Grau im bbox-Rechteck) und Kantenstärke
+             ((|diff x| + |diff y|)/2 im bbox-Rechteck) vor/nach, Helligkeits-
+             verschiebung, Alpha-Vergleich, bbox-Verschiebung. Schreibt JSON.
+
+Aufruf:
+  tiefe_bauen.py depth   [nur_kopf]      # Tiefenkarten
+  tiefe_bauen.py relief  [nur_kopf]      # relief3-Saetze
+  tiefe_bauen.py parallax                # Tiefenscheiben (Kopf)
+  tiefe_bauen.py messen                  # Messreport -> tiefe_report.json
+"""
+import os
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+import sys
+import json
+import numpy as np
+import cv2
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+QUELLEN = {
+    "kopf": ("kopf_rgba", "kopf_rgba_tiefe", "kopf_rgba_relief3"),
+    "koerper": ("koerper_rgba", "koerper_rgba_tiefe", "koerper_rgba_relief3"),
+}
+MARGIN = 32          # px Rand um die sichtbare Flaeche herum, den die Tiefe noch sieht
+BANDS = 4            # Tiefenscheiben
+FEDER = 0.020        # Federbreite der Scheibengrenze in Tiefen-Einheiten [0..1]
+
+
+# --------------------------------------------------------------------------- Tiefen-Modell
+_MODELL = None
+
+
+def tiefen_modell():
+    global _MODELL
+    if _MODELL is None:
+        import torch
+        from transformers import AutoImageProcessor, AutoModelForDepthEstimation
+        name = "depth-anything/Depth-Anything-V2-Small-hf"
+        proc = AutoImageProcessor.from_pretrained(name, local_files_only=True)
+        mod = AutoModelForDepthEstimation.from_pretrained(name, local_files_only=True)
+        mod.eval()
+        torch.set_num_threads(min(8, os.cpu_count() or 8))
+        _MODELL = (proc, mod, torch)
+    return _MODELL
+
+
+def bild_fuer_tiefe(pfad):
+    """RGBA-Datei -> RGB-Zusammensetzung ueber neutralem Grau (Volldimension)."""
+    arr = np.array(Image.open(pfad).convert("RGBA"))
+    alpha = arr[..., 3:4].astype(np.float32) / 255.0
+    rgb = arr[..., :3].astype(np.float32)
+    grau = 118.0  # neutrales Grau, im Blau/Magenta-Stil neutral, kein Weiß-Glare
+    comp = rgb * alpha + grau * (1.0 - alpha)
+    return comp.astype(np.uint8), arr[..., 3]
+
+
+def tiefe_fuer_datei(pfad):
+    """Echte Tiefenkarte [0..1], Vollbild 1536x1024, ausserhalb alpha = 0."""
+    proc, mod, torch = tiefen_modell()
+    comp, alpha = bild_fuer_tiefe(pfad)
+    ys, xs = np.where(alpha > 8)
+    if len(xs) == 0:
+        return np.zeros(alpha.shape, np.float32)
+    x0 = max(0, int(xs.min()) - MARGIN)
+    y0 = max(0, int(ys.min()) - MARGIN)
+    x1 = min(comp.shape[1], int(xs.max()) + 1 + MARGIN)
+    y1 = min(comp.shape[0], int(ys.max()) + 1 + MARGIN)
+    crop = comp[y0:y1, x0:x1]
+    # Detailgewinn: Kopf-Layout beim Netz etwa 620 px laengste Seite
+    h, w = crop.shape[:2]
+    skal = 620.0 / max(h, w)
+    if skal < 1.0:
+        crop = cv2.resize(crop, (max(1, round(w * skal)), max(1, round(h * skal))),
+                          interpolation=cv2.INTER_AREA)
+    eing = Image.fromarray(crop)
+    with torch.no_grad():
+        inputs = proc(images=eing, return_tensors="pt")
+        out = mod(**inputs)
+        tiefe = out.predicted_depth
+    tiefe = torch.nn.functional.interpolate(
+        tiefe.unsqueeze(1).float(), size=crop.shape[:2], mode="bicubic",
+        align_corners=False).squeeze().numpy()
+    tiefe = tiefe - tiefe.min()
+    mx = tiefe.max()
+    if mx > 1e-6:
+        tiefe = tiefe / mx
+    if tiefe.shape != (y1 - y0, x1 - x0):
+        tiefe = cv2.resize(tiefe, (x1 - x0, y1 - y0), interpolation=cv2.INTER_LINEAR)
+    voll = np.zeros(alpha.shape, np.float32)
+    voll[y0:y1, x0:x1] = tiefe
+    # ausserhalb alpha -> 0 (unendlich weit weg), fuer Vergleichbarkeit
+    voll[alpha == 0] = 0.0
+    return voll.astype(np.float32)
+
+
+def quell_dateien(kopf_only=False, nur=None):
+    """(relativer Pfad, absolut) aller PNG unter den Quellen, Unterordner mit."""
+    liste = []
+    namen = [nur] if nur else (["kopf"] if kopf_only else ["kopf", "koerper"])
+    for n in namen:
+        src = os.path.join(VISUAL, QUELLEN[n][0])
+        for wurzel, _, dateien in os.walk(src):
+            for d in sorted(dateien):
+                if not d.lower().endswith(".png"):
+                    continue
+                p = os.path.join(wurzel, d)
+                liste.append((os.path.relpath(p, VISUAL), p))
+    return sorted(liste)
+
+
+def out_pfad(rel, base):
+    """Quelldatei 'kopf_rgba/roll/x.png' -> '<base>/roll/x.png' (flach gespiegelt)."""
+    rel_flach = rel.split("/", 1)[1] if "/" in rel else rel
+    return os.path.join(VISUAL, base, rel_flach)
+
+
+# --------------------------------------------------------------------------- Modi
+def modus_depth(kopf_only=False):
+    import time
+    alles = quell_dateien(kopf_only)
+    t0 = time.time()
+    for i, (rel, p) in enumerate(alles, 1):
+        ziel = out_pfad(rel, QUELLEN["kopf" if rel.startswith("kopf") else "koerper"][1])
+        ziel = ziel.replace(".png", ".png")
+        os.makedirs(os.path.dirname(ziel), exist_ok=True)
+        if os.path.isfile(ziel):
+            continue
+        d = tiefe_fuer_datei(p)
+        Image.fromarray((d * 65535).astype(np.uint16)).save(ziel)
+        if i % 10 == 0 or i == len(alles):
+            print(f"  depth {i}/{len(alles)}  {time.time()-t0:.0f}s  {rel}", flush=True)
+    print(f"depth fertig: {len(alles)} Karten, {time.time()-t0:.0f}s")
+
+
+def lese_tiefe(rel, base):
+    return np.array(Image.open(out_pfad(rel, base))).astype(np.float32) / 65535.0
+
+
+def relief_aus_tiefe(rgb, alpha, tiefe, staerke=1.0, k_hp=0.9):
+    """Normale aus echter Tiefe + Lambert-Shading. Helligkeit bleibt (Mittel 1).
+
+    Zwei Bänder, damit die Kantenstaerke NICHT sinkt:
+      Formband  : Shading aus der echten Tiefenkarte (Nase heraus, Augenhöhlen
+                  hinein) -- das ist der Fix gegen die Fake-Höhe von _relief2.
+      Feinband  : Original-Highpass wird wieder aufgesteckt (k_hp). Ohne ihn
+                  misst der Filter -7 % Kantenstaerke, weil die Tiefenkarte
+                  glatt ist; mit ihm liegen wir ueber dem Original.
+    """
+    h = tiefe.copy()
+    # kleine Glaettung: Tiefenkante bleibt, Kachel-Rauschen des Netzes weg
+    h = cv2.GaussianBlur(h, (0, 0), 1.6)
+    gx = cv2.Sobel(h, cv2.CV_32F, 1, 0, ksize=3) * 900.0
+    gy = cv2.Sobel(h, cv2.CV_32F, 0, 1, ksize=3) * 900.0
+    nz = np.ones_like(h)
+    norm = np.sqrt(gx * gx + gy * gy + nz * nz)
+    nx, ny, nzc = -gx / norm, -gy / norm, nz / norm
+    # Licht von oben-links-vorn (passt zur bestehenden Beleuchtung der Buehne)
+    lx, ly, lz = -0.45, -0.55, 0.70
+    ln = np.sqrt(lx * lx + ly * ly + lz * lz)
+    lx, ly, lz = lx / ln, ly / ln, lz / ln
+    diff = np.clip(nx * lx + ny * ly + nzc * lz, 0.0, 1.0)
+    shade = 0.62 + 0.55 * diff * staerke
+    maske = alpha > 0
+    if maske.any():
+        m = shade[maske].mean()
+        if m > 1e-6:
+            shade = shade / m          # Helligkeitserhalt: Mittelwert genau 1.0
+    shaded = rgb.astype(np.float32) * shade[..., None]
+    fein = rgb.astype(np.float32) - cv2.GaussianBlur(rgb, (0, 0), 2.5)
+    aus = shaded + k_hp * fein
+    return np.clip(aus + 0.5, 0, 255).astype(np.uint8)
+
+
+def modus_relief():
+    for key, (_q, _t, relief3) in QUELLEN.items():
+        alles = quell_dateien(nur=key)
+        for i, (rel, p) in enumerate(alles, 1):
+            ziel = out_pfad(rel, relief3)
+            os.makedirs(os.path.dirname(ziel), exist_ok=True)
+            arr = np.array(Image.open(p).convert("RGBA"))
+            d = lese_tiefe(rel, QUELLEN[key][1])
+            rgb = relief_aus_tiefe(arr[..., :3], arr[..., 3], d)
+            aus = np.dstack([rgb, arr[..., 3]])      # Alpha byte-identisch uebernommen
+            aus[arr[..., 3] == 0, :3] = 0
+            Image.fromarray(aus, "RGBA").save(ziel)
+            if i % 20 == 0 or i == len(alles):
+                print(f"  relief {key} {i}/{len(alles)} {rel}", flush=True)
+    print("relief3 fertig")
+
+
+def modus_parallax():
+    """Tiefenscheiben fuer kopf_zero_mit_augen + alle kopf_rgba/roll/-Posen."""
+    ziele = [("kopf_zero_mit_augen.png", os.path.join(VISUAL, "kopf_rgba", "kopf_zero_mit_augen.png"))]
+    roll = sorted(os.listdir(os.path.join(VISUAL, "kopf_rgba", "roll")))
+    for d in roll:
+        if d.endswith(".png"):
+            ziele.append((os.path.join("roll", d), os.path.join(VISUAL, "kopf_rgba", "roll", d)))
+    bericht = {}
+    for rel, p in ziele:
+        arr = np.array(Image.open(p).convert("RGBA"))
+        alpha = arr[..., 3]
+        d = lese_tiefe(rel, QUELLEN["kopf"][1])
+        maske = alpha > 0
+        dw = cv2.GaussianBlur(d, (0, 0), 3.0)      # Bänder nicht zersplittern lassen
+        werte_grenzen = np.quantile(dw[maske], [i / BANDS for i in range(1, BANDS)])
+        u = [1.0 / (1.0 + np.exp(-(dw - t) / FEDER)) for t in werte_grenzen]
+        gewichte = [1.0 - u[0]]
+        for j in range(len(u) - 1):
+            gewichte.append(u[j] - u[j + 1])
+        gewichte.append(u[-1])
+        # Ganzzahl-Split: Summe der Scheiben-Alphas == Original-Alpha (byte-genau)
+        zerteilt = []
+        rest = alpha.astype(np.int64).copy()
+        for g in gewichte:
+            a_i = np.floor(alpha.astype(np.float32) * g).astype(np.int64)
+            zerteilt.append(a_i)
+            rest -= a_i
+        # Rest-Pixel der Scheibe mit groesstem Gewicht zuschieben
+        wmax = np.argmax(np.stack(gewichte), axis=0)
+        for k in range(BANDS):
+            schieb = rest * (wmax == k)
+            zerteilt[k] += schieb
+        summe = np.zeros_like(alpha, dtype=np.int64)
+        for a_i in zerteilt:
+            summe += a_i
+        assert np.array_equal(summe.astype(np.uint8), alpha), rel
+        ziel_ordner = os.path.join(VISUAL, QUELLEN["kopf"][1], "parallax")
+        os.makedirs(ziel_ordner, exist_ok=True)
+        name = os.path.basename(rel)[:-4]
+        for k, a_i in enumerate(zerteilt):
+            a = a_i.astype(np.uint8)
+            rgb = arr[..., :3].copy()
+            rgb[a == 0] = 0
+            Image.fromarray(np.dstack([rgb, a]), "RGBA").save(
+                os.path.join(ziel_ordner, f"{name}_scheibe{k}.png"))
+        bericht[rel] = {
+            "grenzen": [float(t) for t in werte_grenzen],
+            "slices": BANDS,
+            "alpha_summe_identisch": True,
+        }
+        print(f"  parallax {rel} ok", flush=True)
+    with open(os.path.join(VISUAL, QUELLEN["kopf"][1], "parallax", "manifest.json"), "w") as f:
+        json.dump(bericht, f, indent=1)
+
+
+# --------------------------------------------------------------------------- Messung
+def messung(pfad):
+    """Kontrast / Kanten / Helligkeit im sichtbaren bbox-Rechteck."""
+    arr = np.array(Image.open(pfad).convert("RGBA"))
+    al = arr[..., 3]
+    grau = cv2.cvtColor(arr[..., :3], cv2.COLOR_RGB2GRAY)
+    ys, xs = np.where(al > 128)
+    if len(xs) == 0:
+        return None
+    x0, x1, y0, y1 = xs.min(), xs.max(), ys.min(), ys.max()
+    g = grau[y0:y1 + 1, x0:x1 + 1]
+    dx = np.abs(np.diff(g.astype(np.float32), axis=1)).mean()
+    dy = np.abs(np.diff(g.astype(np.float32), axis=0)).mean()
+    return dict(bbox=[int(x0), int(y0), int(x1), int(y1)],
+                kontrast=float(g.std()), kante=float((dx + dy) / 2),
+                helligkeit=float(g.mean()))
+
+
+def modus_messen():
+    bericht = {}
+    paare = [
+        ("kopf_zero_mit_augen.png", "kopf", "kopf_zero_mit_augen.png"),
+        ("roll/gier_+00_nick_+00_roll_+05.png", "kopf", "roll/gier_+00_nick_+00_roll_+05.png"),
+        ("roll/gier_+00_nick_+00_roll_-15.png", "kopf", "roll/gier_+00_nick_+00_roll_-15.png"),
+        ("master__koerper_zero.png", "koerper", "master__koerper_zero.png"),
+    ]
+    for rel, key, orig in paare:
+        q, _t, r3 = QUELLEN[key]
+        zeile = {}
+        for tag, ordner in [("original", q), ("relief2", q + "_relief2"), ("relief3", r3)]:
+            p = os.path.join(VISUAL, ordner, rel)
+            if os.path.isfile(p):
+                zeile[tag] = messung(p)
+        bericht[rel] = zeile
+    out = os.path.join(VISUAL, "tiefe_report.json")
+    with open(out, "w") as f:
+        json.dump(bericht, f, indent=1)
+    print(json.dumps(bericht, indent=1))
+    print("->", out)
+
+
+if __name__ == "__main__":
+    modus = sys.argv[1] if len(sys.argv) > 1 else "depth"
+    nur_kopf = len(sys.argv) > 2 and sys.argv[2] == "nur_kopf"
+    if modus == "depth":
+        modus_depth(nur_kopf)
+    elif modus == "relief":
+        modus_relief()
+    elif modus == "parallax":
+        modus_parallax()
+    elif modus == "messen":
+        modus_messen()
+    else:
+        print(__doc__)

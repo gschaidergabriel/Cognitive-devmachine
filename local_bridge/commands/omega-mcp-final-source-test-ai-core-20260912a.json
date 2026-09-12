@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-final-source-test-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 240,
+  "command": "set -euo pipefail\nD=$(mktemp -d /tmp/omega-mcp-final-test.XXXXXX)\ncd \"$D\"\ngh repo clone gschaidergabriel/clay-global-research-entity repo -- --quiet\ncd repo\ngit fetch -q origin chatgpt/omega-chatgpt-mcp-bridge-20260912\ngit checkout -q --detach FETCH_HEAD\npython3 -m py_compile tools/omega_chatgpt_mcp.py tools/omega_grid_relay.py\nbash -n tools/install_omega_chatgpt_mcp_ai_core.sh\npython3 -m pytest -q tests/test_omega_chatgpt_mcp.py\nprintf '\\nTEST_HEAD='; git rev-parse HEAD"
+}

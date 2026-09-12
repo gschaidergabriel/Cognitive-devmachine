@@ -1,0 +1,13 @@
+function blinzeln(zeitplanNeu = true){
+  if(_sonderLaeuft){
+    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+    return;
+  }
+  const schritte = [];
+  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+  blinzelAbspielen(schritte, 0, zeitplanNeu);
+}
+FUNCTION_BYTES 469
+SCOPE=READ_ONLY_EXACT_BLINZELN

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-review-exact-blinzeln-function-20260912-0752",
+  "command_sha256": "a0d5e98a6f9fa010cb2337b9d13727f9cc3a62450b663f6dc51360f14c3be005",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:45:30.039066+00:00",
+  "finished_at": "2026-09-12T00:45:30.094186+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a32138b60e9d688c705e80f15b075ee2d8a6c71d567a1e1c5a31422a5727538b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "function blinzeln(zeitplanNeu = true){\n  if(_sonderLaeuft){\n    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang\n    return;\n  }\n  const schritte = [];\n  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? \"halb1\" : \"zu\"]);\n  schritte.push([8, blinzelDauerGeschlossenHalten(), \"zu\"]);\n  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), \"halb2\"]);\n  blinzelAbspielen(schritte, 0, zeitplanNeu);\n}\nFUNCTION_BYTES 469\nSCOPE=READ_ONLY_EXACT_BLINZELN\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

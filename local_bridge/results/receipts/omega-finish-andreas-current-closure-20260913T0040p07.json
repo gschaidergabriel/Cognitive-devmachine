@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-finish-andreas-current-closure-20260913T0040p07",
+  "command_sha256": "4ff19a0812677d1cf99c4423994fb04ab646bbec73af5aeb9c03bcd4b5fc25ff",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:37:04.181279+00:00",
+  "finished_at": "2026-09-12T17:37:04.370628+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "d95e34c10bc0dbf3cd4e15cce052298decdb3a3828de13f857f513b01b1142c6",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== UNIT ===\nActiveState=active\nSubState=running\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\nActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST\nMainPID=319869\nExecCondition={ path=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; argv[]=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n=== GUARD TARGETS ===\nPRESENT:/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh\nABSENT:/usr/local/libexec/entityos/semantic-state-cutover.py\nPRESENT:/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\nABSENT:/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\n=== CONFIG BINDS ===\nENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n=== RESCUE ===\n/var/lib/entityos/data/volatile-state-rescue/omega-20260913T0032-b4235e7e/MANIFEST.json|7717|2026-09-12T19:32:47.3714332320\n=== CUTOVER ===\nNO_SEMANTIC_STATE_DIR\n=== VOLATILE MTIMES ===\n/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db|479232|2026-09-12 19:35:14.259125333 +0200\n/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db|24576|2026-09-12 02:09:26.719139082 +0200\n/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db|36864|2026-09-10 08:34:38.506411274 +0200\n/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db|249856|2026-09-12 03:22:01.997348125 +0200\n=== LIVE SELF-INTEGRATION ===\n5b06f6c40eefb9b2bb058c8117f8705cdff50a6a\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

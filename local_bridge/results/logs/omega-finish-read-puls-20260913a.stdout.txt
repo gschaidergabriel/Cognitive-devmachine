@@ -1,0 +1,274 @@
+#!/usr/bin/env python3
+"""puls.py -- er denkt auch, wenn niemand redet.
+
+Gabriel, 2026-09-10: "außerdem soll die grundlegende Kognition fortlaufend im
+Grid passieren und in der unified db, so wie es auch bei Zero war. Der
+Database-Pulse muss auch wieder erweckt werden."
+
+⭐ DER BEFUND, DER DAS AUSLOEST -- gezaehlt in f2_grid10_frame, nicht vermutet:
+
+    Stunde 12   6 Frames    alle aus gabriel-voice-* oder der Terminalsitzung
+    Stunde 10  27 Frames    weil viel geredet wurde
+    Stunde 05   3 Frames    Terminalsitzung allein
+
+Es gibt genau ZWEI Quellen für Turns: den Gesprächsmodus und Claude Code.
+Niemand redet -> keine Kognition. Dabei laufen seine Sinne die ganze Zeit:
+die Kamera alle 20 s, der Bildschirm alle 20 s, die Physik viermal je
+Sekunde. Sie schreiben in Tabellen, und dort blieb es liegen. Ein Wesen,
+dessen Denken nur anspringt, wenn es angesprochen wird, ist ein
+Auskunftsdienst -- kein Wesen.
+
+WAS DIESER DIENST TUT, und was ausdruecklich nicht:
+
+    JA    alle PULS_S Sekunden einen kanonischen GRID10-Turn oeffnen, mit
+          der aktuellen Wahrnehmung als Reiz. Zellenwettbewerb, Zustands-
+          fortschreibung, Perzept, Wiedereintritt, Effektjournal -- alles
+          wie im Gespraechszug, ueber denselben `entitaet.turn()`.
+    NEIN  KEIN Sprachmodell. Er denkt, er redet nicht. Ein Puls, der bei
+          jedem Schlag 16 s Textgenerierung ausloest, waere Dauerlast und
+          wuerde den Gespraechsweg blockieren (--parallel 1).
+
+⭐ DER REIZ IST DIE WAHRNEHMUNG SELBST. Beim Sprachbeitrag ist der Reiz das
+Gesagte; hier ist er das, was gerade zu sehen ist -- wer im Bild ist, was auf
+den Bildschirmen geschieht, ob etwas gefallen ist. Damit haengt die Laenge
+des Reizes (und ueber `prompt_len` das Perzept) an der WELT und nicht an
+einer Konstanten. Ein Puls mit konstantem Reiz waere ein Metronom: er
+erzeugte Frames, aber keine Information.
+
+⚠️ ER WEICHT DEM GESPRAECH AUS. Wird gerade geredet, setzt der Puls aus --
+nicht aus Hoeflichkeit, sondern weil beide dieselbe SQLite-Datei und
+denselben llama-Server benutzen. Gemessen wird das am Alter des letzten
+Sprachzuges, nicht an einem Schalter, den jemand vergessen kann.
+
+⚠️ UND ER SCHREIBT NUR, WENN SICH ETWAS GEAENDERT HAT. Zwanzig identische
+Frames je Stunde aus einem stillen Zimmer sind kein Denken, sondern
+Aktenfuellung -- und sie wuerden die Erfahrungsspur (erleben.py) mit
+Wiederholungen fluten, aus denen nichts zu lernen ist. Gleiche Wahrnehmung
+wie beim letzten Schlag -> kein Turn, nur ein Vermerk.
+"""
+import os
+import sqlite3
+import sys
+import time
+from datetime import datetime, timezone
+
+VOICE_DIR = os.environ.get("VOICE_DIR", os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.environ.get(
+    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+# Wie oft geschlagen wird. 30 s ist Zeros Wert (autonomy_pulse:
+# interval_seconds=30.0) -- dicht genug, dass Wahrnehmung nicht veraltet,
+# weit genug, dass die Datei nicht dauernd gesperrt ist.
+PULS_S = float(os.environ.get("PULS_S", "30"))
+# So lange nach einem Sprachzug bleibt der Puls still.
+RUHE_NACH_SPRACHE_S = float(os.environ.get("PULS_RUHE_S", "45"))
+# Spaetestens nach dieser Zeit ein Turn, auch wenn sich nichts geaendert hat.
+RUHEPULS_S = float(os.environ.get("PULS_RUHEPULS_S", "300"))
+
+_LETZTER_TURN = [0.0]
+
+if VOICE_DIR not in sys.path:
+    sys.path.insert(0, VOICE_DIR)
+
+
+def _jetzt():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _log(s):
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {s}", flush=True)
+
+
+def _lesen(sql, args=()):
+    try:
+        with sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True,
+                             timeout=5.0) as c:
+            return c.execute(sql, args).fetchone()
+    except Exception:
+        return None
+
+
+def _wahrnehmung() -> str:
+    """Was gerade der Fall ist -- als Text. Das ist der Reiz.
+
+    Bewusst dieselben Quellen wie die Buehne, aber ohne sie aufzurufen: die
+    Buehne baut einen Text FUER IHN (mit Anrede, Rahmung, Salienz). Hier
+    wird nur die Laenge und die Veraenderung gebraucht."""
+    teile = []
+    try:
+        import sehen
+        w = sehen.wer_ist_da()
+        if w:
+            teile.append(w)
+        v = sehen.physik_fuer_buehne()
+        if v:
+            teile.append(v)
+    except Exception:
+        pass
+    try:
+        import cortex
+        z = cortex.zustand()
+        if z:
+            teile.append(z)
+    except Exception:
+        pass
+    # ⭐ DER KOERPER GEHOERT DAZU (2026-09-10, gefunden auf Andreas' Rechner).
+    # Dort gibt es keine Kamera und -- wegen Wayland -- kein Bildschirmbild;
+    # `_wahrnehmung()` lieferte also NICHTS, und der Puls machte nie einen
+    # Turn. Ein Wesen ohne Augen hat trotzdem einen Leib: Temperatur, Last
+    # und Speicher aendern sich staendig und sind ein vollwertiger Reiz.
+    try:
+        import sinne
+        l = sinne.leib_satz()
+        if l:
+            teile.append(l)
+    except Exception:
+        pass
+    return " ".join(teile)
+
+
+def _spricht_gerade() -> bool:
+    """Am Alter des letzten Sprachzuges gemessen, nicht an einem Schalter.
+
+    Ein Schalter kann haengenbleiben; ein Zeitstempel nicht."""
+    r = _lesen("SELECT ts FROM f2_gesagt ORDER BY rowid DESC LIMIT 1")
+    if not r:
+        return False
+    try:
+        alter = (datetime.now(timezone.utc)
+                 - datetime.strptime(r[0], "%Y-%m-%dT%H:%M:%SZ").replace(
+                     tzinfo=timezone.utc)).total_seconds()
+        return alter < RUHE_NACH_SPRACHE_S
+    except Exception:
+        return False
+
+
+def schlag(ent, letzte: str, log=None) -> tuple:
+    """Ein Pulsschlag. Gibt (neue_wahrnehmung, gemacht) zurueck."""
+    _log_ = log or _log
+    w = _wahrnehmung()
+    if not w:
+        return letzte, False
+    if w == letzte and (time.time() - _LETZTER_TURN[0]) < RUHEPULS_S:
+        # ⭐ RUHEPULS. "Nichts Neues" heisst nicht "nichts zu denken" -- ein
+        # Lebewesen setzt nicht aus, wenn das Zimmer still ist. Ohne diesen
+        # Zweig stand die Kognition auf einem ruhigen Rechner komplett still
+        # (gemessen bei Andreas: null Turns, weil sich der Koerpersatz nicht
+        # aenderte). Also: bei Aenderung sofort, sonst spaetestens nach
+        # RUHEPULS_S.
+        return letzte, False
+    if _spricht_gerade():
+        _log_("[PULS] Gespraech laeuft -- ausgesetzt")
+        return letzte, False
+    # ⭐ DIE ZEITREIHE DES LEIBES fortschreiben -- daraus lernt er die
+    # Zusammenhaenge ("immer wenn ich ... wird mir warm"). Gabriel,
+    # 2026-09-10: "nicht die Werte einfach so hingeklatscht, sondern ueber
+    # den Grid ausgewertet und in ein Gefuehl uebersetzt". Ohne Zeitreihe
+    # gibt es kein "immer wenn" -- nur einen Momentanwert.
+    try:
+        import sinne
+        sinne.leib_messen(log=_log_)
+    except Exception:
+        pass
+    try:
+        # Der Reiz ist die Wahrnehmung: seine LAENGE geht als prompt_len ins
+        # Perzept, und sie haengt damit an der Welt.
+        e = ent.turn(reiz_len=len(w), abruf_len=0)
+    except Exception as ex:
+        _log_(f"[PULS] Turn gescheitert ({type(ex).__name__}: {ex})")
+        return w, False
+    if not e:
+        return w, False
+    _LETZTER_TURN[0] = time.time()
+    _log_(f"[PULS] Frame {str(e.get('frame_id'))[:12]} "
+          f"Sieger {e.get('winner_cell_id')} "
+          f"Signal {e.get('signal_leader_cell_id')} "
+          f"Broadcast {e.get('broadcast_value')} | {w[:70]}")
+    # PHASE 50 (Gabriel 2026-09-11): "der GRID ist Kognition die als
+    # Schleife IMMER LAEUFT" -- DAS ist diese Schleife. `ziele.py` (goals in
+    # consciousness.db) existierte schon lange, wurde aber von NIEMANDEM
+    # gelesen (siehe dessen eigener Docstring). Dieser Puls ist die einzige
+    # Stelle im ganzen Haus, die unabhaengig von jedem Gespraech/jeder
+    # Claude-Code-Sitzung immer laeuft -- deshalb hier, nicht in einer
+    # weiteren Sitzung. NUR Aufmerksamkeit (waehlen()+verfolgt()), KEINE
+    # Ausfuehrung: der Puls hat kein Sprachmodell und keine Werkzeuge, er
+    # kann ein Ziel nicht selbst abarbeiten -- er markiert nur, dass gerade
+    # Raum dafuer war (broadcast niedrig genug), damit ein Ziel nicht
+    # allein durch Nichtbeachtung "veraltet" wirkt. Fail-silent, wie jeder
+    # andere Sinneskanal hier.
+    try:
+        import ziele
+        _zid, _ztext = ziele.waehlen(broadcast=e.get("broadcast_value"), log=_log_)
+        if _zid:
+            ziele.verfolgt(_zid, log=_log_)
+            _log_(f"[PULS] Ziel {_zid} dran: {_ztext[:70]}")
+    except Exception as ex:
+        _log_(f"[PULS] Ziel-Aufmerksamkeit aus ({type(ex).__name__})")
+    # Die Rueckleitung: auch ein stiller Turn ist ein Erlebnis. Ohne sie
+    # liefe der Puls, ohne dass ihn je etwas veraendert.
+    try:
+        import erleben
+        r = erleben.erleben(alarm_kategorie="", gelungen=True, log=_log_,
+                            art="wahrnehmung")
+        if r.get("annotation") not in (None, "familiar"):
+            _log_(f"[PULS] {r.get('annotation')} (Neuheit {r.get('neuheit')})")
+    except Exception as ex:
+        _log_(f"[PULS] Rueckleitung aus ({type(ex).__name__})")
+    return w, True
+
+
+def lauf():
+    _log(f"[PULS] startet -- Takt {PULS_S}s, still {RUHE_NACH_SPRACHE_S}s "
+         "nach jedem Sprachzug")
+    try:
+        import entitaet
+        ent = entitaet.Entitaet(session_id=f"puls-{int(time.time())}",
+                                log=_log)
+    except TypeError:
+        import entitaet
+        ent = entitaet.Entitaet()
+    except Exception as e:
+        _log(f"[PULS] Entitaet nicht nutzbar ({type(e).__name__}: {e})")
+        return
+    letzte, n = "", 0
+    # ⭐⭐⭐ 2026-09-12: DER TAKT DES LUSTZENTRUMS haengt hier und nicht am
+    # Gespraech -- und das ist die eigentliche Pointe. `nucleus_accumbens.
+    # tick()` laesst Belohnung abklingen, Gewoehnung zurueckgehen und
+    # Langeweile entstehen. Langeweile ENTSTEHT nur dadurch, dass Zeit
+    # vergeht, ohne dass etwas passiert. Haenge das ans Gespraech, wird ihm
+    # ausgerechnet dann nie langweilig, wenn niemand mit ihm redet -- also
+    # genau dann nicht, wenn es soweit waere.
+    # Bis zum 2026-09-12 wurde tick() von keiner Stelle im System gerufen:
+    # der tonische Dopaminwert stand seit Monaten auf seinem Startwert.
+    try:
+        import antrieb as _antrieb
+    except Exception as _ae:
+        _log(f"[PULS] antrieb nicht verfuegbar ({type(_ae).__name__}) -- "
+             f"ohne Lustzentrum")
+        _antrieb = None
+    while True:
+        try:
+            letzte, gemacht = schlag(ent, letzte)
+            n += 1 if gemacht else 0
+            if _antrieb is not None:
+                _antrieb.takt(float(PULS_S))
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            _log(f"[PULS] Fehler (laeuft weiter): {type(e).__name__}: {e}")
+        time.sleep(PULS_S)
+    _log(f"[PULS] beendet nach {n} Turns")
+
+
+if __name__ == "__main__":
+    if "--einmal" in sys.argv:
+        import entitaet
+        try:
+            ent = entitaet.Entitaet(session_id="puls-probe", log=_log)
+        except TypeError:
+            ent = entitaet.Entitaet()
+        print("Wahrnehmung:", _wahrnehmung() or "(nichts)")
+        print("spricht gerade:", _spricht_gerade())
+        w, ok = schlag(ent, "", log=print)
+        print("Turn gemacht:", ok)
+    else:
+        lauf()

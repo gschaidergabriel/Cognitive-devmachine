@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-cutover-preflight-andreas-20260913T0037p07",
+  "command_sha256": "5d0b560f3ce65caba2caa1b706da00515e63a324f576605d4a5d6c2156dbab36",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:37:04.074575+00:00",
+  "finished_at": "2026-09-12T17:37:04.167493+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "78073e740a1fed8ffa709c949d754f39149164d0d54101b4e2ea82de07859b1f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== SERVICE ===\nActiveState=active\nSubState=running\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\nActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST\nMainPID=319869\nExecCondition={ path=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; argv[]=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n=== GUARDS ===\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh\nMISSING:/usr/local/libexec/entityos/semantic-state-cutover.py\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf\nMISSING:/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\n=== CONFIG ===\nENTITYOS_DATA_DIR=/var/lib/entityos/data\nENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run\nENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n=== MANIFEST ===\nCUTOVER_MANIFEST_MISSING\n=== SOURCE DB WRITERS ===\nDB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\nDB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\nDB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\nDB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\nOMEGA_CUTOVER_PREFLIGHT_DONE=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

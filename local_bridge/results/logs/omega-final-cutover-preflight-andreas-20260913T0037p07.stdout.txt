@@ -1,0 +1,24 @@
+=== SERVICE ===
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; argv[]=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+=== GUARDS ===
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+MISSING:/usr/local/libexec/entityos/semantic-state-cutover.py
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MISSING:/etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+=== CONFIG ===
+ENTITYOS_DATA_DIR=/var/lib/entityos/data
+ENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run
+ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix"
+=== MANIFEST ===
+CUTOVER_MANIFEST_MISSING
+=== SOURCE DB WRITERS ===
+DB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+DB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+DB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+DB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+OMEGA_CUTOVER_PREFLIGHT_DONE=1

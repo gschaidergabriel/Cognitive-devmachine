@@ -1,0 +1,10 @@
+ls: cannot access '/home/ai-core-node/.claude/star/frank_terminal.py': No such file or directory
+-rwxrw-r-- 1 ai-core-node ai-core-node 2564 Sep 12 10:57 /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+-rwxr-xr-x 1 ai-core-node ai-core-node  327 Sep 12 10:59 /home/ai-core-node/.local/bin/frank
+#!/usr/bin/env bash
+set -euo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+cd "$HOME" 2>/dev/null || true
+echo "FranKensteinಠ_ಠ-Terminal — GRID10 -> exact ChatGPT organ -> GRID10"
+echo "Canonical state: ~/.local/share/agentzero/unified.db | no side brain"
+exec python3 "$HOME/.claude/star/frank_chatgpt_terminal.py" "$@"

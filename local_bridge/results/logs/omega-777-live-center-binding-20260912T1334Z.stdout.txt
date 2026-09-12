@@ -1,0 +1,14 @@
+OMEGA_CHECKOUTS
+PYTHON_IMPORT
+IMPORT_FAIL=ModuleNotFoundError:No module named 'omega'
+SERVICE_EXECSTART
+UNIT=omega-chatgpt-mcp.service
+MainPID=3168996
+ExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; ignore_errors=no ; start_time=[Sat 2026-09-12 19:53:33 +07] ; stop_time=[n/a] ; pid=3168996 ; code=(null) ; status=0/0 }
+ActiveState=active
+FragmentPath=/home/ai-core-node/.config/systemd/user/omega-chatgpt-mcp.service
+UNIT=omega-local-effect-adapter.service
+MainPID=3168989
+ExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; ignore_errors=no ; start_time=[Sat 2026-09-12 19:53:33 +07] ; stop_time=[n/a] ; pid=3168989 ; code=(null) ; status=0/0 }
+ActiveState=active
+FragmentPath=/home/ai-core-node/.config/systemd/user/omega-local-effect-adapter.service

@@ -1,0 +1,27 @@
+=== BEFORE BLOCK ===
+             # bewusst auf 2D-Canvas statt WebGL (Entscheidung des
+             # Bauagenten, genau wegen des geteilten Speichers). Ohne
+             # GPU-Kontext rendert Chrome auf der CPU -- fuer Bilder,
+             # Ueberblendungen und ein paar hundert Regentropfen reicht das,
+             # und das Sprachmodell behaelt seine 5 GB.
+             "--disable-gpu",
+             "--disable-gpu-compositing",
+             "--disable-software-rasterizer"],
+            stdout=log, stderr=log,
+            start_new_session=True)  # eigene Prozessgruppe -> sauber killbar
+        with open(PID_DATEI, "w") as f:
+OLD_SHA=0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9
+NEW_SHA=5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2
+=== AFTER BLOCK ===
+             # bewusst auf 2D-Canvas statt WebGL (Entscheidung des
+             # Bauagenten, genau wegen des geteilten Speichers). Ohne
+             # GPU-Kontext rendert Chrome auf der CPU -- fuer Bilder,
+             # Ueberblendungen und ein paar hundert Regentropfen reicht das,
+             # und das Sprachmodell behaelt seine 5 GB.
+],
+            stdout=log, stderr=log,
+            start_new_session=True)  # eigene Prozessgruppe -> sauber killbar
+        with open(PID_DATEI, "w") as f:
+=== LIVE MAIN CHROME ===
+1472995 bash -lc set -euo pipefail cd /home/ai-core-node/.claude/star/visual test "$(hostname)" = "ai-core-node-projekt-frankenstein" EXPECTED_DAEMON="0ab232f7112b046ced7e3e4ae454fe0d800eebd32d23bdac138c961bc069dff9" EXPECTED_HTML="87cc0e3a94781f90a7533b129743597753876a8410b868767d243b753c5d3645" test "$(sha256sum buehne_daemon.py | awk '{print $1}')" = "$EXPECTED_DAEMON" test "$(sha256sum buehne.html | awk '{print $1}')" = "$EXPECTED_HTML" test "$(sha256sum buehne_daemon.py.go-gpu-backup-20260912T0708 | awk '{print $1}')" = "$EXPECTED_DAEMON" echo '=== BEFORE BLOCK ===' sed -n '1098,1108p' buehne_daemon.py python3 - <<'PY' from pathlib import Path p=Path('buehne_daemon.py') s=p.read_text(encoding='utf-8') old='''             "--disable-gpu",              "--disable-gpu-compositing",              "--disable-software-rasterizer"],''' new='''],''' if s.count(old) != 1:     raise SystemExit(f'exact GPU flag block count={s.count(old)} expected=1') s2=s.replace(old,new,1) if '--disable-gpu' in s2 or '--disable-gpu-compositing' in s2 or '--disable-software-rasterizer' in s2:     raise SystemExit('GPU-disable token remains after exact block replacement') p.write_text(s2,encoding='utf-8') PY python3 -m py_compile buehne_daemon.py NEW_SHA="$(sha256sum buehne_daemon.py | awk '{print $1}')" echo "OLD_SHA=$EXPECTED_DAEMON" echo "NEW_SHA=$NEW_SHA" echo '=== AFTER BLOCK ===' sed -n '1098,1106p' buehne_daemon.py systemctl --user restart frankenstein-buehne.service sleep 12 test "$(systemctl --user is-active frankenstein-buehne.service)" = "active" curl -fsS http://127.0.0.1:8788/ >/dev/null echo '=== LIVE MAIN CHROME ===' pgrep -af '/opt/google/chrome/chrome --app=http://127.0.0.1:8788/' || true if pgrep -af '/opt/google/chrome/chrome --app=http://127.0.0.1:8788/.*--disable-gpu' >/dev/null; then   echo 'FAIL: disable-gpu still present on live main chrome' >&2   cp -a buehne_daemon.py.go-gpu-backup-20260912T0708 buehne_daemon.py   python3 -m py_compile buehne_daemon.py   systemctl --user restart frankenstein-buehne.service   exit 41 fi echo '=== LIVE RENDERER/GPU ===' ps -eo pid,pcpu,rss,args | grep '/opt/google/chrome/chrome --type=\(renderer\|gpu-process\)' | grep 'chrome-profile' | grep -v grep | head -12 || true echo '=== FPS SAMPLES ===' for i in 1 2 3 4 5 6; do   date +%H:%M:%S   curl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get("fps"),ensure_ascii=False))'   sleep 3 done echo '=== FINAL HASHES ===' sha256sum buehne_daemon.py buehne.html filmlook.js 
+1473733 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate

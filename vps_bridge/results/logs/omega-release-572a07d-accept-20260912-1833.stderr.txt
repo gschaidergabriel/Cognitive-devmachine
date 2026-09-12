@@ -1,0 +1,36 @@
+From github.com:gschaidergabriel/clay-global-research-entity
+ * branch                omega-vps-deploy -> FETCH_HEAD
+ * branch                omega-master-control -> FETCH_HEAD
+ * branch                omega-master-results-v1 -> FETCH_HEAD
+ * branch                chatgpt-local-ai-core-node-control -> FETCH_HEAD
+ * branch                chatgpt-local-ai-core-node-results -> FETCH_HEAD
+ * branch                chatgpt-local-andreas-maco-control -> FETCH_HEAD
+ * branch                chatgpt-local-andreas-maco-results -> FETCH_HEAD
+   1957f401b..238b24d78  omega-vps-deploy -> origin/omega-vps-deploy
+   9640c6960..a6ea41dac  chatgpt-local-ai-core-node-control -> origin/chatgpt-local-ai-core-node-control
+   4d6ffb32d..088853baa  chatgpt-local-ai-core-node-results -> origin/chatgpt-local-ai-core-node-results
+Reset branch 'omega-vps-deploy'
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py", line 134, in <module>
+    if __name__=="__main__": raise SystemExit(main())
+                                              ^^^^^^
+  File "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py", line 127, in main
+    if a.once: print(json.dumps(bridge.process_once(),indent=2)); return 0
+                                ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py", line 116, in process_once
+    res=self.submit(item,correlation_id=mid); marker.parent.mkdir(parents=True,exist_ok=True); marker.write_text(json.dumps(res,indent=2)+"\n"); counts["submitted"]+=1
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py", line 89, in submit
+    blob=self._publish(self.control_branch,rel,req,f"omega master request: {request_id}")
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py", line 71, in _publish
+    if attempt==3: raise MasterBridgeCarrierError(f"push unresolved: {p.stderr[-1000:]}")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+MasterBridgeCarrierError: push unresolved: ERROR: The key you are authenticating with has been marked as read only.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+

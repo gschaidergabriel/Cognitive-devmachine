@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-resume-voice-action-plane-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; SRC=/home/ai-core-node/clay-global-research-entity; git -C \"$SRC\" fetch -q origin chatgpt-local-ai-core-node-control; TMP=/tmp/999-resume-voice-action-plane.sh; python3 -c 'import json,subprocess,pathlib; raw=subprocess.check_output([\"git\",\"-C\",\"/home/ai-core-node/clay-global-research-entity\",\"show\",\"FETCH_HEAD:local_bridge/commands/00000-gpt56sol-build-final-voice-action-plane-20260912.json\"], text=True); pathlib.Path(\"/tmp/999-resume-voice-action-plane.sh\").write_text(json.loads(raw)[\"command\"], encoding=\"utf-8\")'; chmod 700 \"$TMP\"; exec bash \"$TMP\"",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 1200
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-live-compose-ai-core-node-20260913T0050-gpt56sol",
+  "command_sha256": "dbad39f12568ad107c971584ac83f9da5c51c21f9d67556c4692766f985a3758",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:51:06.360209+00:00",
+  "finished_at": "2026-09-12T17:51:10.396620+00:00",
+  "status": "FAIL",
+  "exit_code": 4,
+  "op": "exec",
+  "stdout_sha256": "6864430603af1f976c3d14d6f4716c2e4dbd32aac5293fcbb02e7849467509c0",
+  "stderr_sha256": "961b941d0cd610877d76eb8eea93b50056ee4ed4c1dafceb980e2149cb489375",
+  "stdout_tail": "SCRATCH=/home/ai-core-node/.omega-live-compose.DTem4O\nSOURCE_HEAD=065e03acca024ab03d6eb2cd036f931fc8dc11be\n===SOURCE_SELFTEST===\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": true,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime defines no resident infinite/server loop; AST parsed\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\nVOICE_PID_BEFORE=2407635 CLIENT_PID_BEFORE=2407631\n===INSTALL_FINAL_POLICY===\nInstalled final Frankenstein Voice runtime.\nSource: /home/ai-core-node/.omega-live-compose.DTem4O/frankenstein\nDestination: /home/ai-core-node/.local/lib/frankenstein-voice-final\nDrop-in: /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf\nIdentity tuple: gabriel / ai-core-node / gabriel\nThe conversation service was NOT restarted by this installer.\n===COMPOSE_OMEGA===\n",
+  "stderr_tail": "777 install refused: effective Voice entrypoint is not one exact existing voice_final_runtime.py: { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nReconcile stale/parallel Voice drop-ins first; this installer will not silently replace policy authority.\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

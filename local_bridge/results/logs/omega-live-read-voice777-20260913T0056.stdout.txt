@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""777 OMEGA local-voice wrapper over the existing full voice runtime.
+
+No second voice implementation is created. The canonical ``voice_full_runtime``
+patch stack is installed first, then this wrapper adds only cross-organ
+presentation-floor coordination. OMNI/terminal focus can therefore silence new
+local responses without changing memory, GRID, identity or effect authority.
+
+Critical boundary: this module MUST NOT wrap or veto ``_tool_ausfuehren``.
+Presentation ownership controls whether this voice surface may start/speak a new
+response; tool/effect decisions remain exclusively on the established
+Frankenstein authority path. An already in-flight canonical tool call must not
+be cancelled merely because another presentation surface acquired the floor.
+"""
+from __future__ import annotations
+
+import os
+import sys
+import uuid
+from pathlib import Path
+from typing import Any
+
+HERE = Path(__file__).resolve().parent
+LEGACY = HERE.parent / "DEV_SOURCE_RESEARCH" / "repository" / "scripts"
+for p in (HERE, LEGACY):
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+import omega_organ_activity as organ  # noqa: E402
+import voice_full_integration as vfi  # noqa: E402
+import voice_full_runtime as full  # noqa: E402
+import realtime_gespraech as rt  # noqa: E402
+import gespraechsmodus as gm  # noqa: E402
+
+_PATCHED = False
+VOICE_SURFACE = "local_voice"
+VOICE_TTL_S = 8.0
+
+
+def _sid(session: Any) -> str:
+    vf = getattr(session, "voice_full", None)
+    value = getattr(vf, "session_id", "") if vf is not None else ""
+    if not value:
+        value = getattr(session, "raum_session_id", "")
+    if not value:
+        value = f"local-voice-{os.getpid()}-{uuid.uuid4().hex}"
+        setattr(session, "_omega_organ_session_id", value)
+    return str(value)
+
+
+def _may_voice() -> tuple[bool, Any, str]:
+    return organ.floor(VOICE_SURFACE)
+
+
+def _patch_identity_injection() -> None:
+    original = vfi.VoiceIntegrationSession.identity_active_assembly
+    if getattr(original, "_omega_777_wrapped", False):
+        return
+
+    def wrapped(self, *args, **kwargs):
+        base = original(self, *args, **kwargs)
+        return base + "\n" + organ.injection(VOICE_SURFACE)
+
+    wrapped._omega_777_wrapped = True
+    vfi.VoiceIntegrationSession.identity_active_assembly = wrapped
+
+
+def _patch_realtime_activity() -> None:
+    original = vfi.VoiceIntegrationSession.note_realtime_event
+    if getattr(original, "_omega_777_wrapped", False):
+        return
+
+    def wrapped(self, event: str, **payload: Any) -> None:
+        original(self, event, **payload)
+        e = str(event or "").strip().lower()
+        if e in {"speech_started", "speech_stopped", "transcript_ready", "response_released", "barge_in", "tool_intent"}:
+            organ.claim(
+                VOICE_SURFACE,
+                session_id=str(self.session_id),
+                ttl_s=VOICE_TTL_S,
+                detail=f"realtime:{e}",
+            )
+
+    wrapped._omega_777_wrapped = True
+    vfi.VoiceIntegrationSession.note_realtime_event = wrapped
+
+
+def _patch_new_session_gate() -> None:
+    original = gm.realtime_gespraech.fuehren_gespraech
+    if getattr(original, "_omega_777_wrapped", False):
+        return
+
+    def wrapped(*args, **kwargs):
+        allowed, active, _ = _may_voice()
+        if not allowed:
+            # Staying in WACHE while OMNI/terminal owns the floor is the
+            # cheapest suspension: no second Realtime websocket is opened.
+            return None
+        return original(*args, **kwargs)
+
+    wrapped._omega_777_wrapped = True
+    gm.realtime_gespraech.fuehren_gespraech = wrapped
+    # Both modules normally reference the same imported module, but bind the
+    # direct rt symbol too so provenance is explicit under unusual loaders.
+    if hasattr(rt, "fuehren_gespraech"):
+        rt.fuehren_gespraech = wrapped
+
+
+def _patch_response_floor() -> None:
+    original = rt.RealtimeSession._response_erstellen
+    if getattr(original, "_omega_777_wrapped", False):
+        return
+
+    def wrapped(self, ws, zusatz_hinweis: str = "", **kwargs):
+        allowed, active, reason = _may_voice()
+        if not allowed:
+            self._omega_organ_suspended = True
+            self._omega_organ_block_reason = reason
+            # Do not ask the model to speak while another OMEGA surface owns
+            # the presentation floor. The session remains alive so a short
+            # OMNI use does not destroy conversational continuity.
+            return None
+        self._omega_organ_suspended = False
+        organ.claim(
+            VOICE_SURFACE,
+            session_id=_sid(self),
+            ttl_s=VOICE_TTL_S,
+            detail="realtime:response",
+        )
+        return original(self, ws, zusatz_hinweis, **kwargs)
+
+    wrapped._omega_777_wrapped = True
+    rt.RealtimeSession._response_erstellen = wrapped
+
+
+def patch_777() -> None:
+    global _PATCHED
+    if _PATCHED:
+        return
+    # Preserve the exact established 999/full-integration stack first.
+    full.patch_runtime()
+    _patch_identity_injection()
+    _patch_realtime_activity()
+    _patch_new_session_gate()
+    _patch_response_floor()
+    # Deliberately NO _tool_ausfuehren wrapper here. The organ floor is a
+    # presentation lease only; effect authority remains on the canonical path.
+    _PATCHED = True
+
+
+def main() -> int:
+    patch_777()
+    gm.hoeren()
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

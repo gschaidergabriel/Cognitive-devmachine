@@ -1,0 +1,53 @@
+SCRATCH=/home/ai-core-node/.omega-live-compose.DTem4O
+SOURCE_HEAD=065e03acca024ab03d6eb2cd036f931fc8dc11be
+===SOURCE_SELFTEST===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+VOICE_PID_BEFORE=2407635 CLIENT_PID_BEFORE=2407631
+===INSTALL_FINAL_POLICY===
+Installed final Frankenstein Voice runtime.
+Source: /home/ai-core-node/.omega-live-compose.DTem4O/frankenstein
+Destination: /home/ai-core-node/.local/lib/frankenstein-voice-final
+Drop-in: /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+Identity tuple: gabriel / ai-core-node / gabriel
+The conversation service was NOT restarted by this installer.
+===COMPOSE_OMEGA===

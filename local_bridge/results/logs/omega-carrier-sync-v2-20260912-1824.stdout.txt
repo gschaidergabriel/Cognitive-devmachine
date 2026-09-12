@@ -1,0 +1,51 @@
+Your branch is behind 'origin/main' by 5 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+Updating 1c11f79..c4714d5
+Fast-forward
+ omega/grid_runtime_v3.py       | 203 +++++++++++++++++++++++++++++++++++++++++
+ omega/master_bridge_carrier.py | 134 +++++++++++++++++++++++++++
+ omega/supervisor.py            | 126 +++++++++++++++++++++++++
+ omega/telemetry_daemon.py      |  93 +++++++++++++++++++
+ 4 files changed, 556 insertions(+)
+ create mode 100644 omega/grid_runtime_v3.py
+ create mode 100644 omega/master_bridge_carrier.py
+ create mode 100644 omega/supervisor.py
+ create mode 100644 omega/telemetry_daemon.py
+branch 'omega-vps-deploy' set up to track 'origin/omega-vps-deploy'.
+Your branch is up to date with 'origin/omega-vps-deploy'.
+[omega-vps-deploy 1957f401b] omega: publish immutable VPS deployment carrier c4714d5782a37a17d589c9b2337e59dc4fbcb23a
+ 34 files changed, 4461 insertions(+), 3 deletions(-)
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/000_OMEGA_ABSOLUTE_BOOTSTRAP.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/README.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/architecture/ALIGNMENT_KERNEL.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/architecture/DYNAMIC_ORGAN_ROUTING.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/architecture/README.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/assets/omega-hero.svg
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/config/autonomy_policy.json
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/config/organ_router.json
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/config/sources.json
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/__init__.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/alignment.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/bridge_relay.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/bridge_transport.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/grid_organ_router.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/grid_runtime.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/grid_runtime_v2.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/grid_runtime_v3.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/master_bridge.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/master_bridge_carrier.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/policy_kernel.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/router.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/supervisor.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/telemetry_daemon.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/unified_store.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/research/README.md
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/schema/002_runtime.sql
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/schema/omega.sql
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_alignment.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_bridge_transport.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_grid_runtime_v2.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_policy_kernel.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_router.py
+ create mode 100644 omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/tests/test_unified_store.py
+OMEGA_HEAD=c4714d5782a37a17d589c9b2337e59dc4fbcb23a

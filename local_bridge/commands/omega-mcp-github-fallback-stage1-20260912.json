@@ -1,0 +1,9 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"omega-mcp-github-fallback-stage1-20260912",
+  "op":"exec",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "timeout_seconds":90,
+  "command":"set -euo pipefail; set -a; . \"$HOME/.config/omega/omega-mcp.env\"; set +a; python3 - <<'PY'\nimport json,os,urllib.request\nbody=json.dumps({'jsonrpc':'2.0','id':'github-fallback-e2e','method':'tools/call','params':{'name':'omega_execute','arguments':{'person':'gabriel','command':'printf OMEGA_FALLBACK_PROD_GITHUB_OK','cwd':'/tmp','timeout_seconds':30,'wait_seconds':0,'transport':'github'}}},separators=(',',':')).encode()\nreq=urllib.request.Request('http://127.0.0.1:8789/mcp',data=body,method='POST',headers={'Authorization':'Bearer '+os.environ['OMEGA_MCP_TOKEN'],'Content-Type':'application/json'})\nout=json.loads(urllib.request.urlopen(req,timeout=10).read())['result']['structuredContent']\nassert out['state']=='PENDING',out\nassert out['transport_used']=='github_local_bridge',out\nassert out['machine_id']=='ai-core-node' and out['owner']=='gabriel',out\nprint(json.dumps({'state':out['state'],'transport_used':out['transport_used'],'command_id':out['command_id'],'machine_id':out['machine_id'],'owner':out['owner']},separators=(',',':')))\nPY"
+}

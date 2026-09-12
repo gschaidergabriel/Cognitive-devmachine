@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-review-source-slices-blink-20260912-0741",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":30,
+  "command":"set -euo pipefail\nEXPECTED=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\ntest \"$(sha256sum buehne.html | awk '{print $1}')\" = \"$EXPECTED\"\necho ===PATH_OCCURRENCES===\ngrep -n -F '/augen_blink/blink_' buehne.html\necho ===CSS===\nsed -n '350,430p' buehne.html\necho ===BLINK_CONST===\nsed -n '620,720p' buehne.html\necho ===BLINK_FN===\nsed -n '1170,1235p' buehne.html\necho ===GAZE===\nsed -n '1370,1420p' buehne.html\necho SCOPE=READ_ONLY_EXACT_SOURCE_SLICES\n"
+}

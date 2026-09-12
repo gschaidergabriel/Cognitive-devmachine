@@ -1,0 +1,85 @@
+=== GO083 READONLY PREFLIGHT ===
+2026-09-12T04:05:34+02:00
+andreas-MACO
+andreas
+--- LIVE REPO ---
+## main...origin/main
+HEAD=2d0bab710a0b229cbf07c443db2da71e552ab6e3
+REMOTE_MAIN=e28d758a91b181fdeae7160231a1b38e614e46d1
+--- SUBJECT BLOBS ---
+werkzeug/selbsttests.sh 15a040543e3d883103cdd73e6e58c51bb9ab4018
+werkzeug/rueckstaende-pruefen.sh 28b7fd7fa5aefe83b4490905880d0ea0a96cf3b0
+werkzeug/selbsttests-waechter.py db933c8a9ac154beee31802b5a19b862f61fecdc
+MISSING werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py
+werkzeug/systemd/grid10-selbsttests.service d0ce8659d0254291010f9d9b20a15669dc889959
+werkzeug/systemd/grid10-selbsttests.timer 62466a68780a00c188235e365b32b05a5454d2e3
+--- USER SYSTEMD ---
+enabled
+active
+inactive
+# /home/andreas/.config/systemd/user/grid10-selbsttests.service -> /home/andreas/self-integration/werkzeug/systemd/grid10-selbsttests.service
+[Unit]
+Description=GRID10-Selbsttestwaechter — laesst den Selbsttestsatz laufen und meldet Aenderungen
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/self-integration/werkzeug/selbsttests-waechter.py --still
+Nice=15
+IOSchedulingClass=idle
+
+# TMPDIR steht hier NICHT. selbsttests.sh sucht sich seine Temp-Grundlage
+# selbst und sieht dabei nach, ob sie im RAM liegt (Eintrag 076). Wuerde die
+# Unit den Wert vorgeben, haette dieselbe Entscheidung zwei Orte -- und der
+# in der Unit waere der, an den beim naechsten Umbau niemand denkt.
+
+# Gemessen 2026-09-11 (076), auf dieser Maschine:
+#   Laufzeit des Satzes   17-22 s (11 Selbsttests)
+#   Temp-Spitze           339-484 MiB, seit 076 auf Platte statt in tmpfs
+# Der Timer steht auf 60 Minuten. Der Regressionswaechter laeuft alle 30 und
+# braucht 3-6 s; diesen Satz dort mit hineinzuhaengen haette dessen Budget
+# vervierfacht. Das war der Grund, warum 074 die Frage offen gelassen hat --
+# sie ist jetzt beantwortet, nicht umgangen: eigener Timer, eigene Kadenz.
+
+# Dieselbe Unterscheidung wie beim Regressionswaechter (073):
+#   rc=0 gelaufen, nichts Neues
+#   rc=1 der Satz war nicht startbar oder nicht auswertbar -- WERKZEUGFEHLER
+#   rc=2 ein Selbsttest ist gefallen -- DIESES WERKZEUG ARBEITET RICHTIG
+# rc=2 darf die Unit nicht rot faerben, sonst sieht ein echter Werkzeugfehler
+# von aussen genauso aus wie ein gefundener Befund.
+#
+# KOSTEN, damit sie nicht unbemerkt bleiben: python beendet sich bei einem
+# Argumentfehler ebenfalls mit 2 und saehe ab hier erfolgreich aus. Auffangen
+# wuerde das der Verlauf: ein Lauf, der keine Zeile in selbsttestverlauf.tsv
+# schreibt, hat nichts gemessen -- unabhaengig vom Exit-Code.
+SuccessExitStatus=2
+# /home/andreas/.config/systemd/user/grid10-selbsttests.timer -> /home/andreas/self-integration/werkzeug/systemd/grid10-selbsttests.timer
+[Unit]
+Description=Den Selbsttestsatz stuendlich laufen lassen (meldet nur bei Aenderung)
+
+[Timer]
+# Versetzt zu den beiden 30-Minuten-Waechtern, die am 2026-09-11 beide um
+# 08:09:30 feuerten -- der Kommentar im Regressionstimer behauptet dort eine
+# Versetzung, die es in der Praxis nicht gibt. Hier steht sie in der Zahl.
+OnBootSec=25min
+OnUnitActiveSec=60min
+AccuracySec=2min
+Persistent=true
+Unit=grid10-selbsttests.service
+
+[Install]
+WantedBy=timers.target
+NEXT                                   LEFT LAST                                PASSED UNIT                                          ACTIVATES
+Sat 2026-09-12 04:47:53 CEST          42min Sat 2026-09-12 03:47:53 CEST     17min ago grid10-selbsttests.timer                      grid10-selbsttests.service
+--- PRODUCT HISTORY ---
+HISTORY=/home/andreas/architekt/selbsttestverlauf.tsv
+2026-09-11T23:45:50+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T00:47:51+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T01:47:55+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T02:48:08+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+2026-09-12T03:48:21+02:00	13/13	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+MESSAGE=/home/andreas/architekt/selbsttest-meldung.txt
+2026-09-11T12:26:51+02:00	datei	Selbsttest-Befund geaendert -- satz: 11/11 -> 12/12
+2026-09-11T16:35:08+02:00	datei	Selbsttest-Befund geaendert -- satz: 12/12 -> 13/13
+--- RESIDUE ROOT ---
+lauf079
+=== END PREFLIGHT ===

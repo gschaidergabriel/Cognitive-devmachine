@@ -1,0 +1,51 @@
+=== VISIBLE AVATAR SUBJECT PREFLIGHT ===
+2026-09-12T09:53:57+07:00
+ai-core-node-projekt-frankenstein
+ai-core-node
+--- SERVICE ---
+active
+MainPID=1632280
+ExecMainStartTimestamp=Sat 2026-09-12 07:25:08 +07
+ActiveEnterTimestamp=Sat 2026-09-12 07:25:08 +07
+--- SOURCE HASHES ---
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+--- HTTP ---
+HTTP=200 SIZE=113616 TIME=0.001648
+--- PRODUCTION CHROME ---
+3033100 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+3655855 bash -lc set -euo pipefail echo '=== VISIBLE AVATAR SUBJECT PREFLIGHT ===' date -Is; hostname; whoami echo '--- SERVICE ---' systemctl --user is-active frankenstein-buehne.service || true systemctl --user show frankenstein-buehne.service -p MainPID -p ActiveEnterTimestamp -p ExecMainStartTimestamp --no-pager || true echo '--- SOURCE HASHES ---' sha256sum /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py echo '--- HTTP ---' curl -fsS -o /dev/null -w 'HTTP=%{http_code} SIZE=%{size_download} TIME=%{time_total}\n' http://127.0.0.1:8788/ || true echo '--- PRODUCTION CHROME ---' pgrep -af 'chrome.*127.0.0.1:8788' || true P=$(pgrep -fo 'chrome.*127.0.0.1:8788' || true); if [ -n "${P:-}" ]; then tr '\0' ' ' </proc/$P/cmdline; echo; fi echo '--- REMOTE DEBUG LISTENERS ---' ss -ltnp 2>/dev/null | grep -E 'chrome|:92[0-9][0-9]|:93[0-9][0-9]' || true echo '--- WINDOWS ---' DISPLAY=:0 xdotool search --onlyvisible --name 'FranKenstein' getwindowgeometry --shell %@ 2>/dev/null || true echo '--- MONITORS ---' DISPLAY=:0 xrandr --listmonitors || true echo '--- SCRATCH CHROME LEAKS ---' ps -eo pid,ppid,args | grep -E '[c]hrome.*(eye-scheduler|go-eye|remote-debugging-port=93[0-9][0-9])' || true echo '=== END PREFLIGHT ===' 
+/opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate 
+--- REMOTE DEBUG LISTENERS ---
+--- WINDOWS ---
+WINDOW=12591277
+X=86
+Y=51
+WIDTH=1052
+HEIGHT=834
+SCREEN=0
+WINDOW=12591419
+X=1819
+Y=70
+WIDTH=774
+HEIGHT=515
+SCREEN=0
+WINDOW=67108880
+X=114
+Y=149
+WIDTH=1024
+HEIGHT=768
+SCREEN=0
+WINDOW=10485764
+X=1847
+Y=168
+WIDTH=746
+HEIGHT=449
+SCREEN=0
+--- MONITORS ---
+Monitors: 2
+ 0: +*HDMI-A-0 1024/476x600/268+1680+0  HDMI-A-0
+ 1: +HDMI-A-1 1680/477x1050/268+0+0  HDMI-A-1
+--- SCRATCH CHROME LEAKS ---
+3655855  959674 bash -lc set -euo pipefail echo '=== VISIBLE AVATAR SUBJECT PREFLIGHT ===' date -Is; hostname; whoami echo '--- SERVICE ---' systemctl --user is-active frankenstein-buehne.service || true systemctl --user show frankenstein-buehne.service -p MainPID -p ActiveEnterTimestamp -p ExecMainStartTimestamp --no-pager || true echo '--- SOURCE HASHES ---' sha256sum /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py echo '--- HTTP ---' curl -fsS -o /dev/null -w 'HTTP=%{http_code} SIZE=%{size_download} TIME=%{time_total}\n' http://127.0.0.1:8788/ || true echo '--- PRODUCTION CHROME ---' pgrep -af 'chrome.*127.0.0.1:8788' || true P=$(pgrep -fo 'chrome.*127.0.0.1:8788' || true); if [ -n "${P:-}" ]; then tr '\0' ' ' </proc/$P/cmdline; echo; fi echo '--- REMOTE DEBUG LISTENERS ---' ss -ltnp 2>/dev/null | grep -E 'chrome|:92[0-9][0-9]|:93[0-9][0-9]' || true echo '--- WINDOWS ---' DISPLAY=:0 xdotool search --onlyvisible --name 'FranKenstein' getwindowgeometry --shell %@ 2>/dev/null || true echo '--- MONITORS ---' DISPLAY=:0 xrandr --listmonitors || true echo '--- SCRATCH CHROME LEAKS ---' ps -eo pid,ppid,args | grep -E '[c]hrome.*(eye-scheduler|go-eye|remote-debugging-port=93[0-9][0-9])' || true echo '=== END PREFLIGHT ===' 
+=== END PREFLIGHT ===

@@ -1,0 +1,1 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"gpt56-chmod-andreas-frank-wrapper-20260912T0403Z","machine_id":"andreas-maco","owner":"andreas","op":"exec","cwd":"/home/andreas","timeout_seconds":30,"command":"set -eu; chmod 0755 $HOME/.local/bin/frank; $HOME/.local/bin/frank --help | head -24; echo '---WIP---'; git -C $HOME/frankenstein-repo status --porcelain=v1 | head -20"}

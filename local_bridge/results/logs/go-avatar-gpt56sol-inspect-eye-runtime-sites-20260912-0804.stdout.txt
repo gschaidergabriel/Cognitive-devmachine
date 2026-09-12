@@ -1,0 +1,59 @@
+=== function blinzelAbspielen( ===
+function blinzelAbspielen(schritte, idx, zeitplanNeu){
+  if(idx >= schritte.length){
+    $("augen-blink").style.opacity = "0";
+    blinzelPhase = null; gesichtNeuZeichnen(false);
+    if(zeitplanNeu){
+      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+      blinzelWeiterPlanen();
+    }
+    return;
+  }
+  const [frame, dauer, phase] = schritte[idx];
+  $("augen-blink").src = BLINK_BILDER[frame];
+  $("augen-blink").style.opacity = "1";
+  blinzelPhase = phase; gesichtNeuZeichnen(false);
+  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+}
+=== function gazeSchritt( ===
+function gazeSchritt(){
+  const ziel = gazeZielBestimmen();
+  zielGazeX = ziel.x; zielGazeY = ziel.y;
+  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+  // driftet der Glimmer beim Rollen vom Blinzel-Flicken weg, obwohl beide
+  // denselben Augen-Anker verfolgen sollen.
+  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+}
+===CSS #augen-blink ===
+#augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+    transform-origin:70.38% 241.32%;
+    z-index:4;pointer-events:none;opacity:0}
+===CSS #pupillen-glow ===
+#pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+    transform-origin:70.38% 241.32%;
+    z-index:4;pointer-events:none;opacity:0;
+    filter:drop-shadow(0 0 5px rgba(255,63,45,.6)) drop-shadow(0 0 11px rgba(255,90,40,.35));
+    transition:opacity .35s ease-in-out;will-change:transform}
+===COUPLING_LINES===
+1207     $("augen-blink").style.opacity = "0";
+1217   $("augen-blink").style.opacity = "1";
+1402   $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1407   $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+SCOPE=READ_ONLY_EYE_RUNTIME_SITES

@@ -1,19 +1,23 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "gpt56sol-crush-simplediag-20260912-1732",
-  "command_sha256": "74aca0f0144900b489e896862aab41d4fca4f4b8579bcbe3515b64343bc2f0aa",
+  "command_id": "gpt56sol-read-crush-harness-sh-20260912-1734",
+  "command_sha256": "7e5d24b92861d02571916667706e7d1c927089a540fc0bcaa62924026b490ebd",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-12T10:29:53.286917+00:00",
-  "finished_at": "2026-09-12T10:29:53.383247+00:00",
+  "started_at": "2026-09-12T10:30:46.718615+00:00",
+  "finished_at": "2026-09-12T10:30:46.718968+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "79341c5e6b6d6649fe24fe69cc4e5dc93c3db8bafdd0fb49e1c634feb873afc5",
-  "stderr_sha256": "ee6a7d1ccf68454c19d2a1a7aa8746f82529070f5c92be70042f7a98489dd0d5",
-  "stdout_tail": "IDENTITY\nai-core-node-projekt-frankenstein\nai-core-node\n/home/ai-core-node\nREPO\ndrwxrwxr-x 14 ai-core-node ai-core-node 4096 Sep 12 11:07 /home/ai-core-node/frankenstein-repo\n## main...origin/main [ahead 3, behind 19]\n?? scripts/openai_api_key.local\ndd755a639b8c2bc406f7ee7221aabe5dcfa7ed46\nCRUSH\nPROCS\n1296174 /usr/bin/cool-retro-term -T Free Frank -e /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh\n1296427 /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh\n1296430 python3 harness_crush_knopf.py\n1297048 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue\n1297064 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue\n",
-  "stderr_tail": "bash: line 1: crush: command not found\n",
-  "meta": {},
+  "op": "read_file",
+  "stdout_sha256": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/bin/bash\n# harness_crush_knopf.sh -- Desktop-Knopf-Ziel \"Free Frank\" (PHASE 52,\n# Werkzeugwechsel aider->Crush, Gabriel-Auftrag 2026-09-12). Startet den\n# FranKenstein-Banner + Modellwahl + Crush-Start (harness_crush_knopf.py) in\n# einem gruen-auf-schwarz eingefaerbten Terminal (Matrix-Optik-Auftrag).\n# `exec bash` am Ende -- gleiches Muster wie star-start/harness_aider_knopf.sh:\n# das Fenster bleibt nach Programmende offen, Fehlermeldungen bleiben lesbar.\nexport PATH=\"$HOME/.local/npm-global/bin:$PATH\"\ncd \"$HOME/.claude/star\" || exit 1\npython3 harness_crush_knopf.py\nexec bash\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+    "bytes": 587,
+    "truncated": false
+  },
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

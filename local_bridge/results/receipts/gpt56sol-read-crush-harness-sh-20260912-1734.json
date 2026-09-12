@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-read-crush-harness-sh-20260912-1734",
+  "command_sha256": "7e5d24b92861d02571916667706e7d1c927089a540fc0bcaa62924026b490ebd",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:30:46.718615+00:00",
+  "finished_at": "2026-09-12T10:30:46.718968+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/bin/bash\n# harness_crush_knopf.sh -- Desktop-Knopf-Ziel \"Free Frank\" (PHASE 52,\n# Werkzeugwechsel aider->Crush, Gabriel-Auftrag 2026-09-12). Startet den\n# FranKenstein-Banner + Modellwahl + Crush-Start (harness_crush_knopf.py) in\n# einem gruen-auf-schwarz eingefaerbten Terminal (Matrix-Optik-Auftrag).\n# `exec bash` am Ende -- gleiches Muster wie star-start/harness_aider_knopf.sh:\n# das Fenster bleibt nach Programmende offen, Fehlermeldungen bleiben lesbar.\nexport PATH=\"$HOME/.local/npm-global/bin:$PATH\"\ncd \"$HOME/.claude/star\" || exit 1\npython3 harness_crush_knopf.py\nexec bash\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+    "bytes": 587,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

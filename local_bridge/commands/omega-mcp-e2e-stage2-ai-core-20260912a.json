@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-e2e-stage2-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 90,
+  "command": "set -euo pipefail\nset -a\n. \"$HOME/.config/omega/omega-mcp.env\"\nset +a\npython3 - <<'PY'\nimport json, os, urllib.request\nurl='http://127.0.0.1:8789/mcp'\ntoken=os.environ['OMEGA_MCP_TOKEN']\nobj={'jsonrpc':'2.0','id':'receipt-e2e','method':'tools/call','params':{'name':'omega_receipt','arguments':{'person':'gabriel','command_id':'omega-effect-chatgpt-mcp-gabriel-status-e2e-70614664df504cb4','wait_seconds':0}}}\nreq=urllib.request.Request(url,data=json.dumps(obj,separators=(',',':')).encode(),method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json','Accept':'application/json, text/event-stream'})\nwith urllib.request.urlopen(req,timeout=10) as r: reply=json.loads(r.read().decode())\np=reply['result']['structuredContent']\nreceipt=p.get('receipt') or {}\nout={'ok':p.get('ok'),'state':p.get('state'),'command_id':p.get('command_id'),'machine_id':p.get('machine_id'),'owner':p.get('owner'),'receipt_status':receipt.get('status'),'receipt_boundary':receipt.get('execution_boundary')}\nprint(json.dumps(out,separators=(',',':')))\nassert p.get('ok') is True and p.get('state')=='PASS'\nassert p.get('machine_id')=='ai-core-node' and p.get('owner')=='gabriel'\nassert receipt.get('machine_id')=='ai-core-node' and receipt.get('owner')=='gabriel'\nassert receipt.get('command_id')==p.get('command_id')\nPY"
+}

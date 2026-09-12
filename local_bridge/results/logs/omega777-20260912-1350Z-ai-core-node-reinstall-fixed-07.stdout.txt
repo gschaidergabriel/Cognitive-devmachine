@@ -1,0 +1,46 @@
+SNAPSHOT:/tmp/omega777-16466a2.s8gM8D
+=== PRE ===
+MainPID=2800373
+Id=frankenstein-gespraechsmodus.service
+ActiveState=active
+SubState=running
+
+MainPID=1075883
+Id=frankenstein-chatgpt-client.service
+ActiveState=active
+SubState=running
+OMEGA 777 organ-floor layer installed without restarting live voice.
+
+Installed presentation arbitration:
+  OMNI > terminal > local_voice
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared effective service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+
+Verified loaded ExecStart definitions:
+  voice:   { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+  client:  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the local-voice wrapper only when the current voice session is quiescent with:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+=== EFFECTIVE ===
+{ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+{ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+=== COMPILE ===
+COMPILE_PASS
+=== POST NO RESTART ===
+MainPID=2800373
+Id=frankenstein-gespraechsmodus.service
+ActiveState=active
+SubState=running
+
+MainPID=1075883
+Id=frankenstein-chatgpt-client.service
+ActiveState=active
+SubState=running

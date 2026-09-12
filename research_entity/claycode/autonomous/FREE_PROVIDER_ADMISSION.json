@@ -4,8 +4,8 @@
   "mode": "FREE_ONLY_EXCEPT_EXPLICIT_OWNER_GLM53_FLASH_CODING_TEST_ROUTE",
   "product": "EntityOS",
   "compute_architecture": "HCU",
-  "source": "CURRENT_OWNER_DIRECTIVE_2026-09-11",
-  "default_policy": "OWNER_REAUTHORIZED_FREE_SWARM_2026-09-11; FREE_PROVIDER_ADMISSION_ENABLED_GROQ_NVIDIA_MISTRAL_OPENROUTER; TOGETHER_FORBIDDEN; NO_UNKNOWN_PROVIDER_OR_IMPLICIT_PAID_FALLBACK",
+  "source": "CURRENT_OWNER_DIRECTIVE_2026-09-11_REAFFIRMED_2026-09-12_AVATAR_SWARM",
+  "default_policy": "OWNER_REAUTHORIZED_FREE_SWARM_2026-09-11; REAFFIRMED_FOR_AVATAR_SWARM_WORK_2026-09-12; FREE_PROVIDER_ADMISSION_ENABLED_GROQ_NVIDIA_MISTRAL_OPENROUTER; TOGETHER_FORBIDDEN; NO_UNKNOWN_PROVIDER_OR_IMPLICIT_PAID_FALLBACK",
   "providers": {
     "groq": {
       "admitted": true,
@@ -47,7 +47,7 @@
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "FREE_SWARM_HARD_OFF_WITH_SINGLE_OWNER_AUTHORIZED_GLM53_FLASH_CODING_TEST_EXCEPTION",
+  "execution_state": "FREE_SWARM_REAUTHORIZED_GROQ_NVIDIA_MISTRAL_OPENROUTER_WITH_GLM53_FLASH_CODING_TEST_EXCEPTION; TOGETHER_FORBIDDEN",
   "route_level_gate": {
     "implementation": "tools/free_provider_admission.py canonical provider admission boundary where applicable",
     "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1 where applicable",
@@ -108,18 +108,24 @@
   "together": {
     "admitted": false,
     "quantity_authorized": 0,
-    "note": "Together remains forbidden. The GLM-5.3-Flash owner exception does not generalize to Together or other providers."
+    "note": "Together remains forbidden. Free-Swarm reauthorization and the GLM-5.3-Flash owner exception do not generalize to Together."
   },
   "free_swarm": {
-    "admitted": false,
-    "owner_emergency_stop": true,
-    "note": "The former autonomous Free-Swarm remains disabled. The GLM-5.3-Flash route is a bounded coding/test-agent exception, not a swarm restart."
+    "admitted": true,
+    "owner_emergency_stop": false,
+    "providers": [
+      "groq",
+      "mistral",
+      "nvidia",
+      "openrouter"
+    ],
+    "note": "Owner reauthorized the free-provider swarm on 2026-09-11 and reaffirmed swarm use for Avatar work on 2026-09-12. Route-level free-cost/provenance gates and secret isolation remain mandatory; Together remains forbidden."
   },
   "quarantined_relayed_directive_20260828_second_confirmation": {
     "source_commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
-    "status": "NON_OPERATIVE_EXCEPT_WHERE_SUPERSEDED_BY_CURRENT_OWNER_GLM53_FLASH_EXCEPTION",
+    "status": "NON_OPERATIVE_EXCEPT_WHERE_SUPERSEDED_BY_CURRENT_OWNER_FREE_SWARM_REAUTHORIZATION_OR_GLM53_FLASH_EXCEPTION",
     "provider_execution_authority": false,
     "paid_execution_authority": false
   },
-  "note": "Newest explicit owner instruction authorizes GLM-5.3-Flash as a Claude-Code substitute / API-backed coding-test agent. All other autonomous provider routes remain fail-closed; Together remains forbidden; credentials must never be persisted."
+  "note": "Newest explicit owner direction reauthorizes the zero-cost Free Swarm routes Groq/NVIDIA/Mistral/OpenRouter and reaffirms their use for Avatar work. GLM-5.3-Flash remains a bounded coding/test-agent exception. Together and paid/unknown-cost fallback remain forbidden; credentials must never be persisted."
 }

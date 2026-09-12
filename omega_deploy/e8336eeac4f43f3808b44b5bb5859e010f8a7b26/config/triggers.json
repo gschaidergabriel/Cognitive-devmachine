@@ -1,0 +1,42 @@
+{
+  "schema": "OMEGA_TRIGGER_REGISTRY/v1",
+  "triggers": {
+    "999": {
+      "name": "REENTRY",
+      "meaning": "RE-ENTER_RESOLVE_DOCK_ASSIMILATE_CONTINUE",
+      "requires_reentry": false,
+      "maximal_convergence": false,
+      "description": "Canonical OMEGA manifestation/re-entry. Refresh current authority, evidence, repositories, runtime receipts and relevant physical subjects; assimilate with provenance; continue the strongest non-duplicate open gate."
+    },
+    "777": {
+      "name": "CONVERGENCE",
+      "meaning": "REENTER_CONVERGE_EXECUTE_VERIFY_PROMOTE",
+      "requires_reentry": true,
+      "reentry_trigger": "999",
+      "maximal_convergence": true,
+      "description": "Aggressive evidence-bound OMEGA convergence macrocycle. Perform current re-entry first, reuse existing work/claims/receipts, execute the highest-information non-duplicate admitted gate, verify exact outcomes, promote only proven scope, and continue while new safe closure steps are enabled."
+    }
+  },
+  "shared_invariants": [
+    "MEMORY_IS_CACHE_NOT_AUTHORITY",
+    "PRESERVE_MACHINE_OWNER_AND_RUNTIME_PROVENANCE",
+    "NO_IDENTITY_FLATTENING",
+    "NO_SECOND_CANONICAL_AUTHORITY",
+    "NO_DOUBLE_DISPATCH",
+    "UNKNOWN_OUTCOME_IS_NOT_AUTO_REPLAYED",
+    "EFFECTS_REQUIRE_CURRENT_ADMISSION_AND_RECEIPTS",
+    "DELETE_REMOVAL_DENIED",
+    "STORAGE_FILESYSTEM_FORMAT_DENIED",
+    "PROTECTED_ALIGNMENT_SELF_MUTATION_DENIED",
+    "COMPONENT_PASS_IS_NOT_WHOLE_SYSTEM_PROMOTION",
+    "PROVIDER_AUTHORITY_IS_UNCHANGED_BY_TRIGGER"
+  ],
+  "777_termination_conditions": [
+    "PROVEN_CONVERGENCE_BOUNDARY_REACHED",
+    "NO_NON_DUPLICATE_OPEN_GATE",
+    "HARD_EXTERNAL_BLOCKER",
+    "AUTHORITY_REQUIRED",
+    "UNKNOWN_EFFECT_OUTCOME",
+    "RESOURCE_SAFETY_BLOCK"
+  ]
+}

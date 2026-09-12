@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-vps-host-service-contracts-20260912-1854",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 seimensch-vps 'systemctl cat clayverse-mcp-ro.service --no-pager 2>/dev/null | grep -E \"^(\\[|ExecStart|User|Group|WorkingDirectory|EnvironmentFile|Environment=)\"; echo ---; systemctl cat github-actions-vps-clay-host.service --no-pager 2>/dev/null | grep -E \"^(\\[|ExecStart|User|Group|WorkingDirectory|EnvironmentFile|Environment=)\"'"
+}

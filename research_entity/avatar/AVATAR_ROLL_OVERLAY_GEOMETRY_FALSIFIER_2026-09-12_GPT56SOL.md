@@ -1,6 +1,6 @@
 # Avatar Roll Overlay Geometry Falsifier — GPT-5.6 Sol — 2026-09-12
 
-Status: **CRITICAL FALSIFIER / REAL-HOST GENERATOR BOUND / LOCAL CHROMIUM CONFIRMED / REAL-HOST CHROMIUM RECEIPT PENDING**
+Status: **CRITICAL FALSIFIER / REAL-HOST CONFIRMED / LIVE FIX NOT YET PROMOTED**
 
 No live Avatar source was modified by this work.
 
@@ -44,29 +44,45 @@ The generator file itself reports `0° -> (+0.5,+0.5)` because of the 5x5 marker
 
 ## Critical semantic distinction
 
-Because those values are **full target displacement**, they cannot automatically also be the translation operand of a second explicit CSS rotation around the neck anchor. If the browser rotation already moves the marker from the neutral position, the translation operand required to reach the generator target is:
+Because those values are **full target displacement**, they cannot also be used unchanged as the translation operand of a second explicit CSS rotation around the neck anchor. The browser rotation already moves the neutral eye marker. Therefore:
 
 `required_translation = generator_displacement - browser_rotation_displacement`
 
 not the full generator displacement again.
 
-## Independent Chromium scratch result
+## Independent + real-host Chromium result
 
-A scratch Chromium geometry model was run outside production using:
+The same scratch Chromium discriminator was executed twice:
+
+1. independently outside the production host context;
+2. through Local Bridge on the real `ai-core-node` host.
+
+The real-host receipt is:
+
+`local_bridge/results/receipts/avatar-roll-css-generator-falsifier-20260912-1012-gpt56sol.json`
+
+Receipt facts:
+
+- machine_id: `ai-core-node`
+- owner: `gabriel`
+- status: `PASS`
+- exit_code: `0`
+- execution boundary: `REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED`
+- production browser/file mutation: `0`
+
+The model uses:
 
 - canvas `1536x1024`;
 - marker neutral position `(610,207)`;
-- transform origin mapped to fixed neck `(768,600)`;
-- exact live transform order `translate(dx,dy) rotate(roll)`;
+- transform origin at fixed neck `(768,600)`;
+- exact live CSS order `translate(dx,dy) rotate(roll)`;
 - current live table values.
 
-No production page/browser/window/file was touched.
+Observed maximum anchor error using the current live composition:
 
-Observed maximum anchor error using the current composition:
+`183.355405 px` native canvas at ±25°.
 
-`183.3554 px` native canvas at ±25°.
-
-Representative results:
+Representative real-host results:
 
 | roll | generator target dx,dy | pure CSS rotation dx,dy | current-composition error norm |
 |---:|---:|---:|---:|
@@ -75,9 +91,11 @@ Representative results:
 | +5 | +10.5, -29.0 | +34.853, -12.275 | 36.952 px |
 | +25 | +62.5, -112.0 | +180.892, -29.953 | 183.355 px |
 
-Using the residual translation instead yielded maximum numerical error about `1.5e-5 px` in the scratch Chromium model.
+Using the residual translation yielded maximum numerical anchor error:
 
-Provisional residual table from that browser geometry:
+`0.000015 px`.
+
+Real-host residual table produced by the discriminator:
 
 ```text
 -25: (+118.786, -81.595)
@@ -93,22 +111,29 @@ Provisional residual table from that browser geometry:
 +25: (-118.392, -82.047)
 ```
 
-These numbers are **not authorized for live use yet**. They are a falsifier output pending same-host Chromium confirmation and a matched visual gate.
+These values now have real-host Chromium support, but they are still **not live-authorized** because a matched actual-image visual gate and mutation-boundary reconciliation remain required.
+
+## Mouth-marker instrumentation failure preserved
+
+A separate command attempted to reuse the old `messen_augenanker_exakt.py` module directly for a mouth marker. It failed with:
+
+`FileNotFoundError: /home/ai-core-node/.claude/star/visual/rig2/kopf/master/kopf_zero_mit_augen.png`
+
+Reason: the script computes `VISUAL = dirname(__file__)`, so importing it from `rig2/` makes its internal asset path point under `rig2/kopf/...`. This is classified **HARNESS / INSTRUMENTATION FAILURE**, not a product negative. No replay is treated as accepted evidence until the path binding is repaired explicitly.
 
 ## Why this matters to mouth-roll work
 
-The mouth path exposed the broader transform-ownership problem, but it must not copy the current eye table blindly. First fix/resolve the semantic meaning of the eye table versus CSS rotation. Once the correct `generator target -> browser transform` mapping is proven, the mouth patch can be derived from the same generator operation at its exact manifest anchor `(622,352)`.
+The mouth path exposed the broader transform-ownership problem, but it must not copy the current eye table blindly. First resolve the eye table semantics in an exact-image matched gate. Once the correct `generator target -> browser transform` mapping is proven at visual scope, the mouth patch can be derived from the same generator operation at its exact manifest anchor `(622,352)`.
 
-## Real-host confirmation dispatched
+## Highest-information next gate
 
-A read-only/scratch Local Bridge command has been dispatched:
-
-`avatar-roll-css-generator-falsifier-20260912-1012-gpt56sol`
-
-It runs isolated Playwright/Chromium geometry only and explicitly does not open or reload a production browser or mutate the live file.
-
-Promotion remains blocked until that receipt is PASS and the current active eye worker lane is reconciled.
+1. Build an exact-subject **scratch** candidate from live SHA `18770d8e...` that changes only the roll translation semantics from full displacement to validated residual displacement.
+2. Run a deterministic actual-image matched browser gate over all 11 roll states with current vs corrected geometry.
+3. Assert current geometry reproduces the known large anchor error and corrected geometry reaches the generator marker target within a strict native-pixel tolerance.
+4. Verify neutral state byte/visual invariance and no changes to blink timing, gaze semantics, source image identity, body, parallax or production browser.
+5. Reconcile with the currently active eye lane before any live mutation.
+6. Only then exact-hash guarded live patch, rollback copy, reload the **existing** production page, and independent post-readback.
 
 ## Scope fence
 
-Even if confirmed, this is a roll-overlay geometry defect/fix only. It does not promote canonical eye identity, blink semantics, parallax, body/GPU, whole-avatar acceptance, HCU/GWT/J-Space, training, or whole-product completion.
+This confirms a roll-overlay geometry defect at the measured anchor model. It does not yet promote a live fix, canonical eye identity, blink semantics, parallax, body/GPU, whole-avatar acceptance, HCU/GWT/J-Space, training, or whole-product completion.

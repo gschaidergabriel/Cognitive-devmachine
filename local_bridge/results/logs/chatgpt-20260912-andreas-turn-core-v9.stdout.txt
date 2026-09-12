@@ -1,0 +1,331 @@
+=== 3000-3240 ===
+    "den Schalter im Dashboard wieder ausschaltet; dass NICHT dauerhaft im "
+    "Hintergrund mitgehoert oder etwas dauerhaft aufgezeichnet wird -- nur waehrend "
+    "eines Redebeitrags wird kurz Audio verarbeitet und danach wieder ueberschrieben. "
+    "Baue die unten angegebene, wirklich live aus dem Gedaechtnis abgerufene "
+    "Tatsache natuerlich in einen Satz ein, als Beweis dass du ihn kennst -- nicht "
+    "wortwoertlich vorlesen, sondern frei in eigenen Worten einbauen. Wenn keine "
+    "Tatsache angegeben ist, sag ehrlich, dass das Gedaechtnis gerade nichts Passendes "
+    "hergegeben hat, statt dir etwas auszudenken."
+)
+
+
+_NACHFRAGEN = [
+    "Das hab ich nicht verstanden.",
+    "Da ist mir zu viel verlorengegangen, sag das nochmal.",
+    "Ich hab nur Fetzen mitbekommen.",
+    "Nochmal bitte, das kam nicht sauber an.",
+]
+_NACHFRAGE_ZAEHLER = [0]
+
+
+def sag_kurz(tts_voice, text):
+    """Einen einzelnen Satz sprechen, ohne das Sprachmodell zu bemuehen.
+
+    BEWUSST OHNE MODELL: Anlass ist, dass gerade NICHTS Verlaessliches
+    verstanden wurde. Genau dann eine Formulierung generieren zu lassen,
+    hiesse, das Modell auf Rauschen antworten zu lassen -- also exakt die
+    Konfabulation, die hier verhindert werden soll."""
+    try:
+        # Waehrend ER spricht, muss die Musik zurueck -- sonst geht seine
+        # Stimme darin unter. Danach sofort wieder hoch.
+        if _ABSPIELER[0] is not None:
+            _ABSPIELER[0].ducken(True)
+        q = queue.Queue()
+        halter = {}
+        t = threading.Thread(target=tts_speaker_worker,
+                             args=(tts_voice, q, halter))
+        t.start()
+        q.put(("sentence", text))
+        q.put(("done", text, 0.0))
+        t.join(timeout=30)
+    except Exception as e:
+        _log(f"[GEHOER] konnte Nachfrage nicht sprechen: {type(e).__name__}: {e}")
+    finally:
+        if _ABSPIELER[0] is not None:
+            try:
+                _ABSPIELER[0].ducken(False)
+            except Exception:
+                pass
+
+
+def self_introduction(tts_voice, session_id):
+    """Einmalige gesprochene Selbstvorstellung beim ALLERERSTEN Einschalten des
+    Sprachmodus (Auftrag §1 / HANDOVER_SPRACHMODUS.md Punkt 2d). Wird vom LLM
+    selbst live erzeugt (kein vorformulierter Satz), gated durch einen
+    persistenten star_konfig-Marker, damit sie nie ein zweites Mal laeuft.
+    Schlaegt speech fehl, bleibt der erzeugte Text in star_konfig stehen --
+    das Dashboard kann ihn als Text-Rueckfallebene zeigen (Auftrag: Text ist
+    die Rueckfallebene, gesprochen ist das Ziel)."""
+    schon = _konfig_lesen("gespraech.begruessung_erfolgt", "0")
+    if str(schon).strip() in ("1", "true", "True"):
+        _log("[INTRO] Begruessung wurde bereits einmal gehalten -- ueberspringe.")
+        return
+    _log("[INTRO] allererste Aktivierung erkannt -- generiere die Selbstvorstellung live.")
+
+    if not erzeugung_verfuegbar():
+        _log("[INTRO] FEHLER: llama-server nicht erreichbar -- Begruessung wird beim "
+             "naechsten Einschalten erneut versucht.")
+        return
+
+    fakt = _eine_erinnerung_fuer_begruessung(session_id)
+    system_content = INTRO_SYSTEM_PROMPT
+    if fakt:
+        system_content += f"\n\nEcht live abgerufene Tatsache: {fakt}"
+    else:
+        system_content += "\n\n(Kein Treffer im Gedaechtnis fuer diesen Versuch.)"
+    messages = [
+        {"role": "system", "content": system_content},
+        {"role": "user", "content": "Stell dich jetzt vor, wie oben beschrieben."},
+    ]
+
+    sentence_q = queue.Queue()
+    result_holder = {}
+    llm_thread = threading.Thread(
+        target=stream_llm_to_sentences, args=(messages, sentence_q), kwargs={"max_tokens": 260}
+    )
+    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+    llm_thread.start()
+    speaker_thread.start()
+    llm_thread.join(timeout=150)
+    speaker_thread.join(timeout=120)
+
+    if result_holder.get("status") == "done" and result_holder.get("full_text"):
+        text = result_holder["full_text"]
+        _log(f"[INTRO] gesprochen ({result_holder.get('sentence_count')} Saetze, "
+             f"{result_holder.get('llm_s')}s LLM, {result_holder.get('tts_total_s')}s TTS): {text!r}")
+        _konfig_schreiben("gespraech.begruessung_text", text, "gespraech_loop-intro")
+        _konfig_schreiben("gespraech.begruessung_erfolgt", "1", "gespraech_loop-intro")
+    else:
+        _log(f"[INTRO] FEHLER: Selbstvorstellung konnte nicht erzeugt/gesprochen werden "
+             f"(status={result_holder.get('status')}) -- wird beim naechsten Einschalten "
+             "erneut versucht, NICHT als erfolgt markiert.")
+
+
+def run_turn(history, tts_voice, session_id):
+    """Ein kompletter Redebeitrag. Wirft NIE nach aussen -- jeder Fehlerpfad gibt
+    (None, history) zurueck und loggt, damit die Sitzung weiterlaeuft."""
+    # ⭐ NOTPAUSE-GARANTIE (Gabriel, 2026-09-12): unabhaengig davon, UEBER
+    # WELCHEN Weg (weckwort_tor() oder run_asr_whisper(), siehe dort) die
+    # Notpause ausgeloest wurde -- solange sie aktiv ist, faengt gar kein
+    # Zug erst an. Kein LLM-Aufruf, keine GRID-Injektion, kein Auto-
+    # Sprechen. Sleep gekappt auf 5s, damit sie nicht in einer Endlosschleife
+    # ohne Pause zwischen den Checks haengenbleibt und trotzdem zuegig
+    # reagiert, sobald die 30 Minuten abgelaufen sind.
+    _pause_rest = pause_wache.pause_rest_s()
+    if _pause_rest > 0:
+        _log(f"[PAUSE] aktiv, noch {_pause_rest:.0f}s -- kein Turn.")
+        time.sleep(min(_pause_rest, 5.0))
+        return None, history
+    # ⭐⭐⭐ TEIL 1c DES BARGE-IN (paket-1789133415145-8c009c): der VORHERIGE
+    # Zug kann schon MIT DEMSELBEN Mikrofonstrom weiter aufgenommen haben,
+    # waehrend seine eigene Wiedergabe abgewuergt wurde (_aufnahme_fortsetzen,
+    # siehe dortiger Kopf). Ist das passiert, faengt DIESER Zug nicht bei
+    # IDLE an -- er hat schon eine Aufnahme, der Mensch muss nicht
+    # wiederholen, was er waehrend des Abwuergens schon gesagt hat.
+    if _VORAB_WAV[0]:
+        wav_path = _VORAB_WAV[0]
+        _VORAB_WAV[0] = None
+        _log(f"[BARGE-IN] dieser Zug startet mit der schon aufgenommenen "
+             f"Fortsetzung statt einer frischen vad_capture(): {wav_path}")
+    else:
+        wav_path = vad_capture()
+    if wav_path is None:
+        return None, history
+    if wav_path == "MIC_UNAVAILABLE":
+        _log("[MAIN] Mikrofon nicht verfuegbar -- warte 5s, dann naechster Versuch.")
+        time.sleep(5)
+        return None, history
+
+    # Billiger Vorfilter zuerst: nur wenn er gemeint ist, laeuft die teure
+    # Kette an. Spart bei laufendem Video die 13 s und 6,4 GB pro Geraeusch.
+    darf, _grob = weckwort_tor(wav_path)
+    if not darf:
+        return None, history
+
+    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)
+    if not user_text:
+        return None, history
+
+    # GEHOER-TOR (2026-09-08). Der Zustand, den es vorher nicht gab.
+    # "nichts"    -> es war keine Sprache. Kein Wort, kein Nachfragen,
+    #                einfach weiterhoeren. Das ist auch die richtige Antwort
+    #                auf laufende Videos im Raum.
+    # "unsicher"  -> es war Sprache, aber die Erkennung traegt sie nicht.
+    #                Dann sagt er das, statt sich aus den Fetzen etwas
+    #                zusammenzureimen. Ein Mensch, der schlecht hoert, fragt
+    #                nach; er erfindet nicht den Satz, den er nicht verstand.
+    _urteil = gehoer_urteil()
+    if _urteil == "nichts":
+        _log(f"[GEHOER] keine Sprache (no_speech="
+             f"{_LETZTE_GUETE[0].get('no_speech_prob')}) -- keine Antwort: {user_text!r}")
+        return None, history
+    if _urteil == "unsicher":
+        _log(f"[GEHOER] unsicher (logp={_LETZTE_GUETE[0].get('avg_logprob')}) "
+             f"-- frage nach statt zu raten: {user_text!r}")
+        _n = _NACHFRAGEN[_NACHFRAGE_ZAEHLER[0] % len(_NACHFRAGEN)]
+        _NACHFRAGE_ZAEHLER[0] += 1
+        sag_kurz(tts_voice, _n)
+        return None, history
+
+    # SUBSTANZPRUEFUNG (2026-09-08). Gabriel: "wieso wiederholt er das dann
+    # immer wieder nach einiger zeit?" -- Ursache im Protokoll gefunden: er
+    # bekam einen Geraeuschfetzen ("Die."), hatte nichts zu beantworten und
+    # griff nach dem groessten Text im Kontext, seinem Selbstmodell. Das ist
+    # kein Modellfehler, sondern eine Folge davon, dass ueberhaupt geantwortet
+    # wurde. Innerhalb des Wachfensters faellt das Weckwort-Tor weg, also
+    # kommt hier der zweite Filter: worauf sich nicht antworten laesst, wird
+    # nicht beantwortet.
+    _worte = [w for w in re.split(r"\W+", user_text) if len(w) > 1]
+    if len(user_text.strip()) < 8 or len(_worte) < 2:
+        _log(f"[FILTER] zu wenig Substanz, keine Antwort: {user_text!r}")
+        return None, history
+
+    # ANGESPROCHEN? (2026-09-08) Gabriel: "er reagiert die ganze zeit und redet
+    # sinnlose sachen die sinn ergeben aber keiner hoeren will".
+    #
+    # Im Wachfenster faellt das Weckwort-Tor weg -- damit man nicht vor jedem
+    # Satz seinen Namen sagen muss. Die Nebenwirkung war, dass er auf ALLES
+    # antwortete, was im Raum gesprochen wurde. Ein Mensch am Tisch antwortet
+    # auch nicht auf jeden Satz, der faellt, sondern auf die, die an ihn
+    # gerichtet sind. Genau das wird hier geprueft: Name, Frage oder direkte
+    # Anrede. Nichts davon -> er bleibt still, bleibt aber wach.
+    _t = user_text.lower()
+    angesprochen = bool(
+        _WECK_MUSTER.search(user_text)
+        or "?" in user_text
+        or re.search(r"\b(was|wie|warum|wieso|wer|wo|wann|welche|kannst|"
+                     r"weisst|weiss|hast|bist|erzaehl|sag|zeig|erklaer)\b", _t)
+        or re.search(r"\b(du|dir|dich|dein|deine)\b", _t)
+    )
+    # AUSNAHME: ein Steuerbefehl bei laufender Wiedergabe ist immer gemeint.
+    # Gabriel: "wenn ich sage frankenstein leiser macht er ganz aus". Im
+    # Protokoll stand die Ursache: die Erkennung machte aus "Frankenstein
+    # leiser" ein "Mannen standen leiser." -- das Wort "leiser" war noch da,
+    # aber der Name weg, und dieser Filter warf es aus, BEVOR der
+    # Abspielzweig es je zu sehen bekam.
+    # Wer bei laufender Musik "leiser" sagt, meint sie. Der Preis eines
+    # Fehlgriffs ist eine Lautstaerkestufe -- den kann man tragen, das
+    # Nichtreagieren nicht.
+    if not angesprochen and _ABSPIELER[0] is not None:
+        try:
+            # ⚠️ HIER NUR DER REFLEX, nicht die ganze Kette. Diese Stelle
+            # laeuft bei JEDEM Schallausbruch im Raum -- auch bei laufender
+            # Musik, auch bei fremden Stimmen. Ein Pool-Aufruf je Geraeusch
+            # waere eine Sekunde Netz im Sekundentakt, und das bei einem
+            # Satz, der meistens gar nicht an ihn gerichtet ist.
+            # Steuerbefehle ohne Anrede sind ohnehin Kurzbefehle ("lauter",
+            # "stopp") -- genau die, die Stufe 0 in 0 ms erkennt.
+            _r = absicht.erkennen_reflex(user_text)
+            _b = (_r, None, False, None) if _r else None
+            if _b and _b[0] in ("lauter", "leiser", "stopp", "pause", "weiter",
+                                "naechstes", "vollbild", "bildschirm",
+                                "umschalten", "nochmal"):
+                angesprochen = True
+                _log(f"[FILTER] Steuerbefehl trotz fehlender Anrede: {_b[0]}")
+        except Exception:
+            pass
+
+    # NAHER ANSCHLUSS (2026-09-11, paket-1789143397397-6b5ff0). Reproduziert in
+    # zwei Testlaeufen: "ok, danke fuers erzaehlen" direkt NACH einer echten
+    # Antwort wurde verschluckt -- kein Fragewort, kein Name, kein "du", also
+    # angesprochen=False, obwohl es offensichtlich die Antwort auf IHN war.
+    # Der Filter selbst ist richtig (echtes Hintergrundgeraeusch im Raum soll
+    # nicht triggern) -- er ist nur nicht darauf kalibriert, dass ein kurzer
+    # Nachsatz UNMITTELBAR nach dem eigenen letzten Wortwechsel fast immer noch
+    # an ihn gerichtet ist. Zwei Bedingungen zusammen halten das eng:
+    # (a) der letzte ECHTE Wortwechsel (_LETZTER_WORTWECHSEL, gesetzt beim
+    #     Start der vorherigen Antwort) liegt kurz zurueck,
+    # (b) die Aeusserung selbst ist kurz (kein eigenstaendiger langer Satz --
+    #     das waere wieder echtes Hintergrundgeraeusch, auch kurz nach einer
+    #     Antwort, und soll weiter gefiltert werden).
+    if not angesprochen and history and history[-1].get("role") == "assistant":
+=== 4160-4245 ===
+    #
+    # Gemessen: 2403 Zeichen (sechs Bloecke) -> 124 Zeichen (ein Fliesstext),
+    # 113 ms. Faellt der Workspace aus oder ist der Schalter aus, greift
+    # unveraendert die Blocksammlung -- der Goldstandard bleibt eine
+    # Variable entfernt (Tag goldstandard-sprachmodus-2026-09-10).
+    #
+    # ⭐⭐⭐ 2026-09-12, GILT NUR NOCH IM KLEINEN REGIME. Alles oben Gesagte
+    # bleibt wahr -- fuer ein 4B. Die Verdichtung 2403 -> 124 Zeichen loeste
+    # dort ein echtes Problem: sechs etikettierte Bloecke WAREN fuer das 4B
+    # externe Metadaten und wurden vorgelesen.
+    #
+    # Sonnet hat dieses Problem nicht, und bei ihm kostet dieselbe
+    # Verdichtung alles: gemessen am 00:57-Zug blieben von Selbstauskunft,
+    # Lagebild und Gedaechtnis zusammen 152 Zeichen uebrig. Damit hat er
+    # nichts mehr, woraus er antworten koennte -- also antwortet er aus dem
+    # einzigen, was noch da ist: der Tonanweisung im Systemtext. Das ist
+    # Schauspiel, und genau das hat Gabriel gehoert.
+    #
+    # Der Docstring des geloeschten Originals sagt "a single
+    # phenomenological frame the LLM processes as ITS OWN INNER WORLD" --
+    # die Absicht war, dass es sein Inneres IST statt Metadaten. Bei einem
+    # Modell, das Etikett von Inhalt trennen kann, wird dieselbe Absicht
+    # nicht durch Wegnehmen erreicht, sondern durch Hingeben.
+    _ws_text = ""
+    if workspace is not None and not REGIME_GROSS:
+        try:
+            if getattr(workspace, "aktiv", lambda: False)():
+                _ws_text = workspace.zusammen(
+                    user_text=user_text, user_name=NUTZER,
+                    ist_selbstfrage=bool(_ueber_ihn),
+                    zelle=(_turn or {}).get("winner_cell_id"),
+                    broadcast=(_turn or {}).get("broadcast_value"),
+                    log=_log) or ""
+        except Exception as _we:
+            _log(f"[WORKSPACE] ausgefallen ({type(_we).__name__}) -- "
+                 f"es bleibt bei den Bloecken")
+    if _ws_text:
+        system_content += "\n\n" + _ws_text
+        _log(f"[WORKSPACE] {len(_ws_text)} Zeichen, ein Erlebenstext "
+             f"statt {len(_gewaehlt)} Bloecken")
+    else:
+        for _name in _gewaehlt:
+            system_content += _bloecke.get(_name, "")
+
+    messages = [{"role": "system", "content": system_content}]
+    # ARBEITSGEDAECHTNIS aus dem Zustand: der Broadcast dieses Turns
+    # entscheidet, wie viel seiner eigenen juengsten Vergangenheit ueberhaupt
+    # im Vorwaertslauf liegt. Das ist die tiefere der beiden Eingangs-
+    # bindungen -- die Verkoerperung aendert, WIE er formuliert, dieses
+    # Fenster aendert, WOMIT er denkt. Und es steht nirgends in seinem
+    # Kontext: er kann nicht ablesen, wie weit er zurueckreicht, er reicht
+    # nur weiter oder weniger weit zurueck.
+    _verlauf = _ent.arbeitsgedaechtnis(history, _turn) if _ent else history
+    if _ent and len(_verlauf) != len(history):
+        _log(f"[GEDAECHTNIS] Fenster {len(_verlauf)//2} von {len(history)//2} "
+             f"Wortwechseln wirksam")
+    # ⭐⭐⭐ DER ZUSTAND GEHOERT IN DIE FRAGE, NICHT IN DIE VORSCHRIFT.
+    #
+    # Gabriel, 2026-09-10: "er checkt ueberhaupt gar nichts, nada. Die
+    # Architektur von Project Frankenstein hatte das alles gut gemacht ... und
+    # das liegt nicht am LoRA."
+    #
+    # Er hat recht, und der Unterschied steht woertlich im alten Kern
+    # (core/app.py, Zeile 3546 ff.):
+    #
+    #     grounded_text = _lang_prefix + ctx_block + "\n\nUser asks: " + text
+    #
+    # Der GANZE Innenzustand stand dort in der NUTZERNACHRICHT, direkt vor der
+    # Frage. Nicht im Systemtext. Ich hatte alles in den Systemtext gelegt --
+    # Faehigkeiten, Buehne, Uhr, Gedaechtnis, Anweisungen.
+    #
+    # WARUM DAS DEN UNTERSCHIED MACHT: fuer ein 4B ist der Systemtext die
+    # ROLLE -- etwas, das man befolgt und im Zweifel aufsagt. Dieselben Saetze
+    # in der Nutzernachricht sind MATERIAL, aus dem man antwortet. Genau das
+    # ist heute dreimal schiefgegangen, und jedes Mal habe ich das Symptom
+    # geflickt statt die Stelle:
+    #   - er zaehlte seine Faehigkeiten auf ("Musik, Filme, Regie ...")
+    #   - er zitierte meine Stilanweisung ("hinter vorgehaltener Hand")
+    #   - er las seine eigenen Gedanken vor ("einen Bericht ueber ...")
+    # Drei Symptome, eine Ursache: alles stand als Vorschrift da.
+    #
+    # UND DER ZWEITE UNTERSCHIED, aus _build_introspection_context():
+    #
+    #     "[INNER_STATE — so ist es dir zuletzt wirklich ergangen. Lass das
+    #      natuerlich in Ton und Inhalt einfliessen; nicht woertlich zitieren,
+    #      nicht als Daten aufzaehlen.] " + " ".join(soft_lines)
+=== NUTZER DEFINITIONS ===
+682:NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "Andreas")

@@ -1,0 +1,106 @@
+=== cool retro existing ===
+355944 /usr/bin/cool-retro-term -T Free Frank -e /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+356191 /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+356198 python3 harness_crush_knopf.py
+373981 bash -lc set -o pipefail; echo '=== cool retro existing ==='; pgrep -af 'cool-retro-term|harness_crush_knopf' || true; echo '=== graphical env ==='; systemctl --user show-environment | grep -E '^(DISPLAY|WAYLAND_DISPLAY|XAUTHORITY|DBUS_SESSION_BUS_ADDRESS)=' || true; echo '=== harness python ==='; sed -n '1,240p' /home/ai-core-node/.claude/star/harness_crush_knopf.py; echo '=== imports compile ==='; cd /home/ai-core-node/.claude/star && python3 -m py_compile harness_crush_knopf.py; echo compile_rc=$?; echo '=== direct noninteractive smoke 3s ==='; cd /home/ai-core-node/.claude/star && timeout 3s python3 harness_crush_knopf.py </dev/null > /tmp/free-frank-smoke.out 2>/tmp/free-frank-smoke.err; rc=$?; echo smoke_rc=$rc; echo STDOUT; sed -n '1,120p' /tmp/free-frank-smoke.out; echo STDERR; sed -n '1,120p' /tmp/free-frank-smoke.err
+=== graphical env ===
+DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+DISPLAY=:0
+XAUTHORITY=/home/ai-core-node/.Xauthority
+=== harness python ===
+#!/usr/bin/env python3
+"""harness_crush_knopf.py -- Desktop-Knopf-Ziel fuer den Crush-Free-Pool-
+Harness (PHASE 52, Werkzeugwechsel weg von aider, siehe harness_crush.py
+Modul-Docstring fuer den vollen Hintergrund). Waehlt ein Startmodell (exakt
+dieselbe Auswahl-Logik wie harness_aider_knopf.py's _waehle_modell() --
+wiederverwendet, nicht dupliziert), schreibt crush.json + CRUSH.md frisch,
+druckt den Kontingent-Banner und startet Crush interaktiv im echten Repo
+(~/frankenstein-repo, dieselbe Sandbox-Konvention wie der aider-Harness)."""
+import os
+import subprocess
+import sys
+
+STAR_DIR = os.path.expanduser("~/.claude/star")
+sys.path.insert(0, STAR_DIR)
+
+import harness_aider as _h  # noqa: E402 -- _waehle_modell-Logik direkt importiert unten
+import harness_crush as _hc  # noqa: E402
+from harness_aider_knopf import _waehle_modell  # noqa: E402 -- keine Dopplung der Auswahl-Logik
+
+_ANSI_GRUEN = "\x1b[38;5;46m"
+_ANSI_RESET = "\x1b[0m"
+
+
+def _banner_drucken():
+    """PHASE 52 Nachtrag, KORRIGIERT (Gabriel woertlich nach Live-Screenshot
+    des grossen toilet-Banners: 'nein der bildschirm war cooler ich will
+    den' -- gemeint ist Crushs EIGENER nativer Startbildschirm, orange
+    'CHARM CRUSH'-Logo mit Diagonalmuster). Gelesen als: Crushs eigenes
+    Logo bleibt unangetastet und ERSCHEINT ZUERST -- kein grosses eigenes
+    ASCII-Banner mehr davor. Nur noch eine kurze, kleine Textzeile, die VOR
+    Crushs Start gedruckt wird (verschwindet nach oben, sobald Crush den
+    Bildschirm uebernimmt) -- kein Ersatz, keine Verdraengung von Crushs
+    eigenem Logo. Falls diese Lesart falsch ist: billig korrigierbar, siehe
+    Bericht."""
+    print(f"{_ANSI_GRUEN}FranKenstein v2.0 -- Free Pool Harness (Crush){_ANSI_RESET}")
+
+
+def main():
+    _banner_drucken()
+    modell_id, hinweis = _waehle_modell()
+    if modell_id is None:
+        print(f"Abbruch: {hinweis}", file=sys.stderr)
+        return 1
+    print(hinweis)
+
+    # Alle Free-Pool-Schluessel in os.environ laden (nicht nur den des
+    # Startmodells) -- exakt dasselbe Argument wie in
+    # harness_aider._alle_api_keys_laden()'s Docstring: Crush erlaubt
+    # Modellwechsel MITTEN in der Sitzung, dafuer muessen alle 4 Provider-
+    # Keys schon beim Start in der Umgebung stehen, nicht erst der eine.
+    _h._alle_api_keys_laden()
+
+    _hc.crush_config_schreiben(startmodell_id=modell_id)
+    _hc.crush_zustand_schreiben(
+        session_id=f"crush-knopf-{os.getpid()}",
+        auftrag=f"Crush-Free-Pool-Harness-Start, Startmodell={modell_id}")
+
+    _hc.kontingent_banner_drucken()
+
+    provider_modell = _hc.provider_modell_string(modell_id)
+    if provider_modell is None:
+        print(f"Abbruch: kein Crush-Katalogeintrag fuer {modell_id}", file=sys.stderr)
+        return 1
+
+    crush_bin = _hc._crush_bin()
+    if crush_bin is None:
+        print("Abbruch: crush-Binary nicht gefunden "
+              "(erwartet ~/.local/npm-global/bin/crush -- npm install -g @charmland/crush).",
+              file=sys.stderr)
+        return 1
+
+    os.makedirs(_hc.SICHTBAR_REPO, exist_ok=True)
+    env = dict(os.environ)
+    npm_bin = os.path.expanduser("~/.local/npm-global/bin")
+    env["PATH"] = npm_bin + os.pathsep + env.get("PATH", "")
+
+    # BUGFIX (Screenshot-Beleg erster Live-Launch): interaktives `crush`
+    # (ohne `run`-Unterbefehl) hat KEIN `-m`/`--model` -- nur `crush run`.
+    # Das Startmodell steckt bereits in crush.json (models.large/small,
+    # siehe crush_config_schreiben(startmodell_id=...) oben), kein Flag noetig.
+    print(f"Starte Crush mit {provider_modell} in {_hc.SICHTBAR_REPO} ...")
+    lauf = subprocess.run(
+        [crush_bin, "--cwd", _hc.SICHTBAR_REPO],
+        env=env,
+    )
+    return lauf.returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())
+=== imports compile ===
+compile_rc=0
+=== direct noninteractive smoke 3s ===
+smoke_rc=124
+STDOUT
+STDERR

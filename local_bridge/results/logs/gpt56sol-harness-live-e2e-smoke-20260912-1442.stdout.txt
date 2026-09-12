@@ -1,0 +1,8 @@
+BEFORE
+[]
+RUN
+{"schema": "FRANK_TERMINAL/v1", "ok": false, "session_id": "smoke-hardened-20260912-1442", "paket_id": "paket-1789198868215-6abaf6", "answer": null, "answer_sha256": null, "conversation_url": null, "error": "TerminalError: MAIN_ORGAN_UNAVAILABLE: browser ChatGPT unavailable; alternate-model fallback refused for owner-facing response"}
+FRANK_RC=1
+AFTER
+circuit []
+incidents [('transport_failure', 'TerminalError: MAIN_ORGAN_UNAVAILABLE: browser ChatGPT unavailable; alternate-model fallback refused for owner-facing response'), ('bridge_recovered', 'headed server alive but not responding'), ('transport_failure', 'TerminalError: MAIN_ORGAN_UNAVAILABLE: browser ChatGPT unavailable; alternate-model fallback refused for owner-facing response'), ('bridge_recovered', 'headed server alive but not responding'), ('transport_failure', 'TerminalError: MAIN_ORGAN_UNAVAILABLE: browser ChatGPT unavailable; alternate-model fallback refused for owner-facing response'), ('bridge_recovered', 'headed server alive but not responding'), ('transport_failure', 'TerminalError: MAIN_ORGAN_UNAVAILABLE: browser ChatGPT unavailable; alternate-model fallback refused for owner-facing response'), ('bridge_recovered', 'headed server alive but not responding')]

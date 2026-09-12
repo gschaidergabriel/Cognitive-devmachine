@@ -83,6 +83,32 @@ Impact on the 1536x1024 expression canvas:
 
 This is the intended compromise: enforce one eye identity while preserving >99% of every expression frame untouched.
 
+## 308-frame identity stabilization discriminator
+
+The eye-only candidate was composited over every one of the 308 special-expression frames without altering source files.
+
+Measured RGB standard deviation across expressions:
+
+- alpha >= 240 core: `15.6430 -> 0.0296`, ratio `0.001892`, **99.811% reduction**;
+- alpha >= 128 region: `15.7021 -> 0.1997`, ratio `0.012718`, **98.728% reduction**;
+- feather region: `18.3649 -> 15.0302`, **18.158% reduction**, intentionally preserving a soft seam transition.
+
+Range collapse:
+
+- core median per-pixel RGB range: `171 -> 0`;
+- core pixels with total range <= 1 RGB level: `34.65% -> 95.89%`;
+- alpha >= 128 pixels with range <= 1: `34.76% -> 93.98%`.
+
+Outside the candidate eye mask, measured maximum RGB delta is exactly `0`.
+
+Interpretation: this candidate is not merely visually plausible; it deterministically collapses expression-dependent eye appearance to one photographed identity in the high-confidence eye core while leaving expression information outside the mask unchanged.
+
+## Current staged runtime evidence
+
+A concurrent integrator independently materialized `augen_blink_relief2/` assets on the real `ai-core-node`. Its open frame is byte-identical to this review candidate (`8ab1a11c...`). A reversible real-window A/B exercised those relief2 assets with direct HTTP readback and recorded 15/15 FPS samples at `60.0`.
+
+Important scope fence: the persistent `buehne.html` observed after that A/B still had SHA-256 `18770d8e...`, did not persistently reference `augen_blink_relief2`, and retained the old `_sonderLaeuft` glow/blink coupling. Therefore asset runtime/performance evidence exists, but semantic eye-identity integration is **not yet live**.
+
 ## Minimal runtime design
 
 Prefer reuse over a new rendering authority.
@@ -154,7 +180,7 @@ No live promotion unless all of these pass on the **same exact subject**:
 This candidate does **not** establish:
 
 - live visual acceptance;
-- runtime promotion;
+- semantic eye-identity runtime promotion;
 - whole-avatar photorealism;
 - GRID10/GWT/J-Space credit;
 - training credit;

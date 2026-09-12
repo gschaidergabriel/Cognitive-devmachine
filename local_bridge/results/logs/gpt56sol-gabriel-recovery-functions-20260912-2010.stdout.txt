@@ -1,0 +1,229 @@
+=== _chatgpt_daemon_wiederherstellen ===
+def _chatgpt_daemon_wiederherstellen() -> dict:
+    """Reiner PROZESS-Neustart des gstack-browse-Daemons + Navigation auf
+    die Projekt-URL. NIEMALS Login/Passwort/2FA/E-Mail eintippen -- das
+    bleibt ausschliesslich Mensch. Der Chromium-Kontext ist auf Disk
+    persistent (~/.gstack/chromium-profile/, launchPersistentContext), ein
+    Prozess-Neustart wirft Cookies also NICHT automatisch weg -- nur ein
+    wirklich korruptes Profil/verlorenes Cookie fuehrt zu 'sitzung_verloren'.
+
+    WICHTIG, real 2026-08-26 beim Bau dieser Routine entdeckt: ein blosser
+    `$B status`/`newtab`-Aufruf nach einem toten Daemon spawnt einen NEUEN
+    Daemon im Default-'launched'-Modus -- mit ANDEREM Browser-Fingerprint
+    als der urspruengliche 'headed'-Daemon. Testweise reproduziert: das
+    liess Cloudflares Turnstile-Challenge ("Just a moment...") haengen,
+    obwohl das Cookie-Profil auf Disk unveraendert war und die echte
+    Session-Cookie (`__Secure-next-auth.session-token.*`) noch da war --
+    chatgpt_login_status() hielt es faelschlich fuer eingeloggt, weil seine
+    Heuristik JEDE Cookie mit 'chatgpt.com' in der Domain zaehlt,
+    einschliesslich Cloudflares eigenem `__cf_bm`. Fix: exakt die
+    Wiederherstellungsroutine aus gstack-connect-chrome/SKILL.md
+    nachbauen -- Schritt 0 (alten Prozess+Locks raeumen) + `$B connect`
+    (launcht explizit headed), NICHT die generischen Befehle."""
+    zustand_datei = Path.home() / ".gstack" / "browse.json"
+    profil_dir = Path.home() / ".gstack" / "chromium-profile"
+
+    # 1. Alten Prozess (haengend oder tot) hart beenden.
+    try:
+        if zustand_datei.is_file():
+            zustand = json.loads(zustand_datei.read_text())
+            pid = zustand.get("pid")
+            if pid:
+                try:
+                    os.kill(int(pid), signal.SIGKILL)
+                    _log(f"_chatgpt_daemon_wiederherstellen: alten Daemon PID {pid} hart beendet")
+                except ProcessLookupError:
+                    pass
+    except Exception as e:
+        _log(f"_chatgpt_daemon_wiederherstellen: Alt-PID lesen/beenden uebersprungen: {e}")
+    time.sleep(1.0)
+
+    # 2. Stale Zustands-/Lockdateien raeumen (Schritt-0-Pre-Flight-Cleanup
+    #    aus gstack-connect-chrome/SKILL.md) -- ohne das haengt ein neuer
+    #    Chromium-Start am ProcessSingleton-Lock des toten Prozesses.
+    try:
+        zustand_datei.unlink(missing_ok=True)
+    except Exception:
+        pass
+    for lockname in ("SingletonLock", "SingletonSocket", "SingletonCookie"):
+        try:
+            (profil_dir / lockname).unlink(missing_ok=True)
+        except Exception:
+            pass
+
+    # 3. Headed neu verbinden ueber `$B connect` (NICHT bare 'status'/
+    #    'newtab' -- siehe Docstring oben).
+    verbunden = _chatgpt_browse("connect", timeout=45.0)
+    if not verbunden.get("ok"):
+        return {"ok": False, "grund": f"'connect' schlug fehl: "
+                                       f"{verbunden.get('grund') or _kurz(verbunden.get('stderr') or '', 200)}"}
+    time.sleep(1.0)
+    probe = _chatgpt_daemon_gesund()
+    if not probe.get("gesund"):
+        return {"ok": False, "grund": f"Daemon nach 'connect' weiter ungesund: {probe.get('grund')}"}
+
+    # 4. Ein-Tab-Disziplin wiederherstellen: auf Projekt-URL navigieren.
+    neu = _chatgpt_browse("goto", _CHATGPT_PROJECT_URL, timeout=15.0)
+    if not neu.get("ok"):
+        return {"ok": False, "grund": f"Daemon laeuft wieder, aber Navigation zur Projekt-URL schlug fehl: "
+                                        f"{neu.get('grund') or _kurz(neu.get('stderr') or '', 200)}"}
+    time.sleep(1.5)
+
+    # 5. Login PRUEFEN, NIE selbst herstellen.
+    lage = chatgpt_login_status()
+    if not lage.get("eingeloggt"):
+        return {"ok": False, "sitzung_verloren": True,
+                "grund": "Daemon-Prozess laeuft wieder, aber KEINE ChatGPT-Sitzung mehr gefunden -- "
+                         "bitte Mensch loggt sich im sichtbaren Browserfenster neu ein (das Modell tippt "
+                         "kein Passwort/2FA/E-Mail ein). Danach 'chatgpt-login-bestaetigen' aufrufen."}
+    return {"ok": True, "tabs": probe.get("tabs")}
+
+=== _chatgpt_lauf_mit_recovery ===
+def _chatgpt_lauf_mit_recovery(befehl: list, env: dict, timeout_s: float, *,
+                                max_versuche: int = 3, backoff_s: tuple = (15.0, 45.0)) -> dict:
+    """Fuehrt EINEN chatgpt_burst_worker_v2.sh-Aufruf aus, mit automatischer
+    Absturz-Erkennung + Wiederherstellung. `max_versuche` zaehlt den ersten
+    (normalen) Versuch mit -- also bis zu `max_versuche - 1` Recovery+Retry-
+    Zyklen (Gabriel-Vorgabe: 1-2 automatische Wiederherstellungsversuche),
+    danach sauberer Abbruch mit klarer Fehlermeldung statt endlosem Haengen."""
+    recovery_log = []
+    letzter = None
+    for versuch in range(1, max_versuche + 1):
+        if versuch > 1:
+            pause = backoff_s[min(versuch - 2, len(backoff_s) - 1)]
+            _log(f"chatgpt_lauf_mit_recovery: Versuch {versuch}/{max_versuche}, "
+                 f"warte {pause}s vor Wiederherstellungsversuch")
+            time.sleep(pause)
+            wh = _chatgpt_daemon_wiederherstellen()
+            recovery_log.append(wh)
+            if not wh.get("ok"):
+                if wh.get("sitzung_verloren"):
+                    return {"ok": False, "grund": wh["grund"], "sitzung_verloren": True,
+                            "recovery_log": recovery_log, "versuche": versuch}
+                # Daemon liess sich (noch) nicht reparieren -- restliche
+                # Versuche/Backoff koennen trotzdem helfen (transientes
+                # Problem), also weiterlaufen bis max_versuche erschoepft.
+        try:
+            r = subprocess.run(befehl, cwd=str(Path.home()), env=env, capture_output=True,
+                                text=True, timeout=timeout_s)
+        except subprocess.TimeoutExpired:
+            letzter = {"ok": False, "grund": "Zeitueberschreitung (running but not responding)",
+                       "rc": None, "stdout": "", "stderr": "", "versuch": versuch}
+            recovery_log.append({"ausloeser": "timeout", "versuch": versuch})
+            continue
+        crash = _chatgpt_absturz_erkannt(r.stdout) or _chatgpt_absturz_erkannt(r.stderr)
+        letzter = {"ok": r.returncode == 0 and not crash, "rc": r.returncode,
+                   "stdout": r.stdout, "stderr": r.stderr, "versuch": versuch}
+        if not crash:
+            letzter["recovery_log"] = recovery_log
+            return letzter
+        _log(f"chatgpt_lauf_mit_recovery: Absturzmuster erkannt ('{crash}'), Versuch {versuch}/{max_versuche}")
+        recovery_log.append({"ausloeser": f"absturzmuster:{crash}", "versuch": versuch})
+    letzter = letzter or {"ok": False, "grund": "kein Versuch gelaufen"}
+    letzter["ok"] = False
+    letzter["grund"] = letzter.get("grund") or f"Absturz nach {max_versuche} Versuchen weiter reproduzierbar"
+    letzter["recovery_log"] = recovery_log
+    letzter["versuche_erschoepft"] = True
+    return letzter
+
+=== _chatgpt_env_ohne_display ===
+def _chatgpt_env_ohne_display(env: dict) -> dict:
+    """Entfernt DISPLAY/WAYLAND_DISPLAY aus env-Kopie und setzt DISPLAY
+    danach explizit auf die fest reservierte gstack-browse-Anzeige
+    (`_GSTACK_BROWSE_DISPLAY`, dauerhaft von gstack-browse-display.service
+    offen gehalten) -- so erbt ein Neustart des Daemons NIE die reale
+    Desktop-Anzeige der aufrufenden Shell (s. Kommentarblock oben) UND
+    landet nicht zufaellig auf tAverns :99 oder einer wechselnden
+    Autospawn-Anzeige, sondern immer auf derselben, von /browser fest
+    verdrahteten Anzeige. Reine Kopie, mutiert das Original nicht."""
+    env = dict(env)
+    env.pop("DISPLAY", None)
+    env.pop("WAYLAND_DISPLAY", None)
+    env["DISPLAY"] = _GSTACK_BROWSE_DISPLAY
+    return env
+
+=== _chatgpt_ausfall_erkannt ===
+def _chatgpt_ausfall_erkannt(zusammenfassung: Optional[dict], *, log_text: Optional[str] = None,
+                              log_pfad: Optional[str] = None) -> dict:
+    """Erkennt harten ChatGPT-Ausfall TROTZ bestaetigtem Login -- Ergaenzung
+    zu PHASE 46b (siehe Abschnittskommentar oben). Zwei Bedingungen MUESSEN
+    beide zutreffen, sonst kein Ausfall-Befund (verhindert dass ein
+    einzelner Flake unter vielen erfolgreichen Sends faelschlich den
+    teuren Fallback ausloest):
+
+      1. harte Fehlschlagsrate in `zusammenfassung`:
+         - Sende-Phase (Schluessel attempted/sent/failed, aus
+           SUMMARY_v2_*.json): attempted>0, sent==0, failed>=attempted.
+         - Ernte-Phase (Schluessel done/pending): gesamt (done+pending)>0
+           und done==0.
+      2. Log (direkt uebergebener `log_text`, sonst `log_pfad`, sonst
+         `zusammenfassung['log_file']`, sonst das neueste burst_v2_*.log)
+         zeigt ein bekanntes 403/Cloudflare-Muster.
+
+    Reine Werte-Funktion, kein eigener ChatGPT-Aufruf -- darum isoliert
+    testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+    zweiter Fallback-Ausloeser genutzt (gleicher harness_aider.py-Pfad wie
+    PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+    laut ihrem eigenen Docstring bewusst KEINEN neuen Fallback-Lauf aus --
+    es gibt dort keinen neuen Prompt-Text zu beantworten). Rueckgabe immer
+    {'ausfall': bool, 'grund': str, 'muster': str|None}."""
+    if not zusammenfassung:
+        return {"ausfall": False, "grund": "keine Zusammenfassung vorhanden", "muster": None}
+
+    if {"attempted", "sent", "failed"} <= zusammenfassung.keys():
+        attempted = zusammenfassung.get("attempted") or 0
+        sent = zusammenfassung.get("sent") or 0
+        failed = zusammenfassung.get("failed") or 0
+        harte_fehlschlagsrate = attempted > 0 and sent == 0 and failed >= attempted
+        rate_grund = f"Sende-Phase attempted={attempted} sent={sent} failed={failed}"
+    elif {"done", "pending"} <= zusammenfassung.keys():
+        done = zusammenfassung.get("done") or 0
+        pending = zusammenfassung.get("pending") or 0
+        gesamt = done + pending
+        harte_fehlschlagsrate = gesamt > 0 and done == 0
+        rate_grund = f"Ernte-Phase done={done} pending={pending}"
+    else:
+        return {"ausfall": False, "grund": f"unbekannte Zusammenfassungs-Form: {sorted(zusammenfassung.keys())}",
+                "muster": None}
+
+    if not harte_fehlschlagsrate:
+        return {"ausfall": False, "grund": f"keine harte Fehlschlagsrate ({rate_grund})", "muster": None}
+
+    text = log_text
+    if text is None:
+        pfad = log_pfad or zusammenfassung.get("log_file") or _chatgpt_neuestes_burst_log_pfad()
+        if not pfad:
+            return {"ausfall": False,
+                    "grund": f"harte Fehlschlagsrate ({rate_grund}), aber kein Log zum Bestaetigen",
+                    "muster": None}
+        try:
+            text = Path(pfad).read_text(encoding="utf-8", errors="replace")
+        except Exception as e:
+            return {"ausfall": False,
+                    "grund": f"harte Fehlschlagsrate ({rate_grund}), Log '{pfad}' nicht lesbar: {e}",
+                    "muster": None}
+
+    for muster in _CHATGPT_AUSFALL_LOG_MUSTER:
+        if muster in (text or ""):
+            return {"ausfall": True, "muster": muster,
+                    "grund": f"{rate_grund} (harte Fehlschlagsrate) UND Log zeigt Muster '{muster}' -- "
+                             f"403/Cloudflare-Block trotz bestaetigtem Login"}
+    return {"ausfall": False,
+            "grund": f"harte Fehlschlagsrate ({rate_grund}), aber kein 403/Cloudflare-Muster im Log",
+            "muster": None}
+
+=== _chatgpt_login_sicherstellen ===
+def _chatgpt_login_sicherstellen() -> dict:
+    """Login-Gate mit automatischem Selbstheilungsversuch: prueft Status,
+    versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+    (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+    fruehes Scheitern zu melden."""
+    lage = chatgpt_login_status()
+    if lage.get("eingeloggt"):
+        return lage
+    if _chatgpt_cookie_backup_wiederherstellen():
+        lage = chatgpt_login_status()
+    return lage
+

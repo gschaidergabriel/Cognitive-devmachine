@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-blink-stage-cache-aware-20260912-0723",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 90,
+  "command": "set -euo pipefail\nVIS=/home/ai-core-node/.claude/star/visual; BR=/home/ai-core-node/.claude/star/local_bridge_state/repo; C=e8d09af9b3fb3df9020ee3956111f3ba99a1ce5d\ncd \"$VIS\"; test \"$(hostname)\" = ai-core-node-projekt-frankenstein; test \"$(sha256sum buehne_daemon.py|awk '{print $1}')\" = 5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2; test \"$(sha256sum buehne.html|awk '{print $1}')\" = 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e; test \"$(systemctl --user is-active frankenstein-buehne.service)\" = active\nTMP=$(mktemp -d /var/tmp/blink-stage-XXXXXX); BACKUP=\"$VIS/.go_backups/blink-pre-20260912T0723-cache-aware\"; test ! -e \"$BACKUP\"; mkdir \"$BACKUP\"; cp -a augen_blink/blink_*.png \"$BACKUP/\"\ntrap 'rm -rf \"$TMP\"' EXIT\ngit -C \"$BR\" show \"$C:handoff/frank-avatar-round2-candidate/build_blink_eye_local_mask.py\" > \"$TMP/build.py\"; python3 \"$TMP/build.py\" \"$VIS\" \"$TMP/out\" >/dev/null; cp -a \"$TMP\"/out/blink_*.png augen_blink/\nfor f in \"$TMP\"/out/blink_*.png; do n=$(basename \"$f\"); test \"$(sha256sum \"$f\"|awk '{print $1}')\" = \"$(sha256sum \"augen_blink/$n\"|awk '{print $1}')\"; done\necho STAGE_LOCAL_HASHES=PASS; sha256sum augen_blink/blink_*.png | sort\nsystemd-run --user --unit=go-avatar-blink-restart-20260912-0723 --on-active=2s /usr/bin/systemctl --user restart frankenstein-buehne.service >/dev/null\necho BACKUP=$BACKUP; echo RESTART_SCHEDULED=1"
+}

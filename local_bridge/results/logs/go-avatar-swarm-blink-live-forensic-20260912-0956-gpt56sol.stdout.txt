@@ -1,0 +1,48 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+156:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+165:  #kopf-dreh{transform-origin:50% 58.59%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+179:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+203:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+288:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+292:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+302:  #pupillen-glow{position:absolute;left:31%;top:12%;width:27%;height:auto;
+310:     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+313:     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+397:          <div id="kopf-dreh">
+408:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+423:            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+647:const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+649:BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+700:let blinzelPhase = null; // null | "halb1" | "zu" | "halb2"
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+783:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+796://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+883:  $("augen-blink").style.transform =
+899:// echt ueber die bereits-RGBA #pupillen-glow (gazeSchritt(), unveraendert)
+908:  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+937:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1191:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1194:function blinzeln(zeitplanNeu = true){
+1205:function blinzelAbspielen(schritte, idx, zeitplanNeu){
+1207:    $("augen-blink").style.opacity = "0";
+1208:    blinzelPhase = null; gesichtNeuZeichnen(false);
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217:  $("augen-blink").style.opacity = "1";
+1218:  blinzelPhase = phase; gesichtNeuZeichnen(false);
+1221:function blinzelWeiterPlanen(){
+1350:// immer, alle 1-4s) -- sichtbar wird sie trotzdem nur, wenn #pupillen-glow
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1402:  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+1407:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);

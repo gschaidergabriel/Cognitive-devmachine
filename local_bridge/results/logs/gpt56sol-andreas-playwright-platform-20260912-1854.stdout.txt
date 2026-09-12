@@ -1,0 +1,89 @@
+VERSION
+Version 1.58.2
+PLATFORM_CODE
+node_modules/playwright-core/lib/server/webkit/wkPage.js:37:var import_hostPlatform = require("../utils/hostPlatform");
+node_modules/playwright-core/lib/server/webkit/wkPage.js:678:    if (!this._browserContext._browser?.options.headful && (import_hostPlatform.hostPlatform === "ubuntu22.04-x64" || import_hostPlatform.hostPlatform.startsWith("debian12")))
+node_modules/playwright-core/lib/server/webkit/wkPage.js:773:      return import_hostPlatform.hostPlatform === "mac10.15" ? 55 : 59;
+node_modules/playwright-core/lib/server/bidi/bidiChromium.js:41:var import_hostPlatform = require("../utils/hostPlatform");
+node_modules/playwright-core/lib/server/bidi/bidiChromium.js:110:    if (import_os.default.platform() !== "darwin" || !(0, import_hostPlatform.hasGpuMac)()) {
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:458:  "ubuntu24.04-x64": {
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1225:deps["ubuntu24.04-arm64"] = {
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1226:  tools: [...deps["ubuntu24.04-x64"].tools],
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1227:  chromium: [...deps["ubuntu24.04-x64"].chromium],
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1229:    ...deps["ubuntu24.04-x64"].firefox
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1232:    ...deps["ubuntu24.04-x64"].webkit
+node_modules/playwright-core/lib/server/registry/nativeDeps.js:1235:    ...deps["ubuntu24.04-x64"].lib2package
+node_modules/playwright-core/lib/server/registry/index.js:51:var import_hostPlatform = require("../utils/hostPlatform");
+node_modules/playwright-core/lib/server/registry/index.js:164:    "ubuntu24.04-x64": cftUrl("linux64/chrome-linux64.zip"),
+node_modules/playwright-core/lib/server/registry/index.js:168:    "ubuntu24.04-arm64": "builds/chromium/%s/chromium-linux-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:195:    "ubuntu24.04-x64": cftUrl("linux64/chrome-headless-shell-linux64.zip"),
+node_modules/playwright-core/lib/server/registry/index.js:199:    "ubuntu24.04-arm64": "builds/chromium/%s/chromium-headless-shell-linux-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:226:    "ubuntu24.04-x64": cftUrl("linux64/chrome-linux64.zip"),
+node_modules/playwright-core/lib/server/registry/index.js:230:    "ubuntu24.04-arm64": "builds/chromium-tip-of-tree/%s/chromium-tip-of-tree-linux-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:257:    "ubuntu24.04-x64": cftUrl("linux64/chrome-headless-shell-linux64.zip"),
+node_modules/playwright-core/lib/server/registry/index.js:261:    "ubuntu24.04-arm64": "builds/chromium-tip-of-tree/%s/chromium-tip-of-tree-headless-shell-linux-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:288:    "ubuntu24.04-x64": "builds/firefox/%s/firefox-ubuntu-24.04.zip",
+node_modules/playwright-core/lib/server/registry/index.js:292:    "ubuntu24.04-arm64": "builds/firefox/%s/firefox-ubuntu-24.04-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:319:    "ubuntu24.04-x64": "builds/firefox-beta/%s/firefox-beta-ubuntu-24.04.zip",
+node_modules/playwright-core/lib/server/registry/index.js:323:    "ubuntu24.04-arm64": "builds/firefox-beta/%s/firefox-beta-ubuntu-24.04-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:350:    "ubuntu24.04-x64": "builds/webkit/%s/webkit-ubuntu-24.04.zip",
+node_modules/playwright-core/lib/server/registry/index.js:354:    "ubuntu24.04-arm64": "builds/webkit/%s/webkit-ubuntu-24.04-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:381:    "ubuntu24.04-x64": "builds/ffmpeg/%s/ffmpeg-linux.zip",
+node_modules/playwright-core/lib/server/registry/index.js:385:    "ubuntu24.04-arm64": "builds/ffmpeg/%s/ffmpeg-linux-arm64.zip",
+node_modules/playwright-core/lib/server/registry/index.js:412:    "ubuntu24.04-x64": void 0,
+node_modules/playwright-core/lib/server/registry/index.js:416:    "ubuntu24.04-arm64": void 0,
+node_modules/playwright-core/lib/server/registry/index.js:443:    "ubuntu24.04-x64": "builds/android/%s/android.zip",
+node_modules/playwright-core/lib/server/registry/index.js:447:    "ubuntu24.04-arm64": "builds/android/%s/android.zip",
+node_modules/playwright-core/lib/server/registry/index.js:505:    const revisionOverride = (obj.revisionOverrides || {})[import_hostPlatform.hostPlatform];
+node_modules/playwright-core/lib/server/registry/index.js:507:    const browserDirectoryPrefix = revisionOverride ? `${name}_${import_hostPlatform.hostPlatform}_special` : `${name}`;
+node_modules/playwright-core/lib/server/registry/index.js:532:      const tokens = EXECUTABLE_PATHS[name][import_hostPlatform.shortPlatform];
+node_modules/playwright-core/lib/server/registry/index.js:537:        throw new Error(`${name} is not supported on ${import_hostPlatform.hostPlatform}`);
+node_modules/playwright-core/lib/server/registry/index.js:1124:    const downloadPathTemplate = paths[import_hostPlatform.hostPlatform] || paths["<unknown>"];
+node_modules/playwright-core/lib/server/registry/index.js:1152:      throw new Error(`ERROR: Playwright does not support ${descriptor.name} on ${import_hostPlatform.hostPlatform}`);
+node_modules/playwright-core/lib/server/registry/index.js:1153:    if (!import_hostPlatform.isOfficiallySupportedPlatform)
+node_modules/playwright-core/lib/server/registry/index.js:1154:      (0, import_browserFetcher.logPolitely)(`BEWARE: your OS is not officially supported by Playwright; downloading fallback build for ${import_hostPlatform.hostPlatform}.`);
+node_modules/playwright-core/lib/server/registry/index.js:1156:      const message = `You are using a frozen ${descriptor.name} browser which does not receive updates anymore on ${import_hostPlatform.hostPlatform}. Please update to the latest version of your operating system to test up-to-date browsers.`;
+node_modules/playwright-core/lib/server/registry/index.js:1163:    const downloadFileName = `playwright-download-${descriptor.name}-${import_hostPlatform.hostPlatform}-${descriptor.revision}.zip`;
+node_modules/playwright-core/lib/server/registry/dependencies.js:47:var import_hostPlatform = require("../utils/hostPlatform");
+node_modules/playwright-core/lib/server/registry/dependencies.js:102:  const platform = import_hostPlatform.hostPlatform;
+node_modules/playwright-core/lib/server/registry/dependencies.js:103:  if (!import_hostPlatform.isOfficiallySupportedPlatform)
+node_modules/playwright-core/lib/server/registry/dependencies.js:213:  const libraryToPackageNameMapping = import_nativeDeps.deps[import_hostPlatform.hostPlatform] ? {
+node_modules/playwright-core/lib/server/registry/dependencies.js:214:    ...import_nativeDeps.deps[import_hostPlatform.hostPlatform]?.lib2package || {},
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:29:var hostPlatform_exports = {};
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:30:__export(hostPlatform_exports, {
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:32:  hostPlatform: () => hostPlatform,
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:36:module.exports = __toCommonJS(hostPlatform_exports);
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:41:  if (process.env.PLAYWRIGHT_HOST_PLATFORM_OVERRIDE) {
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:43:      hostPlatform: process.env.PLAYWRIGHT_HOST_PLATFORM_OVERRIDE,
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:63:    return { hostPlatform: macVersion, isOfficiallySupportedPlatform: true };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:67:      return { hostPlatform: "<unknown>", isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:75:        return { hostPlatform: "ubuntu18.04" + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:77:        return { hostPlatform: "ubuntu20.04" + archSuffix, isOfficiallySupportedPlatform: isUbuntu && version === "20.04" };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:79:        return { hostPlatform: "ubuntu22.04" + archSuffix, isOfficiallySupportedPlatform: isUbuntu && version === "22.04" };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:81:        return { hostPlatform: "ubuntu24.04" + archSuffix, isOfficiallySupportedPlatform: isUbuntu && version === "24.04" };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:82:      return { hostPlatform: "ubuntu" + distroInfo.version + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:87:        return { hostPlatform: "ubuntu20.04" + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:89:        return { hostPlatform: "ubuntu22.04" + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:90:      return { hostPlatform: "ubuntu24.04" + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:95:        return { hostPlatform: "debian11" + archSuffix, isOfficiallySupportedPlatform: isOfficiallySupportedPlatform2 };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:97:        return { hostPlatform: "debian12" + archSuffix, isOfficiallySupportedPlatform: isOfficiallySupportedPlatform2 };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:99:        return { hostPlatform: "debian13" + archSuffix, isOfficiallySupportedPlatform: isOfficiallySupportedPlatform2 };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:101:        return { hostPlatform: "debian13" + archSuffix, isOfficiallySupportedPlatform: isOfficiallySupportedPlatform2 };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:103:    return { hostPlatform: "ubuntu24.04" + archSuffix, isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:106:    return { hostPlatform: "win64", isOfficiallySupportedPlatform: true };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:107:  return { hostPlatform: "<unknown>", isOfficiallySupportedPlatform: false };
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:109:const { hostPlatform, isOfficiallySupportedPlatform } = calculatePlatform();
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:110:function toShortPlatform(hostPlatform2) {
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:111:  if (hostPlatform2 === "<unknown>")
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:113:  if (hostPlatform2 === "win64")
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:115:  if (hostPlatform2.startsWith("mac"))
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:116:    return hostPlatform2.endsWith("arm64") ? "mac-arm64" : "mac-x64";
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:117:  return hostPlatform2.endsWith("arm64") ? "linux-arm64" : "linux-x64";
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:119:const shortPlatform = toShortPlatform(hostPlatform);
+node_modules/playwright-core/lib/server/utils/hostPlatform.js:135:  hostPlatform,
+node_modules/playwright-core/lib/utils.js:52:__reExport(utils_exports, require("./server/utils/hostPlatform"), module.exports);
+node_modules/playwright-core/lib/utils.js:97:  ...require("./server/utils/hostPlatform"),
+CACHES
+drwxrwxr-x 3 andreas andreas 4096 Aug 28 22:37 /home/andreas/.cache/ms-playwright/chromium-1234
+drwxr-xr-x 3 andreas andreas 4096 Aug 12 16:14 /home/andreas/.cache/ms-playwright/chromium_headless_shell-1234
+drwxr-xr-x 2 andreas andreas 4096 Aug 12 16:14 /home/andreas/.cache/ms-playwright/ffmpeg-1011

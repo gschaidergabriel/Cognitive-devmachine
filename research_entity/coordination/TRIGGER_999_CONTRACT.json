@@ -1,0 +1,49 @@
+{
+  "schema": "frankenstein_trigger_contract/v1",
+  "trigger": "999",
+  "date": "2026-09-12",
+  "status": "research_entity_handoff",
+  "intent": "advance_human_like_live_conversation_participation",
+  "must_refresh_before_material_execution": [
+    "current_owner_authority",
+    "clay-global-research-entity/main",
+    "self-integration/main",
+    "frankenstein/main",
+    "frankenstein-2.0/main",
+    "exact_voice_realtime_runtime_subject"
+  ],
+  "required_behaviors": [
+    "socially_justified_unsolicited_entry",
+    "intentional_wait",
+    "floor_awareness",
+    "backchanneling",
+    "barge_in_yield",
+    "semantic_reentry_after_interrupt",
+    "emotion_and_prosody_expression",
+    "contextual_humor_sarcasm_teasing_with_restraint",
+    "full_existing_frankenstein_tool_memory_research_effect_routes"
+  ],
+  "reuse_existing_speech_acts": [
+    "ANSWER",
+    "CLARIFY",
+    "OBJECT",
+    "PROPOSE",
+    "WISH",
+    "BACKCHANNEL",
+    "SELF_COMMENT",
+    "TOOL",
+    "WAIT",
+    "CLOSE"
+  ],
+  "hard_non_goals": [
+    "new_persona_engine",
+    "new_memory_authority",
+    "new_effect_authority",
+    "new_state_sync",
+    "new_canonical_turn_loop",
+    "realtime_as_persistent_identity"
+  ],
+  "default_floor_policy": "human_speech_preempts_frankenstein_except_rare_high_urgency_correction",
+  "promotion_rule": "spec_or_branch_is_not_production_activation; exact_runtime_tests_and_readback_required",
+  "canonical_handoff": "research_entity/coordination/TRIGGER_999_HUMAN_CONVERSATION_IMPLEMENTATION_2026-09-12.md"
+}

@@ -1,55 +1,55 @@
-# Avatar special-expression eye identity — candidate lane
+# Avatar special-expression eye identity — review-only lane
 
-Status: **SOURCE CANDIDATE / NOT LIVE / ZERO LIVE VISUAL CREDIT**
+Status: **REVIEW_ONLY / SUPERSEDED BY HOST-DERIVED EYE MASK / DO NOT PROMOTE THIS BRANCH**
 
-## Defect
+## Why this branch is no longer mutation authority
 
-The current live `buehne.html` (SHA-256 `18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e`) renders `ausdruck_erweitert/.../frontal/stufe_00..06.png` as full 1536x1024 RGBA head frames. During `_sonderLaeuft` it deliberately suppresses the canonical `#pupillen-glow`, and `blinzeln()` skips the canonical blink channel. Therefore a special-expression frame owns its own eye pixels instead of preserving one eye identity across all states.
+This branch correctly identified a real defect in the current live `buehne.html` (SHA-256 `18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e`): special-expression frames are full-head RGBA images, while `_sonderLaeuft` suppresses the canonical `#pupillen-glow` and makes `blinzeln()` return early. That still means special expressions can own a different eye identity.
 
-This is a separate boundary from the already validated `blink_identity_contamination` candidate (`e8d09af9b3fb3df9020ee3956111f3ba99a1ce5d`).
+However, after this branch was created, an independent real-host lane produced a strictly better eye-mask candidate from measured image dynamics instead of this branch's rectangular eye-core approximation. To avoid two competing eye authorities, the scripts here are retained only as an independent design/review artifact.
 
-## Candidate architecture
+The superseding real-host shadow candidate is:
 
-`build_canonical_eye_expressions.py` builds a **shadow copy** of all 44 x 7 frontal special-expression frames. It does not alter the source tree. In every frame:
+- command `go-avatar-review-eye-mask-shadow-v1-20260912-0732`;
+- `eye_identity_mask.png` SHA-256 `321ef6fa09c6dfb72ab9eb486d623b49d5a4e9c512ace80bfd09ef4e7f3867b0`;
+- `eye_identity_open.png` SHA-256 `8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9`;
+- manifest SHA-256 `2e16c2fb6f7ed3b204a093707492826dd81bd146677604f3c07430ff9db41d95`;
+- mask bbox `(39,52)-(273,117)` on the 319x152 patch;
+- mapped nonzero mask fraction only `0.009863` of the 1536x1024 full canvas;
+- zero live-file mutation during candidate construction.
 
-- pixels outside the measured eye mask remain pixel-identical to the source expression;
-- the hard eye core is pixel-identical to the active canonical neutral head `kopf_rgba/kopf_zero_ohne_rotes_augenglow.png` (expected SHA-256 `489e928fd436253c087183a25b01d685d4ba138bc75bc1b3c4c70a415762f261`);
-- a feathered transition surrounds the hard core to avoid a rectangular seam;
-- no red gaze signal is painted into the generated frame. Gaze remains a separate runtime channel.
+It derives the eye region from open-vs-closed RGB dynamics, restricts it using the actually measured gaze signal, keeps exactly the two major eye components, then adds a hard margin plus feather. That is a more defensible identity boundary than the fixed rectangle used by this branch.
 
-The mask is derived from the already measured eye-local Blink candidate bbox `[42,50,274,118]` in the 319x152 eye-patch coordinate system and from the existing live CSS geometry (`left:31%`, `top:12%`, `width:27%`) on the 1536x1024 head canvas. Current hard core: `[513,170,851,294]` canvas pixels.
+## Independent evidence
 
-`patch_buehne_canonical_eye_identity.py` is bound to the exact live HTML preimage. It only removes the two ownership exceptions that currently turn canonical eye channels off during a special expression:
+A second real-host read-only run evaluated the host-derived candidate over all 308 special-expression frames:
 
-1. Blink no longer returns early solely because `_sonderLaeuft` is true.
-2. Measured gaze opacity is no longer forced to zero solely because `_sonderLaeuft` is true.
+- hard-core cross-expression variance reduction: **99.811%**;
+- mid-mask variance reduction: **98.728%**;
+- pixels outside the mask: **max delta 0**.
 
-The normal gaze honesty rule remains unchanged: if the real face/presence signal says no usable target, opacity remains zero.
+This strongly supports the host-derived mask as the single candidate to carry forward.
 
-## Promotion fence
+Separately, the localized Blink candidate is now accepted on the productive `augen_blink_relief2` path by `go-avatar-gpt56sol-blink-relief2-live-promote-20260912-0744`:
 
-Do **not** promote this lane until the existing blink-identity candidate is independently accepted live. Otherwise the old high-coverage Blink patch can still reintroduce noncanonical eye/skin pixels during a blink.
+- candidate -> live filesystem -> HTTP byte readback: PASS;
+- real before/idle/blink captures: produced;
+- FPS median/min: `60.0 / 60.0` over 15 samples;
+- `BLINK_RELIEF2_LIVE_RUNTIME_GATE=PASS`.
 
-Promotion order:
+This removes the former dependency fence that blocked special-expression eye work. It does **not** by itself close special-expression identity: current live HTML still suppresses gaze during `_sonderLaeuft` and still skips Blink there.
 
-1. Refresh live hashes and ownership. Abort on drift.
-2. Require accepted live Blink-identity evidence.
-3. Build the 308 expression candidates in a non-live staging directory.
-4. Require builder manifest: 44 expression directories, 308 frames, zero outside-mask invariant failures, zero hard-core invariant failures.
-5. Produce offline before/after contact sheets across at least the expression families used by the runtime pools.
-6. Back up the complete live `ausdruck_erweitert` tree and `buehne.html`.
-7. Swap the canonical-eye expression tree first.
-8. Apply the exact-preimage HTML patch second. This ordering is intentional: canonicalized assets are safe with eye overlays still disabled; the reverse ordering can briefly render two eye identities.
-9. Reload and use the existing deterministic/live hooks to exercise Blink plus special expression; capture before/after evidence.
-10. Require no rectangular eye seam, no second-eye/foreign-eye appearance, no non-eye expression regression, and no FPS regression below the current accepted runtime floor.
-11. On any failure, rollback HTML first, then expression assets.
+## What remains useful here
 
-## Evidence boundary
+`build_canonical_eye_expressions.py` and `patch_buehne_canonical_eye_identity.py` remain useful as an independent architectural cross-check for two invariants:
 
-What this candidate can eventually prove if promoted and visually accepted:
+1. the expression signal outside the eye ownership region must remain unchanged;
+2. canonical gaze/Blink should have exactly one runtime ownership path rather than a second special-expression eye subsystem.
 
-- one canonical base eye identity persists through special expressions;
-- the same canonical Blink channel can operate during special expressions;
-- the same measured gaze channel can operate during special expressions.
+They must not be promoted as-is because their mask authority has been superseded.
 
-It does **not** prove whole-avatar photorealism, full GRID10, GWT/J-Space, training readiness, or whole-product completion.
+## Next exact gate
+
+Reuse the existing host-derived `eye_identity_mask.png` / `eye_identity_open.png` and the now-live accepted `relief2` Blink subject. Repair or replace the isolated-browser special-expression A/B harness that most recently failed on a WebSocket screenshot timeout. Only after a clean reversible A/B demonstrates canonical eye persistence through a special expression with no seam/ghost/identity/FPS regression should any live special-expression integration occur.
+
+Live credit for special-expression eye identity remains **0** until that gate passes.

@@ -1,0 +1,58 @@
+===SOURCE===
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+===DIRS===
+DIR=ausdruck_erweitert EXISTS=1
+308
+ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_06.png 1094015f873f354644020eefb0faab3038c0bd901b533f7154ced4d81cbc6fbd
+DIR=ausdruck_erweitert_ai EXISTS=1
+308
+ausdruck_erweitert_ai/anime_90s/anime_fassungslos/frontal/stufe_06.png 1cb2fdcda070da6c4172cd993e016532248996f9d4d60b380e0d7a6e2b39e68d
+DIR=ausdruck_erweitert_relief2 EXISTS=1
+308
+ausdruck_erweitert_relief2/anime_90s/anime_fassungslos/frontal/stufe_06.png ec8c1323bff3b7a19739c7bb6994bb5ac26179807cdf0b0e78d9de8831a29fa7
+===HTTP_REPRESENTATIVE===
+anime_90s/anime_fassungslos/frontal/stufe_06.png ec8c1323bff3b7a19739c7bb6994bb5ac26179807cdf0b0e78d9de8831a29fa7
+serious_dystopian/wut/frontal/stufe_06.png e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+demonic/angst/frontal/stufe_06.png e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+===DAEMON_ROUTE===
+165-    return kandidat if os.path.isdir(kandidat) else pfad
+166-
+167-
+168-KOPF_RGBA_DIR = _vielleicht_ai(KOPF_RGBA_DIR)
+169-KOERPER_RGBA_DIR = _vielleicht_ai(KOERPER_RGBA_DIR)
+170-GAZE_DIR = _vielleicht_ai(GAZE_DIR)
+171-BLINK_DIR = _vielleicht_ai(BLINK_DIR)
+172-MUND_DIR = _vielleicht_ai(MUND_DIR)
+173:AUSDRUCK_ERWEITERT_DIR = _vielleicht_ai(AUSDRUCK_ERWEITERT_DIR)
+174-# ⭐ Default-Fenstergeometrie (Gabriel 2026-09-11, siehe oeffnen()) -- EINE
+175-# Quelle fuer Start-Flags UND fuer die xdotool-Erzwingung danach.
+176-# Y=0 ist der WUNSCH, nicht das Ergebnis: mutter/GNOME reserviert oben
+177-# einen Arbeitsbereich-Rand (_NET_WORKAREA meldet y>=40) plus eigene
+178-# Fenster-Dekoration/Schatten -- gemessen 2026-09-11 landet JEDES an
+179-# dieses Fenster gerichtete windowmove-Y (0, 3, 40 probiert) am Ende bei
+180-# y≈86-89, nie tiefer. Das ist eine harte WM-Grenze, keine Code-Luecke --
+181-# Gabriels eigentliche Vorgabe war nur "Groesse 746x449, nicht Vollbild",
+182-# keine exakte Pixelposition. Groesse (das Wichtige) sitzt exakt.
+183-FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449
+--
+905-                            self.send_response(404)
+906-                            self.end_headers()
+907-                    else:
+908-                        self.send_response(404)
+909-                        self.end_headers()
+910-                else:
+911-                    self.send_response(404)
+912-                    self.end_headers()
+913:            elif path.startswith("/ausdruck_erweitert/"):
+914-                # /ausdruck_erweitert/<register>/<ausdruck>/<frontal|yaw_proxy>/<datei>.png
+915-                # Register UND Unterordner per fester Allowlist (kein
+916-                # Pfad-Traversal ueber Ordnernamen moeglich); <ausdruck> ist
+917-                # ein freier Ordnername, wird aber nur ueber os.path.isdir
+918-                # gegen den echten Baum geprueft, nie direkt in einen Pfad
+919-                # ausserhalb von AUSDRUCK_ERWEITERT_DIR aufgeloest, weil
+920-                # os.path.join+os.path.isfile am Ende trotzdem greift.
+921-                teile = [t for t in path.split("/") if t]
+922-                if len(teile) == 5:
+923-                    _, register, ausdruck, unterordner, datei = teile
+===END_READ_ONLY===

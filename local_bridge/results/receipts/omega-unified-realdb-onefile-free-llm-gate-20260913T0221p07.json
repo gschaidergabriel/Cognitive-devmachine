@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-unified-realdb-onefile-free-llm-gate-20260913T0221p07",
+  "command_sha256": "84da355223420d84368611254ef5a9bea95c1d3a394db0c7c821c73549ebbcbe",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T19:09:55.582639+00:00",
+  "finished_at": "2026-09-12T19:11:36.052587+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "40a350c39ace742e51659f656eb6d48093efff6a829ca6c6ee5f47e682636090",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\"compressor\": \"extractive\", \"counters\": {\"fallback\": 0, \"inserted\": 1, \"llm\": 0, \"seen\": 1, \"skipped\": 0, \"unchanged\": 0, \"updated\": 0}, \"db\": \"/home/ai-core-node/.omega-udb-gate.1d0peh/test.db\", \"failures\": [], \"finished_at\": \"2026-09-12T19:11:24Z\", \"model\": \"none\", \"policy\": {\"paid_fallback\": false, \"raw_source_persisted\": false, \"secret_like_paths_excluded\": true}, \"schema\": \"OMEGA_UNIFIED_INGEST_RESULT/v1\"}\n{\"by_host\": {\"github\": 1}, \"by_owner\": {\"shared_project\": 1}, \"capsules_current\": 1, \"capsules_history\": 1, \"datei\": 1, \"fundort\": 1}\nNAME                       ID              SIZE      MODIFIED    \nbge-m3:latest              790764642607    1.2 GB    2 weeks ago    \nnomic-embed-text:latest    0a109f422b47    274 MB    2 weeks ago    \nqwen2.5:0.5b               a8b0c5157701    397 MB    2 weeks ago    \n{\"compressor\": \"ollama\", \"counters\": {\"fallback\": 0, \"inserted\": 1, \"llm\": 1, \"seen\": 1, \"skipped\": 0, \"unchanged\": 0, \"updated\": 0}, \"db\": \"/home/ai-core-node/.local/share/agentzero/unified.db\", \"failures\": [], \"finished_at\": \"2026-09-12T19:11:35Z\", \"model\": \"qwen2.5:0.5b\", \"policy\": {\"paid_fallback\": false, \"raw_source_persisted\": false, \"secret_like_paths_excluded\": true}, \"schema\": \"OMEGA_UNIFIED_INGEST_RESULT/v1\"}\nPRE=0 POST=1\nomega-src-e3114b2e1a493efc8ea2a99d500f8ed8-012df0f1885f65bf|omega_source_capsule|.claude-plugin/marketplace.json|{\"capsule_chars\": 196, \"compressor\": \"ollama:qwen2.5:0.5b\", \"machine_id\": \"github\", \"no_raw_source_persisted\": true, \"owner\": \"shared_project\", \"path\": \".claude-plugin/marketplace.json\", \"raw_chars_seen\": 672, \"ref\": \"e7009fae4402a93f4164bf1877ce94c80095b881\", \"repo\": \"gschaidergabriel/frankenstein\", \"sample_mode\": \"full\", \"schema\": \"OMEGA_SOURCE_CAPSULE/v1\", \"scope\": \"repo\", \"source_bytes\": 680, \"source_sha256\": \"012df0f1885f65bf22e14e22a84de47cb6626924781e7f394ce065316dc781db\"}|shared_project|github|measured+llm_compressed\nOMEGA_UNIFIED_FREE_LLM_REALDB_GATE_PASS=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

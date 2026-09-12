@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-frank-runtime-locate-andreas-20260912T040900Z",
+  "command_sha256": "57a2cc4910466d706975ea86be78f97b076faa2a1cafb7014774beae83d2660a",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:54:12.103994+00:00",
+  "finished_at": "2026-09-12T03:54:42.269209+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "bc160dc7b378a7514f9443649911c7b481e4b8647da49ccaf3eea7adcba05e66",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "active\nHOST_DB\nDatenbank-Autoritaet auf andreas-MACO -- 2026-09-12T03:54:12Z\nEntscheidet ueber inodes, nicht ueber Pfadstrings. Nur lesend.\n\n== Die Autoritaet ==\n  AUTORITAET       inode=9319392     79183872 B  tab=221  grid10=12  2026-09-12 05:31\n              /var/lib/entityos/data/unified.db\n              beansprucht Entitaet 410e0108ae035e713adf029284467488\n\n== Jede weitere Datei namens unified.db auf dem HOST ==\n  fremd            inode=62006024    19787776 B  tab=187  grid10=0   2026-09-07 13:59\n              /home/andreas/.claude/udb/unified.db\n  ATTRAPPE         inode=61997837           0 B  tab=0    grid10=0   2026-09-10 07:26\n              /home/andreas/.local/share/agentzero/unified.db\n              Herkunft: geboren 2026-09-10 07:26:45, durch gabriel\n                        /usr/bin/sqlite3 /home/andreas/.local/share/agentzero/unified.db SELECT schluessel,wert FROM sta\n  ATTRAPPE         inode=58860974           0 B  tab=0    grid10=0   2026-09-06 23:14\n              /home/andreas/unified.db\n              Herkunft: geboren 2026-09-06 23:14:32, durch andreas\n                        /usr/bin/python3 -c \\nimport sqlite3\\nc=sqlite3.connect(\\'/home/andreas/unified.db\\')\\nfor r in \n  FREMDE ENTITAET  inode=61878309   105271296 B  tab=213  grid10=7   2026-09-06 21:13\n              /home/gabriel/.local/share/agentzero/unified.db\n              andere Entitaet: 7a1bd3f56160ce514659f8c9117484057f1e7a8fb77696e5c7a55cee3e94f8ae\n              (Autoritaet: 410e0108ae035e713adf029284467488) -- gehoert jemandem,\n              ist kein Konkurrent um die Autoritaet ueber DIESE Entitaet.\n              Herkunft: keine Spur im Journal (-60s/+5s um die Geburt).\n                        Das heisst NICHT \"niemand\" -- nur: kein Befehl,\n                        der diesen Pfad ausschreibt, steht im Protokoll.\n  fremd            inode=14690372       24576 B  tab=3    grid10=0   2026-09-12 02:09\n              /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\n  ATTRAPPE         inode=9308520            0 B  tab=0    grid10=0   2026-09-08 14:47\n              /var/lib/entityos/unified.db\n              Herkunft: geboren 2026-09-08 14:47:06, durch gabriel\n                        /usr/bin/sqlite3 /var/lib/entityos/unified.db SELECT schluessel, wert FROM star_konfig WHERE sch\n\n== Derselbe Pfadstring in der VM (entityos) ==\n  CLAUDE.md: \"/var/lib/entityos/data/unified.db (= /var/lib/entityos/unified.db, dieselbe Datei)\"\n  in der VM  : inode=9319392\n  auf dem Host: inode=9308520\n  DIESELBE DATEI -- in der VM stimmt die Aussage der CLAUDE.md.\n  Aber auf dem HOST ist /var/lib/entityos/unified.db eine andere Datei.\nVM_CORE\nConnected to machine entityos. Press ^] three times within 1s to exit session.\nFOUND:/home/andreas/frankenstein-repo/scripts/stern.py\r\n/usr/bin/python3\r\nandreas-MACO\r\nConnection to machine entityos terminated.\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

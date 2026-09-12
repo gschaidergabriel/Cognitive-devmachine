@@ -1,0 +1,20 @@
+usage: frank_chatgpt_terminal_remote.py [-h] [--session-id SESSION_ID]
+                                        [text ...]
+
+Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10
+
+positional arguments:
+  text
+
+options:
+  -h, --help            show this help message and exit
+  --session-id SESSION_ID
+---PROXY---
+9:TARGET_MACHINE_ID='ai-core-node'
+10:TARGET_OWNER='gabriel'
+33:  payload={'prompt':prompt,'num_workers':1}
+37:  doc={'schema':'CLAY_LOCAL_COMMAND/v1','command_id':cid,'machine_id':TARGET_MACHINE_ID,'owner':TARGET_OWNER,'op':'exec','command':shell,'timeout_seconds':min(3600,int(self.timeout_s))}
+59:      if receipt.get('machine_id')!=TARGET_MACHINE_ID or receipt.get('owner')!=TARGET_OWNER:raise ProxyError('receipt attribution mismatch')
+---WIP---
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py

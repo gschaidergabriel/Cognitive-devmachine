@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-depthwarp-final-readback-20260912-1108",
+  "command_sha256": "20d4662125bd45e8c657a4f8145e347e059395519dde6501dc90ec8b4cc26043",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T01:50:27.488218+00:00",
+  "finished_at": "2026-09-12T01:50:34.966675+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "3a28ad07fdbad68c52740dbc1dedc7bac19ed735e60069d79e1ec10ac6776798",
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_final_visual_readback.py\", line 211, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_final_visual_readback.py\", line 139, in main\n    _, warped, gate, dx = build(root, r, eye_src, amp)\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_display_space_gate.py\", line 33, in build\n    rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ncv2.error: OpenCV(4.13.0) /io/opencv/modules/imgproc/src/imgwarp.cpp:1670: error: (-215:Assertion failed) ((map1.type() == CV_32FC2 || map1.type() == CV_16SC2) && map2.empty()) || (map1.type() == CV_32FC1 && map2.type() == CV_32FC1) in function 'remap'\n\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_final_visual_readback.py", line 211, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_final_visual_readback.py", line 139, in main
+    _, warped, gate, dx = build(root, r, eye_src, amp)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/go-depth-final.e4IdwM/repo/research_entity/avatar/tools/depthwarp_display_space_gate.py", line 33, in build
+    rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cv2.error: OpenCV(4.13.0) /io/opencv/modules/imgproc/src/imgwarp.cpp:1670: error: (-215:Assertion failed) ((map1.type() == CV_32FC2 || map1.type() == CV_16SC2) && map2.empty()) || (map1.type() == CV_32FC1 && map2.type() == CV_32FC1) in function 'remap'
+

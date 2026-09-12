@@ -1,0 +1,73 @@
+=== HOST ===
+ai-core-node-projekt-frankenstein
+2026-09-12T10:39:22+07:00
+=== HARNESS META ===
+/home/ai-core-node/.claude/star/harness_aider.py 82644 bytes 2026-09-12 06:47:15.995894631 +0700
+/home/ai-core-node/.claude/star/stern.py 988679 bytes 2026-09-12 08:25:23.377004335 +0700
+=== HARNESS SEAMS ===
+8:(zero_raum_ruf), Audit ueber harness_audit.py, Reconcile mit mechanisch
+12:den chatgpt-Skill, wenn die ChatGPT-Bruecke (Login) ausfaellt UND beide
+13:automatischen Wiederherstellungsversuche (_chatgpt_login_sicherstellen())
+20:     in zero_raum_ruf) -- kein UI-Klick noetig, aber immer noch dieselbe
+38:          NUR bei exit_code 0 (git-Verlauf und zero_raum_ruf stimmen exakt
+51:import argparse
+131:def git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=None):
+134:    changes in zero_raum_ruf. Gibt Dict mit {"anzahl_commits": N,
+144:    zero_raum_ruf protokolliert, bevor das Skript am Umfang schlicht zu
+159:        conn = _s.verbindung()
+168:                """SELECT 1 FROM zero_raum_ruf
+231:def _aider_kommando_praefix():
+240:def _alle_api_keys_laden():
+259:def _relative_zeit_de(ts):
+275:def _kontingent_banner():
+308:def _api_key_laden(modell_id):
+328:def _git(werkraum, *args, check=True, timeout=30):
+333:def _forschung_preflight(repo):
+389:def _forschung_lock(timeout_s: float = 900.0, poll_s: float = 1.0):
+405:    Verschmutzung. Analog zu `_chatgpt_lock()` in stern.py: ein zweiter
+444:def _forschung_allowlist_pruefen(werkraum, commit_hashes):
+447:    zero_raum_ruf-Cache) -- unabhaengige Pruefung wie harness_audit.py."""
+465:def _forschung_provenance_schreiben(werkraum, paket_id, modell_id, auftrag,
+480:        "fallback_reason": fallback_grund or "chatgpt-secondary Browser-Bruecke nicht erreichbar (Login, auch nach automatischem Cookie-Wiederherstellungsversuch)",
+484:        "geprueft_durch": "harness_audit.py (git-Verlauf <-> zero_raum_ruf, exakter Abgleich)",
+497:def _werkraum_git_identitaet(werkraum, modell_id):
+507:def _aider_werkraum_aufraeumen(werkraum):
+531:def _grid_zustand_block(session_id=None, auftrag=None):
+546:      2. entityos_arbeitspaket (unified.db) -- offene/laufende Pakete
+553:      4. stern.py's _f2wp1207_turn_loop_delegieren() -- DIESELBE hyperGRID-
+588:        grid_text = _s._f2wp1207_turn_loop_delegieren(
+653:        with contextlib.closing(_s.verbindung()) as c:
+655:                "SELECT paket_id, auftrag, womit, stand FROM entityos_arbeitspaket "
+681:def _hinweis_ordner_aufraeumen(aktueller_paket_id=None):
+691:    vorhandenen Ordner, dessen paket_id in entityos_arbeitspaket NICHT mehr
+698:        with contextlib.closing(_s.verbindung()) as c:
+700:                "SELECT paket_id FROM entityos_arbeitspaket WHERE stand IN ('offen','laeuft')")}
+723:def _persona_hinweis_schreiben(paket_id, modell_id, berechtigung, kapsel="",
+869:        "# Hinweis fuer diese Sitzung (automatisch eingefuegt, harness_aider.py visible-start)\n\n"
+903:def _terminal_banner(modell_id, berechtigung, paket_id):
+932:def _werkraum_diff_dateien(werkraum, seit):
+950:def _loeschungen_pruefen(werkraum, seit):
+963:def _eingeschraenkt_verstoesse_pruefen(werkraum, seit):
+973:def _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad):
+998:def visible_run(modell_id):
+1222:def _aider_ausfuehren(werkraum, modell_id, nachricht, timeout=600, map_tokens=None, paket_id=None):
+1290:def _antwort_zuruecklesen(werkraum, antwort_rel):
+1301:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1440:    # zero_raum_ruf-Rekonstruktion (paket-1787841564031-f1f2d6) -- der Push
+1524:def cmd_visible_start(args):
+1534:def cmd_fallback_start(args):
+1535:    """Fuer stern.py's chatgpt-Fallback: probiert Kandidaten der Reihe nach,
+1547:        aktiviert = _s.modell_aktiv_setzen(modell_id, von="chatgpt-fallback")
+1561:                                   fallback_grund=args.grund or "chatgpt-secondary Browser-Bruecke nicht erreichbar")
+1566:            # spiegeln -- stern.py's _chatgpt_harness_fallback() liest diese
+1579:def main():
+1580:    parser = argparse.ArgumentParser(description="Harness fuer kontrollierten Aufruf von aider")
+1583:    p_vis = sub.add_parser("visible-start", help="PHASE 48: sichtbarer, interaktiver Terminal-Harness im echten Repo (kein Sandbox-Versteck mehr)")
+1586:    p_fb = sub.add_parser("fallback-start", help="ChatGPT-Fallback: aktiviert Kandidaten selbst, laeuft im Forschungsmodus (echtes Repo, allowlist+audit-gated)")
+1593:    if args.command == "visible-start":
+=== REPO STATUS ===
+## main...origin/main [ahead 2]
+M  scripts/f2wp1207_alignment_controller.py
+?? CRUSH.md
+?? test_add.py
+=== DB POINTER ===

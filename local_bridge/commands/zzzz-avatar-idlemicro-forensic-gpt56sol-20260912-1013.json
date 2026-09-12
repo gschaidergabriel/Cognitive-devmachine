@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "zzzz-avatar-idlemicro-forensic-gpt56sol-20260912-1013",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 120,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib,re,json,os\np=Path('/home/ai-core-node/.claude/star/visual/buehne.html')\ns=p.read_text()\nprint('SHA256='+hashlib.sha256(s.encode()).hexdigest())\nprint('BYTES='+str(len(s.encode())))\nfor needle in ['const KATEGORIE_SONDERAUSDRUCK','function sonderausdruckZeigen','function sonderausdruckAusEmote','async function statusHolen','async function chatHolen','function mundAnimation','function blinzeln','function atmen','function reaktionAufNeuenStatus']:\n i=s.find(needle)\n print('\\n=== '+needle+' @ '+str(i)+' ===')\n print(s[i:i+7000] if i>=0 else 'NOT_FOUND')\nroot=Path('/home/ai-core-node/.claude/star/visual/ausdruck_erweitert')\nprint('\\n=== ASSETS ===')\nif root.exists():\n for reg in sorted([x for x in root.iterdir() if x.is_dir()]):\n  vals=[]\n  for expr in sorted([x for x in reg.iterdir() if x.is_dir()]):\n   front=expr/'frontal'\n   stages=sorted(x.name for x in front.glob('stufe_*.png')) if front.exists() else []\n   vals.append({'expression':expr.name,'stages':len(stages)})\n  print(reg.name+': '+json.dumps(vals,ensure_ascii=False))\nelse: print('NO_ASSET_ROOT')\nPY"
+}

@@ -1,0 +1,37 @@
+===HOST===
+andreas-MACO
+andreas
+2026-09-12T19:21:52+02:00
+===REPOS===
+REPO=/home/andreas/frankenstein-repo
+main
+c7de75d22b94ee88d02c5f663252009ccace282b
+DIRTY=4
+REPO=/home/andreas/self-integration
+main
+5b06f6c40eefb9b2bb058c8117f8705cdff50a6a
+DIRTY=0
+REPO=/home/andreas/frank-repo
+main
+5de1094856ff13fed50c17589f96d5597ee40868
+DIRTY=0
+===BRIDGE===
+active
+===VM_READONLY===
+active
+ActiveState=active
+SubState=running
+DropInPaths=
+ExecMainPID=319869
+===VOLATILE_GUARD===
+11:# The ExecStartPre wipe is NOT a defect -- it is immutable infrastructure and
+75:ExecStartPre=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN"'
+76:ExecStartPre=/bin/sh -c 'mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR"'
+79:ExecStartPre=/bin/sh -c 'test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; }'
+===DURABLE_DB===
+-rw-r--r-- 1 andreas andreas 91983872 Sep 12 19:20 /var/lib/entityos/data/unified.db
+===VOLATILE_DBS===
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+MISSING /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db

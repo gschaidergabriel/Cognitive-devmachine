@@ -1,0 +1,12 @@
+{
+  "schema": "f2.andreas.bridge.request.v1",
+  "id": "omega_grid_andreas_origin_preflight_20260913T0448p07",
+  "operation": "exec",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 120,
+  "argv": [
+    "/bin/bash",
+    "-lc",
+    "set -euo pipefail; echo HOST=$(hostname); echo USER=$(whoami); echo SERVICE=$(systemctl is-active entityos-vm.service 2>/dev/null || true); DB=/var/lib/entityos/data/unified.db; echo DB_SIZE=$(stat -c %s \"$DB\"); echo DB_INTEGRITY=$(sqlite3 \"$DB\" 'pragma integrity_check;'); echo EPOCH=$(sqlite3 \"$DB\" 'select runtime_epoch_id from f2_runtime_epoch order by rowid desc limit 1;'); echo GRID_SCRIPT=$(test -f /home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_turn_loop.py && echo present || echo missing); echo MODEL=$(test -f /var/lib/entityos/voice/models/llm/Qwen3.5-4B-abliterated.Q4_K_M.gguf && echo present || echo missing); echo LLAMA=$(/usr/local/bin/llama-cli --version 2>/dev/null | head -1 || true); echo REMOTE=$(git -C /home/andreas/frankenstein-repo remote get-url origin 2>/dev/null || true); echo HEAD=$(git -C /home/andreas/frankenstein-repo rev-parse HEAD); echo DIRTY_BEGIN; git -C /home/andreas/frankenstein-repo status --short | head -20; echo DIRTY_END"
+  ]
+}

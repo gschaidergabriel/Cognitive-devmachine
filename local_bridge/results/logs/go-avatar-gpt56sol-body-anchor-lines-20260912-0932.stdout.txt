@@ -1,0 +1,37 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+111:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+152:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+168:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+171:  #koerper-schicht{z-index:1}
+185:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+188:     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+189:     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+190:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+191:  #koerper-schicht2{opacity:0}
+194:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+396:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+403:                 wie #koerper-schicht/#koerper-schicht2. -->
+651:// werden erst beim ersten echten Bedarf geladen, nicht alle vor. bildLaden()
+655:function bildLaden(src){
+754:  const eintrag = bildLaden(schritt.src);
+897:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+1516:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1640:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1682:  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+1703:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1705:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1711:const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+1713:ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+1714:const ATMEN_MS_PRO_BILD = 330;
+1717:let atmenAktivSchicht = "koerper-schicht";
+1718:function koerperCrossfade(src){
+1719:  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+1737:// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+1760:function koerperAktionStarten(fertig){
+1771:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1779:    const eintrag = bildLaden(a.bilder[a.idx]);
+1782:    koerperCrossfade(a.bilder[a.idx]);
+1791:  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+1793:  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+1794:  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+SCOPE=REAL_HOST_READ_ONLY_BODY_ANCHOR_LINES

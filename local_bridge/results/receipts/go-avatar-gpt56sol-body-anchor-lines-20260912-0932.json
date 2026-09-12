@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-body-anchor-lines-20260912-0932",
+  "command_sha256": "db4f2468c84e1ebb36cacc4ec29a19b6504bb4b59dca38b07b81f79d28e356d0",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T02:23:56.337351+00:00",
+  "finished_at": "2026-09-12T02:23:56.376780+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "12c544d7a61b064679f92e5e563199c181c7f043290cf1fe9a9ac77c3eed320e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html\n111:     #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,\n152:     OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht\n168:  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,\n171:  #koerper-schicht{z-index:1}\n185:     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster\n188:     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet\n189:     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */\n190:  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}\n191:  #koerper-schicht2{opacity:0}\n194:     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie\n396:          <div id=\"koerper-dreh\"><img id=\"koerper-schicht\" src=\"/koerper_rgba/koerper_zero.png\" alt=\"\"><img id=\"koerper-schicht2\" src=\"/koerper_rgba/koerper_zero.png\" alt=\"\"></div>\n403:                 wie #koerper-schicht/#koerper-schicht2. -->\n651:// werden erst beim ersten echten Bedarf geladen, nicht alle vor. bildLaden()\n655:function bildLaden(src){\n754:  const eintrag = bildLaden(schritt.src);\n897:// Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe\n1516:// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,\n1640:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die\n1682:  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie\n1703:// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).\n1705:// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie\n1711:const ATMEN_BILDER = Array.from({length:12}, (_,i) =>\n1713:ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });\n1714:const ATMEN_MS_PRO_BILD = 330;\n1717:let atmenAktivSchicht = \"koerper-schicht\";\n1718:function koerperCrossfade(src){\n1719:  const naechsteSchicht = atmenAktivSchicht === \"koerper-schicht\" ? \"koerper-schicht2\" : \"koerper-schicht\";\n1737:// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,\n1760:function koerperAktionStarten(fertig){\n1771:  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),\n1779:    const eintrag = bildLaden(a.bilder[a.idx]);\n1782:    koerperCrossfade(a.bilder[a.idx]);\n1791:  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;\n1793:  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;\n1794:  koerperCrossfade(ATMEN_BILDER[atmenIndex]);\nSCOPE=REAL_HOST_READ_ONLY_BODY_ANCHOR_LINES\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

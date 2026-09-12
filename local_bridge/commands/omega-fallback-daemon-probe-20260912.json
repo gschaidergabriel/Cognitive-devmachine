@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-fallback-daemon-probe-20260912",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 60,
+  "command": "set -eu; echo '=== clay-local-bridge ==='; systemctl --user cat clay-local-bridge.service 2>/dev/null || true; echo '=== frankenstein-local-bridge ==='; systemctl --user cat frankenstein-local-bridge.service 2>/dev/null || true; echo '=== relevant processes ==='; ps -ef | grep -E '[l]ocal.*bridge|[b]ridge.*local' || true"
+}

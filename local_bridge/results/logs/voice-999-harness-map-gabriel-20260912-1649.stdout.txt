@@ -1,0 +1,432 @@
+===/home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py===
+9:      -> existing canonical GRID10 turn
+11:      -> existing ChatGPT browser harness
+13:      -> feed harvested result through the SAME GRID10 turn loop
+14:      -> next reentry starts from the new canonical frame.
+17:connections, GRID10 lifecycle, browser harness and durable authority.
+47:    user_text_sha256         TEXT NOT NULL,
+48:    worker_budget            INTEGER NOT NULL,
+67:    direction           TEXT NOT NULL CHECK (direction IN ('USER','GRID_TO_CHATGPT','CHATGPT_TO_GRID')),
+84:class ChatGPTOrganError(RuntimeError):
+89:class HostAdmission:
+95:    max_swarm_workers: int
+98:def _now() -> str:
+102:def _canon(value: Any) -> str:
+106:def _origin_owner() -> str:
+110:def _origin_role() -> str:
+114:def ensure_schema(conn: sqlite3.Connection) -> dict:
+132:def _mem_available_mb() -> int:
+143:def host_admission() -> HostAdmission:
+163:def _table_exists(conn: sqlite3.Connection, name: str) -> bool:
+169:def latest_pointer(conn: sqlite3.Connection) -> dict:
+173:        "frame_id,turn_event_id,reentry_kind_used,reentry_evidence_json,"
+175:        "FROM f2_grid10_turn_pointer ORDER BY created_at DESC LIMIT 1"
+178:        raise ChatGPTOrganError("no canonical GRID10 turn pointer")
+182:def _latest_hypermirror(conn: sqlite3.Connection) -> Optional[str]:
+201:def state_capsule(conn: sqlite3.Connection, pointer: Mapping[str, Any]) -> dict:
+226:        "reentry_kind": pointer.get("reentry_kind_used"),
+235:def _one_line(text: str, limit: int = 12000) -> str:
+239:def build_grid_instruction(user_text: str, capsule: Mapping[str, Any], run_id: str) -> str:
+243:        f"run={run_id} GRID_STATE={compact} USER_EVENT={json.dumps(user_text, ensure_ascii=False)} "
+245:        "GRID10 owns the cognitive turn lifecycle and unified.db is canonical state. Read/inspect connected "
+247:        "task as Claude Code would: analyze, use available tools/workers where justified, preserve machine/owner "
+249:        "GRID10 uptake, never effect authority. Do not create a parallel memory/state system. Finish with a dense "
+251:        "\"next\":\"...\",\"workers_suggested\":0}."
+255:def _extract_response(value: Any) -> str:
+278:def _insert_message(
+307:def _update_run(conn: sqlite3.Connection, run_id: str, **fields: Any) -> None:
+311:        "worker_budget",
+333:def _suggest_worker_budget(user_text: str, admission: HostAdmission) -> int:
+336:    text = (user_text or "").lower()
+337:    complexity = 1 + min(5, len(user_text) // 500)
+338:    for word in ("hardcore", "maximal", "research", "avatar", "debug", "audit", "test", "grid", "swarm"):
+341:    return max(1, min(admission.max_swarm_workers, complexity))
+344:def execute_terminal_turn(user_text: str, *, session_id: str, stern_module: Any) -> dict:
+345:    """Run one canonical USER -> GRID -> ChatGPT -> GRID cycle."""
+346:    text = (user_text or "").strip()
+355:            "retrieval_present": False,
+356:            "retrieval_len": 0,
+360:        return {"ok": False, "phase": "grid-user-turn", "turn": turn}
+373:        budget = _suggest_worker_budget(text, admission)
+374:        instruction = build_grid_instruction(text, capsule, run_id)
+379:            "source_session_id,source_winner_cell,source_broadcast_value,user_text_sha256,worker_budget,"
+409:            direction="GRID_TO_CHATGPT",
+410:            role="GRID10",
+419:        num_workers=budget,
+457:            direction="CHATGPT_TO_GRID",
+477:            "retrieval_present": True,
+478:            "retrieval_len": len(response),
+483:            _update_run(conn, run_id, status="FAILED", error_text="response GRID uptake failed")
+487:            "phase": "grid-response-turn",
+504:        "worker_budget": budget,
+505:        "workers": budget,
+509:        "grid_after": {
+513:            "reentry": response_turn.get("reentry"),
+525:    "build_grid_instruction",
+===/home/ai-core-node/.claude/star/pool_wache.py===
+2:"""pool_wache.py -- unabhaengiger Free-Pool-Ueberwachungs-/Verwaltungsdienst.
+6:OpenRouter) und ~/.claude/star/harness_aider.py (bereits bestehender,
+17:Nacht): "der GRID soll die Free Tokens frei verwalten und verwenden --
+39:     die Schnittstelle, die eskalation_freepool.py (Anforderung B) und die
+40:     GRID-Routing-Weiche (paralleles Paket paket-1789143924381-8e19a8)
+59:DB_PATH = os.path.expanduser("~/.claude/star/daten/pool_wache.db")
+68:def prioritaets_reihenfolge() -> list:
+96:def _verbindung() -> sqlite3.Connection:
+104:def record(tier: str, ok: bool, http_status: Optional[int] = None,
+110:    wer gemeldet hat (z.B. 'harness_aider:nvidia-nemotron', 'grid-routing').
+150:def tier_state(tier: str) -> dict:
+174:def status() -> dict:
+176:    UND fuer andere Module (eskalation_freepool.py, GRID-Routing)."""
+180:def viable_tiers() -> list:
+196:def all_exhausted() -> bool:
+206:def probe(tier: Optional[str] = None) -> dict:
+246:def _cli():
+247:    p = argparse.ArgumentParser(description="Free-Pool-Ueberwachung (pool_wache.py)")
+===/home/ai-core-node/.claude/star/eskalation_freepool.py===
+2:"""eskalation_freepool.py -- Teil B von paket-1789144122619-ec428c
+6:ist: spinnt ueber das bestehende harness_aider.py einen voll handlungs-
+11:dieses Modul ruft harness_aider.py NIE im 'forschung'-Modus auf -- dieser
+13:~/clay-global-research-entity/ (siehe harness_aider.py Zeile ~106), genau
+16:bereits bestehender, unabhaengiger Modus in harness_aider.py (frischer,
+17:isolierter Werkraum unter ~/.claude/star/harness-werkraum/<paket_id>/,
+55:harness_aider.py bestehenden strukturellen Schranken (kein Loeschen, keine
+67:import harness_aider  # ~/.claude/star/harness_aider.py -- WIEDERVERWENDET, nicht neu erfunden
+69:import pool_wache
+95:def _claude_kontingent_knapp(schwelle_pct: int = _QUOTA_SCHWELLE_PCT) -> Optional[bool]:
+118:def waehle_bestes_modell(task_kind: str = "datei_edit") -> Optional[str]:
+120:    Stufe, nach modell_faehigkeiten.empfehlung_fuer() + pool_wache.viable_tiers()
+123:    viable = pool_wache.viable_tiers()
+128:        if modell_id not in harness_aider.MODELL_MAP:
+130:        if harness_aider._api_key_laden(modell_id) is None:
+139:def eskalieren(auftrag: str, grund: Optional[str] = None,
+143:    harness_aider.einen_lauf(..., modus='sandbox') direkt auf (echter
+145:    kein erfundener Handoff hier), meldet das Ergebnis an pool_wache.record().
+148:    harness_aider.einen_lauf())."""
+149:    if pool_wache.all_exhausted():
+151:                "erreichbar (pool_wache.all_exhausted()==True) -- nirgends hinzueskalieren"}
+158:    aktiviert = _s.modell_aktiv_setzen(modell_id, von="eskalation_freepool")
+163:    ergebnis = harness_aider.einen_lauf(
+171:        pool_wache.record(tier_label, ok=bool(ergebnis.get("ok")),
+173:                           quelle=f"eskalation_freepool:{modell_id}")
+179:def pruefe_und_eskaliere_bei_bedarf(auftrag: str, task_kind: str = "datei_edit") -> dict:
+195:def _cli():
+197:    p = argparse.ArgumentParser(description="Free-Pool-Eskalation (eskalation_freepool.py)")
+===/home/ai-core-node/.claude/star/harness_aider.py===
+2:"""harness_aider.py -- kontrollierter Aider-Aufruf gegen ein Free-Pool-Modell.
+5:isolierten Sandbox (harness-werkraum/<paket_id>/), nie im echten Repo,
+8:(zero_raum_ruf), Audit ueber harness_audit.py, Reconcile mit mechanisch
+34:          PROVENANCE.json (actor_id=freepool-fallback-secondary, siehe
+37:       d) mit demselben harness_audit.py-Mechanismus wie im Sandbox-Modus --
+68:AIDER_BIN = os.path.expanduser("~/.claude/star/harness-venv/bin/aider")
+76:AIDER_VENV_PYTHON = os.path.expanduser("~/.claude/star/harness-venv/bin/python3")
+78:WERKRAUM_BASIS = os.path.expanduser("~/.claude/star/harness-werkraum")
+99:#     (glm_client.POOL_STUFEN); dort wuerde es vorgelesen.
+119:# PHASE 49 -- Namensraum-Bruecke zu pool_wache.py: dessen Tier-Labels (aus
+123:_MODELL_ZU_POOL_TIER = {
+136:SICHTBAR_NOTIZ_PRAEFIX = "notizen-freepool/"
+137:SICHTBAR_HINWEIS_BASIS = os.path.expanduser("~/.claude/star/harness-hinweise")
+145:FORSCHUNG_ACTOR_ID = "freepool-fallback-secondary"
+148:def git_checkpoint_und_protokollieren(werkraum, paket_id, modell_id, seit=None):
+222:            f"harness:aider:{modell_id}", "AKTION",
+235:                f"harness:aider:{modell_id}", "UNCOMMITTED",
+248:def _aider_kommando_praefix():
+257:def _alle_api_keys_laden():
+276:def _relative_zeit_de(ts):
+292:def _kontingent_banner():
+295:    49 Punkt 3, pool_wache.py-Cooldown-Heuristik, KEIN erfundenes Tages-
+299:    Fail-soft: pool_wache nicht lesbar -> ein einzelnes rotes Hinweis-
+304:        import pool_wache as _pw
+306:        for modell_id, tier in _MODELL_ZU_POOL_TIER.items():
+319:        segs.append(f"{_ANSI_ROT}pool-status nicht lesbar: {e}{_ANSI_RESET}")
+322:    return f"{_ANSI_AMBER}pool{_ANSI_RESET}{sep}" + sep.join(segs)
+325:def _api_key_laden(modell_id):
+345:def _git(werkraum, *args, check=True, timeout=30):
+350:def _forschung_preflight(repo):
+399:class ForschungLockTimeout(Exception):
+406:def _forschung_lock(timeout_s: float = 900.0, poll_s: float = 1.0):
+461:def _forschung_allowlist_pruefen(werkraum, commit_hashes):
+464:    zero_raum_ruf-Cache) -- unabhaengige Pruefung wie harness_audit.py."""
+482:def _forschung_provenance_schreiben(werkraum, paket_id, modell_id, auftrag,
+486:    Anweisung befolgt hat. Eigener Commit, erkennbar an der harness-eigenen
+493:        "provider": "NVIDIA NIM / Mistral AI (free-tier pool)",
+501:        "geprueft_durch": "harness_audit.py (git-Verlauf <-> zero_raum_ruf, exakter Abgleich)",
+509:                   f"harness(freepool-fallback): provenance fuer {paket_id} ({modell_id})",
+514:def _werkraum_git_identitaet(werkraum, modell_id):
+515:    _git(werkraum, "config", "user.email", "harness@lokal.invalid", check=False)
+516:    _git(werkraum, "config", "user.name", f"harness-{modell_id}", check=False)
+520:_AIDER_EIGENE_DATEIEN = (".aider.chat.history.md", ".aider.input.history",
+521:                          ".aider.llm.history", ".aider.tags.cache.v4")
+524:def _aider_werkraum_aufraeumen(werkraum):
+527:    fehl, weil der ERSTE Testlauf .aider.chat.history.md/.aider.input.history
+549:    "~/.claude/star/daten/FREE_POOL_WISSENSPAKET.md")
+552:def _wissenspaket_block() -> str:
+554:    free shit alles ganz genau vorgekaut sein: wo sind die server/vps, was
+562:    `_grid_zustand_block()` betroffen (der ist fuer den DYNAMISCHEN Zustand
+575:def _grid_zustand_block(session_id=None, auftrag=None):
+579:    wie immer vom grid'): EIN Textblock aus vier echten, GERADE ABGEFRAGTEN
+594:         geschrieben, siehe cortex_dashboard_immunsystem.py) + pool_wache.
+597:      4. stern.py's _f2wp1207_turn_loop_delegieren() -- DIESELBE hyperGRID-
+600:         Enthaelt darin BEREITS die GRID-Koordinationspakete aus
+601:         grid_packet_bridge.py (_paket_zeile) und die Anweisung/Zusicherung
+609:    Gibt (text, hat_hypergrid_zeile) zurueck -- Letzteres steuert in
+611:    zusaetzlich noch gebraucht wird (die hyperGRID-Zeile enthaelt dieselbe
+622:    Reihenfolge (Ziele zuerst, hyperGRID zuletzt) den 3500-Zeichen-Deckel
+623:    schon mit Zielen/Paketen, sodass die hyperGRID-Zeile -- und darin die
+625:    kuerzesten Bloecke (hyperGRID inkl. Zusicherung, Immunsystem, Pool-
+629:    hat_hypergrid = False
+630:    grid_teil = None
+632:        grid_text = _s._f2wp1207_turn_loop_delegieren(
+633:            session_id or _s._uid("harness-grid"),
+637:        if grid_text:
+638:            grid_teil = grid_text
+639:            hat_hypergrid = True
+662:    pool_teil = None
+664:        import pool_wache as _pw
+672:            pool_teil = "Free-Pool-Kontingent gerade (pool_wache.py): " + ", ".join(pw_zeilen)
+714:    teile = [t for t in (grid_teil, immun_teil, pool_teil, ziele_teil, pakete_teil) if t]
+722:    return "\n\n".join(teile)[:3500], hat_hypergrid
+725:def _hinweis_ordner_aufraeumen(aktueller_paket_id=None):
+733:    Ordner harness-hinweise/paket-<id>/ an und hat nie einen davon geloescht
+767:def _persona_hinweis_schreiben(paket_id, modell_id, berechtigung, kapsel="",
+790:      (a) `_grid_zustand_block()` -- echter, FRISCHER Datenabruf (Ziele,
+791:          offene Pakete, Immunsystem, hyperGRID-Injektion inkl. GRID-
+799:    `session_id`/`auftrag` (optional) fliessen NUR in (a) (die hyperGRID-
+842:    # PHASE 51 -- echter, frischer Zustand + hyperGRID-Injektion (inkl. GRID-
+843:    # Koordinationspaketen aus grid_packet_bridge.py), siehe
+844:    # _grid_zustand_block()-Docstring. `hat_hypergrid` steuert unten, ob die
+846:    zustand_text, hat_hypergrid = _grid_zustand_block(session_id=session_id, auftrag=auftrag)
+852:    # PHASE 49 (Gabriel-Auftrag 2026-09-12, "frankenstein 2.0 und grid und
+864:    # PHASE 51 Nachtrag: NUR NOCH ALS FALLBACK. Wenn `_grid_zustand_block()`
+865:    # oben bereits die hyperGRID-Zeile liefern konnte (hat_hypergrid=True),
+868:    # knappen Free-Pool-Kontext. Schlaegt der hyperGRID-Turn fehl (real
+873:    if not hat_hypergrid:
+878:                _spec = _ilu.spec_from_file_location("_regie_hook_harness", _rp)
+918:        "# Hinweis fuer diese Sitzung (automatisch eingefuegt, harness_aider.py visible-start)\n\n"
+952:def _terminal_banner(modell_id, berechtigung, paket_id):
+973:    stufe_str = f"{_ANSI_AMBER}free-pool:{berechtigung}({rechte}){_ANSI_RESET}"
+981:def _werkraum_diff_dateien(werkraum, seit):
+999:def _loeschungen_pruefen(werkraum, seit):
+1012:def _eingeschraenkt_verstoesse_pruefen(werkraum, seit):
+1022:def _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad):
+1029:        with open(chat_history_pfad, "r", encoding="utf-8", errors="replace") as f:
+1043:                   f"harness(freepool-sichtbar): Notiz {modell_id} {paket_id}", check=False)
+1047:def visible_run(modell_id):
+1051:    isolierten harness-werkraum/-Sandbox, sondern im echten Projekt-Repo
+1106:    session_id = _s._uid("harness-sess")
+1111:            womit=f"harness:sichtbar:{modell_id}",
+1121:        paket_id = _s._uid("harness-sichtbar")
+1124:    _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "START",
+1131:    # PHASE 51: session_id/auftrag mitgeben, damit der hyperGRID-Turn (in
+1132:    # _grid_zustand_block()) mit echtem Kontext statt einem generischen
+1142:    # harness_aider.py-eigenen Python-Interpreter wirkt NICHT im
+1157:    chat_history_pfad = os.path.join(buchfuehrung_dir, "chat-history.md")
+1170:        "--chat-history-file", chat_history_pfad,
+1171:        "--input-history-file", os.path.join(buchfuehrung_dir, "input-history"),
+1172:        "--llm-history-file", os.path.join(buchfuehrung_dir, "llm-history"),
+1210:        _notiz_schreiben(werkraum, paket_id, modell_id, chat_history_pfad)
+1230:        _s._raum_ruf_schreiben(f"harness:sichtbar:{modell_id}", "VERSTOSS_VERWORFEN",
+1237:    audit_script = os.path.join(os.path.dirname(__file__), "harness_audit.py")
+1253:    beleg = f"test:{0 if gesamt_ok else 1}:sichtbarer_harness paket_id={paket_id} modell={modell_id}"
+1271:def _aider_ausfuehren(werkraum, modell_id, nachricht, timeout=600, map_tokens=None, paket_id=None):
+1306:        aider_cmd += ["--chat-history-file", os.path.join(buchfuehrung_dir, "chat-history.md"),
+1307:                      "--input-history-file", os.path.join(buchfuehrung_dir, "input-history"),
+1308:                      "--llm-history-file", os.path.join(buchfuehrung_dir, "llm-history")]
+1339:def _antwort_zuruecklesen(werkraum, antwort_rel):
+1350:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1370:            quelle="harness_aider.einen_lauf")
+1376:def _einen_lauf_kern(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1401:    session_id = _s._uid("harness-sess")
+1405:            womit=f"harness:aider:{modell_id}",
+1436:    _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "START",
+1472:            _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "ALLOWLIST_VERLETZUNG",
+1494:    audit_script = os.path.join(os.path.dirname(__file__), "harness_audit.py")
+1547:        _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "PUSH" if gepusht else "PUSH_FEHLGESCHLAGEN",
+1579:    beleg = f"test:{0 if gesamt_ok else 1}:harness_audit paket_id={paket_id} modus={modus}"
+1599:def cmd_visible_start(args):
+1609:def cmd_fallback_start(args):
+1641:            # spiegeln -- stern.py's _chatgpt_harness_fallback() liest diese
+1654:def main():
+===/var/lib/entityos/voice/gespraech_loop.py===
+19:     history geschrieben), damit sie nicht bei jedem Folgeturn erneut und
+21:  3. Beschraenktes Mehrturn-Gedaechtnis (history), Fenster begrenzt, damit
+86:def _pw_env():
+108:KASKADE = os.environ.get("GESPRAECH_KASKADE", "pool")
+154:def _mikro_schliessen():
+199:import grid_steuerung  # der Grid stellt eine reale Groesse ein
+205:import pause_wache  # Notpause-Phrase, deterministisch, VOR GRID/LLM (siehe dortiger Kopf)
+221:class _Fehlt:
+395:def _innenwelt_huelle(absatz: str) -> str:
+457:def _bloecke_als_absatz(voller_systemtext: str) -> str:
+948:# GRID-Stellgroesse, der thema-Parameter, die Free-Pool-Nutzung). Beim vierten
+1099:def _grid_orientierung() -> str:
+1165:def _handlung_ausfuehren(text: str):
+1183:def _naechste_zaesur(buf: str, mindest: int = 0):
+1208:def _log(msg):
+1224:def ch0_rms(frame_bytes, channels):
+1236:def vad_capture(max_wait_s=MAX_WAIT_S):
+1382:def _asr_modell_laden():
+1403:def run_asr_resident(wav_path):
+1541:def ohne_eigene_anrede(text: str) -> str:
+1588:def ohne_erfundene_handlung(text: str) -> str:
+1609:def ohne_anrede(text: str) -> str:
+1627:def _erste_sekunden(wav_path, sekunden: float) -> str:
+1647:def weckwort_tor(wav_path) -> tuple:
+1705:def gespraech_verlaengern():
+1740:def _gehoer_start():
+1761:def _gehoer_frage(wav_path):
+1792:def run_asr_whisper(wav_path):
+1821:def gehoer_urteil():
+1836:def run_asr_subprocess(wav_path):
+1882:def llm_health_ok(timeout=2.0):
+1891:def erzeugung_verfuegbar():
+1933:# oeffnet einen echten GRID10-Frame, unter derselben Entitaet, mit
+1935:# Sprache echte Werte (prompt_len, retrieval_present, retrieval_len,
+1949:def kognitionsturn(session_id, user_text, gedaechtnis_kontext):
+1959:            "prompt_len": len(user_text or ""),
+1960:            "retrieval_present": bool(gedaechtnis_kontext),
+1961:            "retrieval_len": len(gedaechtnis_kontext or ""),
+1974:             f"winner={e.get('winner_cell_id')} reentry="
+1975:             f"{(e.get('reentry') or {}).get('kind')}")
+1980:            f"{(e.get('reentry') or {}).get('kind')}. Das ist nichts, was du "
+1990:def _llm_stuecke_lokal(messages, ausdruck, max_tokens):
+2053:def _llm_stuecke(messages, ausdruck, max_tokens, erzwinge_lokal=False):
+2131:            # ⭐ DER GANZE FREIE POOL als EINE Stufe (2026-09-12). Gemessen:
+2134:            # einzelner freier Anbieter ist keine Kaskade. "pool" geht
+2140:            # Harness." Steht deshalb VOR "pool": der Pool ist ein blosser
+2145:            "harness": (lambda: glm_client.harness_stuecke(
+2148:            "pool": (lambda: glm_client.pool_stuecke(
+2150:                Exception, "POOL"),
+2187:def stream_llm_to_sentences(messages, sentence_queue, max_tokens=None,
+2189:                            user_text="", _zweiter_versuch=False):
+2214:    _echo_text = [user_text or ""]     # wogegen der erste Satz geprueft wird
+2351:        # tts_speaker_worker). gesprochen bleibt, wie es bis zum Abbruch war.
+2405:                user_text=user_text, _zweiter_versuch=True)
+2496:def _reagiere_auf_einwurf(voice, wav_path):
+2528:def tts_speaker_worker(voice, sentence_queue, result_holder, ausdruck=None):
+2679:def scale_wav_gain(in_path, out_path, gain):
+2739:#                  tts_speaker_worker() liest ihn nach jedem Satz aus und
+2764:def _einwurf_wav_schreiben(buf: bytearray):
+2782:def _aufnahme_fortsetzen(ohr, vorab: bytearray):
+2832:def _spielen_mit_ohr(proc) -> bool:
+2928:def play(wav_path, gain=PLAYBACK_GAIN):
+2981:def _konfig_lesen(schluessel, default=None):
+2996:def _konfig_schreiben(schluessel, wert, quelle):
+3027:def _eine_erinnerung_fuer_begruessung(session_id):
+3070:def sag_kurz(tts_voice, text):
+3084:        t = threading.Thread(target=tts_speaker_worker,
+3100:def self_introduction(tts_voice, session_id):
+3135:    speaker_thread = threading.Thread(target=tts_speaker_worker, args=(tts_voice, sentence_q, result_holder))
+3153:def run_turn(history, tts_voice, session_id):
+3155:    (None, history) zurueck und loggt, damit die Sitzung weiterlaeuft."""
+3159:    # Zug erst an. Kein LLM-Aufruf, keine GRID-Injektion, kein Auto-
+3167:        return None, history
+3182:        return None, history
+3186:        return None, history
+3192:        return None, history
+3194:    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)
+3195:    if not user_text:
+3196:        return None, history
+3209:             f"{_LETZTE_GUETE[0].get('no_speech_prob')}) -- keine Antwort: {user_text!r}")
+3210:        return None, history
+3213:             f"-- frage nach statt zu raten: {user_text!r}")
+3217:        return None, history
+3227:    _worte = [w for w in re.split(r"\W+", user_text) if len(w) > 1]
+3228:    if len(user_text.strip()) < 8 or len(_worte) < 2:
+3229:        _log(f"[FILTER] zu wenig Substanz, keine Antwort: {user_text!r}")
+3230:        return None, history
+3241:    _t = user_text.lower()
+3243:        _WECK_MUSTER.search(user_text)
+3244:        or "?" in user_text
+3267:            _r = absicht.erkennen_reflex(user_text)
+3290:    if not angesprochen and history and history[-1].get("role") == "assistant":
+3295:                 f"Antwort, trotz fehlender Anrede angenommen: {user_text[:60]!r}")
+3298:        _log(f"[FILTER] nicht an ihn gerichtet, bleibt still: {user_text[:60]!r}")
+3300:        return None, history
+3323:        _sem = erinnern.block(user_text, log=_log)
+3332:            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+3348:        konversation_kontext = konversation.block(user_text, log=_log)
+3410:        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+3417:                       for w in re.findall(r"\w+", user_text.lower())):
+3444:    # free", "auch videos alles".
+3464:    _befehl = absicht.als_befehl(user_text, laeuft=_laeuft, log=_log)
+3477:        _bt = _ent.turn(len(user_text or ""), 0) if _ent else {}
+3479:            _steuer_b = grid_steuerung.steuern(_bt)
+3534:        return None, history
+3550:    if not netz.ist_rueckverweis(user_text):
+3551:        _neues_thema = netz.thema_aus(user_text)
+3575:    _ueber_ihn = selbstauskunft.ist_selbstfrage(user_text)
+3585:    _wesensfrage = (selbstauskunft.ist_wesensfrage(user_text)
+3597:    elif netz.braucht_netz(user_text):
+3600:            _netzfund = netz.nachschlagen(user_text)
+3619:    _turn = _ent.turn(len(user_text or ""), len(gedaechtnis_kontext or "")) if _ent else {}
+3626:            f"{(_turn.get('reentry') or {}).get('kind')}. Das ist nichts, was du "
+3632:    # statt aus einer unversionierten Datei (siehe Kopf von grid_steuerung.py).
+3634:        _steuer = grid_steuerung.steuern(_turn)
+3700:            reiz_text=user_text,
+3963:    # einen echten GRID10-Frame, sein Zustand aendert sich weiter dadurch,
+3989:    _subjekt = None if _ueber_ihn else reflexion.ist_meinungsfrage(user_text)
+3996:                user_text, _subjekt,
+4009:    if _SICHTFRAGE.search(user_text):
+4083:    # `grid_steuerung.steuern()` laufen unveraendert: der Frame wird gebucht,
+4134:    if _SICHTFRAGE.search(user_text):
+4145:    # Die GRID-Zelle steuert im grossen Regime weiterhin den Zustand, den
+4238:                    user_text=user_text, user_name=NUTZER,
+4262:    _verlauf = _ent.arbeitsgedaechtnis(history, _turn) if _ent else history
+4263:    if _ent and len(_verlauf) != len(history):
+4264:        _log(f"[GEDAECHTNIS] Fenster {len(_verlauf)//2} von {len(history)//2} "
+4304:    # ⭐ Die gemeinsame Orientierung ZUERST -- siehe _grid_orientierung().
+4305:    _orient = _grid_orientierung()
+4312:        # ⭐⭐⭐ DIE REGIE DES GRID (Gabriel, 2026-09-10): "der Grid muss
+4335:            _re = (_tq.get("reentry") or {}).get("kind", "")
+4362:                                        nutzertext=user_text, log=_log)
+4374:                                  reentry=_re, log=_log)
+4406:        frage = _zustand + "\n\nEr wendet sich an dich: " + ohne_anrede(user_text)
+4437:        frage = user_text
+4456:        return None, history
+4480:                                          "user_text": user_text})
+4481:    speaker_thread = threading.Thread(target=tts_speaker_worker,
+4508:        return None, history
+4512:        "user_text": user_text,
+4513:        "assistant_text": reply,
+4554:        wiederholung.merken(user_text, reply, log=_log)
+4558:    history = history + [
+4559:        {"role": "user", "content": user_text},
+4565:        {"role": "assistant",
+4568:    if len(history) > MAX_HISTORY_MESSAGES:
+4569:        history = history[-MAX_HISTORY_MESSAGES:]
+4570:    return reply, history
+4573:def main():
+4644:    history = []
+4653:            reply, history = run_turn(history, tts_voice, session_id)
+===/var/lib/entityos/voice/glm_client.py===
+59:standardmaessig, wo moeglich" (siehe [[free-pool-standardmaessig-grid-
+115:def _log(msg):
+126:class GlmFehler(Exception):
+130:class CliFehler(Exception):
+134:class MistralFehler(Exception):
+144:def _mistral_schluessel():
+162:def _mistral_body_bauen(messages, ausdruck, max_tokens, modell=None):
+167:            if (m or {}).get("role") in ("system", "user", "assistant")
+181:def _mistral_ein_stream(schluessel, messages, ausdruck, max_tokens,
+241:def mistral_fallback_stuecke(messages, ausdruck=None, max_tokens=None):
+269:#  DER GANZE FREIE POOL ALS EINE STUFE
+288:POOL_STUFEN = [
+313:def _schluessel_lesen():
+324:def pool_stuecke(messages, ausdruck=None, max_tokens=None):
+331:    for name, endpunkt, modell, namen in POOL_STUFEN:
+343:                        _log(f"[POOL] {name} antwortet ({schluesselname})")
+350:                _log(f"[POOL] ⚠️ {name}/{schluesselname}: "
+371:# ⚠️ KEIN NEUER STARTWEG: gerufen wird `harness_crush.crush_run_mit_fallback`
+387:def harness_stuecke(messages, ausdruck=None, max_tokens=None):
+393:    import harness_crush as _hc
+436:def _dialog_bauen(messages):
+448:        elif rolle in ("user", "assistant") and inhalt:
+461:def cli_fallback_text(messages, ausdruck=None, max_tokens=None,
+518:def cli_stuecke(messages, ausdruck=None, max_tokens=None, timeout=None):
+583:def _hole_schluessel():
+606:def _body_bauen(messages, ausdruck, max_tokens):
+615:        elif rolle in ("user", "assistant") and inhalt:
+619:    # assistant (moeglich nach einem geloeschten Startzug), faellt der raus --
+643:def stuecke(messages, ausdruck=None, max_tokens=None, versuche=3):
+681:def _ein_stream(messages, ausdruck, max_tokens):
+750:def gesund():

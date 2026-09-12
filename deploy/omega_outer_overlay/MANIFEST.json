@@ -1,0 +1,17 @@
+{
+  "schema": "OMEGA_OUTER_OVERLAY_MANIFEST/v1",
+  "base_omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "canonical_omega_branch": "omega-outer-relay-20260912",
+  "canonical_omega_overlay_head": "8b27af95e4449221de3a26507e573f30b5612ba2",
+  "files": {
+    "omega/spool_bridge_relay.py": "31d761ab88f4296040f01c17207456ab14f9431560fa7bb2a7084f003960717d",
+    "omega/supervisor_outer.py": "61633a981c65c3fc12ddbc21804b3566615cd6141a721dd7fbf20cd5d7c6b1cd",
+    "tests/test_spool_bridge_relay.py": "c76ab13bc6a5276331e95a4f5c5e815d9cc93b7e20cbb2963888d1a4f494873c"
+  },
+  "constraints": [
+    "no credentials inside OMEGA sandbox",
+    "outer relay cannot reroute machine or owner",
+    "UNKNOWN is terminal and never auto-replayed",
+    "base release remains unchanged and rollback-capable"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "zzzz-gpt56sol-chatgpt-bridge-audit-20260912-1620",
+  "op": "exec",
+  "command": "set -e; echo HOST=$(hostname) USER=$(whoami); ROOT=/home/ai-core-node/frankenstein-repo; echo '===CHATGPT FUNCTIONS==='; grep -RIn --include='*.py' -E 'def (chatgpt_|.*chatgpt.*)|chatgpt_senden|chatgpt_ernten|chatgpt_idle|conversation_id|conversation.*harvest|browser.*chatgpt' \"$ROOT\" 2>/dev/null | head -n 300; echo '===BRIDGE FILES==='; find \"$ROOT\" -maxdepth 5 -type f \( -iname '*chatgpt*' -o -iname '*bridge*' -o -iname '*bruecke*' -o -iname '*harness*' \) -printf '%p\n' | head -n 300; echo '===PROCESSES==='; ps -eo pid,etime,cmd | grep -Ei 'chatgpt|chrome|chromium|bridge|harness|frankenstein' | grep -v grep | head -n 120; echo '===SERVICES==='; systemctl --user --no-pager --type=service --all 2>/dev/null | grep -Ei 'chatgpt|frankenstein|bridge|harness' || true",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120
+}

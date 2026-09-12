@@ -1,0 +1,89 @@
+=== ACTIVE FINDINGS DETAIL ===
+2026-09-12T04:19:30+02:00
+andreas-MACO
+--- PULS ---
+Pulspruefung meiner eigenen Uhren -- 2026-09-12T02:19:30Z
+Nur lesend. Vier Messungen je Uhr, jede faengt einen anderen Ausfall.
+
+== OK   wettbewerb  (grid10-wettbewerbswaechter.timer) ==
+  A Uhr        loaded/enabled/active
+  B letzter Lauf  Result=success Status=0
+  C Schlag     vor 18min, Periode 30min
+  D Spur       vor 18min geschrieben (Wettbewerbsverlauf)
+
+== OK   regression  (grid10-regressions-waechter.timer) ==
+  A Uhr        loaded/enabled/active
+  B letzter Lauf  Result=success Status=2 (von der Unit als Erfolg erklaert)
+  C Schlag     vor 18min, Periode 30min
+  D Spur       vor 18min geschrieben (Regressionsverlauf)
+
+== TOT  architekt  (frankenstein-architekt.timer) ==
+  A Uhr        loaded/enabled/active
+  B letzter Lauf  Result=exit-code Status=1
+  C Schlag     vor 4.0h, Periode 4.0h
+  -> B letzter Lauf Result=exit-code
+  -> B letzter Lauf ExecMainStatus=1
+
+-> 1 tote Uhr(en) von 3
+Eine tote Uhr meldet ihr eigenes Sterben nicht. Das ist der ganze Zweck dieser Datei.
+PULS_RC=2
+--- GATTER ---
+Gatterpruefung andreas-MACO -- 2026-09-12T02:19:30Z
+Fragt nicht "ist der Wert 0", sondern "verantwortet jemand das Offene". Nur lesend.
+
+== Die Autoritaet ==
+  lesbar  /var/lib/entityos/data/unified.db
+  Journal reicht zurueck bis 2026-07-18T15:34:58+02:00 -- was davor geschaltet wurde, ist UNMESSBAR.
+
+== Die Gatter ==
+  gespraech.aktiv  OFFEN     wert=1
+                   UNERKLAERT: letzte protokollierte Schaltung war
+                   SET wert=? durch andreas, 2026-09-12T01:58:31+02:00 -- gemessen ist 1.
+                   Zwischen Protokoll und Zustand liegt eine Schaltung
+                   ohne Spur.
+  cortex.aktiv     ZU        wert=0
+                   keine protokollierte Schaltung -- bei einem geschlossenen
+                   Gatter ist das der unauffaellige Fall.
+
+----
+-> 1 unerklaert offene(s) Gatter
+Befund, kein Auftrag: NICHTS davon selbst zurueckschalten.
+Ein Gatter zu schliessen ist eine Handlung an der laufenden Entitaet.
+Wer schaltet, muss ein Mensch sein.
+GATTER_RC=2
+--- FLUECHTIG ---
+
+== 1. Welcher Ort ist gemeint? ==
+   fluechtiger Klon laut Konfiguration: /var/lib/entityos/rootfs-run
+
+== 2. Loescht der Start diesen Ort wirklich? ==
+   JA -- ExecStartPre der Unit entityos-vm.service loescht ihn:
+       rm -rf "$ENTITYOS_ROOTFS_RUN"
+
+== 3. Was wurde in DIESEM Leben geschrieben? ==
+   VM laeuft seit: Tue 2026-09-08 12:04:36 CEST
+
+== 4. Zustandsspeicher (nach Magie-Bytes, nicht nach Namen) ==
+   1259 Datei(en) seit dem VM-Start geschrieben, davon SQLite:
+
+   TRAEGT ZUSTAND  /var/lib/entityos/rootfs-run/root/.cache/Microsoft/DeveloperTools/.onnxruntime/onnxruntime.db
+                   24576 Byte, 2 Tabelle(n), 9 Zeile(n)
+                   LEBT -- offen bei PID: 2438491 
+   leer            /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db.vor-maerz-20260910 (0 Tabelle(n), 0 Zeilen)
+   TRAEGT ZUSTAND  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+                   36864 Byte, 3 Tabelle(n), 2 Zeile(n)
+   TRAEGT ZUSTAND  /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+                   249856 Byte, 3 Tabelle(n), 1484 Zeile(n)
+                   LEBT -- offen bei PID: 1351332 3795508 
+   TRAEGT ZUSTAND  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+                   360448 Byte, 4 Tabelle(n), 3139 Zeile(n)
+                   LEBT -- offen bei PID: 1351332 3795508 
+   TRAEGT ZUSTAND  /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+                   24576 Byte, 2 Tabelle(n), 1 Zeile(n)
+
+== Befund ==
+-> 5 Zustandsspeicher in fluechtigem Speicher
+Diese Daten sind beim naechsten VM-Start weg. Kein Fehler wird
+dabei gemeldet. Ob sie gerettet werden, entscheidet ein Mensch.
+FLUECHTIG_RC=2
+=== END ===

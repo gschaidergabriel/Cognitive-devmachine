@@ -1,0 +1,50 @@
+HEAD=c0920dad5027d8de8acd214c21847f3e9d8dad6c
+F..                                                                      [100%]
+=================================== FAILURES ===================================
+___________ test_parallel_spool_relay_constructs_without_git_carrier ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-ai-core-node/pytest-35/test_parallel_spool_relay_cons0')
+
+    def test_parallel_spool_relay_constructs_without_git_carrier(tmp_path):
+        args = _args(tmp_path)
+        assert not Path(args.carrier_repo).exists()
+>       relay = build_relay(args)
+                ^^^^^^^^^^^^^^^^^
+
+tests/test_777_central_spool_runtime.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+omega/spool_bridge_relay_parallel.py:14: in build_relay
+    return CredentialFreeSpoolRelay(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <omega.spool_relay_runtime.CredentialFreeSpoolRelay object at 0x7ce32e5bc3e0>
+
+    def __init__(
+        self,
+        *,
+        runtime_root: Path,
+        repo_root: Path,
+        db_path: Path,
+        policy_path: Path,
+        router_path: Path,
+        spool_root: Path,
+        poll_seconds: float = 0.5,
+        max_worker_staleness: float | None = None,
+    ) -> None:
+        self.runtime_root = runtime_root
+        self.repo_root = repo_root
+        self.store = UnifiedStore(db_path, repo_root / "schema")
+        self.policy = PolicyKernel.from_path(policy_path)
+        self.router_cfg = json.loads(router_path.read_text(encoding="utf-8"))
+        self.organs = {str(o["organ_id"]): o for o in self.router_cfg["organs"]}
+>       self.transport = SpoolTransport(
+            spool_root,
+            poll_seconds=poll_seconds,
+            max_worker_staleness=max_worker_staleness,
+        )
+E       TypeError: SpoolTransport.__init__() got an unexpected keyword argument 'max_worker_staleness'
+
+omega/spool_relay_runtime.py:39: TypeError
+=========================== short test summary info ============================
+FAILED tests/test_777_central_spool_runtime.py::test_parallel_spool_relay_constructs_without_git_carrier
+1 failed, 2 passed in 0.15s

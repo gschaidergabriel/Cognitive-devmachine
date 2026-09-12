@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-final-assembly-release-provenance-20260912-1742z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -u\nROOT=/workspace/omega_runtime\nREL=$(readlink -f \"$ROOT/current\")\nprintf '%s\\n' '---CURRENT_RELEASE---'\ncat \"$ROOT/CURRENT_RELEASE.json\" 2>/dev/null || true\nprintf '%s\\n' '---COMPOSED_RELEASE---'\ncat \"$REL/OMEGA_COMPOSED_RELEASE.json\" 2>/dev/null || true\nprintf '%s\\n' '---ACTIVATION_RECEIPT---'\ncat \"$ROOT/activation_receipts/777-a676-pre.json\" 2>/dev/null || true\nprintf '%s\\n' '---CARRIER GIT---'\ngit -C \"$ROOT/carrier_repo\" status --short --branch 2>/dev/null || true\ngit -C \"$ROOT/carrier_repo\" remote -v 2>/dev/null || true\ngit -C \"$ROOT/carrier_repo\" log --all --oneline --decorate -20 -- omega_deploy/a676258885b964efc2a80599957dc1c09dc3d43b 2>/dev/null || true\nprintf '%s\\n' '---ACTIVATION PRIMITIVES---'\ngrep -Rsn --exclude='*.pyc' --exclude-dir='.git' -E 'CURRENT_RELEASE\\.json|ln -s(fn|f|n).*omega_runtime/current|activation_receipts|OMEGA_COMPOSED_RELEASE' \"$ROOT/carrier_repo\" \"$ROOT\" 2>/dev/null | head -300 || true\n"
+}

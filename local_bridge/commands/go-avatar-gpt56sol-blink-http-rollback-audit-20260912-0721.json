@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-blink-http-rollback-audit-20260912-0721",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 30,
+  "command": "set -euo pipefail; cd /home/ai-core-node/.claude/star/visual; echo ===SUBJECT===; sha256sum buehne_daemon.py buehne.html filmlook.js; echo ===BLINK_FILE_VS_HTTP===; for f in augen_blink/blink_000.png augen_blink/blink_006.png augen_blink/blink_011.png; do n=$(basename \"$f\"); a=$(sha256sum \"$f\"|awk '{print $1}'); b=$(curl -fsS \"http://127.0.0.1:8788/augen_blink/$n\"|sha256sum|awk '{print $1}'); printf '%s file=%s http=%s match=%s\\n' \"$n\" \"$a\" \"$b\" \"$([ \"$a\" = \"$b\" ] && echo yes || echo no)\"; done; echo ===ALL_LIVE_BLINK===; sha256sum augen_blink/blink_*.png | sort; echo ===BACKUP===; sha256sum .go_backups/blink-pre-20260912T0719v2/blink_*.png 2>/dev/null | sort || true; echo ===FPS===; curl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys; print((json.load(sys.stdin).get(\"fps\") or {}).get(\"fps\"))'"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "avatar-singleton-lines-20260912T1013-0700",
+  "command_sha256": "cbfdee8ff0546053935262b1959e6a97488ec5c0cb6ef1f9caf9a971bc1afa80",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:11:40.340962+00:00",
+  "finished_at": "2026-09-12T03:11:40.366543+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "53c6c9314892c7cbf4d9d8155bc002b90eb136f6fb35d66770298845b64243ab",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "52:CHROME_PROFIL = os.path.join(VISUAL_DIR, \"chrome-profile\")\n53:PID_DATEI = os.path.join(VISUAL_DIR, \"chrome.pid\")\n183:FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449\n196:os.makedirs(CHROME_PROFIL, exist_ok=True)\n1029:class Fensterverwalter:\n1033:    def _alte_pid_aufraeumen(self):\n1037:            with open(PID_DATEI, \"r\") as f:\n1044:            os.remove(PID_DATEI)\n1048:    def laeuft(self) -> bool:\n1051:    def oeffnen(self):\n1075:             f\"--window-position={FENSTER_X},{FENSTER_Y}\",\n1076:             f\"--window-size={FENSTER_B},{FENSTER_H}\",\n1077:             f\"--user-data-dir={CHROME_PROFIL}\",\n1106:        with open(PID_DATEI, \"w\") as f:\n1111:    def _fenstergroesse_erzwingen(self):\n1173:                subprocess.run([\"xdotool\", \"windowsize\", wid, str(FENSTER_B), str(FENSTER_H)],\n1175:                subprocess.run([\"xdotool\", \"windowmove\", wid, str(FENSTER_X), str(FENSTER_Y)],\n1180:    def schliessen(self, grund=\"zustand=aus\"):\n1207:            subprocess.run([\"pkill\", \"-9\", \"-f\", f\"user-data-dir={CHROME_PROFIL}\"],\n1212:            os.remove(PID_DATEI)\n1218:    def herunterfahren(self):\n1222:def hauptschleife():\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

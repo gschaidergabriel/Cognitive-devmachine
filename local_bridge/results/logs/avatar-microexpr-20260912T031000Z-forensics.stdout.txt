@@ -1,0 +1,477 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+BEGIN_MATCHES
+20:    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+44:    background:radial-gradient(ellipse at 50% 30%, #1b1530 0%, var(--bg) 72%)}
+47:     GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) als EINE gemeinsame
+79:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+85:  /* ── Gesicht + Effekte -- die Buehne ist der Star ────────────────── */
+88:     #buehne. Ganz unten (z-index:0) -- Gesicht/Regen/Vignette bleiben davor
+107:  #gesicht-rahmen{position:absolute;inset:28px;z-index:2;
+114:     Sie ersetzen das alte, undurchsichtige #gesicht/#gesicht2 als sichtbare
+120:  /* ⭐⭐ 2026-09-11 KOPF-LEINWAND (Koordinator-Befund "Mundfehler aufgeklaert"):
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+122:     Gesichtsflicken mit einem PIXELGENAUEN Anker aus dem RIG-Manifest
+125:     zweiten Mund ins Auge). CSS-Prozente auf #gesicht-rahmen konnten das
+126:     nicht treffen, weil #gesicht-rahmen der SICHTBARE, bereits zugeschnittene
+132:     #gesicht-rahmen beschneidet sie per overflow:hidden auf den sichtbaren
+134:     Koerper UND Mund sitzen jetzt alle als simple Prozent-Kinder DIESER
+139:     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+156:     geraten): #kopf-dreh drehte bisher um seine eigene Bildmitte (CSS-
+165:  #kopf-dreh{transform-origin:50% 58.59%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+175:     #gesicht/#gesicht2 (undurchsichtige Vollbild-RGBs mit eingebratenem
+179:     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+186:     wie #gesicht/#gesicht2 (Kommentar oben), nur fuer den Koerper -- 12 echte
+203:     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+212:     gestapelte <img> statt einem: #gesicht + #gesicht2, per opacity
+215:  /* ⭐⭐ 2026-09-11 (Animations-Agent): die alten flachen Ebenen #gesicht und
+216:     #gesicht2 sind ENTFERNT (DOM + CSS). Sie waren undurchsichtige Vollbild-RGBs
+220:     aufgenommene Gesicht ueber den echten Kopf -- unterschiedliche Kopfposition
+226:     gesichtNeuZeichnen(mitSchwung) unten) -- bewusst NICHT beim Blinzeln
+229:  #gesicht-rahmen.pose-wechsel{animation:pose-overshoot .38s cubic-bezier(.32,1.55,.6,1)}
+234:     mit z-index:4 UEBER dem Gesicht und benutzte mix-blend-mode:color-dodge --
+236:     Querstreifen quer ueber die Bildmitte (ellipse at 50% 40%, volle Breite).
+237:     Dieselbe Fehlerklasse wie die Wasserlinie darunter: Zustand wurde als
+238:     FLAECHE UEBER dem Gesicht gezeigt statt am Gesicht selbst.
+240:     "Emotion wie Wut, Angst oder Freude live visuell verknuepft"). Der Weg
+241:     dorthin fuehrt aber ueber den HINTERGRUND -- er faerbt sich, das Gesicht
+242:     hebt sich davon ab. Nie wieder eine aufhellende Auflage auf dem Gesicht.
+246:    background:radial-gradient(ellipse at 50% 38%, rgba(0,0,0,0) 52%, rgba(0,0,0,.5) 100%)}
+251:     Bildes und legte sich als Schleier ueber das Gesicht. Der Gedanke war
+257:  /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus
+259:     ⭐⭐ 2026-09-11 KORRIGIERT nach Koordinator-Messung ("Mundfehler
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+267:     (zweiter Mund im Auge).
+273:     NICHT zu #gesicht-rahmen -- deshalb jetzt dort drin, kein bottom/right,
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+285:     Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+288:     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+292:     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+293:     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+300:     echten Signals (opacity bleibt am echten "anwesend&&nah"-Zustand
+308:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+312:     Gesichtserkennung (Blinzeln ist kein Blick -- es behauptet keine
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+375:         #kamera fasst Hintergrund+Gesicht/Koerper-Rahmen zu EINER Ebene
+384:      <div id="gesicht-rahmen">
+386:             #gesicht als Hauptdarstellung -- #hg-frame scheint jetzt durch. -->
+388:             Kopf, Koerper UND Mund-Flicken teilen sich jetzt dieselbe, per JS
+392:             (1/2/4) weiterhin gegen #gesicht/#regen (3) im GLEICHEN, von
+393:             #gesicht-rahmen (z-index:2) gebildeten Stapelkontext zaehlt --
+394:             sonst wuerde der Mund-Flicken hinter Gesicht/Regen verschwinden. -->
+397:          <div id="kopf-dreh">
+406:                 flachen #gesicht/#gesicht2 -- siehe CSS-Kommentar "Geister-
+408:                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+414:                 also fest bei links 31%/oben 12% relativ zu #gesicht-rahmen --
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+491:// ── Mundbewegung: SILBENTAKT-SCHAETZUNG aus Textlaenge, kein echter Pegel.
+495:// nur die DARSTELLUNG wechselt jetzt durch echte Mundstellungen aus
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+498:const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+499:  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+500:const MUND_RUHE = "mund_00_rest";
+501:// ⭐⭐ 2026-09-11 MUNDUEBERGAENGE (Koordinator, "die naechste eine Sache"):
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+503:// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+504:// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+510:// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+511:// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+515:// ⚠️ Speicher: es werden NUR die Grundstellungen aus MUND_SPRECH_SET+MUND_RUHE
+517:// nicht alle 221 Dateien in mund_keyframes/.
+518:function mundFrames(name){
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+522:const MUND_ALLE_STELLUNGEN = MUND_SPRECH_SET.concat([MUND_RUHE]);
+523:for(const n of MUND_ALLE_STELLUNGEN){
+524:  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+526:let mundAktivFrames = null;
+527:let mundAktivIndex = 0;
+528:let mundLetzterFrameT = 0;
+529:const MUND_FRAME_MS = 22; // 6 Frames in ~130ms Alt-Takt = ~21,7ms/Frame
+530:function mundZielSetzen(name){
+531:  mundAktivFrames = mundFrames(name);
+532:  mundAktivIndex = 0;
+533:  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+535:function mundSchritt(jetzt){
+536:  if(!mundAktivFrames) return;
+537:  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+538:  mundLetzterFrameT = jetzt;
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+540:  mundAktivIndex++;
+541:  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+543:function mundAnimation(text){
+548:    let i = Math.floor(Math.random() * MUND_SPRECH_SET.length);
+549:    if(i === letzte) i = (i + 1) % MUND_SPRECH_SET.length; // nie zweimal dieselbe Stellung hintereinander
+551:    mundZielSetzen(MUND_SPRECH_SET[i]);
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+562:// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+572:          mundAnimation(z.text);
+620:// bewegt sich beim Sprechen. Eine Praesenz bewegt sich immer." Vier
+627:// dann zur Kamera, wenn tatsaechlich ein Gesicht erkannt wurde." Deshalb
+629:// Gesichtserkennung in blick.py), niemals lokal erfunden.
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+647:const BLINK_BILDER = Array.from({length:12}, (_,i) =>
+648:  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+649:BLINK_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+704:// Zustandssignal -- wechselt selbstaendig alle 9-19s (kopfWeiterPlanen()/
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+765:  // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+783:// liegt jetzt IN #kopf-dreh und bekommt darueber automatisch schon kDrehRot
+796://   (1) FALSCHES VORZEICHEN/DOPPELABZUG: #kopf-dreh vererbt kDrehRot per CSS
+815://       Leinwand weg vom Gesicht -- fuer die ~110ms bis zum naechsten
+865:  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+883:  $("augen-blink").style.transform =
+892:// ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): #gesicht/#gesicht2 haben
+893:// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+898:// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+904:// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+906:let _letzteZustandsSignatur = "";
+907:function gesichtNeuZeichnen(mitSchwung = true){
+909:  if(signatur === _letzteZustandsSignatur) return; // kein echter Wechsel -- nichts zu tun
+910:  _letzteZustandsSignatur = signatur;
+931:// #gesicht/#gesicht2 (z-index:3) UEBER den echten RGBA-Kopf (#kopf-schicht,
+937:// #kopf-dreh auf derselben Leinwand liegen und denselben Hals-Masken-Verlauf
+938:// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+939:// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+941:// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+948:  $("mund-effekt").style.opacity = "0";
+965:      const rahmen = $("gesicht-rahmen");
+967:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+974:    $("mund-effekt").style.opacity = "1";
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+977:    gesichtNeuZeichnen(true);
+1030:    ["anime_90s","anime_zunge_raus"],    ["anime_90s","anime_pfeifen"],
+1066:// Koerperzustand aus koerperpflege.py -> demonic/serious_dystopian koppeln.
+1127:function koerperzustandPruefen(swapVollAnteil, ramFreiAnteil){
+1131:  const uebergangHoeher = stufe > _koerperStufeVorher; // NUR beim Uebergang, nicht dauerhaft im Zustand
+1179:// Zustands-Phasen-Meldung spielt blinzeln() jetzt die 12 fotografierten
+1180:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1191:// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+1207:    $("augen-blink").style.opacity = "0";
+1208:    blinzelPhase = null; gesichtNeuZeichnen(false);
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217:  $("augen-blink").style.opacity = "1";
+1218:  blinzelPhase = phase; gesichtNeuZeichnen(false);
+1231:let serverBlick = {anwesend:false, richtung:null, nah:false};
+1238:// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+1239:// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+1242:// ohne echte Erkennung", serverBlick kommt weiter NUR aus blick.py) bleibt
+1244:// Zustands geschaut wird, nicht OB ueberhaupt ein Gesicht da ist.
+1250:// die EMOTIONALE Tonlage einer Antwort, nicht die Ansprache-Richtung; ein
+1269:// wurde -- sicherer Ausgangszustand, entspricht dem bisherigen Verhalten).
+1283:// im selben 0..1-Koordinatenraum wie serverBlick.cx/cy -- oben/seitlich,
+1299:  return !!(serverBlick.anwesend && serverBlick.nah && typeof serverBlick.cx === "number");
+1303:// direkt anspricht, haelt ein Mensch den Blickkontakt nicht stur -- kurze,
+1308:// gerade ueberhaupt ein Gesicht erkannt ist (sonst nichts zu unterbrechen).
+1327:// ziel_roh() None -> serverBlick.anwesend bleibt false -> Overlay bleibt bei
+1349:// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+1351:// gerade opacity 1 hat (echte Gesichtserkennung), weil Gabriels harte Regel
+1354:// behauptet also keinen Zustand -- sie macht nur den ohnehin schon gezeigten
+1371://   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+1373://                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+1374://   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+1377://   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+1383:  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1405:  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+1410:  if(!serverBlick.anwesend){
+1416:    gesichtNeuZeichnen();
+1425:// gesichtNeuZeichnen()) -- ein echter Blinzel oder Blick-Wechsel unterbricht
+1435:  gesichtNeuZeichnen();
+1441:        gesichtNeuZeichnen();
+1459:  serverBlick = neuerBlick || {anwesend:false, richtung:null, nah:false};
+1460:  // ⭐ 2026-09-11 Punkt 3 (Blick): serverBlick ist die Rohquelle; wohin der
+1463:  // entschieden (siehe dort) -- hier nur noch serverBlick selbst uebernehmen.
+1464:  const zielRichtung = serverBlick.anwesend ? (serverBlick.richtung || "geradeaus") : null;
+1469:      gesichtNeuZeichnen();
+1476:      gesichtNeuZeichnen();
+1487:gesichtNeuZeichnen(); // sofortiges erstes Bild, noch vor dem ersten /api/status
+1492:// kleine Ebene HINTER dem Gesichtsrahmen (im Rand/Hintergrund sichtbar),
+1493:// eine schnelle, groessere Ebene VOR dem Gesicht (halbtransparent drueber)
+1495:const canvas = $("regen");           // vorne, ueber dem Gesicht
+1503:  const r = $("gesicht-rahmen").getBoundingClientRect();
+1521:// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+1523:// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+1524:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1533:  const rahmen = $("gesicht-rahmen");
+1603:// DESSELBEN Ausdrucks, damit das Gesicht 'arbeitet' statt einzufrieren"):
+1607:// Kommentar bei gesichtNeuZeichnen() oben -- offene Luecke, schon gemeldet).
+1612:// Takt), der die Helligkeit minimal mitzittern laesst. Kein neuer Zustand,
+1644:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1706:// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+1800:// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+1807://     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+1853:// ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+1854:// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+1857:// Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+1858:// echten Zustandswechseln auf.
+1862:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1874:function schleife(t){
+1878:  mundSchritt(t);
+1887:  requestAnimationFrame(schleife);
+1889:requestAnimationFrame(schleife);
+1907:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+1910:// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+1922:      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+1933:    // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+1934:    koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+1939:    // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+1957:// EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+1966:      kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+1968:        kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+2003:       Mund, Augen, Hintergrund) wie EINE Aufnahme wirken zu lassen.
+END_MATCHES
+BEGIN_ASSETS
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_26_tongue_out__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_15_sz__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/trans_stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_15_sz.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/trans_stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_26_tongue_out__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_27_tongue_left__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_04_a_medium__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_26_tongue_out.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_28_tongue_right__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_16_rch__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_27_tongue_left__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_21_grin_teeth__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_01_closed_mbp__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_02_breath__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_30_whistle_strong__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_15_sz__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_15_sz__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_27_tongue_left__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_01_closed_mbp__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_13_l/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_17_kg__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_03_a_small__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_21_grin_teeth__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_28_tongue_right__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_26_tongue_out__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_00_rest/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_25_tongue_tip/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_07_i__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_14_th__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_04_a_medium__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_03_a_small.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_15_sz__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_03_a_small__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_16_rch__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_02_breath__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_14_th__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_24_bare_teeth__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_01_closed_mbp__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_32_smirk_right__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_02_breath__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_29_whistle_small__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_28_tongue_right.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_21_grin_teeth__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_12_fv__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_07_i__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_21_grin_teeth__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_01_closed_mbp__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_23_snarl_right__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_01_closed_mbp.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_08_o_small__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/trans_stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_16_rch.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_09_o_medium__stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_06_e__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_34_jaw_clench__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_11_u/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_16_rch__stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_05_a_wide/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_22_snarl_left.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_31_smirk_left.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_28_tongue_right__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_20_grin_closed__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_26_tongue_out__stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_35_gasp__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_19_shch/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_10_o_wide__stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_33_pout__stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq/stufe_02.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq/stufe_00.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq/stufe_04.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq/stufe_01.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_18_wq/stufe_03.png
+/home/ai-core-node/.claude/star/visual/mund_keyframes/mund_04_a_medium__stufe_03.png
+END_ASSETS
+FORENSICS_PASS

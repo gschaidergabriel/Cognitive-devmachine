@@ -1,0 +1,187 @@
+/* filmlook.js — globaler Film-Look (Koordinator-Auftrag 2026-09-11)
+   Gabriel woertlich: "ein Filter global eine Vignette ... ein Filter oben
+   drauf global der alles einen Film-Look gibt ... als waere es EINS, nicht
+   viele Ebenen uebereinander."
+
+   Selbstenthalten: injiziert eigenes <style>, eigene SVG-<defs>, eigene
+   Overlay-Elemente zur Laufzeit. Wird diese Datei leer, laeuft die Seite
+   normal weiter -- buehne.html verankert sie nur per <script src>, sonst
+   nichts. Diese Datei ruehrt buehne.html selbst NICHT an, nur das Laufzeit-
+   DOM/Style ueber JS-APIs.
+
+   Baustein A (Tiefenschaerfe, #hg-frame blur) ist schon live in buehne.html.
+   Hier: B (Korn) + C (Farbabstimmung) + F (Vignette-Pruefung), aus
+   FILTER_KONZEPT.md, Abschnitte B/C/F. */
+(function () {
+  "use strict";
+
+  function wennBereit(fn) {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", fn, { once: true });
+    } else {
+      fn();
+    }
+  }
+
+  wennBereit(function () {
+    var buehne = document.getElementById("buehne");
+    var kamera = document.getElementById("kamera");
+    if (!buehne || !kamera) {
+      console.warn(
+        "[filmlook] #buehne/#kamera nicht gefunden -- Seitenstruktur anders " +
+          "als erwartet, bleibe inaktiv statt etwas Falsches zu bauen."
+      );
+      return;
+    }
+    if (document.getElementById("fl-defs")) return; // schon injiziert
+
+    pruefeVignette();
+    injiziereDefs();
+    injiziereKorn(buehne);
+    injiziereFarbabstimmung(kamera);
+    starteZustandsPoll();
+  });
+
+  // ── F: Vignette -- erst ANSEHEN, nicht doppeln ------------------------
+  // #vignette existiert in buehne.html bereits: radialer Verlauf, transparent
+  // bis 52% Radius, dann auf rgba(0,0,0,.5) am Rand, z-index 5 innerhalb von
+  // #gesicht-rahmen -- das deckt praktisch die gesamte sichtbare Buehne ab
+  // (#gesicht-rahmen ist nur 28px von #kamera eingerueckt, #kamera selbst
+  // deckt die volle #buehne + Ueberschuss fuer den Wackel). Das ist bereits
+  // GENAU das gewuenschte globale, sanfte Abdunkeln zu den Ecken -- keine
+  // horizontale Bande, kein Schleier auf dem Gesicht (Zentrum bei 50%/38%
+  // bleibt klar). Deshalb: NICHT verdoppeln. Eine zweite Vignette uebereinander
+  // waere selbst wieder "eine Ebene mehr", genau das Gegenteil vom Auftrag.
+  function pruefeVignette() {
+    var v = document.getElementById("vignette");
+    if (!v) {
+      console.warn("[filmlook] #vignette fehlt -- unerwartet, keine Vignette gebaut (siehe Bericht).");
+      return;
+    }
+    console.info("[filmlook] #vignette vorhanden und global wirksam -- unveraendert gelassen (siehe Bericht).");
+  }
+
+  // ── B: gemeinsames Korn ------------------------------------------------
+  // EIN feTurbulence-Layer, seed FEST (7) -- wird von diesem Skript nie
+  // angefasst, nie animiert. Bewegung ausschliesslich per CSS
+  // transform:translate (reine Compositor-Arbeit, kein Neuzeichnen der
+  // Turbulenz). Siehe FILTER_KONZEPT.md §B, Warnung vor animiertem seed.
+  function injiziereDefs() {
+    var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("id", "fl-defs");
+    svg.setAttribute("aria-hidden", "true");
+    svg.style.position = "absolute";
+    svg.style.width = "0";
+    svg.style.height = "0";
+    svg.style.overflow = "hidden";
+    svg.style.pointerEvents = "none";
+    svg.innerHTML =
+      "<defs>" +
+      '<filter id="fl-korn-filter" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="fl-n"/>' +
+      '<feColorMatrix in="fl-n" type="matrix" values="0.2 0.2 0.2 0 0.2  0.2 0.2 0.2 0 0.2  0.2 0.2 0.2 0 0.2  0 0 0 0 1"/>' +
+      "</filter>" +
+      "</defs>";
+    document.body.appendChild(svg);
+  }
+
+  function injiziereKorn(buehne) {
+    var style = document.createElement("style");
+    style.id = "fl-style";
+    style.textContent =
+      "@keyframes fl-korn-drift {" +
+      "  0%   { transform: translate(0,0); }" +
+      "  25%  { transform: translate(-1.1%, 0.7%); }" +
+      "  50%  { transform: translate(0.6%, -1.0%); }" +
+      "  75%  { transform: translate(1.0%, 0.4%); }" +
+      "  100% { transform: translate(0,0); }" +
+      "}" +
+      "#fl-korn{" +
+      "  position:absolute; top:-15%; left:-15%; width:130%; height:130%;" +
+      "  z-index:4; pointer-events:none;" +
+      "  filter:url(#fl-korn-filter);" +
+      "  mix-blend-mode:overlay;" +
+      "  opacity:0.05;" +
+      /* MESSBEFUND 2026-09-11: CSS-Animation auf diesem Layer = KATASTROPHE
+         in dieser Software-Rendering-Umgebung (Chrome --disable-gpu):
+         animiert fps 3-6, statisch fps 8 unter gleicher Maschinenlast.
+         Die Annahme "transform ist gratis" stimmt hier NICHT -- der
+         SVG-Filter wird bei jedem Animationsframe neu gerastert.
+         Deshalb: Korn steht, und lebt nur ueber SELTENE, DISKRETE Schuebe
+         (JS-Intervall, 700ms) statt kontinuierlicher Interpolation. */
+      "}";
+
+    document.head.appendChild(style);
+
+    var korn = document.createElement("div");
+    korn.id = "fl-korn";
+    // z-index:4 -- unter #kopf (Streamer-UI, z-index:6, bleibt scharf/klar),
+    // ueber #kamera (die ganze gefilmte Szene, z-index:auto). Als Kind von
+    // #buehne (nicht #kamera) angehaengt: das Korn haengt NICHT am Kamera-
+    // Wackel-Transform -- egal, Rauschen hat keine Referenzpunkte, das Auge
+    // kann eine Weltbindung vs. Kamerabindung bei reinem Rauschen nicht
+    // unterscheiden. Dafuer bleibt es entkoppelt von den drei verschiedenen,
+    // gleichzeitig auf #kamera wirkenden Transform-Quellen (Wackel-Loop,
+    // Overshoot-Klasse, ...) -- einfacher, kein Interferenzrisiko.
+    buehne.appendChild(korn);
+
+    // Diskrete Korn-Schuebe: 2 Umpositionierungen/Sekunde statt 60.
+    // Pro Schub ein Raster-Invalidierung, dazwischen NICHTS.
+    var schub = [
+      "translate(0,0)", "translate(-0.9%,0.6%)",
+      "translate(0.5%,-0.8%)", "translate(0.8%,0.3%)"
+    ];
+    var i = 0;
+    setInterval(function () {
+      korn.style.transform = schub[++i % 4];
+    }, 700);
+  }
+
+  // ── C: gemeinsame Farbabstimmung ---------------------------------------
+  // CSS filter DIREKT auf #kamera (= Hintergrund+Koerper+Kopf+Mund+Augen als
+  // EINE bereits zusammengesetzte Ebene, siehe buehne.html-Kommentar zu
+  // #kamera). Das ist ein echtes UMFAERBEN der fertigen Komposition, keine
+  // zusaetzliche Flaeche -- exakt die Lehre aus den zweimal gescheiterten
+  // #farbschicht/#wasserlinie-Versuchen ("nie wieder eine Auflage auf dem
+  // Gesicht"). Ein CSS-`filter` kann per Definition nichts "auflegen", er
+  // faerbt vorhandene Pixel um.
+  var GRUND_FILTER = "sepia(0.05) saturate(1.05) contrast(1.03) hue-rotate(-2deg)";
+  function injiziereFarbabstimmung(kamera) {
+    kamera.style.transition =
+      (kamera.style.transition ? kamera.style.transition + ", " : "") + "filter 4s ease";
+    kamera.style.filter = GRUND_FILTER;
+  }
+
+  // Bonus: Stimmung leicht aus echten, gemessenen Werten faerben -- KEIN
+  // erfundenes Feld, nur was /api/status tatsaechlich liefert
+  // (broadcast_value, ueberraschung), vorher per curl geprueft. Eigene,
+  // langsame Poll-Schleife (6s) statt in die bestehende Buehnen-Schleife
+  // einzugreifen -- diese Datei fasst nur an, was sie selbst injiziert hat.
+  function starteZustandsPoll() {
+    var kamera = document.getElementById("kamera");
+    if (!kamera) return;
+    async function schritt() {
+      try {
+        var r = await fetch("/api/status");
+        var d = await r.json();
+        var b = (d && d.buehne) || {};
+        var hue = -2,
+          sat = 1.05;
+        if (typeof b.ueberraschung === "number") {
+          var u = Math.max(0, Math.min(1, b.ueberraschung));
+          hue = -2 + u * 8; // ruhig: leicht kuehl -- angespannt: leicht waermer/roeter
+        }
+        if (typeof b.broadcast_value === "number") {
+          var t = Math.max(0, Math.min(3, b.broadcast_value)) / 3;
+          sat = 1.02 + t * 0.06;
+        }
+        kamera.style.filter =
+          "sepia(0.05) saturate(" + sat.toFixed(3) + ") contrast(1.03) hue-rotate(" + hue.toFixed(2) + "deg)";
+      } catch (e) {
+        /* kein Status erreichbar -> Grundfarbe (GRUND_FILTER) bleibt stehen */
+      }
+    }
+    schritt();
+    setInterval(schritt, 6000);
+  }
+})();

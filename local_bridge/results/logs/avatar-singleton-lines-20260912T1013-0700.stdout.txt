@@ -1,0 +1,22 @@
+52:CHROME_PROFIL = os.path.join(VISUAL_DIR, "chrome-profile")
+53:PID_DATEI = os.path.join(VISUAL_DIR, "chrome.pid")
+183:FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449
+196:os.makedirs(CHROME_PROFIL, exist_ok=True)
+1029:class Fensterverwalter:
+1033:    def _alte_pid_aufraeumen(self):
+1037:            with open(PID_DATEI, "r") as f:
+1044:            os.remove(PID_DATEI)
+1048:    def laeuft(self) -> bool:
+1051:    def oeffnen(self):
+1075:             f"--window-position={FENSTER_X},{FENSTER_Y}",
+1076:             f"--window-size={FENSTER_B},{FENSTER_H}",
+1077:             f"--user-data-dir={CHROME_PROFIL}",
+1106:        with open(PID_DATEI, "w") as f:
+1111:    def _fenstergroesse_erzwingen(self):
+1173:                subprocess.run(["xdotool", "windowsize", wid, str(FENSTER_B), str(FENSTER_H)],
+1175:                subprocess.run(["xdotool", "windowmove", wid, str(FENSTER_X), str(FENSTER_Y)],
+1180:    def schliessen(self, grund="zustand=aus"):
+1207:            subprocess.run(["pkill", "-9", "-f", f"user-data-dir={CHROME_PROFIL}"],
+1212:            os.remove(PID_DATEI)
+1218:    def herunterfahren(self):
+1222:def hauptschleife():

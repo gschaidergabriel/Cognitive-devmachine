@@ -1,0 +1,222 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+20:    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Ubuntu,sans-serif;
+47:     GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) als EINE gemeinsame
+79:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+87:     Frames (5 Stimmungen x 60), statt dem statischen radial-gradient auf
+120:  /* ⭐⭐ 2026-09-11 KOPF-LEINWAND (Koordinator-Befund "Mundfehler aufgeklaert"):
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+125:     zweiten Mund ins Auge). CSS-Prozente auf #gesicht-rahmen konnten das
+134:     Koerper UND Mund sitzen jetzt alle als simple Prozent-Kinder DIESER
+139:     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --
+169:  #ausdruck-schicht,#ausdruck-schicht2{position:absolute;inset:0;width:100%;height:100%;
+174:     #ausdruck-schicht/#ausdruck-schicht2 ersetzen die alten flachen
+177:     existieren in /ausdruck_erweitert/ als echte 1536x1024-RGBA mit
+182:  #ausdruck-schicht{z-index:3}
+183:  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+207:  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+218:     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+219:     blendete sonderausdruckZeigen() dieses alte, an anderer Bildstelle
+222:     Sonderausdruecke laufen jetzt ueber #ausdruck-schicht/#ausdruck-schicht2
+225:  /* Overshoot-Bewegung fuer echte Kopf-/Blick-/Ausdruckswechsel (siehe
+233:     immer sein -- das auch weg"). Sie sollte die Stimmung faerben, lag aber
+257:  /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus
+259:     ⭐⭐ 2026-09-11 KORRIGIERT nach Koordinator-Messung ("Mundfehler
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+267:     (zweiter Mund im Auge).
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+285:     Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+308:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+388:             Kopf, Koerper UND Mund-Flicken teilen sich jetzt dieselbe, per JS
+394:             sonst wuerde der Mund-Flicken hinter Gesicht/Regen verschwinden. -->
+409:            <img id="ausdruck-schicht" alt="">
+410:            <img id="ausdruck-schicht2" alt="">
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+491:// ── Mundbewegung: SILBENTAKT-SCHAETZUNG aus Textlaenge, kein echter Pegel.
+495:// nur die DARSTELLUNG wechselt jetzt durch echte Mundstellungen aus
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+498:const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+499:  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+500:const MUND_RUHE = "mund_00_rest";
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+503:// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+504:// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+510:// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+511:// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+517:// nicht alle 221 Dateien in mund_keyframes/.
+518:function mundFrames(name){
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+524:  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+526:let mundAktivFrames = null;
+527:let mundAktivIndex = 0;
+528:let mundLetzterFrameT = 0;
+530:function mundZielSetzen(name){
+531:  mundAktivFrames = mundFrames(name);
+532:  mundAktivIndex = 0;
+533:  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+535:function mundSchritt(jetzt){
+536:  if(!mundAktivFrames) return;
+537:  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+538:  mundLetzterFrameT = jetzt;
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+540:  mundAktivIndex++;
+541:  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+543:function mundAnimation(text){
+551:    mundZielSetzen(MUND_SPRECH_SET[i]);
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+562:// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+572:          mundAnimation(z.text);
+573:          sonderausdruckAusEmote(z.emote); // Punkt E, siehe Definition unten
+639:// ⭐ 2026-09-11 (Animations-Agent): die alten Vorladerunden fuer /ausdruck/
+642:// sonderausdruckZeigen()/kopfKurzNeigen()); 10 volle Frames weniger im
+644:// /api/status-Ausdruckskuerzel (AUSDRUCK_ZU_STIMMUNG unten).
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+648:  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+668:// ⭐ 2026-09-11 (Punkt 5 der Liste): Hintergrund-Stimmung aus dem echten,
+669:// server-gemessenen Ausdruck abgeleitet -- keine eigene erfundene Stimmung.
+670:// Mapping ist eine bewusste, dokumentierte Zuordnung (5 Stimmungsordner
+673:// (ploetzliche Alarmiertheit ist der Stimmung am naechsten, die als einzige
+681:let hgStimmung = "ruhig";
+689:  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+695:// Blinzeln > Blick abseits der Mitte > Ausdruck. Blinzeln ist eine
+697:// Reaktion, der Ausdruck ist die langsamste/seltenste Ebene.
+698:let aktuellerAusdruck = "01_ruhig_neutral";
+716:// Behauptung ueber Blick/Ausdruck -- faellt unter die GEMESSEN-Ausnahme.
+765:  // von atmen() diesen Frame schon gesetzt (schleife() ruft atmen() vor
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+876:  // absichtliche Fehlregistrierung zwischen Foto und Augen-/Blink-Overlay.
+883:  $("augen-blink").style.transform =
+887:// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+888:// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+894:// Grundstimmungen -- diese vier Zweige (/augen/, /kopf/, /ausdruck/) sind
+898:// DOM) bleiben die sichtbare Dauerebene, das Blick-/Mundsignal kommt weiter
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+903:// Blick/Ausdruck aendern, auch ohne dass ein Bild dafuer existiert. Diese
+908:  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+918:// Manuell ausloesbar (window.sonderausdruckZeigen in der Browser-Konsole)
+920:// -uncertain aus sonderausdruckAusEmote() unten. Fuer self_empathetic/
+934:// Jetzt: dieselben /ausdruck_erweitert/.../frontal/stufe_NN.png-Sequenzen
+936:// wie #kopf-schicht) auf #ausdruck-schicht/#ausdruck-schicht2, die IN
+938:// tragen. Waehrend der Sequenz wird ausserdem der Mund-Flicken ausgeblendet
+939:// (die Ausdrucks-Frames tragen ihren eigenen Mund) und der
+941:// sonst laege ein zweites Augen-/Mundsignal auf dem Ausdrucksgesicht.
+942:let ausdruckAktiv = 1;
+944:function sonderausdruckZeigen(register, ausdruck, haltenMs){
+948:  $("mund-effekt").style.opacity = "0";
+949:  const stufeSrc = n => `/ausdruck_erweitert/${register}/${ausdruck}/frontal/stufe_0${n}.png`;
+951:    const sichtbar = ausdruckAktiv === 1 ? $("ausdruck-schicht") : $("ausdruck-schicht2");
+952:    const versteckt = ausdruckAktiv === 1 ? $("ausdruck-schicht2") : $("ausdruck-schicht");
+957:    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+963:    ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+972:    $("ausdruck-schicht").style.opacity = "0";
+973:    $("ausdruck-schicht2").style.opacity = "0";
+974:    $("mund-effekt").style.opacity = "1";
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+995:window.sonderausdruckZeigen = sonderausdruckZeigen;
+997:// ⭐ 2026-09-11 Auftragsteil E (Animations-Agent): Sonderausdruck aus einem
+1015:// statt Messen, deshalb bleiben diese zwei Kategorien ohne Sonderausdruck
+1030:    ["anime_90s","anime_zunge_raus"],    ["anime_90s","anime_pfeifen"],
+1044:// "nicht bei jeder Antwort einen Sonderausdruck zeigen -- sonst wird es
+1049:let _letzterSonderausdruckTs = 0, _letzterSonderausdruckAusdruck = null;
+1050:function sonderausdruckAusEmote(emote){
+1051:  if(!emote) return; // self_neutral (kein Emoji) -> ausdruecklich KEIN Sonderausdruck
+1055:  if(Date.now() - _letzterSonderausdruckTs < SONDERAUSDRUCK_ABKLINGZEIT_MS) return;
+1057:  if(pool.length > 1 && wahl[1] === _letzterSonderausdruckAusdruck){
+1060:  _letzterSonderausdruckTs = Date.now();
+1061:  _letzterSonderausdruckAusdruck = wahl[1];
+1062:  sonderausdruckZeigen(wahl[0], wahl[1]);
+1073:// gab (siehe Luecken-Kommentar bei sonderausdruckZeigen() oben).
+1088:// Uhr (_letzterSonderausdruckTs) sorgt zusaetzlich fuer die Prioritaet:
+1089:// jeder Koerper-Ausloeser haelt AUCH sonderausdruckAusEmote() fuer die
+1093:let _letzterKoerperSonderausdruckTs = 0;
+1103:function _koerperSonderausdruckVersuchen(pool, versuch){
+1107:    // bis die laufende Sequenz (z.B. ein Emote-Ausdruck) fertig ist --
+1109:    if(versuch < 8) setTimeout(() => _koerperSonderausdruckVersuchen(pool, versuch+1), 600);
+1114:  _letzterKoerperSonderausdruckTs = Date.now();
+1115:  _letzterSonderausdruckTs = Date.now();
+1116:  _letzterSonderausdruckAusdruck = wahl[1];
+1117:  sonderausdruckZeigen(wahl[0], wahl[1], _haltenMsNachTempo(1400));
+1122:    _letzterSonderausdruckTs = Date.now() + 30000;
+1134:  if(Date.now() - _letzterKoerperSonderausdruckTs < KOERPER_SONDERAUSDRUCK_ABKLINGZEIT_MS) return;
+1135:  _koerperSonderausdruckVersuchen(stufe === 2 ? KOERPER_SONDERAUSDRUCK_DOPPELT : KOERPER_SONDERAUSDRUCK_EINFACH);
+1145:    if(!_sonderLaeuft && Date.now() - _letzterSonderausdruckTs >= SONDERAUSDRUCK_ABKLINGZEIT_MS){
+1146:      _letzterSonderausdruckTs = Date.now();
+1147:      _letzterSonderausdruckAusdruck = "anime_fassungslos";
+1148:      sonderausdruckZeigen("anime_90s", "anime_fassungslos", _haltenMsNachTempo(1400));
+1180:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1192:// bleibt erkennungs-gekoppelt. Läuft NICHT ueber einem Sonderausdruck
+1207:    $("augen-blink").style.opacity = "0";
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217:  $("augen-blink").style.opacity = "1";
+1231:let serverBlick = {anwesend:false, richtung:null, nah:false};
+1238:// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+1239:// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+1242:// ohne echte Erkennung", serverBlick kommt weiter NUR aus blick.py) bleibt
+1269:// wurde -- sicherer Ausgangszustand, entspricht dem bisherigen Verhalten).
+1283:// im selben 0..1-Koordinatenraum wie serverBlick.cx/cy -- oben/seitlich,
+1299:  return !!(serverBlick.anwesend && serverBlick.nah && typeof serverBlick.cx === "number");
+1303:// direkt anspricht, haelt ein Mensch den Blickkontakt nicht stur -- kurze,
+1327:// ziel_roh() None -> serverBlick.anwesend bleibt false -> Overlay bleibt bei
+1349:// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+1371://   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+1373://                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+1374://   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+1377://   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+1383:  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1403:  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+1410:  if(!serverBlick.anwesend){
+1453:// Blick zuerst, dann Ausdruck, dann alles andere (Regen/Wasser laufen schon
+1454:// unabhaengig ueber statusHolen()). Ausdruck bekommt absichtlich eine etwas
+1457:let _blickTimer = null, _ausdruckTimer = null;
+1458:function reaktionAufNeuenStatus(neuerBlick, neuerAusdruck){
+1459:  serverBlick = neuerBlick || {anwesend:false, richtung:null, nah:false};
+1460:  // ⭐ 2026-09-11 Punkt 3 (Blick): serverBlick ist die Rohquelle; wohin der
+1463:  // entschieden (siehe dort) -- hier nur noch serverBlick selbst uebernehmen.
+1464:  const zielRichtung = serverBlick.anwesend ? (serverBlick.richtung || "geradeaus") : null;
+1472:  if(neuerAusdruck && neuerAusdruck !== aktuellerAusdruck){
+1473:    if(_ausdruckTimer) clearTimeout(_ausdruckTimer);
+1474:    _ausdruckTimer = setTimeout(() => {
+1475:      aktuellerAusdruck = neuerAusdruck;
+1477:      // Punkt 5 (Hintergrund): Stimmungswechsel folgt demselben gemessenen
+1478:      // Ausdruck, keine eigene Trigger-Erfindung.
+1479:      const neueStimmung = AUSDRUCK_ZU_STIMMUNG[neuerAusdruck];
+1480:      if(neueStimmung && neueStimmung !== hgStimmung){
+1481:        hgStimmung = neueStimmung;
+1523:// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+1524:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1603:// DESSELBEN Ausdrucks, damit das Gesicht 'arbeitet' statt einzufrieren"):
+1604:// woertlich nicht baubar wie gefragt -- die 6 Grundstimmungen haben keine
+1605:// Stufen-Bilder (nur 1 flaches PNG je Stimmung, siehe ausdruck_zugeschnitten/)
+1608:// Ein erfundenes Stufenbild waere eine erfundene Ausdrucks-AENDERUNG, keine
+1626:// einer Rollpose, ausdruck-schicht/-schicht2 ausser waehrend eines seltenen
+1627:// Sonderausdrucks) auf style.transform/style.filter schreiben liess --
+1634:// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+1641:// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+1644:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1686:  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+1688:  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+1689:  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+1692:    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+1693:    $(ausdruckSichtbar).style.transform = transform;
+1694:    $(ausdruckSichtbar).style.filter = filter;
+1722:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1800:// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+1853:// ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+1874:function schleife(t){
+1878:  mundSchritt(t);
+1939:    // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+1944:      typeof b.ausdruck === "string" ? b.ausdruck : null
+1955:// keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+1957:// EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+1960:// Sonderausdruck aus den drei emote-Pools.
+1976:    sonderausdruckZeigen(wahl[0], wahl[1]);
+1999:       gemeinsame Farbabstimmung, Vignette. Liegt BEWUSST in einer eigenen
+2003:       Mund, Augen, Hintergrund) wie EINE Aufnahme wirken zu lassen.

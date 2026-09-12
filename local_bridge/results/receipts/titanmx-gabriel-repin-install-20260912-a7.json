@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "titanmx-gabriel-repin-install-20260912-a7",
+  "command_sha256": "3a5a90e0bfcf440aa051229e352877634fa8ac73ea5419c1a9bce1a5b22a2adc",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:12:55.077896+00:00",
+  "finished_at": "2026-09-12T03:12:59.251333+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "6a0f3992815afd5735e189147d17685681907e98ac9bec9656ed0eb30798f37f",
+  "stderr_sha256": "e8985582b9fb60767628df26ed97b6d32732012a60d417eebcbbd98314419075",
+  "stdout_tail": "fetched=7c2d0bb2d0e4daa4526fdfbb0a4f8278cb9cbaff\n{\"authority\": \"source-db-read-only;pattern!=truth;pattern!=effect_authority\", \"donor_ci_run\": 34669492940, \"donor_commit\": \"49220445873f5d6812d1c2499f512b50d9651200\", \"ok\": true, \"pinned_files\": 9, \"schema\": \"ENTITYOS_TITAN_MX_PIN/v1\", \"tests\": [\"titan_mx_gold\", \"titan_mx_inject_gold\", \"titan_mx_hook_gold\"]}\n{\"authority\": \"source-db-read-only;pattern!=truth;pattern!=effect_authority\", \"donor_ci_run\": 34669492940, \"donor_commit\": \"49220445873f5d6812d1c2499f512b50d9651200\", \"ok\": true, \"pinned_files\": 9, \"schema\": \"ENTITYOS_TITAN_MX_PIN/v1\", \"tests\": [\"titan_mx_gold\", \"titan_mx_inject_gold\", \"titan_mx_hook_gold\"]}\nTITAN-MX payload installed; service NOT enabled automatically.\nservice=active\nf8870c55b53d2c5ee152624d313522d0010856b89468031e4771f2d3d8d696a7  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_inject.py\nfed4114cc7d26568bd7fb0a49796c71ec471e9899225c76f94ed3507f07452ff  /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook.py\n47752b7bdd521e9a60f5441eb74dee7333478e4848b997a11eef4923e2f13958  /opt/entityos/cognition/titan_mx/TITAN_MX_PIN.json\n",
+  "stderr_tail": "test_all_unknown_patterns_become_dash (__main__.InjectGold.test_all_unknown_patterns_become_dash) ... ok\ntest_stale_still_fails_silent (__main__.InjectGold.test_stale_still_fails_silent) ... ok\ntest_unknown_current_is_unresolved_not_verified (__main__.InjectGold.test_unknown_current_is_unresolved_not_verified) ... ok\ntest_unknown_pattern_removed_but_good_pattern_kept (__main__.InjectGold.test_unknown_pattern_removed_but_good_pattern_kept) ... ok\ntest_wrapper_and_budget_remain_bounded (__main__.InjectGold.test_wrapper_and_budget_remain_bounded) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.082s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

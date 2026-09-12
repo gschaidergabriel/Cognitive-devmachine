@@ -1,0 +1,155 @@
+=== proposals ===
+58-  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue
+59-  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue
+60-  fit=1 if not req else len(req&caps)/len(req);loc=0 if not domains else len(domains&set(d.get('data_domains',[])))/len(domains);fresh=max(0,1-min(a,360)/360);loads=[x for x in (d.get('cpu_load'),d.get('ram_load'),d.get('gpu_load')) if isinstance(x,(int,float))];head=.5 if not loads else 1-max(loads);score=fit+loc*.9+fresh*.9+float(d.get('information_gain',.5))*.85+float(d.get('independence',.5))*(.7 if want2 else 0)+head*.9+float(d.get('bridge_health',1))*.9-(1 if risk and is_host else 0);scores.append((score,oid))
+61- if not scores:raise RuntimeError('NO_ELIGIBLE_ORGAN')
+62- scores.sort(reverse=True);n=max(1,int(task.get('max_organs',1)));n=max(n,2 if want2 else 1);return {'selected_organs':[x[1] for x in scores[:n]],'ranking':scores}
+63:def proposals():
+64- ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};
+65- if ts:s['RESEARCH']+=.10;s['HOST_SCOUT']+=.10;s['FALSIFIER']+=.08
+66- task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+67-def realize(p,fid):
+68- if p['cell']=='HOST_SCOUT':
+69-  try:r=route(p['task'])
+70-  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+71-  ids=[]
+72-  for oid in r['selected_organs']:
+73-   e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+74-   with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+75-   out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+76-  return {'route':r,'effects':ids}
+77- if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}
+78- if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}
+79- if p['cell']=='SELF_IMPROVE':
+80-  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f"{d['candidate_id']}.json").write_text(json.dumps(d,indent=2));return d
+81- return {'cell':p['cell']}
+82-def frame(eid):
+83- ingest();ps=proposals();w=max(ps,key=lambda x:x['score']);fid='frame_'+uuid.uuid4().hex;res=realize(w,fid)
+84- with con() as c:c.execute('INSERT INTO frame VALUES(?,?,?,?,?,?,?)',(fid,eid,latest('frame'),now(),w['cell'],w['score'],canon(res)))
+85- (ROOT/'STATUS.json').write_text(json.dumps({'schema':'OMEGA_GRID_STATUS/v1','updated_at':now(),'epoch_id':eid,'frame_id':fid,'winner':w,'result':res},indent=2,ensure_ascii=False)+'\n')
+86-def run(once=False):
+87- init();eid='epoch_'+uuid.uuid4().hex
+88- with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))
+89- while True:
+90-  try:frame(eid)
+91-  except Exception as e:out('RUNTIME_ERROR',{'error':f'{type(e).__name__}:{e}'})
+92-  if once:return
+93-  time.sleep(INTERVAL)
+94-if __name__=='__main__':run('--once' in os.sys.argv)
+=== realize ===
+62- scores.sort(reverse=True);n=max(1,int(task.get('max_organs',1)));n=max(n,2 if want2 else 1);return {'selected_organs':[x[1] for x in scores[:n]],'ranking':scores}
+63-def proposals():
+64- ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};
+65- if ts:s['RESEARCH']+=.10;s['HOST_SCOUT']+=.10;s['FALSIFIER']+=.08
+66- task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+67:def realize(p,fid):
+68- if p['cell']=='HOST_SCOUT':
+69-  try:r=route(p['task'])
+70-  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+71-  ids=[]
+72-  for oid in r['selected_organs']:
+73-   e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+74-   with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+75-   out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+76-  return {'route':r,'effects':ids}
+77- if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}
+78- if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}
+79- if p['cell']=='SELF_IMPROVE':
+80-  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f"{d['candidate_id']}.json").write_text(json.dumps(d,indent=2));return d
+81- return {'cell':p['cell']}
+82-def frame(eid):
+83- ingest();ps=proposals();w=max(ps,key=lambda x:x['score']);fid='frame_'+uuid.uuid4().hex;res=realize(w,fid)
+84- with con() as c:c.execute('INSERT INTO frame VALUES(?,?,?,?,?,?,?)',(fid,eid,latest('frame'),now(),w['cell'],w['score'],canon(res)))
+85- (ROOT/'STATUS.json').write_text(json.dumps({'schema':'OMEGA_GRID_STATUS/v1','updated_at':now(),'epoch_id':eid,'frame_id':fid,'winner':w,'result':res},indent=2,ensure_ascii=False)+'\n')
+86-def run(once=False):
+87- init();eid='epoch_'+uuid.uuid4().hex
+88- with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))
+89- while True:
+90-  try:frame(eid)
+91-  except Exception as e:out('RUNTIME_ERROR',{'error':f'{type(e).__name__}:{e}'})
+92-  if once:return
+93-  time.sleep(INTERVAL)
+94-if __name__=='__main__':run('--once' in os.sys.argv)
+=== loop ===
+def init():
+ for n in ('inbox','outbox','telemetry','candidates'): (ROOT/n).mkdir(parents=True,exist_ok=True)
+ with con() as c:c.executescript("""PRAGMA journal_mode=WAL;CREATE TABLE IF NOT EXISTS epoch(id TEXT PRIMARY KEY,started TEXT,prev TEXT,status TEXT);CREATE TABLE IF NOT EXISTS frame(id TEXT PRIMARY KEY,epoch TEXT,prev TEXT,created TEXT,cell TEXT,score REAL,result TEXT);CREATE TABLE IF NOT EXISTS task(id TEXT PRIMARY KEY,payload TEXT,state TEXT,created TEXT);CREATE TABLE IF NOT EXISTS effect(id TEXT PRIMARY KEY,frame TEXT,organ TEXT,digest TEXT,payload TEXT,state TEXT,created TEXT);""")
+def latest(t):
+ with con() as c:r=c.execute(f'SELECT id FROM {t} ORDER BY rowid DESC LIMIT 1').fetchone();return r[0] if r else None
+def out(kind,payload):
+ d={'schema':'OMEGA_OUTBOX/v1','message_id':'msg_'+uuid.uuid4().hex,'created_at':now(),'kind':kind,'payload':payload};(ROOT/'outbox'/f"{d['message_id']}.json").write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n')
+def telemetry():
+ r={}
+ for p in (ROOT/'telemetry').glob('*.json'):
+  try:
+   d=json.loads(p.read_text());r[str(d.get('organ_id') or p.stem)]=d
+  except Exception: pass
+ return r
+def ingest():
+ for p in (ROOT/'inbox').glob('*.json'):
+  try:
+   d=json.loads(p.read_text());tid=str(d.get('task_id') or 'task_'+sha(d)[:20])
+   with con() as c:c.execute('INSERT OR IGNORE INTO task VALUES(?,?,?,?)',(tid,canon(d),'OPEN',now()))
+   p.rename(p.with_suffix('.consumed'))
+  except Exception: pass
+def tasks():
+ with con() as c:rows=c.execute("SELECT id,payload FROM task WHERE state='OPEN' ORDER BY created").fetchall()
+ a=[]
+ for r in rows:d=json.loads(r['payload']);d['task_id']=r['id'];a.append(d)
+ return a
+def free_available():
+ try:
+  import sys;sys.path.insert(0,'/workspace/clay-global-research-entity/tools');from run_free_go_swarm import PROVIDERS,provider_execution_admitted;return any(provider_execution_admitted(x) for x in PROVIDERS)
+ except Exception:return False
+def age(s):
+ try:return max(0,(dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(s.replace('Z','+00:00'))).total_seconds())
+ except Exception:return 1e9
+def route(task):
+ req=set(task.get('required_capabilities',[]));domains=set(task.get('preferred_data_domains',[]));heavy=bool(task.get('heavy'));risk=bool(task.get('high_risk_effect'));want2=bool(task.get('wants_independent_falsifier'));tele=telemetry();scores=[]
+ central={'organ_id':'omega-vps','observed_at':now(),'health':'GREEN','capabilities':list(ORGANS['omega-vps']['caps']),'data_domains':['omega-central'],'cpu_load':.3,'ram_load':.3,'bridge_health':1.0,'information_gain':.6,'independence':.3};tele['omega-vps']=central
+ for oid,cfg in ORGANS.items():
+  d=tele.get(oid)
+  if not d: continue
+  caps=cfg['caps']|set(d.get('capabilities',[]));missing=req-caps
+  if missing or str(d.get('health','UNKNOWN')).upper()=='RED':continue
+  a=age(str(d.get('observed_at','')));is_host=cfg['kind']=='host'
+  if heavy and is_host and a>180:continue
+  if heavy and is_host and (not isinstance(d.get('cpu_load'),(int,float)) or not isinstance(d.get('ram_load'),(int,float))):continue
+  if heavy and is_host and max(float(d.get('cpu_load',0)),float(d.get('ram_load',0)),float(d.get('gpu_load',0) or 0))>=.90:continue
+  fit=1 if not req else len(req&caps)/len(req);loc=0 if not domains else len(domains&set(d.get('data_domains',[])))/len(domains);fresh=max(0,1-min(a,360)/360);loads=[x for x in (d.get('cpu_load'),d.get('ram_load'),d.get('gpu_load')) if isinstance(x,(int,float))];head=.5 if not loads else 1-max(loads);score=fit+loc*.9+fresh*.9+float(d.get('information_gain',.5))*.85+float(d.get('independence',.5))*(.7 if want2 else 0)+head*.9+float(d.get('bridge_health',1))*.9-(1 if risk and is_host else 0);scores.append((score,oid))
+ if not scores:raise RuntimeError('NO_ELIGIBLE_ORGAN')
+ scores.sort(reverse=True);n=max(1,int(task.get('max_organs',1)));n=max(n,2 if want2 else 1);return {'selected_organs':[x[1] for x in scores[:n]],'ranking':scores}
+def proposals():
+ ts=tasks();tel=telemetry();free=free_available();missing=len({'host:ai-core-node','host:andreas-maco'}-set(tel));s={'REENTRY':.30,'RESEARCH':.25+(.25 if free else 0),'WORLD_MODEL':.22,'HOST_SCOUT':.20+min(.35,.12*missing),'SELF_IMPROVE':.28 if not ts else .18,'FALSIFIER':.24,'MAINTENANCE':.18,'MEMORY_COMPRESSION':.16,'EFFECT_RECONCILIATION':.10,'MASTER_BRIDGE':.20};
+ if ts:s['RESEARCH']+=.10;s['HOST_SCOUT']+=.10;s['FALSIFIER']+=.08
+ task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+def realize(p,fid):
+ if p['cell']=='HOST_SCOUT':
+  try:r=route(p['task'])
+  except Exception as e:out('GRID_ROUTE_BLOCKED',{'frame_id':fid,'error':str(e)});return {'blocked':str(e)}
+  ids=[]
+  for oid in r['selected_organs']:
+   e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+   with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+   out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+  return {'route':r,'effects':ids}
+ if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}
+ if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}
+ if p['cell']=='SELF_IMPROVE':
+  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f"{d['candidate_id']}.json").write_text(json.dumps(d,indent=2));return d
+ return {'cell':p['cell']}
+def frame(eid):
+ ingest();ps=proposals();w=max(ps,key=lambda x:x['score']);fid='frame_'+uuid.uuid4().hex;res=realize(w,fid)
+ with con() as c:c.execute('INSERT INTO frame VALUES(?,?,?,?,?,?,?)',(fid,eid,latest('frame'),now(),w['cell'],w['score'],canon(res)))
+ (ROOT/'STATUS.json').write_text(json.dumps({'schema':'OMEGA_GRID_STATUS/v1','updated_at':now(),'epoch_id':eid,'frame_id':fid,'winner':w,'result':res},indent=2,ensure_ascii=False)+'\n')
+def run(once=False):
+ init();eid='epoch_'+uuid.uuid4().hex
+ with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))
+ while True:
+  try:frame(eid)
+  except Exception as e:out('RUNTIME_ERROR',{'error':f'{type(e).__name__}:{e}'})
+  if once:return
+  time.sleep(INTERVAL)
+if __name__=='__main__':run('--once' in os.sys.argv)
+=== sha ===
+56f90f418f64d5d151edd08fb9b9dc5bf49a7927a7dd67bd6520bb29c73244af  omega_daemon.py

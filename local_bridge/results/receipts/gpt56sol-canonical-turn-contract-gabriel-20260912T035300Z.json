@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-canonical-turn-contract-gabriel-20260912T035300Z",
+  "command_sha256": "5c71b37efde1f4bedbf657a3697816b955f429f33cbf952184d43d6975254133",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:44:06.281130+00:00",
+  "finished_at": "2026-09-12T03:44:07.907127+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "ad4aa311f760976d137e8d350d47fac589a100e361deb0c3d289e07eb231700c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===MATCHES===\n6072:#     stern.py f2wp1207-turn-loop-turn \\\n6099:    \"\"\"Kernlogik hinter dem CLI-Unterbefehl `f2wp1207-turn-loop-turn`.\n6224:                         \"note\": \"provisioniert von f2wp1207-turn-loop-turn, \"\n6373:    `f2wp1207-turn-loop-turn`, nichts rief sie bei einem echten Prompt\n6416:    \"\"\"CLI-Einstiegspunkt `stern.py f2wp1207-turn-loop-turn`. Liest EIN\n10679:            # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie\n17642:    tlb = sub.add_parser(\"f2wp1207-turn-loop-turn\", help=\"F2WP1207 kanonischer Turn-Loop: EIN Turn ueber run_canonical_turn() (Gate f2wp1207.canonical_turn_loop)\")\n18252:    elif a.cmd == \"f2wp1207-turn-loop-turn\":\n===HOOK HELP===\nusage: stern.py hook [-h]\n\noptions:\n  -h, --help  show this help message and exit\n===SEND DRY RUN===\n{\n  \"ok\": true,\n  \"dry_run\": true,\n  \"laeufe\": [\n    {\n      \"trigger\": \"FRANK_TERMINAL_PREFLIGHT_ONLY\",\n      \"dry_run\": true,\n      \"waere_befehl\": [\n        \"/home/ai-core-node/scripts/chatgpt_burst_worker_v2.sh\"\n      ],\n      \"env_override\": {\n        \"TRIGGER\": \"FRANK_TERMINAL_PREFLIGHT_ONLY\",\n        \"NUM_WORKERS\": \"1\",\n        \"RAM_THRESHOLD_MB\": \"4096\",\n        \"TAB_HARDLIMIT\": \"1\"\n      }\n    }\n  ]\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

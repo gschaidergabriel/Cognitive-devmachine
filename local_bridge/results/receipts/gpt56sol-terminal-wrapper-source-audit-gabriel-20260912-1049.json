@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-terminal-wrapper-source-audit-gabriel-20260912-1049",
+  "command_sha256": "a00d0417dbaec5b47fb98111e1df825f567dd00c6569d42bf115c3921e5c4677",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:44:08.134868+00:00",
+  "finished_at": "2026-09-12T03:44:08.688477+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1ca9556cfa46eefec03153ca5a11efe173929fefe932e3265cd5948b76b411da",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== LIVE WRAPPERS ===\n---/home/ai-core-node/.local/bin/frank-terminal-hilfe\n#!/usr/bin/env bash\nset -euo pipefail\nexport PATH=\"$HOME/.local/bin:$PATH\"\ncd \"$HOME\" 2>/dev/null || true\necho \"FranKenstein\u0ca0_\u0ca0-Terminal \u2014 GRID10 -> ChatGPT organ -> GRID10\"\necho \"Canonical state: ~/.local/share/agentzero/unified.db | no side brain\"\nexec python3 \"$HOME/.claude/star/frank_chatgpt_terminal.py\"\n---/home/ai-core-node/.local/bin/work-on-frank\n#!/usr/bin/env bash\nset -euo pipefail\nARBEIT=\"$HOME/aicore/opt/aicore\"\nORGAN=\"$HOME/.claude/star/frank_chatgpt_terminal.py\"\nif [[ ! -f \"$ORGAN\" ]]; then\n  notify-send \"Work on Frank\" \"ChatGPT-Organ nicht gefunden ($ORGAN)\" 2>/dev/null || true\n  exit 1\nfi\nSNAP=\"\"\nif [[ -x \"$HOME/.local/bin/frank-snapshot\" ]]; then\n  SNAP=\"$(\"$HOME/.local/bin/frank-snapshot\" \"$ARBEIT\" work-on-frank 2>/dev/null || true)\"\nfi\nINNEN=\"cd '$ARBEIT' && echo 'FranKenstein ChatGPT-Organ \u2014 GRID10/UnifiedDB canonical'; echo 'Snapshot: \\$SNAP'; python3 '$ORGAN'; echo; echo '[Sitzung beendet]'; exec bash\"\nfor TERM_BIN in gnome-terminal xfce4-terminal x-terminal-emulator konsole kitty alacritty; do\n  if command -v \"$TERM_BIN\" >/dev/null 2>&1; then\n    if [[ \"$TERM_BIN\" == \"gnome-terminal\" ]]; then\n      exec \"$TERM_BIN\" --title=\"Work on Frank \u2014 ChatGPT Organ\" -- bash -lc \"$INNEN\"\n    else\n      exec \"$TERM_BIN\" -e \"bash -lc '$INNEN'\"\n    fi\n  fi\ndone\nnotify-send \"Work on Frank\" \"Kein Terminal gefunden\" 2>/dev/null || true\nexit 1\n=== LOCAL REPO COMMITS ===\nec6fce0 (HEAD -> main) 4B-Abstraktionsschicht (Liebe/Tod/Verlust) als TypedEntry-Achsen anschliessen\nf5c42d6 Modellwechsel verwirft die Kalibrierung der drei Modellachsen\nc7de75d (origin/main) Innenmessung des Sprachmodells als Perzept: das Modell speist den Wettbewerb, statt nur von ihm geformt zu werden\neda0029 Goldtest 51/51: vier Pruefungen vom Produktionszustand entkoppelt\n6d487ae Goldtest: Basis bewusst auf f5a524b angehoben (G7a/G7c standen seit 2ec1e96 dauerhaft rot)\n=== AHEAD FILES ===\nM\tscripts/f2wp1207_grid10_turn_loop.py\n=== ORGAN SOURCE LOCATE ===\n=== WRAPPER SOURCE MATCH ===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

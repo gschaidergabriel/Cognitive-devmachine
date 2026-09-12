@@ -1,0 +1,34 @@
+===MATCHES===
+6072:#     stern.py f2wp1207-turn-loop-turn \
+6099:    """Kernlogik hinter dem CLI-Unterbefehl `f2wp1207-turn-loop-turn`.
+6224:                         "note": "provisioniert von f2wp1207-turn-loop-turn, "
+6373:    `f2wp1207-turn-loop-turn`, nichts rief sie bei einem echten Prompt
+6416:    """CLI-Einstiegspunkt `stern.py f2wp1207-turn-loop-turn`. Liest EIN
+10679:            # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie
+17642:    tlb = sub.add_parser("f2wp1207-turn-loop-turn", help="F2WP1207 kanonischer Turn-Loop: EIN Turn ueber run_canonical_turn() (Gate f2wp1207.canonical_turn_loop)")
+18252:    elif a.cmd == "f2wp1207-turn-loop-turn":
+===HOOK HELP===
+usage: stern.py hook [-h]
+
+options:
+  -h, --help  show this help message and exit
+===SEND DRY RUN===
+{
+  "ok": true,
+  "dry_run": true,
+  "laeufe": [
+    {
+      "trigger": "FRANK_TERMINAL_PREFLIGHT_ONLY",
+      "dry_run": true,
+      "waere_befehl": [
+        "/home/ai-core-node/scripts/chatgpt_burst_worker_v2.sh"
+      ],
+      "env_override": {
+        "TRIGGER": "FRANK_TERMINAL_PREFLIGHT_ONLY",
+        "NUM_WORKERS": "1",
+        "RAM_THRESHOLD_MB": "4096",
+        "TAB_HARDLIMIT": "1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+=== LIVE WRAPPERS ===
+---/home/ai-core-node/.local/bin/frank-terminal-hilfe
+#!/usr/bin/env bash
+set -euo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+cd "$HOME" 2>/dev/null || true
+echo "FranKensteinಠ_ಠ-Terminal — GRID10 -> ChatGPT organ -> GRID10"
+echo "Canonical state: ~/.local/share/agentzero/unified.db | no side brain"
+exec python3 "$HOME/.claude/star/frank_chatgpt_terminal.py"
+---/home/ai-core-node/.local/bin/work-on-frank
+#!/usr/bin/env bash
+set -euo pipefail
+ARBEIT="$HOME/aicore/opt/aicore"
+ORGAN="$HOME/.claude/star/frank_chatgpt_terminal.py"
+if [[ ! -f "$ORGAN" ]]; then
+  notify-send "Work on Frank" "ChatGPT-Organ nicht gefunden ($ORGAN)" 2>/dev/null || true
+  exit 1
+fi
+SNAP=""
+if [[ -x "$HOME/.local/bin/frank-snapshot" ]]; then
+  SNAP="$("$HOME/.local/bin/frank-snapshot" "$ARBEIT" work-on-frank 2>/dev/null || true)"
+fi
+INNEN="cd '$ARBEIT' && echo 'FranKenstein ChatGPT-Organ — GRID10/UnifiedDB canonical'; echo 'Snapshot: \$SNAP'; python3 '$ORGAN'; echo; echo '[Sitzung beendet]'; exec bash"
+for TERM_BIN in gnome-terminal xfce4-terminal x-terminal-emulator konsole kitty alacritty; do
+  if command -v "$TERM_BIN" >/dev/null 2>&1; then
+    if [[ "$TERM_BIN" == "gnome-terminal" ]]; then
+      exec "$TERM_BIN" --title="Work on Frank — ChatGPT Organ" -- bash -lc "$INNEN"
+    else
+      exec "$TERM_BIN" -e "bash -lc '$INNEN'"
+    fi
+  fi
+done
+notify-send "Work on Frank" "Kein Terminal gefunden" 2>/dev/null || true
+exit 1
+=== LOCAL REPO COMMITS ===
+ec6fce0 (HEAD -> main) 4B-Abstraktionsschicht (Liebe/Tod/Verlust) als TypedEntry-Achsen anschliessen
+f5c42d6 Modellwechsel verwirft die Kalibrierung der drei Modellachsen
+c7de75d (origin/main) Innenmessung des Sprachmodells als Perzept: das Modell speist den Wettbewerb, statt nur von ihm geformt zu werden
+eda0029 Goldtest 51/51: vier Pruefungen vom Produktionszustand entkoppelt
+6d487ae Goldtest: Basis bewusst auf f5a524b angehoben (G7a/G7c standen seit 2ec1e96 dauerhaft rot)
+=== AHEAD FILES ===
+M	scripts/f2wp1207_grid10_turn_loop.py
+=== ORGAN SOURCE LOCATE ===
+=== WRAPPER SOURCE MATCH ===

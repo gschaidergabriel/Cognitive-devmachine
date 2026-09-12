@@ -1,0 +1,18 @@
+{"candidate_sha256": "476c9f3a9dd29472b16bd653168fddca9dacbc20b5561af7687dda4ee6e845e9", "checks": {"blink_end_open_present": true, "canonical_blink_route": true, "marker": true, "no_explicit_relief2_route": true, "old_special_gaze_coupling_absent": true, "special_blink_guard_absent": true}, "source_sha256": "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e"}
+===HASHES===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+476c9f3a9dd29472b16bd653168fddca9dacbc20b5561af7687dda4ee6e845e9  /home/ai-core-node/.claude/star/visual/.go_evidence/eye_semantic_shadow2_20260912_0807/buehne.shadow.html
+===DIFF_RELEVANT===
++<meta name="go-eye-shadow" content="v5-exact-live-sites">
+-  if(_sonderLaeuft){
+-    $("augen-blink").style.opacity = "0";
++    $("augen-blink").src = BLINK_BILDER[0];
++    $("augen-blink").style.opacity = "1";
+-  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
++  $("pupillen-glow").style.opacity = blinzelPhase ? "0" : String(ziel.opazitaet);
+===LIVE_UNCHANGED===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+SERVICE active
+SCOPE=SHADOW_ONLY_NO_LIVE_MUTATION

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-bridge-repo-path-20260912-0810",
+  "command_sha256": "2fb19e3c57228c6a0aae4c57742fadd2aa11f5a1a6293194bb44d55268249204",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:57:17.275442+00:00",
+  "finished_at": "2026-09-12T00:57:18.210275+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "0fd97bd8446fda2d184b1133a003b117ca8d2c826a9b2955d1d1f76a49492f9c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "DAEMON_GIT_HINTS\n6:`chatgpt-local-control` (Befehle) / `chatgpt-local-results` (Ergebnisse) im\n50:REPO = STATE_DIR / \"repo\"\n53:CONTROL_BRANCH = os.environ.get(\"LOCAL_BRIDGE_CONTROL_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-control\")\n54:RESULTS_BRANCH = os.environ.get(\"LOCAL_BRIDGE_RESULTS_BRANCH\", f\"chatgpt-local-{MACHINE_ID}-results\")\n56:RESULTS_PATH = pathlib.Path(\"local_bridge/results\")\n90:        raise RuntimeError(f\"git {args} failed: {text(p.stderr)}\")\n94:def sync_control():\n98:def sync_and_push_results(message: str):\n103:    _git(\"push\", \"-u\", \"origin\", f\"HEAD:{RESULTS_BRANCH}\", timeout=180)\n177:    d = REPO / RESULTS_PATH\n244:    sync_control()\n245:    _git(\"checkout\", \"-B\", RESULTS_BRANCH, f\"origin/{RESULTS_BRANCH}\", check=False)\n269:        sync_and_push_results(f\"local bridge: {processed} command(s) executed on {MACHINE_ID}\")\nREPOS\n/home/ai-core-node/backup-usb-temp/repo\n/home/ai-core-node/frankenstein-repo\n/home/ai-core-node/repo\n/home/ai-core-node/agentforge-e2e/run-baseline-sweep\n/home/ai-core-node/clay-global-research-entity\n/home/ai-core-node/.nvm\n/home/ai-core-node/needle\n/home/ai-core-node/frankenstein-0.85-benchmark\n/home/ai-core-node/entityos-repo\n/home/ai-core-node/digital-retina\n/home/ai-core-node/clay-overlay\n/home/ai-core-node/.lazyweb/repos/lazyweb-skill\n/home/ai-core-node/aicore/opt/shaderc-build\n/home/ai-core-node/aicore/opt/aicore\n/home/ai-core-node/aicore/opt/whisper.cpp\n/home/ai-core-node/aicore/opt/llama.cpp\n/home/ai-core-node/agentforge\n/home/ai-core-node/titan-memory\n/home/ai-core-node/deepseek-harness\n/home/ai-core-node/Documents/daemonweave\n/home/ai-core-node/Documents/lcme\n/home/ai-core-node/andreas-claude\n/home/ai-core-node/virtual-gf/SillyTavern\n/home/ai-core-node/virtual-gf/Forge/repositories/huggingface_guess\n/home/ai-core-node/virtual-gf/Forge/repositories/stable-diffusion-webui-assets\n/home/ai-core-node/virtual-gf/Forge/repositories/BLIP\n/home/ai-core-node/virtual-gf/Forge\n/home/ai-core-node/virtual-gf/sdcpp\n/home/ai-core-node/projects/qgolpu\n/home/ai-core-node/projects/retina\n/home/ai-core-node/seimensch-redesign\n/home/ai-core-node/roboart-web\n/home/ai-core-node/Downloads/clay-machine-master\n/home/ai-core-node/frankenstein-2.0\n/home/ai-core-node/agentic-grid\n/home/ai-core-node/.claude/star/harness-werkraum/paket-1787798454172-df49d5\n/home/ai-core-node/.claude/star/harness-werkraum/paket-1789145772883-319e0a\n/home/ai-core-node/.claude/star/harness-werkraum/paket-1787799551250-58c672\n/home/ai-core-node/.claude/star/local_bridge_state/repo\n/home/ai-core-node/self-integration\n/home/ai-core-node/.local/share/clay-local-bridge/control-mirror\n/home/ai-core-node/.local/share/clay-local-bridge/results-mirror\n/home/ai-core-node/gabriel-claude\n/home/ai-core-node/papers/battery\n/home/ai-core-node/frank-demo\n/home/ai-core-node/roboart\n/home/ai-core-node/frank-projects/video-launch-page\n/home/ai-core-node/frankenstein-avatar-go/c0dd67ea/candidate\n/home/ai-core-node/rae-arbeitskopie\n/home/ai-core-node/chronik\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

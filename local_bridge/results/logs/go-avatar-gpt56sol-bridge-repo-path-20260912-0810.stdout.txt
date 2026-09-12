@@ -1,0 +1,65 @@
+DAEMON_GIT_HINTS
+6:`chatgpt-local-control` (Befehle) / `chatgpt-local-results` (Ergebnisse) im
+50:REPO = STATE_DIR / "repo"
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+56:RESULTS_PATH = pathlib.Path("local_bridge/results")
+90:        raise RuntimeError(f"git {args} failed: {text(p.stderr)}")
+94:def sync_control():
+98:def sync_and_push_results(message: str):
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+177:    d = REPO / RESULTS_PATH
+244:    sync_control()
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+REPOS
+/home/ai-core-node/backup-usb-temp/repo
+/home/ai-core-node/frankenstein-repo
+/home/ai-core-node/repo
+/home/ai-core-node/agentforge-e2e/run-baseline-sweep
+/home/ai-core-node/clay-global-research-entity
+/home/ai-core-node/.nvm
+/home/ai-core-node/needle
+/home/ai-core-node/frankenstein-0.85-benchmark
+/home/ai-core-node/entityos-repo
+/home/ai-core-node/digital-retina
+/home/ai-core-node/clay-overlay
+/home/ai-core-node/.lazyweb/repos/lazyweb-skill
+/home/ai-core-node/aicore/opt/shaderc-build
+/home/ai-core-node/aicore/opt/aicore
+/home/ai-core-node/aicore/opt/whisper.cpp
+/home/ai-core-node/aicore/opt/llama.cpp
+/home/ai-core-node/agentforge
+/home/ai-core-node/titan-memory
+/home/ai-core-node/deepseek-harness
+/home/ai-core-node/Documents/daemonweave
+/home/ai-core-node/Documents/lcme
+/home/ai-core-node/andreas-claude
+/home/ai-core-node/virtual-gf/SillyTavern
+/home/ai-core-node/virtual-gf/Forge/repositories/huggingface_guess
+/home/ai-core-node/virtual-gf/Forge/repositories/stable-diffusion-webui-assets
+/home/ai-core-node/virtual-gf/Forge/repositories/BLIP
+/home/ai-core-node/virtual-gf/Forge
+/home/ai-core-node/virtual-gf/sdcpp
+/home/ai-core-node/projects/qgolpu
+/home/ai-core-node/projects/retina
+/home/ai-core-node/seimensch-redesign
+/home/ai-core-node/roboart-web
+/home/ai-core-node/Downloads/clay-machine-master
+/home/ai-core-node/frankenstein-2.0
+/home/ai-core-node/agentic-grid
+/home/ai-core-node/.claude/star/harness-werkraum/paket-1787798454172-df49d5
+/home/ai-core-node/.claude/star/harness-werkraum/paket-1789145772883-319e0a
+/home/ai-core-node/.claude/star/harness-werkraum/paket-1787799551250-58c672
+/home/ai-core-node/.claude/star/local_bridge_state/repo
+/home/ai-core-node/self-integration
+/home/ai-core-node/.local/share/clay-local-bridge/control-mirror
+/home/ai-core-node/.local/share/clay-local-bridge/results-mirror
+/home/ai-core-node/gabriel-claude
+/home/ai-core-node/papers/battery
+/home/ai-core-node/frank-demo
+/home/ai-core-node/roboart
+/home/ai-core-node/frank-projects/video-launch-page
+/home/ai-core-node/frankenstein-avatar-go/c0dd67ea/candidate
+/home/ai-core-node/rae-arbeitskopie
+/home/ai-core-node/chronik

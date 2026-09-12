@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-ai-inspect-02",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -eu; R=/home/ai-core-node/frankenstein-repo; git -C \"$R\" fetch -q origin main; echo HEAD=$(git -C \"$R\" rev-parse HEAD); echo ORIGIN_MAIN=$(git -C \"$R\" rev-parse origin/main); echo AHEAD_BEHIND=$(git -C \"$R\" rev-list --left-right --count origin/main...HEAD); echo BRANCH=$(git -C \"$R\" branch --show-current); echo '--- status ---'; git -C \"$R\" status --short; echo '--- recent local ---'; git -C \"$R\" log --oneline --decorate -8; echo '--- files differing from origin/main ---'; git -C \"$R\" diff --name-status origin/main...HEAD; echo '--- latest local commit ---'; git -C \"$R\" show --stat --oneline --decorate --no-renames HEAD",
+  "cwd": "/home/ai-core-node/frankenstein-repo",
+  "timeout_seconds": 120
+}

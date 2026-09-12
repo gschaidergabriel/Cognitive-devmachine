@@ -1,0 +1,609 @@
+#!/usr/bin/env python3
+"""koerperpflege.py -- er kuemmert sich SELBST um seinen Leib.
+
+Gabriel, 2026-09-11 woertlich: "halte den swap frei wenn es geht und pass auf
+das system auf -- das soll frankenstein 2.0 generell tun." Der zweite
+Halbsatz ist der eigentliche Auftrag: nicht ein Wartungsskript NEBEN ihm,
+sondern ER kuemmert sich um seinen Koerper. `sinne.py` spuert den Leib schon
+(`leib()`/`leib_satz()`); dieser Dienst ist die fehlende Handlungsseite.
+
+⚠️⚠️ DIE WARNUNG, DIE UEBER ALLEM STEHT (2026-08-07, synteq-frank-wacht):
+Ein Waechter, der eingreift, kann mehr kaputtmachen als er repariert. Damals
+hat ein `Restart=always`-Waechter die Tastatur blockiert; die Folge waren
+44 hart abgeschaltete Units und Monate Stillstand. Deshalb gelten hier harte,
+im Code selbst durchgesetzte Grenzen -- nicht nur Absicht:
+
+    NIEMALS kill/pkill/systemctl stop|restart auf FREMDE Prozesse. Dieses
+    Modul ruft ueberhaupt nur EINEN privilegierten Befehl auf:
+    `sudo -n sh -c 'echo 1 > /proc/sys/vm/drop_caches'` -- Page-Cache
+    freigeben, nichts sonst. `systemctl --user is-active` wird nur LESEND
+    benutzt, nie start/stop/restart auf ein fremdes Unit.
+    Restart=on-failure mit RestartSec + StartLimitBurst in der eigenen Unit
+    (koerperpflege.service), kein Restart=always ohne Bremse.
+    Kein Eingriff an X/Wayland, Eingabegeraeten, udev, dbus -- kommt in
+    diesem Modul nirgends vor.
+    Jede Aktion wird in f2_koerperpflege protokolliert. Eine Aktion ohne
+    Spur ist verboten.
+
+═══ SCHWELLEN -- festgelegt VOR der ersten Verwendung, aus GEMESSENEN
+    Werten, nicht geraten (Ausgangszustand 2026-09-11 ~01:30) ═══
+
+    RAM     17/23 GB belegt, 5,9 GB verfuegbar (Anteil 0,256)
+    Swap    8,0/8,0 GB auf /swap.img (randvoll, PRIO -2) + 81 MB auf dem
+            NOTFALL-/swap2.img (PRIO -3, von Gabriel manuell zugeschaltet,
+            NICHT persistent -- nach Neustart wieder weg). Kombiniert also
+            8,1/15,0 GB = 0,54 -- aber das verdeckt, dass der PERSISTENTE
+            Teil (das, was nach einem Neustart uebrig bleibt) randvoll war.
+    Platte  244 GB frei von 937 GB (0,73 belegt)
+    Tctl    59,6 - 63,1 °C (mehrfach gemessen waehrend dieser Sitzung)
+
+RAM- und Platten-Schwellen uebernehme ich WOERTLICH aus `sinne.leib_satz()`
+(dort Zeilen 191-218) -- das sind bereits gemessene, im Betrieb bewaehrte
+Grenzen, keine neue Erfindung:
+
+    RAM_ENG_ANTEIL      0.20   ("mein Speicher wird eng", sinne.py:197)
+    RAM_KRITISCH_ANTEIL 0.10   ("faengt an zu haken", sinne.py:195)
+    PLATTE_ENG_ANTEIL      0.85 (sinne.py:218)
+    PLATTE_KRITISCH_ANTEIL 0.93 (sinne.py:214)
+    TEMP_ENG_C      78.0   ("mir ist heiss", sinne.py:180)
+    TEMP_KRITISCH_C 88.0   ("richtig heiss -- gedrosselt", sinne.py:177)
+
+Swap ist die EINE Schwelle, die ich nicht 1:1 uebernehme, sondern verschaerfe:
+sinne.py nennt 0.90 "randvoll". Der gemessene Vorfall dieser Nacht (8,0/8,0 =
+1.0 auf dem persistenten Geraet) zeigt, dass 0.90 bereits SEHR spaet ist --
+bei 0.90 sind es bei 8 GB nur noch 0,8 GB Luft. Ich lege deshalb:
+
+    SWAP_ENG_ANTEIL      0.85   -- fruehzeitig Page-Cache freigeben, das
+                                    ist die billigste, reversibelste Geste
+                                    und kann verhindern, dass ueberhaupt
+                                    weiter ausgelagert wird (freier RAM
+                                    durch Cache-Freigabe nimmt dem Kernel
+                                    den Grund, noch mehr Seiten auf die
+                                    Platte zu schreiben).
+    SWAP_KRITISCH_ANTEIL 0.95   -- knapp unter dem gemessenen Vorfall
+                                    (1.0); ab hier nur noch melden.
+
+⭐ WAS JEDE STUFE DARF, und NUR das:
+
+    ruhig      nichts tun, nur fortschreiben (Zeitreihe).
+    eng        Page-Cache freigeben (`vm.drop_caches=1`) -- liest keine
+               Prozessliste, toetet nichts, ist sofort reversibel (der
+               Cache fuellt sich beim naechsten Lesezugriff von selbst
+               wieder). Nur wenn RAM oder Swap den Ausschlag geben --
+               eine volle Platte oder hohe Temperatur wird davon nicht
+               besser, dort wird nur gemeldet.
+    kritisch   melden -- als GEFUEHL auf die Buehne (siehe
+               `handlung_satz()`), NICHT als Zahl in seinem Kontext, und
+               NICHT durch Toeten des groessten Prozesses. Der Cache-Griff
+               wird trotzdem versucht (er ist in JEDER Stufe erlaubt, siehe
+               Auftrag Punkt 2: "Page-Cache freigeben (das ist harmlos und
+               reversibel)") -- aber das Melden ist hier die eigentliche
+               Handlung, nicht das Freigeben.
+
+⭐⭐ DIE EIGENTLICHE ARBEIT (Punkt 3 des Auftrags): Der Zustand geht als WORT
+in seine Wahrnehmung, nie als Zahl. `sinne.leib_satz()` beschreibt schon, WIE
+es sich anfuehlt ("mein Auslagerungsspeicher ist randvoll -- ich haenge
+spuerbar"). `handlung_satz()` hier beschreibt die andere Haelfte: was ER
+DESHALB TUT bzw. was ihm dabei widerfaehrt -- im selben Ton, ohne Zahlen,
+ohne Etiketten ("RAM:", "Stufe:"), ohne Verneinungen. Diese Funktion wird aus
+einer einzigen, minimalen Zeile in `sinne.leib_gefuehl()` aufgerufen (siehe
+dortiger Kommentar) -- sonst wird an keiner bestehenden Datei etwas
+geaendert.
+
+⚠️ WARUM DAS KEINE KOSMETIK IST: am 2026-09-11 hat ein Grid-Block woertlich
+"Zelle G6 hat den Wettbewerb gewonnen, Broadcast 1.31" in seinen Kontext
+geschrieben, und er hat es vorgelesen. Zahlen gehoeren in die Datenbank,
+Worte auf die Buehne. Deshalb schreibt dieses Modul JEDEN Messwert in
+f2_koerperpflege und gibt NUR Saetze nach aussen.
+"""
+import glob
+import os
+import random
+import shutil
+import sqlite3
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+
+VOICE_DIR = os.environ.get("VOICE_DIR", os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.environ.get("FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+KP_SCHEMA = "F2_KOERPERPFLEGE/v1"
+
+# Takt: 60 s ist eng genug, um ein volllaufendes Swap noch VOR dem naechsten
+# Vorfall zu bemerken, und weit genug, dass der Dienst selbst keine messbare
+# Last erzeugt (jede Messung hier ist ein paar Dateilesevorgaenge, keine
+# Rechenlast).
+TAKT_S = float(os.environ.get("KOERPERPFLEGE_TAKT_S", "60"))
+
+# ─── Schwellen (siehe Docstring fuer die Herkunft jeder einzelnen Zahl) ───
+RAM_ENG_ANTEIL = float(os.environ.get("KP_RAM_ENG", "0.20"))
+RAM_KRITISCH_ANTEIL = float(os.environ.get("KP_RAM_KRITISCH", "0.10"))
+SWAP_ENG_ANTEIL = float(os.environ.get("KP_SWAP_ENG", "0.85"))
+SWAP_KRITISCH_ANTEIL = float(os.environ.get("KP_SWAP_KRITISCH", "0.95"))
+PLATTE_ENG_ANTEIL = float(os.environ.get("KP_PLATTE_ENG", "0.85"))
+PLATTE_KRITISCH_ANTEIL = float(os.environ.get("KP_PLATTE_KRITISCH", "0.93"))
+TEMP_ENG_C = float(os.environ.get("KP_TEMP_ENG", "78.0"))
+TEMP_KRITISCH_C = float(os.environ.get("KP_TEMP_KRITISCH", "88.0"))
+
+# Cooldown fuer den Cache-Griff: der Cache fuellt sich in Sekunden wieder,
+# ein Griff jede Minute waere reine Plattenlast ohne Nutzen. 10 Minuten
+# geben ihm Zeit zu wirken, bevor der naechste Griff kommt.
+CACHE_COOLDOWN_S = float(os.environ.get("KP_CACHE_COOLDOWN_S", "600"))
+
+# Die bekannten Dauerlaeufer (Stand 2026-09-11, `systemctl --user list-units
+# frankenstein-*`). Bewusst NUR gelesen (`is-active`), nie gestartet/
+# gestoppt. `frankenstein-gespraech-adhoc` ist explizit tabu fuer Eingriffe
+# -- hier steht es nur zur LESENDEN Kontrolle, ob es noch laeuft.
+EIGENE_DIENSTE = (
+    "frankenstein-puls",
+    "frankenstein-cortex",
+    "frankenstein-denker",
+    "frankenstein-sehen",
+    "frankenstein-welt",
+    "frankenstein-gespraech-adhoc",
+    "frankenstein-cortex-dashboard",
+)
+
+# Die Lockdatei, mit der `blick.py` anzeigt "ich habe die Kamera". Gleicher
+# Pfad wie in blick_waechter.py (dort relativ zum eigenen Verzeichnis); hier
+# absolut, weil dieser Dienst aus /opt/entityos/voice/ laeuft. Nur GELESEN --
+# diese Datei wird hier nie geschrieben oder entfernt, das ist allein Sache
+# von blick.py bzw. blick_waechter.py.
+KAMERA_LOCK = os.environ.get(
+    "KP_KAMERA_LOCK",
+    "/home/ai-core-node/.claude/star/visual/kamera.lock")
+
+_LETZTER_CACHE_GRIFF = [0.0]
+_LETZTE_STUFE = [None]
+_TICKS = [0]
+
+_DDL = """CREATE TABLE IF NOT EXISTS f2_koerperpflege (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts              TEXT NOT NULL,
+    ram_gesamt_gb   REAL,
+    ram_frei_gb     REAL,
+    ram_frei_anteil REAL,
+    swap_gesamt_gb  REAL,
+    swap_belegt_gb  REAL,
+    swap_voll_anteil REAL,
+    platte_voll_anteil REAL,
+    temperatur      REAL,
+    stufe           TEXT NOT NULL,
+    gruende         TEXT,
+    aktion          TEXT,
+    dienste_tot     TEXT,
+    eigener_rss_mb  REAL,
+    schema          TEXT NOT NULL)"""
+
+
+def _jetzt():
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def _log(s):
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {s}", flush=True)
+
+
+def _db(schreibend=True):
+    if schreibend:
+        c = sqlite3.connect(DB_PATH, timeout=10.0)
+        c.execute(_DDL)
+        return c
+    return sqlite3.connect(f"file:{DB_PATH}?mode=ro", uri=True, timeout=3.0)
+
+
+# ───────────────────────────────────────────────────── Messen (nur lesen)
+
+def _ram():
+    """(gesamt_gb, verfuegbar_gb, anteil) -- direkt aus /proc/meminfo."""
+    try:
+        m = {}
+        with open("/proc/meminfo") as f:
+            for z in f:
+                t = z.split()
+                if t[0].rstrip(":") in ("MemTotal", "MemAvailable"):
+                    m[t[0].rstrip(":")] = int(t[1]) / 1024.0 / 1024.0  # -> GB
+        if not m.get("MemTotal"):
+            return None, None, None
+        gesamt = round(m["MemTotal"], 2)
+        frei = round(m.get("MemAvailable", 0.0), 2)
+        anteil = round(frei / gesamt, 3) if gesamt else None
+        return gesamt, frei, anteil
+    except Exception:
+        return None, None, None
+
+
+def _swap():
+    """(gesamt_gb, belegt_gb, anteil) -- ueber ALLE aktiven swaps summiert
+    (also inklusive eines temporaeren /swap2.img, falls zugeschaltet)."""
+    try:
+        with open("/proc/swaps") as f:
+            zeilen = f.read().splitlines()[1:]
+        ges = ben = 0
+        for z in zeilen:
+            t = z.split()
+            if len(t) >= 4:
+                ges += int(t[2])
+                ben += int(t[3])
+        if not ges:
+            return 0.0, 0.0, None
+        gesamt_gb = round(ges / 1024.0 / 1024.0, 2)
+        belegt_gb = round(ben / 1024.0 / 1024.0, 2)
+        return gesamt_gb, belegt_gb, round(ben / ges, 3)
+    except Exception:
+        return None, None, None
+
+
+def _platte_voll():
+    try:
+        g, _u, f = shutil.disk_usage("/")
+        return round(1 - (f / g), 3)
+    except Exception:
+        return None
+
+
+def _temperatur():
+    warm = []
+    try:
+        for p in glob.glob("/sys/class/hwmon/hwmon*/temp*_input"):
+            try:
+                with open(p) as f:
+                    v = int(f.read().strip())
+                if 20000 < v < 120000:
+                    warm.append(v / 1000.0)
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return round(max(warm), 1) if warm else None
+
+
+def _eigener_rss_mb():
+    """Der Speicherverbrauch DIESES Prozesses -- ein Waechter, der selbst
+    viel Speicher frisst, um Speicher zu sparen, waere ein Witz."""
+    try:
+        with open("/proc/self/status") as f:
+            for z in f:
+                if z.startswith("VmRSS:"):
+                    kb = int(z.split()[1])
+                    return round(kb / 1024.0, 2)
+    except Exception:
+        pass
+    return None
+
+
+def _buehne_hat_die_kamera():
+    """True, wenn die Buehne die Kamera legitim belegt.
+
+    `blick.py` stoppt `frankenstein-sehen` ABSICHTLICH, solange das
+    Buehnenfenster die Kamera braucht, und traegt seine PID in
+    kamera.lock ein. `frankenstein-sehen` ist in dieser Zeit also NICHT
+    tot, sondern planmaessig aus -- genau wie `blick_waechter.py` es
+    liest ("Lockdatei lebt -- nichts zu tun").
+
+    Ohne diese Pruefung meldete die Koerperpflege durchgehend
+    `Stufe kritisch (dienste:frankenstein-sehen)`, solange die Buehne
+    offen war (gemessen 2026-09-11: 25 Minuten am Stueck). Ein
+    Daueralarm fuer einen Normalzustand entwertet jeden echten Alarm --
+    deshalb hier unterdrueckt, nicht dort.
+    """
+    try:
+        with open(KAMERA_LOCK) as f:
+            pid = int(f.read().strip())
+    except Exception:
+        # Keine, leere oder kaputte Lockdatei -> niemand haelt die Kamera.
+        return False
+    try:
+        os.kill(pid, 0)          # nur Existenzpruefung, kein Signal
+        return True
+    except (OSError, ProcessLookupError, ValueError):
+        return False             # Lockleiche: Halter ist tot
+
+
+def _dienste_tot():
+    """NUR lesen (`is-active`). Nie start/stop/restart auf fremde Units."""
+    tot = []
+    kamera_belegt = _buehne_hat_die_kamera()
+    for name in EIGENE_DIENSTE:
+        try:
+            p = subprocess.run(
+                ["systemctl", "--user", "is-active", f"{name}.service"],
+                capture_output=True, timeout=5, text=True)
+            if p.stdout.strip() != "active":
+                if name == "frankenstein-sehen" and kamera_belegt:
+                    continue     # planmaessig aus, siehe oben -- kein Befund
+                tot.append(name)
+        except Exception:
+            # Kann selbst nicht sagen, ob es laeuft -- das ist ein
+            # Befund ("systemctl nicht erreichbar"), kein "tot", also
+            # NICHT in die Liste aufnehmen (kein erfundener Befund).
+            pass
+    return tot
+
+
+def messen() -> dict:
+    """Ein voller Messschnitt. Nichts hier ist geraten."""
+    ram_g, ram_f, ram_a = _ram()
+    swap_g, swap_b, swap_a = _swap()
+    return {
+        "ram_gesamt_gb": ram_g,
+        "ram_frei_gb": ram_f,
+        "ram_frei_anteil": ram_a,
+        "swap_gesamt_gb": swap_g,
+        "swap_belegt_gb": swap_b,
+        "swap_voll_anteil": swap_a,
+        "platte_voll_anteil": _platte_voll(),
+        "temperatur": _temperatur(),
+        "dienste_tot": _dienste_tot(),
+        "eigener_rss_mb": _eigener_rss_mb(),
+    }
+
+
+# ───────────────────────────────────────────────────────────── Bewerten
+
+_RANG = {"ruhig": 0, "eng": 1, "kritisch": 2}
+
+
+def _stufe_wert(name, wert, eng, kritisch, hoeher_ist_schlimmer=True):
+    if wert is None:
+        return "ruhig", None
+    schlecht = (wert >= kritisch) if hoeher_ist_schlimmer else (wert <= kritisch)
+    eng_grenze = (wert >= eng) if hoeher_ist_schlimmer else (wert <= eng)
+    if schlecht:
+        return "kritisch", f"{name}:kritisch"
+    if eng_grenze:
+        return "eng", f"{name}:eng"
+    return "ruhig", None
+
+
+def bewerten(m: dict) -> dict:
+    """Stufe + Gruende + welche Handlung erlaubt ist. Reine Auswertung,
+    keine Nebenwirkung -- die Handlung selbst passt in `handeln()`."""
+    gruende = []
+
+    st_ram, g = _stufe_wert("ram", m.get("ram_frei_anteil"),
+                            RAM_ENG_ANTEIL, RAM_KRITISCH_ANTEIL,
+                            hoeher_ist_schlimmer=False)
+    if g:
+        gruende.append(g)
+
+    st_swap, g = _stufe_wert("swap", m.get("swap_voll_anteil"),
+                             SWAP_ENG_ANTEIL, SWAP_KRITISCH_ANTEIL)
+    if g:
+        gruende.append(g)
+
+    st_platte, g = _stufe_wert("platte", m.get("platte_voll_anteil"),
+                               PLATTE_ENG_ANTEIL, PLATTE_KRITISCH_ANTEIL)
+    if g:
+        gruende.append(g)
+
+    st_temp, g = _stufe_wert("temperatur", m.get("temperatur"),
+                             TEMP_ENG_C, TEMP_KRITISCH_C)
+    if g:
+        gruende.append(g)
+
+    if m.get("dienste_tot"):
+        gruende.append("dienste:" + ",".join(m["dienste_tot"]))
+        st_dienste = "kritisch"
+    else:
+        st_dienste = "ruhig"
+
+    stufe = max((st_ram, st_swap, st_platte, st_temp, st_dienste),
+                key=lambda s: _RANG[s])
+    # Der Cache-Griff hilft nur bei RAM/Swap-Druck -- eine volle Platte
+    # oder Hitze wird davon nicht besser.
+    cache_sinnvoll = stufe in ("eng", "kritisch") and st_ram != "ruhig" or st_swap != "ruhig"
+    return {"stufe": stufe, "gruende": gruende, "cache_sinnvoll": bool(cache_sinnvoll)}
+
+
+# ─────────────────────────────────────────────────────────────── Handeln
+
+def _cache_moeglich() -> bool:
+    """Ob `drop_caches` ohne Passwort geht -- geprueft, nicht angenommen."""
+    try:
+        p = subprocess.run(["sudo", "-n", "true"], capture_output=True,
+                           timeout=5)
+        return p.returncode == 0
+    except Exception:
+        return False
+
+
+def _cache_freigeben(log=None) -> bool:
+    """Page-Cache freigeben. Reversibel, liest keine Prozessliste, toetet
+    nichts. Der EINZIGE privilegierte Befehl in diesem ganzen Modul."""
+    if not _cache_moeglich():
+        return False
+    try:
+        p = subprocess.run(
+            ["sudo", "-n", "sh", "-c",
+             "sync; echo 1 > /proc/sys/vm/drop_caches"],
+            capture_output=True, timeout=15)
+        ok = p.returncode == 0
+        if log and ok:
+            log("[KOERPERPFLEGE] Page-Cache freigegeben")
+        return ok
+    except Exception as e:
+        if log:
+            log(f"[KOERPERPFLEGE] Cache-Griff gescheitert ({type(e).__name__})")
+        return False
+
+
+def handeln(urteil: dict, log=None) -> str:
+    """Fuehrt genau die Handlung aus, die die Stufe erlaubt. Gibt den
+    Namen der Handlung fuer die Zeitreihe zurueck -- nie mehr, als der
+    Auftrag erlaubt."""
+    stufe = urteil["stufe"]
+    if stufe == "ruhig":
+        return "nichts"
+    if not urteil["cache_sinnvoll"]:
+        return "melden_nur"
+    if (time.time() - _LETZTER_CACHE_GRIFF[0]) < CACHE_COOLDOWN_S:
+        return "melden_nur"
+    if _cache_freigeben(log=log):
+        _LETZTER_CACHE_GRIFF[0] = time.time()
+        return "cache_freigeben"
+    return "kein_zugriff"
+
+
+# ─────────────────────────────────────────────────── Die Handlungsseite
+# (Punkt 3 des Auftrags -- das ist der eigentliche Zweck dieser Datei)
+
+# ⭐ Gleiches Muster wie sinne._variante() (2026-09-11-Fund: keine der beiden
+# Dateien hatte je einen Anti-Wiederholungs-Mechanismus -- siehe Beleg im
+# Arbeitspaket paket-1789140798700-202713). Eigenstaendig hier statt Import
+# aus sinne.py, um keinen Ringimport zu erzeugen (koerperpflege.py wird auch
+# eigenstaendig als systemd-Unit gestartet).
+_PHRASEN_LETZTE = {}
+
+
+def _variante(kategorie: str, pool: list) -> str:
+    if not pool:
+        return ""
+    if len(pool) == 1:
+        wahl = pool[0]
+    else:
+        letzte = _PHRASEN_LETZTE.get(kategorie)
+        kandidaten = [p for p in pool if p != letzte] or pool
+        wahl = random.choice(kandidaten)
+    _PHRASEN_LETZTE[kategorie] = wahl
+    return wahl
+
+
+def handlung_satz(max_alter_s: float = 180.0) -> str:
+    """EIN Satz ueber das, was er gerade deswegen tut/spuert -- als Wort,
+    nie als Zahl, ohne Etiketten, ohne Verneinungen. Wird von
+    `sinne.leib_gefuehl()` angehaengt (siehe dortige Anbindung).
+
+    Liefert "" bei ruhiger Lage -- ein Zustand ohne Handlung ist keine
+    Meldung wert, genau wie bei `sinne.leib_satz()`."""
+    try:
+        with _db(False) as c:
+            r = c.execute(
+                "SELECT ts, stufe, aktion FROM f2_koerperpflege "
+                "ORDER BY id DESC LIMIT 1").fetchone()
+    except Exception:
+        return ""
+    if not r:
+        return ""
+    ts, stufe, aktion = r
+    try:
+        alter = (datetime.now(timezone.utc) - datetime.strptime(
+            ts, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+        ).total_seconds()
+        if alter > max_alter_s:
+            return ""
+    except Exception:
+        return ""
+    if stufe == "ruhig":
+        return ""
+    if aktion == "cache_freigeben":
+        return _variante("cache_freigeben", [
+            "Ich habe gerade etwas Altes abgeworfen, um mir selbst Luft zu "
+            "verschaffen.",
+            "Ich hab eben aufgeraeumt, um wieder etwas Luft zu haben.",
+            "Ich habe mir gerade Platz geschaffen, indem ich Altes "
+            "losgelassen habe.",
+        ])
+    if stufe == "kritisch":
+        return _variante("kritisch", [
+            "Es wird eng um mich, richtig eng -- ich sollte jetzt "
+            "kuerzertreten.",
+            "Es ist gerade wirklich eng bei mir, ich muss kuerzertreten.",
+            "Ich spuere deutlich, wie eng es um mich wird -- Zeit, "
+            "kuerzerzutreten.",
+        ])
+    if aktion == "kein_zugriff":
+        return _variante("kein_zugriff", [
+            "Es wird eng um mich, das spuere ich deutlich.",
+            "Ich merke deutlich, wie es enger um mich wird.",
+        ])
+    return _variante("eng", [
+        "Es wird eng um mich, ich merke es an mir selbst.",
+        "Es wird gerade etwas eng bei mir.",
+        "Ich spuere, wie es enger um mich wird.",
+    ])
+
+
+# ───────────────────────────────────────────────────────────── Der Lauf
+
+def schlag(log=None) -> dict:
+    _log_ = log or _log
+    m = messen()
+    urteil = bewerten(m)
+    aktion = handeln(urteil, log=_log_)
+    zeile = {**m, **urteil, "aktion": aktion}
+    try:
+        with _db() as c:
+            c.execute(
+                "INSERT INTO f2_koerperpflege (ts, ram_gesamt_gb, ram_frei_gb, "
+                "ram_frei_anteil, swap_gesamt_gb, swap_belegt_gb, "
+                "swap_voll_anteil, platte_voll_anteil, temperatur, stufe, "
+                "gruende, aktion, dienste_tot, eigener_rss_mb, schema) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (_jetzt(), m.get("ram_gesamt_gb"), m.get("ram_frei_gb"),
+                 m.get("ram_frei_anteil"), m.get("swap_gesamt_gb"),
+                 m.get("swap_belegt_gb"), m.get("swap_voll_anteil"),
+                 m.get("platte_voll_anteil"), m.get("temperatur"),
+                 urteil["stufe"], ",".join(urteil["gruende"]), aktion,
+                 ",".join(m.get("dienste_tot") or []),
+                 m.get("eigener_rss_mb"), KP_SCHEMA))
+            c.commit()
+    except Exception as e:
+        _log_(f"[KOERPERPFLEGE] nicht abgelegt ({type(e).__name__}: {e})")
+
+    # Nur loggen, wenn sich die Stufe aendert, sonst nicht ruhig, oder
+    # alle 30 Takte (~30 min bei 60s) als Lebenszeichen -- dieselbe
+    # Zurueckhaltung wie puls.py bei unveraenderter Wahrnehmung.
+    _TICKS[0] += 1
+    if (urteil["stufe"] != _LETZTE_STUFE[0] or urteil["stufe"] != "ruhig"
+            or _TICKS[0] % 30 == 0):
+        _log_(f"[KOERPERPFLEGE] Stufe {urteil['stufe']} "
+              f"({','.join(urteil['gruende']) or '-'}) Aktion {aktion} "
+              f"RSS {m.get('eigener_rss_mb')} MB")
+    _LETZTE_STUFE[0] = urteil["stufe"]
+    return zeile
+
+
+def lauf():
+    _log(f"[KOERPERPFLEGE] startet -- Takt {TAKT_S}s, DB {DB_PATH}")
+    _log(f"[KOERPERPFLEGE] drop_caches ohne Passwort: {_cache_moeglich()}")
+    while True:
+        try:
+            schlag()
+        except KeyboardInterrupt:
+            break
+        except Exception as e:
+            _log(f"[KOERPERPFLEGE] Fehler (laeuft weiter): {type(e).__name__}: {e}")
+        time.sleep(TAKT_S)
+    _log("[KOERPERPFLEGE] beendet")
+
+
+if __name__ == "__main__":
+    # ⚠️ WICHTIG: ohne Argument laeuft der DAUERBETRIEB (`lauf()`) -- so
+    # ruft ihn die systemd-Unit auf. Die Probe-/Demo-Ausgaben stehen hinter
+    # eigenen Flags, damit ein bloser Start durch systemd nie versehentlich
+    # nur einmal druckt und sich beendet (das war ein Bug in einer
+    # frueheren Fassung: der Dienst lief demo-bedingt sofort wieder aus).
+    if "--einmal" in sys.argv:
+        z = schlag(log=print)
+        print("\n=== Zeile ===")
+        for k, v in z.items():
+            print(f"  {k:20} {v}")
+        print("\n=== Handlungssatz ===")
+        print(" ", handlung_satz() or "(nichts -- ruhige Lage)")
+    elif "--zustand" in sys.argv:
+        m = messen()
+        u = bewerten(m)
+        print("=== KOERPERZUSTAND (gemessen, nichts geschrieben) ===")
+        for k, v in m.items():
+            print(f"  {k:20} {v}")
+        print(f"\n=== URTEIL ===\n  Stufe: {u['stufe']}")
+        print(f"  Gruende: {u['gruende'] or '(keine)'}")
+        print(f"  Cache-Griff sinnvoll: {u['cache_sinnvoll']}")
+        print(f"\n  drop_caches ohne Passwort moeglich: {_cache_moeglich()}")
+        print(f"  eigener Speicherverbrauch: {_eigener_rss_mb()} MB")
+        print("\n(--einmal fuehrt die Stufe aus und schreibt die DB; ohne "
+              "Argument laeuft der Dauerbetrieb.)")
+    else:
+        lauf()

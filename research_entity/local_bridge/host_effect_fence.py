@@ -13,9 +13,9 @@ Design
   one shared SQLite effect journal before execution.
 * command_id + command_sha256 are immutable identity. Reusing an id with changed
   bytes fails closed.
-* a RUNNING/UNKNOWN prior effect blocks replay. Human/independent reconciliation
-  must classify it before another attempt.
-* SUCCEEDED exact replay is suppressed, not re-executed.
+* PREPARED/RUNNING/UNKNOWN/BODY_RETURNED_UNVERIFIED block further live effects.
+* exact replay is suppressed only after VERIFIED_SUCCEEDED, never merely because
+  an effect body returned without throwing.
 * path/hash preconditions are checked after the lock is held and immediately
   before the caller enters the effect body.
 
@@ -88,6 +88,13 @@ class EffectTicket:
     duplicate_suppressed: bool = False
 
 
+BLOCKING_STATUSES = {
+    "PREPARED",
+    "RUNNING",
+    "BODY_RETURNED_UNVERIFIED",
+    "UNKNOWN",
+}
+
 SCHEMA = """
 PRAGMA journal_mode=WAL;
 PRAGMA synchronous=FULL;
@@ -99,7 +106,10 @@ CREATE TABLE IF NOT EXISTS effect_attempts(
   holder TEXT NOT NULL,
   machine_id TEXT NOT NULL,
   generation INTEGER NOT NULL,
-  status TEXT NOT NULL CHECK(status IN ('PREPARED','RUNNING','SUCCEEDED','FAILED','UNKNOWN','RECONCILED_SAFE')),
+  status TEXT NOT NULL CHECK(status IN (
+    'PREPARED','RUNNING','BODY_RETURNED_UNVERIFIED','VERIFIED_SUCCEEDED',
+    'UNKNOWN','RECONCILED_SAFE'
+  )),
   started_at REAL NOT NULL,
   finished_at REAL,
   outcome_sha256 TEXT,
@@ -192,12 +202,13 @@ class HostEffectFence:
             )
         return row
 
-    def _assert_no_unknown_effect(self, command_id: str) -> None:
+    def _assert_no_blocking_effect(self, command_id: str) -> None:
+        placeholders = ",".join("?" for _ in BLOCKING_STATUSES)
         row = self.db.execute(
-            "SELECT command_id,status,holder,generation FROM effect_attempts "
-            "WHERE status IN ('PREPARED','RUNNING','UNKNOWN') AND command_id<>? "
+            f"SELECT command_id,status,holder,generation FROM effect_attempts "
+            f"WHERE status IN ({placeholders}) AND command_id<>? "
             "ORDER BY started_at DESC LIMIT 1",
-            (command_id,),
+            (*sorted(BLOCKING_STATUSES), command_id),
         ).fetchone()
         if row:
             raise UnknownPriorEffect(
@@ -229,9 +240,9 @@ class HostEffectFence:
         row = self._assert_identity(command_id, command_sha256)
         if not row:
             return "NEW"
-        if row["status"] == "SUCCEEDED":
+        if row["status"] == "VERIFIED_SUCCEEDED":
             return "DUPLICATE_SUPPRESSED"
-        if row["status"] in {"PREPARED", "RUNNING", "UNKNOWN"}:
+        if row["status"] in BLOCKING_STATUSES:
             raise UnknownPriorEffect(f"{command_id}: prior status {row['status']}")
         return "RETRY_ALLOWED"
 
@@ -265,8 +276,6 @@ class HostEffectFence:
             )
             return
 
-        # All live/system effects share one physical-host critical section,
-        # regardless of which bridge branch or daemon requested the operation.
         with self._exclusive_host_lock(blocking=blocking) as lock_handle:
             replay = self.classify_replay(command_id, command_sha256)
             if replay == "DUPLICATE_SUPPRESSED":
@@ -280,16 +289,14 @@ class HostEffectFence:
                 )
                 return
 
-            self._assert_no_unknown_effect(command_id)
+            self._assert_no_blocking_effect(command_id)
             self.assert_preconditions(preconditions)
             started = time.time()
             with self._tx() as db:
                 generation = int(
                     db.execute("SELECT generation FROM effect_meta WHERE singleton=1").fetchone()[0]
                 ) + 1
-                db.execute(
-                    "UPDATE effect_meta SET generation=? WHERE singleton=1", (generation,)
-                )
+                db.execute("UPDATE effect_meta SET generation=? WHERE singleton=1", (generation,))
                 db.execute(
                     "INSERT INTO effect_attempts(command_id,command_sha256,effect_class,holder,machine_id,generation,status,started_at) "
                     "VALUES(?,?,?,?,?,?,?,?) "
@@ -330,9 +337,6 @@ class HostEffectFence:
             try:
                 yield ticket
             except BaseException as exc:
-                # We know the Python effect body raised, but we deliberately do
-                # not claim the external world is unchanged. Reconciliation is
-                # required before replay.
                 with self._tx() as db:
                     db.execute(
                         "UPDATE effect_attempts SET status='UNKNOWN',finished_at=?,note=? "
@@ -341,14 +345,36 @@ class HostEffectFence:
                     )
                 raise
             else:
-                # Caller must separately bind/verify the real outcome. Success
-                # here only means the guarded effect body returned normally.
+                # Returning from an effect body is not readback. Keep subsequent
+                # live/system effects blocked until verify_success() binds an
+                # independent outcome digest.
                 with self._tx() as db:
                     db.execute(
-                        "UPDATE effect_attempts SET status='SUCCEEDED',finished_at=? "
+                        "UPDATE effect_attempts SET status='BODY_RETURNED_UNVERIFIED',finished_at=? "
                         "WHERE command_id=? AND generation=?",
                         (time.time(), command_id, generation),
                     )
+
+    def verify_success(self, command_id: str, command_sha256: str, *, outcome_sha256: str, note: str) -> None:
+        if not outcome_sha256 or len(outcome_sha256) != 64:
+            raise ValueError("64-hex outcome_sha256 required")
+        int(outcome_sha256, 16)
+        if not note.strip():
+            raise ValueError("verification note required")
+        with self._exclusive_host_lock(blocking=False):
+            row = self._assert_identity(command_id, command_sha256)
+            if not row:
+                raise KeyError(command_id)
+            if row["status"] != "BODY_RETURNED_UNVERIFIED":
+                raise EffectFenceError(
+                    f"{command_id}: verify requires BODY_RETURNED_UNVERIFIED, got {row['status']}"
+                )
+            with self._tx() as db:
+                db.execute(
+                    "UPDATE effect_attempts SET status='VERIFIED_SUCCEEDED',finished_at=?,outcome_sha256=?,note=? "
+                    "WHERE command_id=? AND command_sha256=?",
+                    (time.time(), outcome_sha256.lower(), note, command_id, command_sha256),
+                )
 
     def mark_unknown_after_startup(self) -> int:
         """Fail closed after daemon/host restart.
@@ -356,6 +382,7 @@ class HostEffectFence:
         A crashed process releases flock automatically, so OS-lock availability
         alone cannot prove a prior external effect did not happen. Any leftover
         PREPARED/RUNNING attempt becomes UNKNOWN and blocks future live effects.
+        BODY_RETURNED_UNVERIFIED already blocks and remains explicitly distinct.
         """
         with self._tx() as db:
             cur = db.execute(
@@ -369,15 +396,18 @@ class HostEffectFence:
     def reconcile_safe(self, command_id: str, *, note: str) -> None:
         if not note.strip():
             raise ValueError("reconciliation note required")
-        with self._tx() as db:
-            row = db.execute(
-                "SELECT status FROM effect_attempts WHERE command_id=?", (command_id,)
-            ).fetchone()
-            if not row:
-                raise KeyError(command_id)
-            if row["status"] != "UNKNOWN":
-                raise EffectFenceError(f"{command_id}: status={row['status']} is not UNKNOWN")
-            db.execute(
-                "UPDATE effect_attempts SET status='RECONCILED_SAFE',finished_at=?,note=? WHERE command_id=?",
-                (time.time(), note, command_id),
-            )
+        with self._exclusive_host_lock(blocking=False):
+            with self._tx() as db:
+                row = db.execute(
+                    "SELECT status FROM effect_attempts WHERE command_id=?", (command_id,)
+                ).fetchone()
+                if not row:
+                    raise KeyError(command_id)
+                if row["status"] not in {"UNKNOWN", "BODY_RETURNED_UNVERIFIED"}:
+                    raise EffectFenceError(
+                        f"{command_id}: status={row['status']} cannot be reconciled"
+                    )
+                db.execute(
+                    "UPDATE effect_attempts SET status='RECONCILED_SAFE',finished_at=?,note=? WHERE command_id=?",
+                    (time.time(), note, command_id),
+                )

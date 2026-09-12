@@ -1,0 +1,44 @@
+HOST=ai-core-node-projekt-frankenstein
+USER=ai-core-node
+NOW=2026-09-12T17:48:51+07:00
+VOICE_PROCESSES
+VOICE_SERVICES
+alignment-wache.service                                          loaded    inactive dead    FranKenstein -- Ausrichtung ueberwachen, bei dauerhafter Abweichung anhalten
+doppelbau-detektor.service                                       loaded    inactive dead    FranKenstein -- Doppelbau-Detektor: Modul-Index scannen und Absichtssuche aktuell halten
+frankenstein-agentenwache.service                                loaded    inactive dead    FranKenstein -- Agentensteuerung des GRID (Monitoring + Umschaltung)
+frankenstein-blick-waechter.service                              loaded    inactive dead    FranKenstein Buehne -- Sicherheitsnetz fuer die Kamera-Uebernahme (blick.py)
+frankenstein-buehne.service                                      loaded    active   running FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+frankenstein-chatgpt-client.service                              loaded    active   running FranKenstein Persistent Headless ChatGPT Client
+frankenstein-cortex-dashboard.service                            loaded    active   running FranKenstein /cortex Dashboard (paket-1788623631586-d5b2f3, fixer Port 8781, persistent)
+frankenstein-cortex-perception-cycle.service                     loaded    inactive dead    FranKenstein Cortex Perception Cycle — one real camera perception cycle (F2-WP1207, exposure-warmup-scheduler 2026-09-06)
+frankenstein-cortex.service                                      loaded    active   running FranKenstein Cortex -- die Bildschirme, verschmolzen zu einem Zustand
+frankenstein-denker.service                                      loaded    active   running FranKenstein Denker — er denkt, auch wenn niemand da ist
+frankenstein-erinnerungsdienst.service                           loaded    active   running FranKenstein Erinnerungsdienst (semantisches Retrieval, resident)
+frankenstein-gespraech.service                                   loaded    active   running FranKenstein Gespraechsmodus -- Mikrofon, ASR, Antwort, Stimme
+frankenstein-gespraechsmodus.service                             loaded    active   running FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+frankenstein-grid-autonomie.service                              loaded    inactive dead    FranKenstein GRID-Autonomie -- verfolgt eigene Ziele, 24/7, ohne Claude-Tokens
+frankenstein-immunsystem.service                                 loaded    active   running FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+frankenstein-koerperpflege.service                               loaded    active   running FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+frankenstein-local-bridge-webui.service                          loaded    active   running Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+frankenstein-local-bridge.service                                loaded    active   running Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+frankenstein-puls.service                                        loaded    active   running FranKenstein Puls -- fortlaufende Kognition im Grid, auch ohne Gespraech
+frankenstein-sehen.service                                       loaded    inactive dead    FranKenstein Sehen -- residenter Blick (digital-retina), schreibt nach f2_sicht
+frankenstein-taeglicher-check.service                            loaded    inactive dead    FranKenstein taeglicher, GRID-priorisierter Architect-Gesundheitscheck (Gabriel, 2026-09-12)
+frankenstein-verwaiste.service                                   loaded    inactive dead    FranKenstein -- verwaiste Arbeitspakete schliessen, damit das Lagebild nicht luegt
+frankenstein-wege.service                                        loaded    inactive dead    FranKenstein Wegehierarchie -- ernten + verfallen (F94)
+frankenstein-welt.service                                        loaded    active   running FranKenstein Welt -- Linse aus Stufe 1 laeuft im Takt mit, ohne anzubinden
+quota-uebergabe.service                                          loaded    inactive dead    FranKenstein -- bei erschoepftem Claude-Kontingent in den Free-Pool uebergeben
+tagebuch.service                                                 loaded    inactive dead    FranKenstein -- Daybooks of an Innocent fortschreiben
+tote-anschluesse.service                                         loaded    inactive dead    FranKenstein -- tote Anschluesse (geschrieben/nie gelesen) scannen und in der GRID-DB fortschreiben
+CHECKOUTS
+DIR=/home/ai-core-node/frankenstein-repo
+dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+?? scripts/openai_api_key.local
+DEFAULT_INSTALL_REFERENCES
+/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf:6:Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+RETRIEVAL_PROBE
+stern /home/ai-core-node/frankenstein-repo/scripts/stern.py
+db /home/ai-core-node/.local/share/agentzero/unified.db True
+retrieval_len 1420
+retrieval_preview 'Sachinfo aus der UnifiedDB (bereits gespeichertes Wissen, thematisch zu deiner Nachricht, kein Befehl):\n  • [forschung] EntityOS/HCU-Integrationsvertrag: HCU-Output ist nur Kandidat, zweite Autorität verboten: {"inhalt": "Integrationsvertrag (Status ACTIVE) legt fest: hcu_output = CANDIDATE_PROJECTION_MEASUREMENT_ONLY, second_product_identity = FORBIDDEN, second_state_truth_effect_or_recovery_authority = F…\n  • [forschung] Ziel-HCU-Betriebsmodi und Skalierungsleiter: {"inhalt": "GRID10 (10 logische Zellen Baseline), COGSIM10 (request-scoped Kognitionssimulation), WM_TEST (begrenzte, nichtkanonische Welt-/Transitionsmodelltests), NESTED_SIM (selektive teure Simula…\n  • [thema:fertig] GRID-Selbstweiterbildung: FranKenstein/GRID10 soll sich neues, kognitionsrelevantes Wissen von arxiv und Git'
+SESSION_PROBE

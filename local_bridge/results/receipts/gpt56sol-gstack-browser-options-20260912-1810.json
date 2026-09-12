@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-gstack-browser-options-20260912-1810",
+  "command_sha256": "7d036476391d910d39c5a0208b04fce0398dad0933c8ac79f8964c58b8481da9",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:48:54.997905+00:00",
+  "finished_at": "2026-09-12T10:48:55.830355+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "3b9bd755569d8c8b4245e2e4f43e5a6a85bdfc0d94636b0e5b2d63efdf75bda2",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "BROWSE_BIN\n/home/ai-core-node/.claude/skills/gstack/browse/dist/browse\nHELP\ngstack browse \u2014 Fast headless browser for AI coding agents\n\nUsage: browse <command> [args...]\n\nNavigation:     goto <url> | back | forward | reload | url\nContent:        text | html [sel] | links | forms | accessibility\nInteraction:    click <sel> | fill <sel> <val> | select <sel> <val>\n                hover <sel> | type <text> | press <key>\n                scroll [sel] | wait <sel|--networkidle|--load> | viewport <WxH>\n                upload <sel> <file1> [file2...]\n                cookie-import <json-file>\n                cookie-import-browser [browser] [--domain <d>]\nInspection:     js <expr> | eval <file> | css <sel> <prop> | attrs <sel>\n                console [--clear|--errors] | network [--clear] | dialog [--clear]\n                cookies | storage [set <k> <v>] | perf\n                is <prop> <sel> (visible|hidden|enabled|disabled|checked|editable|focused)\nVisual:         screenshot [--viewport] [--clip x,y,w,h] [@ref|sel] [path]\n                pdf [path] | responsive [prefix]\nSnapshot:       snapshot [-i] [-c] [-d N] [-s sel] [-D] [-a] [-o path] [-C]\n                -D/--diff: diff against previous snapshot\n                -a/--annotate: annotated screenshot with ref labels\n                -C/--cursor-interactive: find non-ARIA clickable elements\nCompare:        diff <url1> <url2>\nMulti-step:     chain (reads JSON from stdin)\nTabs:           tabs | tab <id> | newtab [url] | closetab [id]\nServer:         status | cookie <n>=<v> | header <n>:<v>\n                useragent <str> | stop | restart\nDialogs:        dialog-accept [text] | dialog-dismiss\n\nRefs:           After 'snapshot', use @e1, @e2... as selectors:\n                click @e3 | fill @e4 \"value\" | hover @e1\n                @c refs from -C: click @c1\nCONNECT\n/home/ai-core-node/.claude/skills/gstack-connect-chrome\n/home/ai-core-node/.claude/skills/gstack/connect-chrome\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

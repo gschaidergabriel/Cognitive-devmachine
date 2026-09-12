@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "999-20260912-voice-merge-main-retest-push-01",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; R=/home/ai-core-node/frankenstein-repo; BR=chatgpt-fix/voice-live-action-final-20260912; EXPECT=eef0976c41e8abdbf46c61560df5339055b10633; WT=/tmp/frankenstein-999-merge-main-02; test -e \"$WT/.git\"; test \"$(git -C \"$WT\" rev-parse HEAD)\" = 7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5; git -C \"$R\" fetch -q origin \"$BR\"; GOT=$(git -C \"$R\" rev-parse \"origin/$BR\"); echo EXPECT=$EXPECT; echo GOT=$GOT; test \"$GOT\" = \"$EXPECT\" || { echo BRANCH_MOVED_ABORT; exit 42; }; cd \"$WT\"; python3 -m py_compile scripts/voice_full_integration.py scripts/voice_full_runtime.py scripts/voice_final_runtime.py scripts/voice_action_executor.py scripts/voice_action_guard.py DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py DEV_SOURCE_RESEARCH/repository/scripts/voice_session_capsule.py DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff.py DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff_runtime.py DEV_SOURCE_RESEARCH/repository/scripts/conversation_presence_policy.py; PYTHONPATH=.:DEV_SOURCE_RESEARCH/repository pytest -q tests/test_voice_live_final.py tests/test_voice_full_integration.py tests/test_voice_host_broker.py tests/test_frankenstein_identity_assembly.py DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_cross_organ.py DEV_SOURCE_RESEARCH/repository/tests/test_conversation_presence_policy.py; git diff --check; git push origin HEAD:refs/heads/$BR; echo PUSHED=$(git rev-parse HEAD)",
+  "cwd": "/tmp/frankenstein-999-merge-main-02",
+  "timeout_seconds": 1200
+}

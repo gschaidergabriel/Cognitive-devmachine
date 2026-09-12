@@ -1,0 +1,27 @@
+DB omega.sqlite3 exists True bytes 114688
+TABLES effect,epoch,frame,task
+COUNT effect 1
+COUNT epoch 3
+COUNT frame 318
+COUNT task 1
+STATES task [["DISPATCHED", 1]]
+STATES effect [["PROPOSED", 1]]
+DB omega_runtime.sqlite3 exists True bytes 45056
+TABLES effect_intent,epoch,frame,proposal,task
+COUNT effect_intent 0
+COUNT epoch 1
+COUNT frame 1
+COUNT proposal 10
+COUNT task 0
+STATES task []
+OUTBOX_DIRECT 0
+OUTBOX_WRAPPED 6
+RELAY_RESULTS 0
+CURRENT_RELEASE {
+  "schema": "OMEGA_CURRENT_RELEASE/v1",
+  "omega_head": "572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "release_path": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "activated_at": "2026-09-12T11:25:41.761800+00:00",
+  "carrier_branch": "omega-vps-deploy"
+}
+

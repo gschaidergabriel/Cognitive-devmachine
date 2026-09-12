@@ -1,0 +1,28 @@
+TMP=/tmp/omega-assembly.nGHjyr
+BASE=2319dcde91284c959837637d055e056e15137c70
+MERGE_READY=1
+CHANGED=2
+.github/workflows/omega-777-organ-arbitration.yml
+tests/test_voice777_installer_convergence.py
+--- OMEGA references ---
+scripts/voice_777_runtime.py:24:import omega_organ_activity as organ  # noqa: E402
+scripts/voice_host_777_live_client.py:19:import omega_organ_activity as organ  # noqa: E402
+scripts/voice_host_777_live_client.py:37:                result["omega_organ_activity"] = organ.injection("omni")
+scripts/frank_terminal_777.py:18:import omega_organ_activity as organ  # noqa: E402
+scripts/frank_terminal.py:42:import omega_arm_bus as oab  # noqa: E402  # 777: one SELF / multi-arm live projection
+scripts/voice_full_runtime.py:27:import omega_arm_bus as oab  # noqa: E402  # 777: one SELF / multi-arm live projection
+scripts/voice_full_runtime.py:233:        self._omega_arm_bus = None
+scripts/voice_full_runtime.py:237:                self._omega_arm_bus = oab.OmegaArmBus(
+scripts/voice_full_runtime.py:243:                self._omega_arm_bus = None
+scripts/voice_full_runtime.py:342:    _arm_bus = getattr(self, "_omega_arm_bus", None)
+scripts/voice_full_runtime.py:480:        _arm_bus = getattr(self, "_omega_arm_bus", None)
+scripts/voice_full_runtime.py:567:        bus = getattr(self, "_omega_arm_bus", None)
+scripts/voice_full_runtime.py:613:        bus = getattr(self, "_omega_arm_bus", None)
+--- tests ---
+TEST=tests/test_omega_arm_bus.py
+TEST=tests/test_voice777_local_audio_arm.py
+TEST=tests/test_voice777_multiarm_integration.py
+TEST=tests/test_voice777_omni_presence.py
+TEST=tests/test_voice777_pocket_renderer.py
+TEST=tests/test_omega_organ_activity.py
+ALL_TEST_COMMANDS_PASS=1

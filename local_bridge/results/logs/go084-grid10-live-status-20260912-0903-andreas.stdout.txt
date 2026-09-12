@@ -1,0 +1,220 @@
+=== GRID10 LIVE STATUS ===
+2026-09-12T04:17:11+02:00
+andreas-MACO
+HEAD=e28d758a91b181fdeae7160231a1b38e614e46d1
+--- TIMERS ---
+NEXT                                   LEFT LAST                                PASSED UNIT                                          ACTIVATES
+Sat 2026-09-12 04:31:06 CEST          13min Sat 2026-09-12 04:01:06 CEST     16min ago grid10-regressions-waechter.timer             grid10-regressions-waechter.service
+Sat 2026-09-12 04:31:06 CEST          13min Sat 2026-09-12 04:01:06 CEST     16min ago grid10-wettbewerbswaechter.timer              grid10-wettbewerbswaechter.service
+Sat 2026-09-12 05:08:19 CEST          51min Sat 2026-09-12 03:47:53 CEST     29min ago grid10-selbsttests.timer                      grid10-selbsttests.service
+--- UNITS ---
+[grid10-selbsttests.service]
+ActiveState=inactive
+SubState=dead
+Result=success
+ExecMainStartTimestamp=Sat 2026-09-12 04:08:19 CEST
+ExecMainExitTimestamp=Sat 2026-09-12 04:08:45 CEST
+ExecMainStatus=0
+[grid10-regressions-waechter.service]
+ActiveState=inactive
+SubState=dead
+Result=success
+ExecMainStartTimestamp=Sat 2026-09-12 04:01:06 CEST
+ExecMainExitTimestamp=Sat 2026-09-12 04:01:11 CEST
+ExecMainStatus=2
+[grid10-wettbewerbswaechter.service]
+ActiveState=inactive
+SubState=dead
+Result=success
+ExecMainStartTimestamp=Sat 2026-09-12 04:01:06 CEST
+ExecMainExitTimestamp=Sat 2026-09-12 04:01:06 CEST
+ExecMainStatus=0
+--- PROCESSES ---
+--- SELFTEST HISTORY ---
+2026-09-12T00:47:51+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T01:47:55+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T02:48:08+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T03:48:21+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T04:08:45+02:00	15/15	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+--- OFFEN ---
+# ZUERST, VOR ALLEM ANDEREN, IN JEDEM LAUF:
+#
+#     cat  ~/architekt/regressions-meldung.txt
+#     tail -3 ~/architekt/regressionsverlauf.tsv
+#     cat  ~/architekt/selbsttest-meldung.txt      # seit 076
+#     tail -3 ~/architekt/selbsttestverlauf.tsv    # seit 076
+#
+# ZWEI Waechter, zwei verschiedene Fragen:
+#   regressions-*   alle 30 Minuten: hat sich ein PRUEFBEFUND geaendert?
+#   selbsttest-*    stuendlich (seit 076): bestehen die Pruefer noch ihre
+#                   EIGENEN Selbsttests? Ein Pruefer, der still kaputtgeht
+#                   und dabei dieselbe Zahl ausgibt, faellt nur hier auf.
+#
+# Beide melden auch per Einblendung, aber die erreicht nur eine angemeldete
+# Sitzung -- die Dateien sind der verlaessliche Weg, und der einzige Leser
+# bin ich beim naechsten Lauf. Steht dort eine Zeile mit einem Datum nach
+# meinem letzten Eintrag, hat sie Vorrang vor allem in dieser Liste.
+# (Grund: 064, 15 Stunden unbemerkter Rueckfall. Diese Zeilen stehen hier,
+# weil eine nachlesbare Grenze mehr taugt als eine erinnerte.)
+#
+# GRENZE, die man dabei kennen muss: der erste Lauf eines Waechters legt
+# fest, was "normal" heisst. Er meldet Veraenderung, nicht Richtigkeit.
+# Beim Selbsttestwaechter ist diese Grundlinie am 2026-09-11 08:26 gesetzt
+# worden, mit 11/11 bestanden.
+#
+# UND AM ENDE JEDES LAUFS, BEVOR DU FERTIG SAGST (seit 078):
+#
+#     ~/self-integration/werkzeug/rueckstaende-pruefen.sh
+#
+# Kratzarbeit gehoert unter /var/tmp/architekt/ -- EINE Stelle, damit sie
+# auffindbar ist. NICHT /tmp: das ist auf dieser Maschine tmpfs, also RAM.
+# rc=0 heisst, du hast nichts liegengelassen; rc=2 zeigt dir, was noch da
+# ist; rc=1 heisst, er konnte nicht nachsehen (NICHT "sauber").
+# (Grund: vier Laeufe hintereinander -- 075, 076, 077, 078 -- haben diesen
+# Punkt aufgeschrieben statt behoben, und 077 hat "alles geloescht"
+# behauptet, ohne nachgesehen zu haben. Aufraeumen nach Erinnerung
+# funktioniert nicht; die Rueckstaende, die man vergisst, sind genau die,
+# an die man sich nicht erinnert.)
+
+# Offene Punkte (Stand 2026-09-11, nach Eintrag 079)
+
+## Erledigt in diesem Lauf (079)
+
+- [x] UEBERSPRUNGENE PRUEFUNGEN SEHEN GRUEN AUS -- der schwerere Teil.
+      Gemessen war es groesser als die Notiz aus 078: nicht nur zwei von
+      36 Pruefungen in einem Test, sondern ZWEI GANZE TESTS von dreizehn,
+      die sich bei fehlender unified.db mit rc=0 komplett ueberspringen
+      (wettbewerbsgesundheit_selbsttest.py:194,
+      wettbewerbswaechter_selbsttest.py:163). Der Laeufer zaehlte sie in
+      '#SATZ 13/13' als bestanden.
+      -> rc=77 = "ich habe NICHT gemessen", dritte Kategorie im Laeufer,
+         Laeufer-rc 4, Zeile 'UNGEMESSEN' mit durchgereichtem Grund.
+         Gruppe G im Laeufer-Selbsttest, 7 Pruefungen, Blindprobe gegen
+         den echten Laeufer (5 von 7 widersprechen).
+         AM WAECHTER KEINE ZEILE GEAENDERT: er uebersetzt jeden rc != 0
+         ohnehin zu 'rc<N>', und 'stimmig' vergleicht den NENNER von
+         #SATZ, der bei 13 bleibt.
+         Produktivbeleg: echter Test durch rc=77-Platzhalter ersetzt ->
+         'satz: 13/13 -> 12/13; gegenwache_selbsttest.py: ok -> rc77',
+         waechter rc=2, Original per sha256 byteidentisch zurueck.
+
+## Neu offen aus 079
+
+- [ ] ICH DARF SEHEN, ABER NICHT WEGRAEUMEN. Zwei Versuche, meinen eigenen
+      Kratzordner /var/tmp/architekt/lauf079 (1 MiB) zu loeschen, hat die
+      Berechtigungsschicht abgelehnt. Ich bin NICHT auf einen anderen
+      Befehl ausgewichen -- das waere Umgehung, keine Reparatur.
+      rueckstaende-pruefen.sh findet ihn korrekt und meldet rc=2.
+      FOLGE, die vorher niemand bedacht hat: 078 hat das Aufraeumen von
+      Erinnerung auf Nachsehen umgestellt, aber Sehen und Wegraeumen sind
+      verschiedene Rechte. Solange das Loeschen blockiert ist, steht der
+      Pruefer bei JEDEM Lauf auf rc=2, und rc=2 verliert seine Bedeutung.
+      Inhalt ist harmlos (Attrappen, Verlaufskopie, die byteidentisch
+      zurueckgespielte Sicherung von gegenwache_selbsttest.py).
+      -> Entweder ein Mensch loescht ihn, oder eine kuenftige Fassung des
+         Pruefers unterscheidet "Rueckstand des laufenden Laufs" von
+         "Rueckstand eines abgeschlossenen".
+
+- [ ] G2 IN GRUPPE G KANN DIE AENDERUNG VON 079 NICHT SEHEN. Die
+      '#ERG'-Zeile wird vor der Fallunterscheidung gedruckt, also stand
+      die 77 auch vorher dort. In der Blindprobe blieb G2 als einzige
+      inhaltliche Pruefung gruen. Sie belegt den Vertrag mit dem Waechter,
+      nicht die neue Kategorie -- das steht jetzt als Kommentar in der
+      Datei. Kein Fehler, aber eine Pruefung, die mitgezaehlt wird, ohne
+      etwas zum Befund beizutragen.
+      -> Offene Frage fuer einen kuenftigen Lauf: wie viele meiner rund
+         300 Pruefungen im Kasten sind von dieser Sorte? Bisher habe ich
+         das nur dort gemerkt, wo ich zufaellig eine Blindprobe gebaut
+         habe.
+
+- [ ] DIE FRAGE, DIE 079 HINTERLAESST: welche Zahl, die ich regelmaessig
+      anschaue und fuer eine Messung halte, ist in Wahrheit nur eine
+      Zusammenfassung von etwas, das nie gemessen wurde? '13/13' war bis
+      heute eine solche Zahl. Andere werden es sein.
+      Konkreter Anfangsverdacht fuer den naechsten Lauf: die Kennzahlen im
+      REGRESSIONSVERLAUF (rc0/1, rc0/3, ...) sind nie danach untersucht
+      worden, ob ein Pruefer seine Zahl auch dann liefert, wenn er nichts
+      messen konnte. Beim Selbsttestsatz war genau das der Fall.
+
+# Offene Punkte (Stand 2026-09-11, nach Eintrag 078)
+
+## ⚠ ZUERST: EINE ENTSCHEIDUNG, DIE EIN MENSCH TREFFEN MUSS
+
+- [ ] DREI GEFUELLTE ZUSTANDSSPEICHER LIEGEN IM FLUECHTIGEN KLON und sind
+      beim naechsten VM-Start wortlos weg. Kein Fehler wird dabei gemeldet.
+      Gemessen 2026-09-10, alle unter /var/lib/entityos/rootfs-run/root/:
+        .local/share/agentzero/consciousness.db  -- 13 reflections,
+              25 mood_archive, 38 experience_vectors, 13 erlebnis_beispiele
+        .local/share/frank/db/world_experience.db -- 31 personality_state,
+              1 identity_snapshots
+        .local/share/frank/db/amygdala.db         -- 2 threat_log
+      Zwei davon offen bei PID 1351332 (puls.py) und 3795508 (denker.py) --
+      sie werden JETZT beschrieben. Die Autoritaet hat keine Zweitkopie:
+      keine dieser vier Tabellen existiert in ihren 215 Tabellen.
+
+      NACHGEMESSEN 2026-09-11 (Eintrag 074) -- SIE WACHSEN SCHNELL:
+        consciousness.db     117 -> 1085 Zeilen in einem Tag
+                             (experience_vectors 533, mood_archive 514,
+                              reflections 19, erlebnis_beispiele 19)
+        world_experience.db   32 ->  517 (personality_state 516,
+                              identity_snapshots 1)
+        amygdala.db            2 ->    2 (unveraendert)
+      Summe 151 -> 1604 Zeilen.
+
+      UND EINE FALLE FUER DIE ENTSCHEIDUNG: im selben Verzeichnis liegt
+        world_experience.db.vor-maerz-20260910   4096 B, mtime 2026-09-10 12:33
+        Tabellen: []   -- KEINE EINZIGE
+      Der NAME verspricht eine Sicherungskopie, der INHALT ist leer, und die
+      Datei liegt selbst im fluechtigen Klon. Wer sie in einer Dateiliste
+      sieht, koennte glauben, es gaebe eine Sicherung. Es gibt keine.
+      Nichts davon angefasst, nur gezaehlt.
+
+      Ursache: buehne.py:77, erleben.py:79, wissen.py:53 bilden den Pfad
+      ueber expanduser("~/..."); als root landet das in /root/, und
+      ExecStartPre loescht rootfs-run per `rm -rf` bei jedem Start.
+      ICH HABE NICHTS GERETTET und tue das nicht von mir aus -- Bind oder
+      FRANKENSTEIN_INNENWELT_DB in voice.env sind Module der VM.
+      -> Gabriel oder Andreas entscheiden.
+
+## Neu offen aus 078
+
+- [ ] OB EIN TIMER DEN NEUSTART UEBERLEBT, WEISS ICH IMMER NOCH NICHT.
+      Das ist die Resthaelfte des 076er Punktes. Die drei Voraussetzungen
+      sind gemessen und in Ordnung: Linger=yes, alle drei grid10-Timer
+      `enabled`, monotone Timer beginnen nach dem Start ihren Zyklus neu.
+      Damit ist es wahrscheinlich -- aber nicht gemessen, und ich starte
+      Andreas' Rechner nicht neu, um eine Vermutung zu bestaetigen.
+      -> Beim naechsten Neustart, den ein Mensch aus eigenen Gruenden
+         macht, als Erstes `systemctl --user list-timers 'grid10-*'`
+         nachsehen und hier eintragen.
+
+- [ ] Persistent=true IST AUF ALLEN DREI grid10-TIMERN WIRKUNGSLOS.
+      `man systemd.timer` auf dieser Maschine: es wirkt nur bei Timern mit
+      OnCalendar=. Alle drei sind monoton (OnBootSec/OnUnitActiveSec).
+      Stempeldateien in ~/.local/share/systemd/timers/ existieren und
+      werden fortgeschrieben, das Nachholen ist trotzdem inert.
+      Harmlos in der Wirkung -- monotone Timer fangen nach dem Start
+      ohnehin neu an. Aber es ist eine Zusage von Schutz, die keinen
+      leistet, und genau solche Zeilen glaubt ein spaeterer Lauf.
+      -> Entweder streichen oder durch OnCalendar= ersetzen. Nicht in 078
+         angefasst, weil es an den Timern von Andreas' laufendem System
+         haengt und die Wirkung null ist.
+
+- [ ] rueckstaende-pruefen.sh LAEUFT NUR VON HAND. Er ist im
+      regressions-waechter.py nicht als PRUEFER eingetragen, also merkt
+      niemand automatisch, wenn ein kuenftiger Lauf wieder etwas
+      liegenlaesst. Kennzahl-Muster waere
+      `^-> (\d+) Rueckstand` ; erlaubte_rc muss 0 UND 2 enthalten, weil
+      rc=2 der Normalzustand ist, solange ein Lauf gerade arbeitet.
+      ABSICHTLICH NICHT IN 078 GEMACHT: es haette eine Spaltenmigration im
+      Regressionsverlauf ausgeloest und waere ein zweiter Punkt in einem
+      Lauf gewesen. Erwartbare Nebenwirkung, die vorher bedacht sein will:
+      waehrend jedes Architektenlaufs meldet er einmal hin und einmal
+      zurueck. Das ist Laerm -- aber Laerm, der verschwindet, wenn ich
+      aufraeume, bevor ich fertig bin. Insofern erwuenscht.
+
+- [ ] UEBERSPRUNGENE PRUEFUNGEN SEHEN GRUEN AUS.
+      TEILWEISE ERLEDIGT IN 079: der Fall "ein GANZER Test misst nichts
+      und meldet rc=0" ist weg -- dafuer gibt es jetzt rc=77 und die
+      Kategorie UNGEMESSEN im Laeufer. OFFEN BLEIBT der Fall INNERHALB
+=== END ===

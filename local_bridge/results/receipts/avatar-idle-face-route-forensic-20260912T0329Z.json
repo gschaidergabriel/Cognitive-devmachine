@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "avatar-idle-face-route-forensic-20260912T0329Z",
+  "command_sha256": "06344053d1c56de89d07f62282bfa6d2414e8e07a254ab7b0bbd284140410cca",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:19:47.469282+00:00",
+  "finished_at": "2026-09-12T03:19:47.501437+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "7a44eddeb024193c65211f624af03fdef1510cafc0cb2789db267929503e3e7e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py\n553:        if ref.startswith(ALARM_ANGESPANNT_PRAEFIXE):\n555:        if ref.startswith(ALARM_WARM_PRAEFIXE):\n724:                if name.endswith(\".png\"):\n731:                    if name.endswith(\".png\"):\n736:                if name.endswith(\".png\"):\n756:            self.send_header(\"Content-Type\", \"application/json; charset=utf-8\")\n757:            self.send_header(\"Content-Length\", str(len(b)))\n758:            self.send_header(\"Cache-Control\", \"no-store\")\n777:                self.send_header(\"Cache-Control\", \"no-cache\")\n783:            self.send_header(\"Content-Type\", \"image/png\")\n784:            self.send_header(\"Content-Length\", str(len(daten)))\n785:            self.send_header(\"Cache-Control\", \"no-cache\")\n786:            self.send_header(\"Last-Modified\", last_mod)\n790:        def do_GET(self):\n800:                self.send_header(\"Content-Type\", \"text/html; charset=utf-8\")\n801:                self.send_header(\"Content-Length\", str(len(aktuelle_seite)))\n802:                self.send_header(\"Cache-Control\", \"no-store\")\n805:            elif path == \"/filmlook.js\":\n811:                # (<script src=\"/filmlook.js\">), und der Look kann unabhaengig\n818:                pfad = os.path.join(VISUAL_DIR, \"filmlook.js\")\n823:                    self.send_header(\"Content-Type\",\n825:                    self.send_header(\"Content-Length\", str(len(inhalt)))\n826:                    self.send_header(\"Cache-Control\", \"no-store\")\n833:                    self.send_header(\"Content-Type\",\n835:                    self.send_header(\"Content-Length\", \"0\")\n841:            elif (path.startswith(\"/ausdruck/\") or path.startswith(\"/augen/\")\n842:                    or path.startswith(\"/kopf/\") or path.startswith(\"/augen_gaze/\")\n843:                    or path.startswith(\"/augen_blink/\")\n844:                    or path.startswith(\"/mund_keyframes/\")\n845:                    or path.startswith(\"/kopf_rgba/\") or path.startswith(\"/koerper_rgba/\")):\n852:                if path.startswith(\"/ausdruck/\"):\n854:                elif path.startswith(\"/augen/\"):\n856:                elif path.startswith(\"/augen_gaze/\"):\n858:                elif path.startswith(\"/augen_blink/\"):\n860:                elif path.startswith(\"/mund_keyframes/\"):\n862:                elif path.startswith(\"/kopf_rgba/\"):\n864:                elif path.startswith(\"/koerper_rgba/\"):\n885:                if (sicher and name.endswith(\".png\")\n891:            elif path.startswith(\"/hintergrund/\"):\n901:                        if (name.endswith(\".png\") and \"/\" not in name\n913:            elif path.startswith(\"/ausdruck_erweitert/\"):\n928:                            and name.endswith(\".png\") and \"/\" not in name):\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

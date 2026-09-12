@@ -1,0 +1,171 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+  mikroSakX = Math.cos(winkel) * staerke;
+  mikroSakY = Math.sin(winkel) * staerke;
+  setTimeout(() => { mikroSakX = 0; mikroSakY = 0; }, 80 + Math.random() * 90); // kurz gehalten, dann ballistisch zurueck (kein Lerp)
+  setTimeout(mikroSakkadeSchritt, 1000 + Math.random() * 3000); // 1-4s, unregelmaessig
+}
+setTimeout(mikroSakkadeSchritt, 1500);
+// ⭐⭐ NEU 2026-09-11: pro Frame neu entschieden (nicht mehr nur alle 3s beim
+// Poll), weil blickPauseAktiv jederzeit zwischen zwei Polls kippen kann --
+// die Zielwahl braucht denselben Takt wie die Animation selbst. Bleibt
+// billige Arithmetik, kein zusaetzlicher Bildaufbau (GPU-Budget-Disziplin
+// unveraendert). Drei Stufen, alle aus echten/deterministischen Signalen:
+//   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+//                      Gabriel gerade direkt an, kein Wegblick aktiv
+//                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+//   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+//                      Mikro-Pause aktiv -> Ziel = _wegZiel (sichtbar
+//                      anders, aber gedaempft: "da, aber nicht fixiert")
+//   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+//                      Hartregel: kein erfundener Blick ohne Erkennung)
+function gazeZielBestimmen(){
+  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+  const wegAktiv = blickPauseAktiv || gespraechsFokus === "thema";
+  if(wegAktiv) return {x:_wegZiel.x, y:_wegZiel.y, opazitaet:0.4};
+  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+}
+function gazeSchritt(){
+  const ziel = gazeZielBestimmen();
+  zielGazeX = ziel.x; zielGazeY = ziel.y;
+  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+  // driftet der Glimmer beim Rollen vom Blinzel-Flicken weg, obwohl beide
+  // denselben Augen-Anker verfolgen sollen.
+  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+}
+function wanderSchritt(){
+  if(!serverBlick.anwesend){
+    let neu = aktuelleBlickRichtung;
+    while(neu === aktuelleBlickRichtung){
+      neu = WANDER_RICHTUNGEN[Math.floor(Math.random()*WANDER_RICHTUNGEN.length)];
+    }
+    aktuelleBlickRichtung = neu;
+    gesichtNeuZeichnen();
+  }
+  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+}
+setTimeout(wanderSchritt, 1500);
+
+// ⭐ 2026-09-11 Seltene, kurze Kopfneigung -- eigenstaendiger fuenfter
+// Lebendigkeits-Baustein neben Blinzeln/Atmen/Drift/Wander-Blick, gleiche
+// Idee: unregelmaessige Abstaende statt Takt. Niedrigste Prioritaet (siehe
+// gesichtNeuZeichnen()) -- ein echter Blinzel oder Blick-Wechsel unterbricht
+// die Neigung sofort wieder sichtbar, die Neigung selbst haelt aber ueber
+// einen Blinzler hinweg an (wirkt wie eine gehaltene Haltung, nicht wie ein
+// Tick). Dank Crossfade jetzt weich statt Bildsprung.
+function kopfKurzNeigen(){
+  if(_sonderLaeuft || kopfRollSchritte){ kopfWeiterPlanen(); return; }
+  const gross = Math.random() < 0.12;
+  const pool = gross ? KOPF_ROLL_GROSS : KOPF_ROLL_POOL;
+  const ziel = pool[Math.floor(Math.random()*pool.length)];
+  kopfPose = "roll"; kopfRollSoll = ziel;
+  gesichtNeuZeichnen();
+  kopfRollSequenzZu(ziel, () => {
+    // halten (2.6-5.2s, siehe Messung unten), dann in 5°-Schritten zurueck
+    setTimeout(() => {
+      kopfRollSequenzZu(0, () => {
+        kopfPose = null; kopfRollSoll = 0;
+        gesichtNeuZeichnen();
+        kopfWeiterPlanen();
+      });
+    }, 2600 + Math.random()*2600);
+  });
+}
+function kopfWeiterPlanen(){
+  setTimeout(kopfKurzNeigen, 9000 + Math.random()*10000); // 9-19s, unregelmaessig
+}
+kopfWeiterPlanen();
+
+// 4) REAKTIONSLATENZ -- 150-350ms, NICHT sofort. Reihenfolge laut Auftrag:
+// Blick zuerst, dann Ausdruck, dann alles andere (Regen/Wasser laufen schon
+// unabhaengig ueber statusHolen()). Ausdruck bekommt absichtlich eine etwas
+// laengere Verzoegerung als der Blick, damit die Reihenfolge auch bei
+// gleichzeitiger Aenderung sichtbar eingehalten wird.
+let _blickTimer = null, _ausdruckTimer = null;
+function reaktionAufNeuenStatus(neuerBlick, neuerAusdruck){
+  serverBlick = neuerBlick || {anwesend:false, richtung:null, nah:false};
+  // ⭐ 2026-09-11 Punkt 3 (Blick): serverBlick ist die Rohquelle; wohin der
+  // Glimmer TATSAECHLICH zeigt (Gabriel direkt vs. Weg-Ziel bei Thema-Fokus/
+  // Mikro-Pause), wird jetzt PRO FRAME in gazeZielBestimmen()/gazeSchritt()
+  // entschieden (siehe dort) -- hier nur noch serverBlick selbst uebernehmen.
+  const zielRichtung = serverBlick.anwesend ? (serverBlick.richtung || "geradeaus") : null;
+  if(zielRichtung && zielRichtung !== aktuelleBlickRichtung){
+    if(_blickTimer) clearTimeout(_blickTimer);
+    _blickTimer = setTimeout(() => {
+      aktuelleBlickRichtung = zielRichtung;
+      gesichtNeuZeichnen();
+    }, 150 + Math.random()*200); // 150-350ms
+  }
+  if(neuerAusdruck && neuerAusdruck !== aktuellerAusdruck){
+    if(_ausdruckTimer) clearTimeout(_ausdruckTimer);
+    _ausdruckTimer = setTimeout(() => {
+      aktuellerAusdruck = neuerAusdruck;
+      gesichtNeuZeichnen();
+      // Punkt 5 (Hintergrund): Stimmungswechsel folgt demselben gemessenen
+      // Ausdruck, keine eigene Trigger-Erfindung.
+      const neueStimmung = AUSDRUCK_ZU_STIMMUNG[neuerAusdruck];
+      if(neueStimmung && neueStimmung !== hgStimmung){
+        hgStimmung = neueStimmung;
+        hgFrame = 0;
+      }
+    }, 260 + Math.random()*220); // spaeter als der Blick, siehe oben
+  }
+}
+gesichtNeuZeichnen(); // sofortiges erstes Bild, noch vor dem ersten /api/status
+
+// ── Buehnen-Animation: atmen, Datenregen (2 Ebenen = Parallaxe), Farbdrift,
+// Wasserlinie. Zwei Regenebenen statt einer erzeugen Tiefe (Gabriel,
+// 2026-09-11: "so als waere er wirklich da drinnen"): eine langsame,
+// kleine Ebene HINTER dem Gesichtsrahmen (im Rand/Hintergrund sichtbar),
+// eine schnelle, groessere Ebene VOR dem Gesicht (halbtransparent drueber)
+// -- er steht optisch zwischen den beiden statt nur davor.
+const canvas = $("regen");           // vorne, ueber dem Gesicht
+const ctx = canvas.getContext("2d");
+const canvasHinten = $("regen-hinten"); // hinten, hinter dem Rahmen
+const ctxHinten = canvasHinten.getContext("2d");
+let tropfenVorne = [];
+let tropfenHinten = [];
+
+function regenGroesseSetzen(){
+  const r = $("gesicht-rahmen").getBoundingClientRect();
+  canvas.width = r.width; canvas.height = r.height;
+  // ⭐ 2026-09-11: #regen-hinten liegt jetzt IN #kamera (Overscan-Box, 112%
+  // von #buehne), nicht mehr direkt in #buehne -- Groesse muss deshalb vom
+  // tatsaechlichen Elternrahmen kommen, sonst bleibt am Ueberstand-Rand eine
+  // ungezeichnete Luecke, die der Cam-Shake sichtbar ins Bild zieht.
+  const b = $("kamera").getBoundingClientRect();
+  canvasHinten.width = b.width; canvasHinten.height = b.height;
+}
+window.addEventListener("resize", regenGroesseSetzen);
+regenGroesseSetzen();
+
+// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+// object-position:50% 15%). Cover-Formel: scale = max(containerW/bildW,
+// containerH/bildH); die Leinwand wird auf renderedW x renderedH gesetzt und
+// so weit verschoben, dass an der object-position-Stelle (50%/15%) kein
+// Rand entsteht -- exakt die Formel, die der Browser intern fuer
+// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+// exakt. offsetWidth/offsetHeight statt getBoundingClientRect -- die sind
+// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+// mitgemessen werden (nur einmal bei Start/Resize aufgerufen, nicht pro
+// Frame -- die Leinwand selbst ist statisch, der Shake wirkt automatisch
+MOUTH_SOURCE_PASS

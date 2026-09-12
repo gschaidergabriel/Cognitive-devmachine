@@ -1,0 +1,55 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+219:     blendete sonderausdruckZeigen() dieses alte, an anderer Bildstelle
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+504:// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+510:// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+517:// nicht alle 221 Dateien in mund_keyframes/.
+518:function mundFrames(name){
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+524:  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+530:function mundZielSetzen(name){
+531:  mundAktivFrames = mundFrames(name);
+535:function mundSchritt(jetzt){
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+543:function mundAnimation(text){
+551:    mundZielSetzen(MUND_SPRECH_SET[i]);
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+572:          mundAnimation(z.text);
+642:// sonderausdruckZeigen()/kopfKurzNeigen()); 10 volle Frames weniger im
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+918:// Manuell ausloesbar (window.sonderausdruckZeigen in der Browser-Konsole)
+940:// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+943:let _sonderLaeuft = false;
+944:function sonderausdruckZeigen(register, ausdruck, haltenMs){
+945:  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+947:  _sonderLaeuft = true;
+948:  $("mund-effekt").style.opacity = "0";
+974:    $("mund-effekt").style.opacity = "1";
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+976:    _sonderLaeuft = false;
+995:window.sonderausdruckZeigen = sonderausdruckZeigen;
+1062:  sonderausdruckZeigen(wahl[0], wahl[1]);
+1073:// gab (siehe Luecken-Kommentar bei sonderausdruckZeigen() oben).
+1105:  if(_sonderLaeuft){
+1117:  sonderausdruckZeigen(wahl[0], wahl[1], _haltenMsNachTempo(1400));
+1145:    if(!_sonderLaeuft && Date.now() - _letzterSonderausdruckTs >= SONDERAUSDRUCK_ABKLINGZEIT_MS){
+1148:      sonderausdruckZeigen("anime_90s", "anime_fassungslos", _haltenMsNachTempo(1400));
+1195:  if(_sonderLaeuft){
+1407:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1430:  if(_sonderLaeuft || kopfRollSchritte){ kopfWeiterPlanen(); return; }
+1524:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1634:// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+1641:// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+1689:  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+1691:  if(_sonderLaeuft){
+1722:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1761:  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+1878:  mundSchritt(t);
+1965:    if(!kopfRollSchritte && !_sonderLaeuft){
+1976:    sonderausdruckZeigen(wahl[0], wahl[1]);

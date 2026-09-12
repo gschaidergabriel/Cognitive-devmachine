@@ -1,0 +1,45 @@
+LIVE_SHA=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+44:    background:radial-gradient(ellipse at 50% 30%, #1b1530 0%, var(--bg) 72%)}
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+236:     Querstreifen quer ueber die Bildmitte (ellipse at 50% 40%, volle Breite).
+246:    background:radial-gradient(ellipse at 50% 38%, rgba(0,0,0,0) 52%, rgba(0,0,0,.5) 100%)}
+257:  /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+492:// (kein Zugriff auf Audio-Pegel ohne verbotene Dateien anzufassen)
+494:// an der Schaetzung geaendert -- kein echtes Audio, weiterhin Textlaenge),
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+498:const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+499:  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+500:const MUND_RUHE = "mund_00_rest";
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+503:// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+510:// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+515:// ⚠️ Speicher: es werden NUR die Grundstellungen aus MUND_SPRECH_SET+MUND_RUHE
+517:// nicht alle 221 Dateien in mund_keyframes/.
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+522:const MUND_ALLE_STELLUNGEN = MUND_SPRECH_SET.concat([MUND_RUHE]);
+523:for(const n of MUND_ALLE_STELLUNGEN){
+529:const MUND_FRAME_MS = 22; // 6 Frames in ~130ms Alt-Takt = ~21,7ms/Frame
+535:function mundSchritt(jetzt){
+537:  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+548:    let i = Math.floor(Math.random() * MUND_SPRECH_SET.length);
+549:    if(i === letzte) i = (i + 1) % MUND_SPRECH_SET.length; // nie zweimal dieselbe Stellung hintereinander
+551:    mundZielSetzen(MUND_SPRECH_SET[i]);
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+620:// bewegt sich beim Sprechen. Eine Praesenz bewegt sich immer." Vier
+893:// KEINE RGBA-Entsprechung fuer Blinzeln/Blickrichtung/Kopfneigung/6
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+904:// Luecke (keine 1:1-RGBA-Entsprechung fuer diese vier Basiszustaende) ist
+948:  $("mund-effekt").style.opacity = "0";
+974:    $("mund-effekt").style.opacity = "1";
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+1001:// aus /opt/entityos/voice/identitaet.py aufruft -- eine Klassifikation von
+1030:    ["anime_90s","anime_zunge_raus"],    ["anime_90s","anime_pfeifen"],
+1524:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1878:  mundSchritt(t);
+1922:      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+MOUTH_GREP_PASS

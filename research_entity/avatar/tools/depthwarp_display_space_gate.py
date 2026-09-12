@@ -29,7 +29,11 @@ def build(root,r,eye,amp):
  yy,xx=np.mgrid[0:a.shape[0],0:a.shape[1]].astype(np.float32); ell=((xx-eye[0])/220)**2+((yy-eye[1])/125)**2
  gate=ss(.70,.97,a)*(1-ss(.015,.10,grad))*ss(1.,1.55,ell)
  dx=amp*depth*gate
- mapx=xx-dx; mapy=yy
+ # OpenCV remap requires CV_32FC1/CV_32FC2 or CV_16SC2 maps.  NumPy may
+ # promote xx-dx to float64 when amp/eye arrive as Python/np.float64 scalars,
+ # so pin the executable map ABI explicitly instead of relying on promotion.
+ mapx=np.ascontiguousarray(xx-dx,dtype=np.float32)
+ mapy=np.ascontiguousarray(yy,dtype=np.float32)
  rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
  out=np.dstack([rgb,base[:,:,3]])
  return base,out,gate,dx

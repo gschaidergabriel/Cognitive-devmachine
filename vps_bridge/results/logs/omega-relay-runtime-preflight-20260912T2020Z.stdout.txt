@@ -1,0 +1,29 @@
+PWD=/workspace/omega_runtime/state
+PROCESSES
+944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+946938 bash -lc set -u; echo PWD=$(pwd); echo PROCESSES; pgrep -af 'omega_grid_relay|omega-grid|omega_grid' || true; echo TMUX; tmux ls 2>/dev/null || true; echo STATE; find /workspace/omega_runtime/state -maxdepth 2 -type f -printf '%p\n' 2>/dev/null | sort | tail -80; echo OUTBOX; find /workspace/omega_runtime/state/outbox -maxdepth 1 -type f -printf '%f\n' 2>/dev/null | sort | tail -40
+TMUX
+omega-grid: 1 windows (created Sat Sep 12 10:50:32 2026)
+STATE
+/workspace/omega_runtime/state/STATUS.json
+/workspace/omega_runtime/state/master_bridge/LAST_GRID_MASTER_EMIT
+/workspace/omega_runtime/state/omega.sqlite3
+/workspace/omega_runtime/state/omega.sqlite3-shm
+/workspace/omega_runtime/state/omega.sqlite3-wal
+/workspace/omega_runtime/state/omega_runtime.sqlite3
+/workspace/omega_runtime/state/outbox/msg_1525669a778643cfbfc6b32d90385f0c.json
+/workspace/omega_runtime/state/outbox/msg_3be9cec3b7054ad88af6877c8728be25.json
+/workspace/omega_runtime/state/outbox/msg_74287d31d48b4e82a669ea8cb96662f2.json
+/workspace/omega_runtime/state/outbox/msg_b07097ddf588445f8ef50fc935c0bae7.json
+/workspace/omega_runtime/state/outbox/msg_c3001fb05dbc4206a7001efbc5dd357b.json
+/workspace/omega_runtime/state/telemetry/ai-core-node.json
+/workspace/omega_runtime/state/telemetry/andreas-maco.json
+/workspace/omega_runtime/state/telemetry/andreas.json
+/workspace/omega_runtime/state/telemetry/gabriel.json
+OUTBOX
+msg_1525669a778643cfbfc6b32d90385f0c.json
+msg_3be9cec3b7054ad88af6877c8728be25.json
+msg_74287d31d48b4e82a669ea8cb96662f2.json
+msg_b07097ddf588445f8ef50fc935c0bae7.json
+msg_c3001fb05dbc4206a7001efbc5dd357b.json

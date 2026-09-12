@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-relay-runtime-preflight-20260912T2020Z",
+  "command_sha256": "8e77c30eee2377025693dbd05075a434c38cab24cb56e862634376416b2a3c87",
+  "started_at": "2026-09-12T13:18:11.612028+00:00",
+  "finished_at": "2026-09-12T13:18:11.774999+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "b6cc04b78c57d3d5f064a8b95d6e3aaa3a796b9185787511a41f2c48e209d5bc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PWD=/workspace/omega_runtime/state\nPROCESSES\n944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n946938 bash -lc set -u; echo PWD=$(pwd); echo PROCESSES; pgrep -af 'omega_grid_relay|omega-grid|omega_grid' || true; echo TMUX; tmux ls 2>/dev/null || true; echo STATE; find /workspace/omega_runtime/state -maxdepth 2 -type f -printf '%p\\n' 2>/dev/null | sort | tail -80; echo OUTBOX; find /workspace/omega_runtime/state/outbox -maxdepth 1 -type f -printf '%f\\n' 2>/dev/null | sort | tail -40\nTMUX\nomega-grid: 1 windows (created Sat Sep 12 10:50:32 2026)\nSTATE\n/workspace/omega_runtime/state/STATUS.json\n/workspace/omega_runtime/state/master_bridge/LAST_GRID_MASTER_EMIT\n/workspace/omega_runtime/state/omega.sqlite3\n/workspace/omega_runtime/state/omega.sqlite3-shm\n/workspace/omega_runtime/state/omega.sqlite3-wal\n/workspace/omega_runtime/state/omega_runtime.sqlite3\n/workspace/omega_runtime/state/outbox/msg_1525669a778643cfbfc6b32d90385f0c.json\n/workspace/omega_runtime/state/outbox/msg_3be9cec3b7054ad88af6877c8728be25.json\n/workspace/omega_runtime/state/outbox/msg_74287d31d48b4e82a669ea8cb96662f2.json\n/workspace/omega_runtime/state/outbox/msg_b07097ddf588445f8ef50fc935c0bae7.json\n/workspace/omega_runtime/state/outbox/msg_c3001fb05dbc4206a7001efbc5dd357b.json\n/workspace/omega_runtime/state/telemetry/ai-core-node.json\n/workspace/omega_runtime/state/telemetry/andreas-maco.json\n/workspace/omega_runtime/state/telemetry/andreas.json\n/workspace/omega_runtime/state/telemetry/gabriel.json\nOUTBOX\nmsg_1525669a778643cfbfc6b32d90385f0c.json\nmsg_3be9cec3b7054ad88af6877c8728be25.json\nmsg_74287d31d48b4e82a669ea8cb96662f2.json\nmsg_b07097ddf588445f8ef50fc935c0bae7.json\nmsg_c3001fb05dbc4206a7001efbc5dd357b.json\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

@@ -53,12 +53,7 @@ class _AdoptedProcess:
 
 
 def _adopt_previous_chrome(self):
-    """Adopt a live PID from chrome.pid; only delete the PID file when stale/invalid.
-
-    The old implementation killed the previous process group during daemon startup. That
-    contradicts the owner singleton law because a daemon re-entry should keep/reuse the
-    production browser when it is still alive.
-    """
+    """Adopt a live PID from chrome.pid; only delete the PID file when stale/invalid."""
     try:
         with open(mod.PID_DATEI, "r", encoding="utf-8") as fh:
             pid = int(fh.read().strip())
@@ -78,7 +73,25 @@ def _adopt_previous_chrome(self):
         print(f"[buehne-singleton] stale PID cleanup failed: {exc}")
 
 
+def _preserve_chrome_on_daemon_exit(self):
+    """Daemon/service re-entry must not destroy the visible production browser.
+
+    A deliberate stage-off through the existing state/API still uses the original
+    `schliessen()` path. This override affects daemon shutdown/restart only: it leaves
+    Chrome + chrome.pid in place so the next singleton entrypoint can adopt the same
+    production process instead of creating a replacement.
+    """
+    if getattr(mod, "_blick_modul", None) is not None:
+        try:
+            mod._blick_modul.instanz().stoppen()
+        except Exception as exc:
+            print(f"[buehne-singleton] Blickfuehrung stop warning: {exc}")
+    pid = getattr(getattr(self, "proc", None), "pid", None)
+    print(f"[buehne-singleton] daemon exit preserves Chrome pid={pid}; next daemon adopts it")
+
+
 mod.Fensterverwalter._alte_pid_aufraeumen = _adopt_previous_chrome
+mod.Fensterverwalter.herunterfahren = _preserve_chrome_on_daemon_exit
 
 
 def _delayed_singleton_reconcile():

@@ -1,0 +1,93 @@
+{
+  "schema": "FRANKENSTEIN_CHATGPT_TERMINAL_HARNESS_ACCEPTANCE/v1",
+  "status": "IN_PROGRESS",
+  "created_at": "2026-09-12",
+  "authority": "OWNER_INTENT_PLUS_CURRENT_EXECUTION_FABRIC_POLICY",
+  "purpose": "Make terminal and web two ingress surfaces into one FranKenstein/GRID10/UnifiedDB cognitive path, with the local Frankenstein harness as the primary execution fabric and ephemeral workers as execution organs.",
+  "must": {
+    "single_cognitive_path": "Frankenstein/GRID10/UnifiedDB",
+    "terminal_entry": "~/.local/bin/frank -> ~/.claude/star/frank_chatgpt_terminal.py",
+    "chatgpt_organ": "~/.claude/star/f2wp1207_chatgpt_organ.py",
+    "canonical_turn": "stern.run_canonical_turn",
+    "canonical_turn_exactly_once_per_user_prompt": true,
+    "workers_are_ephemeral_organs": true,
+    "workers_must_not_be_state_authorities": true,
+    "machine_owner_provenance_required": true,
+    "host_telemetry_admission_required_before_local_fanout": true,
+    "material_effect_receipt_and_readback_required": true,
+    "silent_main_organ_identity_substitution_forbidden": true,
+    "split_brain_forbidden": true
+  },
+  "correlation_envelope": {
+    "required_identifiers": [
+      "request_id",
+      "session_id",
+      "turn_event_id_or_grid_frame_id",
+      "runtime_epoch_id",
+      "machine_id",
+      "owner"
+    ],
+    "worker_and_effect_records_must_reference_parent_turn": true,
+    "database_projection_rule": "Each existing database/store receives only its domain-specific record through its canonical writer, correlated to the same parent turn. Do not mirror raw conversation/state blindly into every SQLite database."
+  },
+  "main_organ_identity": {
+    "owner_facing_voice": "ChatGPT/GPT-5.6 Sol organ",
+    "fallback_rule": "Alternative models may run only as explicitly identified workers/fallback execution organs. They must not silently impersonate the owner-facing main organ response.",
+    "on_main_organ_unavailable": "Expose an explicit DEGRADED/MAIN_ORGAN_UNAVAILABLE state unless owner policy explicitly selects another main organ."
+  },
+  "host_rules": {
+    "ai-core-node": {
+      "owner": "gabriel",
+      "role": "primary interactive host/harness/avatar/local effects",
+      "local_bridge_receipts_required": true
+    },
+    "andreas-maco": {
+      "owner": "andreas",
+      "role": "EntityOS/GRID/self-integration host",
+      "local_bridge_receipts_required": true,
+      "entityos_vm_restart_is_not_a_convenience_action": true
+    }
+  },
+  "acceptance_tests": [
+    {
+      "id": "T1_SINGLE_TURN",
+      "pass": "One `frank --once` prompt creates exactly one request identity and exactly one canonical GRID10 turn/frame, with no second terminal-only turn loop."
+    },
+    {
+      "id": "T2_ROUNDTRIP",
+      "pass": "Terminal prompt reaches the ChatGPT organ, the organ result returns to the same terminal request, and pre/post GRID10/reentry evidence is correlated."
+    },
+    {
+      "id": "T3_NO_SPLIT_BRAIN",
+      "pass": "No second cognitive DB/state authority is created by terminal, web, worker or fallback paths; all domain writes resolve to existing canonical writers/stores."
+    },
+    {
+      "id": "T4_WORKER_PARENTAGE",
+      "pass": "Every spawned worker has parent request/turn identity, bounded scope, resource admission and terminal lifecycle visibility; worker completion does not mint independent canonical state."
+    },
+    {
+      "id": "T5_STRICT_MAIN_ORGAN",
+      "pass": "Failure of the ChatGPT main-organ path cannot silently replace the owner-facing response with Sonnet/Opus/GLM/Kimi/etc.; any alternate model is explicitly labeled as a worker/fallback organ."
+    },
+    {
+      "id": "T6_EFFECT_PROVENANCE",
+      "pass": "Every real host effect carries machine_id+owner and a durable receipt/readback bound to the parent turn."
+    },
+    {
+      "id": "T7_HOST_SAFETY",
+      "pass": "Local fan-out fails closed when current host telemetry is unknown/red and respects configured RAM/tab/process limits."
+    },
+    {
+      "id": "T8_REENTRY",
+      "pass": "A later terminal or web turn re-enters the same persistent entity path while preserving host/runtime provenance; changing ingress does not create a new brain."
+    }
+  ],
+  "current_evidence": [
+    "research_entity/coordination/EXECUTION_FABRIC_OWNER_POLICY.json",
+    "research_entity/coordination/LOCAL_BRIDGE_PROTOCOL.md",
+    "local_bridge/results/receipts/0000-gpt56-install-frank-cli-entry-20260912T1050-0700.json",
+    "local_bridge/results/receipts/gpt56sol-canonical-turn-contract-gabriel-20260912T035300Z.json",
+    "local_bridge/results/receipts/gpt56sol-audit-chatgpt-organ-20260912T034900Z-7d9a4f2e.json"
+  ],
+  "promotion_rule": "Do not mark this ACCEPTED until one real end-to-end terminal prompt proves T1-T8 at the claimed scope."
+}

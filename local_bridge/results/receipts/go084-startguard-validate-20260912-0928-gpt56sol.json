@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go084-startguard-validate-20260912-0928-gpt56sol",
+  "command_sha256": "94cd1fea4e3be89979e70f1c3ff26fdf423eae8dda37c87999bd7b2f9e556513",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:27:35.307478+00:00",
+  "finished_at": "2026-09-12T02:27:38.108390+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e1ddae655854e4563da527777ace3b8902d58b2742b090c25973add2b48305d6",
+  "stderr_sha256": "de6df45127773a14c73ec0f9f9218b6c704e9a0bb353500fc26ea10102b7c0d1",
+  "stdout_tail": "=== GO084 STARTGUARD VALIDATION ===\n2026-09-12T04:27:35+02:00\nandreas-MACO\n--- MODES ---\n775 /tmp/go084-startguard.ba9rQw/werkzeug/fluechtig-vor-start-pruefen.sh\n775 /tmp/go084-startguard.ba9rQw/werkzeug/fluechtig-vor-start-pruefen_selbsttest.sh\n--- SELFTEST ---\nOK   1 fehlender alter Klon rc=0\nOK   2 leerer semantischer Bereich rc=0\nOK   3 Schema-only Datenbank rc=0\nOK   4 consciousness.db mit Zustand rc=255\nOK   5 gefuellt ohne .db-Endung rc=255\nOK   6 gefuellter Cache ist ausser Scope rc=0\nOK   7 world_experience mit identity snapshot rc=255\nOK   8 unlesbarer SQLite-Kandidat fail-closed rc=255\nOK   9 mehrere Schema-only DBs rc=0\n\n9/9 Faelle korrekt\nSELFTEST_RC=0\n--- REAL HOST READONLY DISCRIMINATOR ---\nREAL_GUARD_RC=255\n--- LIVE CHECKOUT UNCHANGED ---\n## main...origin/main\ne28d758a91b181fdeae7160231a1b38e614e46d1\n=== PASS ===\n",
+  "stderr_tail": "GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\nSTART BLOCKIERT -- 4 gefuellte semantische Zustandsspeicher liegen noch im fluechtigen Klon. Erst Persistenz/Export klaeren, dann starten.\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

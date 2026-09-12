@@ -1,0 +1,25 @@
+=== GO084 STARTGUARD VALIDATION ===
+2026-09-12T04:27:35+02:00
+andreas-MACO
+--- MODES ---
+775 /tmp/go084-startguard.ba9rQw/werkzeug/fluechtig-vor-start-pruefen.sh
+775 /tmp/go084-startguard.ba9rQw/werkzeug/fluechtig-vor-start-pruefen_selbsttest.sh
+--- SELFTEST ---
+OK   1 fehlender alter Klon rc=0
+OK   2 leerer semantischer Bereich rc=0
+OK   3 Schema-only Datenbank rc=0
+OK   4 consciousness.db mit Zustand rc=255
+OK   5 gefuellt ohne .db-Endung rc=255
+OK   6 gefuellter Cache ist ausser Scope rc=0
+OK   7 world_experience mit identity snapshot rc=255
+OK   8 unlesbarer SQLite-Kandidat fail-closed rc=255
+OK   9 mehrere Schema-only DBs rc=0
+
+9/9 Faelle korrekt
+SELFTEST_RC=0
+--- REAL HOST READONLY DISCRIMINATOR ---
+REAL_GUARD_RC=255
+--- LIVE CHECKOUT UNCHANGED ---
+## main...origin/main
+e28d758a91b181fdeae7160231a1b38e614e46d1
+=== PASS ===

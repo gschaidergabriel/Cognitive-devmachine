@@ -1,0 +1,470 @@
+#!/usr/bin/env python3
+"""immunsystem.py -- Neurales Immunsystem, portiert aus dem historischen
+Project-Frankenstein (gschaidergabriel/Project-Frankenstein, services/
+neural_immune/), angepasst auf DIESE Maschine und ohne die ML-Modelle
+(BaselineNet/AnomalyNet/RestartNet) -- Gabriel wollte ein einfaches,
+deterministisches Immunsystem, kein trainiertes Netz ohne Gewichte.
+
+Gabriel, woertlich (2026-09-12): "das immunsystem soll alles wieder
+hochfahren das ist klar ... aber es soll falls was iregulaer wieder
+hochgefahren werden muss auch selbststaendig einen sonnet architekten holen
+der das fixen soll und wenn gefixt wird immer root cause und user in ruhe
+lassen ausser es muss sein ... außerdem muss das immunsystem bei killswitch
+und dem anderen pausieren auch kzt gekillt bzw pausiert werden."
+
+Uebernommen vom Original (circuit_breaker.py, fast woertlich):
+  - CircuitBreaker FSM: CLOSED -> OPEN -> HALF_OPEN, decorrelated jitter
+    backoff (AWS-Pattern), Zustand persistiert in sqlite.
+Angepasst/neu:
+  - SERVICE_REGISTRY: echte Dienste dieser Maschine (keine aicore-*, die
+    gab es nur im historischen Frank).
+  - Restart-Wellen: hier flach (fast alle Dienste sind After=basic.target/
+    app.slice ohne echte Cross-Deps) -- EINE Ausnahme real gefunden:
+    frankenstein-gespraech.service hat After=frankenstein-puls.service,
+    also Welle 0 = alles ausser gespraech, Welle 1 = gespraech danach.
+  - Architect-Eskalation: NEU, gab es im Original nicht. Wenn ein Circuit
+    ESKALATIONS_SCHWELLE mal OPEN geht (einfache Neustarts helfen nicht
+    mehr), wird ein headless Sonnet-Architect-Lauf ausgeloest (reuses
+    architekt/taeglicher_gesundheitscheck.py's architect_lauf()-Baustein).
+  - Killswitch/Pause-Kopplung: NEU. pause_wache.pause_rest_s() UND ein
+    eigenes Halt-Signal (immunsystem_halt) werden jeden Tick geprueft.
+"""
+from __future__ import annotations
+
+import json
+import logging
+import math
+import os
+import random
+import signal
+import sqlite3
+import subprocess
+import sys
+import threading
+import time
+from pathlib import Path
+from typing import Dict, List, Optional
+
+LOG_PFAD = Path.home() / ".claude" / "star" / "immunsystem.log"
+DB_PFAD = Path.home() / ".claude" / "star" / "immunsystem.db"
+HALT_DATEI = Path.home() / ".claude" / "star" / "immunsystem_halt"  # vom Killswitch gesetzt
+STATUS_DATEI = Path.home() / ".claude" / "star" / "immunsystem_status.json"
+
+sys.path.insert(0, "/opt/entityos/voice")
+try:
+    import pause_wache  # gleiche Pause-Quelle wie gespraech_loop.py/grid_autonomie.py
+except Exception:
+    pause_wache = None  # defensiv: Immunsystem darf nie an einem fehlenden Modul crashen
+
+LOG_PFAD.parent.mkdir(parents=True, exist_ok=True)
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s",
+    handlers=[logging.StreamHandler(), logging.FileHandler(str(LOG_PFAD))],
+)
+LOG = logging.getLogger("immunsystem")
+
+CHECK_INTERVAL_S = 15
+FAILURE_THRESHOLD = 5          # Consecutive failures -> OPEN (aus dem Original uebernommen)
+PROBE_WINDOW_SECONDS = 30
+BASE_COOLDOWN = 3.0
+MAX_COOLDOWN = 120.0
+ESKALATIONS_SCHWELLE = 3       # NEU: 3x OPEN in Folge (einfache Neustarts helfen nicht) -> Architect
+ESKALATIONS_COOLDOWN_S = 3600  # NEU (Haertungsrunde): nicht bei jedem weiteren OPEN erneut
+                               # den teuren Architect ausloesen -- 1x pro Stunde pro Dienst/
+                               # Kombi-Ereignis reicht, sonst: sinnlose wiederholte Eskalation
+                               # fuer ein bereits als "nicht automatisch fixbar" bekanntes Problem.
+KORRELATIONS_SCHWELLE = 3     # NEU (Haertungsrunde): >=3 kritische Dienste gleichzeitig im
+                               # selben Tick eskalationswuerdig -> EINE Kombi-Eskalation statt
+                               # N unabhaengiger (z.B. Maschine kurz weg/OOM/Netzwerk = 1 Ursache).
+
+# ── Echte Dienste dieser Maschine (verifiziert 2026-09-12, keine erfundene Liste) ──
+# tier: 0 = keine echten Cross-Deps, 1 = braucht Tier 0 zuerst (After=... erkannt)
+# sudo: True = system-level Unit, braucht `sudo systemctl` (passwordless hier eingerichtet)
+# oneshot: True = timer-getriggert, "inactive" ist NORMAL, nicht ueberwachen als Dauerlauf
+SERVICE_REGISTRY: Dict[str, Dict] = {
+    "frankenstein-puls.service":              {"tier": 0, "critical": True},
+    "frankenstein-cortex.service":             {"tier": 0, "critical": True},
+    "frankenstein-koerperpflege.service":      {"tier": 0, "critical": True},
+    "frankenstein-sehen.service":              {"tier": 0, "critical": False},
+    "frankenstein-welt.service":               {"tier": 0, "critical": False},
+    "frankenstein-buehne.service":             {"tier": 0, "critical": True},
+    "frankenstein-cortex-dashboard.service":   {"tier": 0, "critical": True},
+    "frankenstein-denker.service":             {"tier": 0, "critical": True},
+    "digital-retina.service":                  {"tier": 0, "critical": True},
+    "frankenstein-gespraech.service":          {"tier": 1, "critical": True},  # After=puls
+    # entityos-vm.service / entityos-dashboard@8782.service ABSICHTLICH NICHT
+    # registriert -- Gabriel, 2026-09-12: "viele systeme sind nicht im neuen
+    # frankenstein 2.0, das immunsystem soll nur die restarten die wir auch
+    # wirklich verwenden, keine leichen". Real geprueft: Port 8782 antwortet
+    # nicht (curl -> 000), die EntityOS-VM ist laut Projekt-Historie ("Frank
+    # v2.0 lokal": "tAvern+Zero abgeschaltet") die ABGELOESTE Architektur,
+    # nicht das aktuelle frankenstein-2.0 (das lebt in frankenstein-puls.service
+    # + /opt/entityos/voice). Wieder aufnehmen, falls das je wieder echt genutzt wird.
+}
+# Timer-getriggerte Oneshots -- nur pruefen, dass der .timer aktiv ist, nie den .service selbst
+ONESHOT_TIMER_PAARE = {
+    "frankenstein-wege.timer": "frankenstein-wege.service",
+    "frankenstein-blick-waechter.timer": "frankenstein-blick-waechter.service",
+    "frankenstein-cortex-perception-cycle.timer": "frankenstein-cortex-perception-cycle.service",
+}
+
+
+def _log(msg: str) -> None:
+    LOG.info(msg)
+
+
+# ── DB (stark vereinfacht gegenueber dem Original -- nur Circuit-Zustand) ──
+
+class ImmunDB:
+    def __init__(self, path: Path = DB_PFAD):
+        self.path = path
+        # Haertungsrunde (2026-09-12): WAL + busy_timeout, damit ein manueller
+        # `python3 immunsystem.py einmal`-Aufruf oder ein spaeterer zweiter
+        # Leser sich niemals mit dem laufenden Daemon-Prozess auf dieselbe DB-
+        # Datei verhakt. Getestet: Python sqlite3 hat per Default schon 5s
+        # busy-timeout, WAL macht Leser zusaetzlich blockierungsfrei gegenueber
+        # Schreibern -- reine Haertung, kein Beweis eines akuten Crashs (ehrlich
+        # gemessen, nicht behauptet).
+        self._conn = sqlite3.connect(str(path), timeout=10.0)
+        self._conn.execute("PRAGMA journal_mode=WAL")
+        self._conn.execute("PRAGMA busy_timeout=10000")
+        self._conn.execute("""
+            CREATE TABLE IF NOT EXISTS circuit_states (
+                service TEXT PRIMARY KEY,
+                state TEXT, failure_count INTEGER, cooldown_until REAL,
+                last_delay REAL, open_count INTEGER DEFAULT 0
+            )
+        """)
+        self._conn.execute("""
+            CREATE TABLE IF NOT EXISTS incidents (
+                ts REAL, service TEXT, event TEXT, detail TEXT
+            )
+        """)
+        self._conn.execute("""
+            CREATE TABLE IF NOT EXISTS eskalationen (
+                schluessel TEXT PRIMARY KEY, letzte_ts REAL
+            )
+        """)
+        self._conn.commit()
+
+    def kann_eskalieren(self, schluessel: str, cooldown_s: float = ESKALATIONS_COOLDOWN_S) -> bool:
+        """Eskalations-eigener Cooldown (getrennt vom Circuit-Breaker-Cooldown
+        fuer Neustarts) -- verhindert taeglich/stuendlich wiederholte teure
+        Architect-Laeufe fuer dasselbe bereits bekannte, nicht automatisch
+        fixbare Problem. schluessel = Dienstname ODER '__kombi__' fuer die
+        gemeinsame Mehrfach-Ausfall-Eskalation."""
+        row = self._conn.execute(
+            "SELECT letzte_ts FROM eskalationen WHERE schluessel=?", (schluessel,)
+        ).fetchone()
+        if not row:
+            return True
+        return (time.time() - row[0]) >= cooldown_s
+
+    def markiere_eskaliert(self, schluessel: str) -> None:
+        self._conn.execute(
+            "INSERT INTO eskalationen (schluessel, letzte_ts) VALUES (?,?) "
+            "ON CONFLICT(schluessel) DO UPDATE SET letzte_ts=excluded.letzte_ts",
+            (schluessel, time.time()),
+        )
+        self._conn.commit()
+
+    def save(self, service, state, failure_count, cooldown_until, last_delay, open_count):
+        self._conn.execute(
+            "INSERT INTO circuit_states (service, state, failure_count, cooldown_until, last_delay, open_count) "
+            "VALUES (?,?,?,?,?,?) ON CONFLICT(service) DO UPDATE SET "
+            "state=excluded.state, failure_count=excluded.failure_count, "
+            "cooldown_until=excluded.cooldown_until, last_delay=excluded.last_delay, "
+            "open_count=excluded.open_count",
+            (service, state, failure_count, cooldown_until, last_delay, open_count),
+        )
+        self._conn.commit()
+
+    def load(self, service) -> Optional[dict]:
+        row = self._conn.execute(
+            "SELECT state, failure_count, cooldown_until, last_delay, open_count "
+            "FROM circuit_states WHERE service=?", (service,)
+        ).fetchone()
+        if not row:
+            return None
+        return {"state": row[0], "failure_count": row[1], "cooldown_until": row[2],
+                "last_delay": row[3], "open_count": row[4]}
+
+    def log_incident(self, service, event, detail=""):
+        self._conn.execute("INSERT INTO incidents (ts, service, event, detail) VALUES (?,?,?,?)",
+                            (time.time(), service, event, detail))
+        self._conn.commit()
+
+    def close(self):
+        self._conn.close()
+
+
+class CircuitState:
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+
+class CircuitBreaker:
+    """Fast woertlich aus dem historischen circuit_breaker.py uebernommen --
+    dieselbe FSM, derselbe Jitter-Algorithmus, plus open_count fuer die
+    NEUE Architect-Eskalation (gab es im Original nicht)."""
+
+    def __init__(self, service: str, db: ImmunDB, base_delay: float = BASE_COOLDOWN):
+        self.service = service
+        self._db = db
+        self._base_delay = base_delay
+        self.state = CircuitState.CLOSED
+        self.failure_count = 0
+        self.last_transition = time.time()
+        self.cooldown_until = 0.0
+        self.last_delay = base_delay
+        self.open_count = 0
+        self._probe_start: Optional[float] = None
+        self._load()
+
+    def _load(self):
+        saved = self._db.load(self.service)
+        if saved:
+            self.state = saved["state"]
+            self.failure_count = saved["failure_count"]
+            self.cooldown_until = saved["cooldown_until"]
+            self.last_delay = saved["last_delay"]
+            self.open_count = saved.get("open_count", 0)
+            if self.state == CircuitState.HALF_OPEN:
+                self._probe_start = self.last_transition
+
+    def _save(self):
+        self._db.save(self.service, self.state, self.failure_count,
+                       self.cooldown_until, self.last_delay, self.open_count)
+
+    def _transition(self, new_state: str):
+        old = self.state
+        self.state = new_state
+        self.last_transition = time.time()
+        self._save()
+        _log(f"[{self.service}] Circuit: {old} -> {new_state} (failures={self.failure_count}, opens={self.open_count})")
+
+    def record_failure(self) -> bool:
+        """Liefert True wenn dieser Aufruf einen neuen OPEN ausgeloest hat."""
+        self.failure_count += 1
+        if self.state == CircuitState.CLOSED and self.failure_count >= FAILURE_THRESHOLD:
+            self._open_circuit()
+            return True
+        if self.state == CircuitState.HALF_OPEN:
+            self._open_circuit()
+            return True
+        return False
+
+    def record_success(self):
+        if self.state == CircuitState.HALF_OPEN:
+            if self._probe_start and (time.time() - self._probe_start >= PROBE_WINDOW_SECONDS):
+                self._close_circuit()
+        elif self.state == CircuitState.CLOSED and self.failure_count > 0:
+            self.failure_count -= 1
+            if self.failure_count == 0:
+                self._save()
+
+    def allows_restart(self) -> bool:
+        now = time.time()
+        if self.state == CircuitState.CLOSED:
+            return True
+        if self.state == CircuitState.OPEN:
+            if now >= self.cooldown_until:
+                self._probe_start = now
+                self._transition(CircuitState.HALF_OPEN)
+                return True
+            return False
+        return False  # HALF_OPEN: nur ein Versuch, der ist schon gelaufen
+
+    def reset(self):
+        self.failure_count = 0
+        self.cooldown_until = 0.0
+        self.last_delay = self._base_delay
+        self.open_count = 0
+        self._probe_start = None
+        self._transition(CircuitState.CLOSED)
+
+    @property
+    def is_open(self):
+        return self.state == CircuitState.OPEN
+
+    def _open_circuit(self):
+        delay = self._jitter_delay(self.last_delay)
+        self.cooldown_until = time.time() + delay
+        self.last_delay = delay
+        self.open_count += 1
+        self._probe_start = None
+        self._transition(CircuitState.OPEN)
+
+    def _close_circuit(self):
+        self.failure_count = 0
+        self.cooldown_until = 0.0
+        self.last_delay = self._base_delay
+        self.open_count = 0
+        self._probe_start = None
+        self._transition(CircuitState.CLOSED)
+
+    def _jitter_delay(self, last_delay: float) -> float:
+        jittered = random.uniform(self._base_delay, max(self._base_delay, last_delay * 3))
+        return min(MAX_COOLDOWN, jittered)
+
+
+def _ist_pausiert() -> Optional[float]:
+    """0 wenn keine Pause, sonst verbleibende Sekunden. Nie crashen."""
+    if pause_wache is None:
+        return None
+    try:
+        rest = pause_wache.pause_rest_s()
+        return rest if rest and rest > 0 else None
+    except Exception:
+        return None
+
+
+def _ist_halt_gesetzt() -> bool:
+    return HALT_DATEI.exists()
+
+
+def is_active(unit: str) -> bool:
+    cmd = ["sudo", "systemctl", "is-active", unit] if SERVICE_REGISTRY.get(unit, {}).get("sudo") \
+        else ["systemctl", "--user", "is-active", unit]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=10)
+        return (r.stdout or "").strip() == "active"
+    except Exception:
+        return False
+
+
+def restart(unit: str) -> bool:
+    cmd = ["sudo", "systemctl", "restart", unit] if SERVICE_REGISTRY.get(unit, {}).get("sudo") \
+        else ["systemctl", "--user", "restart", unit]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        return r.returncode == 0
+    except Exception:
+        return False
+
+
+def _architect_lauf_ausfuehren(bezeichnung: str, einheiten: List[str], grund: str) -> dict:
+    """Der eigentliche, blockierende Architect-Aufruf (bis 900s). Wird NUR
+    noch aus einem Hintergrund-Thread heraus gerufen (siehe _architect_eskalation),
+    NIE mehr direkt im Tick-Loop -- Haertungsrunde 2026-09-12: vorher blockierte
+    ein einzelner Eskalations-Lauf den GESAMTEN 15s-Tick fuer bis zu 15 Minuten,
+    waehrend dieser Zeit wurde KEIN anderer Dienst mehr ueberwacht/neugestartet.
+    Real bestaetigt durch Code-Lesen (subprocess.run(timeout=900) ist synchron)."""
+    sys.path.insert(0, str(Path.home() / ".claude" / "star" / "architekt"))
+    try:
+        import taeglicher_gesundheitscheck as tgc
+    except Exception as e:
+        _log(f"[{bezeichnung}] Architect-Eskalation FEHLGESCHLAGEN (Import): {e}")
+        return {"ok": False, "grund": f"Import: {e}"}
+
+    prioritaet = [{"unit": u, "status": grund, "erwartet": "active", "auffaellig": True}
+                  for u in einheiten]
+    ergebnis = tgc.architect_lauf(prioritaet, timeout_s=900)
+    _log(f"[{bezeichnung}] Architect-Ergebnis: {json.dumps(ergebnis, ensure_ascii=False)}")
+    if not ergebnis.get("ok"):
+        try:
+            subprocess.run(["notify-send", "-u", "critical", "Immunsystem",
+                             f"{bezeichnung}: Architect-Fix fehlgeschlagen, bitte pruefen. "
+                             f"Log: {LOG_PFAD}"], timeout=5)
+        except Exception:
+            pass
+    return ergebnis
+
+
+class Supervisor:
+    def __init__(self):
+        self.db = ImmunDB()
+        self.breakers: Dict[str, CircuitBreaker] = {
+            name: CircuitBreaker(name, self.db) for name in SERVICE_REGISTRY
+        }
+        self._running = True
+        self._sofort = threading.Event()          # NEU: SIGUSR1 -> Sofort-Tick statt Sleep abwarten
+        self._eskaliert_gerade: set[str] = set()   # NEU: verhindert 2 parallele Architect-Threads fuer denselben Schluessel
+        self._eskaliert_lock = threading.Lock()
+
+    def stop(self, *_):
+        self._running = False
+
+    def _sofort_anfordern(self, *_):
+        # Signal-Handler: NUR ein Event setzen, keine Arbeit hier (Signal-Handler-Hygiene).
+        self._sofort.set()
+
+    def _status_schreiben(self, zustaende: Dict[str, str]) -> None:
+        try:
+            STATUS_DATEI.write_text(json.dumps(
+                {"ts": time.time(), "dienste": zustaende}, ensure_ascii=False, indent=2))
+        except Exception:
+            pass
+
+    def _eskalation_asynchron(self, schluessel: str, einheiten: List[str], grund: str) -> None:
+        """Startet den (bis 15min dauernden) Architect-Lauf in einem eigenen
+        Thread, damit der 15s-Tick-Loop NICHT blockiert und andere Dienste
+        waehrenddessen weiter ueberwacht/neugestartet werden. Verhindert per
+        Lock+Set, dass fuer denselben Schluessel zwei Laeufe gleichzeitig starten."""
+        with self._eskaliert_lock:
+            if schluessel in self._eskaliert_gerade:
+                _log(f"[{schluessel}] Eskalation laeuft bereits, kein zweiter Lauf.")
+                return
+            self._eskaliert_gerade.add(schluessel)
+
+        def _worker():
+            try:
+                _log(f"[{schluessel}] Eskaliere an Sonnet-Architect ({grund})")
+                _architect_lauf_ausfuehren(schluessel, einheiten, grund)
+            except Exception as e:
+                _log(f"[{schluessel}] Eskalations-Thread-Fehler: {e}")
+            finally:
+                with self._eskaliert_lock:
+                    self._eskaliert_gerade.discard(schluessel)
+
+        threading.Thread(target=_worker, daemon=True, name=f"eskalation-{schluessel}").start()
+
+    def tick(self) -> Dict[str, str]:
+        """Eine Pruefrunde. Liefert {dienst: 'gruen'|'orange'|'rot'} fuer die Lampen."""
+        rest = _ist_pausiert()
+        if rest:
+            _log(f"Pause aktiv, noch {rest:.0f}s -- kein Eingriff diesen Tick.")
+            return {}
+        if _ist_halt_gesetzt():
+            _log("Halt-Signal gesetzt (Killswitch) -- Immunsystem greift nicht ein.")
+            return {}
+
+        zustaende: Dict[str, str] = {}
+        eskalations_kandidaten: List[str] = []  # NEU: erst sammeln, dann korrelieren
+
+        for name, info in SERVICE_REGISTRY.items():
+            breaker = self.breakers[name]
+            aktiv = is_active(name)
+            if aktiv:
+                breaker.record_success()
+                zustaende[name] = "gruen"
+                continue
+
+            if not info.get("critical", True):
+                zustaende[name] = "gruen"  # nicht-kritisch + inaktiv = erwartet, wie im Original
+                continue
+
+            neu_offen = breaker.record_failure()
+            if neu_offen:
+                self.db.log_incident(name, "circuit_open", f"open_count={breaker.open_count}")
+                if breaker.open_count >= ESKALATIONS_SCHWELLE:
+                    eskalations_kandidaten.append(name)
+
+            if breaker.allows_restart():
+                zustaende[name] = "orange"
+                ok = restart(name)
+                self.db.log_incident(name, "restart", f"erfolg={ok}")
+                _log(f"[{name}] Neustart-Versuch: {'ok' if ok else 'fehlgeschlagen'}")
+            else:
+                zustaende[name] = "rot"
+
+        # NEU (Intelligenz-Haertung): mehrere Dienste gleichzeitig eskalationswuerdig
+        # im SELBEN Tick -> vermutlich EINE gemeinsame Ursache (Maschine kurz weg,
+        # OOM, Netzwerk) statt N unabhaengige Probleme. Eine Kombi-Eskalation statt N,
+        # UND jeder einzelne Eskalations-Cooldown wird trotzdem pro Dienst gesetzt
+        # (verhindert, dass direkt danach noch einzelne Eskalationen fuer dieselben
+        # Dienste nachfeuern).
+        if len(eskalations_kandidaten) >= KORRELATIONS_SCHWELLE:
+            if self.db.kann_eskalieren("__kombi__"):
+                self.db.markiere_eskaliert("__kombi__")

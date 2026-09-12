@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-stage-49d9-sidecar-20260912T2036Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; BASE=572a07d2d6b69b1faeb747faab9b2b3f221b2e69; HEAD=49d9bb023933ee6383433e5206d4148b8082dcae; C=/workspace/omega_runtime/carrier_repo; R=/workspace/omega_runtime/releases; git -C \"$C\" fetch origin omega-vps-deploy; git -C \"$C\" checkout -B omega-vps-deploy origin/omega-vps-deploy >/dev/null; test -d \"$R/$BASE\"; if [ ! -d \"$R/$HEAD\" ]; then cp -a \"$R/$BASE\" \"$R/$HEAD\"; fi; for f in outer_bridge_worker.py spool_bridge_relay.py supervisor_outer.py; do cp \"$C/omega_deploy/$HEAD/omega/$f\" \"$R/$HEAD/omega/$f\"; done; printf 'BLOBS\\n'; for f in outer_bridge_worker.py spool_bridge_relay.py supervisor_outer.py; do printf '%s ' \"$f\"; git hash-object \"$R/$HEAD/omega/$f\"; done; PYTHONPATH=\"$R/$HEAD\" python3 -m compileall -q \"$R/$HEAD/omega\"; PYTHONPATH=\"$R/$HEAD\" python3 -m omega.outer_bridge_worker --help >/dev/null; PYTHONPATH=\"$R/$HEAD\" python3 -m omega.spool_bridge_relay --help >/dev/null; echo STAGE_PASS"
+}

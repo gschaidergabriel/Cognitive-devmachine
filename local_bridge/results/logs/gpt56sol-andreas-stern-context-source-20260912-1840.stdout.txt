@@ -1,0 +1,121 @@
+=== _chatgpt_kontext_diagnose ===
+def _chatgpt_kontext_diagnose() -> dict:
+    """Rein diagnostisch (kein Geheimniswert): WO genau laeuft dieser
+    Python-Prozess gerade -- Host, $HOME, cwd, SSH-Signale. Wird in JEDEN
+    chatgpt_login_status()-Rueckgabewert gemischt, damit ein Aufrufer
+    (Mensch oder Agent) sofort sieht, ob er ueberhaupt den richtigen
+    Rechner trifft, statt 'eingeloggt: false' blind als Login-Problem zu
+    lesen."""
+    try:
+        host = socket.gethostname()
+    except Exception:
+        host = "unbekannt"
+    ssh_signale = {k: v for k in ("SSH_CONNECTION", "SSH_TTY", "SSH_CLIENT")
+                   if (v := os.environ.get(k))}
+    return {
+        "pruef_host": host,
+        "pruef_home": str(Path.home()),
+        "pruef_cwd": os.getcwd(),
+        "host_wie_erwartet": _CHATGPT_ERWARTETER_HOSTNAME_TEILSTRING in host.lower(),
+        "ssh_session_erkannt": bool(ssh_signale),
+        "ssh_signale": ssh_signale or None,
+    }
+
+=== _chatgpt_env_ohne_display ===
+def _chatgpt_env_ohne_display(env: dict) -> dict:
+    """Entfernt DISPLAY/WAYLAND_DISPLAY aus env-Kopie und setzt DISPLAY
+    danach explizit auf die fest reservierte gstack-browse-Anzeige
+    (`_GSTACK_BROWSE_DISPLAY`, dauerhaft von gstack-browse-display.service
+    offen gehalten) -- so erbt ein Neustart des Daemons NIE die reale
+    Desktop-Anzeige der aufrufenden Shell (s. Kommentarblock oben) UND
+    landet nicht zufaellig auf tAverns :99 oder einer wechselnden
+    Autospawn-Anzeige, sondern immer auf derselben, von /browser fest
+    verdrahteten Anzeige. Reine Kopie, mutiert das Original nicht."""
+    env = dict(env)
+    env.pop("DISPLAY", None)
+    env.pop("WAYLAND_DISPLAY", None)
+    env["DISPLAY"] = _GSTACK_BROWSE_DISPLAY
+    return env
+
+=== _chatgpt_cookie_backup_speichern ===
+def _chatgpt_cookie_backup_speichern() -> bool:
+    """Sichert die aktuellen chatgpt.com/openai.com-Sitzungscookies in eine
+    geschuetzte (0600) lokale Datei -- NICHT im Tresor (siehe Docstring von
+    chatgpt_login_bestaetigen() fuer die Begruendung dagegen), sondern nach
+    demselben Muster wie der OpenAI-API-Schluessel-Cache
+    (_OPENAI_KEY_DATEI). Nachtrag 2026-08-27, nachdem die Sitzung an einem
+    Tag real mehrfach durch nebenlaeufige Agenten-Aktivitaet (Autologin-
+    Tests, versehentliche `browse connect`-Aufrufe) verloren ging und
+    Gabriel jedes Mal manuell neu einloggen musste. Fail-silent (best
+    effort) -- ein fehlgeschlagenes Backup darf den aufrufenden Login-Fluss
+    nicht kaputt machen."""
+    try:
+        cookies = _chatgpt_browse("cookies", timeout=10.0)
+        if not cookies.get("ok"):
+            return False
+        arr = json.loads(cookies.get("stdout") or "[]")
+        relevante = [c for c in arr if any(
+            d in (c.get("domain") or "") for d in ("chatgpt.com", "openai.com")
+        )]
+        if not relevante:
+            return False
+        _CHATGPT_COOKIE_BACKUP_DATEI.parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(str(_CHATGPT_COOKIE_BACKUP_DATEI), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+        with os.fdopen(fd, "w") as f:
+            json.dump(relevante, f)
+        os.chmod(_CHATGPT_COOKIE_BACKUP_DATEI, 0o600)
+        _log(f"chatgpt_cookie_backup_speichern: {len(relevante)} Cookies gesichert")
+        return True
+    except Exception as e:
+        _log(f"chatgpt_cookie_backup_speichern fehler: {e}")
+        return False
+
+=== _chatgpt_cookie_backup_wiederherstellen ===
+def _chatgpt_cookie_backup_wiederherstellen() -> bool:
+    """Gegenstueck zu _chatgpt_cookie_backup_speichern(): liest die
+    geschuetzte Backup-Datei, gruppiert nach exakter Domain (chatgpt.com/
+    openai.com/auth.openai.com brauchen je einen eigenen `goto` davor --
+    $B cookie-import lehnt Domain-Mismatches ab), importiert je Gruppe.
+    Wird automatisch versucht, BEVOR chatgpt_senden()/chatgpt_ernten() eine
+    verlorene Sitzung an Gabriel eskalieren -- kein Mensch-Login noetig,
+    wenn eine kuerzliche echte Sitzung schon gesichert wurde. Real
+    verifiziertes Verfahren (2026-08-27, zweimal live erfolgreich
+    angewendet, bevor es hier fest eingebaut wurde)."""
+    if not _CHATGPT_COOKIE_BACKUP_DATEI.exists():
+        return False
+    try:
+        cookies = json.loads(_CHATGPT_COOKIE_BACKUP_DATEI.read_text())
+    except Exception as e:
+        _log(f"chatgpt_cookie_backup_wiederherstellen: Backup unlesbar ({e})")
+        return False
+    if not cookies:
+        return False
+    gruppen: dict = {}
+    for c in cookies:
+        d = (c.get("domain") or "").lstrip(".")
+        if d.endswith("auth.openai.com"):
+            schluessel = "https://auth.openai.com"
+        elif d.endswith("chatgpt.com"):
+            schluessel = "https://chatgpt.com"
+        elif d.endswith("openai.com"):
+            schluessel = "https://openai.com"
+        else:
+            continue
+        gruppen.setdefault(schluessel, []).append(c)
+    erfolg_irgendeine = False
+    for url, teilmenge in gruppen.items():
+        tmp_pfad = STERN_DIR / f".chatgpt_cookie_restore_{uuid.uuid4().hex[:8]}.json"
+        try:
+            _chatgpt_browse("goto", url, timeout=15.0)
+            tmp_pfad.write_text(json.dumps(teilmenge))
+            r = _chatgpt_browse("cookie-import", str(tmp_pfad), timeout=10.0)
+            if r.get("ok"):
+                erfolg_irgendeine = True
+        except Exception as e:
+            _log(f"chatgpt_cookie_backup_wiederherstellen: {url} fehlgeschlagen ({e})")
+        finally:
+            tmp_pfad.unlink(missing_ok=True)
+    if erfolg_irgendeine:
+        _log("chatgpt_cookie_backup_wiederherstellen: Cookies aus Backup wiederhergestellt")
+    return erfolg_irgendeine
+

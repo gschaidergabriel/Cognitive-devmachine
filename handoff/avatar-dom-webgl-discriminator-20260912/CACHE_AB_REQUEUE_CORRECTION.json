@@ -1,0 +1,29 @@
+{
+  "schema": "AVATAR_BODY_CACHE_AB_REQUEUE/v1",
+  "created_at": "2026-09-12T02:29:00Z",
+  "supersedes_active_discriminator_field_in": "RESULT_Y_ORIENTATION_PARTIAL_CAUSE.json schema AVATAR_BODY_RENDER_CONVERGENCE/v5",
+  "invalid_command": {
+    "command_id": "go-avatar-gpt56sol-body-texture-cache-ab-20260912-0926",
+    "classification": "EVIDENCE_INVALID",
+    "reason": "malformed raw newlines inside command JSON caused fail-closed bridge parser skip",
+    "receipt": null,
+    "removed_from_control": true
+  },
+  "current_command": {
+    "command_id": "go-avatar-gpt56sol-body-texture-cache-ab-v2-20260912-0936",
+    "control_commit": "ecda7ab619ec02cb517a687f0d344d3b4a908f14",
+    "control_path": "local_bridge/commands/go-avatar-gpt56sol-body-texture-cache-ab-v2-20260912-0936.json",
+    "state": "UNKNOWN_NONTERMINAL",
+    "machine_id": "ai-core-node",
+    "owner": "gabriel",
+    "live_mutation_intended": false,
+    "generator_commit": "c537d80bc1099e2cb109399f8a1ae4faaf4b1d22",
+    "generator_path": "handoff/avatar-dom-webgl-discriminator-20260912/make_body_texture_cache_ab_gate.py"
+  },
+  "credit": {
+    "texture_cache_performance_credit": 0,
+    "live_webgl_integration_credit": 0,
+    "whole_avatar_credit": 0
+  },
+  "next_exact_action": "Consume only the v2 receipt if/when present; do not infer success from command existence."
+}

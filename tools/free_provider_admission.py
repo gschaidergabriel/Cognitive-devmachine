@@ -33,12 +33,41 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return payload
 
 
-def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
-    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache.
+def _alias_program(payload: dict[str, Any], label: str) -> str:
+    active = str(payload.get("active_program") or "").strip()
+    program = str(payload.get("program") or "").strip()
+    if active and program and active != program:
+        raise ProviderAdmissionError(f"{label}_PROGRAM_ALIAS_CONFLICT")
+    return active or program
 
-    Steering documents have used both ``active_program`` and ``program`` across admitted
-    authority epochs. Treat those names as compatibility aliases only when they agree;
-    conflicting dual fields fail closed instead of letting a stale alias select authority.
+
+def _coalesce_authority(
+    inbox: dict[str, Any],
+    steering: dict[str, Any],
+    key: str,
+    *,
+    label: str,
+) -> str:
+    """Resolve an authority value while rejecting any explicit disagreement.
+
+    Current SUPERVISOR_INBOX records may carry product/program identity while their
+    referenced historical steering delta deliberately omits those repeated fields.
+    Omission is not disagreement. If both surfaces state a value, however, they must
+    be byte-equal after string normalization or provider admission fails closed.
+    """
+    left = str(inbox.get(key) or "").strip()
+    right = str(steering.get(key) or "").strip()
+    if left and right and left != right:
+        raise ProviderAdmissionError(f"SUPERVISOR_{label}_CONFLICT")
+    return right or left
+
+
+def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
+    """Resolve current supervisor authority from inbox + referenced steering.
+
+    The inbox is the successor-dynamic pointer. The referenced steering record must
+    match its authority epoch. Program/product/architecture fields may be stated on
+    either surface; omission is allowed, but explicit conflicts fail closed.
     """
     repo_root = (root or ROOT).resolve()
     inbox = _read_json(inbox_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
@@ -60,12 +89,19 @@ def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | 
     if str(steering.get("schema_version") or "").strip() != epoch:
         raise ProviderAdmissionError("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
 
-    active_program = str(steering.get("active_program") or "").strip()
-    program = str(steering.get("program") or "").strip()
-    if active_program and program and active_program != program:
-        raise ProviderAdmissionError("SUPERVISOR_PROGRAM_ALIAS_CONFLICT")
-    resolved_program = active_program or program
-    if resolved_program != "ENTITYOS_HCU" or steering.get("product") != "EntityOS" or steering.get("integrated_cognition_compute_architecture") != "HCU":
+    inbox_program = _alias_program(inbox, "SUPERVISOR_INBOX")
+    steering_program = _alias_program(steering, "SUPERVISOR_STEERING")
+    if inbox_program and steering_program and inbox_program != steering_program:
+        raise ProviderAdmissionError("SUPERVISOR_PROGRAM_AUTHORITY_CONFLICT")
+    resolved_program = steering_program or inbox_program
+    product = _coalesce_authority(inbox, steering, "product", label="PRODUCT_AUTHORITY")
+    architecture = _coalesce_authority(
+        inbox,
+        steering,
+        "integrated_cognition_compute_architecture",
+        label="COMPUTE_ARCHITECTURE_AUTHORITY",
+    )
+    if resolved_program != "ENTITYOS_HCU" or product != "EntityOS" or architecture != "HCU":
         raise ProviderAdmissionError("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
     return epoch, steering_ref
 

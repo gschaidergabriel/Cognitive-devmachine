@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-runtime-wiring-tests-05872ebb-20260912-1734z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail\nTMP=$(mktemp -d /workspace/omega-runtime-wiring-test-XXXXXX)\ngit clone --depth 1 --branch chatgpt/omega-runtime-wiring-20260913-0020 git@github.com:gschaidergabriel/oMEGA.git \"$TMP/repo\"\ncd \"$TMP/repo\"\nACTUAL=$(git rev-parse HEAD)\ntest \"$ACTUAL\" = 05872ebb045f6506c62c78c751d80e2207c4a1aa\npython3 -m pytest -q\nprintf 'OMEGA_RUNTIME_WIRING_TEST_HEAD=%s\\n' \"$ACTUAL\""
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-frank-entrypoint-check-20260912T0351Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "command -v frank || true; if [ -e /home/ai-core-node/.local/bin/frank ]; then ls -l /home/ai-core-node/.local/bin/frank; sha256sum /home/ai-core-node/.local/bin/frank; else echo NO_EXISTING_FRANK_WRAPPER; fi",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 20
+}

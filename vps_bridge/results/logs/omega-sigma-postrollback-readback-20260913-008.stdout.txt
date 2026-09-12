@@ -1,0 +1,7 @@
+{"active_relay": [], "current": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1", "lock": "1381260", "relay_states": {}, "status": {"children": {"grid": {"alive": true, "pid": 1381262, "returncode": null}, "master_bridge": {"alive": true, "pid": 1381265, "returncode": null}, "relay": {"alive": true, "pid": 1381263, "returncode": null}, "telemetry": {"alive": true, "pid": 1381264, "returncode": null}}, "pid": 1381260, "relay_mode": "BOUNDED_NONBLOCKING", "repo_root": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1", "schema": "OMEGA_SUPERVISOR_STATUS/v2", "transport_boundary": "OUTER_SPOOL", "updated_at": "2026-09-12T19:49:01.042838+00:00"}}
+---PS---
+1381260       1 SN   Sat Sep 12 19:48:15 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1
+1381262 1381260 SNs  Sat Sep 12 19:48:15 2026 /usr/bin/python3 -m omega.grid_runtime_v3
+1381263 1381260 SNs  Sat Sep 12 19:48:15 2026 /usr/bin/python3 -m omega.spool_bridge_relay_parallel
+1381264 1381260 SNs  Sat Sep 12 19:48:15 2026 /usr/bin/python3 -m omega.telemetry_daemon
+1381265 1381260 SNs  Sat Sep 12 19:48:15 2026 /usr/bin/python3 -m omega.master_bridge_carrier

@@ -1,0 +1,31 @@
+=== GO084 STARTGUARD VALIDATION 2 ===
+2026-09-12T04:28:47+02:00
+andreas-MACO
+BRANCH_SHA=73284879a50d655e64b9dde6f4491e0eb4cc4a6f
+MODE=775 PATH=/tmp/go084-startguard2.9grmAN/werkzeug/fluechtig-vor-start-pruefen.sh
+MODE=775 PATH=/tmp/go084-startguard2.9grmAN/werkzeug/fluechtig-vor-start-pruefen_selbsttest.sh
+--- SELFTEST ---
+OK   1 fehlender alter Klon rc=0
+OK   2 leerer semantischer Bereich rc=0
+OK   3 Schema-only Datenbank rc=0
+OK   4 consciousness.db mit Zustand rc=255
+OK   5 gefuellt ohne .db-Endung rc=255
+OK   6 gefuellter Cache ist ausser Scope rc=0
+OK   7 world_experience mit identity snapshot rc=255
+OK   8 unlesbarer SQLite-Kandidat fail-closed rc=255
+OK   9 mehrere Schema-only DBs rc=0
+OK   10 nicht vollstaendig traversierbarer Baum rc=255
+
+10/10 Faelle korrekt
+SELFTEST_RC=0
+--- REAL HOST READONLY ---
+GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+START BLOCKIERT -- 4 gefuellte semantische Zustandsspeicher liegen noch im fluechtigen Klon. Erst Persistenz/Export klaeren, dann starten.
+REAL_GUARD_RC=255
+--- CHECKOUT ---
+## main...origin/main
+LIVE_HEAD=e28d758a91b181fdeae7160231a1b38e614e46d1
+=== PASS CLEAN STDERR ===

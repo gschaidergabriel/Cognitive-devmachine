@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go084-startguard-validate2-20260912-0930-gpt56sol",
+  "command_sha256": "0b766f0c5097e6e9437a2fc2e295a1ba42612ce120054e613197ea6cc5093bf4",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:28:47.384573+00:00",
+  "finished_at": "2026-09-12T02:28:49.837528+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "6501863f888031692a87ea415d828189752d7a97200cb587067c8a4e1d70a161",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== GO084 STARTGUARD VALIDATION 2 ===\n2026-09-12T04:28:47+02:00\nandreas-MACO\nBRANCH_SHA=73284879a50d655e64b9dde6f4491e0eb4cc4a6f\nMODE=775 PATH=/tmp/go084-startguard2.9grmAN/werkzeug/fluechtig-vor-start-pruefen.sh\nMODE=775 PATH=/tmp/go084-startguard2.9grmAN/werkzeug/fluechtig-vor-start-pruefen_selbsttest.sh\n--- SELFTEST ---\nOK   1 fehlender alter Klon rc=0\nOK   2 leerer semantischer Bereich rc=0\nOK   3 Schema-only Datenbank rc=0\nOK   4 consciousness.db mit Zustand rc=255\nOK   5 gefuellt ohne .db-Endung rc=255\nOK   6 gefuellter Cache ist ausser Scope rc=0\nOK   7 world_experience mit identity snapshot rc=255\nOK   8 unlesbarer SQLite-Kandidat fail-closed rc=255\nOK   9 mehrere Schema-only DBs rc=0\nOK   10 nicht vollstaendig traversierbarer Baum rc=255\n\n10/10 Faelle korrekt\nSELFTEST_RC=0\n--- REAL HOST READONLY ---\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\nSTART BLOCKIERT -- 4 gefuellte semantische Zustandsspeicher liegen noch im fluechtigen Klon. Erst Persistenz/Export klaeren, dann starten.\nREAL_GUARD_RC=255\n--- CHECKOUT ---\n## main...origin/main\nLIVE_HEAD=e28d758a91b181fdeae7160231a1b38e614e46d1\n=== PASS CLEAN STDERR ===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

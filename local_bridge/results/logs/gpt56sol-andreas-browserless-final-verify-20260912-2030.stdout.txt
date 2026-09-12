@@ -1,0 +1,10 @@
+SERVICE=active
+CLIENT_PID=291286
+TREE
+CLIENT_BROWSER_DESCENDANTS=0
+OLD_GSTACK_STATE_EXISTS=no
+HUMAN_BRAVE
+8400 /bin/bash /usr/bin/brave-browser --restore-last-session
+8462 /opt/brave.com/brave/brave --restore-last-session
+3799129 bash -lc set -euo pipefail; LEADER=$(machinectl show entityos -p Leader --value); PID=$(sudo -n nsenter --target "$LEADER" --mount --pid --uts --ipc --net -- systemctl show frankenstein-chatgpt-client.service -p MainPID --value); echo SERVICE=$(sudo -n nsenter --target "$LEADER" --mount --pid --uts --ipc --net -- systemctl is-active frankenstein-chatgpt-client.service); echo CLIENT_PID=$PID; echo TREE; pstree -ap "$PID" 2>/dev/null | head -80 || true; if pstree -ap "$PID" 2>/dev/null | grep -Eiq 'chrome|chromium|brave|playwright'; then echo CLIENT_BROWSER_DESCENDANTS=BAD; exit 31; else echo CLIENT_BROWSER_DESCENDANTS=0; fi; echo OLD_GSTACK_STATE_EXISTS=$([ -f /home/andreas/.gstack/browse.json ] && echo yes || echo no); echo HUMAN_BRAVE; pgrep -af '^/opt/brave.com/brave/brave --restore-last-session$|/usr/bin/brave-browser --restore-last-session' | head -10; echo DB_REENTRY; python3 - <<'PY' import sqlite3,json p='/var/lib/entityos/data/unified.db'; epoch='3707680c104d456f95c6d12c67036acb' c=sqlite3.connect(p) row=c.execute('select runtime_epoch_id,session_id,started_at from f2_runtime_epoch where runtime_epoch_id=?',(epoch,)).fetchone() frames=c.execute('select count(*), max(created_at) from f2_grid10_frame where runtime_epoch_id=?',(epoch,)).fetchone() print(json.dumps({'epoch_present':bool(row),'epoch_session':None if not row else row[1],'frames_for_epoch':frames[0],'latest_frame_at':frames[1]},sort_keys=True)) assert row is not None and frames[0] >= 1 PY echo FINAL_BROWSERLESS_PARITY=PASS
+DB_REENTRY

@@ -1,0 +1,1 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"voice777-models-ai-core-node-20260912T134500Z","op":"exec","command":"printf 'OLLAMA\\n'; ollama list 2>/dev/null || true; printf 'PROCESSES\\n'; ps -eo comm,args | grep -E 'ollama|llama-server|llama.cpp|vllm' | grep -v grep | head -40","cwd":"/home/ai-core-node","timeout_seconds":30}

@@ -1,0 +1,371 @@
+=== service ===
+MainPID=3333824
+ExecMainStatus=0
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[Sat 2026-09-12 14:36:30 +07] ; stop_time=[n/a] ; pid=3333824 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+=== hashes ===
+7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709  /home/ai-core-node/.claude/star/gespraechsmodus.py
+5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4  /home/ai-core-node/.claude/star/realtime_gespraech.py
+6c8f30e44e437f9cf8ccedea8b408d1439dc5c06748a9aea521814c9d27c40cc  /home/ai-core-node/.claude/star/immunsystem.py
+=== voice files ===
+-rw-rw-r-- 1 ai-core-node ai-core-node  66070 Aug 27 22:01 /home/ai-core-node/.claude/star/gespraechsmodus.py
+-rw-rw-r-- 1 ai-core-node ai-core-node 161280 Aug 27 21:06 /home/ai-core-node/.claude/star/realtime_gespraech.py
+=== realtime health/error hooks ===
+/home/ai-core-node/.claude/star/gespraechsmodus.py:2:"""gespraechsmodus.py -- PHASE 42 (Turn-Kette) + PHASE 42b (Architektur-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:3:Pivot auf die echte OpenAI Realtime-API, Speech-to-Speech).
+/home/ai-core-node/.claude/star/gespraechsmodus.py:8:bist ohne push to talk als richtiger gespraechsmodus und der wird aktiviert
+/home/ai-core-node/.claude/star/gespraechsmodus.py:10:ok das reicht beende den gespraechsmodus dann gehst du raus aber das soll
+/home/ai-core-node/.claude/star/gespraechsmodus.py:14:latenzfreie ueber krasse chat gpt gespraechsmodus erfahrung" -- die
+/home/ai-core-node/.claude/star/gespraechsmodus.py:26:    Weckwort erkannt -> realtime_gespraech.fuehren_gespraech() uebernimmt
+/home/ai-core-node/.claude/star/gespraechsmodus.py:27:    fuer die GESAMTE Gespraechsdauer (PHASE 42b): eigene 24kHz-Realtime-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:28:    WebSocket-Session direkt gegen die OpenAI Realtime-API (Speech-to-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:32:    Auftrag/Forschung/Beenden (siehe realtime_gespraech.py-Docstring).
+/home/ai-core-node/.claude/star/gespraechsmodus.py:37:    wird jetzt VON der Realtime-Session selbst genutzt (frank_auftrag_stellen-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:48:frankenstein-gespraechsmodus.service (systemd --user), NICHT von Hand in
+/home/ai-core-node/.claude/star/gespraechsmodus.py:50:bis SIGTERM). Killschalter: `stern.py gespraech-an`/`gespraech-aus` -- der
+/home/ai-core-node/.claude/star/gespraechsmodus.py:52:(prueft gespraech.aktiv bei jeder Aktivierungsrunde neu, genau wie
+/home/ai-core-node/.claude/star/gespraechsmodus.py:66:`gespraech.aktiv` -- Praesenz soll laut Dossier permanent verfuegbar sein,
+/home/ai-core-node/.claude/star/gespraechsmodus.py:94:import realtime_gespraech
+/home/ai-core-node/.claude/star/gespraechsmodus.py:98:_OPENAI_KEY_DATEI = _HIER / "openai_api_key.local"
+/home/ai-core-node/.claude/star/gespraechsmodus.py:102:# `gespraech-status` per Subprozess neu abfragt, statt bei jedem Mikrofon-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:199:    Stream haelt (16kHz-Wachstream hier bzw. 24kHz-Realtime-Mikrofon-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:200:    stream in realtime_gespraech.py), haengt INTERMITTIEREND 15-20+
+/home/ai-core-node/.claude/star/gespraechsmodus.py:213:    (und realtime_gespraech.py) ruft ihn jetzt in-process."""
+/home/ai-core-node/.claude/star/gespraechsmodus.py:218:        if verb == "gespraech-status":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:219:            return _s.gespraech_status()
+/home/ai-core-node/.claude/star/gespraechsmodus.py:220:        if verb == "gespraech-aus":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:221:            return _s.gespraech_aus()
+/home/ai-core-node/.claude/star/gespraechsmodus.py:222:        if verb == "gespraech-status-lesen":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:223:            return _s.gespraech_status_lesen(eigene_session_id=f.get("eigene_session_id"))
+/home/ai-core-node/.claude/star/gespraechsmodus.py:224:        if verb == "gespraech-zustandskontext":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:225:            return _s.gespraech_zustandskontext(pfad=f.get("pfad"))
+/home/ai-core-node/.claude/star/gespraechsmodus.py:226:        if verb == "gespraech-raum-beitreten":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:227:            text = _s.raum_beitreten_und_pulsen(f.get("session_id"), f.get("model", "realtime-gespraech"))
+/home/ai-core-node/.claude/star/gespraechsmodus.py:229:        if verb == "gespraech-raum-puls":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:234:        if verb == "gespraech-raum-verlassen":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:237:        if verb == "gespraech-session-merken":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:238:            return _s.gespraech_session_merken(f.get("id"))
+/home/ai-core-node/.claude/star/gespraechsmodus.py:243:        if verb == "gespraech-mic-status":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:244:            return _s.gespraech_mic_status()
+/home/ai-core-node/.claude/star/gespraechsmodus.py:245:        if verb == "gespraech-verifikation-setzen":
+/home/ai-core-node/.claude/star/gespraechsmodus.py:246:            return _s.gespraech_verifikation_setzen(f.get("status", ""), f.get("detail", ""))
+/home/ai-core-node/.claude/star/gespraechsmodus.py:248:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:254:    print(f"[{zeit}] gespraechsmodus: {msg}", file=sys.stderr, flush=True)
+/home/ai-core-node/.claude/star/gespraechsmodus.py:264:        if not _OPENAI_KEY_DATEI.exists():
+/home/ai-core-node/.claude/star/gespraechsmodus.py:266:        s = _OPENAI_KEY_DATEI.read_text(encoding="utf-8").strip()
+/home/ai-core-node/.claude/star/gespraechsmodus.py:268:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:320:# Funktion, die von realtime_gespraech.py:frank_auftrag_stellen() direkt mit
+/home/ai-core-node/.claude/star/gespraechsmodus.py:361:    "is_error", "grund"}. `ende_erkannt` ist True, wenn Claude selbst das
+/home/ai-core-node/.claude/star/gespraechsmodus.py:379:    except subprocess.TimeoutExpired:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:381:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:390:    except json.JSONDecodeError:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:399:        "ok": not d.get("is_error", False),
+/home/ai-core-node/.claude/star/gespraechsmodus.py:403:        "is_error": d.get("is_error", False),
+/home/ai-core-node/.claude/star/gespraechsmodus.py:427:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:455:    except Exception:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:462:        except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:482:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:512:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:518:        except Exception:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:538:    `gespraech.mic_geraet`, ueber das Dashboard gesetzt) zu einem
+/home/ai-core-node/.claude/star/gespraechsmodus.py:551:    except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:572:    Hauptschleife die Queue nach einem langen Realtime-Gespraech
+/home/ai-core-node/.claude/star/gespraechsmodus.py:596:    """Verwirft alles aktuell Gepufferte -- nach einem laengeren Realtime-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:607:    except queue.Empty:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:620:    teure Realtime-API -- die startet erst NACH erfolgreicher Verifikation.
+/home/ai-core-node/.claude/star/gespraechsmodus.py:661:        except queue.Empty:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:689:        except queue.Empty:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:748:#  erkannter Sprache SYNCHRON an realtime_gespraech.fuehren_gespraech()
+/home/ai-core-node/.claude/star/gespraechsmodus.py:751:#  Dashboard-Schalter gespraech.aktiv, nach jedem Einschalten geht ein
+/home/ai-core-node/.claude/star/gespraechsmodus.py:757:    frankenstein-gespraechsmodus.service). Blockiert bis SIGTERM.
+/home/ai-core-node/.claude/star/gespraechsmodus.py:760:    solange gespraech.aktiv=0 ist, werden WEDER die VAD/STT-Modelle NOCH
+/home/ai-core-node/.claude/star/gespraechsmodus.py:778:    _log("gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:791:    # Dieser Thread ist die Behebung. Laeuft UNABHAENGIG von gespraech.aktiv
+/home/ai-core-node/.claude/star/gespraechsmodus.py:794:    # AUCH wenn gerade kein Gespraech laeuft (gespraech.aktiv=0).
+/home/ai-core-node/.claude/star/gespraechsmodus.py:807:    # (siehe realtime_gespraech.py) ueber genau diesen Broker. Ein separater
+/home/ai-core-node/.claude/star/gespraechsmodus.py:814:    # PHASE-42-Ausnahme fuer frankenstein-gespraechsmodus.service mit.
+/home/ai-core-node/.claude/star/gespraechsmodus.py:820:    # gespraech.aktiv=0 bleibt der Prozess beim dokumentierten <30MB-Sockel.
+/home/ai-core-node/.claude/star/gespraechsmodus.py:836:        except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:842:        except Exception as e:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:853:            _stern("gespraech-raum-verlassen", "--session-id", raum_session_id)
+/home/ai-core-node/.claude/star/gespraechsmodus.py:870:    session_id: Optional[str] = _stern("gespraech-status").get("claude_session_id") or None
+/home/ai-core-node/.claude/star/gespraechsmodus.py:874:    # `cfg = _stern("gespraech-status")` bei JEDER Loop-Iteration (wie im
+/home/ai-core-node/.claude/star/gespraechsmodus.py:882:    # `gespraech.aktiv` zu pruefen. Real mit Timing-Instrumentierung
+/home/ai-core-node/.claude/star/gespraechsmodus.py:886:    # Verzoegerung bis "gespraech-aus" wirkt), aber keine Subprozess-Flut
+/home/ai-core-node/.claude/star/gespraechsmodus.py:888:    cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:893:            cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:898:                _log("gespraech.aktiv=0 -- ausgeschaltet, naechstes Einschalten prueft erneut per "
+/home/ai-core-node/.claude/star/gespraechsmodus.py:901:            _log("gespraech.aktiv=0 -- pausiert (10s)")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:903:            cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:910:        # waehrend gespraech.aktiv=0-Pausen).
+/home/ai-core-node/.claude/star/gespraechsmodus.py:937:            mic_geraet = (_stern("gespraech-mic-status").get("geraet") or "")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:946:        # Realtime-Modus UND bevor der schwere lokale VAD/STT-Stack
+/home/ai-core-node/.claude/star/gespraechsmodus.py:956:                cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:959:            _log("gespraech.aktiv=1 erkannt -- Verifikations-Handshake ('Hoerst du mich?') laeuft ...")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:961:            _stern("gespraech-verifikation-setzen", "--status", "ok" if ok else "fehler", "--detail", detail)
+/home/ai-core-node/.claude/star/gespraechsmodus.py:975:                # (exakt 10s spaeter) -- OHNE dass gespraech.aktiv zwischen-
+/home/ai-core-node/.claude/star/gespraechsmodus.py:977:                # gespraech.aktiv aktiv IM CODE auf 0 setzen (nicht nur per
+/home/ai-core-node/.claude/star/gespraechsmodus.py:987:                _stern("gespraech-aus")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:989:                cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1004:            raum_text = _stern("gespraech-raum-beitreten", "--session-id", raum_session_id,
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1005:                                "--model", "realtime-gespraech").get("text", "")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1013:            _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf Sprache (reaktiv)")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1016:            _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf Sprache (reaktiv)")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1021:        except queue.Empty:
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1058:        # (gespraech.aktiv, /stat) ist die einzige Ein/Aus-Bedingung.
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1062:        # Realtime-Session aus -- reaktiv, kein "Hey FranKenstein" mehr
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1070:        # ── ECHTES Gespraech beginnt: an die Realtime-API uebergeben
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1073:        #    siehe realtime_gespraech.py). Der lokale 16kHz-Wachstream
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1082:        _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "im Gespraech mit Gabriel")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1083:        _log("Realtime-Session wird gestartet (PHASE 42b) ...")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1084:        ergebnis_gespraech = realtime_gespraech.fuehren_gespraech(
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1088:        session_id = ergebnis_gespraech.get("claude_session_id") or session_id
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1091:        _log(f"Realtime-Session beendet: grund={ergebnis_gespraech.get('grund_ende')} "
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1092:             f"dauer_s={ergebnis_gespraech.get('dauer_s')}")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1098:        _stern("gespraech-raum-puls", "--session-id", raum_session_id, "--was", "wartet auf 'Hey FranKenstein'")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1105:    ergebnis = _stern("gespraech-session-merken", "--id", session_id)
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1119:    ap = argparse.ArgumentParser(description="gespraechsmodus -- PHASE 42 echter Gespraechsmodus")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1122:    sub.add_parser("listener", help="Dauerprozess -- ExecStart von frankenstein-gespraechsmodus.service")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1155:        # Duenner Wrapper um `journalctl --user -u frankenstein-gespraechsmodus
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1160:        os.execvp("journalctl", ["journalctl", "--user", "-u", "frankenstein-gespraechsmodus.service",
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1166:        cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1179:        cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/gespraechsmodus.py:1210:                cfg = _stern("gespraech-status")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:2:"""realtime_gespraech.py -- PHASE 42b: Architektur-Pivot des Gespraechsmodus
+/home/ai-core-node/.claude/star/realtime_gespraech.py:4:siehe gespraechsmodus.py PHASE 42) auf die echte OpenAI **Realtime-API**
+/home/ai-core-node/.claude/star/realtime_gespraech.py:9:ueber krasse chat gpt gespraechsmodus erfahrung" -- dann, entscheidende
+/home/ai-core-node/.claude/star/realtime_gespraech.py:17:     Realtime-Session bekommt eine fuer Sprachdialog destillierte Fassung
+/home/ai-core-node/.claude/star/realtime_gespraech.py:22:     Bruecke (PHASE 42b-Abschnitt dort: gespraech_status_lesen(),
+/home/ai-core-node/.claude/star/realtime_gespraech.py:23:     gespraech_erinnerung_lesen()/_schreiben(), gespraech_zustandskontext())
+/home/ai-core-node/.claude/star/realtime_gespraech.py:24:     UND auf die bestehende `claude -p --resume`-Bruecke (gespraechsmodus.py
+/home/ai-core-node/.claude/star/realtime_gespraech.py:30:     offene (kostenpflichtige) Realtime-Session.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:32:     (frank_gespraech_beenden), NICHT per Text-Sentinel wie in PHASE 42 --
+/home/ai-core-node/.claude/star/realtime_gespraech.py:33:     die Realtime-Session hat vollen Audio-/Gespraechskontext.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:38:     (gespraech.stille_timeout_sekunden, siehe _StilleWaechter unten).
+/home/ai-core-node/.claude/star/realtime_gespraech.py:40:     Stimme ("cedar", laut OpenAIs eigenem Realtime-Prompting-Guide die
+/home/ai-core-node/.claude/star/realtime_gespraech.py:42:     Realtime-API verifiziert -- "onyx" aus der alten TTS-Kette existiert
+/home/ai-core-node/.claude/star/realtime_gespraech.py:43:     dort NICHT, siehe stern.py-Kommentar bei gespraech.realtime_stimme),
+/home/ai-core-node/.claude/star/realtime_gespraech.py:48:     Systemlast, stern.py gespraech_zustandskontext()) wird JEDER
+/home/ai-core-node/.claude/star/realtime_gespraech.py:59:    Bequemlichkeitsmethode `client.beta.realtime.connect()` schickt diesen
+/home/ai-core-node/.claude/star/realtime_gespraech.py:61:    "invalid_request_error.beta_api_shape_disabled" abgelehnt, deshalb hier
+/home/ai-core-node/.claude/star/realtime_gespraech.py:62:    bewusst RAW `websockets` statt SDK-Wrapper).
+/home/ai-core-node/.claude/star/realtime_gespraech.py:117:except Exception as _presence_bridge_fehler:  # pragma: no cover -- exercised on cv2/camera-less machines
+/home/ai-core-node/.claude/star/realtime_gespraech.py:128:    # try/except fuer beide, `pf is None`/`active_sensing is None` ist der
+/home/ai-core-node/.claude/star/realtime_gespraech.py:133:except Exception as _active_sensing_fehler:  # pragma: no cover -- cv2/kamera-lose Maschinen
+/home/ai-core-node/.claude/star/realtime_gespraech.py:149:    print(f"[{zeit}] realtime_gespraech: {msg}", file=sys.stderr, flush=True)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:155:    gespraechsmodus.py._stern_flags() (bewusst dupliziert, kein
+/home/ai-core-node/.claude/star/realtime_gespraech.py:178:    Deadlock-Bug, den gespraechsmodus.py._stern()s Docstring bereits fuer
+/home/ai-core-node/.claude/star/realtime_gespraech.py:180:    24kHz-Realtime-Mikrofonstream HIER, siehe _mic_stream_24k()): ein
+/home/ai-core-node/.claude/star/realtime_gespraech.py:184:    In-Prozess-Dispatch statt Subprozess) war NUR in gespraechsmodus.py
+/home/ai-core-node/.claude/star/realtime_gespraech.py:193:        if verb == "gespraech-status-lesen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:194:            return _s.gespraech_status_lesen(eigene_session_id=f.get("eigene_session_id"))
+/home/ai-core-node/.claude/star/realtime_gespraech.py:195:        if verb == "gespraech-zustandskontext":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:196:            return _s.gespraech_zustandskontext(pfad=f.get("pfad"))
+/home/ai-core-node/.claude/star/realtime_gespraech.py:197:        if verb == "gespraech-raum-puls":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:204:        if verb == "gespraech-erinnerung-lesen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:205:            return _s.gespraech_erinnerung_lesen(f.get("suchbegriff") or "", int(f.get("limit") or 8))
+/home/ai-core-node/.claude/star/realtime_gespraech.py:206:        if verb == "gespraech-abruf-holen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:218:        if verb == "gespraech-erinnerung-schreiben":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:219:            return _s.gespraech_erinnerung_schreiben(f.get("subject"), f.get("value"), quelle=f.get("quelle") or "realtime")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:220:        if verb == "gespraech-sprechzustand-setzen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:222:            # siehe RealtimeSession._sprechzustand_spiegeln() oben.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:223:            return _s.gespraech_sprechzustand_setzen(f.get("user") == "1", f.get("assistant") == "1")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:224:        if verb == "gespraech-augenposition-setzen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:226:            # RealtimeSession._augenposition_spiegeln() oben.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:229:            return _s.gespraech_augenposition_setzen(x, y, f.get("sichtbar") == "1")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:256:        if verb == "gespraech-kosten-event-loggen":
+/home/ai-core-node/.claude/star/realtime_gespraech.py:257:            # PHASE 49 -- s. RealtimeSession.__init__ (_kosten_session_uuid)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:264:    except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:349:#  _tool_erinnerung_lesen()/gespraech_erinnerung_lesen()). Das war
+/home/ai-core-node/.claude/star/realtime_gespraech.py:360:#  (ueber den neuen In-Prozess-Dispatch-Zweig "gespraech-abruf-holen" in
+/home/ai-core-node/.claude/star/realtime_gespraech.py:410:    except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:429:FranKenstein, die Realtime-API ist nur dein Mund und Ohr in diesem Moment.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:479:- frank_gespraech_beenden: rufst du auf, SOBALD du aus dem Gesagten \
+/home/ai-core-node/.claude/star/realtime_gespraech.py:516:#  Tool-Schemas (Realtime-API-Function-Calling-Format)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:583:        "type": "function", "name": "frank_gespraech_beenden",
+/home/ai-core-node/.claude/star/realtime_gespraech.py:601:        return _stern("gespraech-status-lesen", "--eigene-session-id", eigene_session_id)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:602:    return _stern("gespraech-status-lesen")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:618:    return _stern("gespraech-erinnerung-lesen",
+/home/ai-core-node/.claude/star/realtime_gespraech.py:628:    return _stern("gespraech-erinnerung-schreiben", "--subject", subject, "--value", value,
+/home/ai-core-node/.claude/star/realtime_gespraech.py:634:    (eigener Thread je Aufgabe), damit das laufende Realtime-Gespraech NIE
+/home/ai-core-node/.claude/star/realtime_gespraech.py:635:    blockiert. Zwei Nutzer in RealtimeSession: `auftrag` (claude_frage()-
+/home/ai-core-node/.claude/star/realtime_gespraech.py:641:    Ergebnis wird in `ergebnisse` abgelegt; die Hauptschleife (RealtimeSession)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:663:        except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:684:    16kHz-Wake-Word-Stream in gespraechsmodus.py (Server verlangt >=24000,
+/home/ai-core-node/.claude/star/realtime_gespraech.py:701:    unterbrechbar bei Nutzer-Baerge-in (siehe RealtimeSession._on_event
+/home/ai-core-node/.claude/star/realtime_gespraech.py:719:        except (BrokenPipeError, OSError, ValueError) as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:744:            except Exception:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:754:            except Exception:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:762:#  frank_gespraech_beenden-Tool, kein Ersatz dafuer.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:770:        # Kernmechanismus 8 (PHASE 42c) -- lebt hier statt auf RealtimeSession,
+/home/ai-core-node/.claude/star/realtime_gespraech.py:800:#  RealtimeSession -- eine Konversation von "Hey FranKenstein" bis
+/home/ai-core-node/.claude/star/realtime_gespraech.py:803:class RealtimeSession:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:817:        # _KONFIG_DEFAULTS-Kommentar bei gespraech.realtime_reasoning_effort
+/home/ai-core-node/.claude/star/realtime_gespraech.py:829:        # Events DIESER einen Realtime-WebSocket-Verbindung.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:838:        # kaum auf, weil stern.gespraech_an() das Einschalten selbst schon
+/home/ai-core-node/.claude/star/realtime_gespraech.py:856:        # Stream an die Realtime-API) -- real per journalctl-Muster bestaetigt
+/home/ai-core-node/.claude/star/realtime_gespraech.py:859:        # Realtime-API hoert offenbar die eigene Sprachausgabe ueber den
+/home/ai-core-node/.claude/star/realtime_gespraech.py:908:        self._gespraechs_ton_hinweis = ""
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1000:        import gespraechsmodus as _gm  # lazy: kein Modulebene-Zyklus, siehe Docstring-Kopf
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1068:        `self._gespraechs_ton_hinweis` an, falls bereits ein
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1079:        if self._gespraechs_ton_hinweis:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1080:            text += "\n\n" + self._gespraechs_ton_hinweis
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1144:                except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1148:        except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1182:                    provenance="realtime_gespraech._voice_outcome_text_verarbeiten",
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1199:                provenance="realtime_gespraech._voice_outcome_text_verarbeiten",
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1218:                except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1223:        except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1246:        Realtime-API hoert Tonlage/Prosodie ohnehin schon direkt aus dem
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1252:        bleibt self._gespraechs_ton_hinweis schlicht auf dem letzten (oder
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1258:        entkoppelt Transkriptions-Timing von Sprechpausen) -- ein
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1278:        # gespraechsmodus auch drinnen sein ... sonst wird das nix"):
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1288:            erg = _stern("gespraech-abruf-holen", "--session-id", self.raum_session_id, "--text", text)
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1291:        except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1301:            self._gespraechs_ton_hinweis = hinweis
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1310:        gespraech-verifikation-setzen oben. NUR an den vier True/False-
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1313:        exakt der Subprozess-/Schreiblast-Bug, den gespraechsmodus.py fuer
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1314:        gespraech.aktiv bereits PHASE-42b-dokumentiert hat (_CFG_REFRESH_
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1317:            _stern("gespraech-sprechzustand-setzen",
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1320:        except Exception as e:
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1334:        Gespraechssession, also implizit nur wenn gespraech.aktiv=1 war, s.
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1346:                _stern("gespraech-augenposition-setzen", "--sichtbar", "0")
+/home/ai-core-node/.claude/star/realtime_gespraech.py:1351:                _stern("gespraech-augenposition-setzen", "--sichtbar", "0")
+=== recent voice journal ===
+Sep 12 14:41:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:41:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:41:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:41:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:41:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:41:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:41:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:41:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:41:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:41:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:42:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:42:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:43:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:43:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:44:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:44:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:45:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:45:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:46:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:46:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:47:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:47:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:48:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:48:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:49:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:49:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:50:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:50:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:51:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:51:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:52:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:52:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:53:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:53:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:54:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:54:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:55:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:55:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:56:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:56:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:57:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:57:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:41 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:41] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:58:51 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:58:51] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:01 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:01] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:11 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:11] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:21 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:21] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:31 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:31] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:42 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 14:59:52 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 14:59:52] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:02 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:02] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:12 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:12] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:22 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:22] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:32 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:32] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:42 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:00:52 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:00:52] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 15:01:02 ai-core-node-projekt-frankenstein python3[3333824]: [2026-09-12 15:01:02] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+=== immune registry ===
+16:  - CircuitBreaker FSM: CLOSED -> OPEN -> HALF_OPEN, decorrelated jitter
+19:  - SERVICE_REGISTRY: echte Dienste dieser Maschine (keine aicore-*, die
+23:    frankenstein-gespraech.service hat After=frankenstein-puls.service,
+24:    also Welle 0 = alles ausser gespraech, Welle 1 = gespraech danach.
+55:    import pause_wache  # gleiche Pause-Quelle wie gespraech_loop.py/grid_autonomie.py
+84:SERVICE_REGISTRY: Dict[str, Dict] = {
+94:    "frankenstein-gespraech.service":          {"tier": 1, "critical": True},  # After=puls
+207:class CircuitBreaker:
+328:    cmd = ["sudo", "systemctl", "is-active", unit] if SERVICE_REGISTRY.get(unit, {}).get("sudo") \
+338:    cmd = ["sudo", "systemctl", "restart", unit] if SERVICE_REGISTRY.get(unit, {}).get("sudo") \
+378:        self.breakers: Dict[str, CircuitBreaker] = {
+379:            name: CircuitBreaker(name, self.db) for name in SERVICE_REGISTRY
+436:        for name, info in SERVICE_REGISTRY.items():
+498:        _log(f"Immunsystem gestartet ({len(SERVICE_REGISTRY)} Dienste ueberwacht).")

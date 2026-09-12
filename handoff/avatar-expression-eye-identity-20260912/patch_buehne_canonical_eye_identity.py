@@ -33,7 +33,7 @@ GAZE_NEW = '''// 2026-09-12 canonical-eye invariant: special-expression frames n
   // own a competing eye identity. Keep the same measured gaze signal active.
   $("pupillen-glow").style.opacity = String(ziel.opazitaet);'''
 
-COMMENT_OLD = '''// waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+COMMENT_OLD = '''// ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
   // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
   // Gesicht (zweites Augenpaar statt zweiter Kopf).'''
 COMMENT_NEW = '''// Sonderausdrucks-Frames werden vor Promotion mit

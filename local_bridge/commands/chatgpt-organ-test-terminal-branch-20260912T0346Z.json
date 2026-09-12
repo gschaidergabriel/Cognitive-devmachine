@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-test-terminal-branch-20260912T0346Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -e; R=/home/ai-core-node/frankenstein-repo; git -C \"$R\" fetch --quiet origin chatgpt/frank-terminal-organ-20260912; git -C \"$R\" show FETCH_HEAD:scripts/frank_terminal.py | python3 -c 'import sys; s=sys.stdin.read(); compile(s, \"frank_terminal.py\", \"exec\"); print(\"PY_COMPILE_OK bytes=%d\" % len(s))'; printf '%s\\n' '--- forbidden direct DB symbols ---'; git -C \"$R\" show FETCH_HEAD:scripts/frank_terminal.py | grep -En 'sqlite3|\.connect\(' || true; printf '%s\\n' '--- canonical bindings ---'; git -C \"$R\" show FETCH_HEAD:scripts/frank_terminal.py | grep -En 'cmd_hook|handoff|chatgpt_senden|chatgpt_ernten|reconcile' | head -30",
+  "cwd": "/home/ai-core-node/frankenstein-repo",
+  "timeout_seconds": 60
+}

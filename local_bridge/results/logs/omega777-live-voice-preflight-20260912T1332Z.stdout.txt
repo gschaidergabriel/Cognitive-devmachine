@@ -1,0 +1,142 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+ai-core-node
+===FRANKENSTEIN_MAIN===
+3064fb21566b9455732fbe143d56911ade45b24e
+===VOICE_UNITS===
+UNIT=frankenstein-gespraechsmodus.service
+MainPID=2800373
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+UNIT=frankenstein-gespraech.service
+MainPID=2893366
+ExecStart={ path=/opt/entityos/voice/start_lokal.sh ; argv[]=/opt/entityos/voice/start_lokal.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+UNIT=frankenstein-chatgpt-client.service
+MainPID=1075883
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+===VOICE_PROCESSES===
+1075883    2339 Sat Sep 12 17:07:11 2026 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py
+2893366    2339 Sat Sep 12 14:03:00 2026 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+3627266  959674 Sat Sep 12 20:31:51 2026 bash -lc set -euo pipefail; echo '===IDENTITY==='; hostname; whoami; echo '===FRANKENSTEIN_MAIN==='; git ls-remote https://github.com/gschaidergabriel/frankenstein.git refs/heads/main | awk '{print $1}'; echo '===VOICE_UNITS==='; for u in frankenstein-gespraechsmodus.service frankenstein-gespraech.service frankenstein-chatgpt-client.service; do echo UNIT=$u; systemctl --user show "$u" -p ActiveState -p SubState -p MainPID -p ExecStart --no-pager || true; done; echo '===VOICE_PROCESSES==='; ps -eo pid,ppid,lstart,cmd | grep -E '[v]oice_full_runtime|[v]oice_777_runtime|[g]espraechsmodus.py|[r]ealtime_gespraech|[g]espraech_loop|[f]rankenstein.*gespraech|[v]oice_host_live_client|[v]oice_host_777_live_client' || true; echo '===ESTABLISHED_NETWORK==='; PIDS=$(for u in frankenstein-gespraechsmodus.service frankenstein-gespraech.service frankenstein-chatgpt-client.service; do systemctl --user show "$u" -p MainPID --value 2>/dev/null || true; done | grep -E '^[1-9][0-9]*$' | paste -sd, -); if [ -n "${PIDS:-}" ]; then ss -tnp 2>/dev/null | grep -E "pid=($(echo $PIDS | tr ',' '|'))[,)]" || true; fi; echo '===RECENT_VOICE_JOURNAL==='; journalctl --user -u frankenstein-gespraechsmodus.service -u frankenstein-gespraech.service --since '-3 min' --no-pager -n 120 2>/dev/null | tail -120 || true; echo '===DROPINS==='; systemctl --user cat frankenstein-gespraechsmodus.service 2>/dev/null | tail -80 || true; systemctl --user cat frankenstein-chatgpt-client.service 2>/dev/null | tail -80 || true
+===ESTABLISHED_NETWORK===
+CLOSE-WAIT 25     0      192.168.1.107:41042      99.86.18.6:443  users:(("python3",pid=2893366,fd=3))  
+===RECENT_VOICE_JOURNAL===
+Sep 12 20:28:54 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:28:54 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:28:54 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:28:54 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:28:54 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:28:54] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:02 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:02 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:02 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:02 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:04 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:04] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:10 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:10 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:10 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:10 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:14 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:14] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:18 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:18 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:18 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:18 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:24 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:24] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:26 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:26 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:26 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:26 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:34 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:34] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:35 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:35 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:35 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:35 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:43 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:43 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:43 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:43 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:44 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:44] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:51 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:51 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:51 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:51 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:29:54 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:29:54] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:29:59 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:59 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:29:59 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:29:59 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:04 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:04] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:07 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:07 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:07 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:07 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:15 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:14] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:15 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:15 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:15 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:15 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:23 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:23 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:23 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:23 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:25 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:25] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:31 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:31 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:31 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:31 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:35 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:35] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:39 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:39 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:39 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:39 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:45 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:45] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:47 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:47 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:47 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:47 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:30:55 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:30:55] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:30:55 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:55 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:30:55 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:30:55 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:04 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:04 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:04 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:04 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:05 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:31:05] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:31:12 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:12 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:12 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:12 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:15 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:31:15] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:31:20 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:20 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:20 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:20 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:25 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:31:25] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:31:28 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:28 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:28 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:28 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:35 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:31:35] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:31:36 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:36 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:36 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:36 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:44 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:44 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:44 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:44 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+Sep 12 20:31:45 ai-core-node-projekt-frankenstein env[2800373]: [2026-09-12 20:31:45] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 12 20:31:52 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:52 [VAD] idle timeout, keine Sprache erkannt -- kein ASR-Aufruf.
+Sep 12 20:31:52 ai-core-node-projekt-frankenstein start_lokal.sh[2893366]: 2026-09-12 20:31:52 [VAD] listening via PipeWire (XDG_RUNTIME_DIR=/run/user/1000) ch0, start_thr=950 end_thr=550.0, max_wait=8.0s
+===DROPINS===
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target

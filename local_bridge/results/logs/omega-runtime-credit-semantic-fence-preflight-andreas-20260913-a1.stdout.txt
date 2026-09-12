@@ -1,0 +1,20 @@
+HOST=andreas-MACO USER=andreas
+SELF_INTEGRATION
+## main...origin/main [hinterher 23]
+HEAD=5b06f6c40eefb9b2bb058c8117f8705cdff50a6a
+ORIGIN_MAIN=2f9fa1004ab140eb312302f799bf2e6165c4aff6
+VM
+LoadState=loaded
+ActiveState=active
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Tue 2026-09-08 12:04:36 CEST
+MainPID=319869
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+TARGETS
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f  /usr/local/libexec/entityos/semantic-state-cutover.py
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d  /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+CONFIG
+ENTITYOS_CONFIG_READABLE=1
+END_PREFLIGHT

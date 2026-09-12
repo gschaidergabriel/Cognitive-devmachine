@@ -50,6 +50,11 @@ if(!mikroMimikDarf()) throw Error('baseline gate should allow');
 mundSprechBis=Date.now()+5000; if(mikroMimikDarf()) throw Error('speech gate failed'); mundSprechBis=0;
 _sonderLaeuft=true; if(mikroMimikDarf()) throw Error('special-expression gate failed'); _sonderLaeuft=false;
 window.__buehneFps=25; if(mikroMimikDarf()) throw Error('fps gate failed'); window.__buehneFps=60;
+// Hard-yield invariant: a speaking handoff must clear queued idle frames immediately.
+_mikroMimikAktiv=true; mundAktivFrames=['idle-a','idle-b']; mundAktivIndex=1; mundLetzterFrameT=99;
+mikroMimikAbbrechen('speech-test', false);
+if(_mikroMimikAktiv || mundAktivFrames !== null || mundAktivIndex !== 0 || mundLetzterFrameT !== 0)
+  throw Error('speech hard-yield failed');
 console.log(JSON.stringify({neutral,warm,tense,tired,surprise,pause_ms:{near,present,absent}},null,2));
 console.log('POLICY_TEST_PASS');
 `;

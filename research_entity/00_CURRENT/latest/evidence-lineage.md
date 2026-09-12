@@ -1,21 +1,20 @@
 # Evidence / lineage / Goodman
 
 Status: `IN_PROGRESS`  
-Observed head: `73d97414ea2b637f2c531ab659856903a4c34871`  
-Selected receipt: `research_entity/00_CURRENT/updates/evidence-lineage/20260828T144653Z-evidence-lineage-ffdaa1b40f.json`
+Observed head: `a44f23cccac5d91f080a9a3a9908115b67741b63`  
+Selected receipt: `research_entity/00_CURRENT/updates/evidence-lineage/20260912T020707Z-evidence-lineage-go083-subject-binding.json`
 
-Triggerword 4 materialized exact Frankenstein 1.x donor freeze and source-archaeology handoff in Frankenstein 2.0
+GO083 real-host preflight proves the active self-test systemd path still executes the pre-080/081 checkout
 
-State: F2-WP-001 generation 2 now binds exact donor commit/tree, adoption-matrix provenance, migration-front blob index, workpackage state evidence, and a continuation checkpoint; no runtime/provider credit was minted.
+State: On andreas-maco, grid10-selbsttests.timer is enabled/active and its service resolves into /home/andreas/self-integration, but the live checkout is 2d0bab710a0b229cbf07c443db2da71e552ab6e3 while current self-integration main is add019e2232714c9b73aab2a657d0715ec9960b5 (GO083 log; 080+081 code itself was already present at e28d758a91b181fdeae7160231a1b38e614e46d1). The live watcher/runner blobs are therefore pre-080/081 and cannot support the requested current-subject temporal ok->rcN->ok promotion. No runtime promotion was minted.
 
-Next: Do not duplicate claimed F2-WP-100 UnifiedDB work. Continue only on unclaimed Triggerword-4 fronts after re-entry; keep F2-WP-001 IN_PROGRESS until README exact binding and semantic donor classifications are completed.
+Next: Deploy before discriminate: on a clean exact-bound live checkout, fast-forward only to current self-integration main, verify the 080+081 blob identities, establish a productive systemd baseline with 15/15 and persistent laeufer=ok, then observe a real status transition. This go macrocycle may not i…
 
 Evidence:
-- `gschaidergabriel/frankenstein-2.0@0528a6cca0974c25218386ca2b78221376a837e0 workpackages/claims/F2-WP-001_G2_GPT56SOL_20260828T2139P0700.json`
-- `gschaidergabriel/frankenstein-2.0@f7641d6432be071f318c35a00cacb28bf997d773 provenance/frankenstein1-donor-freeze-20260828T2139P0700.json`
-- `gschaidergabriel/frankenstein-2.0@373c45568fe4faa526c739b68bb1b239f2e749eb DONOR_ADOPTION_MATRIX.md`
-- `gschaidergabriel/frankenstein-2.0@3f1b0af6e1a74fb4def8991c8b667b0e96a637ae provenance/frankenstein1-donor-source-index-5641dc6b.json`
-- `gschaidergabriel/frankenstein-2.0@c0b14be9d83998998f09e0985191316b19533a3b workpackages/STATE.json`
-- `gschaidergabriel/frankenstein-2.0@ffb38d62ef0d5dfb5548952db95fcf891f534931 checkpoints/F2-WP-001_G2_GPT56SOL_20260828T2146P0700.json`
+- `gschaidergabriel/self-integration@add019e2232714c9b73aab2a657d0715ec9960b5 log/2026-09-12-083-produktionswaechter-subjekt-ist-alt.md`
+- `gschaidergabriel/clay-global-research-entity control branch chatgpt-local-andreas-maco-control command commit 85822a9dad52ae970174893c315fb7642d677fba`
+- `gschaidergabriel/clay-global-research-entity results branch chatgpt-local-andreas-maco-results receipt commit 1ffd0ec13978aaeb7cbda860956556879e8f5235`
+- `receipt command_id go083-production-transition-preflight-20260912-0903-chatgpt; REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED; PASS; exit 0`
+- `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL fail-closed trigger identity rule`
 
 > Cache only. Re-enter current authority/source before material claims.

@@ -1,6 +1,6 @@
 # CLAY NOW — token-efficient current-state cache
 
-Cache head: `3c6fb8d16174d7a6e9dfe6652df62fe167a27c01` · tree `3f64df072fd5` · generated `2026-09-12T01:55:14Z`
+Cache head: `378b127d1e3b824949b3b4cd8d9460ab4c0091fe` · tree `d7ce67856d22` · generated `2026-09-12T02:09:55Z`
 
 > **Cache, not authority.** Read current `SUPERVISOR_INBOX.json` / selected steering before material execution or current-state promotion.
 
@@ -20,7 +20,7 @@ Cache head: `3c6fb8d16174d7a6e9dfe6652df62fe167a27c01` · tree `3f64df072fd5` ·
 - **Global J-Space / causal metrology** `MEASUREMENT_REPAIR_REQUIRED` — Small-scope behavioral steering evidence exists; historical representation-divergence metric is instrumentation-broken and has zero representation-level credit. → `latest/jspace.md`
 - **Claude Code bridge / ZECP13-14** `CURRENT_DESIGN_EVIDENCE_DELTA` — Frankenstein H14 supplies bounded cross-model substitutability evidence; Clay keeps provider admission unchanged and shifts research toward VPS/local deterministic discriminators to conserv… → `latest/claude-bridge.md`
 - **ClayCode / packet ABI / protocol** `CURRENT_DESIGN` — Xeno/ClayCode is the sole addressable model-facing cognitive semantics; JSON/SQLite/Python/tensors are carriers, not a second semantic brain. → `latest/claycode-protocol.md`
-- **Evidence / lineage / Goodman** `IN_PROGRESS` — Triggerword 4 materialized exact Frankenstein 1.x donor freeze and source-archaeology handoff in Frankenstein 2.0 → `latest/evidence-lineage.md`
+- **Evidence / lineage / Goodman** `IN_PROGRESS` — GO083 real-host preflight proves the active self-test systemd path still executes the pre-080/081 checkout → `latest/evidence-lineage.md`
 - **Free Swarm / Forge / Distillery** `HARD_OFF_BLOCKED` — FreeSwarm provider admission is owner-emergency-stop HARD_OFF; legacy live processes were observed after stop. Accepted training tokens remain 0 unless newer exact evidence supersedes. → `latest/free-swarm-distillery.md`
 
 ## Highest visible blockers

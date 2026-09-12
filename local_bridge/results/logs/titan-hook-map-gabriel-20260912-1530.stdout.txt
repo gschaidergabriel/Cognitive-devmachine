@@ -1,0 +1,22 @@
+FILE /home/ai-core-node/.claude/star/settings.json EXISTS True
+HOOK_EVENTS ['PostToolUse', 'PreCompact', 'PreToolUse', 'SessionEnd', 'SessionStart', 'Stop', 'UserPromptSubmit']
+UserPromptSubmit ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+SessionStart ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PreToolUse ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PreCompact ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PostToolUse ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+Stop ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+SessionEnd ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PLUGIN_KEYS []
+FILE /home/ai-core-node/.claude/settings.json EXISTS True
+HOOK_EVENTS ['PostToolUse', 'PreCompact', 'PreToolUse', 'SessionEnd', 'SessionStart', 'Stop', 'UserPromptSubmit']
+PostToolUse ['bash -c \'TOOL=$(cat | jq -r ".tool_name // \\"tool\\"" 2>/dev/null || echo tool); /home/ai-core-node/.claude/watchdog/bin/heartbeat.sh "PostToolUse: $TOOL"\'', '/home/ai-core-node/.local/bin/clay-room-heartbeat', 'python3 /home/ai-core-node/.claude/star/stern.py raum-puls-global', 'python3 /home/ai-core-node/.claude/star/stern.py hook']
+UserPromptSubmit ['bash /home/ai-core-node/.local/bin/clay-chatgpt-usage-hook', 'python3 /home/ai-core-node/.claude/star/stern.py hook', 'python3 /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx_hook.py']
+SessionStart ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PreToolUse ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PreCompact ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+Stop ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+SessionEnd ['python3 /home/ai-core-node/.claude/star/stern.py hook']
+PLUGIN_KEYS ['frankenstein@frankenstein', 'frontend-design@claude-plugins-official', 'rust-analyzer-lsp@claude-plugins-official']
+LEGACY_TITAN_DB_PRESENT=yes
+inactive

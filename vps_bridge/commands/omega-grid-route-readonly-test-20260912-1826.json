@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v3",
+  "command_id":"omega-grid-route-readonly-test-20260912-1826",
+  "op":"exec",
+  "cwd":"/workspace/omega_runtime",
+  "timeout_seconds":60,
+  "command":"python3 - <<'PY'\nimport importlib.util,json\np='omega_daemon.py';sp=importlib.util.spec_from_file_location('od',p);m=importlib.util.module_from_spec(sp);sp.loader.exec_module(m)\nfor task in [\n {'task_id':'avatar','required_capabilities':['avatar'],'preferred_data_domains':['production-avatar']},\n {'task_id':'self-integration','required_capabilities':['self_integration'],'preferred_data_domains':['self-integration']},\n {'task_id':'self-integration-heavy','required_capabilities':['self_integration'],'preferred_data_domains':['self-integration'],'heavy':True}\n]:\n try:r=m.route(task)\n except Exception as e:r={'blocked':str(e)}\n print(task['task_id'],json.dumps(r,separators=(',',':')))\nPY"
+}

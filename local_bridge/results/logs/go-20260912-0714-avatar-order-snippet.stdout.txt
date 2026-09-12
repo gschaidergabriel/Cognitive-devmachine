@@ -1,0 +1,63 @@
+A
+   855	function kopfKoerperDrehSchritt(){
+   856	  // Federziel aus dem ECHTEN Rollwert (12% davon, auf ±3° begrenzt) -- die
+   857	  // Bildpose macht die Neigung, die Feder nur das kleine Nachschwingen.
+   858	  const zielRot = Math.max(-3, Math.min(3, kopfRollSoll * 0.12));
+   859	  [kDrehRot, kDrehRotV] = federSchritt(kDrehRot, kDrehRotV, zielRot, 0.020, 0.20);
+   860	  [kDrehTy,  kDrehTyV ] = federSchritt(kDrehTy,  kDrehTyV,  0,      0.020, 0.20);
+   861	  // 34% des AKTUELLEN (nicht Ziel-)Kopfwerts + eigene weichere Feder =
+   862	  // Koerper folgt spaeter und schwaecher, ohne starren festen Versatz.
+   863	  [bDrehRot, bDrehRotV] = federSchritt(bDrehRot, bDrehRotV, kDrehRot*0.34, 0.010, 0.26);
+   864	  [bDrehTy,  bDrehTyV ] = federSchritt(bDrehTy,  bDrehTyV,  kDrehTy*0.34,  0.010, 0.26);
+   865	  $("kopf-dreh").style.transform = `rotate(${kDrehRot.toFixed(2)}deg) translateY(${kDrehTy.toFixed(1)}px)`;
+   866	  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+   867	  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+   868	  // (STIRN-LUECKE-FIX): Ziel ist jetzt kopfRollWert selbst (kDrehRot kuerzt
+   869	  // sich per CSS-Vererbung von selbst weg, siehe Kommentar), UND geglaettet
+   870	  // per Lerp statt hartem Sprung -- entkoppelt den Flicken vom 5°-Sprung
+   871	  // des Fotowechsels, ohne ihn wahrnehmbar hinter dem echten Winkel
+   872	  // zurueckfallen zu lassen (Faktor 0.4, faengt sich in 2-3 Frames).
+   873	  kopfRollAusgleichDeg += (kopfRollWert - kopfRollAusgleichDeg) * 0.4;
+   874	  // Exakte Translations-Korrektur (siehe KOPF_ROLL_AUGEN_OFFSET oben) --
+   875	  // gleiche Lerp-Rate 0.4 wie die Rotation, damit beide Anteile beim
+   876	  // 5-Grad-Fotosprung synchron nachziehen, kein neuer Zeitversatz.
+   877	  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+   878	  augenOffsetDx += (zielOffset.dx - augenOffsetDx) * 0.4;
+   879	  augenOffsetDy += (zielOffset.dy - augenOffsetDy) * 0.4;
+   880	  const augenDxCss = augenOffsetDx * _kopfCanvasScale;
+   881	  const augenDyCss = augenOffsetDy * _kopfCanvasScale;
+   882	  $("augen-blink").style.transform =
+   883	    `translate(${augenDxCss.toFixed(2)}px, ${augenDyCss.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+   884	}
+   885	
+   886	// ⭐ 2026-09-11 Crossfade statt hartem g.src=neu: ausdruckAktiv zeigt, welches
+   887	// der zwei gestapelten RGBA-Bilder (#ausdruck-schicht/#ausdruck-schicht2)
+   888	// gerade OBEN/sichtbar ist. Beim Wechsel wird das jeweils versteckte Element
+   889	// neu befuellt und per opacity eingeblendet, das bisher sichtbare
+   890	// ausgeblendet -- kein Bildsprung.
+B
+  1868	  const grenze = t - 1000;
+  1869	  letzteFrames = letzteFrames.filter(x => x > grenze);
+  1870	  window.__buehneFps = letzteFrames.length;
+  1871	}
+  1872	
+  1873	function schleife(t){
+  1874	  atmen();
+  1875	  koerperSchritt(t);
+  1876	  kopfRollTick(t);
+  1877	  mundSchritt(t);
+  1878	  kopfKoerperDrehSchritt();
+  1879	  kameraWackeln();
+  1880	  gazeSchritt();
+  1881	  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  1882	  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  1883	  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  1884	  regenZeichnen();
+  1885	  fpsMessen(t);
+  1886	  requestAnimationFrame(schleife);
+  1887	}
+  1888	requestAnimationFrame(schleife);
+  1889	setInterval(() => {
+  1890	  const fps = window.__buehneFps || 60;
+  1891	  if(fps < 24 && !regenGedrosselt){
+  1892	    regenGedrosselt = true;

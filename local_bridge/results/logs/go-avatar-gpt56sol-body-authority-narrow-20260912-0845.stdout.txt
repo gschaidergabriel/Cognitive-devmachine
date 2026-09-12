@@ -1,0 +1,303 @@
+LIVE_SHA 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+MARKER function koerperAktionWeiterPlanen POS 101637
+ pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eintrag = bildLaden(a.bilder[a.idx]);
+    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+    a.letzterT = jetzt;
+    koerperCrossfade(a.bilder[a.idx]);
+    a.idx++;
+    if(a.idx >= a.bilder.length){
+      koerperAktion = null;
+      const f = a.fertig; a.fertig = null;
+      if(f) f();
+    }
+    return;
+  }
+  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  atmenLetzterWechsel = jetzt;
+  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+}
+
+// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+//  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+//     linear.
+// Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+// (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+// Hintergrund bewegt sich minimal weniger als der Vordergrund").
+// ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("
+MARKER function koerperAktionTick POS -1
+MARKER function atmen POS 94678
+ exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+// angefasst.
+let _atmenTransform = "scale(1)";
+let _atmenFilter = "saturate(1.05) brightness(1)";
+function atmen(){
+  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+  const skala = 1 + auf * 0.012;
+  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+  const transform = `scale(${skala})`;
+  const filter = `saturate(1.05) brightness(${helligkeit})`;
+  _atmenTransform = transform;
+  _atmenFilter = filter;
+  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+  $(kopfSichtbar).style.transform = transform;
+  $(kopfSichtbar).style.filter = filter;
+  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+  // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+  // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+  // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+  // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+  // beim Kopf oben.
+  $(atmenAktivSchicht).style.transform = transform;
+  $(atmenAktivSchicht).style.filter = filter;
+  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  
+MARKER function kopfKoerperSchritt POS -1
+MARKER koerperAktionWeiterPlanen(); POS 101970
+n -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eintrag = bildLaden(a.bilder[a.idx]);
+    if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+    a.letzterT = jetzt;
+    koerperCrossfade(a.bilder[a.idx]);
+    a.idx++;
+    if(a.idx >= a.bilder.length){
+      koerperAktion = null;
+      const f = a.fertig; a.fertig = null;
+      if(f) f();
+    }
+    return;
+  }
+  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  atmenLetzterWechsel = jetzt;
+  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+}
+
+// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+//  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+//     linear.
+// Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+// (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+// Hintergrund bewegt sich minimal weniger als der Vordergrund").
+// ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("er zittert, schaut
+// relativ shit aus"): die 8-10Hz-Mikrozitter-Komponente unten war zu schnell
+// UND zu stark -- auf einem kleinen Panel (~296px breit), mit dem neuen
+// engeren Kopf-Crop, UND auf einem Chrome-Fenster ohne GPU-Kompositing
+// (--disable-gpu, siehe Fensterstart) liest sich eine 8-10Hz-Oszillation
+// nicht als sanf
+MARKER requestAnimationFrame(schleife) POS 107669
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+      farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+    }
+    const wasser = $("wasserlinie");
+    let hoehe = null;
+    if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+    else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+    if(hoehe !== null){
+      wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+    }
+    // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse, siehe Definition
+    // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+    koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+    ueberraschungAchsePruefen(b.ueberraschung);
+    if(typeof d.zuschauer === "number"){
+      $("zuschauer-label").textContent = d.zuschauer + (d.zuschauer===1?" Zuschauer":" Zuschauer");
+    }
+    // Ausdruck + Blick: gemessen, nie erfunde
+MARKER function schleife POS 107281
+amera.classList.remove("kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+      farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+    }
+    const wasser = $("wasserlinie");
+    let hoehe = null;
+    if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+    else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+    if(hoehe !== null){
+      wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+    }
+    // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse,
+PROC_BEGIN
+$ pgrep -af 'buehne_daemon.py' || true
+1632280 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_daemon.py
+2788700 bash -lc python3 - <<'PY' from pathlib import Path import re,subprocess,hashlib p=Path('visual/buehne.html');s=p.read_text(errors='replace') print('LIVE_SHA',hashlib.sha256(p.read_bytes()).hexdigest()) for marker in ['function koerperAktionWeiterPlanen','function koerperAktionTick','function atmen','function kopfKoerperSchritt','koerperAktionWeiterPlanen();','requestAnimationFrame(schleife)','function schleife']:  m=re.search(re.escape(marker),s)  print('MARKER',marker,'POS',m.start() if m else -1)  if m: print(s[max(0,m.start()-250):min(len(s),m.start()+2400)]) print('PROC_BEGIN') for cmd in ["pgrep -af 'buehne_daemon.py' || true","pgrep -af 'gespraechsmodus|frank_voice|stern.py' || true","ss -ltnp 2>/dev/null | grep -E ':80|:8000|:8080|:5000|:3000' | head -30 || true"]:  r=subprocess.run(['bash','-lc',cmd],capture_output=True,text=True);print('$',cmd);print(r.stdout.strip()) print('PROC_END') PY
+2788708 bash -lc pgrep -af 'buehne_daemon.py' || true
+$ pgrep -af 'gespraechsmodus|frank_voice|stern.py' || true
+2788700 bash -lc python3 - <<'PY' from pathlib import Path import re,subprocess,hashlib p=Path('visual/buehne.html');s=p.read_text(errors='replace') print('LIVE_SHA',hashlib.sha256(p.read_bytes()).hexdigest()) for marker in ['function koerperAktionWeiterPlanen','function koerperAktionTick','function atmen','function kopfKoerperSchritt','koerperAktionWeiterPlanen();','requestAnimationFrame(schleife)','function schleife']:  m=re.search(re.escape(marker),s)  print('MARKER',marker,'POS',m.start() if m else -1)  if m: print(s[max(0,m.start()-250):min(len(s),m.start()+2400)]) print('PROC_BEGIN') for cmd in ["pgrep -af 'buehne_daemon.py' || true","pgrep -af 'gespraechsmodus|frank_voice|stern.py' || true","ss -ltnp 2>/dev/null | grep -E ':80|:8000|:8080|:5000|:3000' | head -30 || true"]:  r=subprocess.run(['bash','-lc',cmd],capture_output=True,text=True);print('$',cmd);print(r.stdout.strip()) print('PROC_END') PY
+2788718 bash -lc pgrep -af 'gespraechsmodus|frank_voice|stern.py' || true
+$ ss -ltnp 2>/dev/null | grep -E ':80|:8000|:8080|:5000|:3000' | head -30 || true
+LISTEN 0      2048                     127.0.0.1:8000       0.0.0.0:*    users:(("python3",pid=2285072,fd=13))    
+LISTEN 0      2048                     127.0.0.1:8091       0.0.0.0:*    users:(("python3",pid=4078425,fd=7))     
+LISTEN 0      5                        127.0.0.1:8088       0.0.0.0:*    users:(("python3",pid=4078426,fd=10))
+PROC_END

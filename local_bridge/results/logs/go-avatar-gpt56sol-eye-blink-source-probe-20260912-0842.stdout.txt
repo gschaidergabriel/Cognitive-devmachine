@@ -1,0 +1,14 @@
+LIVE_SHA 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+START 69805
+function blinzeln(zeitplanNeu = true){
+  if(_sonderLaeuft){
+    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+    return;
+  }
+  const schritte = [];
+  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+  blinzelAbspielen(schritte, 0, zeitplanNeu);
+}
+END 70274

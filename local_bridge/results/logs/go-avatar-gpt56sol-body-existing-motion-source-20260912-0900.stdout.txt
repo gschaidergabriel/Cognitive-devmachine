@@ -1,0 +1,314 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+LINES_1635_1765
+  1635	// Zweck dieser Zeilen (keine Stale-Werte beim naechsten Hart-Cut-Einblenden,
+  1636	// siehe Kommentar am Dateianfang zu diesem Fund) bleibt vollstaendig erhalten
+  1637	// -- nicht durch Weglassen geloest, sondern durch VORSYNCHRONISIEREN: die
+  1638	// zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+  1639	// bereit, und jede Stelle, die eine bisher versteckte Zwillings-Ebene per
+  1640	// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+  1641	// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+  1642	// EINMALIG auf die Ebene, BEVOR sie opacity:1 bekommt -- exakt derselbe Wert,
+  1643	// den atmen() diesen Frame sowieso schon fuer die bis dahin sichtbare Ebene
+  1644	// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+  1645	// auf, siehe unten -- die Werte sind also brandaktuell, kein Frame Verzug).
+  1646	// Ergebnis: kein Pop (die neue Ebene traegt beim ersten sichtbaren Frame
+  1647	// exakt denselben Skala-/Helligkeitswert wie ihr Zwilling im Frame davor),
+  1648	// aber die vier meiste Zeit unsichtbaren Ebenen werden NICHT mehr pro Frame
+  1649	// angefasst.
+  1650	let _atmenTransform = "scale(1)";
+  1651	let _atmenFilter = "saturate(1.05) brightness(1)";
+  1652	function atmen(){
+  1653	  atemPhase += 0.006 * Math.max(0.4, Math.min(1.6, tempo));
+  1654	  _mikroUnruhe += (_mikroUnruheZiel - _mikroUnruhe) * 0.02; // sehr langsam, kein Sprung
+  1655	  const auf = (Math.sin(atemPhase) * 0.5) + 0.5; // 0..1
+  1656	  const skala = 1 + auf * 0.012;
+  1657	  const helligkeit = 1 + (auf - 0.5) * 0.03 + _mikroUnruhe * 0.006;
+  1658	  const transform = `scale(${skala})`;
+  1659	  const filter = `saturate(1.05) brightness(${helligkeit})`;
+  1660	  _atmenTransform = transform;
+  1661	  _atmenFilter = filter;
+  1662	  // Kopf: nur die gerade sichtbare der beiden Ebenen (kopfRollAktiv siehe
+  1663	  // kopfRollTick() -- false: kopf-schicht sichtbar, true: kopf-schicht2).
+  1664	  const kopfSichtbar = kopfRollAktiv ? "kopf-schicht2" : "kopf-schicht";
+  1665	  $(kopfSichtbar).style.transform = transform;
+  1666	  $(kopfSichtbar).style.filter = filter;
+  1667	  // ⭐⭐ 2026-09-11 NACHTRAG 3 (Koordinator meldet Halsnaht-Rutschen, Gabriel
+  1668	  // hat 3 Screenshots geschickt): Kopf skalierte 1.000->1.012->1.000 pro
+  1669	  // Atemzug, Koerper blieb starr bei 1.0 (siehe Kommentar oben, bewusst
+  1670	  // entfernt wegen "doppeltem Atmen"). Ergebnis: Kopf wird am Atem-Peak
+  1671	  // relativ zum starren Koerper 1,2% groesser -- die Halskante (wo Kopf-
+  1672	  // und Koerperbild sich per Masken-Verlauf treffen, siehe #kopf-schicht
+  1673	  // Halsmaske oben) rutscht auf jedem Atemzug leicht -- unsichtbar im
+  1674	  // Standbild (Koordinator hat das geprueft), sichtbar in Bewegung.
+  1675	  // FIX (a) aus dem Koordinator-Auftrag, kleinste/sicherste Variante: der
+  1676	  // Koerper bekommt DENSELBEN Transform+Filter wie der Kopf -- beide
+  1677	  // skalieren/hellen im GLEICHEN Takt, die Halskante bleibt an derselben
+  1678	  // Relativstelle. Der Koerper "atmet" dadurch zusaetzlich zu seinen 12
+  1679	  // fotografierten Stufen leicht mit (max +1,2% Groesse) -- das ist die
+  1680	  // Halskante wert; ein rutschender Kragen war das schlimmere Artefakt.
+  1681	  // Nur die aktuell sichtbare Koerper-Ebene (atmenAktivSchicht, siehe
+  1682	  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+  1683	  // beim Kopf oben.
+  1684	  $(atmenAktivSchicht).style.transform = transform;
+  1685	  $(atmenAktivSchicht).style.filter = filter;
+  1686	  // Ausdruck-Ebenen sind ausserhalb eines Sonderausdrucks BEIDE opacity:0 --
+  1687	  // dann gibt es nichts zu synchronisieren, kein Pop-Risiko (nichts sichtbar).
+  1688	  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  1689	  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  1690	  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  1691	  if(_sonderLaeuft){
+  1692	    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+  1693	    $(ausdruckSichtbar).style.transform = transform;
+  1694	    $(ausdruckSichtbar).style.filter = filter;
+  1695	  }
+  1696	}
+  1697	
+  1698	// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+  1699	// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+  1700	// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+  1701	// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+  1702	// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+  1703	// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+  1704	// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+  1705	// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+  1706	// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+  1707	// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+  1708	// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+  1709	// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+  1710	// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+  1711	const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  1712	  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+  1713	ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+  1714	const ATMEN_MS_PRO_BILD = 330;
+  1715	let atmenIndex = 0;
+  1716	let atmenLetzterWechsel = 0;
+  1717	let atmenAktivSchicht = "koerper-schicht";
+  1718	function koerperCrossfade(src){
+  1719	  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  1720	  $(naechsteSchicht).src = src;
+  1721	  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  1722	  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  1723	  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  1724	  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  1725	  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  1726	  $(naechsteSchicht).style.transform = _atmenTransform;
+  1727	  $(naechsteSchicht).style.filter = _atmenFilter;
+  1728	  $(naechsteSchicht).style.opacity = 1;
+  1729	  $(atmenAktivSchicht).style.opacity = 0;
+  1730	  atmenAktivSchicht = naechsteSchicht;
+  1731	}
+  1732	// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+  1733	// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+  1734	// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+  1735	// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+  1736	// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+  1737	// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+  1738	// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+  1739	// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+  1740	// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+  1741	const KOERPER_AKTIONEN = [
+  1742	  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+  1743	      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  1744	  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+  1745	      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  1746	  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+  1747	      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+  1748	      `/koerper_rgba/lehnen/${n}.png`) },
+  1749	  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+  1750	      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+  1751	      "gewicht_-05","gewicht_+00"].map(n =>
+  1752	      `/koerper_rgba/gewicht/${n}.png`) },
+  1753	  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+  1754	      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+  1755	      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+  1756	      `/koerper_rgba/schulterdrehung/${n}.png`) }
+  1757	];
+  1758	let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+  1759	let _letzteKoerperAktion = null;
+  1760	function koerperAktionStarten(fertig){
+  1761	  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  1762	  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  1763	  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  1764	  _letzteKoerperAktion = wahl.name;
+  1765	  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+BODY_ASSET_DIRS
+koerper_rgba/atmen/atmen_000.png
+koerper_rgba/atmen__atmen_000.png
+koerper_rgba/atmen/atmen_001.png
+koerper_rgba/atmen__atmen_001.png
+koerper_rgba/atmen/atmen_002.png
+koerper_rgba/atmen__atmen_002.png
+koerper_rgba/atmen/atmen_003.png
+koerper_rgba/atmen__atmen_003.png
+koerper_rgba/atmen/atmen_004.png
+koerper_rgba/atmen__atmen_004.png
+koerper_rgba/atmen/atmen_005.png
+koerper_rgba/atmen__atmen_005.png
+koerper_rgba/atmen/atmen_006.png
+koerper_rgba/atmen__atmen_006.png
+koerper_rgba/atmen/atmen_007.png
+koerper_rgba/atmen__atmen_007.png
+koerper_rgba/atmen/atmen_008.png
+koerper_rgba/atmen__atmen_008.png
+koerper_rgba/atmen/atmen_009.png
+koerper_rgba/atmen__atmen_009.png
+koerper_rgba/atmen/atmen_010.png
+koerper_rgba/atmen__atmen_010.png
+koerper_rgba/atmen/atmen_011.png
+koerper_rgba/atmen__atmen_011.png
+koerper_rgba/aufrichten/aufrichten_000.png
+koerper_rgba/aufrichten__aufrichten_000.png
+koerper_rgba/aufrichten/aufrichten_001.png
+koerper_rgba/aufrichten__aufrichten_001.png
+koerper_rgba/aufrichten/aufrichten_002.png
+koerper_rgba/aufrichten__aufrichten_002.png
+koerper_rgba/aufrichten/aufrichten_003.png
+koerper_rgba/aufrichten__aufrichten_003.png
+koerper_rgba/aufrichten/aufrichten_004.png
+koerper_rgba/aufrichten__aufrichten_004.png
+koerper_rgba/aufrichten/aufrichten_005.png
+koerper_rgba/aufrichten__aufrichten_005.png
+koerper_rgba/aufrichten/aufrichten_006.png
+koerper_rgba/aufrichten__aufrichten_006.png
+koerper_rgba/aufrichten/aufrichten_007.png
+koerper_rgba/aufrichten__aufrichten_007.png
+koerper_rgba/gewicht/gewicht_+00.png
+koerper_rgba/gewicht__gewicht_+00.png
+koerper_rgba/gewicht/gewicht_+05.png
+koerper_rgba/gewicht/gewicht_-05.png
+koerper_rgba/gewicht__gewicht_+05.png
+koerper_rgba/gewicht__gewicht_-05.png
+koerper_rgba/gewicht/gewicht_+10.png
+koerper_rgba/gewicht/gewicht_-10.png
+koerper_rgba/gewicht__gewicht_+10.png
+koerper_rgba/gewicht__gewicht_-10.png
+koerper_rgba/gewicht/gewicht_+15.png
+koerper_rgba/gewicht/gewicht_-15.png
+koerper_rgba/gewicht__gewicht_+15.png
+koerper_rgba/gewicht__gewicht_-15.png
+koerper_rgba/koerper_zero.png
+koerper_rgba/kombiniert/lehnen_+00_schulter_+00.png
+koerper_rgba/kombiniert__lehnen_+00_schulter_+00.png
+koerper_rgba/kombiniert/lehnen_+00_schulter_+20.png
+koerper_rgba/kombiniert/lehnen_+00_schulter_-20.png
+koerper_rgba/kombiniert__lehnen_+00_schulter_+20.png
+koerper_rgba/kombiniert__lehnen_+00_schulter_-20.png
+koerper_rgba/kombiniert/lehnen_+20_schulter_+00.png
+koerper_rgba/kombiniert/lehnen_-20_schulter_+00.png
+koerper_rgba/kombiniert__lehnen_+20_schulter_+00.png
+koerper_rgba/kombiniert__lehnen_-20_schulter_+00.png
+koerper_rgba/kombiniert/lehnen_+20_schulter_+20.png
+koerper_rgba/kombiniert/lehnen_+20_schulter_-20.png
+koerper_rgba/kombiniert/lehnen_-20_schulter_+20.png
+koerper_rgba/kombiniert/lehnen_-20_schulter_-20.png
+koerper_rgba/kombiniert__lehnen_+20_schulter_+20.png
+koerper_rgba/kombiniert__lehnen_+20_schulter_-20.png
+koerper_rgba/kombiniert__lehnen_-20_schulter_+20.png
+koerper_rgba/kombiniert__lehnen_-20_schulter_-20.png
+koerper_rgba/lehnen/lehnen_+00.png
+koerper_rgba/lehnen__lehnen_+00.png
+koerper_rgba/lehnen/lehnen_+05.png
+koerper_rgba/lehnen/lehnen_-05.png
+koerper_rgba/lehnen__lehnen_+05.png
+koerper_rgba/lehnen__lehnen_-05.png
+koerper_rgba/lehnen/lehnen_+10.png
+koerper_rgba/lehnen/lehnen_-10.png
+koerper_rgba/lehnen__lehnen_+10.png
+koerper_rgba/lehnen__lehnen_-10.png
+koerper_rgba/lehnen/lehnen_+15.png
+koerper_rgba/lehnen/lehnen_-15.png
+koerper_rgba/lehnen__lehnen_+15.png
+koerper_rgba/lehnen__lehnen_-15.png
+koerper_rgba/lehnen/lehnen_+20.png
+koerper_rgba/lehnen/lehnen_-20.png
+koerper_rgba/lehnen__lehnen_+20.png
+koerper_rgba/lehnen__lehnen_-20.png
+koerper_rgba/master__koerper_zero.png
+koerper_rgba_relief2/atmen/atmen_000.png
+koerper_rgba_relief2/atmen__atmen_000.png
+koerper_rgba_relief2/atmen/atmen_001.png
+koerper_rgba_relief2/atmen__atmen_001.png
+koerper_rgba_relief2/atmen/atmen_002.png
+koerper_rgba_relief2/atmen__atmen_002.png
+koerper_rgba_relief2/atmen/atmen_003.png
+koerper_rgba_relief2/atmen__atmen_003.png
+koerper_rgba_relief2/atmen/atmen_004.png
+koerper_rgba_relief2/atmen__atmen_004.png
+koerper_rgba_relief2/atmen/atmen_005.png
+koerper_rgba_relief2/atmen__atmen_005.png
+koerper_rgba_relief2/atmen/atmen_006.png
+koerper_rgba_relief2/atmen__atmen_006.png
+koerper_rgba_relief2/atmen/atmen_007.png
+koerper_rgba_relief2/atmen__atmen_007.png
+koerper_rgba_relief2/atmen/atmen_008.png
+koerper_rgba_relief2/atmen__atmen_008.png
+koerper_rgba_relief2/atmen/atmen_009.png
+koerper_rgba_relief2/atmen__atmen_009.png
+koerper_rgba_relief2/atmen/atmen_010.png
+koerper_rgba_relief2/atmen__atmen_010.png
+koerper_rgba_relief2/atmen/atmen_011.png
+koerper_rgba_relief2/atmen__atmen_011.png
+koerper_rgba_relief2/aufrichten/aufrichten_000.png
+koerper_rgba_relief2/aufrichten__aufrichten_000.png
+koerper_rgba_relief2/aufrichten/aufrichten_001.png
+koerper_rgba_relief2/aufrichten__aufrichten_001.png
+koerper_rgba_relief2/aufrichten/aufrichten_002.png
+koerper_rgba_relief2/aufrichten__aufrichten_002.png
+koerper_rgba_relief2/aufrichten/aufrichten_003.png
+koerper_rgba_relief2/aufrichten__aufrichten_003.png
+koerper_rgba_relief2/aufrichten/aufrichten_004.png
+koerper_rgba_relief2/aufrichten__aufrichten_004.png
+koerper_rgba_relief2/aufrichten/aufrichten_005.png
+koerper_rgba_relief2/aufrichten__aufrichten_005.png
+koerper_rgba_relief2/aufrichten/aufrichten_006.png
+koerper_rgba_relief2/aufrichten__aufrichten_006.png
+koerper_rgba_relief2/aufrichten/aufrichten_007.png
+koerper_rgba_relief2/aufrichten__aufrichten_007.png
+koerper_rgba_relief2/gewicht/gewicht_+00.png
+koerper_rgba_relief2/gewicht__gewicht_+00.png
+koerper_rgba_relief2/gewicht/gewicht_+05.png
+koerper_rgba_relief2/gewicht/gewicht_-05.png
+koerper_rgba_relief2/gewicht__gewicht_+05.png
+koerper_rgba_relief2/gewicht__gewicht_-05.png
+koerper_rgba_relief2/gewicht/gewicht_+10.png
+koerper_rgba_relief2/gewicht/gewicht_-10.png
+koerper_rgba_relief2/gewicht__gewicht_+10.png
+koerper_rgba_relief2/gewicht__gewicht_-10.png
+koerper_rgba_relief2/gewicht/gewicht_+15.png
+koerper_rgba_relief2/gewicht/gewicht_-15.png
+koerper_rgba_relief2/gewicht__gewicht_+15.png
+koerper_rgba_relief2/gewicht__gewicht_-15.png
+koerper_rgba_relief2/koerper_zero.png
+koerper_rgba_relief2/kombiniert/lehnen_+00_schulter_+00.png
+koerper_rgba_relief2/kombiniert__lehnen_+00_schulter_+00.png
+koerper_rgba_relief2/kombiniert/lehnen_+00_schulter_+20.png
+koerper_rgba_relief2/kombiniert/lehnen_+00_schulter_-20.png
+koerper_rgba_relief2/kombiniert__lehnen_+00_schulter_+20.png
+koerper_rgba_relief2/kombiniert__lehnen_+00_schulter_-20.png
+koerper_rgba_relief2/kombiniert/lehnen_+20_schulter_+00.png
+koerper_rgba_relief2/kombiniert/lehnen_-20_schulter_+00.png
+koerper_rgba_relief2/kombiniert__lehnen_+20_schulter_+00.png
+koerper_rgba_relief2/kombiniert__lehnen_-20_schulter_+00.png
+koerper_rgba_relief2/kombiniert/lehnen_+20_schulter_+20.png
+koerper_rgba_relief2/kombiniert/lehnen_+20_schulter_-20.png
+koerper_rgba_relief2/kombiniert/lehnen_-20_schulter_+20.png
+koerper_rgba_relief2/kombiniert/lehnen_-20_schulter_-20.png
+koerper_rgba_relief2/kombiniert__lehnen_+20_schulter_+20.png
+koerper_rgba_relief2/kombiniert__lehnen_+20_schulter_-20.png
+koerper_rgba_relief2/kombiniert__lehnen_-20_schulter_+20.png
+koerper_rgba_relief2/kombiniert__lehnen_-20_schulter_-20.png
+koerper_rgba_relief2/lehnen/lehnen_+00.png
+koerper_rgba_relief2/lehnen__lehnen_+00.png
+koerper_rgba_relief2/lehnen/lehnen_+05.png
+koerper_rgba_relief2/lehnen/lehnen_-05.png
+koerper_rgba_relief2/lehnen__lehnen_+05.png
+koerper_rgba_relief2/lehnen__lehnen_-05.png
+koerper_rgba_relief2/lehnen/lehnen_+10.png
+koerper_rgba_relief2/lehnen/lehnen_-10.png
+koerper_rgba_relief2/lehnen__lehnen_+10.png
+koerper_rgba_relief2/lehnen__lehnen_-10.png
+koerper_rgba_relief2/lehnen/lehnen_+15.png
+koerper_rgba_relief2/lehnen/lehnen_-15.png
+koerper_rgba_relief2/lehnen__lehnen_+15.png
+koerper_rgba_relief2/lehnen__lehnen_-15.png
+koerper_rgba_relief2/lehnen/lehnen_+20.png

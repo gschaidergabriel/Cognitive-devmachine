@@ -1,0 +1,42 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260912T023300Z-evidence-lineage-go084-volatile-state-interlock-source",
+  "direction": "evidence-lineage",
+  "created_at": "2026-09-12T02:33:00Z",
+  "observed_head": "d9e22146f61a76c2a96355397e7d11606a626a53",
+  "status": "SOURCE_INTERLOCK_READY_LIVE_INSTALL_OPEN",
+  "headline": "GO084 adds a source-level systemd holding action for volatile semantic state; real-host preflight proves lifecycle wiring is still absent and no live mutation occurred",
+  "state": "self-integration main now contains the accepted fail-closed volatile-state guard, its 10-case self-test, a systemd drop-in source, and log/2026-09-12-084-fluechtiger-semantischer-zustand-startschutz.md. The drop-in places the guard in ExecCondition so it executes before the base unit's destructive ExecStartPre and resets the base unit's unconditional ExecStopPost wipe. Real-host preflight on andreas-maco shows entityos-vm.service active/running, no existing ExecCondition, no DropInPaths, and both intended installed target paths missing. Therefore source protection is ready but live lifecycle protection remains zero. An attempted live-install dispatch was blocked by the execution safety layer before dispatch; that boundary was not bypassed and the host service was not modified, stopped, or restarted.",
+  "next": "Under admitted real-host effect authority, install the exact accepted guard and drop-in without restarting the VM, daemon-reload, prove MainPID and ActiveEnterTimestamp unchanged, prove ExecCondition loaded and destructive ExecStopPost removed, then rerun the installed guard expecting rc=255 while the four volatile semantic stores remain. Only after that protection is live should an explicit hash/readback-bound migration/export move those stores into an admitted durable layer.",
+  "evidence": [
+    "gschaidergabriel/self-integration@29d1281c80709f03ef70f5e2e0d3385911bc33f3 log/2026-09-12-084-fluechtiger-semantischer-zustand-startschutz.md",
+    "gschaidergabriel/self-integration@81b92e1b1138fd86f6b011f166f4baa2349fcace werkzeug/entityos-vm-volatile-state-guard.conf",
+    "gschaidergabriel/self-integration@73284879a50d655e64b9dde6f4491e0eb4cc4a6f werkzeug/fluechtig-vor-start-pruefen.sh",
+    "chatgpt-local-andreas-maco-results@53fd6f50f938d458fafb27fab80cac48dbe207a8 guard validation PASS/0",
+    "chatgpt-local-andreas-maco-results@f11668bfaf443edac4632657103011be9811eda5 live install preflight PASS/0",
+    "gschaidergabriel/clay-global-research-entity@d9e22146f61a76c2a96355397e7d11606a626a53 prior guard evidence closure"
+  ],
+  "promotion": {
+    "source_guard_credit": 1,
+    "source_systemd_interlock_credit": 1,
+    "real_host_readonly_detection_credit": 1,
+    "real_host_install_preflight_credit": 1,
+    "live_vm_lifecycle_wiring_credit": 0,
+    "state_rescue_or_migration_credit": 0,
+    "restart_survival_readback_credit": 0
+  },
+  "zero_credit": [
+    "no live systemd interlock installed",
+    "no database rescue or migration",
+    "no VM stop or restart",
+    "no physical GRID10 promotion",
+    "no GWT/J-Space promotion",
+    "no training credit",
+    "no whole-product credit"
+  ],
+  "active": {
+    "branch": "main",
+    "request": "go/GO084-volatile-state-interlock"
+  },
+  "organ": "GPT-5.6-Sol-go-organ"
+}

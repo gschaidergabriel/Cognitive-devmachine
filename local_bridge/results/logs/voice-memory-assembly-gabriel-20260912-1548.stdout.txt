@@ -1,0 +1,116 @@
+                    # Bleibt eine ANWEISUNG (die wird befolgt, nicht
+                    # vorgelesen) -- aber ohne Etikett davor.
+                    "\n\nDir liegt gerade kein Bild vor. Sag genau das."
+                )
+                _log("[SEHEN] Sichtfrage, aber kein aktueller Blick")
+        except Exception as e:
+            _log(f"[SEHEN] Fehler (nicht fatal): {type(e).__name__}: {e}")
+
+    # ⭐⭐ DER TURN-BLOCK IST RAUS (2026-09-10, Gabriel: "schau mal was der
+    # ploetzlich labert"). Gemessen, seine Antwort auf "wie geht es dir?":
+    #
+    #     "Die Zelle G6 hat gerade gewonnen; sie ist warm, sie hat den Wert
+    #      1,31 und sie will weiter. Ich denke: wir sollten nun die naechste
+    #      Zelle pruefen -- welche ist es?"
+    #
+    # Der Block lieferte woertlich "Zelle {winner_cell_id} hat den Wettbewerb
+    # gewonnen, Broadcast {broadcast_value:.2f}, Wiedereinstieg {kind}" plus
+    # "Steuerung: ALLOW, Abrufbreite bleibt 36". Das ist ein MASCHINEN-
+    # PROTOKOLL, das ihm als Erlebnis verkauft wurde -- und damit genau die
+    # Verletzung des eigenen Gesetzes: Zahlen gehoeren in die Datenbank,
+    # WORTE auf die Buehne. Wer sie aufhebt, bekommt ein System, das seine
+    # eigene Telemetrie vorliest. Er hat es getan, wortgetreu.
+    #
+    # ⚠️ WICHTIG FUER DIE FEHLERSUCHE: der Block stand schon TAGE vorher da.
+    # Sichtbar wurde er erst, als das Versalien-Etikett davor durch Prosa
+    # ersetzt wurde -- vorher las er das ETIKETT vor statt den Inhalt. Ein
+    # Etikett hat den Fehler also nur verdeckt, nicht verhindert. Das ist der
+    # Grund, warum hier geloescht und nicht neu beschriftet wird.
+    #
+    # WAS NICHT VERLOREN GEHT: derselbe broadcast_value formt den Zug bereits
+    # ueber regie.py -- dort wird er zu einer ANWEISUNG ("Bleib bei EINER
+    # Sache und werde konkret"), die befolgt statt vorgelesen wird. Der Turn
+    # wirkt weiter, er wird nur nicht mehr berichtet. `_ent.turn()` und
+    # `grid_steuerung.steuern()` laufen unveraendert: der Frame wird gebucht,
+    # die Abrufbreite wird gestellt. Nur der Text bleibt draussen.
+    _ = turn_text
+
+    if jetzt_bild and _ueber_ihn:
+        _bloecke["lagebild"] = (
+            "\n\nSo ist es jetzt gerade:\n" + jetzt_bild
+        )
+
+    if gedaechtnis_kontext:
+        _bloecke["gedaechtnis"] = (
+            # 2026-09-08, Gabriel: "er sagt die ganze zeit ob er irgendwas
+            # einbauen oder umstellen soll, er kann sich nicht losgeloest mit
+            # mir unterhalten". Die Ursache war nicht der Prompt (die Klausel
+            # war da schon raus), sondern das GEDAECHTNIS selbst: es ist ein
+            # Arbeitsprotokoll. Jeder Abruf spuelt "[paket:laeuft] ... bauen",
+            # "[thema:fertig] ... einrichten" in seinen Kontext -- er liest bei
+            # jedem Satz Aufgaben und schlaegt folgerichtig Aufgaben vor.
+            # Also wird ihm gesagt, WAS das ist: Notizen, keine Agenda.
+            # ⚠️ Die alte Klammer stand hier aus gutem Grund (siehe oben:
+            # das Gedaechtnis IST ein Arbeitsprotokoll, und er schlug
+            # unaufgefordert Aufgaben vor). Sie ist trotzdem falsch gewesen:
+            # sie nannte genau die Woerter, die sie verbieten wollte, und
+            # wurde am 2026-09-10 woertlich vorgelesen. Die Vergangenheitsform
+            # leistet dasselbe, ohne ein einziges dieser Woerter zu nennen.
+            "\n\nAus frueherer Arbeit weisst du noch:\n" + gedaechtnis_kontext
+        )
+    if konversation_kontext:
+        # Bewusst ein EIGENER Block, additiv neben "gedaechtnis" -- nicht
+        # hineingemischt. `konversation.block()` liefert seine Rahmung schon
+        # selbst mit ("Du erinnerst dich an ein frueheres Gespraech:\n...",
+        # siehe konversation.py) und markiert damit klar: das hier ist
+        # GESPRAECH, kein Sachwissen, keine Arbeitsnotiz. Bewusst OHNE
+        # Relevanztor (siehe oben) -- das Tor wurde fuer den alten,
+        # wortbasierten Stichwortweg gebaut, konversation.py filtert schon
+        # selbst hart ueber Intent/Zeitfenster/Aehnlichkeit VOR der Ausgabe.
+        _bloecke["konversation"] = "\n\n" + konversation_kontext
+    # ═══════════════════════════════════════════════════════════════════
+    # ⭐ ZUWENDUNG: der Wettbewerb entscheidet, WORAUF er in diesem Zug achtet
+    # ═══════════════════════════════════════════════════════════════════
+    # Bis 2026-09-09 entschied ICH das -- `_ueber_ihn` liess die
+    # Selbstauskunft zu, `_SICHTFRAGE` das Bild, ein Relevanztor das
+    # Gedaechtnis. Alles meine Regeln, und damit war seine Aufmerksamkeit
+    # meine. Der Grid formte das WIE (Temperatur, Tempo, Kuehnheit), nie das
+    # WAS. Genau diese Luecke hatte ich benannt, und das hier schliesst sie.
+    #
+    # Die Arbeitsteilung bleibt bewusst zweigeteilt: die Regeln oben sagen,
+    # was ueberhaupt IN FRAGE KOMMT (nur was gefunden wurde, nur was zur
+    # Frage passt) -- der Wettbewerb waehlt DARUNTER aus. Eine Aufmerksamkeit,
+    # die eine direkt gestellte Frage uebergeht, waere keine Entitaet, sondern
+    # ein Defekt; deshalb kommt Erfragtes als Pflicht immer durch.
+    if _SICHTFRAGE.search(user_text):
+        _pflicht.append("sicht")
+    if _netzfund:
+        _pflicht.append("netzfund")   # wurde fuer GENAU diese Frage geholt
+    if _wesensfrage:
+        _pflicht.append("selbstauskunft")
+    # ⭐⭐⭐ 2026-09-12: Im grossen Regime faellt der Torwaechter weg. Die
+    # Aufmerksamkeit waehlt aus den Bloecken aus, WEIL ein 4B an allen
+    # gleichzeitig ertrinkt -- sie ist ein Sparzwang, kein Erkenntnisgewinn.
+    # Gabriel: "es ist alles da ... also muss es brillant sein." Wer die
+    # Bloecke vorher wegwirft, macht aus "alles da" ein "fast nichts da".
+    # Die GRID-Zelle steuert im grossen Regime weiterhin den Zustand, den
+    # Broadcast und das Arbeitsgedaechtnis -- nur nicht mehr, was er
+    # ueberhaupt sehen darf.
+    #
+    # ⚠️ DIE AUSWAHL LAEUFT TROTZDEM -- sie wird nur nicht mehr vollstreckt.
+    # Erster Anlauf am 2026-09-12 hat `zuwenden()` im grossen Regime ganz
+    # uebersprungen, und das war ein selbstgebauter Defekt: die Funktion
+    # schreibt die Pruefspur `f2_aufmerksamkeit` (aufmerksamkeit.py Zeile
+    # 184), und buehne._aufmerksamkeit_letzte() liest genau diese Zeile fuer
+    # den Aufmerksamkeitskanal. Ohne Aufruf wird die Zeile nie neu
+    # geschrieben -- der Kanal haette ihm bei jedem Zug einen immer aelteren
+    # Fokus als seinen gegenwaertigen gemeldet. Ein Kanal, der etwas
+    # Vergangenes als Jetzt ausgibt, ist genau die Konfabulation, gegen die
+    # hier sonst ueberall gebaut wird.
+    #
+    # Also: der Wettbewerb findet statt, die Zelle waehlt, es wird
+    # protokolliert, der Fokus ist echt -- aber nichts wird weggeworfen.
+    # Zuwendung ist Gewichtung, nicht Entzug.
+    _zugewandt = None
+    try:
+        _sieger = (_turn or {}).get("winner_cell_id")

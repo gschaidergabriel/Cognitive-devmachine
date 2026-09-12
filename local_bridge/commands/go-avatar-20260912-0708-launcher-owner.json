@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-20260912-0708-launcher-owner",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 180,
+  "command": "set -u; echo '===IDENTITY==='; hostname; whoami; date -Is; echo '===SERVICE==='; systemctl --user cat frankenstein-buehne.service 2>&1 || true; echo '===PROCESS==='; ps -eo pid,ppid,args | grep -E '[c]hrome.*(buehne|8788)|[b]uehne_daemon.py' || true; echo '===VISUAL-GREP==='; cd /home/ai-core-node/.claude/star/visual && grep -RnsE --exclude='*.png' --exclude='*.jpg' --exclude='*.jpeg' --exclude='*.webp' --exclude='*.gif' --exclude='*.mp4' --exclude='*.zip' --exclude='*.tgz' -- '(--disable-gpu|--disable-gpu-compositing|disable-software-rasterizer|google-chrome|/opt/google/chrome|chrome --app)' . 2>/dev/null | head -n 240; echo '===UNIT-GREP==='; grep -RnsE -- '(--disable-gpu|--disable-gpu-compositing|disable-software-rasterizer|google-chrome|/opt/google/chrome|chrome --app)' /home/ai-core-node/.config/systemd/user /home/ai-core-node/.local/bin 2>/dev/null | head -n 160; echo '===HASHES==='; sha256sum /home/ai-core-node/.claude/star/visual/buehne.html /home/ai-core-node/.claude/star/visual/buehne_daemon.py /home/ai-core-node/.claude/star/visual/filmlook.js 2>/dev/null || true"
+}

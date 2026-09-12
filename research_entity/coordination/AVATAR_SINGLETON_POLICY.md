@@ -27,15 +27,36 @@ The production subject is the existing FranKenstein kiosk/page served from:
 7. A worker finding more than one production-like Avatar Chrome/window must treat that as a runtime-policy violation: preserve the intended existing screen-2 production subject, close only confirmed duplicates, then record/read back the resulting singleton state.
 8. Window IDs and PIDs are ephemeral. Bind the production subject by service + URL + title/class + display geometry, not by hard-coded IDs.
 
+## Canonical helper — use this instead of ad-hoc Chrome launches
+
+Versioned helper:
+
+`research_entity/coordination/avatar_singleton_refresh.sh`
+
+On `ai-core-node`, workers should use the live copy at:
+
+`/home/ai-core-node/.claude/star/visual/avatar_singleton_refresh.sh`
+
+Behavior:
+
+- finds the existing exact-title production window;
+- prefers/preserves the one already on physical screen 2;
+- if no screen-2 window exists but another production instance exists, moves that existing instance instead of replacing it;
+- closes confirmed duplicate production-title windows;
+- keeps the singleton at the measured screen-2 geometry;
+- refreshes the existing page with Ctrl+R;
+- if no production window exists at all, asks the existing `buehne_daemon.py` through `/api/schalten` to open exactly one — it never launches an ad-hoc Chrome itself;
+- fails closed if more than one production window remains.
+
 ## Update law
 
 Normal Avatar update:
 
-`identify existing production subject -> verify exact live source/service -> mutate admitted source -> reload existing page -> verify same screen-2 subject remains visible/healthy -> record readback`
+`identify existing production subject -> verify exact live source/service -> mutate admitted source -> run avatar_singleton_refresh.sh -> verify same screen-2 subject remains visible/healthy -> record readback`
 
 Only when the singleton is absent:
 
-`verify absent -> launch one production kiosk on screen 2 -> verify exactly one production subject -> reuse/refresh thereafter`
+`verify absent -> ask existing buehne daemon to open one -> verify exactly one production subject on screen 2 -> reuse/refresh thereafter`
 
 ## Forbidden
 

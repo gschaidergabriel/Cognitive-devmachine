@@ -1,0 +1,16 @@
+DEFAULT_SINK=frank_out_ec
+DEFAULT_SOURCE=alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo
+SINKS
+15577	frank_out_ec	PipeWire	float32le 2ch 48000Hz	RUNNING
+221528	alsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221530	alsa_output.pci-0000_c4_00.1.hdmi-stereo	PipeWire	s32le 2ch 48000Hz	RUNNING
+SOURCES
+15576	frank_mic_clean	PipeWire	float32le 2ch 48000Hz	IDLE
+15577	frank_out_ec.monitor	PipeWire	float32le 2ch 48000Hz	RUNNING
+221526	alsa_input.usb-Rapoo_Camera_Rapoo_Camera_SN0001-02.analog-stereo	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221527	alsa_input.pci-0000_c4_00.6.analog-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+221528	alsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo.monitor	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221529	alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	RUNNING
+221530	alsa_output.pci-0000_c4_00.1.hdmi-stereo.monitor	PipeWire	s32le 2ch 48000Hz	RUNNING
+SOUNDDEVICE
+[{"i": 0, "name": "HD-Audio Generic: HDMI 1 (hw:0,7)", "in": 0, "out": 8, "default_low_in": -1.0, "default_low_out": 0.005804988662131519}, {"i": 1, "name": "HD-Audio Generic: HDMI 2 (hw:0,8)", "in": 0, "out": 8, "default_low_in": -1.0, "default_low_out": 0.005804988662131519}, {"i": 2, "name": "HD-Audio Generic: HDMI 3 (hw:0,9)", "in": 0, "out": 8, "default_low_in": -1.0, "default_low_out": 0.005804988662131519}, {"i": 3, "name": "RODE NT-USB: USB Audio (hw:1,0)", "in": 0, "out": 2, "default_low_in": -1.0, "default_low_out": 0.008684807256235827}, {"i": 4, "name": "HD-Audio Generic: ALC269VC Analog (hw:2,0)", "in": 2, "out": 2, "default_low_in": 0.005804988662131519, "default_low_out": 0.005804988662131519}, {"i": 5, "name": "Rapoo Camera: USB Audio (hw:3,0)", "in": 2, "out": 0, "default_low_in": 0.008684807256235827, "default_low_out": -1.0}, {"i": 6, "name": "pipewire", "in": 64, "out": 64, "default_low_in": 0.008684807256235827, "default_low_out": 0.008684807256235827}, {"i": 7, "name": "pulse", "in": 32, "out": 32, "default_low_in": 0.008684807256235827, "default_low_out": 0.008684807256235827}, {"i": 8, "name": "default", "in": 64, "out": 64, "default_low_in": 0.008684807256235827, "default_low_out": 0.008684807256235827}]

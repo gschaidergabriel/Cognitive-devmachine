@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-777-audio-monitor-discovery-20260912T1331Z",
+  "command_sha256": "8732e85888b4c35ff610024e5fd404362d7ff1ee0e809a54f4f4869ac34c2206",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:28:43.494649+00:00",
+  "finished_at": "2026-09-12T13:28:44.036477+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "46286d26e8ef442bb7816521649b2e97994b92ba1e007e151a180ec57ffa7c17",
+  "stderr_sha256": "70ce2aa010d4c84b9485f9c610996520b3debf07932df41632b4d709a975edbd",
+  "stdout_tail": "DEFAULT_SINK=frank_out_ec\nDEFAULT_SOURCE=alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo\nSINKS\n15577\tfrank_out_ec\tPipeWire\tfloat32le 2ch 48000Hz\tRUNNING\n221528\talsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221530\talsa_output.pci-0000_c4_00.1.hdmi-stereo\tPipeWire\ts32le 2ch 48000Hz\tRUNNING\nSOURCES\n15576\tfrank_mic_clean\tPipeWire\tfloat32le 2ch 48000Hz\tIDLE\n15577\tfrank_out_ec.monitor\tPipeWire\tfloat32le 2ch 48000Hz\tRUNNING\n221526\talsa_input.usb-Rapoo_Camera_Rapoo_Camera_SN0001-02.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221527\talsa_input.pci-0000_c4_00.6.analog-stereo\tPipeWire\ts32le 2ch 48000Hz\tSUSPENDED\n221528\talsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo.monitor\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221529\talsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tRUNNING\n221530\talsa_output.pci-0000_c4_00.1.hdmi-stereo.monitor\tPipeWire\ts32le 2ch 48000Hz\tRUNNING\nSOUNDDEVICE\n[{\"i\": 0, \"name\": \"HD-Audio Generic: HDMI 1 (hw:0,7)\", \"in\": 0, \"out\": 8, \"default_low_in\": -1.0, \"default_low_out\": 0.005804988662131519}, {\"i\": 1, \"name\": \"HD-Audio Generic: HDMI 2 (hw:0,8)\", \"in\": 0, \"out\": 8, \"default_low_in\": -1.0, \"default_low_out\": 0.005804988662131519}, {\"i\": 2, \"name\": \"HD-Audio Generic: HDMI 3 (hw:0,9)\", \"in\": 0, \"out\": 8, \"default_low_in\": -1.0, \"default_low_out\": 0.005804988662131519}, {\"i\": 3, \"name\": \"RODE NT-USB: USB Audio (hw:1,0)\", \"in\": 0, \"out\": 2, \"default_low_in\": -1.0, \"default_low_out\": 0.008684807256235827}, {\"i\": 4, \"name\": \"HD-Audio Generic: ALC269VC Analog (hw:2,0)\", \"in\": 2, \"out\": 2, \"default_low_in\": 0.005804988662131519, \"default_low_out\": 0.005804988662131519}, {\"i\": 5, \"name\": \"Rapoo Camera: USB Audio (hw:3,0)\", \"in\": 2, \"out\": 0, \"default_low_in\": 0.008684807256235827, \"default_low_out\": -1.0}, {\"i\": 6, \"name\": \"pipewire\", \"in\": 64, \"out\": 64, \"default_low_in\": 0.008684807256235827, \"default_low_out\": 0.008684807256235827}, {\"i\": 7, \"name\": \"pulse\", \"in\": 32, \"out\": 32, \"default_low_in\": 0.008684807256235827, \"default_low_out\": 0.008684807256235827}, {\"i\": 8, \"name\": \"default\", \"in\": 64, \"out\": 64, \"default_low_in\": 0.008684807256235827, \"default_low_out\": 0.008684807256235827}]\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<stdin>\", line 6, in <module>\n  File \"/usr/lib/python3.12/json/__init__.py\", line 231, in dumps\n    return _default_encoder.encode(obj)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/encoder.py\", line 200, in encode\n    chunks = self.iterencode(o, _one_shot=True)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/encoder.py\", line 258, in iterencode\n    return _iterencode(o, 0)\n           ^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/encoder.py\", line 180, in default\n    raise TypeError(f'Object of type {o.__class__.__name__} '\nTypeError: Object of type _InputOutputPair is not JSON serializable\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

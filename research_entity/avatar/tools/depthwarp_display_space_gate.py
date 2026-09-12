@@ -20,6 +20,16 @@ AMPS=[0.75,1.0,1.25,1.5]
 def ss(e0,e1,x):
  t=np.clip((x-e0)/(e1-e0),0,1); return t*t*(3-2*t)
 
+def remap_xy(xx,yy,dx):
+ """Return OpenCV split remap coordinates with an explicit CV_32FC1 ABI."""
+ mapx=np.ascontiguousarray(xx-dx,dtype=np.float32)
+ mapy=np.ascontiguousarray(yy,dtype=np.float32)
+ if mapx.dtype != np.float32 or mapy.dtype != np.float32:
+  raise TypeError('depthwarp remap coordinate dtype drift')
+ if not mapx.flags.c_contiguous or not mapy.flags.c_contiguous:
+  raise TypeError('depthwarp remap coordinate contiguity drift')
+ return mapx,mapy
+
 def build(root,r,eye,amp):
  base=np.array(Image.open(root/f'kopf_rgba/roll/gier_+00_nick_+00_roll_{r}.png').convert('RGBA'),np.uint8)
  d=root/f'kopf_rgba_parallax/gier_+00_nick_+00_roll_{r}'
@@ -31,9 +41,8 @@ def build(root,r,eye,amp):
  dx=amp*depth*gate
  # OpenCV remap requires each split coordinate map to be CV_32FC1. Python
  # scalar promotion in the amplitude/gate expression can make mapx float64 on
- # some NumPy/OpenCV combinations even though xx/yy started float32.  Bind the
- # ABI explicitly and keep the arrays contiguous so the gate is reproducible.
- mapx=np.ascontiguousarray(xx-dx,dtype=np.float32); mapy=np.ascontiguousarray(yy,dtype=np.float32)
+ # some NumPy/OpenCV combinations even though xx/yy started float32.
+ mapx,mapy=remap_xy(xx,yy,dx)
  rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
  out=np.dstack([rgb,base[:,:,3]])
  return base,out,gate,dx

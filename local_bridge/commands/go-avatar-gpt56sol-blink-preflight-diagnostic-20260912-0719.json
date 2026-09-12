@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-blink-preflight-diagnostic-20260912-0719",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 30,
+  "command": "set -u; cd /home/ai-core-node/.claude/star/visual; echo ===TIME===; date -Is; echo ===HASHES===; sha256sum buehne_daemon.py buehne.html filmlook.js; echo ===SERVICE===; systemctl --user is-active frankenstein-buehne.service || true; echo ===BACKUP===; ls -ld .go_backups/blink-pre-20260912T0718 2>&1 || true; echo ===BLINK===; sha256sum augen_blink/blink_*.png | sort; echo ===FPS===; curl -fsS http://127.0.0.1:8788/api/status | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps(d.get(\"fps\")))' || true"
+}

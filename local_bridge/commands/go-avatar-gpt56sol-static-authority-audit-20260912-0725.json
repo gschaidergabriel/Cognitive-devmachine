@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-avatar-gpt56sol-static-authority-audit-20260912-0725",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds": 45,
+  "command": "set -u; cd /home/ai-core-node/.claude/star/visual; echo '=== TIME ==='; date -Is; echo '=== SERVICE ID ==='; systemctl --user show frankenstein-buehne.service -p ActiveEnterTimestamp -p ExecMainStartTimestamp -p MainPID -p NRestarts -p ControlGroup; echo '=== DEFERRED RESTART UNITS ==='; systemctl --user status go-avatar-blink-restart-20260912-0723.timer go-avatar-blink-restart-20260912-0723.service --no-pager -n 40 2>&1 || true; echo '=== SUBJECT ==='; sha256sum buehne_daemon.py buehne.html filmlook.js augen_blink/blink_000.png augen_blink/blink_006.png; echo '=== HTTP ==='; for n in blink_000.png blink_006.png; do printf '%s ' \"$n\"; curl -fsS \"http://127.0.0.1:8788/augen_blink/$n\" | sha256sum; done; echo '=== DAEMON STATIC CODE ==='; grep -n -E 'SimpleHTTPRequestHandler|BaseHTTPRequestHandler|send_file|STATIC|static|cache|augen_blink|open\(|read_bytes|read\(' buehne_daemon.py | tail -160; echo '=== DAEMON RELEVANT BLOCKS ==='; sed -n '1,240p' buehne_daemon.py; echo '---'; sed -n '850,1160p' buehne_daemon.py"
+}

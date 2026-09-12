@@ -1,0 +1,354 @@
+SERVICE
+Restart=on-failure
+RestartUSec=30s
+MainPID=3333824
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[Sat 2026-09-12 14:36:30 +07] ; stop_time=[n/a] ; pid=3333824 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+HASHES
+7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709  /home/ai-core-node/.claude/star/gespraechsmodus.py
+5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4  /home/ai-core-node/.claude/star/realtime_gespraech.py
+REPO
+## main...origin/main [ahead 3, behind 15]
+?? scripts/openai_api_key.local
+GM_FUNCTIONS
+26:    Weckwort erkannt -> realtime_gespraech.fuehren_gespraech() uebernimmt
+32:    Auftrag/Forschung/Beenden (siehe realtime_gespraech.py-Docstring).
+53:telegram-listener telegram.aktiv).
+94:import realtime_gespraech
+146:def _normalisieren(text: str) -> str:
+150:def weckwort_treffer(text: str) -> Optional[str]:
+172:def _stern_flags(args) -> dict:
+193:def _stern(*args, timeout=20) -> dict:
+200:    stream in realtime_gespraech.py), haengt INTERMITTIEREND 15-20+
+213:    (und realtime_gespraech.py) ruft ihn jetzt in-process."""
+227:            text = _s.raum_beitreten_und_pulsen(f.get("session_id"), f.get("model", "realtime-gespraech"))
+245:        if verb == "gespraech-verifikation-setzen":
+246:            return _s.gespraech_verifikation_setzen(f.get("status", ""), f.get("detail", ""))
+248:    except Exception as e:
+252:def _log(msg: str) -> None:
+257:def _openai_key() -> Optional[str]:
+268:    except Exception as e:
+292:def _claude_binaerpfad() -> str:
+320:# Funktion, die von realtime_gespraech.py:frank_auftrag_stellen() direkt mit
+357:def claude_frage(text: str, session_id: Optional[str], *, berechtigung: str = "acceptEdits",
+381:    except Exception as e:
+414:def openai_sprechen(text: str, api_key: str, *, modell: str = "gpt-4o-mini-tts",
+427:    except Exception as e:
+435:def _openai_sprechen_cached(text: str, api_key: str, *, modell: str = "gpt-4o-mini-tts",
+438:    ist zu langsam"): `_einschalt_verifikation()` benutzt IMMER dieselben
+455:    except Exception:
+462:        except Exception as e:
+467:def openai_transkribieren(wav_bytes: bytes, api_key: str, *, modell: str = "gpt-4o-transcribe",
+482:    except Exception as e:
+487:def _f32_zu_wav_bytes(pcm_f32, sr: int = SAMPLE_RATE) -> bytes:
+501:def _wav_abspielen(wav_bytes: bytes) -> bool:
+512:    except Exception as e:
+518:        except Exception:
+522:def _pieps(frequenz: int = 880, dauer: float = 0.12) -> None:
+536:def _mic_geraet_aufloesen(name: str) -> Optional[int]:
+551:    except Exception as e:
+565:def _mic_fill_16k(puffer: "queue.Queue", stop_flag: threading.Event, blocksize_samples: int = 1600,
+595:def _puffer_leeren(puffer: "queue.Queue") -> int:
+612:def _einschalt_verifikation(mic_puffer: "queue.Queue", api_key: str,
+748:#  erkannter Sprache SYNCHRON an realtime_gespraech.fuehren_gespraech()
+752:#  guenstiger Verifikations-Handshake voraus (_einschalt_verifikation).
+755:def hoeren() -> None:
+760:    solange gespraech.aktiv=0 ist, werden WEDER die VAD/STT-Modelle NOCH
+765:    aktiv=1 geladen, danach fuer die Lebensdauer des Prozesses warmgehalten
+778:    _log("gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)")
+794:    # AUCH wenn gerade kein Gespraech laeuft (gespraech.aktiv=0).
+807:    # (siehe realtime_gespraech.py) ueber genau diesen Broker. Ein separater
+819:    # _cortex_dauerschleife() unten) -- solange cortex.aktiv=0 UND
+820:    # gespraech.aktiv=0 bleibt der Prozess beim dokumentierten <30MB-Sockel.
+826:            _log("cortex.aktiv=0 -- Visual-Cortex-Dauerschleife wartet (10s), "
+833:        _log("cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt")
+836:        except Exception as e:
+842:        except Exception as e:
+898:                _log("gespraech.aktiv=0 -- ausgeschaltet, naechstes Einschalten prueft erneut per "
+901:            _log("gespraech.aktiv=0 -- pausiert (10s)")
+910:        # waehrend gespraech.aktiv=0-Pausen).
+959:            _log("gespraech.aktiv=1 erkannt -- Verifikations-Handshake ('Hoerst du mich?') laeuft ...")
+960:            ok, detail = _einschalt_verifikation(mic_puffer, api_key)
+961:            _stern("gespraech-verifikation-setzen", "--status", "ok" if ok else "fehler", "--detail", detail)
+1005:                                "--model", "realtime-gespraech").get("text", "")
+1073:        #    siehe realtime_gespraech.py). Der lokale 16kHz-Wachstream
+1084:        ergebnis_gespraech = realtime_gespraech.fuehren_gespraech(
+1102:def _session_merken(session_id: str) -> None:
+1117:def main() -> None:
+1122:    sub.add_parser("listener", help="Dauerprozess -- ExecStart von frankenstein-gespraechsmodus.service")
+1151:    if a.cmd == "listener":
+RT_SESSION
+#  RealtimeSession -- eine Konversation von "Hey FranKenstein" bis
+#  Beendigung (Absicht ODER 5s-Beidseitig-Stille).
+# ══════════════════════════════════════════════════════════════════
+class RealtimeSession:
+    def __init__(self, api_key: str, *, modell: str, stimme: str, berechtigung: str,
+                 claude_session_id: Optional[str], stille_timeout_s: float,
+                 zustandskontext_refresh_s: float = 45.0, raum_session_id: Optional[str] = None,
+                 sprecher_name: Optional[str] = None, sprecher_rolle: Optional[str] = None,
+                 reasoning_effort: Optional[str] = "minimal"):
+        self.api_key = api_key
+        self.modell = modell
+        self.stimme = stimme
+        # PHASE 49b (Kaskaden-Fix, paket-1787835492087-192299): reasoning
+        # effort war seit PHASE 42b "real verifiziert, konfigurierbar" laut
+        # Docstring, aber NIE tatsaechlich gesetzt (Server lief auf
+        # ungesetztem Default). Real A/B-getestet (echte WS-Sessions, echte
+        # usage-Werte, 3 Wiederholungen je Stufe, siehe stern.py
+        # _KONFIG_DEFAULTS-Kommentar bei gespraech.realtime_reasoning_effort
+        # fuer die Zahlen): "minimal" ist schneller UND billiger UND liess
+        # Function-Calling in einem echten Test unveraendert korrekt
+        # ausloesen -- kein Tausch zwischen Qualitaet und Kosten, hier
+        # ziehen beide in dieselbe Richtung. None = Feld weglassen (API-
+        # Default), fuer Rueckfall/Debugging ohne Codeaenderung.
+        self.reasoning_effort = (reasoning_effort or "").strip() or None
+        # PHASE 49 (Gabriel-Auftrag 2026-08-27, paket-1787834229053-bd8dfc,
+        # Kostenkaskade-Sezierung): eigene ID NUR fuer die Kostenspur
+        # (stern.realtime_kosten_event_loggen()) -- bewusst NICHT
+        # claude_session_id/raum_session_id wiederverwendet, die haben
+        # andere Lebensdauer/Semantik. Gruppiert alle response.done-usage-
+        # Events DIESER einen Realtime-WebSocket-Verbindung.
+        self._kosten_session_uuid = str(uuid.uuid4())
+        self._session_id_ref = {"id": claude_session_id}
+        # PHASE 48 (Gabriel-Auftrag 2026-08-27): "user kann mit sprache
+        # alles machen guest nur fragen stellen". sprecher_rolle=None
+        # (kein Voiceprint angelegt -- Alt-Verhalten, s. frank_voice_lite.
+        # VoiceLite._sprecher_pruefen()) wird HIER sicherheitshalber wie
+        # 'guest' behandelt (sicherster Default, keine unbeschraenkte
+        # Werkzeugnutzung ohne bekannten Sprecher) -- praktisch tritt das
+        # kaum auf, weil stern.gespraech_an() das Einschalten selbst schon
+        # an mind. eine 'user'-Stimme bindet; diese zweite Schicht ist
+        # trotzdem hart serverseitig, nicht nur eine Prompt-Anweisung (s.
+        # _tool_ausfuehren() unten -- Rolle wird dort MECHANISCH geprueft,
+        # nicht nur der Persona erzaehlt).
+        self.sprecher_name = sprecher_name
+        self.sprecher_rolle = (sprecher_rolle or "guest").strip().lower()
+        if self.sprecher_rolle not in ("user", "guest"):
+            self.sprecher_rolle = "guest"
+        self.auftrag = _HintergrundBruecke("Auftrag", self._claude_taetigkeit)
+        self.forschung = _HintergrundBruecke("Forschung", self._forschung_taetigkeit)
+        self._berechtigung = berechtigung
+        self.waechter = _StilleWaechter(stille_timeout_s)
+        self.player = _Player()
+        # Root-Cause-Fix (Gabriel-Meldung 2026-08-27, live -- echtes Geld
+        # verbrannt: "er hört sich selbst und reagiert darauf ... wirkt als
+        # ob er in eine Schleife geht"): kein Echo-Cancelling zwischen
+        # Lautsprecher-Ausgabe (_Player/aplay) und Mikrofon-Eingang (24kHz-
+        # Stream an die Realtime-API) -- real per journalctl-Muster bestaetigt
+        # (85 Baerge-ins auf 122 Antworten, JEDES Mal ~2-5s nach Antwortbeginn,
+        # ein Mensch unterbricht nicht metronomisch regelmaessig). Die
+        # Realtime-API hoert offenbar die eigene Sprachausgabe ueber den
+        # Lautsprecher-Raum-Mikrofon-Pfad und haelt das faelschlich fuer
+        # Baerge-in -> Wiedergabe abgebrochen -> neue Antwort -> wieder
+        # gehoert -> Schleife. Fix: Mikrofon-Senden waehrend `assistant_
+        # speaking` UND ein kurzes Nachlauf-Fenster danach aussetzen (siehe
+        # _mic_sender()/response.done-Handler) -- kein echtes AEC, aber
+        # eliminiert das Selbst-Hoeren. Kostet echtes Wort-ins-Reden-Fallen
+        # (kann waehrend dieses Fensters nicht unterbrochen werden) --
+        # bewusster Trade-off: Stabilität/Kosten JETZT wichtiger, echtes AEC
+        # (z.B. PipeWire module-echo-cancel) waere der sauberere Nachfolge-
+        # schritt, wenn wieder echtes Baerge-in gewuenscht ist.
+        self._mikrofon_stumm_bis_mono = 0.0
+        self.zustandskontext_refresh_s = zustandskontext_refresh_s
+        self.raum_session_id = raum_session_id
+        self.ende_gewuenscht = False
+        self.grund = None
+        self._zustandstext = "Zustandskontext noch nicht geladen."
+        self._zustandskontext_dict: dict = {}
+
+        # Sicherheitsschicht (Audit-Befund Runde 1, siehe
+        # _auftrag_stellen_mit_bestaetigung()): zwischen 'gehoert' und
+        # 'echte Aktion mit Werkzeugzugriff' liegt jetzt ein mechanisch
+        # erzwungener Zwei-Schritt-Rueckfragezyklus, keine reine
+        # Verhaltensinstruktion. `_user_transkripte_zaehler` wird NUR von
+        # echten, vom Server transkribierten Audio-Events hochgezaehlt
+        # (siehe fuehren(), `conversation.item.input_audio_transcription.
+        # completed`) -- das Modell kann dieses Signal nicht selbst
+        # ausloesen, es kommt einzig aus echtem Mikrofon-Audio.
+        self._ausstehender_auftrag: Optional[dict] = None
+        self._user_transkripte_zaehler = 0
+        # Bugfix (Runde 2, 2026-08-27, FIXER-Befund #3): der reine Zaehler
+        # bestaetigt nur, DASS irgendeine echte Aeusserung ankam, nicht WAS
+        # gesagt wurde -- `len(self._transkript_log) == self._user_
+        # transkripte_zaehler` immer, damit _auftrag_stellen_mit_bestaetigung()
+        # den TEXT jeder Zwischen-Aeusserung seit dem Vorschlag pruefen kann
+        # (Negations-Veto, siehe dort).
+        self._transkript_log: list = []
+
+        # PHASE 49c (Gabriel-Auftrag 2026-08-27, paket-1787837539664-509831)
+        # -- Kernmechanismus 4b, siehe voice_loop_core.konversations_
+        # appraisal()-Abschnittskopf fuer die volle Begruendung. Laeuft
+        # IMMER in einem eigenen Hintergrund-Thread (_konversations_ton_
+        # aktualisieren() unten), NIE auf dem Pfad zwischen speech_stopped
+        # und response.create -- der Wert hier ist deshalb bewusst ein
+        # geteiltes, per Lock geschuetztes Feld statt eines Rueckgabewerts:
+        # egal WANN der Hintergrund-Thread fertig wird, _response_erstellen()
+        # liest bei JEDEM Aufruf einfach den zuletzt geschriebenen Stand.
+        # Default '' (kein Hinweis) -- exakt das unveraenderte Alt-Verhalten,
+        # solange noch keine erste Appraisal durchgelaufen ist.
+        self._gespraechs_ton_hinweis = ""
+        self._konversations_appraisal_lock = threading.Lock()
+        self._konversations_appraisal_seq = 0
+
+        # PHASE 42c/43 -- VOICE_LOOP_CORE (siehe voice_loop_core.py).
+        # Score-Formel/Gewichte/Schwelle jetzt aus phase43/tools/
+        # calibration_score.py (AUTORITATIV, siehe dortiger Kommentar in
+        # voice_loop_core.py) -- `gewichte`/`wait_basiswert` (PHASE 42c,
+        # selbst hergeleitet) sind damit obsolet, nicht mehr gelesen.
+        vlk = _stern("voice-loop-konfig")
+        self._vl_reopen_fenster_s = float(vlk.get("reopen_fenster_s") or 2.5)
+        self._vl_speak_threshold = float(vlk.get("speak_threshold") or 0.86)
+        self._vl_qwen_modell = vlk.get("qwen_modell") or "qwen2.5:0.5b"
+        self._vl_qwen_host = vlk.get("qwen_host") or "http://localhost:11434"
+        self._vl_qwen_timeout_s = float(vlk.get("qwen_timeout_s") or 1.0)
+        # Kernmechanismus 4b -- eigenes Budget, siehe stern.py
+        # voice_loop.konversations_timeout_s-Kommentar (real gemessen
+        # ~1.0-1.15s fuer das schlankere emotion+engagement-Schema,
+        # qwen_timeout_s=1.0s war zu knapp).
+        self._vl_konversations_timeout_s = float(vlk.get("konversations_timeout_s") or 1.5)
+        # PHASE 43, Gabriel-Vorgabe: "Shadow Mode als Startzustand" --
+        # solange initiative_modus='shadow' (Default), werden Initiative-
+        # Kandidaten bewertet+geloggt (initiative_episode), aber NIE
+        # tatsaechlich ungefragt ausgesprochen. Kalibrierungsstufen
+        # confirm/limited/adaptive sind eine spaetere Baurunde.
+        self._vl_initiative_modus = vlk.get("initiative_modus") or "shadow"
+        self.chatter_debt = vlc.ChatterDebt(
+            increment=float(vlk.get("chatter_debt_increment") or 0.18),
+            decay_per_minute=float(vlk.get("chatter_debt_decay_per_minute") or 0.02),
+        )
+
+        # Kernmechanismus 9 -- echte Unterbrechbarkeit: welches Konversations-
+        # Item (message) gerade Audio ausgibt + wann dessen Audio zu laufen
+        # begann (fuer audio_end_ms bei conversation.item.truncate).
+        self._aktuelles_item_id: Optional[str] = None
+        self._audio_start_mono: Optional[float] = None
+        # Bugfix Echo-Nachlauf (2026-08-27, real im journalctl verifiziert --
+        # s. _mikrofon_stumm_bis_mono-Kommentar unten): fester 0.8s-Nachlauf
+        # reicht nur, wenn aplay bei response.done bereits fast fertig
+        # abgespielt hat. Deltas kommen aber teils in Bursts schneller als
+        # Echtzeit rein (schreiben() schreibt sofort auf aplays stdin,
+        # OHNE auf tatsaechliche Wiedergabe zu warten) -- bei laengeren
+        # Antworten koennen dann noch mehrere Sekunden unabgespielter Audio-
+        # Rueckstand im aplay-Puffer stehen, wenn response.done eintrifft.
+        # Zaehlt geschriebene Bytes pro Antwort, damit response.done die
+        # ECHTE verbleibende Abspieldauer statt eines pauschalen Werts
+        # berechnen kann (s. dort).
+        self._antwort_audio_bytes = 0
+
+        # Bugfix (Runde 2, 2026-08-27, FIXER-Befund #2): war bisher eine
+        # lokale Variable in fuehren(), auf die _unterbrechung_synchronisieren()
+        # (eine Methode) keinen Zugriff hatte -- ein durch Barge-in
+        # abgebrochener Tool-Aufruf (bereits per response.output_item.done
+        # eingetroffen, BEVOR die Unterbrechung kam) wurde deshalb nach
+        # response.done trotzdem noch ausgefuehrt. Jetzt Instanzattribut,
+        # damit die Unterbrechung ihn real leeren kann.
+        self._offene_tool_calls: dict = {}
+
+        # PHASE 43c P0V (2026-08-27) -- single-owner Kamera/Presence-Bridge
+        # fuer die Dauer DIESER Sprachsession, siehe presence_bridge.py
+        # Docstring "HONEST OWNERSHIP NOTE". Nicht hier instanziiert
+        # (Kamera-Oeffnen darf nicht im Konstruktor scheitern koennen und
+        # nicht laufen, bevor `fuehren()` wirklich startet) -- nur der Slot;
+        # `fuehren()` startet/stoppt sie symmetrisch zum 24kHz-Mikrofonstream.
+        self._presence: Optional["presence_bridge.PresenceBridge"] = None
+        # Zusatzauftrag Gabriel 2026-08-27 (Eye-Tracking): Throttle-Zeitstempel
+        # fuer _augenposition_spiegeln() -- siehe dortigen Docstring, warum
+        # das NICHT bei jedem fuehren()-Schleifendurchlauf geschrieben wird.
+        self._letzte_augenpos_spiegel_mono: float = 0.0
+
+        # PHASE 43c P1V (2026-08-27) -- VoiceSessionCapsule (siehe
+        # voice_session_capsule.py). Nur der Slot hier (gleicher Grund wie
+        # self._presence oben: PresenceBridge existiert noch nicht) --
+        # fuehren() instanziiert die Quelle, SOBALD self._presence steht, und
+        # ruft .refresh() an den beiden Stellen auf, an denen sich zugrunde-
+        # liegende Signale in dieser Klasse bereits nachweislich aendern
+        # (Zustandskontext-Refresh, _stille_reopen_pruefen()). Kein zweites
+        # Gedaechtnis (Docstring dort): jede refresh() liest live aus
+        # denselben Quellen, die dieses Modul ohnehin schon haelt/abfragt.
+        self.capsule_quelle: Optional[vsc.VoiceSessionCapsuleQuelle] = None
+        self.capsule: Optional[vsc.VoiceSessionCapsule] = None
+
+        # PHASE 43c P3V (2026-08-27) -- letzte gesprochene Frank-Aussage,
+        # gesetzt in response.output_audio_transcript.done (siehe fuehren()).
+        # Einziger Zweck: _voice_outcome_text_verarbeiten() muss pruefen
+        # koennen, ob ein Widerspruch sich gegen eine visuell verifizierbare
+        # Behauptung richtet (voice_outcome_events.ist_visuell_
+        # verifizierbare_behauptung()) -- ohne diesen Text gaebe es nichts,
+        # wogegen der Widerspruch geprueft werden koennte.
+        self._letzte_assistant_aussage: str = ""
+
+    def _claude_taetigkeit(self, auftrag: str) -> dict:
+        import gespraechsmodus as _gm  # lazy: kein Modulebene-Zyklus, siehe Docstring-Kopf
+        erg = _gm.claude_frage(auftrag, self._session_id_ref.get("id"),
+                                berechtigung=self._berechtigung, timeout=600)
+        if erg.get("ok") and erg.get("session_id"):
+            self._session_id_ref["id"] = erg["session_id"]
+            _gm._session_merken(erg["session_id"])
+        return erg
+
+    def _forschung_taetigkeit(self, frage: str) -> dict:
+        """Stoesst einen ECHTEN neuen Auftrag ueber die bestehende ChatGPT-
+        Burst-Bruecke an (stern.py chatgpt_senden(), real Browser-
+        Automatisierung -- kann mehrere Minuten dauern, deshalb IMMER ueber
+        _HintergrundBruecke, nie synchron im Tool-Aufruf-Pfad). Grosszuegiger
+        Subprozess-Timeout (200s statt _stern()-Standard 20s), weil das
+        zugrundeliegende Skript selbst lange laufen darf."""
+        return _stern("chatgpt-senden", "--prompts", json.dumps([frage], ensure_ascii=False), timeout=200)
+
+    @property
+    def claude_session_id(self) -> Optional[str]:
+        return self._session_id_ref.get("id")
+
+    def _url(self) -> str:
+        return f"wss://api.openai.com/v1/realtime?model={self.modell}"
+
+    def _session_config(self, instructions: str) -> dict:
+        # WICHTIG (real recherchiert, Kollegen-Fund waehrend des Baus, siehe
+        # Commit-Historie/Report): `session.update` mit neuen `instructions`
+        # MITTEN in der Konversation wird vom Modell oft ignoriert (bekanntes
+        # OpenAI-Community-Problem, haengt am bisherigen Gespraechskontext).
+        # Deshalb hier bewusst `turn_detection.create_response=False` --
+        # WIR loesen jede Antwort selbst per `response.create` aus (nach
+        # `input_audio_buffer.speech_stopped`, nach Tool-Ergebnissen, nach
+        # nachgereichten Auftragsergebnissen) und geben JEDES Mal frische
+        # `response.instructions` mit (Persona + aktueller Zustandskontext,
+        # siehe _response_erstellen()) -- das per-Response-Feld ist NICHT
+        # vom selben Ignorier-Problem betroffen (dokumentiertes Verhalten:
+        # ueberschreibt die Session-Instruktion nur fuer GENAU diese eine
+        # Antwort). `instructions` hier im Session-Setup ist deshalb nur der
+        # Startwert/Rueckfall (z.B. falls der Server doch mal serverseitig
+        # antwortet), die eigentliche Steuerung laeuft ueber response.create.
+        session_dict = {
+RT_RUN
+62:    bewusst RAW `websockets` statt SDK-Wrapper).
+222:            # siehe RealtimeSession._sprechzustand_spiegeln() oben.
+226:            # RealtimeSession._augenposition_spiegeln() oben.
+257:            # PHASE 49 -- s. RealtimeSession.__init__ (_kosten_session_uuid)
+635:    blockiert. Zwei Nutzer in RealtimeSession: `auftrag` (claude_frage()-
+641:    Ergebnis wird in `ergebnisse` abgelegt; die Hauptschleife (RealtimeSession)
+701:    unterbrechbar bei Nutzer-Baerge-in (siehe RealtimeSession._on_event
+707:    def start_falls_noetig(self):
+770:        # Kernmechanismus 8 (PHASE 42c) -- lebt hier statt auf RealtimeSession,
+800:#  RealtimeSession -- eine Konversation von "Hey FranKenstein" bis
+803:class RealtimeSession:
+1368:        from websockets.sync.client import connect as ws_connect
+1524:                        # websockets.sync sicher (das Connection-Objekt
+1527:                        # websockets.sync.connection.Connection).
+2306:    sitzung = RealtimeSession(
+2314:        # PHASE 49b Kaskaden-Fix -- s. RealtimeSession.__init__/stern.py
+2380:        from websockets.sync.client import connect as ws_connect
+2384:        sitzung = RealtimeSession(key, modell="gpt-realtime-2.1", stimme="cedar", berechtigung="acceptEdits",
+2401:        from websockets.sync.client import connect as ws_connect
+2405:        sitzung = RealtimeSession(key, modell="gpt-realtime-2.1", stimme="cedar", berechtigung="acceptEdits",
+2444:        from websockets.sync.client import connect as ws_connect
+2449:        sitzung = RealtimeSession(key, modell="gpt-realtime-2.1", stimme="cedar", berechtigung="acceptEdits",
+2470:        from websockets.sync.client import connect as ws_connect
+2474:        sitzung = RealtimeSession(key, modell="gpt-realtime-2.1", stimme="cedar", berechtigung="acceptEdits",
+2535:        sitzung = RealtimeSession("dummy-key", modell="gpt-realtime-2.1", stimme="cedar",
+2576:        sitzung = RealtimeSession("dummy-key", modell="gpt-realtime-2.1", stimme="cedar",
+2646:            """Minimaler Ersatz fuer eine echte websockets-Verbindung --
+2654:        sitzung = RealtimeSession("dummy-key", modell="gpt-realtime-2.1", stimme="cedar",
+IMMUNE_SERVICE
+23:    frankenstein-gespraech.service hat After=frankenstein-puls.service,
+94:    "frankenstein-gespraech.service":          {"tier": 1, "critical": True},  # After=puls

@@ -1,0 +1,10 @@
+HASHES
+b4ac50c2bc3739c11b1ee1d14545b8e947847034d87f4bde21e48de591df5b20  /home/andreas/.local/bin/frank
+OWNER_ROLE
+DB_WRITER
+PROXY_BIND
+ENTRY
+#!/usr/bin/env bash
+set -euo pipefail
+export FRANK_OWNER=andreas
+exec python3 "$HOME/.local/share/frank-chatgpt-organ/frank_chatgpt_terminal_remote.py" "$@"

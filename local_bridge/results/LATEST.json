@@ -1,23 +1,19 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "gpt56sol-harness-polish-read-exactbackend-20260912T0728Z",
-  "command_sha256": "3fe8d98e0f8a64753f08c7d57589e0b69febc78bbec9f5f66fbfec84dfe44da9",
+  "command_id": "gpt56sol-immune-candidates-20260912-1424",
+  "command_sha256": "fc745d058315ea03991457874d3bd1b0d6d098fd970916f4d55e7098aba7cd11",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-12T07:22:42.267381+00:00",
-  "finished_at": "2026-09-12T07:22:42.267521+00:00",
+  "started_at": "2026-09-12T07:23:09.192598+00:00",
+  "finished_at": "2026-09-12T07:23:09.224635+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "read_file",
-  "stdout_sha256": "acec6201b0df3e9095039d644963df2883c68b5f12d7795e95d9969f231ceb2d",
+  "op": "exec",
+  "stdout_sha256": "b29701248f5f5fd7aa8bbcf2726eb42e79bb45e791d35c9b3ef61675f33e8dfd",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "#!/usr/bin/env python3\n\"\"\"Exact ChatGPT backend for the first-class FranKenstein organ.\n\nPreserves the existing two-phase send/harvest contract while using the\nrequest-targeted browser adapter. This is transport only: no side DB, no\nmemory authority, and no fallback to a different model/provider.\n\"\"\"\nfrom __future__ import annotations\n\nfrom types import SimpleNamespace\nfrom typing import Any\n\nfrom f2wp1207_chatgpt_harness_adapter import TargetedChatGPTHarness, _answer_from_payload\n\n\nclass ExactChatGPTBackend:\n    def __init__(self, stern_module: Any):\n        # Freeze the ORIGINAL harness capabilities now.  Terminal frontends\n        # deliberately replace stern.chatgpt_senden/chatgpt_ernten with this\n        # backend so the organ can keep the established two-phase contract.\n        # Holding the mutable stern module itself would make adapter.dispatch()\n        # call this backend again after that replacement -> infinite recursion.\n        # The frozen facade keeps one browser authority while allowing the\n        # public stern entrypoints to be rebound safely.\n        raw_harness = SimpleNamespace(\n            chatgpt_senden=stern_module.chatgpt_senden,\n            _chatgpt_browse=stern_module._chatgpt_browse,\n            _chatgpt_lock=stern_module._chatgpt_lock,\n            _chatgpt_login_sicherstellen=stern_module._chatgpt_login_sicherstellen,\n        )\n        self.adapter = TargetedChatGPTHarness(raw_harness)\n        self._pending: dict[str, Any] | None = None\n\n    def send(self, prompts: list[str], *, num_workers: int | None = None,\n             ram_schwelle_mb: int | None = None, **_: Any) -> dict:\n        # Exactly one coordinator prompt per organ turn. The model may create\n        # specialized tool/workers inside the task, but we never duplicate the\n        # coordinator merely because a local budget is >1.\n        if len(prompts or []) != 1:\n            return {\"ok\": False, \"grund\": \"exact ChatGPT organ accepts one coordinator prompt\"}\n        sent = self.adapter.dispatch(\n            [str(prompts[0])], num_workers_each=1,\n            ram_schwelle_mb=ram_schwelle_mb,\n        )\n        self._pending = sent if sent.get(\"ok\") else None\n        return {\n            \"ok\": bool(sent.get(\"ok\")),\n            \"exact_chatgpt\": True,\n            \"urls\": sent.get(\"urls\") or [],\n            \"send\": sent.get(\"send\"),\n            \"grund\": sent.get(\"error\"),\n        }\n\n    def harvest(self, *, timeout_s: float = 900.0, **_: Any) -> dict:\n        pending = self._pending\n        self._pending = None\n        if not pending:\n            return {\"ok\": False, \"exact_chatgpt\": True, \"grund\": \"nothing pending\", \"results\": []}\n        harvested = self.adapter.harvest_urls(\n            pending.get(\"urls\") or [], timeout_s=min(float(timeout_s), 900.0)\n        )\n        results = []\n        for row in harvested.get(\"results\") or []:\n            answer = _answer_from_payload(row.get(\"payload\"), row.get(\"page_text\") or \"\")\n            results.append({\n                \"antwort\": answer,\n                \"url\": row.get(\"url\"),\n                \"marker\": row.get(\"marker\"),\n                \"payload\": row.get(\"payload\"),\n            })\n        return {\n            \"ok\": bool(harvested.get(\"ok\")) and bool(results) and bool(results[-1].get(\"antwort\")),\n            \"exact_chatgpt\": True,\n            \"results\": results,\n            \"grund\": harvested.get(\"error\"),\n        }\n",
+  "stdout_tail": "/home/ai-core-node/.claude/star/immunsystem.db\n/home/ai-core-node/.claude/star/immunsystem.db-wal\n/home/ai-core-node/.claude/star/immunsystem_status.json\n/home/ai-core-node/.claude/star/__pycache__/immunsystem.cpython-312.pyc\n/home/ai-core-node/.claude/star/__pycache__/cortex_dashboard_immunsystem.cpython-312.pyc\n/home/ai-core-node/.claude/star/immunsystem.db-shm\n/home/ai-core-node/.claude/star/immunsystem.py\n/home/ai-core-node/.claude/star/cortex_dashboard_immunsystem.py\n/home/ai-core-node/.claude/star/immunsystem.log\n",
   "stderr_tail": "",
-  "meta": {
-    "sha256": "acec6201b0df3e9095039d644963df2883c68b5f12d7795e95d9969f231ceb2d",
-    "bytes": 3408,
-    "truncated": false
-  },
+  "meta": {},
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

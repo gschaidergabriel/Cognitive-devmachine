@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-finish-andreas-guard-preflight-20260913a",
+  "command_sha256": "313b207f39da4269fe946fc57f1380d659d0d0983ffb184d4fac3b96ba6f2fdc",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:24:23.109558+00:00",
+  "finished_at": "2026-09-12T17:24:23.398881+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a6ae90fdf71830f731c2cf8d8677c52a9077e0d57f81899d36c9b952bfb5d728",
+  "stderr_sha256": "3a6b92e02a6414769ab79f349eb007c1efda2f196568ca656947b30045985eae",
+  "stdout_tail": "===HEAD_AND_DIRTY===\n5b06f6c40eefb9b2bb058c8117f8705cdff50a6a\n===SOURCE_BINDING===\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  -\n794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  werkzeug/fluechtig-vor-start-pruefen.sh\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  -\n8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  werkzeug/entityos-vm-volatile-state-guard.conf\n===SELFTEST===\nOK   1 fehlender alter Klon rc=0\nOK   2 leerer semantischer Bereich rc=0\nOK   3 Schema-only Datenbank rc=0\nOK   4 consciousness.db mit Zustand rc=255\nOK   5 gefuellt ohne .db-Endung rc=255\nOK   6 gefuellter Cache ist ausser Scope rc=0\nOK   7 world_experience mit identity snapshot rc=255\nOK   8 unlesbarer SQLite-Kandidat fail-closed rc=255\nOK   9 mehrere Schema-only DBs rc=0\nOK   10 nicht vollstaendig traversierbarer Baum rc=255\n\n10/10 Faelle korrekt\nSELFTEST_RC:0\n===LIVE_GUARD_EXPECT_BLOCK===\nLIVE_GUARD_RC:255\nEXPECTED_BLOCK_CONFIRMED\n",
+  "stderr_tail": "GEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/welt.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\nGEFUELLTER semantischer Zustand: /var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\nSTART BLOCKIERT -- 5 gefuellte semantische Zustandsspeicher liegen noch im fluechtigen Klon. Erst Persistenz/Export klaeren, dann starten.\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

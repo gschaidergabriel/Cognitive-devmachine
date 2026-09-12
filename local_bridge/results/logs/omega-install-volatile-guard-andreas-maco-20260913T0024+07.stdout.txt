@@ -1,0 +1,53 @@
+===IDENTITY===
+andreas-MACO
+andreas
+2026-09-12T19:24:25+02:00
+ACTIVE_BEFORE=active PID_BEFORE=319869
+===READBACK===
+794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0  /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e  /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+MainPID=319869
+    $ENTITYOS_IDENTITY_BINDS \
+    --bind=/dev/snd \
+    --bind=/dev/dri \
+    --bind=/dev/dri/renderD128 \
+    --bind=/dev/kfd \
+    --property=DeviceAllow="/dev/snd rwm" \
+    --property=DeviceAllow="/dev/dri rwm" \
+    --property=DeviceAllow="/dev/kfd rwm"'
+ExecStop=/bin/sh -c 'machinectl poweroff "$ENTITYOS_MACHINE_NAME" 2>/dev/null; sleep 2; machinectl terminate "$ENTITYOS_MACHINE_NAME" 2>/dev/null; true'
+ExecStopPost=/bin/sh -c 'rm -rf "$ENTITYOS_ROOTFS_RUN"'
+Restart=no
+TimeoutStartSec=120
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf
+# GO084 — fail-closed holding action for EntityOS volatile semantic state.
+#
+# Install together with fluechtig-vor-start-pruefen.sh at
+# /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh and load this as
+# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf.
+#
+# WHY TWO LINES MATTER:
+# 1) ExecCondition runs before ExecStartPre, so the existing destructive
+#    start-time `rm -rf "$ENTITYOS_ROOTFS_RUN"` cannot run while filled
+#    semantic SQLite state is still present or the guard cannot prove safety.
+# 2) The empty ExecStopPost assignment resets the base unit's unconditional
+#    stop-time wipe. Otherwise `systemctl stop entityos-vm.service` could still
+#    destroy the same state before any future start guard gets a chance.
+#
+# This is intentionally a HOLDING ACTION, not the final persistence migration.
+# It copies/migrates no database and creates no second state authority. Once
+# the volatile semantic stores are migrated/read back under an admitted durable
+# layout, the ordinary disposable-rootfs cleanup policy can be restored.
+
+[Service]
+ExecCondition=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+ExecStopPost=
+GUARD_RC=0

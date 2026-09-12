@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-pr2179-carrier-git-20260912-1330",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nimport json,pathlib,subprocess\np=pathlib.Path('/workspace/omega_runtime/carrier_repo')\nout={'path':str(p),'exists':p.exists(),'git_dir':(p/'.git').exists()}\nif p.exists():\n    for name,args in [('head',['git','-C',str(p),'rev-parse','HEAD']),('branch',['git','-C',str(p),'branch','--show-current']),('remote',['git','-C',str(p),'remote','get-url','origin'])]:\n        try: out[name]=subprocess.check_output(args,text=True,timeout=5,stderr=subprocess.STDOUT).strip()\n        except Exception as e: out[name+'_error']=type(e).__name__\n    for rel in ['tools/omega_grid_relay.py','tools/omega_chatgpt_mcp.py','tests/test_omega_grid_relay.py']:\n        q=p/rel; out[rel]={'exists':q.exists(),'bytes':q.stat().st_size if q.exists() else None}\nprint(json.dumps(out,separators=(',',':')))\nPY"
+}

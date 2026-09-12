@@ -1,0 +1,46 @@
+2026-09-12T07:26:48+07:00
+SERVICE
+MainPID=1632280
+NRestarts=0
+ExecMainStartTimestamp=Sat 2026-09-12 07:25:08 +07
+ActiveEnterTimestamp=Sat 2026-09-12 07:25:08 +07
+TIMER
+Result=success
+ActiveState=inactive
+Result=success
+ExecMainCode=0
+ExecMainStatus=0
+ActiveState=inactive
+HASH
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+c9304ad603ba97ce20c69c8c0640ec389f181e082c06b2f5a5b25bf5fcaf7128  augen_blink/blink_000.png
+06f160a42e396f7c80a633c8954458f09e64f904c7345b5722d9639f030e0c46  augen_blink/blink_006.png
+HTTP
+f7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  -
+f7cc3fc538478c9a0f5748f2139a8bba7234f74aa59b634dc3f266caa237d0fa  -
+STATIC_CODE
+45:from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+73:BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+202:        with open(ZUSTAND_PFAD, "r", encoding="utf-8") as f:
+215:    with open(tmp, "w", encoding="utf-8") as f:
+362:_BROADCAST_VERTEILUNG_CACHE = {"ts": 0.0, "mittel": None, "sd": None}
+370:    if (jetzt - _BROADCAST_VERTEILUNG_CACHE["ts"] < _BROADCAST_VERTEILUNG_TTL_S
+371:            and _BROADCAST_VERTEILUNG_CACHE["mittel"] is not None):
+372:        return _BROADCAST_VERTEILUNG_CACHE["mittel"], _BROADCAST_VERTEILUNG_CACHE["sd"]
+385:    _BROADCAST_VERTEILUNG_CACHE.update(ts=jetzt, mittel=mittel, sd=sd)
+678:    with open(pfad, "rb") as f:
+749:    class Handler(BaseHTTPRequestHandler):
+766:            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+767:            # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+777:                self.send_header("Cache-Control", "no-cache")
+780:            with open(voller_pfad, "rb") as f:
+785:            self.send_header("Cache-Control", "no-cache")
+820:                    with open(pfad, "rb") as fh:
+843:                    or path.startswith("/augen_blink/")
+858:                elif path.startswith("/augen_blink/"):
+983:                with open(ziel, "wb") as f:
+1037:            with open(PID_DATEI, "r") as f:
+1059:        log = open(LOG_DATEI, "ab")
+1060:        self.proc = subprocess.Popen(
+1106:        with open(PID_DATEI, "w") as f:

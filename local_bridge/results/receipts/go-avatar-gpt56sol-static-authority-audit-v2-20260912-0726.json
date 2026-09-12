@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-static-authority-audit-v2-20260912-0726",
+  "command_sha256": "a7c2f31ecbb386494769d0d4e3087fc3b63368b70d0152d31685d4427f8b41fd",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:26:48.638125+00:00",
+  "finished_at": "2026-09-12T00:26:48.702001+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a1844a754c22d4e08ae615a505561088a7c3bcfe2b138c68824abaaf21bf00e1",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "2026-09-12T07:26:48+07:00\nSERVICE\nMainPID=1632280\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-09-12 07:25:08 +07\nActiveEnterTimestamp=Sat 2026-09-12 07:25:08 +07\nTIMER\nResult=success\nActiveState=inactive\nResult=success\nExecMainCode=0\nExecMainStatus=0\nActiveState=inactive\nHASH\n5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py\n18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html\nc9304ad603ba97ce20c69c8c0640ec389f181e082c06b2f5a5b25bf5fcaf7128  augen_blink/blink_000.png\n06f160a42e396f7c80a633c8954458f09e64f904c7345b5722d9639f030e0c46  augen_blink/blink_006.png\nHTTP\nf7c0abd552a91e117f90880bc67c29f22311f1ed5b90a043b169e93495fff44f  -\nf7cc3fc538478c9a0f5748f2139a8bba7234f74aa59b634dc3f266caa237d0fa  -\nSTATIC_CODE\n45:from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\n73:BLINK_DIR = os.path.join(VISUAL_DIR, \"augen_blink\")\n202:        with open(ZUSTAND_PFAD, \"r\", encoding=\"utf-8\") as f:\n215:    with open(tmp, \"w\", encoding=\"utf-8\") as f:\n362:_BROADCAST_VERTEILUNG_CACHE = {\"ts\": 0.0, \"mittel\": None, \"sd\": None}\n370:    if (jetzt - _BROADCAST_VERTEILUNG_CACHE[\"ts\"] < _BROADCAST_VERTEILUNG_TTL_S\n371:            and _BROADCAST_VERTEILUNG_CACHE[\"mittel\"] is not None):\n372:        return _BROADCAST_VERTEILUNG_CACHE[\"mittel\"], _BROADCAST_VERTEILUNG_CACHE[\"sd\"]\n385:    _BROADCAST_VERTEILUNG_CACHE.update(ts=jetzt, mittel=mittel, sd=sd)\n678:    with open(pfad, \"rb\") as f:\n749:    class Handler(BaseHTTPRequestHandler):\n766:            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,\n767:            # nicht \"nie cachen\"), Server antwortet mit 304 wenn unveraendert\n777:                self.send_header(\"Cache-Control\", \"no-cache\")\n780:            with open(voller_pfad, \"rb\") as f:\n785:            self.send_header(\"Cache-Control\", \"no-cache\")\n820:                    with open(pfad, \"rb\") as fh:\n843:                    or path.startswith(\"/augen_blink/\")\n858:                elif path.startswith(\"/augen_blink/\"):\n983:                with open(ziel, \"wb\") as f:\n1037:            with open(PID_DATEI, \"r\") as f:\n1059:        log = open(LOG_DATEI, \"ab\")\n1060:        self.proc = subprocess.Popen(\n1106:        with open(PID_DATEI, \"w\") as f:\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

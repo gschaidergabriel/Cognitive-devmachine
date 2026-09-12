@@ -1,0 +1,160 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+===CSS_200_300===
+     bis y 599/1024=58,5%). Das ist KEINE Weichzeichnung der Textur (die
+     bleibt scharf, Gabriel will das Grobe erhalten) -- nur die Deckkraft
+     faellt dort weich statt hart auf 0. Sitzt auf #kopf-schicht selbst, wandert
+     also mit jeder Neigung/Drehung automatisch mit (siehe #kopf-dreh
+     transform-origin oben) -- der Uebergang bleibt an derselben Halsstelle,
+     auch wenn sich der Kopf bewegt. Startwerte aus der Messung, per Screenshot
+     bei 4-8x-Zoom nachjustierbar falls zu durchsichtig/Kante steht noch. */
+  #kopf-schicht,#kopf-schicht2,#ausdruck-schicht,#ausdruck-schicht2{
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 53.7%,transparent 58.5%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 53.7%,transparent 58.5%)}
+  /* ⭐ 2026-09-11 Crossfade (Gabriel: "smooth ... uncanny in jeder Hinsicht" --
+     harter g.src=neu-Bildsprung war einer der Maschinen-Tells). Zwei
+     gestapelte <img> statt einem: #gesicht + #gesicht2, per opacity
+     ueberblendet statt hart getauscht. Kostet ein zweites <img>-Element
+     (mehr Speicher) -- Koordinator woertlich: "messen". */
+  /* ⭐⭐ 2026-09-11 (Animations-Agent): die alten flachen Ebenen #gesicht und
+     #gesicht2 sind ENTFERNT (DOM + CSS). Sie waren undurchsichtige Vollbild-RGBs
+     mit eingebratenem Hintergrund (0% Transparenz) und lagen mit z-index:3
+     UEBER dem RGBA-Kopf (#kopf-schicht, z-index:2). Bei jedem Sonderausdruck
+     blendete sonderausdruckZeigen() dieses alte, an anderer Bildstelle
+     aufgenommene Gesicht ueber den echten Kopf -- unterschiedliche Kopfposition
+     plus Rechteckkanten = der GEISTER-KOPF, den Gabriel gesehen hat. Die
+     Sonderausdruecke laufen jetzt ueber #ausdruck-schicht/#ausdruck-schicht2
+     (echte RGBA, siehe Kommentar dort).Diese alte Regel bleibt als Grabstein:
+     die flachen Vollbild-Ebenen duerfen NIE wieder ueber den Kopf zurueckkehren. */
+  /* Overshoot-Bewegung fuer echte Kopf-/Blick-/Ausdruckswechsel (siehe
+     gesichtNeuZeichnen(mitSchwung) unten) -- bewusst NICHT beim Blinzeln
+     (das bleibt schnell/knapp, siehe Blinzel-Kommentar weiter unten). */
+  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+  #gesicht-rahmen.pose-wechsel{animation:pose-overshoot .38s cubic-bezier(.32,1.55,.6,1)}
+  #regen{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+    opacity:.55;z-index:3}
+  /* ⚠️ FARBSCHICHT AUSGEBLENDET (2026-09-11, Gabriel: "was soll das komische
+     immer sein -- das auch weg"). Sie sollte die Stimmung faerben, lag aber
+     mit z-index:4 UEBER dem Gesicht und benutzte mix-blend-mode:color-dodge --
+     ein Modus, der drastisch aufhellt. Ergebnis war ein milchig-ausgewaschener
+     Querstreifen quer ueber die Bildmitte (ellipse at 50% 40%, volle Breite).
+     Dieselbe Fehlerklasse wie die Wasserlinie darunter: Zustand wurde als
+     FLAECHE UEBER dem Gesicht gezeigt statt am Gesicht selbst.
+     Die Absicht bleibt richtig und ist ausdruecklich gewuenscht (Gabriel:
+     "Emotion wie Wut, Angst oder Freude live visuell verknuepft"). Der Weg
+     dorthin fuehrt aber ueber den HINTERGRUND -- er faerbt sich, das Gesicht
+     hebt sich davon ab. Nie wieder eine aufhellende Auflage auf dem Gesicht.
+     Der Wert steht weiter in intensitaet (siehe unten, ehemals Zeile ~494). */
+  #farbschicht{display:none}
+  #vignette{position:absolute;inset:0;pointer-events:none;z-index:5;
+    background:radial-gradient(ellipse at 50% 38%, rgba(0,0,0,0) 52%, rgba(0,0,0,.5) 100%)}
+  /* ⚠️ WASSERLINIE ENTFERNT (2026-09-11, Gabriel: "was ist dieses komische
+     halbtransparente Ding da, das immer oben aufliegt bis zur Haelfte -- weg
+     damit"). Sie war als Flaeche von unten gebaut und stieg mit
+     swap_voll_anteil; bei 70% belegtem Swap lag sie ueber zwei Dritteln des
+     Bildes und legte sich als Schleier ueber das Gesicht. Der Gedanke war
+     richtig -- Speicherdruck sichtbar machen -- die Form falsch: ein
+     halbtransparentes Rechteck verdeckt, statt zu zeigen. Der Wert bleibt in
+     b.swap_voll_anteil verfuegbar; wer ihn wieder zeigen will, nimmt Farbe
+     oder Saettigung, keine Flaeche. */
+  #wasserlinie{display:none}
+  /* Mundregion -- deckender Gesichtsflicken (KEIN Lippen-Crop), Anker aus
+     dem RIG-Manifest.
+     ⭐⭐ 2026-09-11 KORRIGIERT nach Koordinator-Messung ("Mundfehler
+     aufgeklaert"). Meine erste Reparatur (bottom:52%, per Bildschirmraster
+     GESCHAETZT) war noch falsch -- der Grund war nicht nur eine falsche
+     Zahl, sondern der falsche Bezugsrahmen ueberhaupt (siehe Kommentar bei
+     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+     gerechnet: anchor{622,352} = obere linke Ecke des Flickens, Bildgroesse
+     295x182, Leinwand 1536x1024 -- per Bildvergleich bestaetigt (nicht nur
+     Zahlenvergleich), die Mittelpunkt-Deutung war visuell grotesk falsch
+     (zweiter Mund im Auge).
+       left   = 622/1536 = 40.49%
+       top    = 352/1024 = 34.38%
+       width  = 295/1536 = 19.21%
+       height = 182/1024 = 17.77%
+     Alle vier Prozent gelten relativ zu #kopf-canvas (der vollen Leinwand),
+     NICHT zu #gesicht-rahmen -- deshalb jetzt dort drin, kein bottom/right,
+     kein object-fit:contain (die Box hat exakt das Seitenverhaeltnis des
+     Flickens, ein Stretch waere ein Bug-Symptom, kein Fix). */
+  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+    z-index:4;pointer-events:none;
+    transition:opacity .06s linear}
+  /* ⭐ 2026-09-11 (Punkt 3 der Liste): kontinuierlicher Pupillen-Glow-Overlay
+     ueber der bestehenden diskreten Blickrichtung (7-Bilder-Wechsel bleibt
+     unangetastet, siehe AUGEN_RICHTUNG_ZU_DATEI oben) -- der Overlay wird nur
+     per translate() verschoben, kein neues Bild pro Blickwinkel. Anchor aus
+     manifest.json (eyes_glow center 610,207 auf 1536x1024) umgerechnet auf
+     Prozent der Bildflaeche. Sichtbar NUR wenn blick.py wirklich ein nahes
+     Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+     gazeSchritt() unten. "nichts erfinden": ohne echte Erkennung kein Glow. */
+  /* ⭐⭐ 2026-09-11 NACHTRAG 4: transform-origin auf denselben Halsanker wie
+     #kopf-dreh (50%/58.59% DER LEINWAND), aber umgerechnet in die eigene
+     Box dieses Flickens (links 31%/oben 12%/Breite 27%/Hoehe~19,3% der
+     1536x1024-Leinwand, exakt aus den obigen Prozenten): (768-476.16)/414.72
+     = 70,38% x, (600,06-122,88)/197,72 = 241,32% y. Kein Rate-Wert -- direkt
+     aus denselben Zahlen gerechnet, die #kopf-dreh oben schon benutzt. Sitzt
+     der Flicken jetzt IN #kopf-dreh (siehe DOM/JS), dreht rotate() um diesen
+     Punkt ihn um GENAU denselben Drehpunkt wie den Kopf selbst. */
+  /* ⭐⭐⭐ 2026-09-12 HALATION (Runde 2, AI-Face-Pass Punkt 6): drop-shadow
+     folgt dem Alpha-Kanal des Glow-Bildes selbst (wie beim Kopf-Schatten
+     oben), bleibt also innerhalb der Augenmaske -- kein neuer roter
+     Bildpunkt ausserhalb der Augen (Gate-0-Vorgabe aus
+     EMPIRICAL_DREAM_TARGET.md). Reine Bloom-Verstaerkung des BESTEHENDEN,
+     echten Signals (opacity bleibt am echten "anwesend&&nah"-Zustand
+===GAZE_1365_1420===
+setTimeout(mikroSakkadeSchritt, 1500);
+// ⭐⭐ NEU 2026-09-11: pro Frame neu entschieden (nicht mehr nur alle 3s beim
+// Poll), weil blickPauseAktiv jederzeit zwischen zwei Polls kippen kann --
+// die Zielwahl braucht denselben Takt wie die Animation selbst. Bleibt
+// billige Arithmetik, kein zusaetzlicher Bildaufbau (GPU-Budget-Disziplin
+// unveraendert). Drei Stufen, alle aus echten/deterministischen Signalen:
+//   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+//                      Gabriel gerade direkt an, kein Wegblick aktiv
+//                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+//   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+//                      Mikro-Pause aktiv -> Ziel = _wegZiel (sichtbar
+//                      anders, aber gedaempft: "da, aber nicht fixiert")
+//   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+//                      Hartregel: kein erfundener Blick ohne Erkennung)
+function gazeZielBestimmen(){
+  if(!gazeBasisSichtbar()) return {x:0.5, y:0.5, opazitaet:0};
+  const wegAktiv = blickPauseAktiv || gespraechsFokus === "thema";
+  if(wegAktiv) return {x:_wegZiel.x, y:_wegZiel.y, opazitaet:0.4};
+  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+}
+function gazeSchritt(){
+  const ziel = gazeZielBestimmen();
+  zielGazeX = ziel.x; zielGazeY = ziel.y;
+  aktGazeX += (zielGazeX - aktGazeX) * 0.07;
+  aktGazeY += (zielGazeY - aktGazeY) * 0.07;
+  const maxPx = 8.5; // Bewegungsspielraum bewusst klein -- ein Glimmer, kein Springen
+  const dx = (aktGazeX - 0.5) * 2 * maxPx + mikroSakX;
+  const dy = (aktGazeY - 0.5) * 2 * maxPx + BLICK_ABWAERTS_BIAS_PX + mikroSakY;
+  // ⭐⭐ 2026-09-11 NACHTRAG 4: rotate() dranhaengen (Rest-Ausgleich zur echten
+  // Rollpose, siehe kopfKoerperDrehSchritt()) -- sonst bleibt der Glimmer beim
+  // Kopfkippen an der falschen Stelle stehen (Geisterkopf-Kante).
+  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+  // driftet der Glimmer beim Rollen vom Blinzel-Flicken weg, obwohl beide
+  // denselben Augen-Anker verfolgen sollen.
+  const dxGesamt = dx + augenOffsetDx * _kopfCanvasScale;
+  const dyGesamt = dy + augenOffsetDy * _kopfCanvasScale;
+  $("pupillen-glow").style.transform = `translate(${dxGesamt.toFixed(2)}px, ${dyGesamt.toFixed(2)}px) rotate(${kopfRollAusgleichDeg.toFixed(2)}deg)`;
+  // ⭐ 2026-09-11: waehrend eines Sonderausdrucks aus -- dessen Frames tragen
+  // ihre eigenen Augen, sonst laege der Erkennungs-Glimmer auf einem fremden
+  // Gesicht (zweites Augenpaar statt zweiter Kopf).
+  gazeSichtbar = ziel.opazitaet > 0; // Rueckwaertskompatibilitaet: anderswo evtl. gelesen
+  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+}
+function wanderSchritt(){
+  if(!serverBlick.anwesend){
+    let neu = aktuelleBlickRichtung;
+    while(neu === aktuelleBlickRichtung){
+      neu = WANDER_RICHTUNGEN[Math.floor(Math.random()*WANDER_RICHTUNGEN.length)];
+    }
+    aktuelleBlickRichtung = neu;
+    gesichtNeuZeichnen();
+  }
+  setTimeout(wanderSchritt, 2500 + Math.random()*4500); // lange, ziellose Pausen
+}
+setTimeout(wanderSchritt, 1500);

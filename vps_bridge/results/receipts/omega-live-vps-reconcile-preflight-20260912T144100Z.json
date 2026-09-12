@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-live-vps-reconcile-preflight-20260912T144100Z",
+  "command_sha256": "2883f10c814c9df7b5e915c00392ba860fb1a58cba131658a32d211d175fd08f",
+  "started_at": "2026-09-12T13:37:39.162688+00:00",
+  "finished_at": "2026-09-12T13:37:39.368656+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1c79061f2cbffe8fe1f1651e6f3499b3637bf41b9918b71e7a07e3f565a7b86d",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "SHA=ffa1d0b48bfade144a77be208b0d76af2ecaecc841999eb58e1a3263dac3173a\nPID=947107\nFRAME_ANCHOR\n83- if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}\n84- if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}\n85- if p['cell']=='SELF_IMPROVE':\n86-  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f\"{d['candidate_id']}.json\").write_text(json.dumps(d,indent=2));return d\n87- return {'cell':p['cell']}\n88:def frame(eid):\n89- ingest();ps=proposals();w=max(ps,key=lambda x:x['score']);fid='frame_'+uuid.uuid4().hex;res=realize(w,fid)\n90- with con() as c:c.execute('INSERT INTO frame VALUES(?,?,?,?,?,?,?)',(fid,eid,latest('frame'),now(),w['cell'],w['score'],canon(res)))\n91- (ROOT/'STATUS.json').write_text(json.dumps({'schema':'OMEGA_GRID_STATUS/v1','updated_at':now(),'epoch_id':eid,'frame_id':fid,'winner':w,'result':res},indent=2,ensure_ascii=False)+'\\n')\n92-def run(once=False):\n93- init();eid='epoch_'+uuid.uuid4().hex\n94- with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))\n95- while True:\n96-  try:frame(eid)\n97-  except Exception as e:out('RUNTIME_ERROR',{'error':f'{type(e).__name__}:{e}'})\n98-  if once:return\n99-  time.sleep(INTERVAL)\n100-if __name__=='__main__':run('--once' in os.sys.argv)\nTASK_SCHEMA\nCREATE TABLE task(id TEXT PRIMARY KEY,payload TEXT,state TEXT,created TEXT);\nEFFECT_SCHEMA\nCREATE TABLE effect(id TEXT PRIMARY KEY,frame TEXT,organ TEXT,digest TEXT,payload TEXT,state TEXT,created TEXT);\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

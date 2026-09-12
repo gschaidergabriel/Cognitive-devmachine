@@ -1,0 +1,25 @@
+SHA=ffa1d0b48bfade144a77be208b0d76af2ecaecc841999eb58e1a3263dac3173a
+PID=947107
+FRAME_ANCHOR
+83- if p['cell']=='RESEARCH':out('FREE_WORKER_REQUEST' if p['free'] else 'RESEARCH_ADMISSION_NEEDED',{'frame_id':fid,'task':p['task']});return {'research':True,'free':p['free']}
+84- if p['cell']=='MASTER_BRIDGE':out('MASTER_COGNITION_UPDATE',{'frame_id':fid,'tasks':tasks()});return {'master':True}
+85- if p['cell']=='SELF_IMPROVE':
+86-  d={'candidate_id':'cand_'+uuid.uuid4().hex,'created_at':now(),'state':'PROPOSED','rule':'NO_SELF_PROMOTION'};(ROOT/'candidates'/f"{d['candidate_id']}.json").write_text(json.dumps(d,indent=2));return d
+87- return {'cell':p['cell']}
+88:def frame(eid):
+89- ingest();ps=proposals();w=max(ps,key=lambda x:x['score']);fid='frame_'+uuid.uuid4().hex;res=realize(w,fid)
+90- with con() as c:c.execute('INSERT INTO frame VALUES(?,?,?,?,?,?,?)',(fid,eid,latest('frame'),now(),w['cell'],w['score'],canon(res)))
+91- (ROOT/'STATUS.json').write_text(json.dumps({'schema':'OMEGA_GRID_STATUS/v1','updated_at':now(),'epoch_id':eid,'frame_id':fid,'winner':w,'result':res},indent=2,ensure_ascii=False)+'\n')
+92-def run(once=False):
+93- init();eid='epoch_'+uuid.uuid4().hex
+94- with con() as c:c.execute('INSERT INTO epoch VALUES(?,?,?,?)',(eid,now(),latest('epoch'),'RUNNING'))
+95- while True:
+96-  try:frame(eid)
+97-  except Exception as e:out('RUNTIME_ERROR',{'error':f'{type(e).__name__}:{e}'})
+98-  if once:return
+99-  time.sleep(INTERVAL)
+100-if __name__=='__main__':run('--once' in os.sys.argv)
+TASK_SCHEMA
+CREATE TABLE task(id TEXT PRIMARY KEY,payload TEXT,state TEXT,created TEXT);
+EFFECT_SCHEMA
+CREATE TABLE effect(id TEXT PRIMARY KEY,frame TEXT,organ TEXT,digest TEXT,payload TEXT,state TEXT,created TEXT);

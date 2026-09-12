@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-final-postreadback-20260913-0100-gpt56sol",
+  "command_sha256": "2a67d02fcc2538c3084cc4ceaaa4ca1a37e104328938e851b73a619214b4e2c1",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:55:22.192502+00:00",
+  "finished_at": "2026-09-12T17:55:22.305469+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "5c7de77169fa58f0c71d22131899818b7a9e8a9c3c637e21144b89a06af66beb",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===VOICE===\nMainPID=2667903\nResult=success\nNRestarts=0\nExecMainStatus=0\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07\n===CLIENT===\nMainPID=2667899\nResult=success\nNRestarts=0\nExecMainStatus=0\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07\npython3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py \npython3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py \n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": true,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime defines no resident infinite/server loop; AST parsed\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\nOMEGA_POSTREADBACK_PASS\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

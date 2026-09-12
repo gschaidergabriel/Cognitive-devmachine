@@ -1,0 +1,47 @@
+===SOURCE===
+398:            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+404:            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+728:const KOPF_ROLL_POOL = [-15,-10,-5,5,10,15];      // uebliche, kleine Neigungen
+729:const KOPF_ROLL_GROSS = [-25,-20,20,25];          // seltene, grosse (12% Chance)
+730:const KOPF_ROLL_MS = 110;                         // je 5°-Schritt, kurz
+732:  return `/kopf_rgba/roll/gier_+00_nick_+00_roll_${w < 0 ? "-" : "+"}${String(Math.abs(w)).padStart(2,"0")}.png`;
+752:  if(jetzt - kopfRollLetzterT < KOPF_ROLL_MS) return;
+785:// Rollpose (bis ±25°, siehe KOPF_ROLL_POOL) nicht -- die Feder zielt bewusst
+841:const KOPF_ROLL_AUGEN_OFFSET = { // native 1536x1024-Leinwand-Pixel, exakt
+878:  const zielOffset = KOPF_ROLL_AUGEN_OFFSET[String(kopfRollWert)] || {dx:0, dy:0};
+1397:  // KOPF_ROLL_AUGEN_OFFSET/kopfKoerperDrehSchritt oben) draufaddiert -- sonst
+1432:  const pool = gross ? KOPF_ROLL_GROSS : KOPF_ROLL_POOL;
+===HEAD_ASSETS===
+gier_+00_nick_+00_roll_+00.png 374707
+gier_+00_nick_+00_roll_+05.png 377925
+gier_+00_nick_+00_roll_-05.png 378932
+gier_+00_nick_+00_roll_+10.png 388480
+gier_+00_nick_+00_roll_-10.png 389680
+gier_+00_nick_+00_roll_+15.png 396377
+gier_+00_nick_+00_roll_-15.png 398017
+gier_+00_nick_+00_roll_+20.png 402055
+gier_+00_nick_+00_roll_-20.png 404196
+gier_+00_nick_+00_roll_+25.png 406722
+gier_+00_nick_+00_roll_-25.png 409672
+kopf_zero_mit_augen.png 374707
+kopf_zero_ohne_rotes_augenglow.png 374545
+roll/gier_+00_nick_+00_roll_+00.png 374707
+roll/gier_+00_nick_+00_roll_+05.png 377925
+roll/gier_+00_nick_+00_roll_-05.png 378932
+roll/gier_+00_nick_+00_roll_+10.png 388480
+roll/gier_+00_nick_+00_roll_-10.png 389680
+roll/gier_+00_nick_+00_roll_+15.png 396377
+roll/gier_+00_nick_+00_roll_-15.png 398017
+roll/gier_+00_nick_+00_roll_+20.png 402055
+roll/gier_+00_nick_+00_roll_-20.png 404196
+roll/gier_+00_nick_+00_roll_+25.png 406722
+roll/gier_+00_nick_+00_roll_-25.png 409672
+STUFE00_COUNT 44 HEAD_COUNT 63
+HEAD_1536_COUNT 63
+NEAREST_HEADS [(0.0, 'kopf_rgba/experimental_2d_proxy/combined/gier_+00_nick_+00_roll_+00.png', 104070), (0.0, 'kopf_rgba/experimental_2d_proxy/gier/gier_+00_nick_+00_roll_+00.png', 104070), (0.0, 'kopf_rgba/experimental_2d_proxy/nick/gier_+00_nick_+00_roll_+00.png', 104070), (0.0, 'kopf_rgba/gier_+00_nick_+00_roll_+00.png', 104070), (0.0, 'kopf_rgba/kopf_zero_mit_augen.png', 104070), (0.0, 'kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png', 104070), (0.259, 'kopf_rgba/kopf_zero_ohne_rotes_augenglow.png', 104070), (9.495, 'kopf_rgba/experimental_2d_proxy/gier/gier_+10_nick_+00_roll_+00.png', 103256), (9.495, 'kopf_rgba/experimental_2d_proxy/gier/gier_-10_nick_+00_roll_+00.png', 103256), (25.781, 'kopf_rgba/experimental_2d_proxy/combined/gier_+20_nick_+00_roll_+00.png', 100578), (25.781, 'kopf_rgba/experimental_2d_proxy/combined/gier_-20_nick_+00_roll_+00.png', 100578), (25.781, 'kopf_rgba/experimental_2d_proxy/gier/gier_+20_nick_+00_roll_+00.png', 100578)]
+HEAD_SHA kopf_rgba/experimental_2d_proxy/combined/gier_+00_nick_+00_roll_+00.png 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
+HEAD_SHA kopf_rgba/experimental_2d_proxy/gier/gier_+00_nick_+00_roll_+00.png 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
+HEAD_SHA kopf_rgba/experimental_2d_proxy/nick/gier_+00_nick_+00_roll_+00.png 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
+HEAD_SHA kopf_rgba/gier_+00_nick_+00_roll_+00.png 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
+HEAD_SHA kopf_rgba/kopf_zero_mit_augen.png 03632de8215751bfd00d74d8a04a2a3d047369f2f2d46ae3bde863b84468937e
+SCOPE=READ_ONLY_CANONICAL_HEAD_DISCOVERY

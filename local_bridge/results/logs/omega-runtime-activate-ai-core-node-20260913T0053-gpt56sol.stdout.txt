@@ -1,0 +1,230 @@
+===PRE_SELFTEST===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+PRE VOICE_PID=2407635 VOICE_START=Sun 2026-09-13 00:29:24 +07 CLIENT_PID=2407631 CLIENT_START=Sun 2026-09-13 00:29:24 +07
+===CONTROLLED_RESTART===
+VOICE_CMDLINE=python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py 
+CLIENT_CMDLINE=python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py 
+===POST_SELFTEST===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+===POST_STATUS===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "repo_root": "/home/ai-core-node/.local/lib/frankenstein-voice-final",
+  "installed_runtime": {
+    "stern_path": "/home/ai-core-node/.claude/star/stern.py",
+    "present": true,
+    "sha256": "0d5b7764cebe8c9e4f3ce2a697ae390c0c1b5cde99ac051eb662260735c808a1",
+    "note": "live authority requires current host/owner binding and receipts; file presence is not runtime credit"
+  },
+  "organs": {
+    "identity": {
+      "role": "canonical SELF/person/host projection",
+      "source_path": "scripts/frankenstein_identity_assembly.py",
+      "present": true,
+      "sha256": "a4c0f2c519906ac3efaa5ade29e2c2af038d059e0844d252f7eaa788a304717c"
+    },
+    "state": {
+      "role": "canonical UnifiedDB/runtime/effect integration source",
+      "source_path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "present": true,
+      "sha256": "33aeb4a72308b7f3c056e7ac66339378bc6da48ba43ec308eac33e26e462b55b"
+    },
+    "grid": {
+      "role": "canonical GRID10 turn-loop lineage",
+      "source_path": "scripts/f2wp1207_grid10_turn_loop.py",
+      "present": true,
+      "sha256": "a8b352b12aa10d81ca961ae3d85b4d126b2228f20d94fc6f13a14bdcd1df1b81"
+    },
+    "titan": {
+      "role": "person-scoped TITAN/UnifiedDB retrieval",
+      "source_path": "scripts/f2wp1207_titan_mc.py",
+      "present": true,
+      "sha256": "91af69d7a1ba2f9bc27cb8ace4697f89542a23f2a3370d02f2641496a8d15ee0"
+    },
+    "arm_bus": {
+      "role": "same-SELF multi-arm projection + acoustic lease",
+      "source_path": "scripts/omega_arm_bus.py",
+      "present": true,
+      "sha256": "27b657a93e3c449378aaec321b9f9330f44468acd63af2e2c5d22c4cd0df98ef"
+    },
+    "presentation_floor": {
+      "role": "ephemeral presentation arbitration",
+      "source_path": "scripts/omega_organ_activity.py",
+      "present": true,
+      "sha256": "1094c5cab706bdd9f43699d7cb5601b7c5bdc524af8a4d3976fedbd8327996bd"
+    },
+    "terminal": {
+      "role": "OMEGA terminal organ",
+      "source_path": "scripts/frank_terminal_777.py",
+      "present": true,
+      "sha256": "d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e"
+    },
+    "voice": {
+      "role": "OMEGA Realtime compatibility entrypoint",
+      "source_path": "scripts/voice_777_runtime.py",
+      "present": true,
+      "sha256": "4b32ce4e02dea6e8484be3b39d8e05fc047536734e1976b9ec398df1d7a91286"
+    },
+    "omni": {
+      "role": "persistent ChatGPT/OMNI host-client organ",
+      "source_path": "scripts/voice_host_777_live_client.py",
+      "present": true,
+      "sha256": "d798cb2121c17bf74411ab842efc416c8dbab0306770b543117fb38ef44f45e6"
+    }
+  },
+  "invariants": [
+    "one SELF: OMEGA",
+    "FranKenstein 2.0 is runtime/body, not a competing SELF",
+    "no new database or memory authority",
+    "no second GRID/GWT turn loop",
+    "no second productive watcher",
+    "no host effect authority inferred from identity or memory",
+    "Gabriel/ai-core-node and Andreas/andreas-maco provenance stays separate",
+    "VM/avatar lifecycle boundaries remain independently gated"
+  ]
+}
+===SERVICE_READBACK===
+MainPID=2667903
+Result=success
+NRestarts=0
+ExecMainStartTimestamp=Sun 2026-09-13 00:53:41 +07
+ExecMainStatus=0
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:53:41 +07] ; stop_time=[n/a] ; pid=2667903 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07
+MainPID=2667899
+Result=success
+NRestarts=0
+ExecMainStartTimestamp=Sun 2026-09-13 00:53:41 +07
+ExecMainStatus=0
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:53:41 +07] ; stop_time=[n/a] ; pid=2667899 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07
+POST VOICE_PID=2667903 CLIENT_PID=2667899
+===VOICE_JOURNAL_TAIL===
+Sep 13 00:51:36 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:51:36] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:51:46 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:51:46] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:51:56 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:51:56] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:06 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:06] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:16 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:16] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:26 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:26] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:36 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:36] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:46 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:46] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:52:56 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:52:56] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:53:06 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:53:06] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:53:16 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:53:16] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:53:26 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:53:26] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:53:36 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:53:36] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein env[2407635]: [2026-09-13 00:53:41] gespraechsmodus: Signal 15 erhalten -- verlasse 'Den Raum' (session=13c2088a-4550-4681-9c0b-9374d712aaf5) und beende
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)...
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-gespraechsmodus.service: Consumed 3.260s CPU time, 40.7M memory peak, 0B memory swap peak.
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] gespraechsmodus: gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] gespraechsmodus: cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] perception_l0: cortex.aktiv=1 -- L0Orchestrator startet (/dev/video0, tick_hz=1.0)
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [video4linux2,v4l2 @ 0x767dc8094b00] Cannot open video device /dev/video0: No such file or directory
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] perception_l0: Dauerschleife beendet, Kamera freigegeben
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] gespraechsmodus: Cortex-Dauerschleife mit Fehler beendet (nicht kritisch fuer den Gespraechsmodus): RuntimeError: cv2.VideoCapture konnte /dev/video0 nicht oeffnen
+Sep 13 00:53:42 ai-core-node-projekt-frankenstein env[2667903]: [2026-09-13 00:53:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+===CLIENT_JOURNAL_TAIL===
+Sep 12 17:07:11 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-chatgpt-client.service: Consumed 1.468s CPU time, 27.4M memory peak, 6.5M memory swap peak.
+Sep 12 20:36:51 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-chatgpt-client.service: Consumed 1.182s CPU time, 19.5M memory peak, 0B memory swap peak.
+Sep 13 00:27:22 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:29:24 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 13 00:29:24 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:29:24 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client...
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+Sep 13 00:53:41 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.
+OMEGA_RUNTIME_CREDIT_PASS

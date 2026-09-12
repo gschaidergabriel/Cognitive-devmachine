@@ -1,0 +1,82 @@
+OMEGA 777 organs composed under the existing FINAL Voice authority.
+
+Canonical entry point:
+  /home/ai-core-node/.local/bin/omega status
+  /home/ai-core-node/.local/bin/omega selftest
+  /home/ai-core-node/.local/bin/omega terminal
+  /home/ai-core-node/.local/bin/omega voice
+
+Bound product tree:
+  destination:        /home/ai-core-node/.local/lib/frankenstein-voice-final
+  final Voice policy: /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+  final policy sha:   56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee
+  canonical identity:/home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/frankenstein_identity_assembly.py
+  canonical base:     /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+  SELF:               OMEGA
+  body/runtime:       FranKenstein 2.0
+  acoustic authority: omega_arm_bus / existing UnifiedDB configuration
+  presentation floor: existing omega_organ_activity lease surface
+  compatibility:      /home/ai-core-node/.local/bin/frank-omega
+
+Voice ExecStart preserved exactly:
+  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+Prepared ChatGPT-client wrapper:
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+  { path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+
+No production conversation process was restarted.
+The updated organs become active in Voice only at an independently admitted,
+host-safe lifecycle boundary. Do not restart merely to activate this source.
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+INSTALLED_HEAD=065e03acca024ab03d6eb2cd036f931fc8dc11be
+MainPID=2407635
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:29:24 +07
+4ff690ab6d84f9c868ec5d5097221d2c003abc30aa2b93bf88d640c11a073e1e  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_runtime.py
+a4c0f2c519906ac3efaa5ade29e2c2af038d059e0844d252f7eaa788a304717c  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/frankenstein_identity_assembly.py
+a982bd785578c7dc7df5013d463a7df3fb82d775f3f516dcbe40096bda6005b7  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_full_runtime.py
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+OMEGA_FINAL_INSTALL_PASS_NO_RESTART

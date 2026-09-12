@@ -1,0 +1,21 @@
+VOICE_PID=2667903
+CLIENT_PID=2667899
+===VOICE_PROC===
+2667903    2339       5 Ssl  python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py 
+===VOICE_CHILDREN===
+===VOICE_NET===
+===VOICE_AUDIO_FDS===
+===CLIENT_PROC===
+2667899    2339       5 Ssl  python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py 
+===CONFIG===
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:53:41 +07] ; stop_time=[n/a] ; pid=2667903 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:53:41 +07] ; stop_time=[n/a] ; pid=2667899 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+ActiveEnterTimestamp=Sun 2026-09-13 00:53:41 +07
+QUIESCENCE_PREFLIGHT_DONE=1

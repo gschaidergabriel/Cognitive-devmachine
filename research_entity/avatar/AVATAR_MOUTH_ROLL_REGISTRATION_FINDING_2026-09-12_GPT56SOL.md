@@ -1,6 +1,6 @@
 # Avatar Mouth/Roll Registration Finding — GPT-5.6 Sol — 2026-09-12
 
-Status: **NEW NONDUPLICATE DEFECT CANDIDATE / EVIDENCE-BOUND / NO LIVE MUTATION YET**
+Status: **NEW NONDUPLICATE DEFECT CANDIDATE / EVIDENCE-BOUND / NO LIVE MUTATION**
 
 ## Exact subject
 
@@ -12,49 +12,62 @@ Status: **NEW NONDUPLICATE DEFECT CANDIDATE / EVIDENCE-BOUND / NO LIVE MUTATION 
 
 This note does not authorize a live write.
 
-## Why this is not duplicate eye work
+## Source-level asymmetry
 
-The swarm already isolated and corrected the temporal eye/roll registration class. In the current live subject, `kopfKoerperDrehSchritt()` atomically binds the photo roll to `KOPF_ROLL_AUGEN_OFFSET`, `kopfRollAusgleichDeg`, `augenOffsetDx`, and `augenOffsetDy`; both `#augen-blink` and `#pupillen-glow` receive roll-specific translation + rotation.
+The current live subject applies explicit roll geometry to `#augen-blink` and `#pupillen-glow`, while `#mund-effekt` remains a neutral-coordinate RGBA face/mouth patch.
 
-The mouth path is structurally different:
-
-- `#mund-effekt` is a neutral-coordinate RGBA face/mouth patch anchored at canvas coordinate approximately `(622,352)` via CSS `left:40.49%; top:34.38%; width:19.21%; height:17.77%`.
-- It is nested in the same `#kopf-dreh` wrapper, so it inherits the small shared spring `kDrehRot/kDrehTy`.
+- Mouth manifest geometry documented in live source: anchor `(622,352)`, patch `295x182`, canvas `1536x1024`.
+- `#mund-effekt` is nested in `#kopf-dreh`, so it inherits the small shared spring `kDrehRot/kDrehTy`.
 - `kopfRollTick()` switches the underlying head photograph to baked roll poses up to ±25°.
 - `mundSchritt()` changes only `#mund-effekt.src`.
-- No current live assignment applies `kopfRollWert`, a per-roll translation table, or an equivalent generated transform to `#mund-effekt`.
-- No `MUND_ROLL_*` geometry exists in the exact live source.
+- No current live assignment applies `kopfRollWert`, a roll-specific translation, or an equivalent generated transform to `#mund-effekt`.
 
-Therefore the shared wrapper handles only the small common spring, while the photo-specific baked roll still has an apparently unowned registration requirement for the mouth patch.
+This makes mouth/rolled-photo registration a real unowned geometry boundary, but source inspection alone does not prove a visible defect.
+
+## Exact generator readback — important correction
+
+Local Bridge read the real host files:
+
+- `rig2/messen_augenanker_exakt.py` SHA-256 `37d3768e440ba003774169823cd449015983597a3fea4a965c9d1a4312837ab0`
+- `rig2/augen_anker_exakt.json` SHA-256 `4b3280dbf1acf72af377229ef5eadc798a9b48e2939ab1ca96b86c4e976bb8cb`
+
+The script explicitly reproduces `build_rig_v2.py` geometry:
+
+1. crop exact head alpha bbox;
+2. `rotate(angle=-roll, expand=True)` about the crop image center;
+3. bottom-center pin the expanded crop to fixed head/neck anchor `(768,600)`;
+4. transform a marker at the real manifest eye anchor `(610,207)` through the same operation;
+5. store **full marker displacement** relative to roll=0.
+
+Therefore the current `KOPF_ROLL_AUGEN_OFFSET` source table is not established by this file as a mere post-CSS residual. An earlier candidate on this branch assumed that it could be reused directly as a common residual for the mouth. That assumption is **withdrawn**. The corresponding patcher/test were deleted from the branch before any live write.
+
+This negative result is preserved deliberately: no production bytes were changed.
 
 ## Falsifiable prediction
 
-If the mouth patch is visible while `kopfRollWert != 0`, its neutral-canvas patch should drift/rotate relative to the baked rolled head unless some asset-internal transform not visible in the current source happens to compensate it. This must be tested; it is not promoted from source inspection alone.
+If the mouth patch is visible while `kopfRollWert != 0`, its neutral-canvas patch may drift/rotate relative to the baked rolled head because no explicit photo-specific mouth transform exists. The strongest discriminator is the existing deterministic `k` roll diagnostic combined with a fixed mouth frame and matched 0° -> rolled -> 0° captures while the exact source hash remains invariant.
 
-The strongest deterministic discriminator is the existing `k` roll diagnostic combined with a fixed mouth frame and matched screenshots/state captures at 0°, +5°, +10°, +15° and return-to-zero, with the current source hash held invariant.
+Reject the defect hypothesis if the mouth/head registration remains stable within a predeclared pixel/edge tolerance without roll-specific mouth geometry. Confirm it if displacement co-varies with roll and reverses at 0°.
 
-Reject the defect hypothesis if the mouth/head seam remains registered to measurement tolerance without any roll-specific mouth transform. Confirm it if mouth-patch edge/landmark displacement co-varies with roll and returns at 0°.
+## Exact mouth origin fact
 
-## Geometry path — do not hand-fit
+If a CSS transform around the same fixed head/neck anchor is eventually part of the correct model, the exact origin relative to the mouth patch box is:
 
-The eye fix already established the correct generator-level method: derive offsets through the same `transform_crop_about_anchor()` geometry used to produce the rolled head photographs. Reuse that generator math for the mouth anchor; do not invent another hand-tuned table.
+- X: `(768 - 622) / 295 * 100 = 49.49152542%`
+- Y: `(600 - 352) / 182 * 100 = 136.26373626%`
 
-The current neutral mouth box implies a neck-anchor transform origin of approximately:
+This is a geometry fact only, not a complete correction.
 
-- X: `(768 - 0.4049*1536) / (0.1921*1536) ≈ 49.5%`
-- Y: `(600 - 0.3438*1024) / (0.1777*1024) ≈ 136.3%`
+## Highest-information next gate
 
-Those numbers are only a derived candidate for reproducing the existing eye strategy. Final values must come from exact source dimensions/anchor data and the same generator transformation, not from rounded CSS percentages.
+Before creating a new mouth table or touching production:
 
-## Next gate
-
-1. Read the exact live `rig2/messen_augenanker_exakt.py` and `rig2/augen_anker_exakt.json` through Local Bridge.
-2. Extend the geometry calculation on a scratch/repo artifact to the mouth anchor without touching production.
-3. Generate `MUND_ROLL_OFFSET` mechanically for the same `-25..+25` ladder and prove zero-state identity.
-4. Build a scratch copy of exact live `18770d8e...` with only mouth geometry changed.
-5. Run matched 0°/rolled/0° screenshots and edge/landmark metrics; simultaneously verify eyes remain byte/behavior unaffected.
-6. Only if that passes and no other worker owns the frontend mutation boundary: exact-hash guarded live patch, rollback copy, existing-window reload only, independent readback, FPS/HTTP/service/visible-window check.
+1. recover the already-accepted live roll/eye discriminator that produced the current `18770d8e...` subject;
+2. establish exactly how the current CSS `translate(...) rotate(...)` composition was evaluated against the generator marker path;
+3. test mouth registration against the same geometric convention, not a newly invented convention;
+4. only then build a scratch candidate and matched real-display A/B;
+5. live promotion remains exact-hash guarded, single-mutator, rollback-protected, existing-window reload only, and independently read back.
 
 ## Scope fence
 
-A mouth-roll fix would not promote blink identity, whole-avatar quality, body/GPU, parallax, HCU/GWT/J-Space, training, or whole-product acceptance.
+No mouth/roll result promotes blink identity, whole-avatar quality, body/GPU, parallax, HCU/GWT/J-Space, training, or whole-product acceptance.

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "777-omega-central-readback-84dac516-20260912",
+  "command_sha256": "30eb59a50f80979386f433dd00fa5e540efc41729d732632bda24087c401f5f3",
+  "started_at": "2026-09-12T13:49:51.961490+00:00",
+  "finished_at": "2026-09-12T13:49:52.117648+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "54d9d4f8d212e68f432c0c4e619090968e5bf5fcccc4ab533ccaf165f06bba6d",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\"boundary\": \"clay-direct-dev\", \"db\": {\"effect_intent\": [], \"recent_relay\": [], \"relay_ledger\": [], \"task\": []}, \"observed_at\": \"2026-09-12T13:49:52Z\", \"source\": {\"omega/bridge_relay.py\": \"36efc8418e42b70abe3f108f28bdd893cd6a107dd52fc1e86962eed2353aac9c\", \"omega/nonblocking_relay.py\": \"c62b7e47b974f2b5cd097cce56253774d2c2bdfaa75bbae08edb22f43dc9ad28\", \"omega/receipt_reconciler.py\": \"190ec7b1772d92613718e2fef4b385d599b352d5280de332a1d37dc182fdb0df\", \"omega/spool_bridge_relay_parallel.py\": \"063905056b3af26032b17bd4079f357838e82b845b046c55af1a8e32a12d3bb5\", \"omega/spool_relay_runtime.py\": null, \"omega/supervisor_outer.py\": \"bc4c1b20ede7df578af4719f3488e73ac10a55143e9d76d1f2e33249a2be19fd\", \"repo_root\": \"/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\"}, \"spool_counts\": {\"outbox\": 7, \"outer_bridge/requests\": null, \"outer_bridge/responses\": null, \"relay_results\": 0}, \"statuses\": {\"RELAY_STATUS.json\": {\"completed_count\": 0, \"inflight\": [], \"last_progress_at\": \"2026-09-12T13:43:13.313775+00:00\", \"long_running\": [], \"max_workers\": 4, \"mode\": \"BOUNDED_NONBLOCKING\", \"per_organ_limit\": 1, \"pid\": 948103, \"queued_eligible\": 0, \"schema\": \"OMEGA_RELAY_STATUS/v2\", \"submitted_effect_ids\": [], \"updated_at\": \"2026-09-12T13:49:51.767426+00:00\"}, \"SUPERVISOR_STATUS.json\": {\"children\": {\"grid\": {\"alive\": true, \"pid\": 948102, \"returncode\": null}, \"master_bridge\": {\"alive\": true, \"pid\": 948105, \"returncode\": null}, \"relay\": {\"alive\": true, \"pid\": 948103, \"returncode\": null}, \"telemetry\": {\"alive\": true, \"pid\": 948104, \"returncode\": null}}, \"pid\": 948100, \"relay_mode\": \"BOUNDED_NONBLOCKING\", \"repo_root\": \"/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\", \"schema\": \"OMEGA_SUPERVISOR_STATUS/v2\", \"transport_boundary\": \"OUTER_SPOOL\", \"updated_at\": \"2026-09-12T13:49:48.298852+00:00\"}}}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

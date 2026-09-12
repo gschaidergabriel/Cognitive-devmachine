@@ -1,0 +1,39 @@
+name: OMEGA relay security gate
+
+on:
+  push:
+    branches:
+      - main
+      - 'chatgpt-work/omega-relay-*'
+    paths:
+      - 'tools/omega_grid_relay.py'
+      - 'tools/omega_chatgpt_mcp.py'
+      - 'tests/test_omega_grid_relay.py'
+      - 'tests/test_omega_chatgpt_mcp.py'
+      - '.github/workflows/omega-relay-security.yml'
+  pull_request:
+    paths:
+      - 'tools/omega_grid_relay.py'
+      - 'tools/omega_chatgpt_mcp.py'
+      - 'tests/test_omega_grid_relay.py'
+      - 'tests/test_omega_chatgpt_mcp.py'
+      - '.github/workflows/omega-relay-security.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  relay-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check pytest
+      - name: Compile OMEGA bridge surfaces
+        run: python -m py_compile tools/omega_grid_relay.py tools/omega_chatgpt_mcp.py
+      - name: Run relay and MCP falsifiers
+        run: python -m pytest -q tests/test_omega_grid_relay.py tests/test_omega_chatgpt_mcp.py

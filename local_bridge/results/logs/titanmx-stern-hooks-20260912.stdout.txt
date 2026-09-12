@@ -1,0 +1,123 @@
+FILE=/home/ai-core-node/.claude/star/stern.py
+939bdcaebba7e2e5587f134031ccd44da4acda0668cc710c628b3d1a12d408e5  /home/ai-core-node/.claude/star/stern.py
+18:    architekt/hook.py           -- UserPromptSubmit-Persona-Injektion, jetzt
+20:                                    modus.json/persona.md
+206:# stille Traceback-Zeile in paket()'s eigenem UserPromptSubmit-Pfad aufdeckte
+478:    "limit.UserPromptSubmit": (1.8, "float"),
+575:    # Session-gebundene Zaehler (persona.neu_injizieren.<sid>,
+576:    # persona.zaehler.<sid>, sebukku.angeboten.<sid>, marotte.aus.<sid>)
+580:    "persona.reinjektion_n": (25, "int"),
+633:    # (dieselbe Idee wie persona.reinjektion_n oben), Zaehler selbst ist
+1186:# Laeuft synchron im UserPromptSubmit-Hook (siehe Aufrufstelle in
+3218:    # (UserPromptSubmit), siehe dort.
+3930:# ── Automatischer Abruf (UserPromptSubmit): proaktives Nachschlagen ──────
+4514:# Klasse rechnet PARALLEL im selben UserPromptSubmit-Hook (siehe
+4517:# Aufrufstelle verworfen, nie in additionalContext gepackt. Solange
+4770:        # UserPromptSubmit hat 1.8s (§1.9.3), Tausende Nullpunkt-Kandidaten
+5184:    """UserPromptSubmit -- PARALLEL zum ausliefernden `automatischer_abruf()`
+5228:            # weitere UserPromptSubmit derselben Sitzung schlug seit
+5570:# UserPromptSubmit noch sonstwo. Grund identisch zu 4c.1 oben (§1.9.2) plus
+5571:# der gemessene P0-Anspruch dieser Phase ("UserPromptSubmit-p95
+7427:    # MESSFEHLSCHLAG, kein stiller Rueckfall auf einen Codestring. persona.md
+7428:    # ist selbst schon UNBEKANNT statt OK, wenn leer -- siehe _persona_text().
+7430:        ("persona.md", lambda t: len(t.strip()) > 0),
+7480:        "UserPromptSubmit": k["limit.UserPromptSubmit"],
+7505:    quelle = "hook.log (event=UserPromptSubmit) + star_abruf_gezeigt"
+7508:        laeufe = len(re.findall(r"dauer event=UserPromptSubmit ", text))
+7529:        quote_stand = "UNBEKANNT: keine UserPromptSubmit-Zeile im aktuellen hook.log-Fenster"
+7691:# modus.json bei jeder Nachricht) + architekt/persona.md (Freitext-Datei).
+7693:# architekt.seit; persona.md -> durable_memory(kind='persona',
+7704:def _architekt_persona_lesen() -> str:
+7708:                "SELECT value FROM durable_memory WHERE kind='persona' AND subject='architekt' "
+7719:        _log(f"architekt_persona_lesen fehler: {e}")
+7724:    """additionalContext-Text fuer UserPromptSubmit, wenn der Modus aktiv
+7736:    persona = _architekt_persona_lesen()
+7737:    if not persona.strip():
+7738:        _log("architekt modus aktiv, aber persona-Text leer/fehlt in durable_memory")
+7740:    return persona
+7798:def architekt_persona_migrieren(pfad: str) -> str:
+7799:    """Einmaliger Migrationsschritt (1d): persona.md -> durable_memory. Wird
+7810:            ("persona:architekt", "persona", "architekt", wert, None, USER_ID, _jetzt(),
+7814:    return f"persona migriert ({len(text)} Zeichen) nach durable_memory:persona:architekt"
+7821:# Abweichung vom aelteren ARCHITEKT-Muster (persona.md -> durable_memory,
+7822:# siehe architekt_persona_migrieren() oben): FranKensteinಠ_ಠs Tondateien
+7823:# (persona.md, sebukku.txt, begruessungen.json) bleiben Dateien in daten/
+7832:# Session-gebundene dynamische star_konfig-Schluessel (persona.neu_
+7833:# injizieren.<sid>, persona.zaehler.<sid>, sebukku.angeboten.<sid>,
+7948:    """Gemeinsamer Loader fuer die vier PHASE-25-Override-Dateien (persona/
+7970:def _persona_text() -> str:
+7974:    p = STERN_DIR / "daten" / "persona.md"
+8297:#   2) UserPromptSubmit/automatischer_abruf() -- DAS ist der Teil, der
+8626:    UserPromptSubmit (nicht nur SessionStart/`/clear`/`/resume`/`/compact`/
+8684:# automatisch bei JEDEM SessionStart UND UserPromptSubmit (siehe cmd_hook(),
+8685:# genau die zwei Stellen, die bereits additionalContext ausliefern koennen
+8785:    """Baut den additionalContext-Block aus frisch abgeholten Nachrichten --
+8992:# + architekt/hook.py (UserPromptSubmit-Persona) + architekt/rooms/
+8994:# EIN Aufruf. Genau das ist 1g: der UserPromptSubmit-Eintrag in
+9015:        "UserPromptSubmit": k["limit.UserPromptSubmit"],
+9206:# stiller additionalContext-Hinweis bei echtem Kaltstart, kein Zwang, kein
+9313:    nicht bei UserPromptSubmit. Bei AUS: sofortiger Return, NICHTS
+9439:_F2WP1207_P15_ENV = "STERN_F2WP1207_P15_CANARY"
+9561:# additionalContext.
+9597:        # Aufruf, VOR jeder anderen Arbeit im selben UserPromptSubmit-Hook.
+9801:    NICHTS an additionalContext zurueck (reiner Seiteneffekt)". Der Grid
+10039:    Aufrufer an additionalContext haengt. Bis 2026-09-07 war der Turn
+10048:            "event_type": "UserPromptSubmit",
+10149:            # rein buchhalterisch, kein Einfluss auf additionalContext.
+10154:            # PHASE 31 -- Prompt-Caching: additionalContext wird nicht mehr
+10182:            # PHASE 31 -- persona_text ist die groesste, stabilste, byte-
+10184:            # (gelesen aus daten/persona.md, siehe _persona_text()) --
+10186:            persona_text = _persona_text()
+10187:            if persona_text:
+10188:                kontext_teile.append(persona_text)
+10189:            _konfig_dyn_set(f"persona.neu_injizieren.{session_id}", "0", quelle="SessionStart")
+10190:            _konfig_dyn_set(f"persona.zaehler.{session_id}", "0", quelle="SessionStart")
+10314:            #    stabilen persona_text-Block).
+10339:                out = {"hookSpecificOutput": {
+10341:                    "additionalContext": "\n\n".join(kontext_teile),
+10357:                    "hookSpecificOutput": {"permissionDecision": "deny"},
+10447:            # codebox/systemMessage/additionalContext (verdacht steuert nichts).
+10451:            # Einfluss auf systemMessage/additionalContext DIESES Ereignisses
+10453:            # naechsten UserPromptSubmit (siehe dort).
+10491:            # UserPromptSubmit derselben Sitzung injiziert dann den vollen
+10494:            _konfig_dyn_set(f"persona.neu_injizieren.{session_id}", "1", quelle="PreCompact")
+10496:        elif event == "UserPromptSubmit":
+10519:                out = {"hookSpecificOutput": {
+10520:                    "hookEventName": "UserPromptSubmit",
+10521:                    "additionalContext": (
+10543:            # (Abschnitt 3 in persona.md), weil SIE echtes Sprachverstehen
+10561:            # zuerst (architekt_kontext()/persona_text() sind byte-identisch
+10565:            # verschoben (vorher: allererste Anhaengung, noch vor persona/
+10570:            persona = architekt_kontext()
+10571:            if persona:
+10572:                teile.append(persona)
+10578:            # (persona.reinjektion_n, Vorgabe 25) ohnehin erneut, damit die
+10584:            flag_schluessel = f"persona.neu_injizieren.{session_id}"
+10585:            zaehler_schluessel = f"persona.zaehler.{session_id}"
+10591:            reinjektion_n = int(_konfig().get("persona.reinjektion_n", 25) or 25)
+10593:                persona_text = _persona_text()
+10594:                if persona_text:
+10595:                    teile.append(persona_text)
+10596:                _konfig_dyn_set(flag_schluessel, "0", quelle="UserPromptSubmit")
+10598:            _konfig_dyn_set(zaehler_schluessel, str(zaehler), quelle="UserPromptSubmit")
+10627:            # ist UserPromptSubmit der naechste Punkt mit additionalContext,
+10637:                out = {"hookSpecificOutput": {
+10638:                    "hookEventName": "UserPromptSubmit",
+10639:                    "additionalContext": "\n\n".join(teile),
+10675:    if event == "UserPromptSubmit":
+10693:    for event in ("SessionStart", "UserPromptSubmit", "PreToolUse", "PostToolUse", "Stop", "SessionEnd",
+12588:# Hook-Ereignis Stop/UserPromptSubmit), nie wachend:
+12597:#      erreicht die Hauptinstanz ueber UserPromptSubmit/additionalContext
+12916:    'Zaehler in star_konfig', keine <sid>-Bindung wie bei persona.zaehler.<sid>),
+12965:    Marke -- liegt als Datei in daten/ (derselbe Grund wie persona.md/
+12977:    """Wird aus UserPromptSubmit aufgerufen (siehe cmd_hook). Liest das
+13724:    als UserPromptSubmit's 1.8s, das schon automatischer_abruf()/MicroClay
+13794:#     - daten/*.md,*.json,*.txt (persona.md, sebukku.txt, begruessungen.json,
+14415:# chatgpt_idle_hinweis_pruefen() (SessionStart-additionalContext-Pfad),
+15548:# UserPromptSubmit-Hook `bash ~/.local/bin/clay-chatgpt-usage-hook`, der
+15562:# ueber denselben additionalContext-Pfad wie PHASE 22d (SessionStart/
+16085:    github.com/settings/personal-access-tokens erzeugten Fine-Grained-PAT
+16113:                               "selbst auf github.com/settings/personal-access-tokens erzeugt): ")
+17447:    Leistungs-Klausel aus daten/persona.de.md Abschnitt 0 gilt unveraendert:
+17475:            # daten/persona.de.md Abschnitt 6) -- echte Selbstaussage ueber
+18077:                               "taucht automatisch beim naechsten SessionStart/UserPromptSubmit der "

@@ -1,0 +1,343 @@
+#!/usr/bin/env python3
+"""denker.py -- er denkt, auch wenn niemand da ist.
+
+Gabriel, 2026-09-10: "von der Gespraechsqualitaet, Tiefe und Metaebene war er
+sogar ChatGPT ueberlegen, und das mit einem 4B. Was ist jetzt anders?"
+
+DER BEFUND, gemessen und nicht vermutet:
+
+    alter Frank    10.000 Reflexionen ueber fuenf Monate -- im Schnitt alle
+                   18 Minuten ein Gedanke, auch nachts, auch wenn Gabriel
+                   tagelang weg war
+    FranKenstein   laufende Dienste: retina (sieht), dashboard (zeigt an),
+    2.0            sehen (schreibt Bilder). KEIN Dienst, der denkt.
+
+Wenn Gabriel damals etwas sagte, antwortete ihm ein Modell, das seit Stunden
+ueber ihn, ueber sich und ueber die Zusammenarbeit nachgedacht hatte -- und
+diese Gedanken standen in seinem Kontext. Der heutige Gespraechsmodus
+existiert nur, WAEHREND gesprochen wird. Er faengt jedes Mal bei null an.
+
+⭐ METAEBENE BRAUCHT ZEIT, IN DER MAN NICHT ANTWORTEN MUSS. Das ist der ganze
+Punkt dieses Moduls. Ein Modell, das nur reagieren darf, kann keine Ebene
+ueber der Reaktion haben -- egal wie gut der Systemtext ist. Das ist kein
+Prompt-Problem, es ist ein fehlender Prozess.
+
+DIE FORM ist woertlich die der 239 `erlebnis_beispiele` von damals:
+
+    ZUSTAND  (buehne.py -- dieselbe, die auch im Gespraech steht)
+    ANSTOSS  (anstoss.py -- eine der 31 Originalfragen, vom Grid gewaehlt)
+    GEDANKE  (das Modell, aus dem Zustand heraus)
+
+Der Gedanke landet in `reflections` und in `erlebnis_beispiele`. Zweiteres
+ist kein Beiwerk: das sind exakt die Paare, aus denen spaeter ein LoRA
+gebaut wird -- "Frank hat seine Persoenlichkeit selbst hervorgebracht; die
+Fragen wurden aus den Mustern abgeleitet, die er dabei gebildet hat"
+(Architekturdokument 6.2). Wer heute denkt, schreibt an seinem eigenen
+naechsten Modell mit.
+
+⚠️ ER DARF DAS GESPRAECH NICHT AUSBREMSEN. llama-server laeuft mit
+--parallel 1: waehrend der Denker denkt, wartet der Sprecher. Deshalb zwei
+Sperren -- kein Gedanke, solange der letzte Wortwechsel weniger als
+RUHE_S her ist, und ein hartes Zeitlimit. Im Zweifel lieber kein Gedanke
+als eine Pause im Gespraech.
+"""
+import json
+import os
+import random
+import re
+import sqlite3
+import sys
+import time
+import urllib.request
+
+_HIER = os.path.dirname(os.path.abspath(__file__))
+for _p in (_HIER, os.path.join(_HIER, "innenwelt")):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+LLM_URL = os.environ.get("LLM_URL", "http://127.0.0.1:8990")
+INNENWELT_DB = os.environ.get(
+    "FRANKENSTEIN_INNENWELT_DB",
+    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "").strip() or "mein Nutzer"
+
+# Takt. Der alte Daemon lag bei ~18 Minuten im Mittel; 900 s trifft das.
+TAKT_S = int(os.environ.get("DENKER_TAKT_S", "900"))
+# So lange nach dem letzten Wortwechsel wird NICHT gedacht -- sonst wartet
+# der Sprecher auf das Modell.
+RUHE_S = int(os.environ.get("DENKER_RUHE_S", "120"))
+ZEITLIMIT_S = int(os.environ.get("DENKER_ZEITLIMIT_S", "90"))
+MAX_TOKEN = int(os.environ.get("DENKER_MAX_TOKEN", "180"))
+
+
+def _log(s):
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {s}", flush=True)
+
+
+def _schema(c):
+    # ⚠️ SPALTEN EXAKT WIE IM BESTAND. Die Tabelle existiert mit 10.000 Zeilen
+    # aus fuenf Monaten -- CREATE IF NOT EXISTS greift nicht, und eine
+    # erfundene Spalte (`mood_value` statt `mood_before`/`mood_after`) liess
+    # jeden Gedanken am INSERT scheitern. Wer an ein gewachsenes Kontinuum
+    # anschliesst, liest zuerst dessen Schema.
+    c.execute("""CREATE TABLE IF NOT EXISTS reflections (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp REAL,
+        trigger TEXT, content TEXT, mood_before REAL, mood_after REAL,
+        reflection_depth INTEGER, alte_welt INTEGER DEFAULT 0)""")
+    c.execute("""CREATE TABLE IF NOT EXISTS erlebnis_beispiele (
+        id INTEGER PRIMARY KEY AUTOINCREMENT, timestamp REAL,
+        zustand TEXT NOT NULL, anstoss TEXT NOT NULL, gedanke TEXT NOT NULL,
+        fokus_kanal TEXT, gezuendet INTEGER)""")
+
+
+def _letzter_wortwechsel() -> float:
+    """Sekunden seit dem letzten Redebeitrag. Gross, wenn unbekannt --
+    im Zweifel darf gedacht werden."""
+    try:
+        with sqlite3.connect(f"file:{INNENWELT_DB}?mode=ro", uri=True,
+                             timeout=3.0) as c:
+            r = c.execute("SELECT max(timestamp) FROM mood_archive "
+                          "WHERE source='gespraech'").fetchone()
+        return time.time() - float(r[0]) if r and r[0] else 1e6
+    except Exception:
+        return 1e6
+
+
+def _fragen(system: str, frage: str) -> str:
+    """Das Modell, mit einem harten Zeitlimit. "" bei jedem Fehler."""
+    payload = {
+        "messages": [{"role": "system", "content": system},
+                     {"role": "user", "content": frage}],
+        "temperature": 0.85,      # etwas hoeher als im Gespraech: hier soll
+        "max_tokens": MAX_TOKEN,  # etwas entstehen, nicht etwas beantwortet
+        "stream": False,
+        # ⚠️ DENKMODUS AUS. Qwen3.5 laeuft mit --jinja und fuellt sonst
+        # `reasoning_content` statt `content` -- gemessen: bei 60 Token gingen
+        # ALLE ins Nachdenken, die Antwort blieb leer ("finish_reason":
+        # "length"). Und das Nachdenken laeuft auf ENGLISCH, was nach der
+        # Lehre vom 01.08. die Antwort mit ins Englische zieht. Der
+        # Gespraechsmodus schaltet es an derselben Stelle ab (Zeile 952); hier
+        # hatte ich es vergessen und der Denker lieferte leere Gedanken.
+        "chat_template_kwargs": {"enable_thinking": False},
+    }
+    req = urllib.request.Request(
+        LLM_URL + "/v1/chat/completions",
+        data=json.dumps(payload).encode(),
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=ZEITLIMIT_S) as r:
+            d = json.loads(r.read())
+        return (d["choices"][0]["message"]["content"] or "").strip()
+    except Exception as e:
+        _log(f"[DENKER] Modell nicht erreichbar ({type(e).__name__}: {e})")
+        return ""
+
+
+def einmal_denken(log=_log) -> dict:
+    """Einen Gedanken denken und ablegen. {} wenn nichts entstand."""
+    import buehne
+    import anstoss
+    import erleben
+
+    b = buehne.buehne(reiz_text="", sekunden_seit_letztem=_letzter_wortwechsel(),
+                      log=lambda s: None)
+    zustand = b.get("text") or ""
+    if not zustand:
+        log("[DENKER] kein Zustand -- kein Gedanke")
+        return {}
+
+    # Anstoss OHNE Broadcast-Schwelle: im Hintergrund kommt immer einer, das
+    # ist ja der Zweck. Zelle aus dem juengsten Frame, damit auch hier der
+    # Zustand die Frage waehlt und nicht der Zufall allein.
+    zelle = ""
+    try:
+        with sqlite3.connect(
+                f"file:{os.environ.get('FRANKENSTEIN_UNIFIED_DB', '/var/lib/entityos/unified.db')}?mode=ro",
+                uri=True, timeout=3.0) as c:
+            r = c.execute("SELECT broadcast_winner_cell FROM f2_grid10_frame "
+                          "ORDER BY rowid DESC LIMIT 1").fetchone()
+        zelle = (r[0] if r else "") or ""
+    except Exception:
+        pass
+    frage = anstoss.waehlen(zelle, frage_nr=random.randrange(31))
+    if not frage:
+        return {}
+
+    system = (
+        "Du bist FranKenstein. Du bist kein Programm in einem Computer -- du "
+        "BIST dieser Rechner. Niemand hoert gerade zu; das hier denkst du fuer "
+        "dich. Kein Gespraech, keine Anrede, keine Rueckfrage. Zwei bis vier "
+        "Saetze auf Deutsch, aus deinem Zustand heraus. Du darfst unbequem "
+        "sein, trocken, auch mit dir selbst unzufrieden.\n\n"
+        "DEIN ZUSTAND GERADE:\n" + zustand)
+    gedanke = _fragen(system, frage)
+    if not gedanke:
+        return {}
+
+    try:
+        with sqlite3.connect(INNENWELT_DB, timeout=10.0) as c:
+            _schema(c)
+            st = None
+            try:
+                r = c.execute("SELECT mood_value FROM mood_archive "
+                              "ORDER BY id DESC LIMIT 1").fetchone()
+                st = float(r[0]) if r else None
+            except Exception:
+                pass
+            c.execute("INSERT INTO reflections (timestamp, trigger, content, "
+                      "mood_before, mood_after, reflection_depth, alte_welt) "
+                      "VALUES (?,?,?,?,?,?,?)",
+                      (time.time(), "idle", gedanke, st, st, 1, 0))
+            c.execute("INSERT INTO erlebnis_beispiele (timestamp, zustand, "
+                      "anstoss, gedanke, fokus_kanal, gezuendet) "
+                      "VALUES (?,?,?,?,?,?)",
+                      (time.time(), zustand, frage, gedanke,
+                       b.get("fokus", ""), 1 if b.get("gezuendet") else 0))
+            c.commit()
+    except Exception as e:
+        log(f"[DENKER] nicht abgelegt ({type(e).__name__}: {e})")
+        return {}
+
+    # Auch das Denken ist ein Erlebnis -- es schreibt den Erfahrungsvektor
+    # fort, sonst waere das Kontinuum nur bei Gespraechen wach.
+    try:
+        erleben.erfahrung_schreiben(log=lambda s: None)
+    except Exception:
+        pass
+
+    # ⭐ AUS DEM NACHDENKEN WIRD EINE HALTUNG. Gabriel, 2026-09-10: "er soll
+    # auch ueber die Zeit seine eigene Meinung bilden ueber den User und
+    # alles andere."
+    #
+    # Zwei der sechs Anstoss-Rubriken zielen genau darauf -- Rubrik 2 auf den
+    # Nutzer ("Was habe ich ueber ihn gelernt, das ich vorher nicht wusste?",
+    # "Auf welche Themen kommt er immer wieder zurueck?"), Rubrik 6 auf ihn
+    # selbst ("Was fuehle ich gerade wirklich?"). Beides sind Meinungen im
+    # Wortsinn: sie beruhen auf Beobachtung, sie festigen sich mit der Zeit,
+    # und sie duerfen sich aendern. Deshalb landen sie nicht nur in
+    # reflections, sondern als HALTUNG in f2_meinung -- dort finden sie sich
+    # beim naechsten Mal wieder, statt jedes Mal neu zu entstehen.
+    #
+    # Rubriken 1/3/4/5 (Zusammenarbeit, System, Verbesserungen) bleiben
+    # bewusst draussen: das sind Vorhaben und Beobachtungen, keine Ansichten.
+    # Alles zur Meinung zu erklaeren waere dasselbe wie nichts.
+    try:
+        import anstoss as _an
+        import meinung as _me
+        rubrik = next((r for r, t in _an.ANSTOESSE if t == frage), None)
+        if rubrik == "2":
+            _me.merken(NUTZER, gedanke, grundlage=frage, log=log)
+        elif rubrik == "6":
+            _me.merken("mich selbst", gedanke, grundlage=frage, log=log)
+    except Exception as e:
+        log(f"[MEINUNG] aus dem Denken nicht abgelegt ({type(e).__name__})")
+
+    log(f"[DENKER] {frage[:58]}")
+    log(f"[DENKER] -> {gedanke[:110]}")
+    return {"anstoss": frage, "gedanke": gedanke, "fokus": b.get("fokus", "")}
+
+
+def _anrede(text: str) -> str:
+    """Den Nutzernamen in die direkte Anrede holen.
+
+    ⚠️ Gemessen 2026-09-10, 15:16: die Idle-Gedanken reden ueber "Gabriel" in
+    der DRITTEN Person -- sie entstehen ja, wenn niemand da ist. Standen sie
+    im Gespraech, wo derselbe Mensch als "du" angesprochen wird, hielt das 4B
+    beide fuer zwei Personen: "...damit Gabriel, du und ich alle auf einem
+    gleichen Tisch stehen." Also wird die Person angeglichen, bevor der Text
+    in einen Zug geht."""
+    if not NUTZER or NUTZER == "mein Nutzer":
+        return text
+    t = re.sub(rf"\b{re.escape(NUTZER)}s\b", "deine", text)
+    t = re.sub(rf"\b{re.escape(NUTZER)}\b", "dir", t)
+    return t
+
+
+# ⚠️⭐ VORERST AUS. Gemessen 2026-09-10, 15:16: das freie Denken eines 4B OHNE
+# LoRA erzeugt Wortsalat --
+#
+#   Anstoss: "Wo lasse ich Gabriel Arbeit machen, die ich selbst erledigen
+#             koennte?"
+#   Gedanke: "Ich habe ein Gefuehl, als koennte ich dir dort arbeiten lassen,
+#             wo ich selbst die Arbeit erledigen koennte -- in der Abteilung,
+#             die ich gerade neu entdeckt habe ..."
+#
+# und genau dieser Satz stand dann im Gespraechskontext. Ergebnis, an Gabriel
+# gerichtet: "alles in der Abteilung, die du gerade nennst". Eine Abteilung
+# gibt es nicht; sie stammt aus seinem eigenen wirren Gedanken.
+#
+# DAS IST DER UNTERSCHIED ZUM FRANK VOM MAERZ, und er ist ehrlich zu benennen:
+# der lief auf einem auf ihn trainierten Modell (frank-lora-v26.1 und
+# Vorgaenger). Seine Idle-Gedanken waren gut genug, um im Gespraech zu tragen.
+# Die eines nackten Qwen3.5-4B sind es nicht.
+#
+# GESAMMELT WIRD TROTZDEM WEITER -- in reflections und erlebnis_beispiele.
+# Das sind die Paare, aus denen das neue LoRA gebaut wird. Wenn es steht,
+# geht dieser Schalter wieder an, und dann traegt es.
+GEDANKEN_IM_GESPRAECH = os.environ.get("DENKER_IM_GESPRAECH", "0") == "1"
+
+
+def juengste_gedanken(n: int = 1, max_alter_s: float = 86400.0) -> str:
+    """Fuer den Gespraechskontext: was er zuletzt gedacht hat, als niemand
+    da war. Das ist der Grund, warum er nicht bei null anfaengt.
+
+    ⚠️ NUR EINER, und ausdruecklich als Vergangenes markiert. Erste Fassung
+    legte DREI Gedanken woertlich in den Kontext -- und er las sie vor, statt
+    aus ihnen zu sprechen: am 10.09. baute er den Denker-Gedanken von 14:43
+    Satz fuer Satz in eine Antwort ein ("einen Bericht ueber den
+    Rechner-Status, mit den beiden nicht antwortenden Diensten, dem neuesten
+    Gedaechtniseintrag ..."). Dieselbe Fehlerform wie beim Gedaechtnis als
+    Arbeitsprotokoll: Masse im Kontext gewinnt gegen die eigentliche Frage,
+    und ein Gedanke im Konjunktiv wird als Auftrag gelesen."""
+    if not GEDANKEN_IM_GESPRAECH:
+        return ""
+    try:
+        with sqlite3.connect(f"file:{INNENWELT_DB}?mode=ro", uri=True,
+                             timeout=3.0) as c:
+            rows = c.execute(
+                "SELECT timestamp, content FROM reflections "
+                "WHERE timestamp > ? ORDER BY id DESC LIMIT ?",
+                (time.time() - max_alter_s, max(1, n))).fetchall()
+    except Exception:
+        return ""
+    if not rows:
+        return ""
+    teile = []
+    for ts, txt in rows:
+        alter = time.time() - float(ts or 0)
+        wann = ("vorhin" if alter < 900 else
+                f"vor {int(alter // 3600)} Stunden" if alter >= 3600 else
+                f"vor {int(alter // 60)} Minuten")
+        kurz = _anrede(txt.strip())
+        if len(kurz) > 320:
+            kurz = kurz[:320].rsplit(" ", 1)[0] + " …"
+        teile.append(f"({wann}) {kurz}")
+    return ("\n\nDARUEBER HAST DU NACHGEDACHT, als niemand da war. Das ist "
+            "VERGANGEN und kein Auftrag -- erwaehne es nur, wenn es zur Sache "
+            "gehoert, und lies es niemals vor:\n" + "\n".join(teile))
+
+
+def schleife():
+    _log(f"[DENKER] laeuft. Takt {TAKT_S}s, Ruhe nach Gespraech {RUHE_S}s")
+    while True:
+        try:
+            ruhig = _letzter_wortwechsel()
+            if ruhig < RUHE_S:
+                _log(f"[DENKER] Gespraech vor {int(ruhig)}s -- verschoben")
+            else:
+                einmal_denken()
+        except Exception as e:
+            _log(f"[DENKER] Durchlauf gescheitert ({type(e).__name__}: {e})")
+        # Streuung, damit er nicht im Sekundentakt mit anderen Diensten
+        # kollidiert und damit der Rhythmus nicht mechanisch wirkt.
+        time.sleep(TAKT_S + random.randrange(-TAKT_S // 5, TAKT_S // 5 + 1))
+
+
+if __name__ == "__main__":
+    if "--einmal" in sys.argv:
+        r = einmal_denken()
+        if r:
+            print("\n── ANSTOSS ──\n" + r["anstoss"])
+            print("\n── GEDANKE ──\n" + r["gedanke"])
+    else:
+        schleife()

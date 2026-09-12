@@ -1,0 +1,22 @@
+===FRANK===
+-rw-rw-r-- 1 andreas andreas 157 Sep 12 05:51 /home/andreas/.local/bin/frank
+/home/andreas/.local/bin/frank
+#!/usr/bin/env bash
+set -euo pipefail
+export FRANK_OWNER=andreas
+exec python3 "$HOME/.local/share/frank-chatgpt-organ/frank_chatgpt_terminal_remote.py" "$@"
+===PROXY HASH===
+17b345360d8689ea7d3a050c3cfd5b1163b35ee6eab4f1962e958ca100c890e6  /home/andreas/.local/share/frank-chatgpt-organ/frank_chatgpt_terminal_remote.py
+===TARGET/FANOUT/STATE===
+4:GRID10/unified.db remain local to this host. Only ChatGPT inference is proxied
+25:from f2wp1207_chatgpt_github_proxy import GabrielGitHubHarness
+27:BACKEND = GabrielGitHubHarness()
+28:stern.chatgpt_senden = BACKEND.send
+29:stern.chatgpt_ernten = BACKEND.harvest
+41:            "run_id", "user_frame_id", "response_frame_id", "runtime_epoch_id", "workers"
+43:        print("\n[FRANK/GRID10 " + json.dumps(meta, ensure_ascii=False, separators=(",", ":")) + "]",
+51:    ap = argparse.ArgumentParser(description="Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10")
+59:    print("GRID10/unified.db stay local; ChatGPT inference backend=ai-core-node via GitHub bridge.\n")
+===HELP===
+===DB POINTER===
+/var/lib/entityos/data/unified.db

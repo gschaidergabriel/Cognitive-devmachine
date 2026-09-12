@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56-converge-audit-andreas-20260912T0408Z",
+  "command_sha256": "c783d9dfbd9945361127dc21aedc8710a26f5a6eacd75d9d9d67274b613a70a4",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T03:53:20.511300+00:00",
+  "finished_at": "2026-09-12T03:53:20.587904+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "94cdb93f7dbe10b398bd5d3b2218cf39da907b851dd787f04d8adb15ad7fec14",
+  "stderr_sha256": "80f176efe5b0cd22f63ff9d009cde589fa1648d3ab2fc8d76407973085ab0223",
+  "stdout_tail": "===FRANK===\n-rw-rw-r-- 1 andreas andreas 157 Sep 12 05:51 /home/andreas/.local/bin/frank\n/home/andreas/.local/bin/frank\n#!/usr/bin/env bash\nset -euo pipefail\nexport FRANK_OWNER=andreas\nexec python3 \"$HOME/.local/share/frank-chatgpt-organ/frank_chatgpt_terminal_remote.py\" \"$@\"\n===PROXY HASH===\n17b345360d8689ea7d3a050c3cfd5b1163b35ee6eab4f1962e958ca100c890e6  /home/andreas/.local/share/frank-chatgpt-organ/frank_chatgpt_terminal_remote.py\n===TARGET/FANOUT/STATE===\n4:GRID10/unified.db remain local to this host. Only ChatGPT inference is proxied\n25:from f2wp1207_chatgpt_github_proxy import GabrielGitHubHarness\n27:BACKEND = GabrielGitHubHarness()\n28:stern.chatgpt_senden = BACKEND.send\n29:stern.chatgpt_ernten = BACKEND.harvest\n41:            \"run_id\", \"user_frame_id\", \"response_frame_id\", \"runtime_epoch_id\", \"workers\"\n43:        print(\"\\n[FRANK/GRID10 \" + json.dumps(meta, ensure_ascii=False, separators=(\",\", \":\")) + \"]\",\n51:    ap = argparse.ArgumentParser(description=\"Remote FranKenstein GRID10 -> ChatGPT organ -> GRID10\")\n59:    print(\"GRID10/unified.db stay local; ChatGPT inference backend=ai-core-node via GitHub bridge.\\n\")\n===HELP===\n===DB POINTER===\n/var/lib/entityos/data/unified.db\n",
+  "stderr_tail": "bash: Zeile 1: /home/andreas/.local/bin/frank: Keine Berechtigung\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

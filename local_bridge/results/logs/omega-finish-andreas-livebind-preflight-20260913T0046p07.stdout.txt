@@ -1,0 +1,127 @@
+=== ROOT MACHINE ACCESS ===
+frankenstein-puls.service=active
+MainPID=137149
+FragmentPath=/etc/systemd/system/frankenstein-puls.service
+ActiveEnterTimestamp=Thu 2026-09-10 15:55:34 CEST
+frankenstein-denker.service=active
+MainPID=133014
+FragmentPath=/etc/systemd/system/frankenstein-denker.service
+ActiveEnterTimestamp=Thu 2026-09-10 12:49:44 CEST
+frankenstein-grid-autonomie.service=active
+MainPID=256575
+FragmentPath=/etc/systemd/system/frankenstein-grid-autonomie.service
+ActiveEnterTimestamp=Sat 2026-09-12 08:39:24 CEST
+=== MACHINECTL ===
+entityos(d6ed76a7d0614db39d366551aff2ca09)
+	   Since: Tue 2026-09-08 12:04:36 CEST; 4 days ago
+	  Leader: 319871 (systemd)
+	 Superv.: 319869 (systemd-nspawn)
+	 Service: systemd-nspawn; class container
+	    Root: /var/lib/entityos/rootfs-run
+	      OS: Ubuntu 24.04 LTS
+	    Unit: entityos.scope
+		  └─payload
+		    ├─init.scope
+		    │ └─319871 /usr/lib/systemd/systemd
+		    └─system.slice
+		      ├─console-getty.service
+		      │ └─319985 /sbin/agetty -o "-p -- \\u" --noclear --keep-baud - 115200,38400,9600 dumb
+		      ├─dbus.service
+		      │ └─3319526 @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+		      ├─frankenstein-chatgpt-client.service
+		      │ └─3764132 /usr/bin/python3 /opt/entityos/voice/browserless_chatgpt_client/voice_host_live_client.py
+		      ├─frankenstein-cortex.service
+		      │ └─4027427 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+		      ├─frankenstein-denker.service
+		      │ └─3795508 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py
+		      ├─frankenstein-grid-autonomie.service
+		      │ └─4034911 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/grid_autonomie.py 300 dauer
+		      ├─frankenstein-immunsystem.service
+		      │ └─4096032 /usr/bin/python3 /root/.claude/star/immunsystem.py
+		      ├─frankenstein-puls.service
+		      │ └─1351332 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+		      ├─frankenstein-welt.service
+		      │ └─4027470 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py
+		      ├─systemd-journald.service
+		      │ └─319912 /usr/lib/systemd/systemd-journald
+		      └─systemd-logind.service
+		        └─319975 /usr/lib/systemd/systemd-logind
+=== CURRENT MOUNTS IN CONTAINER ===
+LEADER=319871
+findmnt: can't read /proc/mounts: No such file or directory
+findmnt: can't read /proc/mounts: No such file or directory
+=== BIND HELP ===
+machinectl [OPTIONS...] COMMAND ...
+
+Send control commands to or query the virtual machine and container
+registration manager.
+
+Machine Commands:
+  list                        List running VMs and containers
+  status NAME...              Show VM/container details
+  show [NAME...]              Show properties of one or more VMs/containers
+  start NAME...               Start container as a service
+  login [NAME]                Get a login prompt in a container or on the
+                              local host
+  shell [[USER@]NAME [COMMAND...]]
+                              Invoke a shell (or other command) in a container
+                              or on the local host
+  enable NAME...              Enable automatic container start at boot
+  disable NAME...             Disable automatic container start at boot
+  poweroff NAME...            Power off one or more containers
+  reboot NAME...              Reboot one or more containers
+  terminate NAME...           Terminate one or more VMs/containers
+  kill NAME...                Send signal to processes of a VM/container
+  copy-to NAME PATH [PATH]    Copy files from the host to a container
+  copy-from NAME PATH [PATH]  Copy files from a container to the host
+  bind NAME PATH [PATH]       Bind mount a path from the host into a container
+
+Image Commands:
+  list-images                 Show available container and VM images
+  image-status [NAME...]      Show image details
+  show-image [NAME...]        Show properties of image
+  edit NAME|FILE...           Edit settings of one or more VMs/containers
+  cat NAME|FILE...            Show settings of one or more VMs/containers
+  clone NAME NAME             Clone an image
+  rename NAME NAME            Rename an image
+  read-only NAME [BOOL]       Mark or unmark image read-only
+  remove NAME...              Remove an image
+  set-limit [NAME] BYTES      Set image or pool size limit (disk quota)
+  clean                       Remove hidden (or all) images
+
+Options:
+  -h --help                   Show this help
+     --version                Show package version
+     --no-pager               Do not pipe output into a pager
+     --no-legend              Do not show the headers and footers
+     --no-ask-password        Do not ask for system passwords
+  -H --host=[USER@]HOST       Operate on remote host
+  -M --machine=CONTAINER      Operate on local container
+     --system                 Connect to system machine manager
+     --user                   Connect to user machine manager
+  -p --property=NAME          Show only properties by this name
+     --value                  When showing properties, only print the value
+  -P NAME                     Equivalent to --value --property=NAME
+  -q --quiet                  Suppress output
+  -a --all                    Show all properties, including empty ones
+  -l --full                   Do not ellipsize output
+     --kill-whom=WHOM         Whom to send signal to
+  -s --signal=SIGNAL          Which signal to send
+     --uid=USER               Specify user ID to invoke shell as
+  -E --setenv=VAR[=VALUE]     Add an environment variable for shell
+     --read-only              Create read-only bind mount or clone
+     --mkdir                  Create directory before bind mounting, if missing
+  -n --lines=INTEGER          Number of journal entries to show
+     --max-addresses=INTEGER  Number of internet addresses to show at most
+  -o --output=STRING          Change journal output mode (short, short-precise,
+                               short-iso, short-iso-precise, short-full,
+                               short-monotonic, short-unix, short-delta,
+                               json, json-pretty, json-sse, json-seq, cat,
+                               verbose, export, with-unit)
+     --force                  Replace target file when copying, if necessary
+     --now                    Start or power off container after enabling or
+                              disabling it
+     --runner=RUNNER          Select between nspawn and vmspawn as the runner
+  -V                          Short for --runner=vmspawn
+
+See the machinectl(1) man page for details.

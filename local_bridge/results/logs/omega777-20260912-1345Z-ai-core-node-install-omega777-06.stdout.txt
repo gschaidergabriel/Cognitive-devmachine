@@ -1,0 +1,109 @@
+SNAPSHOT:/tmp/omega777-3064fb2.TB9D23
+=== PRE SERVICES ===
+MainPID=2800373
+Id=frankenstein-gespraechsmodus.service
+ActiveState=active
+SubState=running
+
+MainPID=1075883
+Id=frankenstein-chatgpt-client.service
+ActiveState=active
+SubState=running
+OMEGA 777 organ-floor layer installed without restarting live voice.
+
+Installed presentation arbitration:
+  OMNI > terminal > local_voice
+  cache: XDG_RUNTIME_DIR/frankenstein/omega_organ_activity.json
+  terminal: /home/ai-core-node/.local/bin/frank-omega
+
+Prepared service overrides:
+  /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf
+  /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf
+
+No production conversation process was restarted by this installer.
+Apply the persistent ChatGPT-client wrapper at a controlled boundary with:
+  systemctl --user restart frankenstein-chatgpt-client.service
+Apply the local-voice wrapper only when the current voice session is quiescent:
+  systemctl --user restart frankenstein-gespraechsmodus.service
+=== INSTALLED HASHES ===
+omega_organ_activity.py source=4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7
+omega_organ_activity.py live=4e952d23cfb6f7b636d3422bfd9be1cc3140563c8192ec623a146578bd1f82b7
+voice_777_runtime.py source=83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84
+voice_777_runtime.py live=83d2a291353f8380864f058f78688a92347a8986578d0bf7f545ea8c98b66a84
+voice_host_777_live_client.py source=8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff
+voice_host_777_live_client.py live=8bd2b6b724427e802e29230ba6a367fe13c19c7954f81ebb3514ef71311777ff
+frank_terminal_777.py source=d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e
+frank_terminal_777.py live=d9a82656cc25f3f44fcd5e731923d16e66931528f9799d4044af72a38d38424e
+=== DROPINS ===
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+=== POST SERVICES NO RESTART ===
+MainPID=2800373
+Id=frankenstein-gespraechsmodus.service
+ActiveState=active
+SubState=running
+
+MainPID=1075883
+Id=frankenstein-chatgpt-client.service
+ActiveState=active
+SubState=running
+=== TERMINAL ===
+#!/usr/bin/env bash
+exec /usr/bin/env python3 "/home/ai-core-node/.local/lib/frankenstein/scripts/frank_terminal_777.py" "$@"

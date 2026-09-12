@@ -1,0 +1,166 @@
+===/home/ai-core-node/.local/bin/frank-harness-sichtbar===
+#!/usr/bin/env bash
+# frank-harness-sichtbar -- Wrapper fuer den sichtbaren Free-Pool-Terminal-
+# Harness (PHASE 48, Gabriel-Auftrag 2026-08-27). Ersetzt den alten headless
+# Sandbox-Testlauf: startet harness_aider.py visible-start im echten Repo,
+# in einem echten, sichtbaren Terminal-Fenster (gleiches Muster wie
+# ~/.local/bin/frank-terminal-hilfe, PHASE 34/40) -- kein Hintergrundprozess,
+# kein neuer Dauerdienst.
+set -uo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+
+MODELL_ID="${1:-}"
+if [[ -z "$MODELL_ID" ]]; then
+  echo "frank-harness-sichtbar: keine modell_id uebergeben." >&2
+  exec bash
+fi
+
+echo "FranKensteinಠ_ಠ -- sichtbarer Free-Pool-Harness (${MODELL_ID})"
+echo "Repo: $HOME/frankenstein-repo (echtes Repo, kein Sandbox-Versteck)"
+echo "----------------------------------------------------------------"
+
+python3 "$HOME/.claude/star/harness_aider.py" visible-start --modell "$MODELL_ID"
+STATUS=$?
+
+echo "----------------------------------------------------------------"
+echo "Sichtbarer Harness-Lauf beendet (exit=$STATUS)."
+read -r -p "Enter zum Schliessen dieses Fensters... " _ignore
+
+exit "$STATUS"
+===/home/ai-core-node/.local/bin/frank-hub===
+#!/usr/bin/env bash
+# Franks Oberflaeche oeffnen.
+#
+# ⚠️ GEAENDERT 2026-08-01 (Gabriel): Frank laeuft jetzt 24/7. Die Dienste sind
+# `enabled` und starten beim Hochfahren des Rechners von selbst mit; Lingering
+# ist an, es braucht dafuer keine Anmeldung. Frueher stand hier das Gegenteil
+# (Dienste bewusst NICHT enabled, dieser Knopf weckte die Kette) — das gilt
+# nicht mehr.
+# Der Startbefehl unten bleibt trotzdem stehen: er startet nur, was gerade
+# NICHT laeuft. Im Normalfall tut er also nichts und der Browser geht sofort
+# auf; er ist die Rueckfallebene, falls jemand Dienste von Hand gestoppt hat.
+# Angelegt 2026-07-31. Icon: ~/.local/share/icons/frank-hub-*.png
+set -u
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+export DBUS_SESSION_BUS_ADDRESS="${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
+
+# Reihenfolge zaehlt: das Modell braucht ~60 s, alles Weitere haengt daran.
+for u in micro-llm router core toolboxd webd webui; do
+  systemctl --user is-active --quiet "aicore-$u" || systemctl --user start "aicore-$u"
+done
+
+# Warten, bis die Oberflaeche wirklich antwortet — sonst zeigt der Browser
+# einen Verbindungsfehler und man haelt Frank faelschlich fuer tot.
+for _ in $(seq 1 60); do
+  curl -sf --max-time 2 http://127.0.0.1:8099/api/health >/dev/null 2>&1 && break
+  sleep 2
+done
+
+# EIGENES FENSTER statt Browser-Tab (Gabriel, 2026-08-06).
+# --app= oeffnet ein Fenster OHNE Adresszeile, Tableiste und Lesezeichen:
+# es sieht aus und verhaelt sich wie eine eigene Anwendung.
+# Eigenes Profil, damit Fenstergroesse/Zoom von Franks Fenster nicht am
+# normalen Browser haengen und umgekehrt.
+URL="http://127.0.0.1:8099"
+PROFIL="$HOME/.local/share/frank-hub-fenster"
+
+if command -v google-chrome >/dev/null 2>&1; then
+  exec google-chrome --app="$URL" \
+       --user-data-dir="$PROFIL" \
+       --class=FrankHub --name=FrankHub \
+       --window-size=1400,900 \
+       --no-first-run --no-default-browser-check \
+       >/dev/null 2>&1 &
+elif command -v firefox >/dev/null 2>&1; then
+  # Firefox kennt kein --app mehr; --kiosk kommt dem am naechsten.
+  exec firefox --new-window "$URL" >/dev/null 2>&1 &
+else
+  xdg-open "$URL" >/dev/null 2>&1 &
+fi
+===/home/ai-core-node/.local/bin/frank-terminal-hilfe===
+#!/usr/bin/env bash
+# frank-terminal-hilfe -- Wrapper fuer das Terminal-Hilfe-Icon (PHASE 34).
+# Erzeugt von install_terminal_help_icon.sh, sicher erneut ausfuehrbar.
+# Startet `claude` dort, wo die FranKensteinಠ_ಠ-Hooks tatsaechlich feuern --
+# siehe Kommentarkopf des Installers fuer die zwei Faelle.
+set -uo pipefail
+export PATH="$HOME/.local/bin:$PATH"
+cd "$HOME" 2>/dev/null || true
+
+PLUGIN_ENABLED=0
+if [[ -f "$HOME/.claude/settings.json" ]] && command -v python3 >/dev/null 2>&1; then
+  if python3 - <<'PYEOF'
+import json, sys
+try:
+    d = json.load(open(__import__("os").path.expanduser("~/.claude/settings.json")))
+except Exception:
+    sys.exit(1)
+enabled = d.get("enabledPlugins", {})
+sys.exit(0 if any(k.split("@")[0] == "frankenstein" and v for k, v in enabled.items()) else 1)
+PYEOF
+  then
+    PLUGIN_ENABLED=1
+  fi
+fi
+
+if [[ "$PLUGIN_ENABLED" == "1" ]]; then
+  echo "FranKensteinಠ_ಠ-Terminal (Marketplace-Plugin aktiv, Hooks global verdrahtet)."
+  claude
+elif [[ -f "$HOME/.claude/star/settings.json" ]]; then
+  echo "FranKensteinಠ_ಠ-Terminal (Dev-/Star-Verdrahtung: ~/.claude/star/settings.json)."
+  claude --settings "$HOME/.claude/star/settings.json"
+else
+  echo "FranKensteinಠ_ಠ-Terminal: weder Marketplace-Plugin (enabledPlugins in"
+  echo "~/.claude/settings.json) noch ~/.claude/star/settings.json gefunden --"
+  echo "Hooks wuerden nicht feuern. Siehe INSTALL_HOST_STEPS.md. Oeffne trotzdem"
+  echo "eine normale claude-Sitzung, aber Begruessungsbanner/Kontext fehlen."
+  claude
+fi
+
+exec bash
+===/home/ai-core-node/.local/bin/work-on-frank===
+#!/usr/bin/env bash
+# Work on Frank — startet Claude Code lokal im Terminal mit dem festen
+# Frank-Kontext (Gedächtnis-Pfad + Direktive, das Gedächtnis fortzuschreiben).
+# Wird aus der GNOME-Startleiste / App-Suche aufgerufen (work-on-frank.desktop),
+# tut dasselbe wie der "Work on Frank"-Knopf in Franks Oberfläche.
+set -euo pipefail
+
+CLAUDE="$HOME/.local/bin/claude"
+ARBEIT="$HOME/aicore/opt/aicore"
+KONTEXT="$HOME/.config/frank/orchestrator-kontext.md"
+
+if [[ ! -x "$CLAUDE" && ! -L "$CLAUDE" ]]; then
+    notify-send "Work on Frank" "Claude Code nicht gefunden ($CLAUDE)" 2>/dev/null || true
+    exit 1
+fi
+if [[ ! -f "$KONTEXT" ]]; then
+    notify-send "Work on Frank" "Kontextdatei fehlt ($KONTEXT)" 2>/dev/null || true
+    exit 1
+fi
+
+# Vor dem Start den Arbeitsstand sichern (siehe frank-snapshot/-rollback).
+SNAP=""
+if [[ -x "$HOME/.local/bin/frank-snapshot" ]]; then
+    SNAP="$("$HOME/.local/bin/frank-snapshot" "$ARBEIT" work-on-frank 2>/dev/null || true)"
+fi
+
+# In einem Login-Terminal starten, damit PATH/Node stimmen; nach dem Ende
+# eine Shell offen lassen, damit das Fenster nicht sofort zuklappt. Der
+# Snapshot-Hinweis wird dem Prompt angehängt, damit Claude ihn kennt.
+INNEN="cd '$ARBEIT' && '$CLAUDE' --dangerously-skip-permissions \"\$(cat '$KONTEXT')\${SNAP:+
+
+--- SICHERUNG: Snapshot \$SNAP angelegt. Rücksetzen mit: frank-rollback \$SNAP ---}\"; echo; echo '[Sitzung beendet]'; exec bash"
+
+for TERM_BIN in gnome-terminal xfce4-terminal x-terminal-emulator konsole kitty alacritty; do
+    if command -v "$TERM_BIN" >/dev/null 2>&1; then
+        if [[ "$TERM_BIN" == "gnome-terminal" ]]; then
+            exec "$TERM_BIN" --title="Work on Frank" -- bash -lc "$INNEN"
+        else
+            exec "$TERM_BIN" -e "bash -lc '$INNEN'"
+        fi
+    fi
+done
+
+notify-send "Work on Frank" "Kein Terminal gefunden" 2>/dev/null || true
+exit 1

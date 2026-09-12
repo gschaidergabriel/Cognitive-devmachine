@@ -1,0 +1,764 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  /home/ai-core-node/.claude/star/visual/buehne.html
+===TERM koerper_rgba COUNT 12 ===
+---MATCH 0 AT 11964 ---
+   identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+     Leinwand, mit demselben unteren Hals-Masken-Verlauf wie der Kopf.
+     Kein Rechteck, kein Hintergrund, kein Versatz: kein Geisterkopf. */
+  #ausdruck-schicht{z-index:3}
+  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+  /* ⭐⭐ 2026-09-11 ECHTES ATMEN (Gabriel: "eins nach dem anderen", DIE eine
+     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+     wie #gesicht/#gesicht2 (Kommentar oben), nur fuer den Koerper -- 12 echte
+     fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png) werden
+     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+  #koerper-schicht2{opacity:0}
+  /* ⭐⭐ 2026-09-11 NACHTRAG 2 (Gabriel zeigt auf die Halskante, ZWEITES,
+     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+     bei y 505..599 (Leinwand 1536x1024). Der Kopf bricht dort hart ab (y 584:
+     165 Kopfpixel/Zeile -> y 600: 0), darunter erscheint abrupt der andere
+     Hals-Farbverlauf des Koerperbildes -- genau die sichtbare Kante. Fix:
+     Kopf unten per Masken-Gradient WEICH ausblenden statt hart abschneiden
+     lassen, in exakt dem gemessenen Ueberlappungsstreifen (y 550/1024=53,7%
+     bis y 599/1024=58,5%). Das ist KEINE Weichzeichnung der Textur
+---MATCH 1 AT 25470 ---
+AND").
+             Kopf, Koerper UND Mund-Flicken teilen sich jetzt dieselbe, per JS
+             (kopfCanvasAnpassen()) exakt skalierte 1536x1024-Leinwand -- ein
+             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+             (bewusst kein eigener Wert), damit die Stapelreihenfolge der Kinder
+             (1/2/4) weiterhin gegen #gesicht/#regen (3) im GLEICHEN, von
+             #gesicht-rahmen (z-index:2) gebildeten Stapelkontext zaehlt --
+             sonst wuerde der Mund-Flicken hinter Gesicht/Regen verschwinden. -->
+        <div id="kopf-canvas">
+          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+          <div id="kopf-dreh">
+            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+                 Posen (gier_+00_nick_+00_roll_+NN, ±25° in 5°-Schritten, PIL:
+                 roll_+00 pixelgleich mit kopf_zero_ohne_rotes_augenglow).
+                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+                 wie #koerper-schicht/#koerper-schicht2. -->
+            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+            <!-- ⭐⭐ 2026-09-11 RGBA-Sonderausdruecke (ersetzen die gelöschten
+                 flachen #gesicht/#gesicht2 -- siehe CSS-Kommentar "Geister-
+                 kopf"): 1536x1024 mit derselben Silhouette wie der Kopf,
+                 deshalb liegen sie in #kopf-dreh auf derse
+---MATCH 2 AT 25541 ---
+eselbe, per JS
+             (kopfCanvasAnpassen()) exakt skalierte 1536x1024-Leinwand -- ein
+             Anker gilt fuer alle drei. z-index:auto auf #kopf-canvas selbst
+             (bewusst kein eigener Wert), damit die Stapelreihenfolge der Kinder
+             (1/2/4) weiterhin gegen #gesicht/#regen (3) im GLEICHEN, von
+             #gesicht-rahmen (z-index:2) gebildeten Stapelkontext zaehlt --
+             sonst wuerde der Mund-Flicken hinter Gesicht/Regen verschwinden. -->
+        <div id="kopf-canvas">
+          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+          <div id="kopf-dreh">
+            <img id="kopf-schicht" src="/kopf_rgba/kopf_zero_ohne_rotes_augenglow.png" alt="">
+            <!-- ⭐ 2026-09-11 echte Kopfdrehung: /kopf_rgba/roll/ hat 11 echte
+                 Posen (gier_+00_nick_+00_roll_+NN, ±25° in 5°-Schritten, PIL:
+                 roll_+00 pixelgleich mit kopf_zero_ohne_rotes_augenglow).
+                 #kopf-schicht2 ist das zweite Crossfade-Bild, gleiches Muster
+                 wie #koerper-schicht/#koerper-schicht2. -->
+            <img id="kopf-schicht2" src="/kopf_rgba/roll/gier_+00_nick_+00_roll_+00.png" alt="">
+            <!-- ⭐⭐ 2026-09-11 RGBA-Sonderausdruecke (ersetzen die gelöschten
+                 flachen #gesicht/#gesicht2 -- siehe CSS-Kommentar "Geister-
+                 kopf"): 1536x1024 mit derselben Silhouette wie der Kopf,
+                 deshalb liegen sie in #kopf-dreh auf derselben Leinwand. -->
+            <img id="ausdruck-schicht" alt="">
+     
+---MATCH 3 AT 97563 ---
+ar).
+  // Waehrend eines Sonderausdrucks bekommt nur die per ausdruckAktiv aktuell
+  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+  // fuer die Vor-Synchronisation der jeweils anderen beim Einblenden).
+  if(_sonderLaeuft){
+    const ausdruckSichtbar = ausdruckAktiv === 1 ? "ausdruck-schicht" : "ausdruck-schicht2";
+    $(ausdruckSichtbar).style.transform = transform;
+    $(ausdruckSichtbar).style.filter = filter;
+  }
+}
+
+// ⭐⭐ 2026-09-11 ECHTES KOERPER-ATMEN (Gabriel, woertlich: "eins nach dem
+// anderen" -- DIE eine Sache fuer diesen Schritt, nichts anderes gleichzeitig).
+// 12 echte fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+---MATCH 4 AT 98193 ---
+fierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).s
+---MATCH 5 AT 98389 ---
+ng noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechste
+===TERM bodyLayer COUNT 0 ===
+===TERM body-layer COUNT 0 ===
+===TERM schulterzucken COUNT 3 ===
+---MATCH 0 AT 99574 ---
+uckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"]
+---MATCH 1 AT 100129 ---
+ewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerp
+---MATCH 2 AT 100209 ---
+fte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilde
+===TERM aufrichten COUNT 4 ===
+---MATCH 0 AT 99592 ---
+en() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/
+---MATCH 1 AT 100279 ---
+ schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+functio
+---MATCH 2 AT 100355 ---
+dle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fer
+---MATCH 3 AT 100366 ---
+n auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig
+===TERM gewicht/ COUNT 2 ===
+---MATCH 0 AT 98238 ---
+_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechst
+---MATCH 1 AT 100861 ---
+hulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  s
+===TERM schulterdrehung COUNT 4 ===
+---MATCH 0 AT 98215 ---
+erper_rgba/atmen__atmen_000..011.png,
+// laut Dateibenennung eine VOLLSTAENDIGE Ein-und-Ausatmung -- deshalb einfach
+// im Kreis 0->11->0 durchlaufen, kein Hin-und-Her-Pingpong noetig) statt der
+// bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+// Ueberblendet weich per Opacity-Crossfade zwischen zwei gestapelten <img>
+// (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+// #gesicht/#gesicht2. Gabriels Zahlen woertlich: 14-16 Atemzuege/min -> ~4s
+// pro Zyklus -> ~330ms je Bild bei 12 Bildern.
+// ⚠️ Speicher: NUR diese 12 Bilder werden vorgeladen, nicht die uebrigen 126
+// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+// spaetere, einzeln freigegebene Schritte unangetastet auf Abruf).
+const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+  `/koerper_rgba/atmen__atmen_${String(i).padStart(3,"0")}.png`);
+ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+const ATMEN_MS_PRO_BILD = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atme
+---MATCH 1 AT 99630 ---
+ur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { 
+---MATCH 2 AT 100893 ---
+padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionSta
+---MATCH 3 AT 101137 ---
+","lehnen_+15",
+      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+      `/koerper_rgba/lehnen/${n}.png`) },
+  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+      "gewicht_-05","gewicht_+00"].map(n =>
+      `/koerper_rgba/gewicht/${n}.png`) },
+  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+      `/koerper_rgba/schulterdrehung/${n}.png`) }
+];
+let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+let _letzteKoerperAktion = null;
+function koerperAktionStarten(fertig){
+  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+  const wahl = pool[Math.floor(Math.random()*pool.length)];
+  _letzteKoerperAktion = wahl.name;
+  koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+}
+function koerperAktionWeiterPlanen(){
+  // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+  // weiterreicht, kein Verzweigen.
+  setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+    22000 + Math.random()*28000);
+}
+koerperAktionWeiterPlanen();
+function koerperSchritt(jetzt){
+  if(koerperAktion){
+    const a = koerperAktion;
+    if(jetzt - a.letzterT < a.ms) return;
+    const eint
+===TERM requestAnimationFrame COUNT 5 ===
+---MATCH 0 AT 57554 ---
+neu) return;
+    versteckt.src = neu;
+    // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+    // kopfRollTick() oben -- atmen() schreibt Transform/Filter nur noch auf
+    // die per ausdruckAktiv aktuell sichtbare Ebene, die neu einblendende
+    // Ebene braucht den brandaktuellen Wert deshalb hier einmalig.
+    versteckt.style.transform = _atmenTransform;
+    versteckt.style.filter = _atmenFilter;
+    versteckt.style.opacity = "1";
+    sichtbar.style.opacity = "0";
+    ausdruckAktiv = ausdruckAktiv === 1 ? 2 : 1;
+    if(mitSchwung){
+      const rahmen = $("gesicht-rahmen");
+      rahmen.classList.remove("pose-wechsel");
+      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+      setTimeout(() => rahmen.classList.remove("pose-wechsel"), 420);
+    }
+  };
+  const sauber = () => {
+    $("ausdruck-schicht").style.opacity = "0";
+    $("ausdruck-schicht2").style.opacity = "0";
+    $("mund-effekt").style.opacity = "1";
+    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+    _sonderLaeuft = false;
+    gesichtNeuZeichnen(true);
+  };
+  let stufe = 0;
+  wechsel(stufeSrc(0), true);
+  const hoch = () => {
+    stufe++;
+    wechsel(stufeSrc(stufe), false);
+    if(stufe < 6) setTimeout(hoch, 90);
+    else setTimeout(runter, haltenMs);
+  };
+  const runter = () => {
+    stufe--;
+    wechsel(stufeSrc(stufe), false);
+    if(stufe > 0) setTimeout(runter, 90);
+    else setTimeout(sauber, 120); // letzte Stufe (= Neutralbild) kurz halten, dann Ebenen aus
+  };
+  setTimeout(hoch, 90);
+}
+window.sonderausdruckZeigen = sonderausdruckZeigen;
+
+// ⭐ 2026-09-11 Auftragsteil E (Animations-A
+---MATCH 1 AT 106942 ---
+5-1 = -0.15x) statt des vollen Werts.
+  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+}
+// ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+// #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+// wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+// Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+// echten Zustandswechseln auf.
+function kameraNachschwung(){
+  const kamera = $("kamera");
+  kamera.classList.remove("kamera-wechsel");
+  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift 
+---MATCH 2 AT 107669 ---
+eout(() => kamera.classList.remove("kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket n
+---MATCH 3 AT 107704 ---
+"kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHol
+---MATCH 4 AT 108479 ---
+t){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+      farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+    }
+    const wasser = $("wasserlinie");
+    let hoehe = null;
+    if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+    else if(typeof b.ram_frei_anteil === "
+SCOPE=REAL_HOST_READ_ONLY_LIVE_BODY_RUNTIME_LOCATOR

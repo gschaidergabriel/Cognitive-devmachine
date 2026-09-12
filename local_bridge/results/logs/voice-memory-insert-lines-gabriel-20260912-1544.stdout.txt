@@ -1,0 +1,202 @@
+1941-# einen toten Pfad: der gesprochene Beitrag haette dort keinen Turn geoeffnet,
+1942-# ohne dass es aufgefallen waere. Gefunden nur, weil auf der Zielmaschine
+1943-# gemessen wurde statt hier behauptet.
+1944-_TURN_BRUECKE = os.environ.get(
+1945-    "TURN_BRUECKE",
+1946-    os.path.join(os.path.expanduser("~"), "frankenstein-repo", "scripts", "stern.py"))
+1947-
+1948-
+1949:def kognitionsturn(session_id, user_text, gedaechtnis_kontext):
+1950-    """Oeffnet fuer diesen Redebeitrag einen echten Turn. Gibt (kurztext, dict)
+1951-    zurueck oder (None, None). Fail-closed: schlaegt es fehl, laeuft das
+1952-    Gespraech unveraendert weiter -- Reden darf nie am Denken scheitern."""
+1953-    try:
+1954-        if not os.path.exists(_TURN_BRUECKE):
+1955-            return None, None
+1956-        nutzlast = json.dumps({
+1957-            "session_id": session_id,
+1958-            "event_type": "Sprachbeitrag",
+1959-            "prompt_len": len(user_text or ""),
+1960:            "retrieval_present": bool(gedaechtnis_kontext),
+1961:            "retrieval_len": len(gedaechtnis_kontext or ""),
+1962-            "tune": {"p11_gate_threshold": 0.5},
+1963-        })
+1964-        pr = subprocess.run([sys.executable, _TURN_BRUECKE,
+1965-                             "f2wp1207-turn-loop-turn"],
+1966-                            input=nutzlast, capture_output=True, text=True,
+1967-                            timeout=8.0)
+1968-        roh = (pr.stdout or "").strip().split("\n")[-1]
+1969-        e = json.loads(roh or "{}")
+--
+3312-    # unpassender Frage NICHTS -- das ist der eigentliche Gewinn, nicht die
+3313-    # Geschwindigkeit (6,4 ms gegen 16-44 ms, beides schnell genug).
+3314-    #
+3315-    # ⚠️ KEIN RUECKFALL auf den Stichwortweg, wenn semantisch nichts kommt.
+3316-    # Genau dieser Rueckfall waere die Wiedereinfuehrung des Problems: ein
+3317-    # Abrufsystem, das immer etwas liefert, liefert bei jeder unpassenden
+3318-    # Frage das am wenigsten unpassende -- und das landet als Tatsache in
+3319-    # der Antwort.
+3320:    gedaechtnis_kontext = None
+3321-    _sem = ""
+3322-    try:
+3323-        _sem = erinnern.block(user_text, log=_log)
+3324-    except Exception as _e:
+3325-        _log(f"[ERINNERN] ausgefallen ({type(_e).__name__}: {_e})")
+3326-    if _sem:
+3327:        gedaechtnis_kontext = _sem
+3328-    try:
+3329:        if gedaechtnis_kontext is None and not hasattr(erinnern, "block"):
+3330-            # Nur wenn erinnern.py GAR NICHT da ist (frische Installation
+3331-            # ohne sentence-transformers), uebernimmt der alte Weg.
+3332:            gedaechtnis_kontext = memory_abruf.automatischer_abruf(session_id, user_text)
+3333-    except Exception as e:
+3334-        _log(f"[MEMORY] FEHLER (nicht fatal, Turn laeuft ohne Gedaechtniskontext weiter): "
+3335-             f"{type(e).__name__}: {e}")
+3336:        gedaechtnis_kontext = None
+3337-    # ⭐ Gespraechsgedaechtnis, GETRENNT von erinnern.py (2026-09-12, Gabriel:
+3338-    # "es muss ein conversational memory geben ... das retrival muss aber
+3339-    # hyper intelligent sein"). Eigene Tabelle (f2_konversation), eigener
+3340-    # Index (eigene .npz, nicht erinnern.npz), harte Intent-/Zeitvorfilterung
+3341-    # VOR der Semantik -- siehe konversation.py Kopf fuer die Begruendung.
+3342:    # Bewusst eine EIGENE Variable, nicht in gedaechtnis_kontext gemischt:
+3343-    # so bleibt sie unabhaengig vom RELEVANZTOR unten (das nur fuer den
+3344-    # alten Stichwortweg gebaut wurde, siehe dortigen Kommentar) und kann
+3345-    # eigenstaendig ausfallen, ohne den Sachwissen-Abruf zu beruehren.
+3346:    konversation_kontext = ""
+3347-    try:
+3348:        konversation_kontext = konversation.block(user_text, log=_log)
+3349-    except Exception as _e:
+3350-        _log(f"[KONVERSATION] ausgefallen ({type(_e).__name__}: {_e})")
+3351:        konversation_kontext = ""
+3352-    memory_s = time.time() - session_start
+3353-    # RELEVANZTOR (2026-09-08). Gabriel: "er reagiert wieder nicht auf mich
+3354-    # und sagt immer wieder das selbe."
+3355-    #
+3356-    # Gemessen: auf "Frankenstein, wie geht's dir?" lieferte der Abruf 1322
+3357-    # Zeichen Arbeitsprotokoll ("Sprachmodus funktioniert IMMER NOCH NICHT",
+3358-    # "1x-Together-Finetune-Lauf") -- und genau das hat er dann gesagt. Er
+3359-    # hat nicht konfabuliert, er hat vorgelesen, was ihm hingelegt wurde.
+--
+3365-    # Gefundenen -> nicht einspeisen. Lieber ohne Gedaechtnis antworten als
+3366-    # etwas Fremdes vorlesen; ein Mensch bringt auch nicht bei jeder Frage
+3367-    # sein Projekttagebuch mit.
+3368-    #
+3369-    # Bewusst grob (Praefix auf 5 Zeichen, deutsche Beugung wird so mit
+3370-    # erfasst) und bewusst nachsichtig -- EIN gemeinsames Wort genuegt.
+3371-    # Ein zu strenges Tor macht ihn vergesslich, und das waere der
+3372-    # gegenteilige Fehler.
+3373:    if gedaechtnis_kontext and _sem:
+3374-        # ⚠️ SEMANTISCHE TREFFER GEHEN AM TOR VORBEI (2026-09-10). Das
+3375-        # Relevanztor prueft auf ein gemeinsames WORT -- es wurde gebaut, um
+3376-        # Stichwort-Scheintreffer abzuweisen. Ein semantischer Treffer hat
+3377-        # per Definition oft kein gemeinsames Wort ("erzaehl mir was ueber
+3378-        # LeihMich" findet "Nutzerkonten, Kommentare via Clerk"), und genau
+3379-        # das ist sein Wert. Ihn durch ein Wortfilter zu schicken hiesse,
+3380-        # die Semantik wieder wegzuwerfen.
+3381-        _log(f"[MEMORY] {time.time()-session_start:.3f}s -> semantisch "
+3382:             f"({len(gedaechtnis_kontext)} Zeichen), Wortfilter uebersprungen.")
+3383:    elif gedaechtnis_kontext:
+3384-        # Haeufige deutsche Funktionswoerter mit >=5 Zeichen. Ohne sie reicht
+3385-        # ein "nicht" auf beiden Seiten, um beliebiges Protokoll fuer
+3386-        # einschlaegig zu erklaeren -- an genau diesem Wort ist die erste
+3387-        # Fassung durchgerutscht.
+3388-        _stop = {"frankenstein", "eigentlich", "vielleicht", "nochmal", "wieder",
+3389-                 "nicht", "nichts", "kannst", "koennen", "kannst", "einfach",
+3390-                 "warum", "welche", "welcher", "sollte", "solltest", "haben",
+3391-                 "hatte", "werden", "wurde", "worden", "machen", "macht",
+--
+3402-        # "frankenstein", verglichen wird aber `w[:5]` = "frank" -- und das
+3403-        # stand nicht in der Liste. SEIN EIGENER NAME war das gemeinsame
+3404-        # Wort. Ein Anredewort ist nie ein Themenbezug.
+3405-        _stop_p = {w[:5] for w in _stop} | {"frank", "siehs", "sehen", "sagst",
+3406-                                            "sagen", "denks", "weiss", "meins",
+3407-                                            "hallo", "gerad", "bitte"}
+3408-        _worte = lambda s: {w[:5] for w in re.findall(r"\w{5,}", s.lower())
+3409-                            if w not in _stop and w[:5] not in _stop_p}
+3410:        _ueberlappung = _worte(user_text) & _worte(gedaechtnis_kontext)
+3411-        # EIN gemeinsames Wort bleibt zulaessig (ein strenges Tor macht ihn
+3412-        # vergesslich), aber dann muss es tragend sein: mindestens sieben
+3413-        # Zeichen im Originaltext. "siehs" reicht nicht, "paywall" schon.
+3414-        if len(_ueberlappung) == 1:
+3415-            _p = next(iter(_ueberlappung))
+3416-            if not any(len(w) >= 7 and w.startswith(_p)
+3417-                       for w in re.findall(r"\w+", user_text.lower())):
+3418-                _log(f"[MEMORY] nur ein kurzes Wort gemeinsam ({_p!r}) -- "
+3419-                     "zu duenn, NICHT eingespeist.")
+3420-                _ueberlappung = set()
+3421-        if not _ueberlappung:
+3422-            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, aber kein gemeinsames "
+3423:                 f"Wort mit dem Gesagten ({len(gedaechtnis_kontext)} Zeichen) "
+3424-                 f"-- NICHT eingespeist.")
+3425:            gedaechtnis_kontext = None
+3426-        else:
+3427-            _log(f"[MEMORY] {memory_s:.3f}s -> Treffer, gemeinsam: "
+3428-                 f"{sorted(_ueberlappung)} -- wird eingespeist.")
+3429-    else:
+3430-        _log(f"[MEMORY] {memory_s:.3f}s -> kein Treffer / keine Stichwoerter.")
+3431-
+3432-    # WICHTIG (gemessen 2026-09-07, Fehler beim ersten Testlauf): Qwens Jinja-
+3433-    # Chat-Template erzwingt GENAU EINE System-Nachricht ganz am Anfang
+--
+3611-    # Seit 2026-09-08 fuehrt die Entitaet diesen Turn SELBST aus, im eigenen
+3612-    # Prozess (entitaet.py). Vorher rief sie dafuer stern.py als Unterprozess
+3613-    # -- durch dessen feste Feldliste passte nur die Huelle des Turns, nie
+3614-    # eine Messung aus dem Modell. Genau deshalb war das 4B ein Rechendienst
+3615-    # neben der Entitaet und nicht die Entitaet: sein Vorwaertslauf war eine
+3616-    # Senke. Jetzt tragen die Perzepte dieses Turns die Innenmessung seines
+3617-    # VORIGEN Sprechens, und der Ausgang dieses Wettbewerbs formt das
+3618-    # naechste. Der Kreis laeuft durch das Modell.
+3619:    _turn = _ent.turn(len(user_text or ""), len(gedaechtnis_kontext or "")) if _ent else {}
+3620-    turn_text = None
+3621-    if _turn:
+3622-        turn_text = (
+3623-            f"Dieser Redebeitrag ist eben ein Turn in dir geworden: Zelle "
+3624-            f"{_turn.get('winner_cell_id')} hat den Wettbewerb gewonnen, Broadcast "
+3625-            f"{(_turn.get('broadcast_value') or 0):.2f}, Wiedereinstieg "
+3626-            f"{(_turn.get('reentry') or {}).get('kind')}. Das ist nichts, was du "
+3627-            f"ueber dich weisst -- das ist gerade in dir passiert, weil "
+--
+4084-    # die Abrufbreite wird gestellt. Nur der Text bleibt draussen.
+4085-    _ = turn_text
+4086-
+4087-    if jetzt_bild and _ueber_ihn:
+4088-        _bloecke["lagebild"] = (
+4089-            "\n\nSo ist es jetzt gerade:\n" + jetzt_bild
+4090-        )
+4091-
+4092:    if gedaechtnis_kontext:
+4093-        _bloecke["gedaechtnis"] = (
+4094-            # 2026-09-08, Gabriel: "er sagt die ganze zeit ob er irgendwas
+4095-            # einbauen oder umstellen soll, er kann sich nicht losgeloest mit
+4096-            # mir unterhalten". Die Ursache war nicht der Prompt (die Klausel
+4097-            # war da schon raus), sondern das GEDAECHTNIS selbst: es ist ein
+4098-            # Arbeitsprotokoll. Jeder Abruf spuelt "[paket:laeuft] ... bauen",
+4099-            # "[thema:fertig] ... einrichten" in seinen Kontext -- er liest bei
+4100-            # jedem Satz Aufgaben und schlaegt folgerichtig Aufgaben vor.
+4101-            # Also wird ihm gesagt, WAS das ist: Notizen, keine Agenda.
+4102-            # ⚠️ Die alte Klammer stand hier aus gutem Grund (siehe oben:
+4103-            # das Gedaechtnis IST ein Arbeitsprotokoll, und er schlug
+4104-            # unaufgefordert Aufgaben vor). Sie ist trotzdem falsch gewesen:
+4105-            # sie nannte genau die Woerter, die sie verbieten wollte, und
+4106-            # wurde am 2026-09-10 woertlich vorgelesen. Die Vergangenheitsform
+4107-            # leistet dasselbe, ohne ein einziges dieser Woerter zu nennen.
+4108:            "\n\nAus frueherer Arbeit weisst du noch:\n" + gedaechtnis_kontext
+4109-        )
+4110:    if konversation_kontext:
+4111-        # Bewusst ein EIGENER Block, additiv neben "gedaechtnis" -- nicht
+4112-        # hineingemischt. `konversation.block()` liefert seine Rahmung schon
+4113-        # selbst mit ("Du erinnerst dich an ein frueheres Gespraech:\n...",
+4114-        # siehe konversation.py) und markiert damit klar: das hier ist
+4115-        # GESPRAECH, kein Sachwissen, keine Arbeitsnotiz. Bewusst OHNE
+4116-        # Relevanztor (siehe oben) -- das Tor wurde fuer den alten,
+4117-        # wortbasierten Stichwortweg gebaut, konversation.py filtert schon
+4118-        # selbst hart ueber Intent/Zeitfenster/Aehnlichkeit VOR der Ausgabe.
+4119:        _bloecke["konversation"] = "\n\n" + konversation_kontext
+4120-    # ═══════════════════════════════════════════════════════════════════
+4121-    # ⭐ ZUWENDUNG: der Wettbewerb entscheidet, WORAUF er in diesem Zug achtet
+4122-    # ═══════════════════════════════════════════════════════════════════
+4123-    # Bis 2026-09-09 entschied ICH das -- `_ueber_ihn` liess die
+4124-    # Selbstauskunft zu, `_SICHTFRAGE` das Bild, ein Relevanztor das
+4125-    # Gedaechtnis. Alles meine Regeln, und damit war seine Aufmerksamkeit
+4126-    # meine. Der Grid formte das WIE (Temperatur, Tempo, Kuehnheit), nie das
+4127-    # WAS. Genau diese Luecke hatte ich benannt, und das hier schliesst sie.

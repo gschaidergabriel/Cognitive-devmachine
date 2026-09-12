@@ -1,0 +1,24 @@
+REPO_STATUS
+## main...origin/main [behind 31]
+LOCAL_HEAD=f60746ffc5d1170e146609036d667bb26ac1d56f
+REMOTE_MAIN=a676258885b964efc2a80599957dc1c09dc3d43b
+USER_SERVICES
+  omega-chatgpt-mcp.service                                        loaded    active   running OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback
+  omega-local-effect-adapter.service                               loaded    active   running OMEGA local Unix effect fallback adapter (ai-core-node only)
+USER_UNIT_DETAILS
+UNIT=omega-chatgpt-mcp.service
+MainPID=3168996
+ExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/omega-chatgpt-mcp.service
+UNIT=omega-local-effect-adapter.service
+MainPID=3168989
+ExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/omega-local-effect-adapter.service
+PROCESSES
+3168989    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_local_effect_adapter.py
+3168996    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py
+3694587  959674 Sat Sep 12 20:37:26 2026 bash -lc set -euo pipefail; R=/home/ai-core-node/omega-bootstrap/oMEGA; echo REPO_STATUS; git -C "$R" status --short --branch; echo LOCAL_HEAD=$(git -C "$R" rev-parse HEAD); echo REMOTE_MAIN=$(git ls-remote https://github.com/gschaidergabriel/oMEGA.git refs/heads/main | awk '{print $1}'); echo USER_SERVICES; systemctl --user list-units --type=service --all --no-pager | grep -i omega || true; echo USER_UNIT_DETAILS; for u in omega-chatgpt-mcp.service omega-local-effect-adapter.service; do echo UNIT=$u; systemctl --user show "$u" -p ActiveState -p SubState -p MainPID -p ExecStart -p FragmentPath --no-pager || true; done; echo PROCESSES; ps -eo pid,ppid,lstart,cmd | grep -Ei '[o]mega|[g]rid_runtime_v3|[m]aster_bridge|[o]uter_bridge' | head -80 || true

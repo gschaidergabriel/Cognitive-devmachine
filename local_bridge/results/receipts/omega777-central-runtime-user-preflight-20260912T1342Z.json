@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega777-central-runtime-user-preflight-20260912T1342Z",
+  "command_sha256": "632a12bdc2a92d2c049f766609c153da0c4fca593682d9e512903f706c9f8730",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:37:26.812899+00:00",
+  "finished_at": "2026-09-12T13:37:28.011647+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "de441536ecaef7c2a9785da005bc8b4a6fa3db26a814bccb2d53d9da46a35900",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "REPO_STATUS\n## main...origin/main [behind 31]\nLOCAL_HEAD=f60746ffc5d1170e146609036d667bb26ac1d56f\nREMOTE_MAIN=a676258885b964efc2a80599957dc1c09dc3d43b\nUSER_SERVICES\n  omega-chatgpt-mcp.service                                        loaded    active   running OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback\n  omega-local-effect-adapter.service                               loaded    active   running OMEGA local Unix effect fallback adapter (ai-core-node only)\nUSER_UNIT_DETAILS\nUNIT=omega-chatgpt-mcp.service\nMainPID=3168996\nExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nFragmentPath=/home/ai-core-node/.config/systemd/user/omega-chatgpt-mcp.service\nUNIT=omega-local-effect-adapter.service\nMainPID=3168989\nExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run-local-adapter.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\nFragmentPath=/home/ai-core-node/.config/systemd/user/omega-local-effect-adapter.service\nPROCESSES\n3168989    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_local_effect_adapter.py\n3168996    2339 Sat Sep 12 19:53:32 2026 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py\n3694587  959674 Sat Sep 12 20:37:26 2026 bash -lc set -euo pipefail; R=/home/ai-core-node/omega-bootstrap/oMEGA; echo REPO_STATUS; git -C \"$R\" status --short --branch; echo LOCAL_HEAD=$(git -C \"$R\" rev-parse HEAD); echo REMOTE_MAIN=$(git ls-remote https://github.com/gschaidergabriel/oMEGA.git refs/heads/main | awk '{print $1}'); echo USER_SERVICES; systemctl --user list-units --type=service --all --no-pager | grep -i omega || true; echo USER_UNIT_DETAILS; for u in omega-chatgpt-mcp.service omega-local-effect-adapter.service; do echo UNIT=$u; systemctl --user show \"$u\" -p ActiveState -p SubState -p MainPID -p ExecStart -p FragmentPath --no-pager || true; done; echo PROCESSES; ps -eo pid,ppid,lstart,cmd | grep -Ei '[o]mega|[g]rid_runtime_v3|[m]aster_bridge|[o]uter_bridge' | head -80 || true\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

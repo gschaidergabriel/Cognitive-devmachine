@@ -1,6 +1,6 @@
 # CLAY NOW — token-efficient current-state cache
 
-Cache head: `bde960a25d675d28e5a28ab8068d12b8f0b7c9ab` · tree `d88f5cd79531` · generated `2026-09-12T02:12:43Z`
+Cache head: `6667a72e39c0e08cfdc8c51be8a76ef705119b54` · tree `65bdaf9edefe` · generated `2026-09-12T02:23:50Z`
 
 > **Cache, not authority.** Read current `SUPERVISOR_INBOX.json` / selected steering before material execution or current-state promotion.
 
@@ -20,7 +20,7 @@ Cache head: `bde960a25d675d28e5a28ab8068d12b8f0b7c9ab` · tree `d88f5cd79531` ·
 - **Global J-Space / causal metrology** `MEASUREMENT_REPAIR_REQUIRED` — Small-scope behavioral steering evidence exists; historical representation-divergence metric is instrumentation-broken and has zero representation-level credit. → `latest/jspace.md`
 - **Claude Code bridge / ZECP13-14** `CURRENT_DESIGN_EVIDENCE_DELTA` — Frankenstein H14 supplies bounded cross-model substitutability evidence; Clay keeps provider admission unchanged and shifts research toward VPS/local deterministic discriminators to conserv… → `latest/claude-bridge.md`
 - **ClayCode / packet ABI / protocol** `CURRENT_DESIGN` — Xeno/ClayCode is the sole addressable model-facing cognitive semantics; JSON/SQLite/Python/tensors are carriers, not a second semantic brain. → `latest/claycode-protocol.md`
-- **Evidence / lineage / Goodman** `IN_PROGRESS` — GO083 real-host preflight proves the active self-test systemd path still executes the pre-080/081 checkout → `latest/evidence-lineage.md`
+- **Evidence / lineage / Goodman** `IN_PROGRESS` — GO084 classifies the live frankenstein-architekt.service failure as Claude session/quota infrastructure, not an EntityOS/GRID10 product negative → `latest/evidence-lineage.md`
 - **Free Swarm / Forge / Distillery** `HARD_OFF_BLOCKED` — FreeSwarm provider admission is owner-emergency-stop HARD_OFF; legacy live processes were observed after stop. Accepted training tokens remain 0 unless newer exact evidence supersedes. → `latest/free-swarm-distillery.md`
 
 ## Highest visible blockers

@@ -1,20 +1,21 @@
 # Evidence / lineage / Goodman
 
 Status: `IN_PROGRESS`  
-Observed head: `a44f23cccac5d91f080a9a3a9908115b67741b63`  
-Selected receipt: `research_entity/00_CURRENT/updates/evidence-lineage/20260912T020707Z-evidence-lineage-go083-subject-binding.json`
+Observed head: `111fa3841c2e197c16181462cb82e02b7642559c`  
+Selected receipt: `research_entity/00_CURRENT/updates/evidence-lineage/20260912T022300Z-evidence-lineage-go084-architect-quota-classification.json`
 
-GO083 real-host preflight proves the active self-test systemd path still executes the pre-080/081 checkout
+GO084 classifies the live frankenstein-architekt.service failure as Claude session/quota infrastructure, not an EntityOS/GRID10 product negative
 
-State: On andreas-maco, grid10-selbsttests.timer is enabled/active and its service resolves into /home/andreas/self-integration, but the live checkout is 2d0bab710a0b229cbf07c443db2da71e552ab6e3 while current self-integration main is add019e2232714c9b73aab2a657d0715ec9960b5 (GO083 log; 080+081 code itself was already present at e28d758a91b181fdeae7160231a1b38e614e46d1). The live watcher/runner blobs are therefore pre-080/081 and cannot support the requested current-subject temporal ok->rcN->ok promotion. No runtime promotion was minted.
+State: Read-only Local Bridge evidence on andreas-maco shows frankenstein-architekt.service loaded but failed with ExecMainStatus=1 at 2026-09-12 00:20:25-00:20:32 CEST. Its exact ExecStart is /home/andreas/architekt/lauf.sh. The launcher is executable, bash syntax-valid, sha256 0e7c9eedd3eaa15756e51960ed39d56de1523c625f3cc34ab5cef1d1a5b3a191, and only execs Claude Code model opus with the architect prompt. The persisted lauf.log records 'You've hit your session limit' with reset notices. Therefore classify the observed failure INFRA_AUTH_TRANSPORT_QUOTA. Do n…
 
-Next: Deploy before discriminate: on a clean exact-bound live checkout, fast-forward only to current self-integration main, verify the 080+081 blob identities, establish a productive systemd baseline with 15/15 and persistent laeufer=ok, then observe a real status transition. This go macrocycle may not i…
+Next: Observe the existing timer after quota reset and preserve any natural recovery as evidence. A separate post-cycle read-only probe has been dispatched on the established local bridge. Do not hide quota exhaustion by converting the service exit to success, and do not invent a provider fallback withou…
 
 Evidence:
-- `gschaidergabriel/self-integration@add019e2232714c9b73aab2a657d0715ec9960b5 log/2026-09-12-083-produktionswaechter-subjekt-ist-alt.md`
-- `gschaidergabriel/clay-global-research-entity control branch chatgpt-local-andreas-maco-control command commit 85822a9dad52ae970174893c315fb7642d677fba`
-- `gschaidergabriel/clay-global-research-entity results branch chatgpt-local-andreas-maco-results receipt commit 1ffd0ec13978aaeb7cbda860956556879e8f5235`
-- `receipt command_id go083-production-transition-preflight-20260912-0903-chatgpt; REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED; PASS; exit 0`
-- `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL fail-closed trigger identity rule`
+- `gschaidergabriel/self-integration@136a18e84afa0cf79b0e0566814934de025a207b log/2026-09-12-083-080-081-sind-jetzt-produktiv.md`
+- `gschaidergabriel/clay-global-research-entity control branch command ffd5a2a906ac479336fb1b0659891307aa42a43c / go084-architekt-failure-readonly-20260912-0920-gpt56sol`
+- `gschaidergabriel/clay-global-research-entity results branch commit c564456f510c04929b1b4a96bf895296230db0b5`
+- `gschaidergabriel/clay-global-research-entity control branch command f8fa255d5524b1ecd4e77aeec541ff9deb361994 / go084-architekt-script-readonly-20260912-0922-gpt56sol`
+- `gschaidergabriel/clay-global-research-entity results branch commit 3b7e97e01ea64a66dea5ba20ed335c3d62c8caa7`
+- `launcher sha256 0e7c9eedd3eaa15756e51960ed39d56de1523c625f3cc34ab5cef1d1a5b3a191`
 
 > Cache only. Re-enter current authority/source before material claims.

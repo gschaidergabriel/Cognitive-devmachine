@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56sol-chatgpt-client-select-diagnose-20260912T1735-0700",
+  "command_sha256": "2fd968b6abf35fe92e598dbf60304aeb6fb9682e8e5035a2a9d118419fe06252",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:11:01.079661+00:00",
+  "finished_at": "2026-09-12T10:11:01.211634+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "1d19e028f889688e20632f669e8c07fe219577294282bc65723c9d86f4cfc12e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "OPEN_SESSION {\"age_s\": 0.0, \"identity_state\": \"IDENTITY_REQUIRED\", \"idle_s\": 0.0, \"lifecycle_started\": false, \"runtime_epoch_id\": null, \"selected_person\": null, \"session_id\": \"select-diag-1789207861\"}\nSELECT_SESSION {\"age_s\": 0.008, \"identity_state\": \"BOUND\", \"idle_s\": 0.0, \"lifecycle_started\": true, \"runtime_epoch_id\": null, \"selected_person\": \"gabriel\", \"session_id\": \"select-diag-1789207861\"}\nSELECT_PERSON gabriel\nASSEMBLY_BOUND True\nCLOSE True\n--- LIVE RUNTIME EPOCH SOURCE ---\n1619:    return hashlib.sha256(roh.encode(\"utf-8\")).hexdigest()[:32]\n3326:    return hashlib.sha256(roh.encode(\"utf-8\")).hexdigest()\n--- CLIENT JOURNAL TAIL ---\nSep 12 17:07:11 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

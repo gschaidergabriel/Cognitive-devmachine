@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-finish-086-target-host-selftest-20260913T0043p07",
+  "command_sha256": "d20b58bd40f8337df7c0ed26054fd23b3a8761cef810d01e641f246c56826d54",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T17:32:44.510335+00:00",
+  "finished_at": "2026-09-12T17:32:47.028349+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "db12bed05b4538557210a0180ea0c6f3b7450dfb9c02f04316e33b23fc5485f8",
+  "stderr_sha256": "ef12183ed27ef41e6f87b49f8fe5bccd4a7a0e45cb5402f698b6b60275f4e574",
+  "stdout_tail": "semantic-state-cutover selftest: PASS\n=== LIVE READONLY INSPECT ===\n{\n  \"current_binds\": [\n    \"--bind=/var/lib/entityos/data:/var/lib/entityos/data\",\n    \"--bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts\",\n    \"--bind=/run/user/1000:/run/user/1000\",\n    \"--bind=/tmp/.X11-unix:/tmp/.X11-unix\"\n  ],\n  \"layout\": {\n    \"config\": \"/etc/entityos/entityos.conf\",\n    \"data_dir\": \"/var/lib/entityos/data\",\n    \"durable_root\": \"/var/lib/entityos/data/semantic-state\",\n    \"manifest\": \"/var/lib/entityos/data/semantic-state/CUTOVER.json\",\n    \"rootfs_run\": \"/var/lib/entityos/rootfs-run\",\n    \"service\": \"entityos-vm.service\"\n  },\n  \"manifest_present\": false,\n  \"populated_sources\": [\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db\",\n    \"/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db\"\n  ],\n  \"required_binds\": [\n    \"--bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero\",\n    \"--bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n  ],\n  \"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\"\n}\nTESTED_BRANCH_HEAD=53ca86fc2d3eb91391fce4bab72851b7ad5e6948\nLIVE_CHECKOUT_UNCHANGED=5b06f6c40eefb9b2bb058c8117f8705cdff50a6a\n",
+  "stderr_tail": "Von github-selfintegration:gschaidergabriel/self-integration\n * branch            chatgpt-work/omega-semantic-state-cutover-20260913 -> FETCH_HEAD\n * [neuer Branch]    chatgpt-work/omega-semantic-state-cutover-20260913 -> origin/chatgpt-work/omega-semantic-state-cutover-20260913\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

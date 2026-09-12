@@ -1,0 +1,22 @@
+IDENTITY host=andreas-MACO user=andreas
+REPO_HEAD=5b06f6c40eefb9b2bb058c8117f8705cdff50a6a
+REPO_BRANCH=main
+REPO_DIRTY_BEGIN
+REPO_DIRTY_END
+SERVICE_ACTIVE=active
+SERVICE_SUB=running
+SERVICE_MAINPID=319869
+SERVICE_ACTIVE_ENTER=Tue 2026-09-08 12:04:36 CEST
+SERVICE_DROPINS=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+SERVICE_EXEC_CONDITION={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+SERVICE_EXEC_STOP_POST=
+SOURCE_SHA werkzeug/fluechtig-vor-start-pruefen.sh 794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0
+SOURCE_SHA werkzeug/semantic-state-cutover.py 
+SOURCE_SHA werkzeug/entityos-vm-volatile-state-guard.conf 8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e
+SOURCE_SHA werkzeug/entityos-vm-semantic-cutover.conf 
+TARGET_SHA /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh 794066b1b4caa6b2ae6ec5098aa019f2c13dbce234d7bb5ec31820273c5946b0
+TARGET_SHA /usr/local/libexec/entityos/semantic-state-cutover.py eebf7473805b3e94cb85588e6768abf3a03f2f61e58d18c51f7f6a40c5d13c2f
+TARGET_SHA /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf 8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e
+TARGET_SHA /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf 01dd25a8fddd4fc97cdbccc1852924461648811776241ffc91ba07589fb5de4d
+CONFIG_ENTITYOS_DATA_DIR=ENTITYOS_DATA_DIR=/var/lib/entityos/data
+PREFLIGHT_READONLY_DONE=1

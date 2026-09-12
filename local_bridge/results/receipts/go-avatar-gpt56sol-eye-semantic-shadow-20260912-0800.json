@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-eye-semantic-shadow-20260912-0800",
+  "command_sha256": "480c7a63776d7483bc191f32f3a6c9d134c785f34b7ab01b76c383473925309e",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T00:54:11.543530+00:00",
+  "finished_at": "2026-09-12T00:54:13.997370+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "77ce67a6a1b0c8a0922440ebb3b450fbda9a90db2282835035c75bcd9797cb3c",
+  "stderr_sha256": "64c16270dabe1271dcf307b56dea1c6e64f1efb418b03fe1671731d8b8631238",
+  "stdout_tail": "BUILDER_SHA256 73ace3d8890375811740b97a1136c03a17cd21e191fd155848bd03b23fffc4c2  /tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\", line 220, in <module>\n    main()\n  File \"/tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\", line 213, in main\n    manifest = build(\n               ^^^^^^\n  File \"/tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\", line 153, in build\n    text, blink_meta = rewrite_blink_function(text)\n                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/go_avatar_eye_semantic_shadow_20260912_0800.py\", line 91, in rewrite_blink_function\n    raise RuntimeError(\nRuntimeError: blink end opacity: expected one occurrence inside blinzeln, got 0\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

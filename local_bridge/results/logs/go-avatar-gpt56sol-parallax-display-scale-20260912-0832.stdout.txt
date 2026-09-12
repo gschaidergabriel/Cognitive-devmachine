@@ -1,0 +1,89 @@
+KOPF_CANVAS_FUNCTION
+  canvasHinten.width = b.width; canvasHinten.height = b.height;
+}
+window.addEventListener("resize", regenGroesseSetzen);
+regenGroesseSetzen();
+
+// ⭐⭐ 2026-09-11 #kopf-canvas exakt auf die reale object-fit:cover-Geometrie
+// bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+// object-position:50% 15%). Cover-Formel: scale = max(containerW/bildW,
+// containerH/bildH); die Leinwand wird auf renderedW x renderedH gesetzt und
+// so weit verschoben, dass an der object-position-Stelle (50%/15%) kein
+// Rand entsteht -- exakt die Formel, die der Browser intern fuer
+// object-fit:cover verwendet. #gesicht-rahmen beschneidet den Ueberstand per
+// overflow:hidden -- optisch identisch zum alten object-fit:cover, aber
+// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+// exakt. offsetWidth/offsetHeight statt getBoundingClientRect -- die sind
+// transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+// mitgemessen werden (nur einmal bei Start/Resize aufgerufen, nicht pro
+// Frame -- die Leinwand selbst ist statisch, der Shake wirkt automatisch
+// weiter oben auf #kamera und bewegt die ganze Szene inklusive Leinwand mit).
+const BILD_W = 1536, BILD_H = 1024, OBJ_POS_X = 0.50, OBJ_POS_Y = 0.15;
+let _kopfCanvasScale = 1; // aktuelle Skala Leinwand-px -> CSS-px, siehe kopfCanvasAnpassen()
+function kopfCanvasAnpassen(){
+  const rahmen = $("gesicht-rahmen");
+  const cw = rahmen.offsetWidth, ch = rahmen.offsetHeight;
+  if(!cw || !ch) return; // noch nicht gelayoutet -- naechster Aufruf greift
+  const scale = Math.max(cw / BILD_W, ch / BILD_H);
+  _kopfCanvasScale = scale;
+  const rw = BILD_W * scale, rh = BILD_H * scale;
+  const ox = (cw - rw) * OBJ_POS_X;
+  const oy = (ch - rh) * OBJ_POS_Y;
+  const kc = $("kopf-canvas");
+  kc.style.left = ox.toFixed(2) + "px";
+  kc.style.top = oy.toFixed(2) + "px";
+  kc.style.width = rw.toFixed(2) + "px";
+  kc.style.height = rh.toFixed(2) + "px";
+}
+window.addEventListener("resize", kopfCanvasAnpassen);
+kopfCanvasAnpassen();
+
+let tempo = 1.0; // aus broadcast_value abgeleitet, 0..~3
+
+// Vordere Ebene: groesser, schneller -- wirkt naeher.
+// Performance-Ventil (Gabriel woertlich: "Bleibt sie unter 24 fps, reduziere
+// zuerst die Regenebenen -- Blinzeln und Mikrobewegung sind die letzten
+// Dinge, die fallen duerfen."). Regenebenen fallen zuerst, Praesenz zuletzt --
+DISPLAY_INFO
+Screen 0: minimum 320 x 200, current 2704 x 1050, maximum 16384 x 16384
+HDMI-A-0 connected primary 1024x600+1680+0 (normal left inverted right x axis y axis) 476mm x 268mm
+   1024x600      59.82*+
+   1920x1080     60.00    50.00    59.94  
+   1280x1024     75.02  
+   1280x720      60.00    50.00    59.94  
+   1024x768      75.03    70.07    60.00  
+   832x624       74.55  
+   800x600       72.19    75.00    60.32    56.25  
+   720x576       50.00  
+   720x480       60.00    59.94  
+   640x480       75.00    72.81    60.00    59.94  
+   720x400       70.08  
+HDMI-A-1 connected 1680x1050+0+0 (normal left inverted right x axis y axis) 477mm x 268mm
+   1920x1080     60.00 +  50.00    59.94  
+   1680x1050     59.88* 
+   1600x900      60.00  
+   1280x1024     75.02    60.02  
+   1440x900      59.90  
+   1280x800      59.91  
+   1152x864      75.00  
+   1280x720      60.00    50.00    59.94  
+   1024x768      75.03    70.07    60.00  
+   832x624       74.55  
+   800x600       72.19    75.00    60.32    56.25  
+   720x576       50.00  
+   720x480       60.00    59.94  
+   640x480       75.00    72.81    66.67    60.00    59.94  
+   720x400       70.08  
+DisplayPort-0 disconnected (normal left inverted right x axis y axis)
+WINDOW=10485764
+X=1746
+Y=114
+WIDTH=958
+HEIGHT=523
+SCREEN=0
+LIVE_HASHES
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2  buehne_daemon.py
+179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b  filmlook.js
+active

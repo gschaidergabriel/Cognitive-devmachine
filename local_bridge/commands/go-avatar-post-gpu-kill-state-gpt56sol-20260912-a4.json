@@ -1,0 +1,12 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"go-avatar-post-gpu-kill-state-gpt56sol-20260912-a4","machine_id":"ai-core-node","owner":"gabriel","op":"exec","cwd":"/home/ai-core-node/.claude/star/visual","timeout_seconds":120,"command":"set -eu; cd /home/ai-core-node/.claude/star/visual; echo '===IDENTITY==='; hostname; date -Is; echo '===HASHES==='; sha256sum buehne_daemon.py buehne.html filmlook.js; echo '===SERVICE==='; systemctl --user is-active frankenstein-buehne.service || true; systemctl --user show frankenstein-buehne.service -p MainPID -p NRestarts -p ActiveState -p SubState -p Result -p ExecMainStatus --no-pager || true; echo '===CHROME_EXACT_ARGV==='; python3 - <<'PY'
+from pathlib import Path
+flags=('--disable-gpu','--disable-gpu-compositing','--disable-software-rasterizer','--use-gl=disabled')
+for p in sorted(Path('/proc').iterdir(), key=lambda x: int(x.name) if x.name.isdigit() else -1):
+    if not p.name.isdigit(): continue
+    try: argv=[x.decode('utf-8','replace') for x in (p/'cmdline').read_bytes().split(b'\0') if x]
+    except Exception: continue
+    if not argv or argv[0] != '/opt/google/chrome/chrome': continue
+    if '--app=http://127.0.0.1:8788/' in argv or '--user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile' in argv:
+        print(p.name, ' '.join(argv)); print('FLAGS', [f for f in flags if f in argv])
+PY
+echo '===HTTP/FPS==='; curl -fsS http://127.0.0.1:8788/ >/dev/null && echo HTTP_OK=1 || echo HTTP_OK=0; for i in 1 2 3; do curl -fsS http://127.0.0.1:8788/api/status 2>/dev/null || true; echo; sleep 1; done; echo '===RESOURCE==='; free -m; ps -eo pid,ppid,pcpu,pmem,rss,args --sort=-pcpu | grep -E 'buehne_daemon.py|chrome-profile' | grep -v grep | head -20 || true; echo '===SERVICE_LOG==='; journalctl --user -u frankenstein-buehne.service -n 80 --no-pager 2>/dev/null || true; echo '===DONE==='"}

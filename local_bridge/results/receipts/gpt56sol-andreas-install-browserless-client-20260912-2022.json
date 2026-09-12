@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-install-browserless-client-20260912-2022",
+  "command_sha256": "886ab1e30b460807a3be65c16223b9cda2b34ff6755409037ee9b21506b6f894",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T13:02:04.256919+00:00",
+  "finished_at": "2026-09-12T13:02:22.237244+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "ce32f7065eb9fabec1a9456886da360cf6d4339778019f3b213ed9c402e911db",
+  "stderr_sha256": "7c0b535961a4d93082d737b76199c9c116a8fa9d35cb522f16d5c5927fa96704",
+  "stdout_tail": "ADMISSION cpu=16 load1=1.38 mem_available_mb=5141\nSOURCE_REPO=/home/andreas/.claude/star/local_bridge_state/repo\n./README.md: OK\n./scripts/deploy_chatgpt_client_live.sh: OK\n./scripts/f2wp1207_titan_mc.py: OK\n./scripts/frankenstein_identity_assembly.py: OK\n./scripts/systemd/frankenstein-chatgpt-client.service: OK\n./scripts/voice_host_agent.py: OK\n./scripts/voice_host_broker.py: OK\n./scripts/voice_host_live_client.py: OK\nDONOR_COMMIT=26b72a81011879bc6626b33077e130493eb840d6\nSERVICE=active\nHEALTH {\"active_sessions\": 0, \"db_path\": \"/var/lib/entityos/unified.db\", \"machine_id\": \"andreas-maco\", \"ok\": true, \"owner\": \"andreas\", \"persistent_client\": true, \"person\": \"andreas\"}\n",
+  "stderr_tail": "Created symlink /etc/systemd/system/multi-user.target.wants/frankenstein-chatgpt-client.service \u2192 /etc/systemd/system/frankenstein-chatgpt-client.service.\nTraceback (most recent call last):\n  File \"<stdin>\", line 12, in <module>\n  File \"<stdin>\", line 6, in call\n  File \"/usr/lib/python3.12/urllib/request.py\", line 215, in urlopen\n    return opener.open(url, data, timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/urllib/request.py\", line 515, in open\n    response = self._open(req, data)\n               ^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/urllib/request.py\", line 532, in _open\n    result = self._call_chain(self.handle_open, protocol, protocol +\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/urllib/request.py\", line 492, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"/usr/lib/python3.12/urllib/request.py\", line 1373, in http_open\n    return self.do_open(http.client.HTTPConnection, req)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/urllib/request.py\", line 1348, in do_open\n    r = h.getresponse()\n        ^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/http/client.py\", line 1428, in getresponse\n    response.begin()\n  File \"/usr/lib/python3.12/http/client.py\", line 331, in begin\n    version, status, reason = self._read_status()\n                              ^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/http/client.py\", line 292, in _read_status\n    line = str(self.fp.readline(_MAXLINE + 1), \"iso-8859-1\")\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/socket.py\", line 707, in readinto\n    return self._sock.recv_into(b)\n           ^^^^^^^^^^^^^^^^^^^^^^^\nTimeoutError: timed out\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

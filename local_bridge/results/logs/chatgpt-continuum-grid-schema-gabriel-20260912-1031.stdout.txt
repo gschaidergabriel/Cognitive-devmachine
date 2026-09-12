@@ -1,0 +1,81 @@
+=== f2_grid10_turn_pointer ===
+CREATE TABLE f2_grid10_turn_pointer (
+    pointer_id             TEXT PRIMARY KEY,
+    installation_id        TEXT NOT NULL,
+    state_root_id          TEXT NOT NULL,
+    runtime_epoch_id       TEXT NOT NULL,
+    session_id             TEXT NOT NULL,
+    frame_id               TEXT NOT NULL,
+    turn_event_id          TEXT NOT NULL,
+    reentry_kind_used      TEXT NOT NULL CHECK (
+        reentry_kind_used IN ('previous_frame','previous_epoch','genesis')),
+    reentry_evidence_json  TEXT NOT NULL,
+    broadcast_winner_cell  TEXT NOT NULL,
+    broadcast_value        REAL NOT NULL,
+    cell_states_json       TEXT NOT NULL,
+    persist_schema         TEXT NOT NULL,
+    created_at             TEXT NOT NULL,
+    UNIQUE (installation_id, state_root_id)
+)
+COLS ["pointer_id", "installation_id", "state_root_id", "runtime_epoch_id", "session_id", "frame_id", "turn_event_id", "reentry_kind_used", "reentry_evidence_json", "broadcast_winner_cell", "broadcast_value", "cell_states_json", "persist_schema", "created_at"]
+LAST {"pointer_id": "dc273e23b93b4b1a9bd189f4e8de36fe", "installation_id": "fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84", "state_root_id": "da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1", "runtime_epoch_id": "21ca9deb1200470d802e1aecd50f04ec", "session_id": "puls-1789174490", "frame_id": "ea0a9eb7d883f3f0a33cfd0d84366b18bde7953b002f0fa116c360c7149143ff", "turn_event_id": "puls-1789174490:295", "reentry_kind_used": "previous_frame", "reentry_evidence_json": "{\"effect_journal_id\":\"cabe5c6ba4914e5b8df72cc9404adaf9\",\"pointer_created_at\":\"2026-09-12T03:28:23Z\",\"pointer_frame_id\":\"b56e054456ce0f4b4ba31ea7c996938f0b7208bc32d5cf82f6f7739471e20711\",\"pointer_id\":\"89bb0a1d938b4163b46e4eba42f559c4\",\"pointer_reentry_kind_used\":\"previous_frame\",\"pointer_turn_event_id\":\"puls-1789174490:294\",\"resolved_kind\":\"previous_frame\",\"typed_entry\":{\"abstrakt_abstraktionsgrad\":null,\"abstrakt_bindung\":null,\"abstrakt_endgueltigkeit\":null,\"abstrakt_intensitaet\":null,\"abstrakt_valenz\":null,\"event_type\":\"Sprachbeitrag\",\"modell_entropie\":null,\"modell_streuung\":null,\"modell_ueberraschung\":null,\"prompt_len\":308,\"retrieval_len\":0,\"retrieval_present\":false,\"runtime_epoch_id\":\"21ca9deb1200470d802e1aecd50f04ec\",\"schema\":\"F2WP1207_TYPED_ENTRY/v1\",\"session_id\":\"puls-1789174490\",\"ts\":\"2026-09-12T03:28:54Z\",\"turn_event_id\":null,\"welt_ueberraschung\":null}}", "broadcast_winner_cell": "G10", "broadcast_value": 1.485482416200873, "cell_states_json": "{\"G1\":-9.83575674101495e-50,\"G10\":3.4752379800801267,\"G2\":-4.446889529042737e-89,\"G3\":-4.171188319851524e-251,\"G4\":-5e-324,\"G5\":-9.83575674101495e-50,\"G6\":-4.443344056710664e-89,\"G7\":-5e-324,\"G8\":2.7750296035195764e-49,\"G9\":-1.0620409483476071e-78}", "persist_schema": "F2WP1207_TURN_POINTER/v1", "created_at": "2026-09-12T03:28:54Z"}
+=== f2_grid10_frame ===
+CREATE TABLE f2_grid10_frame (
+    frame_id            TEXT PRIMARY KEY,
+    entity_id           TEXT NOT NULL REFERENCES f2_entity_identity(entity_id),
+    installation_id     TEXT NOT NULL REFERENCES f2_installation_identity(installation_id),
+    state_root_id        TEXT NOT NULL REFERENCES f2_state_root_identity(state_root_id),
+    runtime_epoch_id     TEXT NOT NULL REFERENCES f2_runtime_epoch(runtime_epoch_id),
+    session_id            TEXT NOT NULL,
+    turn_event_id          TEXT NOT NULL,
+    opened_at              TEXT NOT NULL,
+    closed_at               TEXT,
+    status                  TEXT NOT NULL CHECK (status IN ('OPEN','CLOSED','FAILED')),
+    schema                  TEXT NOT NULL, cohort TEXT NOT NULL DEFAULT 'ORGANIC', broadcast_winner_cell TEXT, broadcast_value REAL, experiment_condition TEXT, state_weight REAL,
+    UNIQUE (runtime_epoch_id, turn_event_id)
+)
+COLS ["frame_id", "entity_id", "installation_id", "state_root_id", "runtime_epoch_id", "session_id", "turn_event_id", "opened_at", "closed_at", "status", "schema", "cohort", "broadcast_winner_cell", "broadcast_value", "experiment_condition", "state_weight"]
+LAST {"frame_id": "ea0a9eb7d883f3f0a33cfd0d84366b18bde7953b002f0fa116c360c7149143ff", "entity_id": "7a1bd3f56160ce514659f8c9117484057f1e7a8fb77696e5c7a55cee3e94f8ae", "installation_id": "fb068ee81863d513206561cf384016c8bf689fe7c647896ef64b4b2e63e7db84", "state_root_id": "da592ade8dba4c84dfa1541aef7665b5120023491e5ea09fd7ace9853c5d63b1", "runtime_epoch_id": "21ca9deb1200470d802e1aecd50f04ec", "session_id": "puls-1789174490", "turn_event_id": "puls-1789174490:295", "opened_at": "2026-09-12T03:28:54Z", "closed_at": "2026-09-12T03:28:54Z", "status": "CLOSED", "schema": "F2WP1207_GRID10_FRAME/v1", "cohort": "ORGANIC", "broadcast_winner_cell": "G10", "broadcast_value": 1.485482416200873, "experiment_condition": "f2wp1207_canonical_turn_loop", "state_weight": 1.0}
+=== f2_grid10_cell_observation ===
+CREATE TABLE f2_grid10_cell_observation (
+    observation_id             TEXT PRIMARY KEY,
+    frame_id                    TEXT NOT NULL REFERENCES f2_grid10_frame(frame_id),
+    logical_cell_id               TEXT NOT NULL
+        CHECK (logical_cell_id IN ('G1','G2','G3','G4','G5','G6','G7','G8','G9','G10')),
+    input_digest_sha256            TEXT,
+    output_digest_sha256           TEXT,
+    uptake                          INTEGER NOT NULL DEFAULT 0,
+    reentry_flag                    INTEGER NOT NULL DEFAULT 0,
+    conflict_flag                   INTEGER NOT NULL DEFAULT 0,
+    timing_ms                       REAL,
+    cpu_ru_utime_delta_s             REAL,
+    rss_delta_kb                      INTEGER,
+    predecessor_observation_id        TEXT REFERENCES f2_grid10_cell_observation(observation_id),
+    schema                            TEXT NOT NULL, execution_position INTEGER,
+    UNIQUE (frame_id, logical_cell_id)
+)
+COLS ["observation_id", "frame_id", "logical_cell_id", "input_digest_sha256", "output_digest_sha256", "uptake", "reentry_flag", "conflict_flag", "timing_ms", "cpu_ru_utime_delta_s", "rss_delta_kb", "predecessor_observation_id", "schema", "execution_position"]
+LAST {"observation_id": "8a08f5b2b62d3db2158a40b6a059cabc90411e7dc44498c6c6ea94b71836b0ea", "frame_id": "ea0a9eb7d883f3f0a33cfd0d84366b18bde7953b002f0fa116c360c7149143ff", "logical_cell_id": "G8", "input_digest_sha256": "26222b33eac27c691a48d108feaedbadb11a46e9caf07b395d5c7795a7550c2a", "output_digest_sha256": "93f7733114ed7a99b924d19a7831ab5b3835a1afd655c3c5134c33129452aa44", "uptake": 0, "reentry_flag": 1, "conflict_flag": 0, "timing_ms": null, "cpu_ru_utime_delta_s": null, "rss_delta_kb": null, "predecessor_observation_id": null, "schema": "F2WP1207_GRID10_CELL_OBSERVATION/v1", "execution_position": 10}
+=== f2_grid10_p6d_state ===
+CREATE TABLE f2_grid10_p6d_state (
+    condition_key TEXT NOT NULL,
+    logical_cell_id TEXT NOT NULL CHECK (logical_cell_id IN ('G1','G2','G3','G4','G5','G6','G7','G8','G9','G10')),
+    state_value REAL NOT NULL DEFAULT 0.0,
+    updated_at TEXT NOT NULL,
+    updated_by_frame_id TEXT,
+    won_broadcast_count INTEGER NOT NULL DEFAULT 0,
+    schema TEXT NOT NULL,
+    PRIMARY KEY (condition_key, logical_cell_id)
+)
+COLS ["condition_key", "logical_cell_id", "state_value", "updated_at", "updated_by_frame_id", "won_broadcast_count", "schema"]
+LAST {"condition_key": "f2wp1207_canonical_turn_loop", "logical_cell_id": "G10", "state_value": 3.4752379800801267, "updated_at": "2026-09-12T03:28:54Z", "updated_by_frame_id": "ea0a9eb7d883f3f0a33cfd0d84366b18bde7953b002f0fa116c360c7149143ff", "won_broadcast_count": 743, "schema": "F2WP1207_GRID10_P6D_STATE/v1"}
+=== star_konfig ===
+CREATE TABLE star_konfig(
+  schluessel TEXT PRIMARY KEY,
+  wert TEXT NOT NULL,
+  typ TEXT NOT NULL,
+  quelle TEXT,
+  geaendert REAL NOT NULL
+)
+COLS ["schluessel", "wert", "typ", "quelle", "geaendert"]
+LAST {"schluessel": "persona.zaehler.b04e006f-a673-4974-bff8-53ac338b1b8d", "wert": "4", "typ": "str", "quelle": "UserPromptSubmit", "geaendert": 1789178081.541555}

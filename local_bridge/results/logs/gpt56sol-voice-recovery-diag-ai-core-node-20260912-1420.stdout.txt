@@ -1,0 +1,59 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-12T14:30:19+07:00
+===SERVICE===
+not-found
+inactive
+Result=success
+ExecMainStatus=0
+LoadState=not-found
+ActiveState=inactive
+SubState=dead
+FragmentPath=
+===PROCESSES===
+3255292 bash -lc set +e; echo '===IDENTITY==='; hostname; whoami; date -Is; echo '===SERVICE==='; systemctl --user is-enabled frankenstein-gespraechsmodus.service 2>&1; systemctl --user is-active frankenstein-gespraechsmodus.service 2>&1; systemctl --user show frankenstein-gespraechsmodus.service -p LoadState -p ActiveState -p SubState -p Result -p ExecMainStatus -p ExecStart -p FragmentPath --no-pager 2>&1; echo '===PROCESSES==='; pgrep -af 'gespraechsmodus.py|realtime_gespraech.py|frank_voice_lite.py' || true; echo '===JOURNAL==='; journalctl --user -u frankenstein-gespraechsmodus.service -n 100 --no-pager 2>&1; echo '===AUDIO==='; pactl info 2>&1 | sed -n '1,30p'; python3 - <<'PY' mods=['sounddevice','websockets','onnxruntime','faster_whisper'] for m in mods:     try:         x=__import__(m); print(m,'OK',getattr(x,'__version__','?'))     except Exception as e:         print(m,'FAIL',type(e).__name__,str(e)) try:  import sounddevice as sd  print('devices',sd.query_devices())  print('default',sd.default.device) except Exception as e: print('sounddevice_query FAIL',type(e).__name__,str(e)) PY echo '===FILES==='; unit=$(systemctl --user show frankenstein-gespraechsmodus.service -p ExecStart --value 2>/dev/null); printf '%s\n' "$unit"; for p in /home/ai-core-node/.claude/star/gespraechsmodus.py /home/ai-core-node/.claude/star/realtime_gespraech.py /home/ai-core-node/.claude/star/frank_voice_lite.py /home/ai-core-node/.claude/star/voice_loop_core.py /home/ai-core-node/.claude/star/voice_session_capsule.py /home/ai-core-node/.claude/star/voice_outcome_events.py /home/ai-core-node/.claude/star/stern.py; do if [ -f "$p" ]; then sha256sum "$p"; else echo MISSING "$p"; fi; done; echo '===VOICE_CONFIG_NONSECRET==='; python3 /home/ai-core-node/.claude/star/stern.py gespraech-status-lesen 2>&1 | head -c 12000; echo;
+===JOURNAL===
+-- No entries --
+===AUDIO===
+Server String: /run/user/1000/pulse/native
+Library Protocol Version: 35
+Server Protocol Version: 35
+Is Local: yes
+Client Index: 329359
+Tile Size: 65472
+User Name: ai-core-node
+Host Name: ai-core-node-projekt-frankenstein
+Server Name: PulseAudio (on PipeWire 1.0.5)
+Server Version: 15.0.0
+Default Sample Specification: float32le 2ch 48000Hz
+Default Channel Map: front-left,front-right
+Default Sink: frank_out_ec
+Default Source: alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo
+Cookie: 917d:941d
+sounddevice OK 0.5.5
+websockets OK 16.0
+onnxruntime OK 1.24.2
+faster_whisper OK 1.2.1
+devices   0 HD-Audio Generic: HDMI 1 (hw:0,7), ALSA (0 in, 8 out)
+  1 HD-Audio Generic: HDMI 2 (hw:0,8), ALSA (0 in, 8 out)
+  2 HD-Audio Generic: HDMI 3 (hw:0,9), ALSA (0 in, 8 out)
+  3 RODE NT-USB: USB Audio (hw:1,0), ALSA (0 in, 2 out)
+  4 HD-Audio Generic: ALC269VC Analog (hw:2,0), ALSA (2 in, 2 out)
+  5 Rapoo Camera: USB Audio (hw:3,0), ALSA (2 in, 0 out)
+  6 pipewire, ALSA (64 in, 64 out)
+  7 pulse, ALSA (32 in, 32 out)
+* 8 default, ALSA (64 in, 64 out)
+default [8, 8]
+===FILES===
+
+7678e20a9de56cb086bb1c5c0f2d1a5bf1a5359853f7bff4369d3e00345b1709  /home/ai-core-node/.claude/star/gespraechsmodus.py
+5414c8e9b681a9dee7de03e41a5f24a8a978fc783100daeed170ceea99a0b2d4  /home/ai-core-node/.claude/star/realtime_gespraech.py
+deb1f5a7a933e63ed8056bdaacd5f3282e267885eca12450c063c0c251ca3094  /home/ai-core-node/.claude/star/frank_voice_lite.py
+0cddd395a93cecc6ed332513d0f359e25a5aa1c5df0a268a53b0ceb30411b151  /home/ai-core-node/.claude/star/voice_loop_core.py
+c9104c11f9ab3940be3c9ce09f99055e72c686106c329c9a9652a5bd8560728c  /home/ai-core-node/.claude/star/voice_session_capsule.py
+755c7ba2e6b325c1513a78c2e8227e8d88ac08cec579c1dc5930b9bf71ddfe9a  /home/ai-core-node/.claude/star/voice_outcome_events.py
+0d5b7764cebe8c9e4f3ce2a697ae390c0c1b5cde99ac051eb662260735c808a1  /home/ai-core-node/.claude/star/stern.py
+===VOICE_CONFIG_NONSECRET===
+{"ok": true, "uhrzeit": "2026-09-12 14:30:26", "laufende_auftraege": [{"auftrag": "AVATAR BODY/SHOULDER FALSIFIER ONLY. Current exact production buehne.html SHA256 is 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e. Eye/blink/roll lane is owned by another active wo…", "womit": "harness:aider:nvidia-nemotron", "stand": "laeuft"}], "waechter": {"beschreibung": "blockiert bei Start", "letzter_herzschlag_vor_sekunden": 824440.7, "status": "blockiert_wartet_auf_nutzer"}, "andere_sitzungen_im_raum": [{"session_id": "b04e006f-a673-4974-bff8-53ac338b1b8d", "was": "running: cd /opt/entityos/voice && pyth…", "spitzname": "Deprecated Dream", "vor_sekunden": 1601.0}, {"session_id": "74fa0c7e-4baf-4910-bad8-46352eb85bc4", "was": "running: cd ~/.claude/star && python3 s…", "spitzname": "Sitzung 2", "vor_sekunden": 2680.9}]}
+

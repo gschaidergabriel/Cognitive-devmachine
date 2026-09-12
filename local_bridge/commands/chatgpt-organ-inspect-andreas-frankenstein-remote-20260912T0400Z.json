@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-organ-inspect-andreas-frankenstein-remote-20260912T0400Z",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "command": "set -u; R=/home/andreas/frankenstein-repo; echo '--- remote ---'; git -C \"$R\" remote -v; echo '--- git dirs ---'; stat -c '%a %U:%G %n' \"$R/.git\" \"$R/.git/objects\"; echo '--- status hash ---'; git -C \"$R\" status --porcelain | sha256sum; echo '--- head ---'; git -C \"$R\" rev-parse HEAD",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 30
+}

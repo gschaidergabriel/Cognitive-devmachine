@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-daemon-topology-20260912T2033Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 20,
+  "command": "python3 -c \"from pathlib import Path; p=Path('/workspace/omega_runtime/omega_daemon.py'); lines=p.read_text().splitlines(); needles=('grid_runtime','telemetry','master_bridge','bridge_relay','spool_bridge','outer_bridge','subprocess','Popen'); print('\\n'.join(f'{i+1}:{line}' for i,line in enumerate(lines) if any(n in line for n in needles)))\""
+}

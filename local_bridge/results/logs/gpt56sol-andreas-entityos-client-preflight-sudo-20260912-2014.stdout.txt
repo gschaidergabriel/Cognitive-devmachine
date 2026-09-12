@@ -1,0 +1,27 @@
+SUDO
+sudo_rc=0
+LEADER=319871
+===IDENTITY===
+andreas-MACO
+uid=1000(frank) gid=1000(frank) groups=1000(frank)
+===DB===
+---/var/lib/entityos/unified.db
+-rw-r--r-- 1 frank frank 87482368 Sep 12 14:56 /var/lib/entityos/unified.db
+frank frank 644 87482368
+---/var/lib/entityos/data/unified.db
+-rw-r--r-- 1 frank frank 87482368 Sep 12 14:56 /var/lib/entityos/data/unified.db
+frank frank 644 87482368
+===PYTHON===
+Python 3.12.3
+===FILES===
+---/opt/entityos/voice/voice_host_agent.py
+---/opt/entityos/voice/voice_host_live_client.py
+---/opt/entityos/voice/f2wp1207_titan_mc.py
+---/opt/entityos/voice/frankenstein_identity_assembly.py
+---/home/andreas/frankenstein-repo/scripts/stern.py
+-rw-r--r-- 1 frank frank 988540 Sep 12 14:32 /home/andreas/frankenstein-repo/scripts/stern.py
+===SERVICES===
+  frankenstein-cortex.service              loaded    active   running FranKenstein Cortex
+  frankenstein-gespraech-waechter.service  loaded    inactive dead    FranKenstein Gespraechs-Waechter (startet/stoppt die Sprachschleife)
+● run-p1752242-i56241482.service           loaded    failed   failed  [systemd-run] bash -c "cat /opt/entityos/voice/zustand/gespraech.json 2>/dev/null || ls /opt/entityos/voice/zustand 2>/dev/null"
+===PORT8765===

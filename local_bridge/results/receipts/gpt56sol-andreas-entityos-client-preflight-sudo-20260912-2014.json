@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56sol-andreas-entityos-client-preflight-sudo-20260912-2014",
+  "command_sha256": "63b53ca3d451e019aa6a4f7ced39b2e32c38e846260debd650e6f4e326b82c5e",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T12:57:48.955009+00:00",
+  "finished_at": "2026-09-12T12:57:49.097775+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "dc8a27b442185ffe6c8c4ead26840e4df8837d1c1e9fa34fcc3824097b3fcc90",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "SUDO\nsudo_rc=0\nLEADER=319871\n===IDENTITY===\nandreas-MACO\nuid=1000(frank) gid=1000(frank) groups=1000(frank)\n===DB===\n---/var/lib/entityos/unified.db\n-rw-r--r-- 1 frank frank 87482368 Sep 12 14:56 /var/lib/entityos/unified.db\nfrank frank 644 87482368\n---/var/lib/entityos/data/unified.db\n-rw-r--r-- 1 frank frank 87482368 Sep 12 14:56 /var/lib/entityos/data/unified.db\nfrank frank 644 87482368\n===PYTHON===\nPython 3.12.3\n===FILES===\n---/opt/entityos/voice/voice_host_agent.py\n---/opt/entityos/voice/voice_host_live_client.py\n---/opt/entityos/voice/f2wp1207_titan_mc.py\n---/opt/entityos/voice/frankenstein_identity_assembly.py\n---/home/andreas/frankenstein-repo/scripts/stern.py\n-rw-r--r-- 1 frank frank 988540 Sep 12 14:32 /home/andreas/frankenstein-repo/scripts/stern.py\n===SERVICES===\n  frankenstein-cortex.service              loaded    active   running FranKenstein Cortex\n  frankenstein-gespraech-waechter.service  loaded    inactive dead    FranKenstein Gespraechs-Waechter (startet/stoppt die Sprachschleife)\n\u25cf run-p1752242-i56241482.service           loaded    failed   failed  [systemd-run] bash -c \"cat /opt/entityos/voice/zustand/gespraech.json 2>/dev/null || ls /opt/entityos/voice/zustand 2>/dev/null\"\n===PORT8765===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

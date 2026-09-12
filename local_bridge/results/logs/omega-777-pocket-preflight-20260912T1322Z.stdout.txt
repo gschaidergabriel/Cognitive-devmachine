@@ -1,0 +1,14 @@
+python=Python 3.12.3
+uv=uvx=pip=pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2  937G  686G  204G  78% /
+/dev/nvme0n1p2  937G  686G  204G  78% /
+--- pocket artifacts ---
+missing /home/ai-core-node/.cache/uv
+55G	/home/ai-core-node/.cache/huggingface
+91M	/home/ai-core-node/.cache/torch
+missing /home/ai-core-node/.local/share/omega777-pocket
+missing /tmp/omega777-pocket
+--- running pocket processes ---
+3507154 bash -lc set -euo pipefail printf 'python='; python3 --version printf 'uv='; command -v uv || true printf 'uvx='; command -v uvx || true printf 'pip='; python3 -m pip --version 2>/dev/null || true printf '%s\n' '--- disk ---' df -h "$HOME" /tmp | sed -n '1,3p' printf '%s\n' '--- pocket artifacts ---' for p in "$HOME/.cache/uv" "$HOME/.cache/huggingface" "$HOME/.cache/torch" "$HOME/.local/share/omega777-pocket" "/tmp/omega777-pocket"; do if [ -e "$p" ]; then du -sh "$p" 2>/dev/null || true; else echo "missing $p"; fi; done printf '%s\n' '--- running pocket processes ---' pgrep -af 'pocket[-_]tts|omega777.*pocket' || true

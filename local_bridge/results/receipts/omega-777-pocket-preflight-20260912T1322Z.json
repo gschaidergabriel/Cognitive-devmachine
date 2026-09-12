@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-777-pocket-preflight-20260912T1322Z",
+  "command_sha256": "99217216a3749770d7f34a07605d2f9faf6732ce79170dc840b0b1bfe775b9fa",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:21:16.556511+00:00",
+  "finished_at": "2026-09-12T13:21:17.292473+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "f6cd9f3669a6efd5afcad1d9bcd75653789ffa7e452065239224cba55ec7c09c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "python=Python 3.12.3\nuv=uvx=pip=pip 24.0 from /usr/lib/python3/dist-packages/pip (python 3.12)\n--- disk ---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/nvme0n1p2  937G  686G  204G  78% /\n/dev/nvme0n1p2  937G  686G  204G  78% /\n--- pocket artifacts ---\nmissing /home/ai-core-node/.cache/uv\n55G\t/home/ai-core-node/.cache/huggingface\n91M\t/home/ai-core-node/.cache/torch\nmissing /home/ai-core-node/.local/share/omega777-pocket\nmissing /tmp/omega777-pocket\n--- running pocket processes ---\n3507154 bash -lc set -euo pipefail printf 'python='; python3 --version printf 'uv='; command -v uv || true printf 'uvx='; command -v uvx || true printf 'pip='; python3 -m pip --version 2>/dev/null || true printf '%s\\n' '--- disk ---' df -h \"$HOME\" /tmp | sed -n '1,3p' printf '%s\\n' '--- pocket artifacts ---' for p in \"$HOME/.cache/uv\" \"$HOME/.cache/huggingface\" \"$HOME/.cache/torch\" \"$HOME/.local/share/omega777-pocket\" \"/tmp/omega777-pocket\"; do if [ -e \"$p\" ]; then du -sh \"$p\" 2>/dev/null || true; else echo \"missing $p\"; fi; done printf '%s\\n' '--- running pocket processes ---' pgrep -af 'pocket[-_]tts|omega777.*pocket' || true\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,9 @@
+SHA=ffa1d0b48bfade144a77be208b0d76af2ecaecc841999eb58e1a3263dac3173a
+PROCESSES
+944586 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944587 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1
+944589 python3 /workspace/omega_runtime/omega_daemon.py
+947071 bash -lc echo SHA=$(sha256sum omega_daemon.py | awk '{print $1}'); echo PROCESSES; pgrep -af '/workspace/omega_runtime/omega_daemon.py' || true; echo TMUX; tmux list-panes -t omega-grid -F '#{pane_pid} #{pane_current_command} #{pane_dead}' 2>/dev/null || true; echo TASKS; sqlite3 -json state/omega.sqlite3 'select id,state,created from task order by rowid;'
+TMUX
+944587 bash 0
+TASKS

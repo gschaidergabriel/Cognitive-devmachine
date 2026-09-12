@@ -1,0 +1,50 @@
+...F.................F                                                   [100%]
+=================================== FAILURES ===================================
+____ test_exact_provider_response_instructions_contain_omega_and_retrieval _____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x77518244e4b0>
+
+    def test_exact_provider_response_instructions_contain_omega_and_retrieval(monkeypatch):
+        final.patch_final_runtime()
+        obj = _session_obj(role="user", name="Gabriel")
+        obj.voice_full.bind("gabriel", receipt={"machine_id": "ai-core-node", "owner": "gabriel"})
+        obj._voice_emergent_context = "OMEGA_RETRIEVAL_SENTINEL"
+        obj._voice_emergent_queried = True
+        obj._voice_emergent_chars = len(obj._voice_emergent_context)
+        monkeypatch.setattr(final.base, "_local_inner_state", lambda self: "")
+    
+        ws = FakeWS()
+        final.rt.RealtimeSession._response_erstellen(obj, ws)
+    
+        creates = [m for m in ws.messages if m.get("type") == "response.create"]
+        assert len(creates) == 1
+        instructions = creates[0]["response"]["instructions"]
+        assert "SELF=OMEGA." in instructions
+        assert "OMEGA_RETRIEVAL_SENTINEL" in instructions
+        assert "CURRENT_TURN_MEMORY" in instructions
+        assert "EMERGENT_RETRIEVAL_STATUS{queried=true" in instructions
+>       assert "voll handlungsfaehig" in instructions
+E       assert 'voll handlungsfaehig' in 'Du bist FranKensteinಠ_ಠ -- nicht "Claude, der FranKenstein spielt", volle Identifikation, und gleichzeitig derselbe C...ten Erinnerungen, internen Daten oder Effect-Rechte.\n\nEMERGENT_RETRIEVAL_STATUS{queried=true;chars=24;injected=true}'
+
+tests/test_voice_omega_retrieval.py:115: AssertionError
+----------------------------- Captured stderr call -----------------------------
+[2026-09-12 17:54:10] realtime_gespraech: Response-Release: id=f2resp_c3be1887aa6440b392bfc09a0bbfa38f class=normal floor=None dialogue=None proactive=None tool_choice=session-default max_output_tokens=session-default
+_________________________ test_model_is_organ_not_self _________________________
+
+    def test_model_is_organ_not_self():
+        rendered = build_identity_assembly(
+            selected_person=None,
+            channel="voice",
+            model_organ="GPT-5.6 Sol",
+        ).render()
+        assert "SELF=FranKenstein" in rendered
+        assert "INFERENCE_ORGAN=GPT-5.6 Sol" in rendered
+        assert "not SELF" in rendered
+>       assert "Do not replace your agent identity with 'ChatGPT'" in rendered
+E       assert "Do not replace your agent identity with 'ChatGPT'" in '<frankenstein-identity-active-assembly>\nschema=FRANKENSTEIN_IDENTITY_ASSEMBLY/v1\nSELF=FranKenstein.\nSELF_INVARIANT...and capable of initiative. Explicit user refusal stops pressure immediately.\n</frankenstein-identity-active-assembly>'
+
+tests/test_frankenstein_identity_assembly.py:77: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_voice_omega_retrieval.py::test_exact_provider_response_instructions_contain_omega_and_retrieval
+FAILED tests/test_frankenstein_identity_assembly.py::test_model_is_organ_not_self
+2 failed, 20 passed in 0.91s

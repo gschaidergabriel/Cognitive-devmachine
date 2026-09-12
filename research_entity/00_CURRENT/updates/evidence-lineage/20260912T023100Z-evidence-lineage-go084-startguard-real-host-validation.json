@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "direction": "evidence-lineage",
+  "created_at": "2026-09-12T02:31:00Z",
+  "status": "ACCEPTED_AT_SOURCE_AND_READONLY_REAL_HOST_DISCRIMINATOR_SCOPE",
+  "headline": "GO084 now has a fail-closed volatile semantic-state start guard on self-integration main, validated against the real host without mutating the VM lifecycle",
+  "state": "self-integration main is 73284879a50d655e64b9dde6f4491e0eb4cc4a6f and contains werkzeug/fluechtig-vor-start-pruefen.sh plus a 10-case self-test. The guard scans only the old rootfs-run semantic state trees under root/.local/share/agentzero and root/.local/share/frank, identifies SQLite by magic bytes, excludes cache scope, permits schema-only databases, and fails closed with rc=255 on populated semantic state, unreadable SQLite candidates, missing required tools, or incompletely traversable trees. The real andreas-maco read-only discriminator returned rc=255 and named four populated semantic stores: consciousness.db, the clone-local agentzero/unified.db, amygdala.db, and world_experience.db. The live checkout was not modified by the discriminator. This proves the guard detects the present loss condition. It does NOT prove entityos-vm.service currently invokes the guard before its destructive rootfs-run recreation; the observed live unit does not contain this guard, so lifecycle wiring remains open.",
+  "evidence": [
+    "gschaidergabriel/self-integration@73284879a50d655e64b9dde6f4491e0eb4cc4a6f",
+    "self-integration werkzeug/fluechtig-vor-start-pruefen.sh",
+    "chatgpt-local-andreas-maco-results@53fd6f50f938d458fafb27fab80cac48dbe207a8 command go084-startguard-validate2-20260912-0930-gpt56sol",
+    "gschaidergabriel/clay-global-research-entity@4240bf141ece02118be479a88666c91c7c0fbbf9"
+  ],
+  "promotion": {
+    "source_guard_credit": 1,
+    "selftest_credit": 1,
+    "real_host_readonly_detection_credit": 1,
+    "live_vm_lifecycle_wiring_credit": 0,
+    "state_rescue_or_migration_credit": 0,
+    "restart_survival_readback_credit": 0
+  },
+  "zero_credit": [
+    "no DB rescue/migration performed",
+    "no entityos-vm.service wiring installed or proven",
+    "no VM restart performed",
+    "no physical GRID10 promotion",
+    "no GWT/J-Space semantic promotion",
+    "no effect credit",
+    "no training credit",
+    "no whole-product credit"
+  ],
+  "next": "Keep the destructive VM start fail-closed in design: the next executable product boundary is to wire this exact accepted guard into the admitted VM lifecycle before the rootfs-run rm -rf, then perform the already-specified SQLite backup/bind/recreate/readback migration only under current effect/owner authority. Do not restart the VM merely to test the guard while four semantic stores remain volatile.",
+  "active": {
+    "branch": "main",
+    "request": "go/GO084-startguard-evidence-closure"
+  },
+  "organ": "GPT-5.6-Sol-go-organ",
+  "receipt_id": "20260912T023100Z-evidence-lineage-go084-startguard-real-host-validation"
+}

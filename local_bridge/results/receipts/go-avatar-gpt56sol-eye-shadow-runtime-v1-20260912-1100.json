@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-gpt56sol-eye-shadow-runtime-v1-20260912-1100",
+  "command_sha256": "db2630400effb994096316265538ccb1176c894f510fe918065ce6a1da5aa415",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T01:46:49.563116+00:00",
+  "finished_at": "2026-09-12T01:47:10.004893+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "fe2040b27cf4aa86f2c45f3bac6deea18c1482bb739de2b28353ea563323b052",
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_socket.py\", line 127, in recv\n    bytes_ = _recv()\n             ^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_socket.py\", line 99, in _recv\n    return sock.recv(bufsize)\n           ^^^^^^^^^^^^^^^^^^\nTimeoutError: timed out\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/tmp/go-eye-shadow-runtime.gwXayH/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime.py\", line 341, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/tmp/go-eye-shadow-runtime.gwXayH/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime.py\", line 230, in main\n    samples = cdp.eval(\n              ^^^^^^^^^\n  File \"/tmp/go-eye-shadow-runtime.gwXayH/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime.py\", line 69, in eval\n    result = self.call(\n             ^^^^^^^^^^\n  File \"/tmp/go-eye-shadow-runtime.gwXayH/repo/research_entity/avatar_eye_identity/validate_shadow_blink_runtime.py\", line 61, in call\n    msg = json.loads(self.ws.recv())\n                     ^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_core.py\", line 395, in recv\n    opcode, data = self.recv_data()\n                   ^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_core.py\", line 423, in recv_data\n    opcode, frame = self.recv_data_frame(control_frame)\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_core.py\", line 444, in recv_data_frame\n    frame = self.recv_frame()\n            ^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_core.py\", line 485, in recv_frame\n    return self.frame_buffer.recv_frame()\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_abnf.py\", line 375, in recv_frame\n    self.recv_header()\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_abnf.py\", line 329, in recv_header\n    header = self.recv_strict(2)\n             ^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_abnf.py\", line 418, in recv_strict\n    bytes_ = self.recv(min(16384, shortage))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_core.py\", line 581, in _recv\n    return recv(self.sock, bufsize)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ai-core-node/.local/lib/python3.12/site-packages/websocket/_socket.py\", line 129, in recv\n    raise WebSocketTimeoutException(\"Connection timed out\")\nwebsocket._exceptions.WebSocketTimeoutException: Connection timed out\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

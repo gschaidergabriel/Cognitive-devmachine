@@ -1,0 +1,69 @@
+DONE_ROW []
+LIVE_SHA 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+46:      Handy filmen ... leicht Cam-Shake, aber realistisch"). #kamera traegt die
+48:      Ebene -- der Wackel-Transform (siehe kameraWackeln() unten) wird NUR hier
+51:      #kamera selbst ist 112% gross und -6% versetzt -- Overscan-Reserve, damit
+53:   #kamera{position:absolute;inset:-6%;width:112%;height:112%;will-change:transform}
+54:   @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+55:   #kamera.kamera-wechsel{animation:kamera-overshoot .42s cubic-bezier(.32,1.55,.6,1)}
+111:      #koerper-schicht + #kopf-schicht sind ECHTE Alpha-PNGs aus RIG_V2 (1536x1024,
+147:   /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+150:      vorher direkt gegeneinander. Zweck: kopfKoerperSchritt() (JS weiter
+152:      OHNE die per-Frame scale()-Atmung auf #kopf-schicht/#koerper-schicht
+161:      weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+166:   #koerper-dreh{transform-origin:50% 100%}
+167:   #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+168:   #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+171:   #koerper-schicht{z-index:1}
+185:      Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+188:      weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+189:      unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+190:   #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+191:   #koerper-schicht2{opacity:0}
+194:      (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueberlappt sie
+375:          #kamera fasst Hintergrund+Gesicht/Koerper-Rahmen zu EINER Ebene
+376:          zusammen, damit der Handy-Cam-Shake (kameraWackeln(), siehe Skript)
+381:     <div id="kamera">
+396:           <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+403:                  wie #koerper-schicht/#koerper-schicht2. -->
+511: // von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+633:   geradeaus:"01_geradeaus_kamera", links:"02_blick_links", rechts:"03_blick_rechts",
+709: // Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+764:   // Wert von ihrem letzten Auftritt (Pop). _atmenTransform/_atmenFilter sind
+767:   $(ein).style.transform = _atmenTransform;
+866:   $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+874:   // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+897: // Funktion ab jetzt KEIN Bild mehr -- #kopf-schicht/#koerper-schicht (siehe
+911:   if(mitSchwung) kameraNachschwung();
+959:     versteckt.style.transform = _atmenTransform;
+967:       requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+1505:   // ⭐ 2026-09-11: #regen-hinten liegt jetzt IN #kamera (Overscan-Box, 112%
+1509:   const b = $("kamera").getBoundingClientRect();
+1516: // bringen, die #koerper-schicht/#kopf-schicht vorher PER CSS bekamen (cover,
+1526: // transform-unabhaengig, der Cam-Shake auf #kamera soll hier NICHT
+1529: // weiter oben auf #kamera und bewegt die ganze Szene inklusive Leinwand mit).
+1638: // zuletzt berechneten Werte liegen in _atmenTransform/_atmenFilter global
+1644: // gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1650: let _atmenTransform = "scale(1)";
+1660:   _atmenTransform = transform;
+1703: // bisherigen reinen scale()-Attrappe auf #koerper-schicht (siehe atmen() oben).
+1705: // (#koerper-schicht/#koerper-schicht2), exakt das gleiche Muster wie
+1717: let atmenAktivSchicht = "koerper-schicht";
+1719:   const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+1726:   $(naechsteSchicht).style.transform = _atmenTransform;
+1775: function koerperSchritt(jetzt){
+1800: // #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+1832: function kameraWackeln(){
+1845:   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+1848:   // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+1855: // #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+1859: function kameraNachschwung(){
+1860:   const kamera = $("kamera");
+1861:   kamera.classList.remove("kamera-wechsel");
+1862:   requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1863:   setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+1876:   koerperSchritt(t);
+1880:   kameraWackeln();
+1887:   requestAnimationFrame(schleife);
+1889: requestAnimationFrame(schleife);
+1907: // selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des

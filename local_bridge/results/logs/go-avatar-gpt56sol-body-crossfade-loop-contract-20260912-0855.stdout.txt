@@ -1,0 +1,149 @@
+LIVE_SHA 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+=== BODY_CSS POS 10902 ===
+h{transform-origin:50% 100%}
+  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+  #ausdruck-schicht,#ausdruck-schicht2{position:absolute;inset:0;width:100%;height:100%;
+    display:block;pointer-events:none}
+  #koerper-schicht{z-index:1}
+  #kopf-schicht{z-index:2}
+  /* ⭐⭐ 2026-09-11 (Animations-Agent, ZWEITER KOPF, Ursache behoben):
+     #ausdruck-schicht/#ausdruck-schicht2 ersetzen die alten flachen
+     #gesicht/#gesicht2 (undurchsichtige Vollbild-RGBs mit eingebratenem
+     Hintergrund, z-index:3 UEBER dem RGBA-Kopf). Die 44 Sonderausdruecke
+     existieren in /ausdruck_erweitert/ als echte 1536x1024-RGBA mit
+     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+     Leinwand, mit demselben unteren Hals-Masken-Verlauf wie der Kopf.
+     Kein Rechteck, kein Hintergrund, kein Versatz: kein Geisterkopf. */
+  #ausdruck-schicht{z-index:3}
+  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+  /* ⭐⭐ 2026-09-11 ECHTES ATMEN (Gabriel: "eins nach dem anderen", DIE eine
+     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+     wie #gesicht/#gesicht2 (Kommentar oben), nur fuer den Koerper -- 12 echte
+     fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png) werden
+     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+  #koerper-schicht2{opacity:0}
+  /* ⭐⭐ 2026-09-11 NACHTRAG 2 (Gabriel zeigt auf die Halskante, ZWEITES,
+     eigenstaendiges Problem -- auch OHNE jede Bewegung sichtbar): #kopf-schicht
+     (z-index 2) liegt UEBER #koerper-schicht (z-index 1) und ueb
+=== BODY2_CSS POS 10724 ===
+ante), nicht aus der Mitte. Kostet nichts, behebt
+     laut Messung den groessten Teil des "Puppen"-Eindrucks am Hals. */
+  #kopf-dreh{transform-origin:50% 58.59%}
+  #koerper-dreh{transform-origin:50% 100%}
+  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+  #koerper-schicht,#koerper-schicht2,#kopf-schicht,#kopf-schicht2,
+  #ausdruck-schicht,#ausdruck-schicht2{position:absolute;inset:0;width:100%;height:100%;
+    display:block;pointer-events:none}
+  #koerper-schicht{z-index:1}
+  #kopf-schicht{z-index:2}
+  /* ⭐⭐ 2026-09-11 (Animations-Agent, ZWEITER KOPF, Ursache behoben):
+     #ausdruck-schicht/#ausdruck-schicht2 ersetzen die alten flachen
+     #gesicht/#gesicht2 (undurchsichtige Vollbild-RGBs mit eingebratenem
+     Hintergrund, z-index:3 UEBER dem RGBA-Kopf). Die 44 Sonderausdruecke
+     existieren in /ausdruck_erweitert/ als echte 1536x1024-RGBA mit
+     identischer Silhouette wie #kopf-schicht (10.4% Nicht-Alpha, per PIL
+     nachgemessen) -- sie liegen deshalb IN #kopf-dreh, auf derselben
+     Leinwand, mit demselben unteren Hals-Masken-Verlauf wie der Kopf.
+     Kein Rechteck, kein Hintergrund, kein Versatz: kein Geisterkopf. */
+  #ausdruck-schicht{z-index:3}
+  #kopf-schicht2,#ausdruck-schicht2,#ausdruck-schicht{opacity:0}
+  /* ⭐⭐ 2026-09-11 ECHTES ATMEN (Gabriel: "eins nach dem anderen", DIE eine
+     Sache jetzt): #koerper-schicht2 ist das gleiche Zwei-Bild-Ueberblend-Muster
+     wie #gesicht/#gesicht2 (Kommentar oben), nur fuer den Koerper -- 12 echte
+     fotografierte Atem-Stufen (koerper_rgba/atmen__atmen_000..011.png) werden
+     weich ineinander ueberblendet statt hart getauscht. koerper-schicht2 startet
+     unsichtbar (opacity 0), koerper-schicht bleibt Default (sichtbar). */
+  #koerper-schicht,#koerper-schicht2{z-index:1;transition:opacity .08s ease-in-out}
+  #koerper-schicht2{opacity:0}
+  /* ⭐⭐ 2026-09-11 NACHTRAG 2 (Gabriel ze
+=== CROSSFADE POS 98656 ===
+ = 330;
+let atmenIndex = 0;
+let atmenLetzterWechsel = 0;
+let atmenAktivSchicht = "koerper-schicht";
+function koerperCrossfade(src){
+  const naechsteSchicht = atmenAktivSchicht === "koerper-schicht" ? "koerper-schicht2" : "koerper-schicht";
+  $(naechsteSchicht).src = src;
+  // ⭐⭐ PERF-FIX 2026-09-11: gleiche Vor-Synchronisation wie bei
+  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+  // Filter nur noch auf atmenAktivSchicht (die aktuell sichtbare Koerper-
+  // Ebene). Bevor die naechste Ebene sichtbar wird, bekommt sie hier den
+  // brandaktuellen Wert -- sonst Pop beim Umschalten.
+  $(naechsteSchicht).style.transform = _atmenTransform;
+  $(naechsteSchicht).style.filter = _atmenFilter;
+  $(naechsteSchicht).style.opacity = 1;
+  $(atmenAktivSchicht).style.opacity = 0;
+  atmenAktivSchicht = naechsteSchicht;
+}
+// ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+// Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+// Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+// Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+// wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+// monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+const KOERPER_AKTIONEN = [
+  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+  { name:"lehnen", ms:300, bilder:["lehne
+=== MAIN_LOOP POS 107281 ===
+letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung

@@ -1,0 +1,19 @@
+{
+  "schema": "AVATAR_BODY_TEXTURE_CACHE_CLOSURE/v1",
+  "created_at": "2026-09-12T02:31:00Z",
+  "command_id": "go-avatar-gpt56sol-body-texture-cache-ab-v2-20260912-0936",
+  "receipt": "local_bridge/results/receipts/go-avatar-gpt56sol-body-texture-cache-ab-v2-20260912-0936.json",
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED",
+  "status": "PASS_AT_READ_ONLY_PERFORMANCE_DISCRIMINATOR_SCOPE",
+  "live_mutation": false,
+  "renderer": "ANGLE AMD Radeon Graphics radeonsi phoenix",
+  "canvas": [620, 414],
+  "mesh": {"vertices": 399, "triangles": 720},
+  "cache_build": {"textures": 12, "ms": 283.69999998807907, "outside_measured_animation": true},
+  "upload_warp": {"fps":56.3801138158113,"mean_ms":17.736871508379885,"p95_ms_max":33.29999999999927,"over20_total":20,"measured_uploads_total":40},
+  "cached_warp": {"fps":60.001676041324785,"mean_ms":16.666201117318433,"p95_ms_max":16.700000000000728,"over20_total":0,"measured_uploads_total":0},
+  "delta": {"mean_ms":-1.0706703910614515,"p95_ms":-16.599999999998545,"slow20":-20,"runtime_uploads":-40},
+  "causal_conclusion": "DYNAMIC_TEXIMAGE2D_UPLOAD_CHURN_IS_THE_MEASURED_FRAME_SPIKE_CAUSE_IN_THIS_GATE; PREUPLOADED_BIND_ONLY_TEXTURES_RECOVER_VSYNC_WITH_WARP_INTACT",
+  "combined_candidate": "pre-resample each body source to production geometry once, upload once into bounded persistent GPU cache, then bind/crossfade cached textures while retaining residual shoulder/chest mesh warp",
+  "credit": {"performance_discriminator":1,"live_webgl_integration":0,"avatar_visual_acceptance":0,"whole_avatar":0,"whole_product":0}
+}

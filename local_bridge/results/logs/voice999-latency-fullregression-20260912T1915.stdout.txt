@@ -1,0 +1,81 @@
+HEAD=1bb8ba62e6d11b08a73bb9f526f202644f4d2062
+.....................................FF................................. [ 48%]
+..............FFF....................................................... [ 96%]
+......                                                                   [100%]
+=================================== FAILURES ===================================
+____ test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool ____
+
+    def test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool():
+        s, captured = _tool_session()
+        ws = _WS()
+        s._tool_ausfuehren(
+            ws,
+            "call-1",
+            "frank_auftrag_stellen",
+            json.dumps({"auftrag": "Datei bauen", "bestaetigt": False}),
+        )
+>       assert captured[-1]["response_class"] == "effect_confirmation_request"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'response_class'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:136: KeyError
+_________ test_denied_effect_confirmation_response_is_tool_free_class __________
+
+    def test_denied_effect_confirmation_response_is_tool_free_class():
+        s, captured = _tool_session()
+        s._auftrag_stellen_mit_bestaetigung({"auftrag": "Datei bauen", "bestaetigt": False})
+        s._transkript_log.append("genau")
+        s._user_transkripte_zaehler += 1
+        ws = _WS()
+        s._tool_ausfuehren(
+            ws,
+            "call-2",
+            "frank_auftrag_stellen",
+            json.dumps({"auftrag": "Datei bauen", "bestaetigt": True}),
+        )
+>       assert captured[-1]["response_class"] == "effect_confirmation_denied"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'response_class'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py:156: KeyError
+----------------------------- Captured stderr call -----------------------------
+[2026-09-12 19:10:57] realtime_gespraech: Auftrag NICHT ausgefuehrt: 'Datei bauen' -- noch nicht bestaetigt -- dies ist erst der Vorschlag; owner='gabriel' anchor=0
+________ test_backchannel_release_is_mechanically_tool_free_and_tagged _________
+
+    def test_backchannel_release_is_mechanically_tool_free_and_tagged():
+        s = _session()
+        ws = _WS()
+>       s._response_erstellen(
+            ws,
+            zusatz_hinweis="tiny",
+            floor_action="BACKCHANNEL",
+            dialogue_act="BACKCHANNEL",
+        )
+E       TypeError: _patch_response_instructions.<locals>.wrapped() got an unexpected keyword argument 'floor_action'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py:41: TypeError
+________ test_proactive_allow_is_speech_permission_not_tool_permission _________
+
+    def test_proactive_allow_is_speech_permission_not_tool_permission():
+        s = _session()
+        ws = _WS()
+>       s._response_erstellen(ws, proactive_action="ALLOW")
+E       TypeError: _patch_response_instructions.<locals>.wrapped() got an unexpected keyword argument 'proactive_action'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py:61: TypeError
+____________ test_normal_reactive_answer_keeps_existing_tool_policy ____________
+
+    def test_normal_reactive_answer_keeps_existing_tool_policy():
+        s = _session()
+        ws = _WS()
+>       s._response_erstellen(ws, floor_action="RESPOND", dialogue_act="ANSWER")
+E       TypeError: _patch_response_instructions.<locals>.wrapped() got an unexpected keyword argument 'floor_action'
+
+DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py:71: TypeError
+=========================== short test summary info ============================
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_first_effect_tool_result_can_only_ask_confirmation_no_second_tool
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_effect_confirmation_integration.py::test_denied_effect_confirmation_response_is_tool_free_class
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py::test_backchannel_release_is_mechanically_tool_free_and_tagged
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py::test_proactive_allow_is_speech_permission_not_tool_permission
+FAILED DEV_SOURCE_RESEARCH/repository/tests/test_voice_999_repair_release_integration.py::test_normal_reactive_answer_keeps_existing_tool_policy
+5 failed, 145 passed in 0.75s

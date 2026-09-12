@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "0000-gpt56sol-chatgpt-client-diagnose-20260912T1725-0700",
+  "command_sha256": "f647dea7cacbe30d900a3bb1eea32104e4c51c5491ca602b58eaa60cc94e7b98",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T10:08:39.703417+00:00",
+  "finished_at": "2026-09-12T10:08:40.073606+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "2d9e07837eefe60c781645f04d08ad2e0c5e661c874c64bd922adb24cfc9e835",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "--- CLIENT SHOW ---\nMainPID=1075883\nResult=success\nNRestarts=0\nExecMainStatus=0\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py ; ignore_errors=no ; start_time=[Sat 2026-09-12 17:07:11 +07] ; stop_time=[n/a] ; pid=1075883 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- CLIENT STATUS ---\n\u25cf frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client\n     Loaded: loaded (/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service; enabled; preset: enabled)\n     Active: active (running) since Sat 2026-09-12 17:07:11 +07; 1min 27s ago\n   Main PID: 1075883 (python3)\n      Tasks: 2 (limit: 28222)\n     Memory: 18.6M (peak: 19.9M)\n        CPU: 138ms\n     CGroup: /user.slice/user-1000.slice/user@1000.service/app.slice/frankenstein-chatgpt-client.service\n             \u2514\u25001075883 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py\n\nSep 12 17:07:11 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.\n--- CLIENT JOURNAL ---\nSep 12 17:07:11 ai-core-node-projekt-frankenstein systemd[2339]: Started frankenstein-chatgpt-client.service - FranKenstein Persistent Headless ChatGPT Client.\n--- PORT 8765 ---\nState  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\nLISTEN 0      5          127.0.0.1:8765      0.0.0.0:*    users:((\"python3\",pid=1075883,fd=3))\n--- CLIENT PROCESS ---\nUID          PID    PPID  C STIME TTY          TIME CMD\nai-core+ 1075883    2339  0 17:07 ?        00:00:00 python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py\npython3,1075883 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py\n  `-{python3},1075903\n--- CONVERSATION SERVICE ---\nMainPID=3333824\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n--- ENV FILE META ---\nmode=600 uid=1000 gid=1000 size=430 path=/home/ai-core-node/.config/frankenstein/chatgpt-client.env\n--- DEPLOYED FILE HASHES ---\n285db29c1ae2404528b06776ea85df2cda383acf0ddcd5d74f89aae9e4dc774e  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_live_client.py\n149d2575cb7ae396d216baad85e0f53bc0c980fa3dbd7ba6383c1cbc120efa26  /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_agent.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

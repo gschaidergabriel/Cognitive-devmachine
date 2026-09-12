@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-mcp-ingress-probe-ai-core-20260912a",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "timeout_seconds": 60,
+  "command": "set -u\nprintf 'HOST='; hostname\nprintf '\\nBINARIES\\n'; for x in caddy nginx apache2 cloudflared tailscale traefik; do p=$(command -v \"$x\" 2>/dev/null || true); [ -n \"$p\" ] && echo \"$x=$p\"; done\nprintf '\\nLISTENERS\\n'; ss -lnt 2>/dev/null | sed -n '1,60p'\nprintf '\\nUNITS\\n'; systemctl --user --no-pager --type=service --state=running 2>/dev/null | grep -Ei 'caddy|nginx|cloudflared|tailscale|traefik|frankenstein|omega|bridge' | head -40 || true"
+}

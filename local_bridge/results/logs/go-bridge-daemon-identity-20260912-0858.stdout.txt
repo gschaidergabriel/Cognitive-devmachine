@@ -1,0 +1,48 @@
+===FILE:/home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py===
+22d56fddd760bbda096e8cd58b8d826dbfbfd7df46155a62ef98f64d5ecdbacf  /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py
+12:DB=STATE/'bridge.sqlite3'
+13:CONTROL_BRANCH='chatgpt-local-control'
+14:RESULTS_BRANCH='chatgpt-local-results'
+15:QUEUE=pathlib.Path('local_bridge/commands')
+39:    git(CONTROL,'fetch','origin',CONTROL_BRANCH,'--prune')
+40:    git(CONTROL,'checkout','-B',CONTROL_BRANCH,f'origin/{CONTROL_BRANCH}')
+41:    git(CONTROL,'reset','--hard',f'origin/{CONTROL_BRANCH}')
+44:    git(RESULTS,'fetch','origin',RESULTS_BRANCH,'--prune')
+45:    git(RESULTS,'checkout','-B',RESULTS_BRANCH,f'origin/{RESULTS_BRANCH}')
+46:    git(RESULTS,'reset','--hard',f'origin/{RESULTS_BRANCH}')
+55:            git(RESULTS,'push','--force-with-lease','origin',f'HEAD:{RESULTS_BRANCH}',timeout=300)
+58:    git(RESULTS,'push','origin',f'HEAD:{RESULTS_BRANCH}',timeout=300)
+185:    sync_results(); publish_receipt(receipt,stdout,stderr); c.execute('INSERT INTO done VALUES(?,?,?,?)',(cid,sha(raw),now(),code)); c.commit(); c.close(); return True
+===FILE:/home/ai-core-node/.claude/star/local_bridge_daemon.py===
+836173805c8919492c1d52540c50f8b97dfd5beb8d02196d5630dbce52da342f  /home/ai-core-node/.claude/star/local_bridge_daemon.py
+42:# laeuft -- nur die Umgebung (und damit REPO/STATE_DIR/Branchnamen, die daraus
+47:STATE_DIR = pathlib.Path(
+48:    os.environ.get("LOCAL_BRIDGE_STATE_DIR",
+50:REPO = STATE_DIR / "repo"
+51:DB = STATE_DIR / "bridge.sqlite3"
+52:SHOTS = STATE_DIR / "screenshots"
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+55:QUEUE = pathlib.Path("local_bridge/commands")
+80:    STATE_DIR.mkdir(parents=True, exist_ok=True)
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+98:def sync_and_push_results(message: str):
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+194:        c.execute("INSERT OR IGNORE INTO done VALUES(?,?,?,?)", (f"malformed:{sha(raw)}", sha(raw), now(), -1))
+236:    c.execute("INSERT INTO done VALUES(?,?,?,?)", (cid, sha(raw), now(), code))
+242:def poll_once() -> int:
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+250:            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+255:                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+258:        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+276:        n = poll_once()
+281:                poll_once()
+===PIDS===
+PID=2495
+/usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py 
+/home/ai-core-node
+PID=959674
+/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py 
+/home/ai-core-node
+===OPEN_REPO_FILES===

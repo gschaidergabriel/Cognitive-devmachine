@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Stateless executor for remote FranKenstein hosts.
+
+Runs on ai-core-node. It only executes the existing ChatGPT browser harness and
+prints one JSON result. It never opens/writes unified.db; the originating host
+owns GRID/state uptake.
+"""
+from __future__ import annotations
+import argparse, base64, json, os, sys
+from pathlib import Path
+
+STAR = Path.home() / ".claude" / "star"
+if str(STAR) not in sys.path:
+    sys.path.insert(0, str(STAR))
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--payload-b64", required=True)
+    args = ap.parse_args()
+    try:
+        payload = json.loads(base64.urlsafe_b64decode(args.payload_b64.encode()).decode("utf-8"))
+        prompt = str(payload["prompt"])
+        workers = max(1, min(30, int(payload.get("num_workers") or 1)))
+    except Exception as e:
+        print(json.dumps({"ok": False, "error": f"bad payload: {e}"}, ensure_ascii=False, separators=(",", ":")))
+        return 2
+
+    import stern
+    import f2wp1207_chatgpt_organ as organ
+
+    # This path is explicitly ChatGPT, not the Free-Pool fallback. Do not run
+    # a fallback silently just because the browser login is missing.
+    try:
+        status = stern.chatgpt_login_status()
+    except Exception as e:
+        print(json.dumps({"ok": False, "error": f"login status failed: {e}"}, ensure_ascii=False, separators=(",", ":")))
+        return 1
+    if not status.get("eingeloggt"):
+        print(json.dumps({"ok": False, "needs_login": True, "login": status,
+                          "error": "ChatGPT browser harness not logged in"},
+                         ensure_ascii=False, separators=(",", ":")))
+        return 3
+
+    send = stern.chatgpt_senden([prompt], num_workers=workers, lock_timeout_s=1200.0)
+    if not send.get("ok") or send.get("fallback_verwendet"):
+        print(json.dumps({"ok": False, "send": send,
+                          "error": "ChatGPT send failed or attempted fallback"},
+                         ensure_ascii=False, separators=(",", ":"), default=str))
+        return 4
+    direct = organ._extract_response(send)
+    harvest = stern.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)
+    response = organ._extract_response(harvest) or direct
+    ok = bool(response)
+    print(json.dumps({"ok": ok, "response": response, "send": send, "harvest": harvest,
+                      "backend_host": "ai-core-node", "backend_owner": "gabriel"},
+                     ensure_ascii=False, separators=(",", ":"), default=str))
+    return 0 if ok else 5
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

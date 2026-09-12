@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "gpt56-check-gabriel-remote-exec-20260912T0345Z",
+  "command_sha256": "998e45257e809170d4d25e484cd401e693ab82a8c52a0f96a17e2b314282544d",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:54:14.728223+00:00",
+  "finished_at": "2026-09-12T03:54:14.728542+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "9c97ed5da70e3e38cd84e288c9c08a748fa339899bba6e808eae11a76f04a000",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env python3\n\"\"\"Stateless executor for remote FranKenstein hosts.\n\nRuns on ai-core-node. It only executes the existing ChatGPT browser harness and\nprints one JSON result. It never opens/writes unified.db; the originating host\nowns GRID/state uptake.\n\"\"\"\nfrom __future__ import annotations\nimport argparse, base64, json, os, sys\nfrom pathlib import Path\n\nSTAR = Path.home() / \".claude\" / \"star\"\nif str(STAR) not in sys.path:\n    sys.path.insert(0, str(STAR))\n\n\ndef main() -> int:\n    ap = argparse.ArgumentParser()\n    ap.add_argument(\"--payload-b64\", required=True)\n    args = ap.parse_args()\n    try:\n        payload = json.loads(base64.urlsafe_b64decode(args.payload_b64.encode()).decode(\"utf-8\"))\n        prompt = str(payload[\"prompt\"])\n        workers = max(1, min(30, int(payload.get(\"num_workers\") or 1)))\n    except Exception as e:\n        print(json.dumps({\"ok\": False, \"error\": f\"bad payload: {e}\"}, ensure_ascii=False, separators=(\",\", \":\")))\n        return 2\n\n    import stern\n    import f2wp1207_chatgpt_organ as organ\n\n    # This path is explicitly ChatGPT, not the Free-Pool fallback. Do not run\n    # a fallback silently just because the browser login is missing.\n    try:\n        status = stern.chatgpt_login_status()\n    except Exception as e:\n        print(json.dumps({\"ok\": False, \"error\": f\"login status failed: {e}\"}, ensure_ascii=False, separators=(\",\", \":\")))\n        return 1\n    if not status.get(\"eingeloggt\"):\n        print(json.dumps({\"ok\": False, \"needs_login\": True, \"login\": status,\n                          \"error\": \"ChatGPT browser harness not logged in\"},\n                         ensure_ascii=False, separators=(\",\", \":\")))\n        return 3\n\n    send = stern.chatgpt_senden([prompt], num_workers=workers, lock_timeout_s=1200.0)\n    if not send.get(\"ok\") or send.get(\"fallback_verwendet\"):\n        print(json.dumps({\"ok\": False, \"send\": send,\n                          \"error\": \"ChatGPT send failed or attempted fallback\"},\n                         ensure_ascii=False, separators=(\",\", \":\"), default=str))\n        return 4\n    direct = organ._extract_response(send)\n    harvest = stern.chatgpt_ernten(timeout_s=900.0, lock_timeout_s=1200.0)\n    response = organ._extract_response(harvest) or direct\n    ok = bool(response)\n    print(json.dumps({\"ok\": ok, \"response\": response, \"send\": send, \"harvest\": harvest,\n                      \"backend_host\": \"ai-core-node\", \"backend_owner\": \"gabriel\"},\n                     ensure_ascii=False, separators=(\",\", \":\"), default=str))\n    return 0 if ok else 5\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "9c97ed5da70e3e38cd84e288c9c08a748fa339899bba6e808eae11a76f04a000",
+    "bytes": 2601,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

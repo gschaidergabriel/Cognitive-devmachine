@@ -1,0 +1,208 @@
+===CORE===
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# Kanonischer Turn-Loop -- LIVE-BRUECKE (2026-09-06).
+#
+# Der Loop existiert in f2wp1207_grid10_turn_loop.py (Branch
+# self-integration/wp1207-grid10-turn-loop-20260906, Goldtest 49/49), hatte
+# aber NUR Testaufrufer. Flag-Flip allein waere inert (P15-Lehre: ein Gate
+# ohne Aufrufer aendert nichts). Dieser Subcommand ist der erste LIVE-
+# Aufrufer: er nimmt EIN TypedEntry-Payload von stdin, ruft
+# run_canonical_turn() und gibt strukturiert zurueck.
+#
+#     stern.py f2wp1207-turn-loop-turn \
+#         [--force-new-epoch] [--declared-reentry {previous_frame,previous_epoch,genesis}] \
+#         [--evidence-path PFAD]   < payload.json
+#
+# stdin: {"session_id": "...", "runtime_epoch_id": "...", ...}  (Felder
+# siehe TypedEntry; `runtime_epoch_id` optional -- fehlt er, wird wie in
+# der P15-Lane ueber _f2wp1207_runtime_epoch() gemintet).
+#
+# GATE: `f2wp1207.canonical_turn_loop` (star_konfig) bzw. ENV
+# STERN_F2WP1207_TURN_LOOP. Das Modul prueft es intern VOR jedem I/O;
+# diese Bruecke prueft es ZUSATZLICH fail-closed mit klarer Meldung, damit
+# ein Aufrufer bei Gate AUS einen erkennbaren Grund bekommt statt eines
+# leeren Erfolgs.
+#
+# AUSSCHLIESSLICHKEIT: solange dieses Flag AN ist, tritt die P15-Lane
+# zurueck (siehe AUSSCHLIESSLICHKEIT-Kommentar in
+# _f2wp1207_p15_canary_turn_ausfuehren) -- genau EINE Lane turnt. Umgekehrt
+# tut diese Lane bei Gate AUS nichts.
+# ═══════════════════════════════════════════════════════════════════════
+
+_F2WP1207_TURN_LOOP_TYPED_ENTRY_FELDER = (
+    "event_type", "ts", "prompt_len", "retrieval_present", "retrieval_len",
+    "turn_event_id",
+)
+
+
+def _f2wp1207_turn_loop_turn_ausfuehren(eingabe: Optional[dict] = None) -> dict:
+    """Kernlogik hinter dem CLI-Unterbefehl `f2wp1207-turn-loop-turn`.
+    Fail-closed: JEDE Ausnahme wird als {"ok": False, "fehler": ...}
+    zurueckgegeben -- der CLI-Einstiegspunkt haengt trotzdem sein eigenes
+    try/except drum, gleiches Muster wie die P15-Bruecke oben."""
+    try:
+        data = dict(eingabe or {})
+        if str(STERN_DIR) not in sys.path:
+            sys.path.insert(0, str(STERN_DIR))
+        import f2wp1207_grid10_turn_loop as tlmod  # vendored Kopie, gleiche Lane wie p7/p11/p12
+
+        session_id = str(data.get("session_id") or "").strip()
+        if not session_id:
+            return {
+                "ok": False,
+                "active": False,
+                "fehler": "session_id fehlt -- TypedEntry ohne session_id ist ungueltig",
+            }
+
+        with contextlib.closing(schreib_verbindung()) as c:
+            # --- Gate (zusaetzlich zum internen Check des Moduls) ---------
+            # Bewusst als ERSTES, VOR jedem Mint/Schreiben: bei AUS
+            # passiert hier GAR NICHTS, nicht einmal eine Epoche.
+            if not tlmod.turn_loop_active(c, env=os.environ):
+                return {
+                    "ok": True,
+                    "active": False,
+                    "canonical_loop_owns_turn": False,
+                    "grund": (
+                        "Gate f2wp1207.canonical_turn_loop ist AUS -- "
+                        "Turn-Loop-Bruecke tut nichts (fail-closed)"
+                    ),
+                }
+
+            # --- RuntimeEpoch ------------------------------------------
+            # Gleiche Konvention wie die P15-Lane: ohne explizite
+            # runtime_epoch_id wird eine gemintet (dateibasiert + DB-Sync,
+            # idempotent je session_id). Mit expliziter ID wird sie
+            # verifiziert, bevor der Loop sie sieht -- sonst wirft der Loop
+            # zwar auch, aber die Meldung kaeme erst mitten im Turn.
+            runtime_epoch_id = str(data.get("runtime_epoch_id") or "").strip() or None
+            if runtime_epoch_id:
+                exists = c.execute(
+                    "SELECT 1 FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
+                    (runtime_epoch_id,),
+                ).fetchone()
+                if exists is None:
+                    return {
+                        "ok": False,
+                        "active": False,
+                        "fehler": (
+                            f"runtime_epoch_id={runtime_epoch_id} existiert "
+                            "nicht in f2_runtime_epoch"
+                        ),
+                    }
+            else:
+                # --- Identitaet sicherstellen (nur Auto-Mint-Pfad) --------
+                # `_f2wp1207_runtime_epoch()` schreibt seine Epoche via
+===CLI FUNC===
+        elif not ergebnis.get("active"):
+            _log(f"f2wp1207-turn-loop-auto inaktiv: {ergebnis.get('grund')}")
+        else:
+            _log(
+                "f2wp1207-turn-loop-auto turn geschrieben: "
+                f"frame_id={ergebnis.get('frame_id')} "
+                f"reentry={ergebnis.get('reentry', {}).get('kind')} "
+                f"pointer_id={ergebnis.get('pointer_id')}"
+            )
+    except Exception as e:
+        _log(f"f2wp1207-turn-loop-auto ausnahme: {e}")
+
+
+def cmd_f2wp1207_turn_loop_turn(force_new_epoch: bool = False,
+                                declared_reentry: Optional[str] = None,
+                                evidence_path: Optional[str] = None) -> int:
+    """CLI-Einstiegspunkt `stern.py f2wp1207-turn-loop-turn`. Liest EIN
+    JSON von stdin (TypedEntry-Felder, siehe Moduldocstring oben), schreibt
+    EIN JSON nach stdout. Fail-closed komplett, Exit-Code bleibt immer 0 --
+    gleiches Muster wie cmd_f2wp1207_p15_canary_turn oben."""
+    try:
+        raw = sys.stdin.read()
+        data = json.loads(raw) if raw.strip() else {}
+        if not isinstance(data, dict):
+            data = {}
+    except Exception:
+        data = {}
+    data.setdefault("session_id", "unknown")
+    if force_new_epoch:
+        data["force_new_epoch"] = True
+    if declared_reentry:
+        data["declared_reentry"] = declared_reentry
+    if evidence_path:
+        data["evidence_path"] = evidence_path
+    try:
+        ergebnis = _f2wp1207_turn_loop_turn_ausfuehren(data)
+    except Exception as e:  # doppelte Absicherung, wie bei P15
+        ergebnis = {"ok": False, "active": False, "fehler": str(e)}
+    print(json.dumps(ergebnis, ensure_ascii=False))
+    return 0
+
+
+def _microclay_kreditsignal(session_id: str, transcript_path) -> None:
+    """Stop -- primaeres, mechanisches Kreditsignal (siehe
+    `MicroClay.kreditsignal_mechanisch()`). Fail-silent."""
+    t0 = time.monotonic()
+    try:
+        with contextlib.closing(schreib_verbindung()) as c:
+            c.row_factory = sqlite3.Row
+            ergebnis = MicroClay.kreditsignal_mechanisch(c, session_id, transcript_path)
+            c.commit()
+        dauer_ms = round((time.monotonic() - t0) * 1000)
+        _log(
+            f"microclay kreditsignal sid={session_id} dauer={dauer_ms}ms "
+            f"geprueft={ergebnis.get('geprueft')} getragen={ergebnis.get('getragen')}"
+        )
+===PARSER===
+    # Aufruf, gleiches Muster wie p7-bridge-turn -- liest {"session_id": "..."}
+    # von stdin, ruft die zusammengesetzte P7+P10(evidenzgebunden)+P12+P11-
+    # Kette auf (siehe Kommentarblock bei _f2wp1207_p15_canary_turn_ausfuehren
+    # oben). Eigenes Gate f2wp1207.p15_canary_active in star/stern.py's
+    # Bruecke, dieser Subbefehl fuegt selbst kein zusaetzliches Gate hinzu.
+    p15b = sub.add_parser("f2wp1207-p15-canary-turn", help="F2WP1207 P15-Kanarienvogel-Bruecke: P7+P10(evidenzgebunden)+P12+P11(nur Journal)")
+    p15b.add_argument("--force-new-epoch", action="store_true", help="nur fuer Reentry-Test: neue RuntimeEpoch mit predecessor mint")
+
+    # Kanonischer Turn-Loop -- LIVE-Bruecke (2026-09-06). Eigener Gate-
+    # Schluessel `f2wp1207.canonical_turn_loop`; bei AN tritt die P15-Lane
+    # zurueck (siehe _f2wp1207_p15_canary_turn_ausfuehren). Liest das
+    # TypedEntry-Payload von stdin, schreibt Ergebnis-JSON nach stdout.
+    tlb = sub.add_parser("f2wp1207-turn-loop-turn", help="F2WP1207 kanonischer Turn-Loop: EIN Turn ueber run_canonical_turn() (Gate f2wp1207.canonical_turn_loop)")
+    tlb.add_argument("--force-new-epoch", action="store_true", help="nur wenn keine runtime_epoch_id im Payload steht: neue RuntimeEpoch mit predecessor mint")
+    tlb.add_argument("--declared-reentry", default=None,
+                     choices=["previous_frame", "previous_epoch", "genesis"],
+                     help="Reentry bewusst deklarieren (Vorgabe: der Loop loest selbst auf)")
+    tlb.add_argument("--evidence-path", default=None,
+                     help="abweichender Pfad fuer die JSONL-Evidenz (Vorgabe: f2wp1207_turn_loop_evidence.jsonl neben dieser Datei)")
+
+    sub.add_parser("merken")
+
+    s = sub.add_parser("schliessen")
+    s.add_argument("--session-id", default="unknown")
+
+    su = sub.add_parser("suche")
+    su.add_argument("begriff")
+
+    ab = sub.add_parser("abruf")
+    ab.add_argument("--session-id", default="manuell")
+    ab.add_argument("text")
+===DISPATCH===
+        sid = str(payload.get("session_id") or "unknown")
+        try:
+            epoche, vorgaenger = _f2wp1207_runtime_epoch(sid)
+            print(json.dumps({"ok": True, "runtime_epoch_id": epoche,
+                               "predecessor_epoch_id": vorgaenger}, ensure_ascii=False))
+        except Exception as e:
+            print(json.dumps({"ok": False, "error": str(e)}, ensure_ascii=False))
+        sys.exit(0)
+    elif a.cmd == "f2wp1207-p15-canary-turn":
+        sys.exit(cmd_f2wp1207_p15_canary_turn(force_new_epoch=a.force_new_epoch))
+    elif a.cmd == "f2wp1207-turn-loop-turn":
+        sys.exit(cmd_f2wp1207_turn_loop_turn(
+            force_new_epoch=a.force_new_epoch,
+            declared_reentry=a.declared_reentry,
+            evidence_path=a.evidence_path,
+        ))
+    elif a.cmd == "merken":
+        try:
+            payload = json.loads(sys.stdin.read() or "{}")
+        except Exception:
+            payload = {}

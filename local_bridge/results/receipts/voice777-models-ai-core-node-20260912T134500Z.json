@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "voice777-models-ai-core-node-20260912T134500Z",
+  "command_sha256": "d0cce0b91b02e6ae86a92db09f1d8140511459f321f8d9b66e7faa8eb1c640c6",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:02:57.209237+00:00",
+  "finished_at": "2026-09-12T13:02:57.475401+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "a7c6a7db6c268b37dc561adbf8dfd52ad1ed122c7a3a2e29b723c679f3202deb",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "OLLAMA\nPROCESSES\nllama-server    /home/ai-core-node/aicore/opt/llama.cpp-neu/build-vulkan/bin/llama-server -m /opt/entityos/voice/models/llm/Qwen3.5-4B-abliterated.Q4_K_M.gguf -c 12288 --parallel 1 --host 127.0.0.1 --port 8990 -t 8 -ngl 99 -fa on --jinja\nllama-server    /home/ai-core-node/aicore/opt/llama.cpp-neu/build-vulkan/bin/llama-server --host 127.0.0.1 --port 8105 --model /home/ai-core-node/aicore/var/lib/aicore/models/Qwen3.5-4B-abliterated.Q4_K_M.gguf --mmproj /home/ai-core-node/aicore/var/lib/aicore/models/Qwen3.5-4B-abliterated-mmproj.gguf --ctx-size 16384 -ngl 99 --parallel 2 --threads 12 --threads-batch 14 --batch-size 512 --repeat-penalty 1.1 --reasoning-budget 0 --lora /home/ai-core-node/aicore/var/lib/aicore/models/frank-lora-v25.gguf -fa on --reasoning-format none --jinja --chat-template-kwargs {\"enable_thinking\":false}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "000-frankgrid10-organ-upgrade-recover-zombie-20260912-1133",
+  "command_sha256": "0fa47be957ff7d31541c1dc253a15a6cefc235f4f3ade0089ef60af0e9f25742",
+  "started_at": "2026-09-12T03:22:26.827838+00:00",
+  "finished_at": "2026-09-12T03:22:30.060743+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "76bd72b3fb78eb7a4259db91fc9de85ab1cc9dc3f8268c4d0e431bc8ed221c51",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "OLD_PID=940818\nOLD_STATE=Z\nDAEMON_SOURCE_SHA256=a22b499ba2eaeb882fbce4293a00367086aa65da0105d4d124bb634bf460d2a1\nNEW_PID=940949\nNEW_STATE=S\n{\n  \"effect_authority\": false,\n  \"entity_id\": \"entity-4fc2b533-46a5-4d91-ad36-7bff7dd37258\",\n  \"installation_id\": \"install-c4ff87f9-7861-4da1-97f5-680766886318\",\n  \"monotonic\": 1636144.068404912,\n  \"pid\": 940949,\n  \"resource\": {\n    \"cpu_count\": 4,\n    \"disk_free\": 115808100352,\n    \"load1\": 0.19,\n    \"load_per_cpu\": 0.0475,\n    \"mem_available\": 10823008256,\n    \"reasons\": [],\n    \"status\": \"GREEN\",\n    \"thresholds\": {\n      \"max_load_per_cpu\": 2.5,\n      \"min_disk_free\": 2147483648,\n      \"min_mem_available\": 536870912\n    }\n  },\n  \"runtime_epoch_id\": \"epoch-0779f552-8ab3-4f24-a785-2ff6fe55f239\",\n  \"schema\": \"FRANKGRID10_ORGAN_HEARTBEAT/v2\",\n  \"seq\": 4,\n  \"state_root_id\": \"state-b7d41e13-b1ef-4e61-8567-de586bc3764a\",\n  \"status\": \"RUNNING\",\n  \"truth_authority\": false,\n  \"wall_time\": 1789183348.6492705\n}\nIDENTITY\n{\n  \"created_at\": 1789183347.046594,\n  \"entity_id\": \"entity-4fc2b533-46a5-4d91-ad36-7bff7dd37258\",\n  \"host_binding\": \"VPS_ROOTLESS_PODMAN\",\n  \"installation_id\": \"install-c4ff87f9-7861-4da1-97f5-680766886318\",\n  \"schema\": \"FRANKGRID10_ORGAN_IDENTITY/v1\",\n  \"state_root\": \"/workspace/frankgrid10-organ/state\",\n  \"state_root_id\": \"state-b7d41e13-b1ef-4e61-8567-de586bc3764a\"\n}\nCURRENT_EPOCH\n{\n  \"entity_id\": \"entity-4fc2b533-46a5-4d91-ad36-7bff7dd37258\",\n  \"installation_id\": \"install-c4ff87f9-7861-4da1-97f5-680766886318\",\n  \"opened_at\": 1789183347.048615,\n  \"pid\": 940949,\n  \"predecessor_epoch_id\": null,\n  \"runtime_epoch_id\": \"epoch-0779f552-8ab3-4f24-a785-2ff6fe55f239\",\n  \"schema\": \"FRANKGRID10_RUNTIME_EPOCH/v1\",\n  \"state_root_id\": \"state-b7d41e13-b1ef-4e61-8567-de586bc3764a\",\n  \"status\": \"OPEN\"\n}\nLOG_TAIL\nFRANKGRID10_IDENTITY_RESOURCE_RECOVERY_PASS\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

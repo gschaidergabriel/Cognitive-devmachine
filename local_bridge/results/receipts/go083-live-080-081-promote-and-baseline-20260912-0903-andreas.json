@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go083-live-080-081-promote-and-baseline-20260912-0903-andreas",
+  "command_sha256": "5880e620171e30e78a47257937133d7dd9d479dcf62cc66b1bc6fff2d2d09cbc",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:08:17.194447+00:00",
+  "finished_at": "2026-09-12T02:08:45.677852+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "485972a9e70272b05fabe8b50d135dce980e49cd54e0545ec2fb8635eb098a53",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== PRE ===\n2026-09-12T04:08:17+02:00\nandreas-MACO\nCUR=2d0bab710a0b229cbf07c443db2da71e552ab6e3\nREMOTE=e28d758a91b181fdeae7160231a1b38e614e46d1\nAktualisiere 2d0bab7..e28d758\nFast-forward\n log/2026-09-12-080-rueckstand-ist-kein-gruen.md    | 119 ++++++++++++++++\n ...026-09-12-081-laeuferstatus-muss-in-die-spur.md | 156 +++++++++++++++++++++\n log/2026-09-12-082-real-host-080-081-closure.md    |  97 +++++++++++++\n werkzeug/rueckstand_maschinenstatus_selbsttest.sh  |  83 +++++++++++\n werkzeug/selbsttests-waechter.py                   |   5 +-\n werkzeug/selbsttests.sh                            |   5 +-\n ...selbsttests_waechter_runnerstatus_selbsttest.py |  82 +++++++++++\n 7 files changed, 545 insertions(+), 2 deletions(-)\n create mode 100644 log/2026-09-12-080-rueckstand-ist-kein-gruen.md\n create mode 100644 log/2026-09-12-081-laeuferstatus-muss-in-die-spur.md\n create mode 100644 log/2026-09-12-082-real-host-080-081-closure.md\n create mode 100644 werkzeug/rueckstand_maschinenstatus_selbsttest.sh\n create mode 100644 werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py\n=== SUBJECT ===\nwerkzeug/selbsttests.sh 3ead1d83784abc3b321af934724751259f3fa6ae EXPECT 3ead1d83784abc3b321af934724751259f3fa6ae\nwerkzeug/rueckstand_maschinenstatus_selbsttest.sh a1b083eec049fc93d74db65bcebded02dd3da791 EXPECT a1b083eec049fc93d74db65bcebded02dd3da791\nwerkzeug/selbsttests-waechter.py c512b501fc8d68dd735125825d8246a12e8963ff EXPECT c512b501fc8d68dd735125825d8246a12e8963ff\nwerkzeug/selbsttests_waechter_runnerstatus_selbsttest.py 0b43a5c04553059a657c08bf1626638243ee3d11 EXPECT 0b43a5c04553059a657c08bf1626638243ee3d11\n=== LIVE BASELINE RUN ===\nActiveState=inactive\nSubState=dead\nResult=success\nExecMainStatus=0\n=== HISTORY HEADER+TAIL ===\nzeit\tsatz\tlaeufer\tbetrieb-pruefen_selbsttest.sh\tdb-autoritaet_selbsttest.sh\tfluechtig-pruefen_selbsttest.sh\trueckstaende-pruefen_selbsttest.sh\trueckstand_maschinenstatus_selbsttest.sh\tselbsttests_selbsttest.sh\tgegenwache_selbsttest.py\thook-doppel-pruefen_selbsttest.py\tletzter-frame-pruefen_selbsttest.py\tpuls-pruefen_selbsttest.py\tregressions-waechter_selbsttest.py\tselbsttests-waechter_selbsttest.py\tselbsttests_waechter_runnerstatus_selbsttest.py\twettbewerbsgesundheit_selbsttest.py\twettbewerbswaechter_selbsttest.py\r\n2026-09-12T02:48:08+02:00\t13/13\t\tok\tok\tok\tok\t\tok\tok\tok\tok\tok\tok\tok\t\tok\tok\r\n2026-09-12T03:48:21+02:00\t13/13\t\tok\tok\tok\tok\t\tok\tok\tok\tok\tok\tok\tok\t\tok\tok\r\n2026-09-12T04:08:45+02:00\t15/15\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\tok\r\n=== MESSAGE TAIL ===\n2026-09-11T12:26:51+02:00\tdatei\tSelbsttest-Befund geaendert -- satz: 11/11 -> 12/12\n2026-09-11T16:35:08+02:00\tdatei\tSelbsttest-Befund geaendert -- satz: 12/12 -> 13/13\n2026-09-12T04:08:45+02:00\tdatei\tSelbsttest-Befund geaendert -- satz: 13/13 -> 15/15\n=== POST ===\n## main...origin/main\ne28d758a91b181fdeae7160231a1b38e614e46d1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

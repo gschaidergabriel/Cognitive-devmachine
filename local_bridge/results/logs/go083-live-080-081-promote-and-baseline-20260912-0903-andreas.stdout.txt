@@ -1,0 +1,42 @@
+=== PRE ===
+2026-09-12T04:08:17+02:00
+andreas-MACO
+CUR=2d0bab710a0b229cbf07c443db2da71e552ab6e3
+REMOTE=e28d758a91b181fdeae7160231a1b38e614e46d1
+Aktualisiere 2d0bab7..e28d758
+Fast-forward
+ log/2026-09-12-080-rueckstand-ist-kein-gruen.md    | 119 ++++++++++++++++
+ ...026-09-12-081-laeuferstatus-muss-in-die-spur.md | 156 +++++++++++++++++++++
+ log/2026-09-12-082-real-host-080-081-closure.md    |  97 +++++++++++++
+ werkzeug/rueckstand_maschinenstatus_selbsttest.sh  |  83 +++++++++++
+ werkzeug/selbsttests-waechter.py                   |   5 +-
+ werkzeug/selbsttests.sh                            |   5 +-
+ ...selbsttests_waechter_runnerstatus_selbsttest.py |  82 +++++++++++
+ 7 files changed, 545 insertions(+), 2 deletions(-)
+ create mode 100644 log/2026-09-12-080-rueckstand-ist-kein-gruen.md
+ create mode 100644 log/2026-09-12-081-laeuferstatus-muss-in-die-spur.md
+ create mode 100644 log/2026-09-12-082-real-host-080-081-closure.md
+ create mode 100644 werkzeug/rueckstand_maschinenstatus_selbsttest.sh
+ create mode 100644 werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py
+=== SUBJECT ===
+werkzeug/selbsttests.sh 3ead1d83784abc3b321af934724751259f3fa6ae EXPECT 3ead1d83784abc3b321af934724751259f3fa6ae
+werkzeug/rueckstand_maschinenstatus_selbsttest.sh a1b083eec049fc93d74db65bcebded02dd3da791 EXPECT a1b083eec049fc93d74db65bcebded02dd3da791
+werkzeug/selbsttests-waechter.py c512b501fc8d68dd735125825d8246a12e8963ff EXPECT c512b501fc8d68dd735125825d8246a12e8963ff
+werkzeug/selbsttests_waechter_runnerstatus_selbsttest.py 0b43a5c04553059a657c08bf1626638243ee3d11 EXPECT 0b43a5c04553059a657c08bf1626638243ee3d11
+=== LIVE BASELINE RUN ===
+ActiveState=inactive
+SubState=dead
+Result=success
+ExecMainStatus=0
+=== HISTORY HEADER+TAIL ===
+zeit	satz	laeufer	betrieb-pruefen_selbsttest.sh	db-autoritaet_selbsttest.sh	fluechtig-pruefen_selbsttest.sh	rueckstaende-pruefen_selbsttest.sh	rueckstand_maschinenstatus_selbsttest.sh	selbsttests_selbsttest.sh	gegenwache_selbsttest.py	hook-doppel-pruefen_selbsttest.py	letzter-frame-pruefen_selbsttest.py	puls-pruefen_selbsttest.py	regressions-waechter_selbsttest.py	selbsttests-waechter_selbsttest.py	selbsttests_waechter_runnerstatus_selbsttest.py	wettbewerbsgesundheit_selbsttest.py	wettbewerbswaechter_selbsttest.py
+2026-09-12T02:48:08+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T03:48:21+02:00	13/13		ok	ok	ok	ok		ok	ok	ok	ok	ok	ok	ok		ok	ok
+2026-09-12T04:08:45+02:00	15/15	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok	ok
+=== MESSAGE TAIL ===
+2026-09-11T12:26:51+02:00	datei	Selbsttest-Befund geaendert -- satz: 11/11 -> 12/12
+2026-09-11T16:35:08+02:00	datei	Selbsttest-Befund geaendert -- satz: 12/12 -> 13/13
+2026-09-12T04:08:45+02:00	datei	Selbsttest-Befund geaendert -- satz: 13/13 -> 15/15
+=== POST ===
+## main...origin/main
+e28d758a91b181fdeae7160231a1b38e614e46d1

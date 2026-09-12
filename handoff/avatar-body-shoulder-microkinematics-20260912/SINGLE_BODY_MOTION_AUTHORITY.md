@@ -16,7 +16,7 @@ The exact live subject `buehne.html` SHA-256 `18770d8e333af1bc49a818da4dbd5c2e48
 - an existing synchronized head/body breathing scale reaching about +1.2%, retained specifically to prevent the neck seam from slipping;
 - global camera drift/micro-motion outside the body player.
 
-Therefore a second body scheduler, a second breathing oscillator that directly moves the visible plate, or a parallel action player is rejected as architecture duplication. In particular, the first production-shaped residual candidate must add **no chest/breathing displacement**: the photographed breathing + synchronized scale already own that degree of freedom.
+Therefore a second body scheduler, a second breathing oscillator that directly moves the visible plate, or a parallel action player is rejected as architecture duplication. The residual candidate adds **no chest/breathing displacement**: photographed breathing + synchronized scale already own that degree of freedom.
 
 ## Authority split
 
@@ -34,52 +34,74 @@ Order:
 
 The residual compositor must consume existing state rather than creating a competing scheduler.
 
-- When photographed breathing is active and no discrete body action is active, residual shoulder asymmetry may run conservatively; mesh chest displacement is exactly zero in the first candidate.
-- While a discrete photographed body action is active, residual shoulder amplitude is attenuated toward zero. In particular `schulterzucken` and `schulterdrehung` receive zero residual shoulder articulation.
+- When photographed breathing is active and no discrete body action is active, residual shoulder asymmetry uses the empirically calibrated final-display candidate scale `4.0`; mesh chest displacement is exactly zero.
+- While a discrete photographed body action is active, residual shoulder amplitude is attenuated toward zero. `schulterzucken` and `schulterdrehung` receive exactly zero residual shoulder articulation.
+- `aufrichten`, `lehnen`, `gewicht` use at most scale `1.5` in the next gate; this attenuated action value is still a hypothesis, not live credit.
 - The residual timebase is the page's existing `requestAnimationFrame` timestamp. No additional 60-Hz timer is permitted.
 - Crossfade source/opacity remains owned by the existing two-layer player. A future WebGL compositor must represent both currently selected layers during transition rather than forcing a new image scheduler.
-- Zero residual amplitude must reproduce the existing rendered body baseline within the preregistered image gate.
+- Zero residual amplitude must reproduce the existing rendered body baseline within the admitted image-fidelity gate.
 - The exact neck lock remains mandatory so the mesh cannot fight head/body registration.
-- Existing synchronized breathing transform/filter values are upstream inputs and must not be recreated in WebGL during this gate.
+- Existing synchronized breathing transform/filter values are upstream inputs and must not be recreated in WebGL.
 
-## Initial residual envelope
+## Rendering cache law
 
-Conservative first production-shaped gate, not yet live:
+A real-host discriminator falsified synchronous `texImage2D` upload on body pose-selection frames: both BASE and WARP dropped to roughly 52–54 FPS with p95 around 33 ms. Therefore texture upload in the measured animation path is forbidden.
 
-- ordinary breathing/idle: shoulder residual scale `0.35` of the already-tested nominal scratch field; chest residual `0`;
-- `aufrichten`, `lehnen`, `gewicht`: shoulder residual ramps down to <= `0.15` nominal; chest residual `0`;
+The accepted scratch rendering architecture is:
+
+- prewarm one display-resolution GPU texture per unique photographed body frame;
+- retain existing paths/arrays as semantic authority; GPU textures are only a rebuildable rendering cache;
+- measured rAF path performs only resident texture binding, tiny uniform updates and mesh draw;
+- no synchronous image upload on a pose-transition frame.
+
+On the real AMD renderer, 45 cached 620×414 RGBA textures consumed an estimated `46,202,400` bytes and took about `557.2 ms` to prewarm; a 777-frame all-family stress schedule then held `60.002 FPS`, p95 `16.7 ms`, with zero intervals above 20 ms in both BASE and WARP lanes.
+
+## Calibrated residual envelope
+
+Final-display scratch calibration across four real photographed breathing frames × six temporal phases selected the smallest tested measurable candidate:
+
+- ordinary breathing/idle: shoulder residual scale `4.0`, chest residual `0`;
+- scale 4 analytical peak vertical displacement at 620×414: ~`0.938 px`;
+- scale 4 median pixels with channel delta >=3: `49`; max `203` (~0.0791% of display pixels);
+- scale 4 neck ROI max delta: `0`; deep-hole pixels: `0`; minimum alpha Jaccard: `0.999948`;
+- scale 3 failed the pre-registered signal floor (median changed pixels >=3 was 22 vs required 24);
+- `aufrichten`, `lehnen`, `gewicht`: next-gate shoulder scale <= `1.5`; chest residual `0`;
 - `schulterzucken`, `schulterdrehung`: shoulder residual `0`; chest residual `0`;
-- action entry ramp >= 120 ms; action exit ramp >= 180 ms; no step activation.
+- action entry ramp >=120 ms; action exit ramp >=180 ms; no step activation.
 
-These are bounded discriminator values, not permanent artistic constants.
+Scale 4 is a bounded measurable candidate, not a perceptual-superiority claim.
 
 ## Promotion gates
 
-No production mutation until a composition gate proves on the exact current body assets:
+No production mutation until all remaining gates pass on the exact current body assets:
 
-1. baseline and zero-residual paths are equivalent at final display size;
-2. both existing body crossfade layers can be represented without flash or ghost silhouette;
-3. all action families run through the compositor without missing assets;
-4. neck ROI remains unchanged at zero and bounded under residual deformation;
-5. action-transition + residual envelope has no one-frame transform step above the preregistered limit;
-6. BASE/WARP/WARP/BASE real-wall-clock A/B on the admitted AMD renderer retains the 60-Hz frame gate;
-7. live source hashes are unchanged during the scratch gate;
-8. only after those pass may a reversible dormant production feature gate be constructed.
+1. both existing body crossfade directions are semantically reproduced without flash, ghost silhouette or meaningful alpha/color error;
+2. all action families run through the cached compositor without missing assets;
+3. neck ROI remains unchanged at zero and bounded under residual deformation;
+4. action-transition + residual envelope has no one-frame transform step above the preregistered limit;
+5. whole-scene BASE/WARP/WARP/BASE real-wall-clock A/B retains the frame-budget gate on the admitted AMD renderer;
+6. a matched perceptual A/B shows benefit or at minimum no degradation at the calibrated scale;
+7. live source hashes are unchanged during scratch gates;
+8. only after those pass may a reversible dormant production feature gate be constructed and tested.
 
 ## Current evidence scope
 
-Already established independently on the real `ai-core-node` AMD renderer:
+Established on the real `ai-core-node` AMD renderer:
 
-- the 399-vertex / 720-triangle body mesh executes with `gl_error=0`;
-- BASE/WARP/WARP/BASE held ~60 Hz with no measured interval above 20 ms in the isolated component A/B;
-- live HTML and `koerper_zero.png` hashes remained unchanged;
-- the real `buehne_daemon.py` process is running and the live scheduler has one self-chaining 22–50 s body-action lane plus photographed breathing fallback.
+- 399-vertex / 720-triangle residual body mesh executes with `gl_error=0`;
+- isolated constant-texture BASE/WARP held ~60 Hz;
+- naive upload-on-selection compositor is rejected as a performance negative;
+- cached display-resolution compositor held ~60 Hz under a stricter 777-frame all-family schedule with zero >20 ms intervals;
+- final-display scale `4.0` is the first tested shoulder-only amplitude meeting the preregistered measurable-signal + neck/silhouette bounds;
+- live HTML, daemon and body assets remained unchanged throughout these scratch gates;
+- real `buehne_daemon.py` is running and the live scheduler has one self-chaining 22–50 s body-action lane plus photographed breathing fallback.
 
 Not established yet:
 
-- photographed-action x residual-mesh composition correctness;
-- whole-scene cost;
+- exact/accepted crossfade color/alpha equivalence at semitransparent silhouette edges;
+- action-entry/exit residual envelope behavior;
+- whole-scene cost with the compositor integrated into the full live render stack;
 - perceptual superiority;
 - live production body-mesh credit.
 
-The next discriminator is therefore composition correctness, not another isolated mesh benchmark.
+The next exact blocker is crossfade edge-fidelity characterization, followed by action-envelope and whole-scene shadow integration gates. No live body-mesh promotion before those close.

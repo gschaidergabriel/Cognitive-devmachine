@@ -1,0 +1,43 @@
+13:#     recorded to a state file; a separate --harvest run opens them later,
+18:#     NUM_WORKERS=30 SLEEP_BETWEEN_WORKERS=2 ~/scripts/chatgpt_burst_worker_v2.sh
+20:#     ~/scripts/chatgpt_burst_worker_v2.sh --harvest
+23:#   NUM_WORKERS            default 30   - how many triggerwort2 sends to attempt
+44:# TRIGGER overridable via env (stern.py chatgpt-senden wrapper sets this
+46:TRIGGER="${TRIGGER:-triggerwort2}"
+48:NUM_WORKERS="${NUM_WORKERS:-30}"
+64:# LESSON (2026-08-27, found live via a real multi-paragraph review $TRIGGER):
+66:# a real keypress -- a literal newline (0x0A) inside $TRIGGER is typed as an
+68:# Shift+Enter inserts a newline). A multi-line $TRIGGER therefore gets
+72:# --prompts) MUST pass single-line $TRIGGER text -- join paragraphs with
+79:SENT_URLS_FILE="$STATE_DIR/sent_urls_v2.txt"
+217:# harvest mode
+219:run_harvest() {
+222:        log "no $SENT_URLS_FILE found, nothing to harvest"
+226:    local harvested_done=0 harvested_pending=0 harvested_lost=0
+232:            log "HARVEST: aborting remaining harvest due to resource guard"
+240:            log "HARVEST: aborting remaining harvest, daemon has 0 tabs"
+256:            # harvested back to back. Key by the conversation id from the URL
+266:            harvested_done=$((harvested_done + 1))
+269:            harvested_pending=$((harvested_pending + 1))
+275:    log "HARVEST summary: done=$harvested_done pending=$harvested_pending lost=$harvested_lost"
+283:    log "=== BURST CYCLE V2 START (NUM_WORKERS=$NUM_WORKERS SLEEP_BETWEEN_WORKERS=$SLEEP_BETWEEN_WORKERS RAM_THRESHOLD_MB=$RAM_THRESHOLD_MB TAB_RECYCLE_EVERY=$TAB_RECYCLE_EVERY) ==="
+317:    log "--- Phase B: sequential sends (NUM_WORKERS=$NUM_WORKERS) ---"
+333:    for i in $(seq 1 "$NUM_WORKERS"); do
+340:                "$i" "$ts_start" "$TRIGGER" > "$result_json"
+359:        $B type "$TRIGGER" >>"$LOG" 2>&1
+363:        if [ "$actual" != "$TRIGGER" ]; then
+368:            $B type "$TRIGGER" >>"$LOG" 2>&1
+371:            if [ "$actual" != "$TRIGGER" ]; then
+374:                    "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+388:                "$i" "$CURRENT_TAB" "$conv_url" "$ts_start" "$TRIGGER" > "$result_json"
+398:                "$i" "$CURRENT_TAB" "$ts_start" "$TRIGGER" > "$result_json"
+416:        if [ $((i % TAB_RECYCLE_EVERY)) -eq 0 ] && [ "$i" -lt "$NUM_WORKERS" ]; then
+435:    log "Phase B complete: sent=$sent_count blocked=$blocked_count failed=$failed_count attempted=$NUM_WORKERS"
+440:    SUMMARY_FILE="$STATE_DIR/SUMMARY_v2_${RUN_TS}.json"
+441:    cat > "$SUMMARY_FILE" <<EOF
+444:  "attempted": $NUM_WORKERS,
+448:  "sent_urls_file": "$SENT_URLS_FILE",
+452:    log "Summary written to $SUMMARY_FILE"
+453:    log "BURST_CYCLE_COMPLETE (send phase only; run --harvest separately to collect results)"
+459:if [ "${1:-}" = "--harvest" ]; then
+460:    run_harvest

@@ -1,0 +1,8 @@
+durable_memory cols ['memory_id', 'kind', 'subject', 'value', 'source_turn_id', 'user_id', 'ts', 'provenance']
+durable_memory scope_counts [('andreas', 5823), ('gabriel', 5671)]
+turns cols ['turn_id', 'session_id', 'user_id', 'ordinal', 'ts', 'role', 'content', 'fidelity', 'compression_generation', 'resource_refs', 'causal_refs', 'provenance']
+turns scope_counts [('gabriel', 2058), ('andreas', 1267)]
+memory_tabelle cols ['id', 'artikel_id', 'memory_text', 'quelle', 'erstellt_am', 'priority', 'tag', 'user_id']
+memory_tabelle scope_counts []
+f2_konversation cols ['konversation_id', 'ts', 'ts_lokal', 'session_id', 'runtime_epoch_id', 'intent', 'intent_quelle', 'teilnehmer', 'thema', 'entscheidung', 'brocken', 'quelle_tabelle', 'quelle_ref', 'erzeugt', 'purged', 'purge_grund', 'purge_ts']
+f2_konversation scope_counts NO_SCOPE

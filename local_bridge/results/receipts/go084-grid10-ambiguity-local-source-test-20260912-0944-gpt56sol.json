@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go084-grid10-ambiguity-local-source-test-20260912-0944-gpt56sol",
+  "command_sha256": "38982be5d3d1fac08bb51c9475d892db54760c0bc8c9fe557e6860d7d3c4c955",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:34:58.018722+00:00",
+  "finished_at": "2026-09-12T02:34:58.192351+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "ec66d6c904e40aee08f32b5d45ddd67658c4b914a3be0a02257dae776a99bd9b",
+  "stderr_sha256": "152c238fe5df620ebd66a4ae6c18305d3a9473a839b5f91d5523ff55d854230b",
+  "stdout_tail": "=== GO084 GRID10 AMBIGUITY LOCAL-SOURCE OFFLINE TEST ===\n2026-09-12T04:34:58+02:00\nandreas-MACO\nREPO_HEAD=c7de75d22b94ee88d02c5f663252009ccace282b\n99445500033772250466b6cfbadc6892d44ac6cc0ed90d983ca172cf41a07c36  /home/andreas/frankenstein-repo/scripts/f2wp1207_grid10_turn_loop.py\nOK default_none_exact 100/100\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<stdin>\", line 33, in <module>\nAssertionError: JSpace(turn_event_id='lock', candidates=(Candidate(cell_id='G1', signal=0.9, prior_state=0.0, proposal_score=0.9), Candidate(cell_id='G2', signal=0.88, prior_state=0.0, proposal_score=0.88), Candidate(cell_id='G3', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G4', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G5', signal=0.2, prior_state=100.0, proposal_score=0.8), Candidate(cell_id='G6', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G7', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G8', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G9', signal=0.2, prior_state=0.0, proposal_score=0.2), Candidate(cell_id='G10', signal=0.2, prior_state=0.0, proposal_score=0.2)), winner_cell_id='G1', broadcast_value=0.9)\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

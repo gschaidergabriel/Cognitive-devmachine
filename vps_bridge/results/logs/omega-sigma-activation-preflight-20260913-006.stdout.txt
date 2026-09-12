@@ -1,0 +1,8 @@
+{"current": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1", "current_is_symlink": true, "status": {"children": {"grid": {"alive": true, "pid": 948102, "returncode": null}, "master_bridge": {"alive": true, "pid": 948105, "returncode": null}, "relay": {"alive": true, "pid": 948103, "returncode": null}, "telemetry": {"alive": true, "pid": 948104, "returncode": null}}, "pid": 948100, "relay_mode": "BOUNDED_NONBLOCKING", "repo_root": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1", "schema": "OMEGA_SUPERVISOR_STATUS/v2", "transport_boundary": "OUTER_SPOOL", "updated_at": "2026-09-12T19:47:06.965691+00:00"}}
+---PS---
+ 948100       1 Sat Sep 12 13:43:12 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1
+ 948102  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.grid_runtime_v3
+ 948104  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.telemetry_daemon
+ 948105  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.master_bridge_carrier
+---LOCK---
+948100---CANDIDATE---

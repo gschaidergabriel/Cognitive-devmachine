@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-sigma-activation-preflight-20260913-006",
+  "command_sha256": "652385ad9ef901967a9f1cf1a33a3346998bf689e1c18ee2d40a90192b3575cd",
+  "started_at": "2026-09-12T19:47:09.658619+00:00",
+  "finished_at": "2026-09-12T19:47:10.124029+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "daa908494ae237c895d5f4e6c8fce65a260024f37644f7439bae9bc6ea39d5dc",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\"current\": \"/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\", \"current_is_symlink\": true, \"status\": {\"children\": {\"grid\": {\"alive\": true, \"pid\": 948102, \"returncode\": null}, \"master_bridge\": {\"alive\": true, \"pid\": 948105, \"returncode\": null}, \"relay\": {\"alive\": true, \"pid\": 948103, \"returncode\": null}, \"telemetry\": {\"alive\": true, \"pid\": 948104, \"returncode\": null}}, \"pid\": 948100, \"relay_mode\": \"BOUNDED_NONBLOCKING\", \"repo_root\": \"/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\", \"schema\": \"OMEGA_SUPERVISOR_STATUS/v2\", \"transport_boundary\": \"OUTER_SPOOL\", \"updated_at\": \"2026-09-12T19:47:06.965691+00:00\"}}\n---PS---\n 948100       1 Sat Sep 12 13:43:12 2026 python3 -m omega.supervisor_outer --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\n 948102  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.grid_runtime_v3\n 948104  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.telemetry_daemon\n 948105  948100 Sat Sep 12 13:43:12 2026 /usr/bin/python3 -m omega.master_bridge_carrier\n---LOCK---\n948100---CANDIDATE---\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

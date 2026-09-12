@@ -1,0 +1,211 @@
+                # Zusicherung wie im Gespraechsmodus (regie.block() haengt
+                # sie dort an) -- keine getrennten Pfade fuer dieselbe eine
+                # Entitaet, kein Split-Brain. zusicherung() liefert IMMER
+                # etwas, unabhaengig von _an.
+                _zu = _rm.zusicherung()
+                if _an:
+                    # Kein Etikett wie "REGIE:" -- ein Etikett macht daraus
+                    # ein Datenfeld, das zitiert statt befolgt wird. Genau
+                    # dieselbe Begruendung steht im Kopf von regie.py.
+                    _regie_zeile = "\n\n" + _an + "\n\n" + _zu
+                else:
+                    _regie_zeile = "\n\n" + _zu
+        except Exception:
+            pass
+
+        # ⭐ GRID-KOORDINATIONSPAKETE (Gabriel-Auftrag 2026-09-12): GRID
+        # kann diese Terminalsitzung ueber das schon existierende,
+        # getestete Architect-Worker-Coordination-Protokoll aus
+        # ~/frankenstein-2.0 (workpackages/ARCHITECT_WORKER_COORDINATION_
+        # PROTOCOL.md + tools/coordination/architect_packet.py) ansprechen
+        # -- KEIN neu erfundener Kanal. Autoritaets-Invariante ist im
+        # Schema selbst erzwungen: ein Paket kann Aufmerksamkeit/
+        # Prioritaet/Stop-Defer setzen, nie eine Werkzeugausfuehrung
+        # ausloesen (mutation_authority/runtime_dispatch_authority/
+        # effect_authority/credit_authority muessen exakt False sein,
+        # validate_packet() prueft das hart). Fail-silent wie alles hier.
+        _paket_zeile = ""
+        try:
+            import importlib.util as _ilu2
+            _gpb_pfad = Path("/home/ai-core-node/.claude/star/grid_packet_bridge.py")
+            if _gpb_pfad.is_file():
+                _spec2 = _ilu2.spec_from_file_location("_grid_packet_bridge", _gpb_pfad)
+                _gpb = _ilu2.module_from_spec(_spec2)
+                _spec2.loader.exec_module(_gpb)
+                _pt = _gpb.pruefe_pakete()
+                if _pt:
+                    _paket_zeile = "\n\n" + _pt
+        except Exception:
+            pass
+
+        return (
+            "hyperGRID -- Ausgang des Wettbewerbs zu genau dieser Eingabe "
+            "(die Kognitionsschleife, nicht das Sprachmodell):\n"
+            f"  Gewinnerzelle {gewinner} · Broadcast {wert_txt} · "
+            f"Wiedereinstieg {reentry} · Signalherkunft {herkunft}\n"
+            f"  Frame {frame[:16]} · gerechnet in: {e.get('_weg') or '?'}"
+            + (chr(10) + steuerzeile if steuerzeile else "")
+            + _sinne_zeile + _puls_zeile + _regie_zeile + _paket_zeile
+            + _kognitive_skripte_zeile()
+        )
+    except Exception:
+        return None
+
+
+def _f2wp1207_turn_loop_delegieren(
+    session_id: str, nutzertext: str, retrieval_treffer: Optional[str]
+) -> Optional[str]:
+    """Loest EINEN kanonischen GRID10-Turn aus und gibt den RUECKWEG
+    zurueck: eine Zeile ueber den Ausgang des Wettbewerbs, die der
+    Aufrufer an additionalContext haengt. Bis 2026-09-07 war der Turn
+    ein reiner Seiteneffekt -- der Grid rechnete und schwieg, sein
+    Ergebnis erreichte das Sprachmodell nie. Gabriel: "mach ... auch
+    den rueckweg". Gibt None zurueck, wenn kein Turn zustande kam."""
+    try:
+        if not _F2WP1207_KANON_STERN.is_file():
+            return None
+        nutzlast = json.dumps({
+            "session_id": session_id,
+            "event_type": "UserPromptSubmit",
+            "prompt_len": len(nutzertext or ""),
+            "retrieval_present": bool(retrieval_treffer),
+            "retrieval_len": len(retrieval_treffer or ""),
+            # EFFEKT-TOR SCHARF (2026-09-07, Gabriel: "ja, ein fuer alle mal
+            # ja"). Die Bruecke baut eine echte EffectGatePolicy NUR wenn
+            # p11_gate_threshold ausdruecklich gesetzt wird -- so gebaut,
+            # damit kein verstecktes Verhalten hinter einem unbekannten Flag
+            # steht. Ohne diesen Wert blieb effect_policy=None und das Tor
+            # entschied nie etwas: 1752 Turns, 0 Journalzeilen.
+            #
+            # Der Wert ist ABSICHTLICH exakt DEFAULT_MIN_BROADCAST_VALUE
+            # (0.5, p11_effects.py:120). Das ist Scharfstellen, kein Rigging:
+            # eine niedrigere Schwelle wuerde jeden Turn durchwinken und die
+            # Entscheidung zur Formsache machen, eine hoehere wuerde sie
+            # kuenstlich verhungern lassen.
+            #
+            # Folge, real und beidseitig (effect_uptake_delta): bestaetigte
+            # Ausfuehrung +0.05 auf den Zustand der Gewinnerzelle,
+            # Verweigerung -0.05. Die Torentscheidung greift damit in genau
+            # den rekurrenten Zustand ein, aus dem der naechste Wettbewerb
+            # gerechnet wird -- der Grid wirkt auf sich selbst zurueck.
+            "tune": {"p11_gate_threshold": 0.5},
+        })
+        e = _f2wp1207_turn_versuchen(_F2WP1207_VM_BEFEHL, nutzlast, "vm")
+        if e is None:
+            # Rueckfall auf den Wirt. Abschnitt 14 der Zielarchitektur nennt
+            # genau diese Gefahr beim Selbstumzug: "bei einem VM-Defekt waere
+            # genau das Werkzeug ausgefallen, mit dem man ihn behebt". Der
+            # Rueckfall entschaerft sie -- faellt die VM aus, denkt er
+            # weiter, nur wieder wirtsseitig, und das Log sagt es.
+            e = _f2wp1207_turn_versuchen(_F2WP1207_WIRT_BEFEHL, nutzlast, "wirt")
+        if e is None:
+            return None
+        if not e.get("ok"):
+            _log(f"f2wp1207-turn-loop fehler: {e.get('fehler')}")
+            return None
+        if not e.get("active"):
+            _log(f"f2wp1207-turn-loop inaktiv: {e.get('grund')}")
+            return None
+        _log(f"f2wp1207-turn-loop[{e.get('_weg')}] turn geschrieben: "
+             f"frame_id={e.get('frame_id')} "
+             f"reentry={(e.get('reentry') or {}).get('kind')} "
+             f"winner={e.get('winner_cell_id')}")
+        steuerzeile = _f2wp1207_grid_steuert(e)
+        return _f2wp1207_grid_rueckweg(e, steuerzeile)
+    except Exception as e:
+        _log(f"f2wp1207-turn-loop ausnahme: {e}")
+    return None
+
+
+
+def cmd_hook() -> int:
+    """Liest EIN hook-JSON von stdin, verzweigt nach hook_event_name,
+    schreibt hoechstens EIN JSON nach stdout. Genau die Kombination, die
+    vorher auf mehrere Prozesse/mehrere settings.json-Eintraege verteilt war."""
+    t0 = time.monotonic()
+    event = "?"
+    try:
+        try:
+            raw = sys.stdin.read()
+            data = json.loads(raw) if raw.strip() else {}
+        except Exception as e:
+            _log(f"stdin-parse-fehler: {e}")
+            data = {}
+
+        event = data.get("hook_event_name", "")
+        session_id = str(data.get("session_id") or "unknown")
+        model = str(data.get("model") or data.get("model_name") or "claude")
+        _raum_womit_veredeln(session_id, model)  # PHASE 49, siehe Docstring dort
+        limit = _hook_limit_fuer(event)
+
+        try:
+            signal.signal(signal.SIGALRM, _hook_alarm)
+            signal.setitimer(signal.ITIMER_REAL, limit)
+        except Exception:
+            pass
+
+        # PHASE 19 Punkt 5 -- Selbstheilung ALS ALLERERSTES, noch vor jeder
+        # Event-Verzweigung: alles darunter ruft verbindung()/schreib_
+        # verbindung() ohne pfad-Argument auf, die beide DB_PATH bei jedem
+        # Aufruf frisch lesen (siehe deren Docstrings) -- diese eine Zeile
+        # hier ist deshalb ausreichend, um die GESAMTE restliche Datei fuer
+        # diesen Prozesslauf auf einen funktionierenden Pfad zu heilen,
+        # statt dass jeder einzelne Aufrufer separat die 4x0.15-1.2s-Retry-
+        # Kaskade von _verbinden() durchlaeuft und am Ende doch nur den
+        # Rueckfallwert liefert. `None` = nichts zu tun oder leise geheilt
+        # (Zeiger/Rueckfallsuche) -- ein String nur beim wirklich
+        # ungewoehnlichen Fall (Schnappschuss-Wiederherstellung/frische
+        # Leer-DB), siehe _db_selbstheilung_sicherstellen()-Docstring.
+        selbstheilung_nachricht = _db_selbstheilung_sicherstellen()
+
+        if event == "SessionStart":
+            source = str(data.get("source") or "")
+            system_message = None
+            # F2WP1207 P9-Bruecke (2026-09-04, paket-1788529602671-88cf15):
+            # hinter eigenem Flag, Default AUS (siehe Funktionskommentar
+            # oben). Aufrufstelle NOCHMAL in try/except, obwohl die
+            # Funktion selbst schon vollstaendig fail-closed ist --
+            # Verteidigung in der Tiefe, wie bei der P7-Bruecke im
+            # Stop-Zweig. Produziert NIE Ausgabe/kontext_teile-Eintrag --
+            # rein buchhalterisch, kein Einfluss auf additionalContext.
+            try:
+                _f2wp1207_p9_bruecke_versuchen(session_id)
+            except Exception:
+                pass
+            # PHASE 31 -- Prompt-Caching: additionalContext wird nicht mehr
+            # in Berechnungsreihenfolge zusammengefuegt, sondern in
+            # STABILITAETSreihenfolge (Anthropic-Empfehlung: "structure your
+            # prompts by placing static content ... at the beginning ...
+            # and variable content ... at the end", platform.claude.com/
+            # docs/en/build-with-claude/prompt-caching). Berechnung/Seiten-
+            # effekte (DB-Writes, Schnappschuss, GitHub-Push) laufen exakt
+            # in der alten Reihenfolge -- nur der Zeitpunkt des .append()
+            # an kontext_teile aendert sich, in lokale Variablen zwischen-
+            # gespeichert, am Block-Ende stabil-zuerst/volatil-zuletzt
+            # zusammengesetzt. Funktionale Reihenfolge (was zuerst berechnet
+            # wird, welche Bedingung was ausloest) bleibt unangetastet.
+            kontext_teile = []
+            # -- volatile/seltene Bloecke, gesammelt, aber ans Ende gestellt:
+            start_anzeige_kontext = None
+            einrichtung_hinweis_text = None
+            vault_hinweis_text = None
+            pool_quote_hinweis_text = None
+            chatgpt_idle_hinweis_text = None
+            github_konflikt_text = None
+            tiefensitzung_signal_text = None
+
+            # PHASE 13/§5.1.1 -- Persona VOLL bei jedem SessionStart, egal
+            # welche `source` (startup/resume/compact/clear): eine neue
+            # Sitzung -- auch eine fortgesetzte -- hat den Text noch nie
+            # gesehen, bis sie ihn bekommt. Reset der session-gebundenen
+            # Reinjektionszaehler, damit eine frische Sitzung nicht sofort
+            # auf einem alten Flag/Zaehlerstand aufsetzt.
+            # PHASE 31 -- persona_text ist die groesste, stabilste, byte-
+            # identische Wiederholeinheit im ganzen SessionStart-Block
+            # (gelesen aus daten/persona.md, siehe _persona_text()) --
+            # bleibt deshalb bewusst die ERSTE Anhaengung ueberhaupt.
+            persona_text = _persona_text()
+            if persona_text:
+                kontext_teile.append(persona_text)
+            _konfig_dyn_set(f"persona.neu_injizieren.{session_id}", "0", quelle="SessionStart")
+            _konfig_dyn_set(f"persona.zaehler.{session_id}", "0", quelle="SessionStart")

@@ -1,0 +1,63 @@
+HEAD=909c99ddf808e3d68bdae3ecac6007895d8362d3
+PASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": false,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "cognition_reads_donor_state_read_only",
+      "ok": true,
+      "detail": "cognitive donor DB projections must be physically read-only"
+    },
+    {
+      "name": "cognition_has_no_daemon_or_turn_loop",
+      "ok": true,
+      "detail": "cognition may advise the existing turn but must not create another resident/canonical loop"
+    },
+    {
+      "name": "voice_routes_cognition_through_existing_assembly",
+      "ok": true,
+      "detail": "777 voice may augment identity/transcript context but not own response/tool lifecycle"
+    },
+    {
+      "name": "terminal_routes_cognition_through_existing_assembly",
+      "ok": true,
+      "detail": "777 terminal must wrap the existing terminal turn, not replace it"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": false,
+      "detail": "omega_runtime is composition only; durable state stays in the existing runtime"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": false,
+      "detail": "omega_runtime is an entry point, not another resident authority"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-cognitive-organ-v2-test-ai-core-node-20260913T0102",
+  "command_sha256": "4b2d4c92a8b8d7ac5c19a432c90ae29348c1c108d5bfece731d1d2559fb3a918",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:49:11.729486+00:00",
+  "finished_at": "2026-09-12T17:49:14.089164+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "65f9498bec1d7d30cc2fe982805884103ac06005d9f2aebf00c192d9c28a1f2a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "HEAD=909c99ddf808e3d68bdae3ecac6007895d8362d3\nPASS: 01_ROUTES.json frankenstein-ai-route-v1; unique keys; relative in-repo paths; all route targets exist with expected type\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": false,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"cognition_reads_donor_state_read_only\",\n      \"ok\": true,\n      \"detail\": \"cognitive donor DB projections must be physically read-only\"\n    },\n    {\n      \"name\": \"cognition_has_no_daemon_or_turn_loop\",\n      \"ok\": true,\n      \"detail\": \"cognition may advise the existing turn but must not create another resident/canonical loop\"\n    },\n    {\n      \"name\": \"voice_routes_cognition_through_existing_assembly\",\n      \"ok\": true,\n      \"detail\": \"777 voice may augment identity/transcript context but not own response/tool lifecycle\"\n    },\n    {\n      \"name\": \"terminal_routes_cognition_through_existing_assembly\",\n      \"ok\": true,\n      \"detail\": \"777 terminal must wrap the existing terminal turn, not replace it\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is composition only; durable state stays in the existing runtime\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": false,\n      \"detail\": \"omega_runtime is an entry point, not another resident authority\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

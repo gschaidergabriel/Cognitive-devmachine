@@ -1,0 +1,11 @@
+520:        _n = (os.environ.get("FRANKENSTEIN_NUTZER") or "").strip()
+682:NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "Andreas")
+843:    f"Du arbeitest mit {NUTZER} und duzt ihn. "
+1499:    r"[\s,]*(?:" + re.escape(NUTZER) + r"\b[\s,.!?:-]*)?", re.IGNORECASE)
+2993:    "Du bist FranKenstein, " + NUTZER + "s lokale Sprachstimme auf seinem eigenen Rechner. "
+4188:                    user_text=user_text, user_name=NUTZER,
+4227:    # Der GANZE Innenzustand stand dort in der NUTZERNACHRICHT, direkt vor der
+4351:        # "{NUTZER} sagt zu dir:" war nicht besser, sondern nur anders
+4552:    session_id = f"{NUTZER.lower()}-voice-{int(time.time())}"
+3103:def run_turn(history, tts_voice, session_id):
+3144:    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)

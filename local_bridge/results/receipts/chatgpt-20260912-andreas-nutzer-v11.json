@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "chatgpt-20260912-andreas-nutzer-v11",
+  "command_sha256": "4f13aeb4cdc241437248487d1bc8fc66b6c2a5d3602858239ea0ccfa8c20cfb2",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T08:39:59.538633+00:00",
+  "finished_at": "2026-09-12T08:39:59.794878+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "870b7080874c3d7c6b6c4c677a67eac92ec62ddfaabc521b93a9b117a0d71df3",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "520:        _n = (os.environ.get(\"FRANKENSTEIN_NUTZER\") or \"\").strip()\n682:NUTZER = os.environ.get(\"FRANKENSTEIN_NUTZER\", \"Andreas\")\n843:    f\"Du arbeitest mit {NUTZER} und duzt ihn. \"\n1499:    r\"[\\s,]*(?:\" + re.escape(NUTZER) + r\"\\b[\\s,.!?:-]*)?\", re.IGNORECASE)\n2993:    \"Du bist FranKenstein, \" + NUTZER + \"s lokale Sprachstimme auf seinem eigenen Rechner. \"\n4188:                    user_text=user_text, user_name=NUTZER,\n4227:    # Der GANZE Innenzustand stand dort in der NUTZERNACHRICHT, direkt vor der\n4351:        # \"{NUTZER} sagt zu dir:\" war nicht besser, sondern nur anders\n4552:    session_id = f\"{NUTZER.lower()}-voice-{int(time.time())}\"\n3103:def run_turn(history, tts_voice, session_id):\n3144:    user_text, asr_load_s, asr_infer_s, asr_rss_kb = run_asr_subprocess(wav_path)\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

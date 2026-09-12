@@ -1,0 +1,272 @@
+=== /home/ai-core-node/.claude/star/eskalation_freepool.py ===
+139:def eskalieren(auftrag: str, grund: Optional[str] = None,
+140:               task_kind: str = "datei_edit") -> dict:
+141:    """Kern-Funktion: waehlt bestes erreichbares 'voll'-Modell, aktiviert es
+142:    (stern.modell_aktiv_setzen, exakt wie cmd_fallback_start es tut), ruft
+143:    harness_aider.einen_lauf(..., modus='sandbox') direkt auf (echter
+144:    Fortsetzungskontext kommt aus DESSEN eigenem stern.handoff()-Aufruf --
+145:    kein erfundener Handoff hier), meldet das Ergebnis an pool_wache.record().
+146:
+147:    Gibt IMMER ein dict zurueck, wirft nie unbehandelt (gleicher Vertrag wie
+148:    harness_aider.einen_lauf())."""
+149:    if pool_wache.all_exhausted():
+150:        return {"ok": False, "grund": "kompletter Free-Pool aktuell erschoepft/nicht "
+151:                "erreichbar (pool_wache.all_exhausted()==True) -- nirgends hinzueskalieren"}
+152:
+153:    modell_id = waehle_bestes_modell(task_kind)
+154:    if modell_id is None:
+155:        return {"ok": False, "grund": "kein 'voll'-Free-Pool-Modell aktuell erreichbar "
+156:                f"(Kandidaten geprueft: {_KANDIDATEN_VOLL})"}
+157:
+158:    aktiviert = _s.modell_aktiv_setzen(modell_id, von="eskalation_freepool")
+159:    if not aktiviert.get("ok"):
+160:        return {"ok": False, "grund": f"Aktivierung von {modell_id} fehlgeschlagen: {aktiviert}"}
+161:
+162:    voller_auftrag = f"{auftrag}\n\n---\n{_STANDING_AUTH_HINWEIS}".strip()
+163:    ergebnis = harness_aider.einen_lauf(
+164:        modell_id, voller_auftrag, modus="sandbox",
+165:        fallback_grund=(grund or "Claude-Kontingent knapp/erschoepft "
+166:                        f"(five_h>= {_QUOTA_SCHWELLE_PCT}%, siehe _claude_kontingent_knapp())"),
+167:    )
+168:
+169:    tier_label = modell_faehigkeiten.query(modell_id).get("tier_label")
+170:    if tier_label:
+171:        pool_wache.record(tier_label, ok=bool(ergebnis.get("ok")),
+172:                           err=(None if ergebnis.get("ok") else ergebnis.get("grund")),
+173:                           quelle=f"eskalation_freepool:{modell_id}")
+174:
+175:    ergebnis["eskaliert_mit_modell"] = modell_id
+176:    return ergebnis
+177:
+178:
+179:def pruefe_und_eskaliere_bei_bedarf(auftrag: str, task_kind: str = "datei_edit") -> dict:
+180:    """SEMI-automatischer Haken (siehe Docstring oben, ehrlicher Stand):
+181:    liest das echte Claude-Kontingent, eskaliert NUR wenn wirklich knapp.
+182:    Muss von aussen aufgerufen werden (Koordinator/Hook//loop) -- laeuft
+183:    NICHT selbst als Daemon."""
+184:    knapp = _claude_kontingent_knapp()
+185:    if knapp is None:
+186:        return {"ok": False, "grund": "Claude-Kontingent-Zustand unbekannt (Datei fehlt/"
+187:                "veraltet) -- KEINE Eskalation ohne echten Beleg"}
+188:    if not knapp:
+189:        return {"ok": False, "grund": "Claude-Kontingent hat noch Luft, keine Eskalation noetig",
+190:                "eskaliert": False}
+191:    return {**eskalieren(auftrag, grund="automatische Pruefung: Claude-Kontingent knapp"),
+192:            "ausgeloest_durch": "pruefe_und_eskaliere_bei_bedarf"}
+193:
+194:
+195:def _cli():
+196:    import argparse
+197:    p = argparse.ArgumentParser(description="Free-Pool-Eskalation (eskalation_freepool.py)")
+198:    sub = p.add_subparsers(dest="cmd", required=True)
+199:
+200:    p_st = sub.add_parser("quota-status", help="echten Claude-Kontingent-Zustand zeigen")
+201:
+202:    p_wm = sub.add_parser("waehle-modell", help="bestes erreichbares Modell zeigen, ohne zu starten")
+203:    p_wm.add_argument("--task-kind", default="datei_edit")
+204:
+205:    p_es = sub.add_parser("eskalieren", help="JETZT eskalieren (echter Aider-Lauf!)")
+206:    p_es.add_argument("--auftrag", required=True)
+207:    p_es.add_argument("--grund", default=None)
+208:    p_es.add_argument("--task-kind", default="datei_edit")
+209:
+210:    p_pr = sub.add_parser("pruefen-und-eskalieren",
+211:                           help="nur eskalieren, wenn echtes Kontingent-Signal knapp ist")
+212:    p_pr.add_argument("--auftrag", required=True)
+213:
+214:    args = p.parse_args()
+215:    if args.cmd == "quota-status":
+216:        print(json.dumps({"knapp": _claude_kontingent_knapp()}, ensure_ascii=False))
+217:        return 0
+218:    if args.cmd == "waehle-modell":
+219:        print(json.dumps({"modell": waehle_bestes_modell(args.task_kind)}, ensure_ascii=False))
+220:        return 0
+221:    if args.cmd == "eskalieren":
+222:        r = eskalieren(args.auftrag, grund=args.grund, task_kind=args.task_kind)
+223:        print(json.dumps(r, ensure_ascii=False, indent=2))
+224:        return 0 if r.get("ok") else 1
+225:    if args.cmd == "pruefen-und-eskalieren":
+226:        r = pruefe_und_eskaliere_bei_bedarf(args.auftrag)
+227:        print(json.dumps(r, ensure_ascii=False, indent=2))
+228:        return 0 if r.get("ok") else 1
+229:    return 1
+230:
+231:
+232:if __name__ == "__main__":
+233:    sys.exit(_cli())
+179:def pruefe_und_eskaliere_bei_bedarf(auftrag: str, task_kind: str = "datei_edit") -> dict:
+180:    """SEMI-automatischer Haken (siehe Docstring oben, ehrlicher Stand):
+181:    liest das echte Claude-Kontingent, eskaliert NUR wenn wirklich knapp.
+182:    Muss von aussen aufgerufen werden (Koordinator/Hook//loop) -- laeuft
+183:    NICHT selbst als Daemon."""
+184:    knapp = _claude_kontingent_knapp()
+185:    if knapp is None:
+186:        return {"ok": False, "grund": "Claude-Kontingent-Zustand unbekannt (Datei fehlt/"
+187:                "veraltet) -- KEINE Eskalation ohne echten Beleg"}
+188:    if not knapp:
+189:        return {"ok": False, "grund": "Claude-Kontingent hat noch Luft, keine Eskalation noetig",
+190:                "eskaliert": False}
+191:    return {**eskalieren(auftrag, grund="automatische Pruefung: Claude-Kontingent knapp"),
+192:            "ausgeloest_durch": "pruefe_und_eskaliere_bei_bedarf"}
+193:
+194:
+195:def _cli():
+196:    import argparse
+197:    p = argparse.ArgumentParser(description="Free-Pool-Eskalation (eskalation_freepool.py)")
+198:    sub = p.add_subparsers(dest="cmd", required=True)
+199:
+200:    p_st = sub.add_parser("quota-status", help="echten Claude-Kontingent-Zustand zeigen")
+201:
+202:    p_wm = sub.add_parser("waehle-modell", help="bestes erreichbares Modell zeigen, ohne zu starten")
+203:    p_wm.add_argument("--task-kind", default="datei_edit")
+204:
+205:    p_es = sub.add_parser("eskalieren", help="JETZT eskalieren (echter Aider-Lauf!)")
+206:    p_es.add_argument("--auftrag", required=True)
+207:    p_es.add_argument("--grund", default=None)
+208:    p_es.add_argument("--task-kind", default="datei_edit")
+209:
+210:    p_pr = sub.add_parser("pruefen-und-eskalieren",
+211:                           help="nur eskalieren, wenn echtes Kontingent-Signal knapp ist")
+212:    p_pr.add_argument("--auftrag", required=True)
+213:
+214:    args = p.parse_args()
+215:    if args.cmd == "quota-status":
+216:        print(json.dumps({"knapp": _claude_kontingent_knapp()}, ensure_ascii=False))
+217:        return 0
+218:    if args.cmd == "waehle-modell":
+219:        print(json.dumps({"modell": waehle_bestes_modell(args.task_kind)}, ensure_ascii=False))
+220:        return 0
+221:    if args.cmd == "eskalieren":
+222:        r = eskalieren(args.auftrag, grund=args.grund, task_kind=args.task_kind)
+223:        print(json.dumps(r, ensure_ascii=False, indent=2))
+224:        return 0 if r.get("ok") else 1
+225:    if args.cmd == "pruefen-und-eskalieren":
+226:        r = pruefe_und_eskaliere_bei_bedarf(args.auftrag)
+227:        print(json.dumps(r, ensure_ascii=False, indent=2))
+228:        return 0 if r.get("ok") else 1
+229:    return 1
+230:
+231:
+232:if __name__ == "__main__":
+233:    sys.exit(_cli())
+=== /home/ai-core-node/.claude/star/harness_aider.py ===
+1350:def einen_lauf(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1351:                push_erlaubt=True):
+1352:    """Duenner Wrapper um `_einen_lauf_kern()`: misst die echte Laufzeit und
+1353:    verbucht JEDEN Aufruf (Erfolg UND Fehlschlag, auch fruehe Ablehnungen
+1354:    wie 'Modell nicht aktiv') in modell_profile.py's persistenter Historie
+1355:    (PHASE 53 Teil 2, Gabriel-Auftrag 2026-09-12: 'das soll dynamisch immer
+1356:    weiter verbessert werden mittels der nutzung und auswertung dessen').
+1357:    Ein Wrapper statt Aenderungen an jedem der sechs return-Pfade im Kern --
+1358:    weniger Risiko, dieselbe Abdeckung. Fail-soft: schlaegt die Verbuchung
+1359:    selbst fehl, darf das NIE den echten Lauf-Erfolg verdecken."""
+1360:    _t0 = time.time()
+1361:    ergebnis = _einen_lauf_kern(modell_id, auftrag, modus=modus,
+1362:                                 fallback_grund=fallback_grund,
+1363:                                 push_erlaubt=push_erlaubt)
+1364:    try:
+1365:        import modell_profile as _mp
+1366:        _mp.verlauf_aufzeichnen(
+1367:            modell_id, bool(ergebnis.get("ok")), chunked=False, anzahl_chunks=1,
+1368:            geschaetzte_tokens=_mp._tokens_schaetzen(auftrag or ""),
+1369:            dauer_s=time.time() - _t0, grund=ergebnis.get("grund"),
+1370:            quelle="harness_aider.einen_lauf")
+1371:    except Exception:
+1372:        pass
+1373:    return ergebnis
+1374:
+1375:
+1376:def _einen_lauf_kern(modell_id, auftrag, *, modus="sandbox", fallback_grund=None,
+1377:                push_erlaubt=True):
+1378:    """Kernlogik, gemeinsam fuer 'start' (modus=sandbox) und 'fallback-start'
+1379:    (modus=forschung). Gibt IMMER ein dict mit mindestens 'ok'/'paket_id'/
+1380:    'grund_falls_fehler' zurueck -- wirft nie eine unbehandelte Ausnahme
+1381:    nach aussen (der Aufrufer -- stern.py-Fallback -- braucht ein
+1382:    verlaessliches JSON, kein Traceback)."""
+1383:    if modell_id not in MODELL_MAP:
+1384:        return {"ok": False, "grund": f"unbekannte modell_id: {modell_id}"}
+1385:
+1386:    # 1) Aktivierungssperre
+1387:    aktiv_modell = _s._konfig_dyn_get("modell_aktiv.gewaehlt", "")
+1388:    if modell_id != aktiv_modell:
+1389:        return {"ok": False, "grund": f"Modell {modell_id} ist nicht das aktive Modell "
+1390:                f"(aktiv: {aktiv_modell or '(keins)'}) -- erst aktivieren"}
+1391:
+1392:    # 2) Forschungsmodus-Preflight VOR jedem Handoff/jeder Aenderung
+1393:    vor_head = None
+1394:    if modus == "forschung":
+1395:        pre = _forschung_preflight(FORSCHUNG_REPO)
+1396:        if not pre["ok"]:
+1397:            return {"ok": False, "grund": f"Forschungsmodus-Preflight fehlgeschlagen: {pre['grund']}"}
+1398:        vor_head = pre["head"]
+1399:
+1400:    # 3) Session + Handoff (Kontinuitaets-Bruecke, wie im Sandbox-Modus)
+1401:    session_id = _s._uid("harness-sess")
+1402:    try:
+1403:        handoff_result = _s.handoff(
+1404:            session_id=session_id, auftrag=auftrag,
+1405:            womit=f"harness:aider:{modell_id}",
+1406:            warum=(fallback_grund or "Free-Pool-Coding-Harness (Gabriel-Auftrag Modell-Dashboard)"),
+1407:            thema=f"Harness {modell_id} ({modus})",
+1408:        )
+1409:        if not handoff_result or handoff_result.get("paket_id") is None:
+1410:            return {"ok": False, "grund": "Handoff fehlgeschlagen: keine paket_id erhalten"}
+1411:        paket_id = handoff_result["paket_id"]
+1412:        kapsel = handoff_result.get("kapsel", "")
+1413:    except Exception as e:
+1414:        return {"ok": False, "grund": f"Handoff-Ausnahme: {e}"}
+1415:
+1416:    # 4) Werkraum bestimmen
+1417:    antwort_rel = None
+1418:    if modus == "forschung":
+1419:        werkraum = FORSCHUNG_REPO
+1420:        antwort_rel = os.path.join(FORSCHUNG_ERLAUBTER_PRAEFIX, paket_id, "ANTWORT.md")
+1421:        anweisung_pfad = (f"Schreibe deine Antwort AUSSCHLIESSLICH in die neue Datei "
+1422:                           f"'{antwort_rel}' (lege den Ordner an falls noetig). "
+1423:                           f"Aendere KEINE andere Datei in diesem Repository -- jede "
+1424:                           f"Aenderung ausserhalb von '{FORSCHUNG_ERLAUBTER_PRAEFIX}{paket_id}/' "
+1425:                           f"wird mechanisch geprueft und die GESAMTE Sitzung verworfen, falls "
+1426:                           f"du dich nicht daran haeltst.")
+1427:    else:
+1428:        werkraum = os.path.join(WERKRAUM_BASIS, paket_id)
+1429:        os.makedirs(werkraum, exist_ok=True)
+1430:        if not os.path.isdir(os.path.join(werkraum, ".git")):
+1431:            _git(werkraum, "init", "-q")
+1432:        anweisung_pfad = ""
+1433:
+1434:    _werkraum_git_identitaet(werkraum, modell_id)
+1435:
+1436:    _s._raum_ruf_schreiben(f"harness:aider:{modell_id}", "START",
+1437:                            f"paket_id={paket_id} modus={modus} werkraum={werkraum} auftrag={auftrag[:200]}")
+1438:
+1439:    # 5) Aider ausfuehren
+1440:    nachricht = f"{kapsel}\n---\n{anweisung_pfad}\n---\n{auftrag}".strip()
+1441:    aider_exit = _aider_ausfuehren(werkraum, modell_id, nachricht,
+1442:                                    map_tokens=(0 if modus == "forschung" else None),
+1443:                                    paket_id=paket_id)
+1444:    # Zweite, unabhaengige Absicherung (siehe Docstring dort) -- IMMER, auch
+1445:    # bei aider_exit != 0, damit der naechste Lauf ein sauberes Werkraum-
+1446:    # Arbeitsverzeichnis vorfindet (im Forschungsmodus: das ECHTE Repo).
+1447:    _aider_werkraum_aufraeumen(werkraum)
+1448:
+1449:    # 6) Checkpoint (IMMER, auch bei aider_exit != 0 -- evtl. wurde vor dem
+1450:    #    Fehler schon etwas committet, das gehoert protokolliert).
+1451:    #    seit=vor_head im Forschungsmodus ist PFLICHT (siehe Docstring der
+1452:    #    Funktion) -- sonst wird die GESAMTE Repo-Historie faelschlich
+1453:    #    diesem einen Lauf zugeschrieben (real passiert, 5930 Alt-Commits,
+1454:    #    beim ersten echten Testlauf 2026-08-27, seither gefixt).
+1455:    try:
+1456:        checkpoint_result = git_checkpoint_und_protokollieren(
+1457:            werkraum, paket_id, modell_id, seit=(vor_head if modus == "forschung" else None))
+1458:    except Exception as e:
+1459:        print(f"Checkpoint fehlgeschlagen: {e}", file=sys.stderr)
+1460:        checkpoint_result = {"anzahl_commits": 0, "unquittiert": True, "commit_hashes": []}
+1461:
+1462:    allowlist_ok = True
+1463:    allowlist_verstoesse = []
+1464:    verworfen = False
+1465:    if modus == "forschung":
+1466:        # 6b) Allowlist-Pruefung -- checkpoint_result["commit_hashes"] ist dank
+1467:        # seit=vor_head oben bereits korrekt auf DIESEN Lauf eingegrenzt.
+1468:        allowlist = _forschung_allowlist_pruefen(werkraum, checkpoint_result["commit_hashes"])
+1469:        allowlist_ok = allowlist["ok"]

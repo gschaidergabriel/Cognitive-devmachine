@@ -1,0 +1,154 @@
+BODY_PLAYER_SOURCE_BEGIN
+1732 // ⭐⭐ 2026-09-11 (Animations-Agent, Auftrag 4): die uebrigen echten
+1733 // Koerperbewegungen aus /koerper_rgba/ -- bisher lief nur atmen/ (12 Frames).
+1734 // ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+1735 // schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+1736 // Idle-Aktionen auf EINEM Spieler + EINER Scheduler-Kette (keine parallelen
+1737 // Systeme), geladen wird lazy ueber bildLaden() -- zuerst sichtbar schalten,
+1738 // wenn der Frame dekodiert ist (kein Flash). kombiniert bleibt bewusst draussen:
+1739 // seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+1740 // monotone Bewegungslinie, ein Durchlauf davon waere ein Sprung, keine Bewegung.
+1741 const KOERPER_AKTIONEN = [
+1742   { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1743       `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+1744   { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1745       `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+1746   { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+1747       "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+1748       `/koerper_rgba/lehnen/${n}.png`) },
+1749   { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+1750       "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+1751       "gewicht_-05","gewicht_+00"].map(n =>
+1752       `/koerper_rgba/gewicht/${n}.png`) },
+1753   { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+1754       "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+1755       "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+1756       `/koerper_rgba/schulterdrehung/${n}.png`) }
+1757 ];
+1758 let koerperAktion = null;      // {bilder, ms, idx, letzterT, fertig}
+1759 let _letzteKoerperAktion = null;
+1760 function koerperAktionStarten(fertig){
+1761   if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+1762   const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+1763   const wahl = pool[Math.floor(Math.random()*pool.length)];
+1764   _letzteKoerperAktion = wahl.name;
+1765   koerperAktion = { bilder:wahl.bilder, ms:wahl.ms, idx:0, letzterT:0, fertig };
+1766 }
+1767 function koerperAktionWeiterPlanen(){
+1768   // 22-50s Ruhe zwischen zwei Koerperaktionen -- selten, unregelmaessig,
+1769   // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+1770   // weiterreicht, kein Verzweigen.
+1771   setTimeout(() => koerperAktionStarten(() => koerperAktionWeiterPlanen()),
+1772     22000 + Math.random()*28000);
+1773 }
+1774 koerperAktionWeiterPlanen();
+1775 function koerperSchritt(jetzt){
+1776   if(koerperAktion){
+1777     const a = koerperAktion;
+1778     if(jetzt - a.letzterT < a.ms) return;
+1779     const eintrag = bildLaden(a.bilder[a.idx]);
+1780     if(!eintrag.ok) return; // Frame noch nicht dekodiert -- warten statt Flash
+1781     a.letzterT = jetzt;
+1782     koerperCrossfade(a.bilder[a.idx]);
+1783     a.idx++;
+1784     if(a.idx >= a.bilder.length){
+1785       koerperAktion = null;
+1786       const f = a.fertig; a.fertig = null;
+1787       if(f) f();
+1788     }
+1789     return;
+1790   }
+1791   if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+1792   atmenLetzterWechsel = jetzt;
+1793   atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+1794   koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+1795 }
+1796 
+1797 // ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+1798 // Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+1799 // passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+1800 // #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+1801 // nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+1802 // echtes Handy waere so exakt synchron mit sich selbst"). Drei
+1803 // ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+1804 // gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+1805 //  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+1806 //     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+1807 //     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+1808 //  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+1809 //     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+1810 //     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+1811 //  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+1812 //     linear.
+1813 // Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+1814 // (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+1815 // Hintergrund bewegt sich minimal weniger als der Vordergrund").
+1816 // ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("er zittert, schaut
+1817 // relativ shit aus"): die 8-10Hz-Mikrozitter-Komponente unten war zu schnell
+1818 // UND zu stark -- auf einem kleinen Panel (~296px breit), mit dem neuen
+1819 // engeren Kopf-Crop, UND auf einem Chrome-Fenster ohne GPU-Kompositing
+1820 // (--disable-gpu, siehe Fensterstart) liest sich eine 8-10Hz-Oszillation
+1821 // nicht als sanftes Handzittern, sondern als sichtbares Vibrieren/Ruckeln --
+1822 // das Auge ist fuer zeitliches Flackern empfindlicher als fuer die reine
+1823 // Pixelamplitude. Fix: Frequenz UND Amplitude aller drei Komponenten deutlich
+1824 // gesenkt (Tremor von ~10/8Hz auf ~3/2.3Hz, Drift/Rotation-Amplitude
+1825 // grob halbiert). Ziel ist jetzt spuerbar ruhiger -- lieber zu wenig als
+1826 // wieder "zittert".
+1827 let driftPhaseX = Math.random() * Math.PI * 2;
+1828 let driftPhaseY = Math.random() * Math.PI * 2;
+1829 let tremorPhaseA = Math.random() * Math.PI * 2;
+1830 let tremorPhaseB = Math.random() * Math.PI * 2;
+1831 let rotPhase = Math.random() * Math.PI * 2;
+1832 function kameraWackeln(){
+1833   const t = Math.max(0.4, Math.min(1.6, tempo)); // "passend zur Bewegung": etwas mehr Schub bei hoeherem Tempo
+1834   driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+1835   driftPhaseY += 0.0105; // ~9.6s Periode -- absichtlich versetzt zu X (war ~4.9s)
+1836   tremorPhaseA += 0.314;  // ~3Hz (war ~10Hz)
+1837   tremorPhaseB += 0.251;  // ~2.4Hz, knapp daneben statt exakt gleich (war ~8Hz)
+1838   rotPhase += 0.0063;     // ~16s Periode, noch langsamer als die Drift (war ~8.3s)
+1839   const driftX = Math.sin(driftPhaseX) * 0.7 * t;
+1840   const driftY = Math.cos(driftPhaseY) * 0.55 * t;
+1841   const tremorX = (Math.sin(tremorPhaseA) * 0.14 + Math.sin(tremorPhaseB) * 0.09) * t;
+1842   const tremorY = (Math.cos(tremorPhaseA * 0.97) * 0.12 + Math.cos(tremorPhaseB * 1.05) * 0.07) * t;
+1843   const rotDeg = Math.sin(rotPhase) * 0.06 * t;
+1844   const x = driftX + tremorX, y = driftY + tremorY;
+1845   $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+1846   // Hintergrund bekommt denselben Wackel, aber 0.85x gedaempft -- winzige
+1847   // Parallaxe, das Bild wirkt nicht wie eine starre Fotomontage auf dem
+1848   // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+1849   // addiert sich zu dem der Kamera, deshalb hier bewusst der GEGEN-Anteil
+1850   // (0.85-1 = -0.15x) statt des vollen Werts.
+1851   $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+1852 }
+1853 // ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+1854 // dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+1855 // #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+1856 // wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+1857 // Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+1858 // echten Zustandswechseln auf.
+1859 function kameraNachschwung(){
+1860   const kamera = $("kamera");
+1861   kamera.classList.remove("kamera-wechsel");
+1862   requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1863   setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+1864 }
+1865 
+BODY_PLAYER_SOURCE_END
+BASE_BBOX (117, 505, 1423, 1024)
+SEQ schulterzucken COUNT 8 NAMES ['zucken_000.png', 'zucken_001.png', 'zucken_002.png', 'zucken_003.png', 'zucken_004.png', 'zucken_005.png', 'zucken_006.png', 'zucken_007.png']
+METRICS [{"file":"zucken_000.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"},{"file":"zucken_001.png","left_mae":23.58,"right_mae":19.239,"lr_ratio":1.226,"changed_upper_gt3":0.4328,"sha256":"4308b8da77d4284d68c77cbca701aa1f16bd215e167fbc0cfc2a702fbf1962e1"},{"file":"zucken_002.png","left_mae":29.046,"right_mae":24.384,"lr_ratio":1.191,"changed_upper_gt3":0.456,"sha256":"493664922d5914e7b463d29eb06a3813ef9da3c61ca9334680c1435a142ae367"},{"file":"zucken_003.png","left_mae":31.581,"right_mae":27.011,"lr_ratio":1.169,"changed_upper_gt3":0.4711,"sha256":"376e8c6fd8afd922fc214d8a61ef531fe5614540fe229c4c57c959455788d17c"},{"file":"zucken_004.png","left_mae":31.581,"right_mae":27.011,"lr_ratio":1.169,"changed_upper_gt3":0.4711,"sha256":"376e8c6fd8afd922fc214d8a61ef531fe5614540fe229c4c57c959455788d17c"},{"file":"zucken_005.png","left_mae":29.046,"right_mae":24.384,"lr_ratio":1.191,"changed_upper_gt3":0.456,"sha256":"493664922d5914e7b463d29eb06a3813ef9da3c61ca9334680c1435a142ae367"},{"file":"zucken_006.png","left_mae":23.58,"right_mae":19.239,"lr_ratio":1.226,"changed_upper_gt3":0.4328,"sha256":"4308b8da77d4284d68c77cbca701aa1f16bd215e167fbc0cfc2a702fbf1962e1"},{"file":"zucken_007.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"}]
+SEQ aufrichten COUNT 8 NAMES ['aufrichten_000.png', 'aufrichten_001.png', 'aufrichten_002.png', 'aufrichten_003.png', 'aufrichten_004.png', 'aufrichten_005.png', 'aufrichten_006.png', 'aufrichten_007.png']
+METRICS [{"file":"aufrichten_000.png","left_mae":21.335,"right_mae":22.604,"lr_ratio":0.944,"changed_upper_gt3":0.4021,"sha256":"8e7817b213cfc3b60faf593f5a87bb1e288998dedfd0fe56624a3b35fd046a25"},{"file":"aufrichten_001.png","left_mae":18.352,"right_mae":19.564,"lr_ratio":0.938,"changed_upper_gt3":0.3855,"sha256":"f6dffd41bf5c8e9947303da89cd59537f8895d2c165ba62c48b84ccc199d3576"},{"file":"aufrichten_002.png","left_mae":15.481,"right_mae":17.031,"lr_ratio":0.909,"changed_upper_gt3":0.3676,"sha256":"166ad73cc8e472a5950cd2afc24b141704a09e91f81933ea519d49cc74bc2206"},{"file":"aufrichten_003.png","left_mae":10.968,"right_mae":13.079,"lr_ratio":0.839,"changed_upper_gt3":0.3458,"sha256":"e6b321e401b4d4079b11078cbddf78b0c88c2325dc6673b1d874ac6cd4ad0d42"},{"file":"aufrichten_004.png","left_mae":7.659,"right_mae":12.352,"lr_ratio":0.62,"changed_upper_gt3":0.3315,"sha256":"4f332bfbd7e029c87853c0c7989403f15164e338d450bf5ac76b127e54989f3a"},{"file":"aufrichten_005.png","left_mae":11.172,"right_mae":11.377,"lr_ratio":0.982,"changed_upper_gt3":0.3494,"sha256":"52e9e7cd47318d99b8b73f1cfc06b6714a5c88dad0645ae1950dd72fe3e6c640"},{"file":"aufrichten_006.png","left_mae":16.924,"right_mae":11.465,"lr_ratio":1.476,"changed_upper_gt3":0.3771,"sha256":"f5cbd07de74a04cecff68ed47cb651a5e66940554fd8ae984621e3d22f904f71"},{"file":"aufrichten_007.png","left_mae":19.03,"right_mae":10.652,"lr_ratio":1.786,"changed_upper_gt3":0.3813,"sha256":"5bcb2eb5387605665d79d89d536a98b688794a9a40107e3b42c1ee9e463ee7ef"}]
+SEQ lehnen COUNT 9 NAMES ['lehnen_+00.png', 'lehnen_+05.png', 'lehnen_+10.png', 'lehnen_+15.png', 'lehnen_+20.png', 'lehnen_-05.png', 'lehnen_-10.png', 'lehnen_-15.png', 'lehnen_-20.png']
+METRICS [{"file":"lehnen_+00.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"},{"file":"lehnen_+05.png","left_mae":23.688,"right_mae":15.007,"lr_ratio":1.578,"changed_upper_gt3":0.4011,"sha256":"b8855f45d087904efb7d543a970de3ad31ac1386c6d1ff8a3fd102ef5450e072"},{"file":"lehnen_+10.png","left_mae":27.607,"right_mae":18.957,"lr_ratio":1.456,"changed_upper_gt3":0.4109,"sha256":"2b48a74bb3470532a3a1909e0ef3f320440c1bf14afed62005efe09f161a8f32"},{"file":"lehnen_+15.png","left_mae":29.942,"right_mae":21.347,"lr_ratio":1.403,"changed_upper_gt3":0.4152,"sha256":"a7118bf10f579cea8ac8ef628ae87a4c8e1dc376f1a24d72c440de5947257a52"},{"file":"lehnen_+20.png","left_mae":31.258,"right_mae":22.739,"lr_ratio":1.375,"changed_upper_gt3":0.4152,"sha256":"c2fd94ca5213b6927cf638cf64cfd33b7ef69e65d6c63d73f5386bf12f134ac2"},{"file":"lehnen_-05.png","left_mae":21.342,"right_mae":21.886,"lr_ratio":0.975,"changed_upper_gt3":0.4079,"sha256":"f215b7bc0d82a9693b1e3b1a2fb710f23c23013cfff3486eabc3e5396cd92c0e"},{"file":"lehnen_-10.png","left_mae":24.819,"right_mae":25.891,"lr_ratio":0.959,"changed_upper_gt3":0.4137,"sha256":"38fcc97e764e77fc82e0d865aec05e3df9e5bfb81bed3fdce82d7ac3970edcf6"},{"file":"lehnen_-15.png","left_mae":27.448,"right_mae":27.545,"lr_ratio":0.996,"changed_upper_gt3":0.4156,"sha256":"b1bf080cce828cd23b547fe5c82ec423800a31d5f62ba577b70ec16c420412cf"},{"file":"lehnen_-20.png","left_mae":29.321,"right_mae":28.039,"lr_ratio":1.046,"changed_upper_gt3":0.4172,"sha256":"eeda326493f1bebaaa88e1e59305f03c97eb48cf26cafc9ad036fd54a0decee5"}]
+SEQ gewicht COUNT 7 NAMES ['gewicht_+00.png', 'gewicht_+05.png', 'gewicht_+10.png', 'gewicht_+15.png', 'gewicht_-05.png', 'gewicht_-10.png', 'gewicht_-15.png']
+METRICS [{"file":"gewicht_+00.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"},{"file":"gewicht_+05.png","left_mae":27.175,"right_mae":20.622,"lr_ratio":1.318,"changed_upper_gt3":0.4183,"sha256":"0be7a32b83781641ddecef4a9fb44c28c09dc1d01019665a8325fae749bbda26"},{"file":"gewicht_+10.png","left_mae":31.178,"right_mae":25.677,"lr_ratio":1.214,"changed_upper_gt3":0.4324,"sha256":"e8ec8f3d2ed89a1ecbafada7316ece45da49beaa210c99a18072e9d1fd0bc118"},{"file":"gewicht_+15.png","left_mae":33.573,"right_mae":28.21,"lr_ratio":1.19,"changed_upper_gt3":0.4418,"sha256":"6c404bb999dcba713d9a584da3ecc4f4951aaca34b6239cb3f97cdda2ba96c37"},{"file":"gewicht_-05.png","left_mae":26.727,"right_mae":23.5,"lr_ratio":1.137,"changed_upper_gt3":0.4246,"sha256":"11a0acc5e3b84f3ebb572e3631eee41d4e9478e3d24200b0fc6208a5b214a142"},{"file":"gewicht_-10.png","left_mae":31.279,"right_mae":26.436,"lr_ratio":1.183,"changed_upper_gt3":0.4352,"sha256":"1c0ad9b6702a7e1f040d20ab6294fc530df50638db7f09005dae77019b5a17d0"},{"file":"gewicht_-15.png","left_mae":33.845,"right_mae":28.353,"lr_ratio":1.194,"changed_upper_gt3":0.4432,"sha256":"e3b6ccd36cd3cb68440c3364944ad9286cd1628e88a4799bec5f0bc626efee70"}]
+SEQ schulterdrehung COUNT 15 NAMES ['schulter_+00.png', 'schulter_+05.png', 'schulter_+10.png', 'schulter_+15.png', 'schulter_+20.png', 'schulter_+25.png', 'schulter_+30.png', 'schulter_+35.png', 'schulter_-05.png', 'schulter_-10.png', 'schulter_-15.png', 'schulter_-20.png', 'schulter_-25.png', 'schulter_-30.png', 'schulter_-35.png']
+METRICS [{"file":"schulter_+00.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"},{"file":"schulter_+05.png","left_mae":8.787,"right_mae":5.684,"lr_ratio":1.546,"changed_upper_gt3":0.286,"sha256":"a744d555ee327dee6c4f49bf28713208b697d66b94275ab2f4c61addbc8eb62d"},{"file":"schulter_+10.png","left_mae":15.676,"right_mae":10.378,"lr_ratio":1.51,"changed_upper_gt3":0.3689,"sha256":"bcee21b6394cdb608afc5730db14cc8f9db44ddf32100d51cdc5d847512f84fc"},{"file":"schulter_+15.png","left_mae":21.346,"right_mae":13.755,"lr_ratio":1.552,"changed_upper_gt3":0.4017,"sha256":"6a44e6bb8055c93ff62568c519fcf942e34eae4d170e21742f854503dc6d4b86"},{"file":"schulter_+20.png","left_mae":24.499,"right_mae":15.45,"lr_ratio":1.586,"changed_upper_gt3":0.4117,"sha256":"f78dd95bf7db81f67fbcb92a979d7a11d393bdf6b180f4a42e30e51c0a662952"},{"file":"schulter_+25.png","left_mae":26.867,"right_mae":16.033,"lr_ratio":1.676,"changed_upper_gt3":0.4131,"sha256":"9c8188ccb736484bce5afdc904147590bc3667d9d85abe7885b5c97153954442"},{"file":"schulter_+30.png","left_mae":28.496,"right_mae":15.996,"lr_ratio":1.781,"changed_upper_gt3":0.4119,"sha256":"eda0b989f83784e00fa14695b24c20b35998169f9780e210b788f124dfacfd5d"},{"file":"schulter_+35.png","left_mae":30.31,"right_mae":15.912,"lr_ratio":1.905,"changed_upper_gt3":0.4123,"sha256":"cc0479f0744b2ccd9da6314d9e53e16de994850ed97f6df633263c23225078fb"},{"file":"schulter_-05.png","left_mae":14.927,"right_mae":12.461,"lr_ratio":1.198,"changed_upper_gt3":0.3781,"sha256":"b3b21eb3ccc967d430acb0a2b3861adb030ea8b3586cfabf037dfae8fa886d8b"},{"file":"schulter_-10.png","left_mae":19.079,"right_mae":17.101,"lr_ratio":1.116,"changed_upper_gt3":0.4078,"sha256":"8c3378e6da5d08af83824d427a9d7d65eda7d51cd6474198f601bca482154442"},{"file":"schulter_-15.png","left_mae":20.873,"right_mae":19.463,"lr_ratio":1.072,"changed_upper_gt3":0.4149,"sha256":"f6848782baee6a0d141440b51c76d840c1f7b8e10316a14a0a833600f638667d"},{"file":"schulter_-20.png","left_mae":22.064,"right_mae":21.406,"lr_ratio":1.031,"changed_upper_gt3":0.4187,"sha256":"00edebaa72e4b122a4ca73464cf484f694779167da99745e53f714b0d187b1ae"},{"file":"schulter_-25.png","left_mae":22.517,"right_mae":23.192,"lr_ratio":0.971,"changed_upper_gt3":0.4202,"sha256":"b9f5cb7aa77d53d86a8bbb3297a61dde4aa9cae4eca9675a5340ae68f2c7cb35"},{"file":"schulter_-30.png","left_mae":22.485,"right_mae":24.58,"lr_ratio":0.915,"changed_upper_gt3":0.4196,"sha256":"178517973062f071cdff457b61ee69059d75db30ad80cb92741afd5b72cf21a0"},{"file":"schulter_-35.png","left_mae":22.134,"right_mae":25.794,"lr_ratio":0.858,"changed_upper_gt3":0.418,"sha256":"b03219e604abc63ce6f50399b30ca954fedf00edfeb5c8f1038569c8713430cd"}]
+SEQ kombiniert COUNT 9 NAMES ['lehnen_+00_schulter_+00.png', 'lehnen_+00_schulter_+20.png', 'lehnen_+00_schulter_-20.png', 'lehnen_+20_schulter_+00.png', 'lehnen_+20_schulter_+20.png', 'lehnen_+20_schulter_-20.png', 'lehnen_-20_schulter_+00.png', 'lehnen_-20_schulter_+20.png', 'lehnen_-20_schulter_-20.png']
+METRICS [{"file":"lehnen_+00_schulter_+00.png","left_mae":8.087,"right_mae":6.372,"lr_ratio":1.269,"changed_upper_gt3":0.287,"sha256":"42b044beb670830c640782ecc93a309a7ebb4e6dec3fc853a924ea418829d7ab"},{"file":"lehnen_+00_schulter_+20.png","left_mae":25.038,"right_mae":17.573,"lr_ratio":1.425,"changed_upper_gt3":0.4172,"sha256":"6166f191ef7ae925a98e96563a5592483801db1b5387ed71964f86402f5c6cc2"},{"file":"lehnen_+00_schulter_-20.png","left_mae":23.715,"right_mae":21.776,"lr_ratio":1.089,"changed_upper_gt3":0.422,"sha256":"8fbfadbf38a6505d5d542ac6dee5625c78328eabb9aa74e1ecc30372bc80d44a"},{"file":"lehnen_+20_schulter_+00.png","left_mae":30.294,"right_mae":23.217,"lr_ratio":1.305,"changed_upper_gt3":0.4154,"sha256":"a0936325b3a10d7dd4ab8d210a601414f02a2d88c52003de9bf48cda305e8b06"},{"file":"lehnen_+20_schulter_+20.png","left_mae":30.724,"right_mae":21.647,"lr_ratio":1.419,"changed_upper_gt3":0.4136,"sha256":"b0fbee9c8b48a4e3b3c7e4f6047309b4ce3cfb79766eb9c82ebd9c53a64846f3"},{"file":"lehnen_+20_schulter_-20.png","left_mae":30.894,"right_mae":25.442,"lr_ratio":1.214,"changed_upper_gt3":0.4171,"sha256":"227b5b6b3b3b089a5bb3252310f1cce3a29cfe083b208213b4141d58e202ad6c"},{"file":"lehnen_-20_schulter_+00.png","left_mae":29.141,"right_mae":28.225,"lr_ratio":1.032,"changed_upper_gt3":0.4169,"sha256":"2e2d994185c36caa5d387c77b54cb453ac6d6b81a09442db14f3fd97a4b20e0b"},{"file":"lehnen_-20_schulter_+20.png","left_mae":29.979,"right_mae":27.948,"lr_ratio":1.073,"changed_upper_gt3":0.4175,"sha256":"b47115b6fbe088e618c75482f97476eed3f549a24f0f309629ccde0a368a657a"},{"file":"lehnen_-20_schulter_-20.png","left_mae":28.725,"right_mae":28.513,"lr_ratio":1.007,"changed_upper_gt3":0.417,"sha256":"7b761dac16d910d34ee5aa259cc229e75f1d78f551701383ae053fec5c5572de"}]
+LIVE_HASHES
+buehne.html 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+buehne_daemon.py 5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2
+filmlook.js 179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b
+active

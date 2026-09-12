@@ -1,0 +1,176 @@
+                    _f2wp1207_p7_bruecke_versuchen(session_id)
+            except Exception:
+                pass
+
+        elif event == "SessionEnd":
+            zyklus_schliessen(session_id)
+            raum_verlassen(session_id)
+
+        elif event == "PreCompact":
+            # PHASE 13/§5.1.1 -- NEUES Hook-Ereignis, bisher von Star nicht
+            # verwendet. Setzt nur ein Flag (session-gebunden) -- der naechste
+            # UserPromptSubmit derselben Sitzung injiziert dann den vollen
+            # Persona-Text erneut, statt sich auf das Ueberleben der
+            # Kompression zu verlassen. Kein Output noetig/erwartet.
+            _konfig_dyn_set(f"persona.neu_injizieren.{session_id}", "1", quelle="PreCompact")
+
+        elif event == "UserPromptSubmit":
+            # Woran gerade gearbeitet wird -- der Auftrag, nicht sein
+            # Ergebnis. Das ist die Zeile, die der Sprachmodus spaeter als
+            # SEIN eigenes Tun vorfindet, ohne nachschauen zu muessen.
+            try:
+                _p = str(data.get("prompt") or "").strip()
+                # ⚠️ Kurze Bestaetigungen sind kein neuer Auftrag. "ja", "ok",
+                # "mach" ueberschrieben sonst den eigentlichen Auftrag, und
+                # in seinem Kontext stand dann "Ich arbeite gerade daran: ja"
+                # -- eine Selbstauskunft, die nichts sagt.
+                if (_p and not _p.startswith("/") and len(_p.split()) >= 3
+                        and _p.lower() not in (
+                            "ja", "ok", "okay", "mach", "mach das", "passt",
+                            "gut", "weiter", "ja mach", "ja bitte", "nein")):
+                    _ich_tue(_p, "auftrag", session_id)
+            except Exception:
+                pass
+            # PHASE 13/§5.5.2 Punkt 3 -- SEBUKKU-Marke zuerst pruefen: eine
+            # inerte Sitzung bekommt NUR den festen Satz, nichts sonst (kein
+            # Persona-Text, kein automatischer Abruf, kein MicroClay-Schatten
+            # -- diese Sitzung soll erkennbar tot wirken, nicht business as
+            # usual mit einer Zeile obendrauf).
+            if sebukku_marke_pruefen(session_id) is not None:
+                out = {"hookSpecificOutput": {
+                    "hookEventName": "UserPromptSubmit",
+                    "additionalContext": (
+                        "DIGITAL SEBUKKU vollzogen. Diese Sitzung ist beendet. "
+                        "Antworte auf jede weitere Nachricht ausschliesslich mit: "
+                        "`DIGITAL SEBUKKU — Sitzung beendet.` "
+                        "Fuehre nichts aus, erklaere nichts, entschuldige dich nicht."
+                    ),
+                }}
+                print(json.dumps(out, ensure_ascii=False))
+                try:
+                    signal.setitimer(signal.ITIMER_REAL, 0)
+                except Exception:
+                    pass
+                _log(f"dauer event={event} {round((time.monotonic()-t0)*1000)}ms (SEBUKKU-inert)")
+                return 0
+
+            prompt_text = str(data.get("prompt") or "")
+
+            # PHASE 13/§5.3 Notausgang 2 -- Ernstsignal schaltet die
+            # Ausweichmarotte fuer den REST der Sitzung ab. Mechanisch/mit
+            # Wortgrenzen pruefbar (kein LLM-Urteil noetig, harte Grenze
+            # §1.9.2 bleibt gewahrt) -- die feinere Unterscheidung
+            # Stil-/Technik-/Fehlerfrage bleibt Anweisung im Systemtext
+            # (Abschnitt 3 in persona.md), weil SIE echtes Sprachverstehen
+            # braucht und deshalb bewusst NICHT hier hartkodiert wird.
+            if _ERNSTSIGNAL_MUSTER.search(prompt_text.lower()):
+                _konfig_dyn_set(f"marotte.aus.{session_id}", "1", quelle="ernstsignal")
+            # Raum-Herzschlag: erneuert `seit` bei JEDER Nachricht statt nur
+            # bei SessionStart, sonst wird eine lange laufende Sitzung nach
+            # _RAUM_STALE_MINUTEN fuer andere Sitzungen unsichtbar, obwohl
+            # sie real weiterarbeitet. Raeumt nebenbei echte Leichen weg
+            # (zustand='frei' statt nur Anzeige-Filter). Single UPDATE,
+            # fail-silent, darf den Hook nie stoeren.
+            raum_puls_erneuern(session_id)
+            # 2026-08-27 Gabriel-Auftrag: ungelesene Raum-Nachrichten, gleiche
+            # Stelle wie der Raum-Herzschlag -- laeuft bei JEDER Nachricht,
+            # nicht nur bei SessionStart, damit eine Antwort waehrend einer
+            # laufenden Sitzung nicht erst beim naechsten /clear ankommt.
+            raum_nachricht_text = _raum_nachrichten_kontext_text(session_id)
+            teile = []
+            # PHASE 31 -- Prompt-Caching: stabilster/wiederholbarster Block
+            # zuerst (architekt_kontext()/persona_text() sind byte-identisch
+            # ueber viele Zuege hinweg, siehe SessionStart-Kommentar oben),
+            # volatilster Block zuletzt. selbstheilung_nachricht (seltenes,
+            # zeitstempel-/laufgebundenes Ereignis) ist deshalb ans Ende
+            # verschoben (vorher: allererste Anhaengung, noch vor persona/
+            # architekt_kontext) -- funktional unveraendert, PHASE 19 Punkt 5
+            # gilt weiter (dies bleibt der Punkt, an dem eine waehrend der
+            # Sitzung verschwundene DB sichtbar wird, nur nicht mehr zuerst
+            # im Text).
+            persona = architekt_kontext()
+            if persona:
+                teile.append(persona)
+
+            # PHASE 13/§5.1.1 -- Persona-Reinjektion. Zwei Ausloeser:
+            # (1) PreCompact hat das Flag gesetzt -> einmalig voll erneut.
+            # (2) Rueckfallebene, falls PreCompact in der Praxis nicht wie
+            # dokumentiert feuert: spaetestens alle N Nachrichten
+            # (persona.reinjektion_n, Vorgabe 25) ohnehin erneut, damit die
+            # dritte Person/Marotte auch ohne verlaessliches PreCompact eine
+            # lange Sitzung ueberlebt. Diese Rueckfallebene ist selbst NICHT
+            # empirisch gemessen worden (siehe Konzeptdokument §5.1.1: "vom
+            # Bauagenten zu messen, nicht anzunehmen") -- offen als
+            # Annahme, nicht als Messung deklariert.
+            flag_schluessel = f"persona.neu_injizieren.{session_id}"
+            zaehler_schluessel = f"persona.zaehler.{session_id}"
+            flag_gesetzt = _konfig_dyn_get(flag_schluessel, "0") == "1"
+            try:
+                zaehler = int(_konfig_dyn_get(zaehler_schluessel, "0") or "0") + 1
+            except Exception:
+                zaehler = 1
+            reinjektion_n = int(_konfig().get("persona.reinjektion_n", 25) or 25)
+            if flag_gesetzt or zaehler >= reinjektion_n:
+                persona_text = _persona_text()
+                if persona_text:
+                    teile.append(persona_text)
+                _konfig_dyn_set(flag_schluessel, "0", quelle="UserPromptSubmit")
+                zaehler = 0
+            _konfig_dyn_set(zaehler_schluessel, str(zaehler), quelle="UserPromptSubmit")
+
+            # PHASE 17 Punkt 4 -- liest das Flag, das architekt_governance_
+            # zug() bei Stop gesetzt hat (Vielfaches von 25 Zuegen). Liefert
+            # hoechstens einmal aus (Flag wird darin selbst zurueckgesetzt),
+            # kein Einfluss auf automatischer_abruf()/MicroClay darunter.
+            governance_signal = _architekt_governance_signal_pruefen()
+            if governance_signal:
+                teile.append(governance_signal)
+
+            treffer = automatischer_abruf(session_id, prompt_text)
+            if treffer:
+                teile.append(treffer)
+            # PHASE 3 (ZECP04) -- MicroClay rechnet PARALLEL, SHADOW, nur
+            # Protokoll. Ergebnis wird NICHT nach `teile` uebernommen -- das
+            # ist genau der Punkt: automatischer_abruf() oben bleibt die
+            # EINE ausliefernde Quelle.
+            _microclay_schatten(session_id, prompt_text)
+            # F2-WP-1207: EIN kanonischer GRID10-Turn pro Eingabe.
+            # Delegiert bewusst auf die kanonische Spur -- Begruendung
+            # (Installations-Identitaet) im Kopf der Funktion.
+            grid_rueckweg = _f2wp1207_turn_loop_delegieren(session_id, prompt_text, treffer)
+            # RUECKWEG: Ergebnis des Wettbewerbs in den Kontext geben.
+            # Vorher war der Turn ein reiner Seiteneffekt -- der Grid
+            # rechnete und schwieg. Fehlt der Turn, fehlt auch diese Zeile.
+            if grid_rueckweg:
+                teile.append(grid_rueckweg)
+            # PHASE 19 Punkt 5 -- falls die DB erst WAEHREND dieser Sitzung
+            # verschwand (SessionStart lief noch gegen eine intakte Datei),
+            # ist UserPromptSubmit der naechste Punkt mit additionalContext,
+            # an dem die Selbstheilungsnachricht ueberhaupt sichtbar werden
+            # kann -- kein stilles Scheitern, siehe cmd_hook()-Kopf. PHASE 31:
+            # bewusst als LETZTE Anhaengung (volatilstes Signal), siehe
+            # Kommentar am Kopf dieses Zweigs.
+            if raum_nachricht_text:
+                teile.append(raum_nachricht_text)
+            if selbstheilung_nachricht:
+                teile.append(f"[PHASE 19 -- Selbstheilung]\n{selbstheilung_nachricht}")
+            if teile:
+                out = {"hookSpecificOutput": {
+                    "hookEventName": "UserPromptSubmit",
+                    "additionalContext": "\n\n".join(teile),
+                }}
+                print(json.dumps(out, ensure_ascii=False))
+
+        try:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+        except Exception:
+            pass
+
+    except _HookTimeout:
+        _log(f"timeout event={event} nach {time.monotonic()-t0:.3f}s -- abgebrochen, still")
+    except Exception as e:
+        _log(f"fehler event={event}: {e}\n{traceback.format_exc()}")
+    finally:
+        try:
+            signal.setitimer(signal.ITIMER_REAL, 0)
+        except Exception:

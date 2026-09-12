@@ -1,0 +1,260 @@
+HTML_SHA256=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+===SOURCE_COUNTS===
+'#augen-blink' 7
+'augen-blink' 12
+'blink_000.png' 1
+'style.opacity' 14
+'_sonderLaeuft' 14
+'function blink' 0
+'blinzeln' 11
+===SRC #augen-blink POS 20968 ===
+   filter:drop-shadow(0 0 5px rgba(255,63,45,.6)) drop-shadow(0 0 11px rgba(255,90,40,.35));
+    transition:opacity .35s ease-in-out;will-change:transform}
+  /* ⭐ 2026-09-11 (Animations-Agent): echtes Blinzeln aus 12 fotografierten
+     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+     dieselbe Geometrie/Verankerung wie der /augen_gaze/-Flicken oben, deshalb
+     identische Prozente). Liegt als eigenes <img> UEBER #pupillen-glow, weil
+     das Lid das Auge inkl. Glimmer verdeckt. Läuft UNABHAENGIG von der
+     Gesichtserkennung (Blinzeln ist kein Blick -- es behauptet keine
+     Aufmerksamkeit), waehrend #pupillen-glow weiter erkennungs-gekoppelt
+     bleibt. */
+  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+    transform-origin:70.38% 241.32%;
+    z-index:4;pointer-events:none;opacity:0}
+
+  /* ── Chatpanel -- Twitch-Anmutung: Name farbig+fett direkt vor der
+     Nachricht, dicht gesetzt ─────────────────────────────────────── */
+  #chat-kopf{padding:11px 14px;border-bottom:1px solid rgba(74,216,232,.14);
+    font-size:12.5px;font-weight:600;color:var(--text-dim);
+    display:flex;justify-content:space-between;align-items:center;letter-spacing:.3px;
+    text-transform:uppercase}
+  #chat-status{display:flex;align-items:center;gap:6px}
+  #chat-status::before{content:"";width:7px;height:7px;border-radius:50%;
+    background:#3ddc78;box-shadow:0 0 6px #3ddc78}
+  #chat-status.getrennt::before{background:var(--rot);box-shadow:0 0 6px var(--rot)}
+  #chat-zeilen{flex:1 1 auto;overflow-y:auto;padding:10px 14px;
+    display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.4}
+  .zeile{max-width:100%;padding:2px 0;
+    animation:einblenden .28s ease-out}
+  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .zeile .wer{font-weight:700;margin-right:5px}
+  .zeile.frage .wer{color:var(--cyan)}
+  .zeile.antwort .wer{color:var(--akzent-hell)}
+  .zeile.getippt .wer{color:#7ee08a}
+  .zeile.datei .wer{color:#ffb954}
+  .zeile .txt{white-space:pre-wrap;word-break:break-word;color:var(--text)}
+  #dropzone{margin:8px 14px;padding:9px;border:1px dashed var(--linie);
+    border-radius:6px;font-size:11.5px;text-align:center;color:var(--text-dim);
+    transition:all .15s ease}
+  #dropzone.ueber{color:var(--text);border-color:var(--akzent);
+    background:rgba(145,70,255,.08)}
+  #eingabe-zeile{display:flex;gap:8px;padding:12px;border-top:1px solid var(--linie);
+    background:var(--panel2)}
+  #eingabe{flex:1 1 auto;background:#0d0a15;border:1px solid var(--linie);
+    color:var(--text);border-radius:6px;padding:9px 11px;font-size:13.5px;
+    transition:border-color .15s ease}
+  #eingabe:focus{outline:none;border-color:var(--akzent)}
+  #senden{background:var(--akzent);color:#fff;border:0;border-radius:6px;
+    padding:9px 16px;cursor:pointer;font-size:13px;font-weigh
+===SRC blink_000.png POS 27710 ===
+a/roll/...+15/+25 etc.) wechselten, blieb der Augen-
+                 Flicken stur an der Null-Grad-Stelle stehen, waehrend das Kopf-
+                 foto darunter tatsaechlich gekippt war -- die harte Rechteckkante
+                 des Flickens schnitt sichtbar durch die schraege Stirn/Wange =
+                 genau der "zweite Kopf, der durchscheint". Fix: beide jetzt HIER
+                 drin, auf derselben Leinwand wie der Kopf, siehe kopfKoerperDrehSchritt()
+                 (rotate() um denselben Halsanker via transform-origin, CSS unten). -->
+            <img id="pupillen-glow" src="/augen_gaze/rotglow_tracking_master.png" alt="">
+            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+          </div>
+        </div>
+        <canvas id="regen"></canvas>
+        <div id="farbschicht"></div>
+        <div id="wasserlinie"></div>
+        <div id="vignette"></div>
+      </div>
+    </div>
+  </div>
+  <div id="chat">
+    <div id="chat-kopf"><span>Chat</span><span id="chat-status">verbunden</span></div>
+    <div id="chat-zeilen"></div>
+    <div id="dropzone">Datei hier reinziehen, um sie abzulegen</div>
+    <div id="eingabe-zeile">
+      <input id="eingabe" placeholder="Nachricht (nur Buehnen-Chat, nicht der Sprachmodus)" maxlength="2000">
+      <button id="senden">Senden</button>
+    </div>
+    <div id="hinweis">
+      Ehrlich: getippte Nachrichten hier gehen NICHT an FranKensteins echten
+      Sprachmodus, nur in diesen Chat. "1 Zuschauer" ist keine Messung, nur
+      eine feste Angabe.
+    </div>
+  </div>
+</div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const chatZeilen = $("chat-zeilen");
+let cursor = "";
+
+// Name+Nachricht in EINER Zeile (<span> statt <div>) -- das war ueber zwei
+// Nachtraege hinweg der meistgenannte Einzelpunkt ("das schafft sofort den
+// Stream-Eindruck"). Autoscroll nur, wenn der Nutzer schon unten war --
+// wer hochgescrollt hat, um etwas zu lesen, wird nicht weggerissen
+// (Gabriel, 4. Nachtrag 2026-09-11).
+// Emoji NICHT als Overlay ueber der Buehne (Gabrielskorrektur 2026-09-11:
+// "smileys nur im chat sichtbar") -- haengt am Ende des Chattexts, ganz
+// normaler Teil der Zeile, kein Extra-Element, keine Animation.
+// Deckel gegen unbegrenztes DOM-Wachstum (2026-09-11): das Fenster laeuft
+// als Dauerbetrieb, chatHolen() feuert alle 1,5 s. Ohne Deckel bleibt JEDE
+// je empfangene Zeile fuer immer im DOM -- bei einem Fenster, das Tage offen
+// steht, wird daraus ein Leck, das niemand mehr einer Ursache zuordnen kann.
+// 400 Zeilen sind mehr als in den Chatbereich passen und mehr, als jemand
+// zurueckscrollt; aeltere fallen vorne raus (Livestream-Logik, kein Archiv --
+// der vollstaendige Verlauf liegt ohnehin beim Daemon, /api/chat?since=0).
+const CHAT_MAX_ZEILEN = 400;
+function zeileAnhaengen(
+===SRC function blinzeln POS 69805 ===
+kurze Schritte), 09-11 OEFFNEN (3
+// laengere) -- ein echtes Lid faellt schnell und geht langsamer auf.
+// Gesamt ~300-340ms (Gabriels Vorgabe 250-350ms).
+// ⚠️ Galton-Watson-Regel UNVERAENDERT (siehe LECK-FIX oben): EINE
+// Selbstartende-Kette, der Doppelschlag bleibt ein einmaliger Bonus ohne
+// eigene Fortpflanzung (zeitplanNeu=false). blinzelAbspielen() ist eine
+// ENDLICHE Kette -- sie erzeugt nie eine neue Kette, sie liefert nur an
+// blinzelWeiterPlanen() zurueck. Blinzeln bleibt unabhaengig von der
+// Gesichtserkennung (das Lid braucht kein Signal); nur #pupillen-glow
+// bleibt erkennungs-gekoppelt. Läuft NICHT ueber einem Sonderausdruck
+// (dessen Frames tragen ihre eigenen Augen).
+function blinzeln(zeitplanNeu = true){
+  if(_sonderLaeuft){
+    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+    return;
+  }
+  const schritte = [];
+  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+  blinzelAbspielen(schritte, 0, zeitplanNeu);
+}
+function blinzelAbspielen(schritte, idx, zeitplanNeu){
+  if(idx >= schritte.length){
+    $("augen-blink").style.opacity = "0";
+    blinzelPhase = null; gesichtNeuZeichnen(false);
+    if(zeitplanNeu){
+      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+      blinzelWeiterPlanen();
+    }
+    return;
+  }
+  const [frame, dauer, phase] = schritte[idx];
+  $("augen-blink").src = BLINK_BILDER[frame];
+  $("augen-blink").style.opacity = "1";
+  blinzelPhase = phase; gesichtNeuZeichnen(false);
+  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+}
+function blinzelWeiterPlanen(){
+  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+}
+blinzelWeiterPlanen();
+
+// 3) DER BLICK LEBT -- niemand da: langsames, zielloses Wandern mit langen
+// Pausen. Jemand da: Blick geht zur gemessenen Richtung und BLEIBT (kein
+// Gleiten -- ein Sprung, dann Halt; das Halten ergibt sich von selbst, weil
+// hier nur bei Richtungswechsel neu gezeichnet wird).
+const WANDER_RICHTUNGEN = ["geradeaus","links","rechts","oben","unten","links_oben","rechts_oben"];
+let serverBlick = {anwesend:false, richtung:null, nah:false};
+
+// ⭐⭐ NEU 2026-09-11 (Gabriel woertlich: "er soll auch nicht stur meinem
+// Blick folgen, sondern hinschauen wo er will, dynamisch wie er will --
+// also wenn er mit mir redet, mich anschauen, wenn er ueber Objekte redet
+// die anschauen -- das alles dynamisch wie ein Mensch, ohne Zwang.").
+//
+// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+// reine Anwesenheit erzwang permanenten Blickkontakt. Das ist das "stur
+//
+===SRC augen-blink").style.opacity POS 70367 ===
+; nur #pupillen-glow
+// bleibt erkennungs-gekoppelt. Läuft NICHT ueber einem Sonderausdruck
+// (dessen Frames tragen ihre eigenen Augen).
+function blinzeln(zeitplanNeu = true){
+  if(_sonderLaeuft){
+    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+    return;
+  }
+  const schritte = [];
+  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+  blinzelAbspielen(schritte, 0, zeitplanNeu);
+}
+function blinzelAbspielen(schritte, idx, zeitplanNeu){
+  if(idx >= schritte.length){
+    $("augen-blink").style.opacity = "0";
+    blinzelPhase = null; gesichtNeuZeichnen(false);
+    if(zeitplanNeu){
+      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+      blinzelWeiterPlanen();
+    }
+    return;
+  }
+  const [frame, dauer, phase] = schritte[idx];
+  $("augen-blink").src = BLINK_BILDER[frame];
+  $("augen-blink").style.opacity = "1";
+  blinzelPhase = phase; gesichtNeuZeichnen(false);
+  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+}
+function blinzelWeiterPlanen(){
+  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+}
+blinzelWeiterPlanen();
+
+// 3) DER BLICK LEBT -- niemand da: langsames, zielloses Wandern mit langen
+// Pausen. Jemand da: Blick geht zur gemessenen Richtung und BLEIBT (kein
+// Gleiten -- ein Sprung, dann Halt; das Halten ergibt sich von selbst, weil
+// hier nur bei Richtungswechsel neu gezeichnet wird).
+const WANDER_RICHTUNGEN = ["geradeaus","links","rechts","oben","unten","links_oben","rechts_oben"];
+let serverBlick = {anwesend:false, richtung:null, nah:false};
+
+// ⭐⭐ NEU 2026-09-11 (Gabriel woertlich: "er soll auch nicht stur meinem
+// Blick folgen, sondern hinschauen wo er will, dynamisch wie er will --
+// also wenn er mit mir redet, mich anschauen, wenn er ueber Objekte redet
+// die anschauen -- das alles dynamisch wie ein Mensch, ohne Zwang.").
+//
+// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+// reine Anwesenheit erzwang permanenten Blickkontakt. Das ist das "stur
+// folgen", das hier behoben wird. Die Hartregel selbst ("kein Blickziel
+// ohne echte Erkennung", serverBlick kommt weiter NUR aus blick.py) bleibt
+// unangetastet -- geaendert wird nur, WOHIN innerhalb dieses erkannten
+// Zustands geschaut wird, nicht OB ueberhaupt ein Gesicht da ist.
+//
+// SIGNAL-EHRLICHKEIT: fuer "redet er GERADE MICH an vs. ueber ein Thema"
+// gibt es in blick.py/beobachtung.py/buehne_daemon.py kein vorhandenes
+// Signal -- geprueft: _grid10_kategorie() (self_confident/-uncertain/
+// -creative/-empathetic/-technical/-neutral, siehe beob
+===CANONICAL_ASSETS===
+augen_blink/blink_000.png size (319, 152) bbox (42, 50, 274, 118) nz 0.20205 a128 0.15012 a240 0.110027 amean 38.56 sha c9304ad603ba97ce20c69c8c0640ec389f181e082c06b2f5a5b25bf5fcaf7128
+augen_blink/blink_006.png size (319, 152) bbox (42, 50, 274, 118) nz 0.20205 a128 0.15012 a240 0.110027 amean 38.56 sha 06f160a42e396f7c80a633c8954458f09e64f904c7345b5722d9639f030e0c46
+augen_gaze/rotglow_tracking_master.png size (319, 152) bbox (75, 75, 241, 94) nz 0.013323 a128 0.013323 a240 0.013323 amean 3.397 sha e9222dde99c5bf84adf838cde2c23284ed1d7b4a5d05c24fe48954871cf64ced
+BLINK_COUNT 12 UNION_BBOX (42, 50, 274, 118) UNION_NZ_FRAC 0.20205 UNION_A240_FRAC 0.110027
+BLINK000_UNIONROI_A0 0 A50 95.0 A90 255.0 A240_FRAC 0.338172 A128_FRAC 0.461397
+EXPRESSION_FRAME_COUNT 308
+EXPRESSION_SIZES [('(1536, 1024)', 308)]
+EXPRESSION_CAN_COVER_UNIONROI 308 / 308
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_00.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_01.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_02.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_03.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_04.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_05.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_augenrollen/frontal/stufe_06.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_00.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_01.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_02.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_03.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+EXPR_SAMPLE ausdruck_erweitert/anime_90s/anime_fassungslos/frontal/stufe_04.png size (1536, 1024) roi_alpha_mean 0.0 roi_opaque_frac 0.0
+MEASUREMENT_SCOPE=READ_ONLY_CANONICAL_EYE_PLATE_FEASIBILITY
+===FPS===
+60.0

@@ -1,0 +1,44 @@
+name: OMEGA GRID keeper
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: omega-grid-keeper
+  cancel-in-progress: false
+
+jobs:
+  queue-health-and-reentry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt-vps-control
+          fetch-depth: 1
+      - name: Queue idempotent OMEGA keeper command
+        shell: bash
+        run: |
+          set -euo pipefail
+          id="omega-grid-keeper-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          mkdir -p vps_bridge/commands
+          cat > "vps_bridge/commands/${id}.json" <<JSON
+          {
+            "schema":"CLAY_VPS_COMMAND/v3",
+            "command_id":"${id}",
+            "op":"exec",
+            "cwd":"/workspace",
+            "timeout_seconds":90,
+            "command":"set -eu; SRC=/workspace/carrier_worktree/vps_bridge/payloads/omega; [ -d \\"$SRC\\" ] || SRC=/workspace/clay-global-research-entity/vps_bridge/payloads/omega; if [ ! -f /workspace/omega_runtime/pkg/runtime_daemon.py ] && [ -f \\"$SRC/runtime_daemon.py\\" ]; then mkdir -p /workspace/omega_runtime/pkg /workspace/omega_runtime/config /workspace/omega_runtime/state; cp \\"$SRC/runtime_daemon.py\\" /workspace/omega_runtime/pkg/runtime_daemon.py; cp \\"$SRC/omega/router.py\\" /workspace/omega_runtime/pkg/router.py; cp \\"$SRC/organ_router.json\\" /workspace/omega_runtime/config/organ_router.json; fi; python3 -m py_compile /workspace/omega_runtime/pkg/router.py /workspace/omega_runtime/pkg/runtime_daemon.py; if ! tmux has-session -t omega-grid 2>/dev/null; then tmux new-session -d -s omega-grid 'cd /workspace/omega_runtime/pkg && env PYTHONPATH=/workspace/omega_runtime/pkg OMEGA_RUNTIME_ROOT=/workspace/omega_runtime/state OMEGA_ROUTER_CONFIG=/workspace/omega_runtime/config/organ_router.json OMEGA_GRID_INTERVAL=30 python3 runtime_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1'; fi; tmux has-session -t omega-grid; cat /workspace/omega_runtime/state/STATUS.json 2>/dev/null || true"
+          }
+          JSON
+          git config user.name "OMEGA GRID Keeper"
+          git config user.email "omega-grid-keeper@users.noreply.github.com"
+          git add "vps_bridge/commands/${id}.json"
+          git commit -m "omega keeper: queue ${id}"
+          git push origin HEAD:chatgpt-vps-control

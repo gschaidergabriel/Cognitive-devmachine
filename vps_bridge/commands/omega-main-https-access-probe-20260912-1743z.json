@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-main-https-access-probe-20260912-1743z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -u\nprintf '%s\\n' '---HTTPS LS-REMOTE---'\ngit ls-remote https://github.com/gschaidergabriel/oMEGA.git refs/heads/main 2>&1 || true\nprintf '%s\\n' '---RAW ASSEMBLY HEAD---'\npython3 - <<'PY'\nimport urllib.request\nurl='https://raw.githubusercontent.com/gschaidergabriel/oMEGA/427cca1300ed597687d720aa94cc1a54cc5abdb5/config/assembly.json'\ntry:\n    with urllib.request.urlopen(url, timeout=15) as r:\n        b=r.read(160)\n        print('HTTP', r.status, 'BYTES_PREFIX', b.decode('utf-8','replace'))\nexcept Exception as e:\n    print(type(e).__name__, e)\nPY\n"
+}

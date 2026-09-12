@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go083-inspect-architect-status-20260912-0903-andreas",
+  "command_sha256": "47a316eb332bb0f16f6b58cce9ea6b7c71ac866330ba6c9d936a4bb2210dcfe5",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T02:07:07.224207+00:00",
+  "finished_at": "2026-09-12T02:07:07.294389+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8b24bd192c22cf4202d9dfa1d0751f9baed7a3c52c5ec09a3927834234f15344",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "ActiveState=failed\nSubState=failed\nFragmentPath=/home/andreas/.config/systemd/user/frankenstein-architekt.service\nResult=exit-code\nExecMainCode=1\nExecMainStatus=1\nExecStart={ path=/home/andreas/architekt/lauf.sh ; argv[]=/home/andreas/architekt/lauf.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\n# /home/andreas/.config/systemd/user/frankenstein-architekt.service\n[Unit]\nDescription=FranKenstein v2 Architekt \u2014 ein Arbeitszyklus (misst, verbessert, schreibt, pusht)\n\n[Service]\nType=oneshot\nExecStart=/home/andreas/architekt/lauf.sh\nTimeoutStartSec=3600\nNice=10\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

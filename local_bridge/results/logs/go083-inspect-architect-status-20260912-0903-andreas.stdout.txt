@@ -1,0 +1,16 @@
+ActiveState=failed
+SubState=failed
+FragmentPath=/home/andreas/.config/systemd/user/frankenstein-architekt.service
+Result=exit-code
+ExecMainCode=1
+ExecMainStatus=1
+ExecStart={ path=/home/andreas/architekt/lauf.sh ; argv[]=/home/andreas/architekt/lauf.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+# /home/andreas/.config/systemd/user/frankenstein-architekt.service
+[Unit]
+Description=FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)
+
+[Service]
+Type=oneshot
+ExecStart=/home/andreas/architekt/lauf.sh
+TimeoutStartSec=3600
+Nice=10

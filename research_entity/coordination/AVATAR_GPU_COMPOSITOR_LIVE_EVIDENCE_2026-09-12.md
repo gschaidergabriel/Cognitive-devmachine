@@ -93,18 +93,37 @@ Observed:
 
 Therefore the compositor-enabled live app is not blank/frozen and exhibits measurable visual dynamics at the exact audited runtime boundary.
 
+## 6. Independent live production FPS readback
+
+Receipt:
+
+`local_bridge/results/receipts/go-avatar-gpt56sol-gpu-live-readback-v2-20260912-0715.json`
+
+A separate read-only worker then bound the same daemon SHA and HTML SHA, verified the live process table and sampled the app's own FPS telemetry once per second for 15 seconds.
+
+Observed:
+
+- `GPU_PROCESS_COUNT=1`;
+- `RENDERER_COUNT=2`;
+- `BAD_FLAG_COUNT=0`;
+- 15/15 FPS samples = `60.0`;
+- `MIN=60.0`, `MEDIAN=60.0`, `MEAN=60.0`, `MAX=60.0`;
+- service remained active throughout.
+
+This is direct production-runtime FPS telemetry on the compositor-enabled subject. It does not replace a longer rAF/jank distribution or hardware-backend attestation.
+
 ## Exact promotion
 
 Promote only this statement:
 
-> On 2026-09-12, the real `ai-core-node` avatar runtime was observed active with the GPU-disable launcher flags removed, Chrome's default GPU/compositor process path active, HTTP healthy, and a nonblank dynamically changing live window. The prior shadow A/B showed a large frame-interval advantage for that default path over the explicitly disabled software path.
+> On 2026-09-12, the real `ai-core-node` avatar runtime was observed active with the GPU-disable launcher flags removed, Chrome's default GPU/compositor process path active, HTTP healthy, a nonblank dynamically changing live window, and 15/15 direct production FPS samples at 60.0 FPS. The prior shadow A/B showed a large frame-interval advantage for that default path over the explicitly disabled software path.
 
 ## Explicit non-promotions
 
 Still **not established by this packet**:
 
-- formal production frame-time distribution after the live switch;
-- exact hardware graphics backend identity / hardware utilization;
+- long-duration rAF/frame-time/jank distribution after the live switch;
+- exact physical graphics backend identity / hardware utilization;
 - long-duration thermal/resource stability;
 - full visual identity correctness;
 - formal multi-angle eye/head Gate-0 acceptance;
@@ -115,4 +134,4 @@ Still **not established by this packet**:
 
 ## Next useful gates
 
-Do not re-add the disable flags or repeat the already-closed launcher-owner search without new executable counterevidence. Prefer independent measurement of the now-live subject: production frame-time/jank over a longer interval, visual-regression checks for head/eye/blink identity, then the already-open unified head/eye anchor and motion-model work.
+Do not re-add the disable flags or repeat the already-closed launcher-owner search without new executable counterevidence. Prefer independent measurement of the now-live subject: longer production rAF/jank/resource stability, visual-regression checks for head/eye/blink identity, then the already-open unified head/eye anchor and motion-model work.

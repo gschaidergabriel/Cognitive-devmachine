@@ -1,0 +1,70 @@
+EXPECT=eef0976c41e8abdbf46c61560df5339055b10633
+GOT=eef0976c41e8abdbf46c61560df5339055b10633
+HEAD is now at eef0976 tests: prove verified-owner immediate Voice action and guest privacy
+Merge made by the 'ort' strategy.
+ .github/workflows/conversation-presence-policy.yml |  39 +++
+ .github/workflows/speaker-handoff-regression.yml   |  62 +++++
+ .../scripts/conversation_presence_policy.py        | 209 ++++++++++++++++
+ .../repository/scripts/realtime_gespraech.py       | 182 ++++++++++++--
+ .../repository/scripts/speaker_handoff.py          | 276 +++++++++++++++++++++
+ .../repository/scripts/speaker_handoff_runtime.py  | 107 ++++++++
+ .../repository/scripts/speaker_handoff_selftest.py |  54 ++++
+ .../repository/scripts/voice_session_capsule.py    |   3 +
+ .../tests/test_conversation_presence_policy.py     |  99 ++++++++
+ .../repository/tests/test_speaker_handoff.py       |  96 +++++++
+ .../tests/test_speaker_handoff_cross_organ.py      |  88 +++++++
+ .../tests/test_speaker_handoff_runtime_contract.py |  89 +++++++
+ ...PEAKER_HANDOFF_IMMUNE_INTEGRATION_2026-09-12.md | 101 ++++++++
+ ...RY_GRID_IMMUNE_ARCHITECTURE_DELTA_2026-09-12.md | 197 +++++++++++++++
+ 14 files changed, 1586 insertions(+), 16 deletions(-)
+ create mode 100644 .github/workflows/conversation-presence-policy.yml
+ create mode 100644 .github/workflows/speaker-handoff-regression.yml
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/scripts/conversation_presence_policy.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff_runtime.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/scripts/speaker_handoff_selftest.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/tests/test_conversation_presence_policy.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_cross_organ.py
+ create mode 100644 DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py
+ create mode 100644 DEV_SOURCE_RESEARCH/research/34_SPEAKER_HANDOFF_IMMUNE_INTEGRATION_2026-09-12.md
+ create mode 100644 DEV_SOURCE_RESEARCH/research/35_IDENTITY_REENTRY_GRID_IMMUNE_ARCHITECTURE_DELTA_2026-09-12.md
+MERGED=7dc7ea282dabcbc1b3055e4d9b4a3b4708ebfee5
+
+==================================== ERRORS ====================================
+_______________ ERROR collecting tests/test_voice_host_broker.py _______________
+ImportError while importing test module '/tmp/frankenstein-999-merge-main-02/tests/test_voice_host_broker.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_voice_host_broker.py:5: in <module>
+    from scripts import voice_host_broker as vhb
+E   ModuleNotFoundError: No module named 'scripts'
+_ ERROR collecting DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py _
+ImportError while importing test module '/tmp/frankenstein-999-merge-main-02/DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py:3: in <module>
+    from scripts.speaker_handoff import (
+E   ModuleNotFoundError: No module named 'scripts'
+_ ERROR collecting DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py _
+ImportError while importing test module '/tmp/frankenstein-999-merge-main-02/DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py:3: in <module>
+    from scripts.speaker_handoff import binding_from_verified_session_speaker, process_text
+E   ModuleNotFoundError: No module named 'scripts'
+=========================== short test summary info ============================
+ERROR tests/test_voice_host_broker.py
+ERROR DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff.py
+ERROR DEV_SOURCE_RESEARCH/repository/tests/test_speaker_handoff_runtime_contract.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 3 errors during collection !!!!!!!!!!!!!!!!!!!!
+3 errors in 0.69s

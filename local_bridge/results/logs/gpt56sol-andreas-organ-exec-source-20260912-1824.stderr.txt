@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+  File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "/home/andreas/.claude/star/f2wp1207_chatgpt_organ.py", line 88, in <module>
+    @dataclass(frozen=True)
+     ~~~~~~~~~^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/dataclasses.py", line 1432, in wrap
+    return _process_class(cls, init, repr, eq, order, unsafe_hash,
+                          frozen, match_args, kw_only, slots,
+                          weakref_slot)
+  File "/usr/lib/python3.14/dataclasses.py", line 1055, in _process_class
+    and _is_type(type, cls, dataclasses, dataclasses.KW_ONLY,
+        ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                 _is_kw_only))):
+                 ^^^^^^^^^^^^
+  File "/usr/lib/python3.14/dataclasses.py", line 814, in _is_type
+    ns = sys.modules.get(cls.__module__).__dict__
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?

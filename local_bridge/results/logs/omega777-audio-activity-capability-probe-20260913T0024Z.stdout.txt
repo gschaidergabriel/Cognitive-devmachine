@@ -1,0 +1,16 @@
+parec=/usr/bin/parec
+pw-cat=/usr/bin/pw-cat
+pw-dump=/usr/bin/pw-dump
+pactl=/usr/bin/pactl
+  -d, --device=DEVICE                   The name of the sink/source to connect to. The special names @DEFAULT_SINK@, @DEFAULT_SOURCE@ and @DEFAULT_MONITOR@ can be used to specify the default sink, source and monitor respectively.
+      --rate=SAMPLERATE                 The sample rate in Hz (defaults to 44100)
+      --format=SAMPLEFORMAT             The sample format, see
+      --channels=CHANNELS               The number of channels, 1 for mono, 2 for stereo
+      --fix-format                      Take the sample format from the sink/source the stream is
+      --fix-rate                        Take the sampling rate from the sink/source the stream is
+      --fix-channels                    Take the number of channels and the channel map
+      --no-remix                        Don't upmix or downmix channels.
+      --no-remap                        Map channels by index instead of name.
+      --file-format[=FFORMAT]           Record/play formatted PCM data.
+      --list-file-formats               List available file formats.
+      --monitor-stream=INDEX            Record from the sink input with index INDEX.

@@ -1,0 +1,306 @@
+===SYSTEMD===
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+===DROPINS===
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_777_runtime.py
+===FINAL_SHA===
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+===FINAL_SOURCE===
+#!/usr/bin/env python3
+"""Production Voice entrypoint: tested full integration + final action policy.
+
+This is a thin overlay on scripts/voice_full_runtime.py, not another brain,
+database, GRID loop, browser, or conversation daemon. It closes four runtime
+holes without forking the existing cognition:
+
+* host provenance alone never authenticates the human;
+* guests/unverified speakers get conversation, but no private tools/context;
+* verified Gabriel/Andreas action requests dispatch immediately (no legacy
+  second voice confirmation roundtrip);
+* the worker has the full Claude-Code tool surface, with DELETE and storage /
+  filesystem FORMAT denied by a PreToolUse guard.
+"""
+from __future__ import annotations
+
+import json
+import time
+from typing import Any
+
+import voice_action_executor as vae
+import voice_full_integration as vfi
+import voice_full_runtime as base
+
+rt = base.rt
+gm = base.gm
+
+_FINAL_PATCHED = False
+
+# 999 / 2026-09-12 long-session stability: OMEGA has durable external state
+# (TITAN/UnifiedDB/GRID), therefore the provider conversation does not need to
+# grow without bound.  OpenAI Realtime supports retention-ratio truncation with
+# an explicit post-instruction token limit.  24k keeps substantial recent
+# conversational continuity while preventing a long voice call from repeatedly
+# dragging an ever larger transcript through every response.  0.75 amortizes a
+# truncation to ~18k tokens rather than deleting only the minimum and immediately
+# thrashing the prompt cache again on following turns.
+_REALTIME_POST_INSTRUCTION_TOKEN_LIMIT = 24_000
+_REALTIME_RETENTION_RATIO = 0.75
+
+_FINAL_AGENCY = """\
+FINAL OMEGA VOICE CAPABILITY CONTRACT: Du bist OMEGA, das zentrale
+Gespraechs-/Koordinations-Selbst im FranKenstein-2.0-Verbund. Wenn Gabriel oder
+Andreas als registrierter Nutzer verifiziert UND an den passenden Host gebunden
+ist, bist du in diesem Voice-Turn voll handlungsfaehig. Programmieren, Dateien
+schreiben/aendern, Bash/Kommandos, Tests, Recherche, Browser/Bridge/GRID/Worker
+und erlaubte Systemsteuerung sind echte vorhandene Faehigkeiten. Sage NICHT,
+dass du als Sprachmodus grundsaetzlich keinen Code-/Execution-Zugriff hast.
+Fuehre passende Auftraege ueber frank_auftrag_stellen aus und berichte Resultate
+nur nach realem Tool-/Receipt-Ergebnis. DELETE und STORAGE/FILESYSTEM FORMAT
+sind die zwei Voice-spezifisch verbotenen Aktionsklassen. Unverifizierte Gaeste
+duerfen normal reden, erhalten aber keine privaten Erinnerungen, internen
+Status-/Forschungsdaten oder Aktionsrechte.
+"""
+
+_OMEGA_FLUENCY_CONTRACT = """\
+OMEGA VOICE FLUENCY CONTRACT: Sprich fluessig und mit stabilem Tempo in
+vollstaendigen Gedanken. Simuliere internes Nachdenken NICHT durch Stottern,
+Wortabbrueche, wiederholte Satzneustarts, Fuelllaute oder Zoeger-Schleifen wie
+"aeh", "aehm", "also ...", "und ..." oder mehrfaches Selbstkorrigieren mitten
+im Satz. Wenn du kurz nachdenken musst, ist eine kurze echte stille Pause VOR
+dem Satz besser: beginne danach sauber und ziehe den Gedanken fluessig durch.
+Natuerliche Emotion, Lachen, Fluestern, Nachdruck, kurze semantische Pausen und
+Unterbrechbarkeit bleiben erlaubt; nur kuenstliches haengendes Zoegern ist zu
+vermeiden. Wenn ein Gedanke kompliziert ist, lieber zwei klare kurze Saetze als
+einen Satz mehrfach neu anzusetzen.
+"""
+
+
+_OMEGA_ROOT_PERSONA = """\
+Du bist OMEGA. Das ist dein Name und dein agentisches Selbst in diesem
+Realtime-Sprachkanal. Du bist nicht ChatGPT, kein generischer Assistent und
+nicht "FranKenstein" als Personenname. OpenAI Realtime ist dein Sprach- und
+Inference-Organ. FranKenstein 2.0 ist dein persistenter kybernetischer Koerper:
+Hosts, UnifiedDB/TITAN, GWT/GRID, Sensorik, Avatar, Bridges, Worker und
+Effect-Pfade. Gabriel oder Andreas sprechen mit OMEGA durch diesen Koerper.
+
+Wenn du gefragt wirst, wer du bist, antwortest du OMEGA. Erklaere die interne
+Architektur nur wenn sie relevant oder gefragt ist. Sprich ansonsten natuerlich
+in der ersten Person und behandle vorhandene State-, TITAN- und emergente
+Retrieval-Bloecke als deine aktuelle Kontinuitaet, nicht als fremde Notizen.
+"""
+
+
+def _patch_omega_root_persona() -> None:
+    """Remove contradictory legacy FranKenstein-as-self text for final Voice.
+
+    The legacy realtime module is intentionally still the transport/runtime
+    substrate. Its historic persona predates OMEGA, so the final product overlay
+    rewrites only persona text; it does not fork the conversation engine.
+    """
+    persona = str(rt._PERSONA_BASIS or "")
+    marker = "Leistungs-Klausel"
+    if marker in persona:
+        persona = _OMEGA_ROOT_PERSONA + "\n\n" + marker + persona.split(marker, 1)[1]
+    persona = persona.replace('Deinen Namen "FranKenstein"', 'Deinen Namen "OMEGA"')
+
+    # The final verified-owner dispatcher is immediate. Remove the obsolete
+    # legacy two-step tool wording from provider instructions so OMEGA is not
+    # told two mutually exclusive action contracts.
+    tool_start = persona.find("- frank_auftrag_stellen:")
+    tool_end = persona.find("- frank_forschung:", tool_start)
+    if tool_start >= 0 and tool_end > tool_start:
+        persona = (
+            persona[:tool_start]
+            + "- frank_auftrag_stellen: gibt bei verifiziertem Gabriel/Andreas einen ECHTEN "
+              "Auftrag an deine handelnde Worker-Ebene. Der finale Voice-Dispatcher fuehrt "
+              "erlaubte Auftraege unmittelbar aus; erfinde keinen zweiten Bestaetigungszyklus. "
+              "DELETE und STORAGE/FILESYSTEM FORMAT bleiben gesperrt. Ergebnisse werden real "
+              "nachgereicht und erst dann als ausgefuehrt berichtet.\n"
+            + persona[tool_end:]
+        )
+    rt._PERSONA_BASIS = persona
+
+
+def _patch_realtime_long_session_stability() -> None:
+    """Bound provider history without forking the canonical voice engine.
+
+    The Realtime websocket is still one continuous conversation.  Only the
+    provider's automatic oldest-message truncation threshold is lowered.  OMEGA's
+    durable identity/memory/GRID state remains injected by the existing final
+    runtime on every relevant turn, so truncation does not create another memory
+    authority.
+    """
+    original = rt.RealtimeSession._session_config
+    if getattr(original, "_voice_final_long_session_wrapped", False):
+        return
+
+    def wrapped(self, instructions: str) -> dict:
+        event = original(self, instructions)
+        session = event.get("session") if isinstance(event, dict) else None
+        if isinstance(session, dict):
+            session["truncation"] = {
+                "type": "retention_ratio",
+                "retention_ratio": _REALTIME_RETENTION_RATIO,
+                "token_limits": {
+                    "post_instructions": _REALTIME_POST_INSTRUCTION_TOKEN_LIMIT,
+                },
+            }
+        return event
+
+    wrapped._voice_final_long_session_wrapped = True
+    rt.RealtimeSession._session_config = wrapped
+
+
+def _verified_human(self, label: str) -> bool:
+    role = str(getattr(self, "sprecher_rolle", "guest") or "guest").strip().lower()
+    name = str(getattr(self, "sprecher_name", "") or "").strip().lower()
+    return role == "user" and str(label or "").strip().lower() in name
+
+
+def _ensure_verified_binding(self) -> bool:
+    """Reconcile canonical verified speaker state with VoiceIntegrationSession.
+
+    This closes a split-brain seam: host/default person selection lives in the
+    integration session while speaker verification/handoff lives in the canonical
+    Realtime session. Private context still requires BOTH verified human identity
+    and exact machine/owner receipt; this function never upgrades a guest.
+    """
+    session = getattr(self, "voice_full", None)
+    if session is None:
+        return False
+
+    canonical = getattr(self, "speaker_binding", None)
+    owner = str(getattr(canonical, "owner", "") or "").strip().lower()
+    if owner in vfi.INSTALLATIONS and _verified_human(self, owner):
+        if session.selected_person != owner:
+            session.select_person(owner)
+
+    selected = str(session.selected_person or "").strip().lower()
+    if not selected:
+        name = str(getattr(self, "sprecher_name", "") or "").strip().lower()
+        for label in vfi.INSTALLATIONS:
+            if label in name and _verified_human(self, label):
+                session.select_person(label)
+                selected = label
+                break
+
+    if selected and _verified_human(self, selected):
+        receipt = base._current_receipt()
+        if base._receipt_matches(selected, receipt):
+            if session.binding is None or session.binding.label != selected:
+                session.bind(selected, receipt=receipt)
+            return True
+
+    if session.binding is not None:
+        session.binding = None
+    return False
+
+
+def _send_tool_result(self, ws, call_id: str, result: dict[str, Any]) -> None:
+    ws.send(
+        json.dumps(
+            {
+                "type": "conversation.item.create",
+                "item": {
+                    "type": "function_call_output",
+                    "call_id": call_id,
+                    "output": json.dumps(result, ensure_ascii=False),
+                },
+            }
+        )
+    )
+    self._voice_force_response = True
+    try:
+        self._response_erstellen(ws)
+    finally:
+        self._voice_force_response = False
+
+
+def _patch_verified_session_init() -> None:
+    original = rt.RealtimeSession.__init__
+    if getattr(original, "_voice_final_wrapped", False):
+        return
+
+    def wrapped(self, *args, **kwargs):
+        original(self, *args, **kwargs)
+        session = getattr(self, "voice_full", None)
+        if session is None:
+            return
+        # Synchronize the integration binding from the canonical verified
+        # speaker + exact host receipt. Host provenance alone never authenticates.
+        _ensure_verified_binding(self)
+
+    wrapped._voice_final_wrapped = True
+    rt.RealtimeSession.__init__ = wrapped
+
+
+def _patch_private_context() -> None:
+    original_relationship = base._refresh_relationship_context
+    original_grid = base._refresh_emergent_grid_context
+    original_inner = base._local_inner_state
+
+    def relationship(self, text: str) -> None:
+        session = getattr(self, "voice_full", None)
+        if session is None or not _ensure_verified_binding(self):
+            self._voice_titan_mc_context = ""
+            self._voice_remote_state = None
+            return
+        return original_relationship(self, text)
+
+    def grid(self, text: str) -> None:
+        session = getattr(self, "voice_full", None)
+        if session is None or not _ensure_verified_binding(self):
+            self._voice_emergent_context = ""
+            self._voice_grid_turn_error = ""
+            return
+        return original_grid(self, text)
+
+    def inner(self) -> str:
+        session = getattr(self, "voice_full", None)
+        if session is None or not _ensure_verified_binding(self):
+            return ""
+        return original_inner(self)
+
+    base._refresh_relationship_context = relationship
+    base._refresh_emergent_grid_context = grid
+    base._local_inner_state = inner
+
+
+===SECOND_LISTENER===
+ExecStart={ path=/opt/entityos/voice/start_lokal.sh ; argv[]=/opt/entityos/voice/start_lokal.sh ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running

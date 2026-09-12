@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Transport-resilient shadow blink runtime gate.
+
+Successor to v2 after two otherwise-valid experiments were invalidated by CDP
+transport timeouts while Python sampled browser state every ~12 ms.  This
+revision preserves the product invariants and exact subject hashes but moves the
+high-frequency sampling and rAF timing entirely into the page.  During the
+measurement window Python performs no state-polling round trips; it retrieves a
+single compact JSON record after the natural blink has completed.
+
+The output uses a new evidence schema rather than relabelling the failed v2
+attempts.  No live source bytes are written.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+import subprocess
+import tempfile
+import threading
+import time
+from typing import Any
+
+import requests
+
+from validate_shadow_blink_runtime_v2 import CDP, sha256_file
+
+EXPECTED_LIVE_SHA256 = "18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e"
+EXPECTED_OPEN_PLATE_SHA256 = "8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9"
+EXPECTED_SHADOW_SHA256 = "4fb62046e650f993edb89be24c40262fb8e7202e2c7cda14df7aa0113cfbfb4d"
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--visual-root", type=Path, required=True)
+    ap.add_argument("--shadow", type=Path, required=True)
+    ap.add_argument("--out", type=Path, required=True)
+    ap.add_argument("--http-port", type=int, default=9280)
+    ap.add_argument("--cdp-port", type=int, default=9281)
+    ap.add_argument("--expression-register", default="anime_90s")
+    ap.add_argument("--expression", default="anime_fassungslos")
+    args = ap.parse_args()
+
+    visual = args.visual_root.resolve()
+    live = visual / "buehne.html"
+    open_plate = visual / "augen_blink_relief2" / "blink_000.png"
+    shadow = args.shadow.resolve()
+    out = args.out.resolve()
+    got_live, got_open, got_shadow = map(sha256_file, (live, open_plate, shadow))
+    if got_live != EXPECTED_LIVE_SHA256:
+        raise SystemExit(f"FAIL live subject drift {got_live}")
+    if got_open != EXPECTED_OPEN_PLATE_SHA256:
+        raise SystemExit(f"FAIL open plate drift {got_open}")
+    if got_shadow != EXPECTED_SHADOW_SHA256:
+        raise SystemExit(f"FAIL shadow drift {got_shadow}")
+    out.mkdir(parents=True, exist_ok=False)
+
+    html = shadow.read_text(encoding="utf-8")
+    if html.count("<head>") != 1:
+        raise SystemExit("FAIL shadow head count")
+    served = html.replace("<head>", '<head>\n<base href="http://127.0.0.1:8788/">', 1).encode("utf-8")
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:  # noqa: N802
+            if self.path.split("?", 1)[0] in ("/", "/buehne.html"):
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(served)))
+                self.end_headers()
+                self.wfile.write(served)
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        def log_message(self, fmt: str, *items: object) -> None:
+            return
+
+    server = ThreadingHTTPServer(("127.0.0.1", args.http_port), Handler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+
+    tmp = Path(tempfile.mkdtemp(prefix="f2-eye-shadow-runtime-v3-"))
+    stdout_f = (tmp / "chrome.stdout").open("wb")
+    stderr_f = (tmp / "chrome.stderr").open("wb")
+    proc = subprocess.Popen(
+        [
+            "google-chrome", "--headless=new", "--no-sandbox", "--disable-dev-shm-usage",
+            "--disable-web-security", f"--remote-debugging-port={args.cdp_port}",
+            "--remote-allow-origins=*", f"--user-data-dir={tmp / 'profile'}",
+            "--window-size=1536,1024", f"http://127.0.0.1:{args.http_port}/",
+        ],
+        stdout=stdout_f,
+        stderr=stderr_f,
+    )
+    cdp: CDP | None = None
+    try:
+        target = None
+        for _ in range(150):
+            try:
+                tabs = requests.get(f"http://127.0.0.1:{args.cdp_port}/json/list", timeout=0.5).json()
+                target = next((t for t in tabs if t.get("type") == "page" and f"127.0.0.1:{args.http_port}" in t.get("url", "")), None)
+                if target:
+                    break
+            except Exception:
+                pass
+            time.sleep(0.1)
+        if not target:
+            raise SystemExit("TARGET_PAGE_NOT_FOUND")
+        cdp = CDP(target["webSocketDebuggerUrl"], timeout=20.0)
+        cdp.call("Page.enable", timeout=20.0)
+        cdp.call("Runtime.enable", timeout=20.0)
+
+        ready = False
+        for _ in range(120):
+            try:
+                ready = bool(cdp.eval(
+                    "document.readyState==='complete' && typeof sonderausdruckZeigen==='function' && "
+                    "typeof blinzeln==='function' && !!document.getElementById('augen-blink')",
+                    timeout=3.0,
+                ))
+            except Exception:
+                ready = False
+            if ready:
+                break
+            time.sleep(0.1)
+        if not ready:
+            raise SystemExit("SHADOW_RUNTIME_NOT_READY")
+
+        cdp.eval(
+            f"(()=>{{sonderausdruckZeigen({json.dumps(args.expression_register)},"
+            f"{json.dumps(args.expression)},15000);return true}})()",
+            timeout=10.0,
+        )
+        for _ in range(100):
+            try:
+                if cdp.eval("_sonderLaeuft===true", timeout=3.0):
+                    break
+            except Exception:
+                pass
+            time.sleep(0.05)
+        else:
+            raise SystemExit("SPECIAL_EXPRESSION_NOT_ACTIVE")
+
+        cdp.screenshot(out / "01_special_expression_open.png")
+
+        # One command starts *all* high-frequency measurement inside the page.
+        # No Python state polling occurs until the full natural blink + 240-rAF
+        # window has had time to finish.
+        start_js = r"""
+(()=>{
+  const blink = document.getElementById('augen-blink');
+  const glow = document.getElementById('pupillen-glow');
+  const R = window.__goShadowRuntimeV3 = {
+    startedPerf: performance.now(), samples: [], raf: [], rafDone: false,
+    sampleDone: false, startSpecial: _sonderLaeuft === true
+  };
+  let last = null;
+  function raf(t) {
+    if (last !== null) R.raf.push(t-last);
+    last = t;
+    if (R.raf.length >= 240) { R.rafDone = true; return; }
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+  function sample() {
+    const now = performance.now();
+    R.samples.push({
+      ms: now-R.startedPerf,
+      special: _sonderLaeuft,
+      phase: blinzelPhase,
+      blinkOpacity: getComputedStyle(blink).opacity,
+      blinkSrc: blink.src,
+      glowOpacity: getComputedStyle(glow).opacity
+    });
+    if (now-R.startedPerf < 3200) setTimeout(sample, 8);
+    else R.sampleDone = true;
+  }
+  sample();
+  blinzeln(false);
+  return true;
+})()
+"""
+        if cdp.eval(start_js, timeout=10.0) is not True:
+            raise SystemExit("IN_PAGE_SAMPLER_NOT_STARTED")
+
+        # Measurement runs autonomously inside Chrome.  Sleeping here is the
+        # deliberate transport decoupling that v1/v2 lacked.
+        time.sleep(4.6)
+
+        payload_text = cdp.eval(
+            "JSON.stringify((()=>{const R=window.__goShadowRuntimeV3||{};"
+            "const b=document.getElementById('augen-blink');const g=document.getElementById('pupillen-glow');"
+            "return {samples:R.samples||[],raf:R.raf||[],rafDone:R.rafDone===true,"
+            "sampleDone:R.sampleDone===true,startSpecial:R.startSpecial===true,"
+            "post:{special:_sonderLaeuft,phase:blinzelPhase,blinkOpacity:getComputedStyle(b).opacity,"
+            "blinkSrc:b.src,glowOpacity:getComputedStyle(g).opacity}}})())",
+            timeout=20.0,
+        )
+        payload = json.loads(payload_text)
+        cdp.screenshot(out / "02_special_expression_after_blink.png")
+
+        samples = payload.get("samples") or []
+        raf = payload.get("raf") or []
+        post = payload.get("post") or {}
+        if not isinstance(samples, list) or len(samples) < 80:
+            raise SystemExit(f"INSUFFICIENT_IN_PAGE_SAMPLES {len(samples) if isinstance(samples,list) else -1}")
+        if not isinstance(raf, list) or len(raf) < 120:
+            raise SystemExit(f"INSUFFICIENT_RAF_SAMPLES {len(raf) if isinstance(raf,list) else -1}")
+
+        phases = sorted({str(r.get("phase")) for r in samples if r.get("phase") is not None})
+        frame_names = sorted({str(r.get("blinkSrc", "")).rsplit("/", 1)[-1] for r in samples if "blink_" in str(r.get("blinkSrc", ""))})
+        active = [r for r in samples if r.get("phase") is not None]
+        opacity_bad = [r for r in active if str(r.get("blinkOpacity")) != "1"]
+        glow_bad = [r for r in active if str(r.get("glowOpacity")) != "0"]
+        special_bad = [r for r in samples if r.get("special") is not True]
+        raf_values = [float(x) for x in raf]
+        raf_sorted = sorted(raf_values)
+        p95 = raf_sorted[int(0.95 * (len(raf_sorted) - 1))]
+        fps = 1000.0 / (sum(raf_values) / len(raf_values))
+
+        checks = {
+            "special_active_at_sampler_start": payload.get("startSpecial") is True,
+            "sample_window_completed": payload.get("sampleDone") is True,
+            "closing_phase_observed": "halb1" in phases,
+            "closed_phase_observed": "zu" in phases,
+            "opening_phase_observed": "halb2" in phases,
+            "enough_distinct_blink_frames": len(frame_names) >= 9,
+            "eye_layer_opaque_while_blinking": not opacity_bad,
+            "glow_hidden_while_lid_active": not glow_bad,
+            "special_never_dropped": not special_bad,
+            "special_active_after": post.get("special") is True,
+            "restored_frame_zero": str(post.get("blinkSrc", "")).endswith("/augen_blink/blink_000.png"),
+            "restored_open_opacity": post.get("blinkOpacity") == "1",
+            "blink_phase_cleared": post.get("phase") is None,
+            "raf_window_completed": payload.get("rafDone") is True,
+            "raf_fps_ge_58": fps >= 58.0,
+            "raf_p95_le_18ms": p95 <= 18.0,
+            "live_source_unchanged": sha256_file(live) == got_live,
+        }
+        report = {
+            "schema": "GO_AVATAR_EYE_SHADOW_RUNTIME/v3",
+            "validator_revision": "V3_IN_PAGE_AUTONOMOUS_SAMPLER",
+            "scope": "ISOLATED_REAL_BROWSER_SHADOW_NO_LIVE_SOURCE_WRITE",
+            "live_sha256": got_live,
+            "shadow_sha256": got_shadow,
+            "open_plate_sha256": got_open,
+            "expression": {"register": args.expression_register, "name": args.expression},
+            "sample_count": len(samples), "phases": phases, "frame_names": frame_names,
+            "active_sample_count": len(active), "opacity_bad_count": len(opacity_bad),
+            "glow_bad_count": len(glow_bad), "special_bad_count": len(special_bad),
+            "post": post,
+            "raf": {"samples": len(raf_values), "done": payload.get("rafDone") is True,
+                    "fps": fps, "p95_ms": p95, "max_ms": max(raf_values)},
+            "transport": {"state_roundtrips_during_measurement": 0, "final_payload_roundtrips": 1},
+            "checks": checks,
+            "source_mutation": False,
+        }
+        (out / "report.json").write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        print(json.dumps(report, sort_keys=True))
+        if not all(checks.values()):
+            raise SystemExit("SHADOW_RUNTIME_GATE_V3_FAIL")
+        print("EYE_SHADOW_RUNTIME_GATE_V3=PASS")
+        return 0
+    finally:
+        if cdp is not None:
+            try: cdp.close()
+            except Exception: pass
+        proc.terminate()
+        try: proc.wait(timeout=5)
+        except subprocess.TimeoutExpired: proc.kill()
+        stdout_f.close(); stderr_f.close(); server.shutdown(); server.server_close()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

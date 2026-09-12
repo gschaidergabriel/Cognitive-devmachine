@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega777-audio-device-enumeration-ai-core-node-20260912T1738Z-gpt56sol",
+  "command_sha256": "ca629b7d0fc7bd8066a036b8a77fe241afdaa233027ff54e8efb31617671f01d",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T17:31:14.746561+00:00",
+  "finished_at": "2026-09-12T17:31:14.957506+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "dd2185ad3628dc07db6c0af04cf27539259b79d3ad638d5a764b5e2f93b5dc1c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== SOUNDDEVICE ===\ndefault= [8, 8]\n0|HD-Audio Generic: HDMI 1 (hw:0,7)|in=0|out=8|sr=44100.0\n1|HD-Audio Generic: HDMI 2 (hw:0,8)|in=0|out=8|sr=44100.0\n2|HD-Audio Generic: HDMI 3 (hw:0,9)|in=0|out=8|sr=44100.0\n3|RODE NT-USB: USB Audio (hw:1,0)|in=0|out=2|sr=44100.0\n4|HD-Audio Generic: ALC269VC Analog (hw:2,0)|in=2|out=2|sr=44100.0\n5|Rapoo Camera: USB Audio (hw:3,0)|in=2|out=0|sr=44100.0\n6|pipewire|in=64|out=64|sr=44100.0\n7|pulse|in=32|out=32|sr=44100.0\n8|default|in=64|out=64|sr=44100.0\n=== PACTL SOURCES ===\n15576\tfrank_mic_clean\tPipeWire\tfloat32le 2ch 48000Hz\tIDLE\n15577\tfrank_out_ec.monitor\tPipeWire\tfloat32le 2ch 48000Hz\tRUNNING\n221526\talsa_input.usb-Rapoo_Camera_Rapoo_Camera_SN0001-02.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221527\talsa_input.pci-0000_c4_00.6.analog-stereo\tPipeWire\ts32le 2ch 48000Hz\tSUSPENDED\n221528\talsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo.monitor\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221529\talsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tRUNNING\n221530\talsa_output.pci-0000_c4_00.1.hdmi-stereo.monitor\tPipeWire\ts32le 2ch 48000Hz\tRUNNING\n=== PACTL SINKS ===\n15577\tfrank_out_ec\tPipeWire\tfloat32le 2ch 48000Hz\tRUNNING\n221528\talsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo\tPipeWire\ts16le 2ch 48000Hz\tSUSPENDED\n221530\talsa_output.pci-0000_c4_00.1.hdmi-stereo\tPipeWire\ts32le 2ch 48000Hz\tRUNNING\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

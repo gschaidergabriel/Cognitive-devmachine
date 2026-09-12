@@ -1,0 +1,23 @@
+=== SOUNDDEVICE ===
+default= [8, 8]
+0|HD-Audio Generic: HDMI 1 (hw:0,7)|in=0|out=8|sr=44100.0
+1|HD-Audio Generic: HDMI 2 (hw:0,8)|in=0|out=8|sr=44100.0
+2|HD-Audio Generic: HDMI 3 (hw:0,9)|in=0|out=8|sr=44100.0
+3|RODE NT-USB: USB Audio (hw:1,0)|in=0|out=2|sr=44100.0
+4|HD-Audio Generic: ALC269VC Analog (hw:2,0)|in=2|out=2|sr=44100.0
+5|Rapoo Camera: USB Audio (hw:3,0)|in=2|out=0|sr=44100.0
+6|pipewire|in=64|out=64|sr=44100.0
+7|pulse|in=32|out=32|sr=44100.0
+8|default|in=64|out=64|sr=44100.0
+=== PACTL SOURCES ===
+15576	frank_mic_clean	PipeWire	float32le 2ch 48000Hz	IDLE
+15577	frank_out_ec.monitor	PipeWire	float32le 2ch 48000Hz	RUNNING
+221526	alsa_input.usb-Rapoo_Camera_Rapoo_Camera_SN0001-02.analog-stereo	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221527	alsa_input.pci-0000_c4_00.6.analog-stereo	PipeWire	s32le 2ch 48000Hz	SUSPENDED
+221528	alsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo.monitor	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221529	alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	RUNNING
+221530	alsa_output.pci-0000_c4_00.1.hdmi-stereo.monitor	PipeWire	s32le 2ch 48000Hz	RUNNING
+=== PACTL SINKS ===
+15577	frank_out_ec	PipeWire	float32le 2ch 48000Hz	RUNNING
+221528	alsa_output.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo	PipeWire	s16le 2ch 48000Hz	SUSPENDED
+221530	alsa_output.pci-0000_c4_00.1.hdmi-stereo	PipeWire	s32le 2ch 48000Hz	RUNNING

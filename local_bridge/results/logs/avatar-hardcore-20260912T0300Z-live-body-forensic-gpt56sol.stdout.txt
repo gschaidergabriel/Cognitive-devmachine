@@ -1,0 +1,31 @@
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+150:     vorher direkt gegeneinander. Zweck: kopfKoerperSchritt() (JS weiter
+511:// von schleife(t) -- gleiches Bauprinzip wie koerperSchritt() oben, nur
+1640:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1644:// gesetzt hat (schleife() ruft atmen() vor koerperSchritt()/kopfRollTick()
+1682:  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+1709:// koerper_rgba-Dateien (schulterdrehung/lehnen/gewicht/... bleiben fuer
+1718:function koerperCrossfade(src){
+1734:// ls-gepruefte Bestaende: schulterzucken 8, aufrichten 8, lehnen 9, gewicht 7,
+1735:// schulterdrehung 15 (schulter_+NN.png!), kombiniert 9. Alle als SELTENE
+1739:// seine Dateifolge (lehnen_+00_schulter_+00 / +20 / -20 ...) ist keine
+1742:  { name:"schulterzucken", ms:110, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1743:      `/koerper_rgba/schulterzucken/zucken_${String(n).padStart(3,"0")}.png`) },
+1744:  { name:"aufrichten", ms:200, bilder:[0,1,2,3,4,5,6,7].map(n =>
+1745:      `/koerper_rgba/aufrichten/aufrichten_${String(n).padStart(3,"0")}.png`) },
+1746:  { name:"lehnen", ms:300, bilder:["lehnen_+00","lehnen_+05","lehnen_+10","lehnen_+15",
+1747:      "lehnen_+20","lehnen_+15","lehnen_+10","lehnen_+05","lehnen_+00"].map(n =>
+1748:      `/koerper_rgba/lehnen/${n}.png`) },
+1749:  { name:"gewicht", ms:300, bilder:["gewicht_+00","gewicht_+05","gewicht_+10","gewicht_+15",
+1750:      "gewicht_+10","gewicht_+05","gewicht_+00","gewicht_-05","gewicht_-10",
+1751:      "gewicht_-05","gewicht_+00"].map(n =>
+1752:      `/koerper_rgba/gewicht/${n}.png`) },
+1753:  { name:"schulterdrehung", ms:170, bilder:["schulter_+00","schulter_+05","schulter_+10",
+1754:      "schulter_+15","schulter_+10","schulter_+05","schulter_+00","schulter_-05",
+1755:      "schulter_-10","schulter_-05","schulter_+00"].map(n =>
+1756:      `/koerper_rgba/schulterdrehung/${n}.png`) }
+1775:function koerperSchritt(jetzt){
+1782:    koerperCrossfade(a.bilder[a.idx]);
+1794:  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+1876:  koerperSchritt(t);
+1908:// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "go-avatar-running-swarm-readback-20260912-1005-gpt56sol",
+  "command_sha256": "f141313ad37e23c4f9ac632d6fb3f67ddc8559bf72eb3d783cb9aaa8507bbad8",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T03:03:00.659446+00:00",
+  "finished_at": "2026-09-12T03:03:00.716785+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "8663b321a36328506f1e51ba0b6d4d61707565667da08f3986f886c59bb0b5d9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== RUNNING GO SWARM READBACK ===\n2026-09-12T10:03:00+07:00\n3765629 bash -lc set -euo pipefail echo '=== RUNNING GO SWARM READBACK ===' date -Is pgrep -af 'run_free_go_swarm.py' || true R=$(find /artifacts/clay-entityos-swarm -maxdepth 1 -type d -name 'go-*' -printf '%T@ %p\\n' 2>/dev/null | sort -nr | head -1 | cut -d' ' -f2-) echo RUN_DIR=${R:-NONE} if [ -n \"${R:-}\" ]; then   echo '--- STATUS ---'; cat \"$R/status.json\" 2>/dev/null || true   echo '--- LAST 12 WORKERS COMPACT ---'   tail -n 12 \"$R/workers.jsonl\" 2>/dev/null | python3 -c 'import sys,json; [print(json.dumps({k:o.get(k) for k in (\"worker_id\",\"role\",\"provider\",\"model\",\"ok\",\"status\",\"output\") if k in o},ensure_ascii=False)[:1800]) for l in sys.stdin if (o:=json.loads(l))]' || true fi echo '=== END SWARM READBACK ===' \n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

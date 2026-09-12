@@ -1,0 +1,97 @@
+#!/usr/bin/env python3
+"""messen_augenanker_exakt.py -- EXAKTE (nicht gemessene/geschaetzte) Position
+des Augen-Ankers pro Rollwinkel, per Reproduktion derselben PIL-Transform, die
+docs/build_rig_v2.py fuer die Kopf-Rollposen benutzt hat
+(transform_crop_about_anchor: rotate(angle=-roll, expand=True) um die
+Bildmitte, dann bottom-center-Pin auf den Anker (768,600)).
+
+Statt die Bilder zu vergleichen (Template-Matching, ungenau bei starker
+Verzerrung), wird ein einzelner Marker-Punkt an der bekannten Augen-Anker-
+Position durch EXAKT dieselbe Transformation geschickt wie das Kopfbild
+selbst -- das Ergebnis ist geometrisch exakt, kein Schaetzwert.
+"""
+import json
+import os
+
+from PIL import Image
+
+VISUAL = os.path.dirname(os.path.abspath(__file__))
+KOPF_MASTER = os.path.join(VISUAL, "kopf", "master", "kopf_zero_mit_augen.png")
+MANIFEST = os.path.join(VISUAL, "manifest.json")
+AUSGABE = os.path.join(VISUAL, "augen_anker_exakt.json")
+
+HEAD_ANCHOR = (768, 600)  # aus manifest.json head_neck_anchor
+
+
+def transform_crop_about_anchor(canvas_1536x1024, head_bbox, angle=0.0, anchor=HEAD_ANCHOR):
+    """1:1 Nachbau von build_rig_v2.py's transform_crop_about_anchor, aber mit
+    dem EXPLIZIT bekannten head_bbox statt Auto-Detektion -- fuer den echten
+    Kopf ist das identisch (dessen Alpha-bbox IST head_bbox), fuer den
+    Marker-Layer (fast leer bis auf einen Punkt) muss die Crop-Box explizit
+    vorgegeben werden, sonst croppt PIL auf den fast-leeren Inhalt statt auf
+    dieselbe Region wie beim echten Kopf."""
+    crop = canvas_1536x1024.crop(head_bbox)
+    if angle:
+        crop = crop.rotate(angle, resample=Image.Resampling.BICUBIC, expand=True)
+    x = round(anchor[0] - crop.width / 2)
+    y = round(anchor[1] - crop.height)
+    out = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    out.alpha_composite(crop, (x, y))
+    return out
+
+
+def main():
+    with open(MANIFEST, encoding="utf-8") as f:
+        manifest = json.load(f)
+    eyes_glow_anchor = None
+    for a in manifest["assets"]:
+        if a["path"] == "augen/gaze/rotglow_tracking_master.png":
+            eyes_glow_anchor = (a["anchor"]["x"], a["anchor"]["y"])
+    if eyes_glow_anchor is None:
+        raise RuntimeError("augen/gaze/rotglow_tracking_master.png nicht im Manifest gefunden")
+    print("Augen-Anker (roll=0, aus Manifest):", eyes_glow_anchor)
+
+    head = Image.open(KOPF_MASTER).convert("RGBA")
+    head_bbox = head.getchannel("A").getbbox()
+    bx0, by0, bx1, by1 = head_bbox
+    print("Kopf-Crop-Box (roll=0):", head_bbox, "Groesse:", (bx1 - bx0, by1 - by0))
+
+    # Marker: volle 1536x1024-Leinwand (wie das echte roll=0-Kopfbild), ein
+    # 5x5-Punkt an der ABSOLUTEN Augen-Anker-Position auf dieser Leinwand --
+    # exakt analog dazu, wie der echte Kopf-Layer auf derselben Leinwand liegt.
+    marker = Image.new("RGBA", (1536, 1024), (0, 0, 0, 0))
+    for dx in range(-2, 3):
+        for dy in range(-2, 3):
+            xx, yy = eyes_glow_anchor[0] + dx, eyes_glow_anchor[1] + dy
+            marker.putpixel((xx, yy), (255, 0, 0, 255))
+
+    ergebnis = {}
+    for roll in range(-25, 26, 5):
+        out = transform_crop_about_anchor(marker, head_bbox, angle=-roll, anchor=HEAD_ANCHOR)
+        bbox_out = out.getchannel("A").getbbox()
+        if bbox_out is None:
+            raise RuntimeError(f"Marker bei roll={roll} verschwunden -- Transform-Fehler")
+        cx = (bbox_out[0] + bbox_out[2]) / 2
+        cy = (bbox_out[1] + bbox_out[3]) / 2
+        dx = cx - eyes_glow_anchor[0]
+        dy = cy - eyes_glow_anchor[1]
+        ergebnis[str(roll)] = {"dx_px": round(dx, 2), "dy_px": round(dy, 2)}
+        print(f"roll={roll:+3d}  dx={dx:+7.2f}px  dy={dy:+7.2f}px")
+
+    with open(AUSGABE, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "quelle": "messen_augenanker_exakt.py -- exakte Reproduktion der Erzeugungs-Transform, kein Schaetzwert",
+                "head_anchor": {"x": HEAD_ANCHOR[0], "y": HEAD_ANCHOR[1]},
+                "augen_anker_roll0": {"x": eyes_glow_anchor[0], "y": eyes_glow_anchor[1]},
+                "werte": ergebnis,
+            },
+            f,
+            indent=2,
+            ensure_ascii=False,
+        )
+    print("\ngespeichert:", AUSGABE)
+
+
+if __name__ == "__main__":
+    main()

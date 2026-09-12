@@ -1,0 +1,29 @@
+=== FETCH PIN ===
+fetched=dfbbd034c4de66e2f2efc1bee4d5327cc391ba6d
+=== VERIFY ===
+{"authority": "source-db-read-only;pattern!=truth;pattern!=effect_authority", "donor_ci_run": 34665504330, "donor_commit": "8363335a12937802a080e9eb550b9bc916e48f03", "ok": true, "pinned_files": 8, "schema": "ENTITYOS_TITAN_MX_PIN/v1", "tests": ["titan_mx_gold", "titan_mx_hook_gold"]}
+=== INSTALL ===
+{"authority": "source-db-read-only;pattern!=truth;pattern!=effect_authority", "donor_ci_run": 34665504330, "donor_commit": "8363335a12937802a080e9eb550b9bc916e48f03", "ok": true, "pinned_files": 8, "schema": "ENTITYOS_TITAN_MX_PIN/v1", "tests": ["titan_mx_gold", "titan_mx_hook_gold"]}
+TITAN-MX payload installed; service NOT enabled automatically.
+=== ENABLE SHADOW ===
+active=active
+enabled=enabled
+=== PROCESS ===
+pid=3772586
+    PID USER      NI     ELAPSED COMMAND
+3772586 ai-core+  10       00:00 /usr/bin/python3 /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx.py --db /home/ai-core-node/.local/share/agentzero/unified.db --state-db /home/ai-core-node/.local/share/agentzero/titan_mx.db --follow --interval 0.5 --max-frames 100
+=== OPEN DB FDS ===
+python3 3772586 ai-core-node  mem-r  REG              259,2     32768    808178 /home/ai-core-node/.local/share/agentzero/unified.db-shm
+python3 3772586 ai-core-node  mem-w  REG              259,2     32768    824815 /home/ai-core-node/.local/share/agentzero/titan_mx.db-shm
+python3 3772586 ai-core-node    3rr  REG              259,2 246464512    807174 /home/ai-core-node/.local/share/agentzero/unified.db
+python3 3772586 ai-core-node    4ur  REG              259,2      4096    808741 /home/ai-core-node/.local/share/agentzero/titan_mx.db
+python3 3772586 ai-core-node    5u   REG              259,2   4099432    824814 /home/ai-core-node/.local/share/agentzero/titan_mx.db-wal
+python3 3772586 ai-core-node    6uw  REG              259,2     32768    824815 /home/ai-core-node/.local/share/agentzero/titan_mx.db-shm
+python3 3772586 ai-core-node    7u   REG              259,2   8038152    808150 /home/ai-core-node/.local/share/agentzero/unified.db-wal
+python3 3772586 ai-core-node    8ur  REG              259,2     32768    808178 /home/ai-core-node/.local/share/agentzero/unified.db-shm
+=== STATE ===
+{"counts": {"titan_mx_pulse": 86, "titan_mx_transition": 7, "titan_mx_pattern": 2, "titan_mx_hyperblock": 86, "titan_mx_mirror": 86}, "latest": ["268768c9e97a0c1b45bbeee158c55153d1e1c16359ca8baa51b0c4abfd1007e6", "mx@86{auth:memory_cache/evidence_authority;now:grid10:G7!;reentry:UNKNOWN;surprise:0.80;hp:-;pat:p13ac600b17(UNKNOWN~UNKNOWN)@0.99#74/13?,pcf9c616253(G4~G4)@0.85#4/2?;inv:[pattern!=truth,pattern!=effect,conflict_preserve,reentry_verify];ev:[268768c9e9]}", 253, "3bfb0241def16b26302a707a905063991ad4eb786ef4159aaea006be3b4e033a"]}
+=== SOURCE CHECK ===
+query_only= 0
+frames= 5554
+=== DONE ===

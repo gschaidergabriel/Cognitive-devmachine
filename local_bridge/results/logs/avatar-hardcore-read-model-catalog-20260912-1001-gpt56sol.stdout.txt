@@ -1,0 +1,289 @@
+"""
+Modell-Katalog fuer das /modelle-Dashboard (Gabriel-Auftrag 2026-08-27).
+Fakten recherchiert (WebSearch, siehe Bauprotokoll), Kurzbeschreibungen/System-
+prompts/Umschalt-Hinweise von Nemotron-3-Super (Free-Pool, ~/last-resort/llm.py)
+erzeugt und von Claude gegengelesen -- Gabriel-Vorgabe: Nemotron/Mistral fuer die
+Text-/Programmierarbeit, Claude nur zur Pruefung/Integration.
+
+PHASE 48 (Gabriel-Auftrag 2026-08-27, Nachtrag) -- 'kategorie' + 'berechtigung_stufe'
++ 'faehigkeiten_liste' ergaenzt:
+  - 'kategorie': 'claude' | 'glm' | 'freepool' -- steuert die neue Seitenreihenfolge
+    in pay.py (_modelle_html): erst Claude, dann GLM, dann Free-Pool. Ersetzt die
+    alte, verwirrende GROSS/MITTEL/KLEIN-Durchmischung als Sortierachse (die
+    'stufe'-Spalte bleibt als Sachinfo auf der Karte erhalten, ist aber nicht mehr
+    die Gruppierungs-Achse).
+  - 'berechtigung_stufe' (NUR bei kategorie='freepool' gesetzt): 'voll' | 'eingeschraenkt'
+    -- real durchgesetzt in harness_aider.py (visible_run(), MODELL_MAP), nicht nur
+    behauptet: 'eingeschraenkt' startet Aider im '--edit-format ask' (strukturell
+    keine Dateiaenderung moeglich, siehe aider/coders/ask_coder.py) + nachgelagerter
+    git-Diff-Wache; 'voll' bekommt normalen Editier-Modus. AUSNAHMSLOS BEIDE Stufen:
+    '--no-suggest-shell-commands' (kein von Aider vorgeschlagener/automatisch
+    bestaetigter Shell-Befehl -> kein rm, keine destruktiven Git-Ops) + nachgelagerte
+    Loesch-Erkennung (git diff --name-status, jede 'D'-Zeile wirft den Lauf zurueck).
+  - 'faehigkeiten_liste': kurze, konkrete Vergleichsliste je Free-Pool-Modell,
+    KONSISTENT mit der echten Durchsetzung oben (nicht nur Marketingtext).
+"""
+
+MODELLE = [
+    {
+        'id': 'claude-opus',
+        'anzeige_name': 'Claude Opus',
+        'anbieter': 'Anthropic',
+        'modell_id': 'claude-opus (natives Claude-Code-Modell)',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '200K Token (teils 1M im Beta-Modus)',
+        'werkzeuge': True,
+        'stufe': 'gross',
+        'kategorie': 'claude',
+        'kurzbeschreibung': 'Claude Opus ist das größte und leistungsfähigste Anthropic-Modell mit 200K-Token-Kontext (bis zu 1M im Beta), nativem Tool-Use und voller Handlungsfähigkeit.',
+        'systemprompt': 'Du bist Claude Opus, voll handlungsfähig und kannst eigenständig komplexe Aufgaben lösen sowie native Werkzeuge nutzen. Antworte präzise, nutze bei Bedarf die verfügbaren Tools und berücksichtige den großen Kontext.',
+        'umschalt_hinweis': 'Das Modell lässt sich direkt über den /model-Befehl in Claude-Code wählen; ein separates Umschalten auf dieser Seite ist nicht erforderlich.',
+    },
+    {
+        'id': 'claude-sonnet',
+        'anzeige_name': 'Claude Sonnet 5',
+        'anbieter': 'Anthropic',
+        'modell_id': 'claude-sonnet-5',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '200K Token',
+        'werkzeuge': True,
+        'stufe': 'mittel',
+        'kategorie': 'claude',
+        'kurzbeschreibung': 'Claude Sonnet 5 von Anthropic bietet ein 200K-Token-Kontextfenster und natives Tool-Use, ist jedoch nur über den /model-Befehl wählbar und nicht frei verfügbar.',
+        'systemprompt': 'Du bist ein hilfreicher Assistent. Nutze Werkzeuge nur, wenn sie zur Erfüllung einer eindeutig definierten Einzelaufgabe erforderlich sind, und frage nach Bestätigung, bevor du mehrschrittige Pläne ausführst.',
+        'umschalt_hinweis': 'Beim Umschalten wird das Modell einfach über den nativen /model-Befehl gewechselt, ohne zusätzliche Aktionen.',
+    },
+    {
+        'id': 'claude-haiku',
+        'anzeige_name': 'Claude Haiku',
+        'anbieter': 'Anthropic',
+        'modell_id': 'claude-haiku (natives Claude-Code-Modell)',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '200K Token',
+        'werkzeuge': True,
+        'stufe': 'klein',
+        'kategorie': 'claude',
+        'kurzbeschreibung': 'Claude Haiku ist das kleinste und schnellste Anthropic-Modell mit 200K Token Kontextfenster, nativem Tool-Use und wählbar über /model, geeignet für einfache, eng umrissene Aufgaben.',
+        'systemprompt': 'Du beantwortest präzise eine einzelne Frage ohne externe Werkzeuge zu nutzen. Halte die Antwort kurz und fokussiert.',
+        'umschalt_hinweis': 'Bei Claude-Modellen wird das Modell unmittelbar über den /model-Parameter umgeschaltet und gilt ab der nächsten Anfrage.',
+    },
+    {
+        'id': 'glm-5.3',
+        'anzeige_name': 'GLM-5.3 (z.ai)',
+        'anbieter': 'z.ai',
+        'modell_id': 'glm-5.3',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '1.000.000 Token (Ausgabe bis 128K)',
+        'werkzeuge': True,
+        'stufe': 'gross',
+        'kategorie': 'glm',
+        'kurzbeschreibung': 'GLM-5.3 ist ein starkes Coding- und Agentic-Modell mit 1 Mio-Token-Kontext, 128 K-Ausgabe, Function-Calling und MCP, das über ein lokales glm-fallback-proxy von z.ai genutzt wird und keinen abschaltbaren Denkmodus hat.',
+        'systemprompt': 'Du bist ein voll handlungsfähiges Coding- und Agentic-Modell. Nutze bei Bedarf Function-Calling und MCP, berücksichtige das große Kontextfenster und den nicht abschaltbaren Denkmodus.',
+        'umschalt_hinweis': 'Beim Wechsel des Modells wird das Feld im lokalen glm-fallback-proxy überschrieben; die Änderung wirkt ab der nächsten Anfrage -- vollwertiger Ersatz, KEIN Sandbox-/Harness-Modus, direkter Modellwechsel, im Terminal danach normal als FranKenstein nutzbar.',
+    },
+    # PHASE 49 (Gabriel-Auftrag 2026-08-27/28) -- 3 weitere echte z.ai-GLM-Modelle,
+    # gestaffelt STARK -> KLEIN (Gabriel-Praezisierung: 4 GLM-Karten insgesamt
+    # reichen, NICHT die komplette Palette). Alle 3 IDs echt verifiziert per
+    # Live-Aufruf gegen https://api.z.ai/api/anthropic/v1/messages (Antwort-Feld
+    # "model" bestaetigt exakt die angefragte ID, kein stilles Umbiegen auf ein
+    # anderes Modell -- anders als z.B. glm-5/-5.1/-5.2, die serverseitig
+    # kommentarlos auf glm-5.3 umgebogen werden, und glm-4.5-air, das auf diesem
+    # Endpunkt mit leerer/fehlerhafter Antwort scheiterte -- beide deshalb NICHT
+    # aufgenommen, um nichts Ungeprueftes zu listen). Parameter-/Kontext-Angaben
+    # aus Z.ai-eigener Ankuendigung (X/Blog, GLM-5.3-Flash) bzw. Drittquellen-
+    # Konsens (OpenRouter/llm-stats/Kilo Code fuer GLM-5-Turbo/GLM-4.7), nicht
+    # aus dem Live-Testaufruf selbst ablesbar (der bestaetigt nur Existenz +
+    # Antwortfaehigkeit, keine Parameterzahlen).
+    {
+        'id': 'glm-5.3-flash',
+        'anzeige_name': 'GLM-5.3-Flash (z.ai)',
+        'anbieter': 'z.ai',
+        'modell_id': 'glm-5.3-flash',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '1.000.000 Token, nativ multimodal',
+        'werkzeuge': True,
+        'stufe': 'gross',
+        'kategorie': 'glm',
+        'kurzbeschreibung': 'GLM-5.3-Flash ist ein starkes multimodales Coding- und Agentic-Modell mit 1 Mio-Token-Kontext, 320 Mrd. Parametern (18 Mrd. aktiv, MoE), das auf dem Z.ai Code Bench GLM-5.2 auf jeder Stufe übertrifft und etwa gleichauf mit Claude Opus 4.8 liegt -- bei deutlich günstigerem Preis als GLM-5.3.',
+        'systemprompt': 'Du bist ein voll handlungsfähiges, multimodales Coding- und Agentic-Modell. Nutze bei Bedarf Function-Calling und MCP, berücksichtige das große Kontextfenster und arbeite kosteneffizient bei gleichbleibend hoher Qualität.',
+        'umschalt_hinweis': 'Beim Aktivieren wird GLM_MODEL im glm-fallback-proxy per systemd-Environment-Override auf diese ID gesetzt und der Dienst (glm-fallback.service) neu gestartet; die Änderung wird anschließend per echtem Testaufruf gegen den Proxy bestätigt -- vollwertiger Ersatz, KEIN Sandbox-/Harness-Modus, direkter Modellwechsel, im Terminal danach normal als FranKenstein weiter nutzbar.',
+    },
+    {
+        'id': 'glm-5-turbo',
+        'anzeige_name': 'GLM-5-Turbo (z.ai)',
+        'anbieter': 'z.ai',
+        'modell_id': 'glm-5-turbo',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '200.000 Token (Ausgabe bis 128K)',
+        'werkzeuge': True,
+        'stufe': 'mittel',
+        'kategorie': 'glm',
+        'kurzbeschreibung': 'GLM-5-Turbo ist ein auf agentische Workflows optimiertes Coding-Modell mit 200K-Token-Kontext, 744 Mrd. Parametern (rund 40 Mrd. aktiv, MoE) und DeepSeek Sparse Attention für effiziente, lange Werkzeug-Ausführungsketten -- schneller als die volle GLM-5.x-Reihe.',
+        'systemprompt': 'Du bist ein voll handlungsfähiges Coding- und Agentic-Modell, optimiert für lange, mehrschrittige Werkzeugnutzung mit stabiler Ausführung über viele Schritte hinweg. Nutze bei Bedarf Function-Calling und MCP.',
+        'umschalt_hinweis': 'Beim Aktivieren wird GLM_MODEL im glm-fallback-proxy per systemd-Environment-Override auf diese ID gesetzt und der Dienst (glm-fallback.service) neu gestartet; die Änderung wird anschließend per echtem Testaufruf gegen den Proxy bestätigt -- vollwertiger Ersatz, KEIN Sandbox-/Harness-Modus, direkter Modellwechsel, im Terminal danach normal als FranKenstein weiter nutzbar.',
+    },
+    {
+        'id': 'glm-4.7',
+        'anzeige_name': 'GLM-4.7 (z.ai)',
+        'anbieter': 'z.ai',
+        'modell_id': 'glm-4.7',
+        'frei': False,
+        'pool_tier': None,
+        'kontextfenster': '200.000 Token (Ausgabe bis 128K)',
+        'werkzeuge': True,
+        'stufe': 'klein',
+        'kategorie': 'glm',
+        'kurzbeschreibung': 'GLM-4.7 ist die vorherige z.ai-Flaggschiff-Generation mit 200K-Token-Kontext, 355-358 Mrd. Parametern (rund 32 Mrd. aktiv, MoE), 73,8% SWE-bench Verified und pro Turn umschaltbarem Denkmodus -- günstiger als die 5.x-Reihe, immer noch konkurrenzfähig bei Coding/Agentic-Aufgaben.',
+        'systemprompt': 'Du bist ein voll handlungsfähiges Coding- und Agentic-Modell mit pro Turn umschaltbarem Denkmodus. Nutze bei Bedarf Function-Calling und MCP und arbeite fokussiert auf klar umrissene Programmieraufgaben.',
+        'umschalt_hinweis': 'Beim Aktivieren wird GLM_MODEL im glm-fallback-proxy per systemd-Environment-Override auf diese ID gesetzt und der Dienst (glm-fallback.service) neu gestartet; die Änderung wird anschließend per echtem Testaufruf gegen den Proxy bestätigt -- vollwertiger Ersatz, KEIN Sandbox-/Harness-Modus, direkter Modellwechsel, im Terminal danach normal als FranKenstein weiter nutzbar.',
+    },
+    {
+        'id': 'nvidia-nemotron',
+        'anzeige_name': 'NVIDIA Nemotron-3-Super-120B-A12B',
+        'anbieter': 'NVIDIA NIM',
+        'modell_id': 'nvidia/nemotron-3-super-120b-a12b',
+        'frei': True,
+        'pool_tier': 'nvidia',
+        'kontextfenster': 'bis 1.000.000 Token (Free-Tier oft 262.144)',
+        'werkzeuge': True,
+        'stufe': 'mittel',
+        'kategorie': 'freepool',
+        'berechtigung_stufe': 'voll',
+        'kurzbeschreibung': 'NVIDIA Nemotron-3-Super-120B-A12B ist ein MoE-Modell mit 123,6 Mrd. Parametern, davon 12 Mrd. aktiv, unterstützt bis zu 1.000.000 Token Kontext und Tool-Calling.',
+        'systemprompt': 'Du bearbeitest einzelne Aufgaben moderat und setzt bei Bedarf Werkzeuge ein.',
+        'umschalt_hinweis': 'Aktivieren startet ein sichtbares Terminal-Fenster mit Aider gegen dieses Modell -- kein Hintergrundprozess, kein Sandbox-Werkraum-Versteck.',
+        'faehigkeiten_liste': [
+            'Code/Dateien im echten Repo ändern: JA (normaler Aider-Editiermodus)',
+            'Neue Notizen/Recherche-Dokumente schreiben: JA',
+            'Seiten/URLs abrufen (Aider /web): JA',
+            'Shell-Befehle ausführen: NIE (--no-suggest-shell-commands, alle Free-Pool-Modelle)',
+            'Löschen von Dateien/destruktive Git-Ops: NIE (strukturell gesperrt + Nach-Lauf-Prüfung)',
+        ],
+    },
+    {
+        'id': 'openrouter-deepseek',
+        'anzeige_name': 'DeepSeek-V3 (ueber OpenRouter)',
+        'anbieter': 'OpenRouter',
+        'modell_id': 'deepseek/deepseek-chat',
+        'frei': True,
+        'pool_tier': 'openrouter',
+        'kontextfenster': '128K-164K Token',
+        'werkzeuge': True,
+        'stufe': 'gross',
+        'kategorie': 'freepool',
+        'berechtigung_stufe': 'voll',
+        'kurzbeschreibung': 'DeepSeek-V3 über OpenRouter ist ein 671 Mrd-Parameter-MoE-Modell mit 37 Mrd aktiven Parametern, 128K-164K Token Kontext und Werkzeugnutzung, Stufe gross.',
+        'systemprompt': 'Du bist ein leistungsfähiger Assistent mit vollem Handlungsspielraum. Nutze bei Bedarf die verfügbaren Werkzeuge und berücksichtige das große Kontextfenster.',
+        'umschalt_hinweis': 'Aktivieren startet ein sichtbares Terminal-Fenster mit Aider gegen dieses Modell -- kein Hintergrundprozess, kein Sandbox-Werkraum-Versteck.',
+        'faehigkeiten_liste': [
+            'Code/Dateien im echten Repo ändern: JA (normaler Aider-Editiermodus)',
+            'Neue Notizen/Recherche-Dokumente schreiben: JA',
+            'Seiten/URLs abrufen (Aider /web): JA',
+            'Shell-Befehle ausführen: NIE (--no-suggest-shell-commands, alle Free-Pool-Modelle)',
+            'Löschen von Dateien/destruktive Git-Ops: NIE (strukturell gesperrt + Nach-Lauf-Prüfung)',
+        ],
+    },
+    {
+        'id': 'groq-gptoss',
+        'anzeige_name': 'openai/gpt-oss-120b (Groq)',
+        'anbieter': 'Groq',
+        'modell_id': 'openai/gpt-oss-120b',
+        'frei': True,
+        'pool_tier': 'groq',
+        'kontextfenster': '131.072 Token',
+        'werkzeuge': True,
+        'stufe': 'klein',
+        'kategorie': 'freepool',
+        'berechtigung_stufe': 'eingeschraenkt',
+        'kurzbeschreibung': 'Das Modell Groq-GPT-OSS-120B verfügt über 120 Mrd. Parameter insgesamt, davon 5,1 Mrd. aktiv (MoE) und ein Kontextfenster von 131.072 Token.',
+        'systemprompt': 'Stelle ausschließlich eine einzelne Frage ohne Nutzung von Werkzeugen.',
+        'umschalt_hinweis': 'Aktivieren startet ein sichtbares Terminal-Fenster mit Aider gegen dieses Modell -- kein Hintergrundprozess, kein Sandbox-Werkraum-Versteck.',
+        'faehigkeiten_liste': [
+            'Code/Dateien ändern: NEIN (Aider läuft strukturell im ask-only-Modus, kann keine Edits anwenden)',
+            'Neue Notizen/Recherche-Dokumente schreiben: JA (Harness schreibt die Antwort selbst in einen festen Notizordner)',
+            'Seiten/URLs abrufen (Aider /web): JA',
+            'Shell-Befehle ausführen: NIE (--no-suggest-shell-commands, alle Free-Pool-Modelle)',
+            'Löschen von Dateien/destruktive Git-Ops: NIE (strukturell gesperrt + Nach-Lauf-Prüfung)',
+        ],
+    },
+    {
+        'id': 'mistral-small',
+        'anzeige_name': 'Mistral Small 4 (mistral-small-latest)',
+        'anbieter': 'Mistral AI',
+        'modell_id': 'mistral-small-latest',
+        'frei': True,
+        'pool_tier': 'mistral',
+        'kontextfenster': '256K Token',
+        'werkzeuge': True,
+        'stufe': 'klein',
+        'kategorie': 'freepool',
+        'berechtigung_stufe': 'eingeschraenkt',
+        'kurzbeschreibung': 'Mistral Small 4 ist ein MoE-Modell mit 119 Mrd. Parametern insgesamt, davon 6 Mrd. aktiv, 256K Token Kontext und unterstützt Werkzeugnutzung sowie multimodale Ausgabe.',
+        'systemprompt': 'Antworte nur auf die gestellte Frage. Verwende keine Tools oder externen Ressourcen.',
+        'umschalt_hinweis': 'Aktivieren startet ein sichtbares Terminal-Fenster mit Aider gegen dieses Modell -- kein Hintergrundprozess, kein Sandbox-Werkraum-Versteck.',
+        'faehigkeiten_liste': [
+            'Code/Dateien ändern: NEIN (Aider läuft strukturell im ask-only-Modus, kann keine Edits anwenden)',
+            'Neue Notizen/Recherche-Dokumente schreiben: JA (Harness schreibt die Antwort selbst in einen festen Notizordner)',
+            'Seiten/URLs abrufen (Aider /web): JA',
+            'Shell-Befehle ausführen: NIE (--no-suggest-shell-commands, alle Free-Pool-Modelle)',
+            'Löschen von Dateien/destruktive Git-Ops: NIE (strukturell gesperrt + Nach-Lauf-Prüfung)',
+        ],
+    },
+]
+
+MODELLE_NACH_ID = {e["id"]: e for e in MODELLE}
+
+
+# ── Token-Einwurf: Anbieter aus einem rohen API-Schluessel erkennen ────────
+# Praefixe, die WIRKLICH im Tresor/keys.env dieser Maschine beobachtet wurden
+# (vault-liste 2026-08-27, siehe Bauprotokoll) + ein paar allgemein dokumen-
+# tierte Praefixe fuer Anbieter, die noch keinen Eintrag haben (Together,
+# Anthropic, OpenAI, HuggingFace) -- letztere NICHT live gegen diese Maschine
+# verifiziert, deshalb "sicher": False fuer die, die nicht selbst beobachtet
+# wurden. Mistral-Schluessel haben KEIN erkennbares Praefix (32 Zeichen,
+# reines alnum) -- dafuer gibt es keine zuverlaessige Praefixerkennung, nur
+# eine Laengen-Heuristik mit sicher=False.
+PRAEFIX_ERKENNUNG = [
+    # (praefix, anbieter_label, vault_url, konto_vorschlag, sicher)
+    ("nvapi-",     "NVIDIA NIM",        "https://build.nvidia.com",   "NVIDIA_NIM_API_KEY", True),
+    ("gsk_",       "Groq",              "https://console.groq.com",   "GROQ_API_KEY",        True),
+    ("sk-or-v1-",  "OpenRouter",        "https://openrouter.ai",      "OPENROUTER_API_KEY",  True),
+    ("tvly-",      "Tavily (Suche, kein LLM)", "https://tavily.com",  "TAVILY_API_KEY",       True),
+    ("hf_",        "Hugging Face",      "https://huggingface.co",     "HF_TOKEN",             True),
+    ("tgp_v1_",    "Together AI",       "https://api.together.xyz",   "TOGETHER_API_KEY",     False),
+    ("sk-ant-",    "Anthropic",         "https://console.anthropic.com", "ANTHROPIC_API_KEY", False),
+    ("sk-proj-",   "OpenAI",            "https://platform.openai.com", "OPENAI_API_KEY",      False),
+]
+
+
+def provider_erkennen(secret: str) -> dict:
+    """Ordnet einen rohen API-Schluessel per Praefix einem Anbieter zu.
+    Rueckgabe: {"anbieter", "url", "konto_vorschlag", "sicher"}. Wenn kein
+    Praefix passt: Laengen-Heuristik fuer Mistral (32 Zeichen reines alnum,
+    das einzige bekannte praefixlose Format in diesem Pool), sonst
+    "anbieter": None -- der Aufrufer (Dashboard) muss dann den Anbieter per
+    Dropdown von Hand waehlen, es wird NICHT geraten und als sicher
+    ausgegeben."""
+    s = (secret or "").strip()
+    for praefix, anbieter, url, konto, sicher in PRAEFIX_ERKENNUNG:
+        if s.startswith(praefix):
+            return {"anbieter": anbieter, "url": url, "konto_vorschlag": konto, "sicher": sicher}
+    if len(s) == 32 and s.isalnum():
+        return {"anbieter": "Mistral AI (Vermutung -- kein Praefix, nur Laengen-Heuristik)",
+                "url": "https://console.mistral.ai", "konto_vorschlag": "MISTRAL_API_KEY",
+                "sicher": False}
+    return {"anbieter": None, "url": None, "konto_vorschlag": None, "sicher": False}
+
+
+# ── Harness-Verfuegbarkeit je Free-Pool-Modell (Spiegel von harness_aider.py ──
+# MODELL_MAP -- bewusst dupliziert statt importiert, damit dieses Katalog-
+# Modul ohne Abhaengigkeit von harness_aider.py als reine Datenquelle
+# funktioniert. Bei Aenderung an einer Seite: die andere nachziehen (beide
+# Dateien tragen diesen Hinweis).
+HARNESS_AIDER_MODELLE = {"nvidia-nemotron", "groq-gptoss", "mistral-small", "openrouter-deepseek"}

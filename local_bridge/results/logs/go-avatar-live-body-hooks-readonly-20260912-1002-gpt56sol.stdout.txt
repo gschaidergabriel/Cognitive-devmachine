@@ -1,0 +1,287 @@
+=== LIVE BODY HOOKS READONLY ===
+2026-09-12T10:03:00+07:00
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+--- BODY STATE SYMBOLS ---
+54:  @keyframes kamera-overshoot{0%{transform:scale(1) rotate(0deg)}40%{transform:scale(1.006) rotate(.12deg)}100%{transform:scale(1) rotate(0deg)}}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+96:     4px auf der vollen 1536er-Leinwand gemessen; #hg-frame ist im
+99:     Mass uebernommen. fps VORHER (baseline, echte Selbstmeldung ueber
+102:  #hg-frame{position:absolute;inset:0;width:100%;height:100%;z-index:0;
+115:     Hauptebene -- #hg-frame (Hintergrund) scheint jetzt durch echte Transparenz
+138:     Filter-Agent geprueft: 101,3% fps-Ratio = praktisch gratis). filter:drop-shadow
+147:  /* ⭐ 2026-09-11 (Animations-Agent) #koerper-dreh/#kopf-dreh: duenne Wrapper
+161:     weil Kopf und Koerper um verschiedene Punkte "dachten". #koerper-dreh
+166:  #koerper-dreh{transform-origin:50% 100%}
+167:  #koerper-dreh,#kopf-dreh{position:absolute;inset:0;pointer-events:none}
+228:  @keyframes pose-overshoot{0%{transform:scale(1)}40%{transform:scale(1.016)}100%{transform:scale(1)}}
+333:  @keyframes einblenden{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+382:      <img id="hg-frame" alt="">
+386:             #gesicht als Hauptdarstellung -- #hg-frame scheint jetzt durch. -->
+396:          <div id="koerper-dreh"><img id="koerper-schicht" src="/koerper_rgba/koerper_zero.png" alt=""><img id="koerper-schicht2" src="/koerper_rgba/koerper_zero.png" alt=""></div>
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+517:// nicht alle 221 Dateien in mund_keyframes/.
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+689:  $("hg-frame").src = `/hintergrund/${hgStimmung}/${hgStimmung}_${nr}.png`;
+709:// Zwischenschritt ohne neue Bilder: #kopf-dreh/#koerper-dreh (siehe HTML+CSS
+866:  $("koerper-dreh").style.transform = `rotate(${bDrehRot.toFixed(2)}deg) translateY(${bDrehTy.toFixed(1)}px)`;
+874:  // sichtbaren Foto-Schritt. Nur der gemeinsame #kopf-dreh/#koerper-dreh-Wrapper
+967:      requestAnimationFrame(() => rahmen.classList.add("pose-wechsel"));
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+1215:  const [frame, dauer, phase] = schritte[idx];
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1553:// Performance-Ventil (Gabriel woertlich: "Bleibt sie unter 24 fps, reduziere
+1560:  if(tropfenVorne.length > deckel) return; // Deckel gegen fps-Einbruch
+1617:// ⭐⭐⭐ 2026-09-11 PERF-FIX (Koordinator-Auftrag, fps 35-45 statt >45, unter
+1640:// opacity 0->1 sichtbar macht (koerperCrossfade(), kopfRollTick(), die
+1682:  // koerperCrossfade()) bekommt den Schreibzugriff, gleiche Begruendung wie
+1711:const ATMEN_BILDER = Array.from({length:12}, (_,i) =>
+1713:ATMEN_BILDER.forEach(src => { const vorlade = new Image(); vorlade.src = src; });
+1718:function koerperCrossfade(src){
+1741:const KOERPER_AKTIONEN = [
+1762:  const pool = KOERPER_AKTIONEN.filter(a => a.name !== _letzteKoerperAktion);
+1782:    koerperCrossfade(a.bilder[a.idx]);
+1793:  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+1794:  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+1834:  driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+1848:  // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+1851:  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+1862:  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+1867:function fpsMessen(t){
+1886:  fpsMessen(t);
+1887:  requestAnimationFrame(schleife);
+1889:requestAnimationFrame(schleife);
+1891:  const fps = window.__buehneFps || 60;
+1892:  if(fps < 24 && !regenGedrosselt){
+1894:    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+1895:  }else if(fps >= 28 && regenGedrosselt){
+1901:// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+1903:  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+1904:    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+1906:// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+1907:// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+1981:// startete Chrome ohne --remote-debugging-port, es gab also KEINEN Weg,
+--- SCRIPT TAIL ---
+    }
+    return;
+  }
+  if(jetzt - atmenLetzterWechsel < ATMEN_MS_PRO_BILD) return;
+  atmenLetzterWechsel = jetzt;
+  atmenIndex = (atmenIndex + 1) % ATMEN_BILDER.length;
+  koerperCrossfade(ATMEN_BILDER[atmenIndex]);
+}
+
+// ⭐ 2026-09-11 (Gabriel woertlich: "als wuerde er sich selbst echt mit dem
+// Handy filmen, am besten sogar ganz leicht Cam-Shake, aber realistisch
+// passend zur Bewegung. Volle Immersion..."). EIN gemeinsamer Transform auf
+// #kamera fuer die GESAMTE Szene (Hintergrund+Koerper+Kopf+Mund+Augen) --
+// nie pro Ebene einzeln, sonst zerfaellt die Illusion sofort ("kein
+// echtes Handy waere so exakt synchron mit sich selbst"). Drei
+// ueberlagerte, bewusst NICHT-zufaellige Komponenten (Gabriels Vorgabe:
+// gleichfoermiges Zufallsrauschen sieht nicht wie eine echte Hand aus):
+//  1) langsame Drift (Atmung/Ermuedung der haltenden Hand, ~4-5s Periode,
+//     wenige px) -- Fortsetzung der bisherigen "nie ganz still"-Drift,
+//     jetzt auf die ganze Kamera statt nur auf #gesicht verschoben.
+//  2) schnelles Mikro-Zittern (~8-12Hz, <1px) -- der Muskelzittern-Anteil
+//     einer echten Hand, zwei knapp benachbarte Sinusfrequenzen statt einer
+//     einzelnen, damit es nicht mechanisch/taktfest wirkt.
+//  3) minimale Rotation (Bruchteile eines Grads) -- eine Hand kippt nie rein
+//     linear.
+// Hintergrund bewegt sich absichtlich einen Hauch WENIGER als der Rest
+// (0.85x) -- winziger Parallaxe-Tiefenhinweis, siehe Koordinator ("optional:
+// Hintergrund bewegt sich minimal weniger als der Vordergrund").
+// ⭐⭐ 2026-09-11 RETUNE nach Gabriels Live-Urteil ("er zittert, schaut
+// relativ shit aus"): die 8-10Hz-Mikrozitter-Komponente unten war zu schnell
+// UND zu stark -- auf einem kleinen Panel (~296px breit), mit dem neuen
+// engeren Kopf-Crop, UND auf einem Chrome-Fenster ohne GPU-Kompositing
+// (--disable-gpu, siehe Fensterstart) liest sich eine 8-10Hz-Oszillation
+// nicht als sanftes Handzittern, sondern als sichtbares Vibrieren/Ruckeln --
+// das Auge ist fuer zeitliches Flackern empfindlicher als fuer die reine
+// Pixelamplitude. Fix: Frequenz UND Amplitude aller drei Komponenten deutlich
+// gesenkt (Tremor von ~10/8Hz auf ~3/2.3Hz, Drift/Rotation-Amplitude
+// grob halbiert). Ziel ist jetzt spuerbar ruhiger -- lieber zu wenig als
+// wieder "zittert".
+let driftPhaseX = Math.random() * Math.PI * 2;
+let driftPhaseY = Math.random() * Math.PI * 2;
+let tremorPhaseA = Math.random() * Math.PI * 2;
+let tremorPhaseB = Math.random() * Math.PI * 2;
+let rotPhase = Math.random() * Math.PI * 2;
+function kameraWackeln(){
+  const t = Math.max(0.4, Math.min(1.6, tempo)); // "passend zur Bewegung": etwas mehr Schub bei hoeherem Tempo
+  driftPhaseX += 0.0131; // ~8.0s Periode bei 60fps (war ~4.0s)
+  driftPhaseY += 0.0105; // ~9.6s Periode -- absichtlich versetzt zu X (war ~4.9s)
+  tremorPhaseA += 0.314;  // ~3Hz (war ~10Hz)
+  tremorPhaseB += 0.251;  // ~2.4Hz, knapp daneben statt exakt gleich (war ~8Hz)
+  rotPhase += 0.0063;     // ~16s Periode, noch langsamer als die Drift (war ~8.3s)
+  const driftX = Math.sin(driftPhaseX) * 0.7 * t;
+  const driftY = Math.cos(driftPhaseY) * 0.55 * t;
+  const tremorX = (Math.sin(tremorPhaseA) * 0.14 + Math.sin(tremorPhaseB) * 0.09) * t;
+  const tremorY = (Math.cos(tremorPhaseA * 0.97) * 0.12 + Math.cos(tremorPhaseB * 1.05) * 0.07) * t;
+  const rotDeg = Math.sin(rotPhase) * 0.06 * t;
+  const x = driftX + tremorX, y = driftY + tremorY;
+  $("kamera").style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) rotate(${rotDeg.toFixed(3)}deg)`;
+  // Hintergrund bekommt denselben Wackel, aber 0.85x gedaempft -- winzige
+  // Parallaxe, das Bild wirkt nicht wie eine starre Fotomontage auf dem
+  // Hintergrund geklebt. #hg-frame ist Kind von #kamera -- dieser Transform
+  // addiert sich zu dem der Kamera, deshalb hier bewusst der GEGEN-Anteil
+  // (0.85-1 = -0.15x) statt des vollen Werts.
+  $("hg-frame").style.transform = `translate(${(x*-0.15).toFixed(2)}px, ${(y*-0.15).toFixed(2)}px)`;
+}
+// ⭐ Nachschwung bei echten Zustandswechseln (Kopfdrehung/Ausdruck/Blick) --
+// dieselbe Overshoot-Mechanik wie #gesicht-rahmen.pose-wechsel, jetzt auf
+// #kamera: die Kamera "haengt" kurz nach und faengt sich dann leicht ueber,
+// wie eine echte Hand, die einer Bewegung folgt (Gabriel: "passend zur
+// Bewegung"). Siehe gesichtNeuZeichnen() weiter oben, ruft dies bei
+// echten Zustandswechseln auf.
+function kameraNachschwung(){
+  const kamera = $("kamera");
+  kamera.classList.remove("kamera-wechsel");
+  requestAnimationFrame(() => kamera.classList.add("kamera-wechsel"));
+  setTimeout(() => kamera.classList.remove("kamera-wechsel"), 420);
+}
+
+let letzteFrames = [];
+function fpsMessen(t){
+  letzteFrames.push(t);
+  const grenze = t - 1000;
+  letzteFrames = letzteFrames.filter(x => x > grenze);
+  window.__buehneFps = letzteFrames.length;
+}
+
+function schleife(t){
+  atmen();
+  koerperSchritt(t);
+  kopfRollTick(t);
+  mundSchritt(t);
+  kopfKoerperDrehSchritt();
+  kameraWackeln();
+  gazeSchritt();
+  const regenFaktor = regenGedrosselt ? 0.5 : 1;
+  if(Math.random() < 0.35 * tempo * regenFaktor) tropfenErzeugenVorne();
+  if(Math.random() < 0.22 * tempo * regenFaktor) tropfenErzeugenHinten();
+  regenZeichnen();
+  fpsMessen(t);
+  requestAnimationFrame(schleife);
+}
+requestAnimationFrame(schleife);
+setInterval(() => {
+  const fps = window.__buehneFps || 60;
+  if(fps < 24 && !regenGedrosselt){
+    regenGedrosselt = true;
+    console.warn("[buehne] fps<24 -- Regenebenen gedrosselt, Blinzeln/Atem-Drift bleiben unangetastet");
+  }else if(fps >= 28 && regenGedrosselt){
+    regenGedrosselt = false;
+  }
+}, 4000);
+
+// Selbstmeldung der gemessenen Bildrate an den eigenen Server, alle 5s --
+// fuer den Belegpflicht-Test (echte Messung, keine Annahme "60fps").
+setInterval(() => {
+  fetch("/api/fps", {method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({fps: window.__buehneFps || 0})}).catch(()=>{});
+}, 5000);
+// gedrosselt auf ~20fps fuer Datenregen-Erzeugung reicht optisch, Zeichnen
+// selbst laeuft mit requestAnimationFrame (typisch Bildwiederholrate des
+// Monitors) -- absichtlich 2D-Canvas statt WebGL, s. Bericht (GPU-Druck).
+
+// ── Zustand/Buehnen-Treiber alle 3s holen (kein WebSocket noetig) ───
+async function statusHolen(){
+  try{
+    const r = await fetch("/api/status");
+    const d = await r.json();
+    const b = d.buehne || {};
+    if(typeof b.broadcast_value === "number"){
+      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+    }
+    const farb = $("farbschicht");
+    if(typeof b.ueberraschung === "number"){
+      const intensitaet = Math.max(0, Math.min(1, b.ueberraschung));
+      farb.style.background = `radial-gradient(ellipse at 50% 40%, rgba(136,51,255,${0.25*intensitaet}) 0%, rgba(34,221,238,${0.18*intensitaet}) 100%)`;
+      farb.style.opacity = intensitaet > 0.05 ? "1" : "0";
+    }
+    const wasser = $("wasserlinie");
+    let hoehe = null;
+    if(typeof b.swap_voll_anteil === "number") hoehe = b.swap_voll_anteil;
+    else if(typeof b.ram_frei_anteil === "number") hoehe = 1 - b.ram_frei_anteil;
+    if(hoehe !== null){
+      wasser.style.height = Math.max(0, Math.min(100, hoehe*100)) + "%";
+    }
+    // Auftragsteil F: Koerperkrise + Ueberraschungs-Achse, siehe Definition
+    // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+    koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+    ueberraschungAchsePruefen(b.ueberraschung);
+    if(typeof d.zuschauer === "number"){
+      $("zuschauer-label").textContent = d.zuschauer + (d.zuschauer===1?" Zuschauer":" Zuschauer");
+    }
+    // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+    // buehne_daemon.py bzw. blick.py). Latenz + Reihenfolge in
+    // reaktionAufNeuenStatus() oben.
+    reaktionAufNeuenStatus(
+      b.blick || {anwesend:false, richtung:null, nah:false},
+      typeof b.ausdruck === "string" ? b.ausdruck : null
+    );
+  }catch(e){}
+}
+
+setInterval(chatHolen, 1500);
+setInterval(statusHolen, 3000);
+chatHolen(); statusHolen();
+
+// ⭐ 2026-09-11 (Animations-Agent) PRUEF-HAKEN fuer die echte-Verifikation am
+// laufenden Fenster (xdotool), weil Chrome ohne Debug-Port laeuft und es
+// keinen anderen Weg gibt, eine Sonderausdruck-Sequenz deterministisch zu
+// triggern. Keine UX-Funktion: nur Tasten, die niemand drueckt. 'b' loest
+// EINEN einzelnen Blink aus (zeitplanNeu=false -- dieselbe Einmal-Kette wie
+// der Doppelschlag, kein Extra-Strang), 'k' eine kleine Kopfneigung mit
+// Rueckweg OHNE die reguläre Planerkette anzufassen, 'x' einen zufaelligen
+// Sonderausdruck aus den drei emote-Pools.
+window.addEventListener("keydown", (e) => {
+  if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+  else if(e.key === "k"){
+    e.preventDefault();
+    if(!kopfRollSchritte && !_sonderLaeuft){
+      kopfPose = "roll"; kopfRollSoll = 15; gesichtNeuZeichnen();
+      kopfRollSequenzZu(15, () => setTimeout(() => {
+        kopfRollSequenzZu(0, () => { kopfPose = null; kopfRollSoll = 0; gesichtNeuZeichnen(); });
+      }, 1400));
+    }
+  }
+  else if(e.key === "x"){
+    e.preventDefault();
+    const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+    const wahl = alle[Math.floor(Math.random()*alle.length)];
+    sonderausdruckZeigen(wahl[0], wahl[1]);
+  }
+});
+
+// ── Permanenter Reload-Weg (Gabriel/Koordinator 2026-09-07: der Daemon
+// startete Chrome ohne --remote-debugging-port, es gab also KEINEN Weg,
+// eine Dateiaenderung ins laufende Fenster zu bekommen ausser manuellem
+// xdotool ctrl+r. Ab jetzt merkt die Seite selbst, wenn buehne.html sich
+// geaendert hat, und laedt sich automatisch neu -- kein Handgriff mehr
+// noetig, kein Debugging-Port noetig, rein clientseitig.
+let _startMtime = null;
+async function _reloadWaechter(){
+  try{
+    const r = await fetch("/api/mtime", {cache:"no-store"});
+    const d = await r.json();
+    if(_startMtime === null){ _startMtime = d.mtime; return; }
+    if(d.mtime && d.mtime !== _startMtime){ location.reload(); }
+  }catch(e){}
+}
+setInterval(_reloadWaechter, 2000);
+_reloadWaechter();
+</script>
+  <!-- ⭐ 2026-09-11 (Koordinator): globaler Filmlook -- gemeinsames Korn,
+       gemeinsame Farbabstimmung, Vignette. Liegt BEWUSST in einer eigenen
+       Datei und nicht hier: diese Seite wird gerade von einem anderen
+       Agenten umgebaut, zwei Agenten in einer Datei kollidieren. Der
+       Zweck des Looks ist, die getrennt erzeugten Ebenen (Kopf, Koerper,
+       Mund, Augen, Hintergrund) wie EINE Aufnahme wirken zu lassen.
+       Abschalten: Datei filmlook.js leeren -- die Seite laeuft ohne. -->
+  <script src="/filmlook.js"></script>
+</body>
+</html>
+=== END BODY HOOKS ===

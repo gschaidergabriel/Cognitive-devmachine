@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-relay-e2e-status-only-gabriel-20260912T143500Z",
+  "command_sha256": "7228baa2ed2253cab0cb9b05e58b8a57cf1b11d91359b2103e3a6c849340da63",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-12T13:36:50.929577+00:00",
+  "finished_at": "2026-09-12T13:36:51.084849+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "223990edd6d2d5e1121c201953b4d3e422e4000c97a28e84b0ff0f09ce693169",
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n  File \"/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py\", line 188, in poll_pending\n    queue_vps(cid, script, 30)\n  File \"/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py\", line 167, in queue_vps\n    put_new(\n  File \"/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py\", line 135, in put_new\n    status, body = _request(\n                   ^^^^^^^^^\n  File \"/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py\", line 96, in _request\n    raise RuntimeError(\"GITHUB_TOKEN_MISSING\")\nRuntimeError: GITHUB_TOKEN_MISSING\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<stdin>", line 4, in <module>
+  File "/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py", line 188, in poll_pending
+    queue_vps(cid, script, 30)
+  File "/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py", line 167, in queue_vps
+    put_new(
+  File "/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py", line 135, in put_new
+    status, body = _request(
+                   ^^^^^^^^^
+  File "/home/ai-core-node/.local/state/omega-grid-relay/omega_grid_relay_main.py", line 96, in _request
+    raise RuntimeError("GITHUB_TOKEN_MISSING")
+RuntimeError: GITHUB_TOKEN_MISSING

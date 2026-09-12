@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "go-source-v2-read-andreas-sync-status-20260912",
+  "machine_id": "andreas-maco",
+  "owner": "andreas",
+  "op": "exec",
+  "cwd": "/home/andreas",
+  "timeout_seconds": 120,
+  "command": "set -u; echo MACHINE=$(hostname); echo USER=$(whoami); P=$HOME/.claude/star/stern.py; echo STERN=$P; if [ ! -f \"$P\" ]; then echo STERN_MISSING; exit 3; fi; python3 \"$P\" github-sync-status; echo RC=$?"
+}

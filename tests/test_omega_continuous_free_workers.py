@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
@@ -73,6 +75,28 @@ class FreeAdmissionAuthorityTests(unittest.TestCase):
             self.assertIn("PROGRAM_ALIAS_CONFLICT", str(ctx.exception))
         finally:
             td.cleanup()
+
+
+class ContinuousEconomicGateTests(unittest.TestCase):
+    def test_checked_policy_is_fresh_and_fail_closed(self):
+        policy = continuous.load_current_economic_policy()
+        self.assertLessEqual(policy["age_days"], continuous.MAX_POLICY_AGE_DAYS)
+        self.assertEqual(policy["schema"], "OMEGA_FREE_PROVIDER_CURRENT_POLICY/v1")
+        self.assertTrue(policy["sha256"])
+
+    def test_mistral_requires_explicit_payg_disabled_attestation(self):
+        mistral = next(x for x in continuous.base.PROVIDERS if x.name == "mistral")
+        with mock.patch.object(continuous, "_ORIGINAL_PROVIDER_EXECUTION_ADMITTED", return_value=True):
+            with mock.patch.dict(os.environ, {}, clear=True):
+                self.assertFalse(continuous.omega_provider_execution_admitted(mistral))
+            with mock.patch.dict(os.environ, {"CLAY_MISTRAL_PAYG_DISABLED_ATTESTED": "true"}, clear=True):
+                self.assertTrue(continuous.omega_provider_execution_admitted(mistral))
+
+    def test_non_mistral_does_not_gain_new_authority(self):
+        groq = next(x for x in continuous.base.PROVIDERS if x.name == "groq")
+        with mock.patch.object(continuous, "_ORIGINAL_PROVIDER_EXECUTION_ADMITTED", return_value=False):
+            with mock.patch.dict(os.environ, {"CLAY_MISTRAL_PAYG_DISABLED_ATTESTED": "true"}, clear=True):
+                self.assertFalse(continuous.omega_provider_execution_admitted(groq))
 
 
 class ContinuousCandidateTests(unittest.TestCase):

@@ -1,0 +1,10 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"go-avatar-review-exact-blinzeln-function-20260912-0752",
+  "machine_id":"ai-core-node",
+  "owner":"gabriel",
+  "op":"exec",
+  "cwd":"/home/ai-core-node/.claude/star/visual",
+  "timeout_seconds":30,
+  "command":"set -euo pipefail\nEXPECTED=18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e\ntest \"$(sha256sum buehne.html | awk '{print $1}')\" = \"$EXPECTED\"\npython3 - <<'PY'\nfrom pathlib import Path\nt=Path('buehne.html').read_text()\ns=t.index('function blinzeln('); b=t.index('{',s); d=0;e=None\nfor i in range(b,len(t)):\n if t[i]=='{': d+=1\n elif t[i]=='}':\n  d-=1\n  if d==0: e=i+1; break\nprint(t[s:e]); print('FUNCTION_BYTES',len(t[s:e].encode()))\nPY\necho SCOPE=READ_ONLY_EXACT_BLINZELN\n"
+}

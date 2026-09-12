@@ -1,0 +1,78 @@
+=== identity ===
+andreas-MACO
+andreas
+2026-09-12T12:56:16+02:00
+=== host telemetry ===
+16
+ 12:56:16 up 4 days, 13:56,  2 users,  load average: 3,57, 2,51, 1,68
+               gesamt       benutzt     frei      gemns.  Puffer/Cache verfügbar
+Speicher:      21278       16267        2049         473        3809        5010
+Auslager:      24575       17394        7181
+=== bridge services ===
+● frankenstein-architekt.service                                   loaded    failed   failed  FranKenstein v2 Architekt — ein Arbeitszyklus (misst, verbessert, schreibt, pusht)
+  frankenstein-local-bridge.service                                loaded    active   running Lokale GitHub-Bruecke fuer die Forschungsentitaet (andreas-MACO, chatgpt-local-andreas-maco-control/-results)
+=== bridge env ===
+ActiveState=active
+SubState=running
+FragmentPath=/home/andreas/.config/systemd/user/frankenstein-local-bridge.service
+MainPID=1918446
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/andreas/.claude/star/local_bridge_daemon.py ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+Environment=LOCAL_BRIDGE_MACHINE_ID=andreas-maco LOCAL_BRIDGE_OWNER=andreas
+=== relevant procs ===
+10110 /usr/bin/python3 /home/andreas/.claude/glm-fallback/proxy.py
+14421 ptyxis --new-window -- /home/andreas/.local/bin/claude-start
+206522 /var/lib/entityos/voice/tmp_test/llama.cpp/build-vk/bin/llama-server -m /var/lib/entityos/voice/models/llm/Qwen3.5-4B-abliterated.Q4_K_M.gguf -c 8192 --parallel 1 --host 127.0.0.1 --port 8990 -t 16 -ngl 99 -fa on --jinja
+300914 sudo grep -RIl --exclude=*.db --exclude=*.sqlite* --exclude=*.log --exclude-dir=.git -- "world_experience.db" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+300917 grep -RIl --exclude=*.db --exclude=*.sqlite* --exclude=*.log --exclude-dir=.git -- "world_experience.db" /etc/systemd /home/andreas/.config/systemd /var/lib/entityos
+319869 systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/var/lib/entityos/data:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/opt/entityos/cognition:/opt/entityos/cognition --bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000/pipewire-0:/run/user/1000/pipewire-0 --bind=/dev/snd --bind=/dev/dri --bind=/dev/dri/renderD128 --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+319874 /usr/bin/python3 /opt/entityos/dashboard/entityos_dashboard_launcher.py
+1109919 /bin/bash /home/andreas/.local/bin/claude-start
+1109920 claude --model sonnet --dangerously-skip-permissions --channels plugin:telegram@claude-plugins-official
+1351332 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+1918446 /usr/bin/python3 /home/andreas/.claude/star/local_bridge_daemon.py
+1945389 nsenter --target 319871 --mount --pid --uts --ipc --net -- /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+1945393 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_waechter.py
+2409716 bash -lc set +e; echo '=== identity ==='; hostname; id -un; date -Is; echo '=== host telemetry ==='; nproc; uptime; free -m; echo '=== bridge services ==='; systemctl --user --no-pager --type=service --all | grep -E 'frankenstein|chatgpt|bridge|crush' | head -120; echo '=== bridge env ==='; systemctl --user show frankenstein-local-bridge.service -p ActiveState -p SubState -p MainPID -p ExecStart -p Environment -p FragmentPath; echo '=== relevant procs ==='; pgrep -af 'frankenstein|chatgpt|crush|claude|voice|entityos|bridge' | head -160; echo '=== homes/repos ==='; for d in /home/andreas/frankenstein-repo /home/andreas/self-integration /home/andreas/frank-repo /home/andreas/.claude/star; do echo ---$d; [ -e $d ] && ls -ld $d; [ -d $d/.git ] && git -C $d status --short --branch; done; echo '=== star files ==='; ls -l /home/andreas/.claude/star/{local_bridge_daemon.py,harness_crush_knopf.py,harness_crush_knopf.sh,harness_crush.py,f2wp1207_chatgpt_organ.py,f2wp1207_chatgpt_exact_backend.py,f2wp1207_chatgpt_harness_adapter.py,frank_chatgpt_terminal.py} 2>&1; echo '=== gstack/chatgpt state ==='; ls -ld /home/andreas/.gstack /home/andreas/scripts/chatgpt_burst_state 2>&1; echo '=== crush ==='; PATH=/home/andreas/.local/npm-global/bin:$PATH; command -v crush; crush --version 2>&1 | head -5
+2969621 nsenter --target 319871 --mount --pid --uts --ipc --net -- runuser -u frank -- env HOME=/var/lib/entityos/data/syncthing-home /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969626 runuser -u frank -- env HOME=/var/lib/entityos/data/syncthing-home /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969627 /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+2969636 /usr/bin/syncthing serve --no-browser --no-restart --logflags=0 --home=/var/lib/entityos/data/syncthing-home
+3427344 /usr/bin/python3 /home/andreas/.claude/star/claude_cli_shim.py
+3656097 /bin/bash /home/andreas/.local/bin/claude-start
+3656098 claude --model sonnet --dangerously-skip-permissions --channels plugin:telegram@claude-plugins-official
+3795508 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py
+3822237 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+3825578 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+4027427 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+4027470 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py
+4034911 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/grid_autonomie.py 300 dauer
+4096032 /usr/bin/python3 /root/.claude/star/immunsystem.py
+=== homes/repos ===
+---/home/andreas/frankenstein-repo
+drwxrwxr-x 12 andreas andreas 4096 Sep 12 02:09 /home/andreas/frankenstein-repo
+## main...origin/main
+ M scripts/__pycache__/stern.cpython-312.pyc
+ M scripts/f2wp1207_grid10_turn_loop.py
+---/home/andreas/self-integration
+drwxr-xr-x 7 andreas andreas 4096 Sep  9 08:05 /home/andreas/self-integration
+## main...origin/main
+---/home/andreas/frank-repo
+drwxr-xr-x 40 andreas andreas 4096 Aug 14 11:48 /home/andreas/frank-repo
+## main...origin/main
+---/home/andreas/.claude/star
+drwxr-xr-x 4 andreas andreas 4096 Sep 12 07:57 /home/andreas/.claude/star
+=== star files ===
+ls: cannot access '/home/andreas/.claude/star/harness_crush_knopf.py': No such file or directory
+ls: cannot access '/home/andreas/.claude/star/harness_crush.py': No such file or directory
+ls: cannot access '/home/andreas/.claude/star/f2wp1207_chatgpt_exact_backend.py': No such file or directory
+ls: cannot access '/home/andreas/.claude/star/f2wp1207_chatgpt_harness_adapter.py': No such file or directory
+ls: cannot access '/home/andreas/.claude/star/frank_chatgpt_terminal.py': No such file or directory
+-rw-rw-r-- 1 andreas andreas 18758 Sep 12 05:57 /home/andreas/.claude/star/f2wp1207_chatgpt_organ.py
+-rwxrwxr-x 1 andreas andreas   410 Sep 12 02:09 /home/andreas/.claude/star/harness_crush_knopf.sh
+-rw-rw-r-- 1 andreas andreas 10765 Sep 12 01:14 /home/andreas/.claude/star/local_bridge_daemon.py
+=== gstack/chatgpt state ===
+ls: cannot access '/home/andreas/.gstack': No such file or directory
+ls: cannot access '/home/andreas/scripts/chatgpt_burst_state': No such file or directory
+=== crush ===
+/home/andreas/.local/npm-global/bin/crush
+crush version v0.93.1

@@ -1,0 +1,62 @@
+---CURRENT_RELEASE---
+{
+  "omega_head": "a676258885b964efc2a80599957dc1c09dc3d43b",
+  "release_dir": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1",
+  "activated_at": "2026-09-12T13:43:13.157138+00:00",
+  "source": "777_convergence",
+  "previous_release": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "transport_boundary": "OUTER_SPOOL",
+  "relay_mode": "BOUNDED_NONBLOCKING"
+}
+---COMPOSED_RELEASE---
+{
+  "base_head": "e8336eeac4f43f3808b44b5bb5859e010f8a7b26",
+  "changed_blobs": {
+    "omega/nonblocking_relay.py": "380647a7af717f9d5583bfe19c2c3d257528755b",
+    "omega/spool_bridge_relay_parallel.py": "eac4387dfe618b9cd415d081e78b5726b62938ea",
+    "omega/supervisor_outer.py": "827ce809a846a216adc1d92652e26445ee6b18e4",
+    "omega/unified_store.py": "91990697359034537da8bc0b588443a304a6c08c",
+    "tests/test_nonblocking_relay.py": "ce20e8f768d50a3aadc260e321c38643588a20db",
+    "tests/test_unified_store.py": "82c4c9570e5cc90f7207ac035d742b40a10d2247"
+  },
+  "schema": "OMEGA_COMPOSED_RELEASE/v1",
+  "target_head": "a676258885b964efc2a80599957dc1c09dc3d43b"
+}
+---ACTIVATION_RECEIPT---
+{
+  "previous_release": "/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69",
+  "target_release": "/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1",
+  "target_head": "a676258885b964efc2a80599957dc1c09dc3d43b",
+  "at": "2026-09-12T13:43:13.157138+00:00"
+}
+---CARRIER GIT---
+## omega-vps-deploy...origin/omega-vps-deploy
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (fetch)
+origin	git@github.com:gschaidergabriel/clay-global-research-entity.git (push)
+ae11678ab (HEAD -> omega-vps-deploy, origin/omega-vps-deploy) omega deploy: stage exact a676 unified store tests
+ec0f2c084 omega deploy: stage exact a676 relay tests
+292ce6f8d omega deploy: carry exact a676 atomic unified store
+f2f0c76a5 omega deploy: bind a676 nonblocking relay exact blob
+d26f35060 omega deploy: carry exact a676 outer supervisor
+f983bed3f omega deploy: stage a676 bounded relay delta
+a8db9564e omega deploy: carry a676 bounded spool relay entrypoint
+635dffbf2 omega deploy: freeze a676 relay concurrency delta
+---ACTIVATION PRIMITIVES---
+/workspace/omega_runtime/carrier_repo/omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/9662238027581bfd390cd0ca3fd46480f28e1ba4-flat-v2/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/49d9bb023933ee6383433e5206d4148b8082dcae/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1/OMEGA_COMPOSED_RELEASE.json:11:  "schema": "OMEGA_COMPOSED_RELEASE/v1",
+/workspace/omega_runtime/releases/a676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/e8336eeac4f43f3808b44b5bb5859e010f8a7b26/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/releases/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/current/OMEGA_COMPOSED_RELEASE.json:11:  "schema": "OMEGA_COMPOSED_RELEASE/v1",
+/workspace/omega_runtime/current/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/f60746ffc5d1170e146609036d667bb26ac1d56f/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/9662238027581bfd390cd0ca3fd46480f28e1ba4-flat-v2/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/c4714d5782a37a17d589c9b2337e59dc4fbcb23a/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"
+/workspace/omega_runtime/carrier_repo/omega_deploy/572a07d2d6b69b1faeb747faab9b2b3f221b2e69/omega/master_bridge_carrier.py:76:        meta=self.runtime_root.parent/"CURRENT_RELEASE.json"

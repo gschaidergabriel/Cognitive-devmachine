@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-pr2179-vps-inventory-20260912-1329",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/state",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nimport json,pathlib\nroot=pathlib.Path('/workspace/omega_runtime')\nout=[]\nfor p in sorted(root.rglob('*')):\n    try:\n        rel=str(p.relative_to(root))\n    except Exception:\n        continue\n    if len(p.parts)-len(root.parts)>3:\n        continue\n    if p.is_file() and (p.suffix in {'.py','.json','.md'} or 'relay' in p.name.lower() or 'alignment' in p.name.lower()):\n        out.append({'path':rel,'bytes':p.stat().st_size})\n    if len(out)>=120:\n        break\nprint(json.dumps({'files':out},separators=(',',':')))\nPY"
+}

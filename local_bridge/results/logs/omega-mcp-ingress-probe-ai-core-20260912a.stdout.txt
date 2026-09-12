@@ -1,0 +1,52 @@
+HOST=ai-core-node-projekt-frankenstein
+
+BINARIES
+cloudflared=/usr/local/bin/cloudflared
+tailscale=/usr/bin/tailscale
+
+LISTENERS
+State  Recv-Q Send-Q               Local Address:Port  Peer Address:PortProcess
+LISTEN 0      4096                     127.0.0.1:631        0.0.0.0:*          
+LISTEN 0      4096                  100.70.87.28:49084      0.0.0.0:*          
+LISTEN 0      4096                    127.0.0.54:53         0.0.0.0:*          
+LISTEN 0      32                       127.0.0.1:5998       0.0.0.0:*          
+LISTEN 0      2048                     127.0.0.1:8000       0.0.0.0:*          
+LISTEN 0      512                      127.0.0.1:8105       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8100       0.0.0.0:*          
+LISTEN 0      100                      127.0.0.1:8114       0.0.0.0:*          
+LISTEN 0      2048                     127.0.0.1:8091       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8088       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8317       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8420       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8765       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8781       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8784       0.0.0.0:*          
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*          
+LISTEN 0      512                      127.0.0.1:8990       0.0.0.0:*          
+LISTEN 0      4096                     127.0.0.1:9050       0.0.0.0:*          
+LISTEN 0      4096                 127.0.0.53%lo:53         0.0.0.0:*          
+LISTEN 0      4096                  100.70.87.28:443        0.0.0.0:*          
+LISTEN 0      4096                       0.0.0.0:22         0.0.0.0:*          
+LISTEN 0      4096                         [::1]:631           [::]:*          
+LISTEN 0      32                           [::1]:5998          [::]:*          
+LISTEN 0      4096                             *:8782             *:*          
+LISTEN 0      4096   [fd7a:115c:a1e0::5e01:5791]:443           [::]:*          
+LISTEN 0      4096                          [::]:22            [::]:*          
+LISTEN 0      4096   [fd7a:115c:a1e0::5e01:5791]:56164         [::]:*          
+
+UNITS
+  clay-local-bridge.service                                        loaded active running Clay ChatGPT local development bridge
+  frankenstein-buehne.service                                      loaded active running FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+  frankenstein-chatgpt-client.service                              loaded active running FranKenstein Persistent Headless ChatGPT Client
+  frankenstein-cortex-dashboard.service                            loaded active running FranKenstein /cortex Dashboard (paket-1788623631586-d5b2f3, fixer Port 8781, persistent)
+  frankenstein-cortex.service                                      loaded active running FranKenstein Cortex -- die Bildschirme, verschmolzen zu einem Zustand
+  frankenstein-denker.service                                      loaded active running FranKenstein Denker — er denkt, auch wenn niemand da ist
+  frankenstein-erinnerungsdienst.service                           loaded active running FranKenstein Erinnerungsdienst (semantisches Retrieval, resident)
+  frankenstein-gespraech.service                                   loaded active running FranKenstein Gespraechsmodus -- Mikrofon, ASR, Antwort, Stimme
+  frankenstein-gespraechsmodus.service                             loaded active running FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+  frankenstein-immunsystem.service                                 loaded active running FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+  frankenstein-koerperpflege.service                               loaded active running FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+  frankenstein-local-bridge-webui.service                          loaded active running Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                loaded active running Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  frankenstein-puls.service                                        loaded active running FranKenstein Puls -- fortlaufende Kognition im Grid, auch ohne Gespraech
+  frankenstein-welt.service                                        loaded active running FranKenstein Welt -- Linse aus Stufe 1 laeuft im Takt mit, ohne anzubinden

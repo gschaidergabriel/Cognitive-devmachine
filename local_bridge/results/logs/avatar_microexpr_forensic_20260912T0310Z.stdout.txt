@@ -1,0 +1,396 @@
+=== HASH ===
+18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e  buehne.html
+=== KEY SYMBOLS ===
+79:    box-shadow:0 0 8px var(--rot);animation:blink 1.6s infinite}
+80:  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+121:     #mund-effekt ist kein Lippen-Ausschnitt, sondern ein deckender
+139:     folgt dem Alpha-Kanal der Kinder (koerper/kopf/mund), nicht der Bounding-Box --
+219:     blendete sonderausdruckZeigen() dieses alte, an anderer Bildstelle
+263:     #kopf-canvas oben). Jetzt exakt aus mund_00_rest.png's Manifest-Anker
+276:  #mund-effekt{position:absolute;left:40.49%;top:34.38%;width:19.21%;height:17.77%;
+285:     Gesicht meldet (serverBlick.anwesend && .nah) -- sonst opacity 0, siehe
+308:     Zwischenbildern (/augen_blink/blink_000..011.png, 319x152 RGBA -- exakt
+315:  #augen-blink{position:absolute;left:31%;top:12%;width:27%;height:auto;
+413:                 #pupillen-glow/#augen-blink lagen bisher AUSSERHALB #kopf-dreh,
+424:            <img id="augen-blink" src="/augen_blink/blink_000.png" alt="">
+425:            <img id="mund-effekt" src="/mund_keyframes/mund_00_rest.png" alt="">
+465:// als Dauerbetrieb, chatHolen() feuert alle 1,5 s. Ohne Deckel bleibt JEDE
+496:// mund_keyframes/ statt einen Gradient zu skalieren. Kleines "sprechendes"
+498:const MUND_SPRECH_SET = ["mund_03_a_small","mund_04_a_medium","mund_06_e",
+499:  "mund_07_i","mund_08_o_small","mund_09_o_medium","mund_11_u","mund_01_closed_mbp"];
+500:const MUND_RUHE = "mund_00_rest";
+502:// mund_keyframes/ hat jetzt zu jeder Grundstellung 5 echte Zwischenbilder
+503:// (mund_NN_name__stufe_00..04.png -- fotografierte Bewegung ZUR Stellung hin,
+504:// nicht irgendein generischer Gradient). Bisher sprang mundAnimation() hart
+510:// Silbenschaetzung"). Abgespielt wird ueber mundSchritt() unten, angestossen
+517:// nicht alle 221 Dateien in mund_keyframes/.
+518:function mundFrames(name){
+519:  return [0,1,2,3,4].map(s => `/mund_keyframes/${name}__stufe_0${s}.png`)
+520:    .concat([`/mund_keyframes/${name}.png`]);
+524:  for(const src of mundFrames(n)){ const vorlade = new Image(); vorlade.src = src; }
+526:let mundAktivFrames = null;
+527:let mundAktivIndex = 0;
+528:let mundLetzterFrameT = 0;
+530:function mundZielSetzen(name){
+531:  mundAktivFrames = mundFrames(name);
+532:  mundAktivIndex = 0;
+533:  mundLetzterFrameT = 0; // sofort beim naechsten schleife()-Tick starten
+535:function mundSchritt(jetzt){
+536:  if(!mundAktivFrames) return;
+537:  if(jetzt - mundLetzterFrameT < MUND_FRAME_MS) return;
+538:  mundLetzterFrameT = jetzt;
+539:  $("mund-effekt").src = mundAktivFrames[mundAktivIndex];
+540:  mundAktivIndex++;
+541:  if(mundAktivIndex >= mundAktivFrames.length) mundAktivFrames = null;
+543:function mundAnimation(text){
+551:    mundZielSetzen(MUND_SPRECH_SET[i]);
+553:  setTimeout(() => { clearInterval(iv); mundZielSetzen(MUND_RUHE); }, dauerMs);
+559:// sofort eine eigene mundAnimation: ~105 gleichzeitige setInterval, der Mund
+562:// den Mund -- er spricht nicht nach, was laengst gesagt wurde.
+564:async function chatHolen(){
+572:          mundAnimation(z.text);
+622://   1. BLINZELN            -- unten, blinzeln()
+642:// sonderausdruckZeigen()/kopfKurzNeigen()); 10 volle Frames weniger im
+646:// dem Augenflicken-Blinklayer #augen-blink abgespielt (siehe blinzeln()).
+648:  `/augen_blink/blink_${String(i).padStart(3,"0")}.png`);
+700:let blinzelPhase = null; // null | "halb1" | "zu" | "halb2"
+782:// ⭐⭐ 2026-09-11 NACHTRAG 4: der Augen-Flicken (#pupillen-glow/#augen-blink)
+867:  // Rest-Ausgleich fuer #pupillen-glow/#augen-blink -- siehe Kommentar oben
+883:  $("augen-blink").style.transform =
+900:// und #mund-effekt. Was bleibt: die Funktion erkennt echte Zustandswechsel
+908:  const signatur = `${blinzelPhase}|${aktuelleBlickRichtung}|${kopfPose}|${aktuellerAusdruck}`;
+918:// Manuell ausloesbar (window.sonderausdruckZeigen in der Browser-Konsole)
+940:// Erkennungs-Glimmer unterdrueckt (gazeSchritt() prueft _sonderLaeuft) --
+943:let _sonderLaeuft = false;
+944:function sonderausdruckZeigen(register, ausdruck, haltenMs){
+945:  if(_sonderLaeuft) return; // keine zwei Sequenzen gleichzeitig
+947:  _sonderLaeuft = true;
+948:  $("mund-effekt").style.opacity = "0";
+974:    $("mund-effekt").style.opacity = "1";
+975:    if(!mundAktivFrames) $("mund-effekt").src = `/mund_keyframes/${MUND_RUHE}.png`;
+976:    _sonderLaeuft = false;
+995:window.sonderausdruckZeigen = sonderausdruckZeigen;
+1027:const KATEGORIE_SONDERAUSDRUCK = {
+1030:    ["anime_90s","anime_zunge_raus"],    ["anime_90s","anime_pfeifen"],
+1053:  const pool = kategorie && KATEGORIE_SONDERAUSDRUCK[kategorie];
+1062:  sonderausdruckZeigen(wahl[0], wahl[1]);
+1066:// Koerperzustand aus koerperpflege.py -> demonic/serious_dystopian koppeln.
+1073:// gab (siehe Luecken-Kommentar bei sonderausdruckZeigen() oben).
+1097:  // "broadcast_value hoch -> intensivere Variante": laenger halten, wenn
+1098:  // tempo (aus broadcast_value abgeleitet, siehe unten) gerade hoch ist --
+1105:  if(_sonderLaeuft){
+1117:  sonderausdruckZeigen(wahl[0], wahl[1], _haltenMsNachTempo(1400));
+1127:function koerperzustandPruefen(swapVollAnteil, ramFreiAnteil){
+1145:    if(!_sonderLaeuft && Date.now() - _letzterSonderausdruckTs >= SONDERAUSDRUCK_ABKLINGZEIT_MS){
+1148:      sonderausdruckZeigen("anime_90s", "anime_fassungslos", _haltenMsNachTempo(1400));
+1157:// ⚠️ LECK-FIX (2026-09-11): blinzeln() rief FRUEHER am Ende IMMER
+1158:// blinzelWeiterPlanen() auf -- auch wenn der Aufruf selbst nur der einmalige
+1159:// "Doppelschlag"-Bonus war (setTimeout(blinzeln, 120+...) unten). Jeder
+1165:// 2732 blinzeln()-Aufrufe in 5 virtuellen Minuten statt der ~55 einer
+1175:function blinzelDauerSchliessen(){ return 15 + Math.random()*5; }
+1176:function blinzelDauerGeschlossenHalten(){ return 30 + Math.random()*20; }
+1177:function blinzelDauerOeffnen(){ return 40 + Math.random()*12; }
+1179:// Zustands-Phasen-Meldung spielt blinzeln() jetzt die 12 fotografierten
+1180:// Lidbilder (/augen_blink/blink_000..011.png, gemessen: 00 offen -> 08
+1182:// Overlay auf #augen-blink ab. Zeitlinie woertlich aus der Messung: die
+1188:// eigene Fortpflanzung (zeitplanNeu=false). blinzelAbspielen() ist eine
+1190:// blinzelWeiterPlanen() zurueck. Blinzeln bleibt unabhaengig von der
+1194:function blinzeln(zeitplanNeu = true){
+1195:  if(_sonderLaeuft){
+1196:    if(zeitplanNeu) blinzelWeiterPlanen(); // Kette haelt, kein zweiter Strang
+1200:  for(let f = 0; f <= 8; f++) schritte.push([f, blinzelDauerSchliessen(), f < 7 ? "halb1" : "zu"]);
+1201:  schritte.push([8, blinzelDauerGeschlossenHalten(), "zu"]);
+1202:  for(let f = 9; f <= 11; f++) schritte.push([f, blinzelDauerOeffnen(), "halb2"]);
+1203:  blinzelAbspielen(schritte, 0, zeitplanNeu);
+1205:function blinzelAbspielen(schritte, idx, zeitplanNeu){
+1207:    $("augen-blink").style.opacity = "0";
+1208:    blinzelPhase = null; gesichtNeuZeichnen(false);
+1210:      if(Math.random() < 0.12){ setTimeout(() => blinzeln(false), 120 + Math.random()*80); }
+1211:      blinzelWeiterPlanen();
+1216:  $("augen-blink").src = BLINK_BILDER[frame];
+1217:  $("augen-blink").style.opacity = "1";
+1218:  blinzelPhase = phase; gesichtNeuZeichnen(false);
+1219:  setTimeout(() => blinzelAbspielen(schritte, idx + 1, zeitplanNeu), dauer);
+1221:function blinzelWeiterPlanen(){
+1222:  setTimeout(() => blinzeln(true), 2000 + Math.random()*5000); // 2-7s, unregelmaessig (Gabriels Vorgabe)
+1224:blinzelWeiterPlanen();
+1231:let serverBlick = {anwesend:false, richtung:null, nah:false};
+1238:// BISHER: sobald serverBlick.anwesend && .nah, ging der Glimmer OHNE
+1239:// jede weitere Bedingung direkt+ausschliesslich auf serverBlick.cx/cy --
+1242:// ohne echte Erkennung", serverBlick kommt weiter NUR aus blick.py) bleibt
+1254:// Fenster kommt (chatHolen()) -- ein Regex, kein LLM-Aufruf, laeuft einmal
+1269:// wurde -- sicherer Ausgangszustand, entspricht dem bisherigen Verhalten).
+1283:// im selben 0..1-Koordinatenraum wie serverBlick.cx/cy -- oben/seitlich,
+1299:  return !!(serverBlick.anwesend && serverBlick.nah && typeof serverBlick.cx === "number");
+1303:// direkt anspricht, haelt ein Mensch den Blickkontakt nicht stur -- kurze,
+1327:// ziel_roh() None -> serverBlick.anwesend bleibt false -> Overlay bleibt bei
+1349:// jede Kopplung an serverBlick/gazeSichtbar in der Ausloesung selbst (laeuft
+1371://   1.0  Opazitaet  -- serverBlick vorhanden+nah UND FranKenstein spricht
+1373://                      -> Ziel = serverBlick.cx/cy (bisheriges Verhalten)
+1374://   0.4  Opazitaet  -- serverBlick vorhanden+nah, ABER Thema-Fokus oder
+1377://   0    Opazitaet  -- serverBlick nicht vorhanden/nicht nah (unveraendert,
+1383:  return {x:serverBlick.cx, y:serverBlick.cy, opazitaet:1};
+1396:  // ⭐⭐⭐ 2026-09-12: dieselbe exakte Roll-Translation wie #augen-blink (siehe
+1407:  $("pupillen-glow").style.opacity = _sonderLaeuft ? "0" : String(ziel.opazitaet);
+1410:  if(!serverBlick.anwesend){
+1430:  if(_sonderLaeuft || kopfRollSchritte){ kopfWeiterPlanen(); return; }
+1459:  serverBlick = neuerBlick || {anwesend:false, richtung:null, nah:false};
+1460:  // ⭐ 2026-09-11 Punkt 3 (Blick): serverBlick ist die Rohquelle; wohin der
+1463:  // entschieden (siehe dort) -- hier nur noch serverBlick selbst uebernehmen.
+1464:  const zielRichtung = serverBlick.anwesend ? (serverBlick.richtung || "geradeaus") : null;
+1523:// jetzt kennt jedes Kind (koerper/kopf/mund) dieselbe 1536x1024-Leinwand und
+1524:// einfache Prozentzahlen (siehe #mund-effekt) treffen den Manifest-Anker
+1550:let tempo = 1.0; // aus broadcast_value abgeleitet, 0..~3
+1556:// blinzeln()/atmen() lesen regenGedrosselt gar nicht erst.
+1598:// Sehr langsames Atmen, an den Puls-Takt (tempo, aus broadcast_value)
+1634:// + Koerper immer, Ausdruck nur waehrend _sonderLaeuft). Der urspruengliche
+1641:// wechsel()-Funktion in sonderausdruckZeigen()), schreibt diese Werte JETZT
+1689:  // sichtbare Ebene den Schreibzugriff (siehe sonderausdruckZeigen()/wechsel()
+1691:  if(_sonderLaeuft){
+1722:  // kopfRollTick()/sonderausdruckZeigen() -- atmen() schreibt Transform/
+1761:  if(koerperAktion || _sonderLaeuft){ if(fertig) fertig(); return; }
+1769:  // gleiche Idee wie blinzelWeiterPlanen(): EINE Kette, die sich selbst
+1874:function schleife(t){
+1878:  mundSchritt(t);
+1916:    if(typeof b.broadcast_value === "number"){
+1917:      tempo = Math.max(0.15, Math.min(3.0, b.broadcast_value));
+1933:    // oben (koerperzustandPruefen/ueberraschungAchsePruefen).
+1934:    koerperzustandPruefen(b.swap_voll_anteil, b.ram_frei_anteil);
+1939:    // Ausdruck + Blick: gemessen, nie erfunden (siehe buehnen_zustand() in
+1949:setInterval(chatHolen, 1500);
+1951:chatHolen(); statusHolen();
+1962:  if(e.key === "b"){ e.preventDefault(); blinzeln(false); }
+1965:    if(!kopfRollSchritte && !_sonderLaeuft){
+1974:    const alle = KATEGORIE_SONDERAUSDRUCK.self_confident;
+1976:    sonderausdruckZeigen(wahl[0], wahl[1]);
+=== ASSET NAMES ===
+./mund_keyframes/mund_26_tongue_out__stufe_03.png
+./mund_keyframes/mund_15_sz__stufe_02.png
+./mund_keyframes/mund_32_smirk_right__stufe_04.png
+./mund_keyframes/mund_13_l__stufe_02.png
+./mund_keyframes/mund_33_pout__stufe_04.png
+./mund_keyframes/mund_24_bare_teeth__stufe_02.png
+./mund_keyframes/mund_12_fv__stufe_02.png
+./mund_keyframes/mund_35_gasp.png
+./mund_keyframes/mund_06_e__stufe_02.png
+./mund_keyframes/mund_09_o_medium__stufe_00.png
+./mund_keyframes/mund_19_shch__stufe_04.png
+./mund_keyframes/mund_17_kg.png
+./mund_keyframes/mund_24_bare_teeth__stufe_03.png
+./mund_keyframes/trans_stufe_01.png
+./mund_keyframes/mund_31_smirk_left/stufe_02.png
+./mund_keyframes/mund_31_smirk_left/stufe_00.png
+./mund_keyframes/mund_31_smirk_left/stufe_04.png
+./mund_keyframes/mund_31_smirk_left/stufe_01.png
+./mund_keyframes/mund_31_smirk_left/stufe_03.png
+./mund_keyframes/mund_15_sz.png
+./mund_keyframes/mund_08_o_small__stufe_02.png
+./mund_keyframes/mund_34_jaw_clench__stufe_01.png
+./mund_keyframes/mund_22_snarl_left__stufe_00.png
+./mund_keyframes/mund_32_smirk_right__stufe_00.png
+./mund_keyframes/mund_05_a_wide.png
+./mund_keyframes/mund_10_o_wide__stufe_00.png
+./mund_keyframes/trans_stufe_00.png
+./mund_keyframes/mund_09_o_medium/stufe_02.png
+./mund_keyframes/mund_09_o_medium/stufe_00.png
+./mund_keyframes/mund_09_o_medium/stufe_04.png
+./mund_keyframes/mund_09_o_medium/stufe_01.png
+./mund_keyframes/mund_09_o_medium/stufe_03.png
+./mund_keyframes/mund_33_pout/stufe_02.png
+./mund_keyframes/mund_33_pout/stufe_00.png
+./mund_keyframes/mund_33_pout/stufe_04.png
+./mund_keyframes/mund_33_pout/stufe_01.png
+./mund_keyframes/mund_33_pout/stufe_03.png
+./mund_keyframes/mund_26_tongue_out__stufe_02.png
+./mund_keyframes/mund_25_tongue_tip.png
+./mund_keyframes/mund_27_tongue_left__stufe_03.png
+./mund_keyframes/mund_31_smirk_left__stufe_03.png
+./mund_keyframes/mund_23_snarl_right/stufe_02.png
+./mund_keyframes/mund_23_snarl_right/stufe_00.png
+./mund_keyframes/mund_23_snarl_right/stufe_04.png
+./mund_keyframes/mund_23_snarl_right/stufe_01.png
+./mund_keyframes/mund_23_snarl_right/stufe_03.png
+./mund_keyframes/mund_04_a_medium__stufe_00.png
+./mund_keyframes/mund_23_snarl_right__stufe_02.png
+./mund_keyframes/mund_06_e__stufe_00.png
+./mund_keyframes/mund_08_o_small__stufe_03.png
+./mund_keyframes/mund_26_tongue_out.png
+./mund_keyframes/mund_19_shch__stufe_00.png
+./mund_keyframes/mund_32_smirk_right/stufe_02.png
+./mund_keyframes/mund_32_smirk_right/stufe_00.png
+./mund_keyframes/mund_32_smirk_right/stufe_04.png
+./mund_keyframes/mund_32_smirk_right/stufe_01.png
+./mund_keyframes/mund_32_smirk_right/stufe_03.png
+./mund_keyframes/mund_24_bare_teeth__stufe_01.png
+./mund_keyframes/mund_22_snarl_left/stufe_02.png
+./mund_keyframes/mund_22_snarl_left/stufe_00.png
+./mund_keyframes/mund_22_snarl_left/stufe_04.png
+./mund_keyframes/mund_22_snarl_left/stufe_01.png
+./mund_keyframes/mund_22_snarl_left/stufe_03.png
+./mund_keyframes/mund_17_kg/stufe_02.png
+./mund_keyframes/mund_17_kg/stufe_00.png
+./mund_keyframes/mund_17_kg/stufe_04.png
+./mund_keyframes/mund_17_kg/stufe_01.png
+./mund_keyframes/mund_17_kg/stufe_03.png
+./mund_keyframes/mund_28_tongue_right__stufe_01.png
+./mund_keyframes/mund_16_rch__stufe_00.png
+./mund_keyframes/mund_27_tongue_left__stufe_04.png
+./mund_keyframes/mund_21_grin_teeth__stufe_00.png
+./mund_keyframes/mund_01_closed_mbp__stufe_00.png
+./mund_keyframes/mund_25_tongue_tip__stufe_00.png
+./mund_keyframes/mund_18_wq__stufe_04.png
+./mund_keyframes/mund_02_breath__stufe_03.png
+./mund_keyframes/mund_30_whistle_strong__stufe_03.png
+./mund_keyframes/mund_00_rest__stufe_03.png
+./mund_keyframes/mund_15_sz__stufe_00.png
+./mund_keyframes/mund_23_snarl_right__stufe_04.png
+./mund_keyframes/mund_00_rest__stufe_01.png
+./mund_keyframes/mund_34_jaw_clench.png
+./mund_keyframes/mund_20_grin_closed__stufe_01.png
+./mund_keyframes/mund_29_whistle_small__stufe_02.png
+./mund_keyframes/mund_15_sz__stufe_01.png
+./mund_keyframes/mund_34_jaw_clench__stufe_04.png
+./mund_keyframes/mund_25_tongue_tip__stufe_03.png
+./mund_keyframes/mund_13_l__stufe_03.png
+./mund_keyframes/mund_06_e/stufe_02.png
+./mund_keyframes/mund_06_e/stufe_00.png
+./mund_keyframes/mund_06_e/stufe_04.png
+./mund_keyframes/mund_06_e/stufe_01.png
+./mund_keyframes/mund_06_e/stufe_03.png
+./mund_keyframes/mund_13_l__stufe_00.png
+./mund_keyframes/mund_27_tongue_left__stufe_01.png
+./mund_keyframes/mund_01_closed_mbp__stufe_02.png
+./mund_keyframes/mund_13_l/stufe_02.png
+./mund_keyframes/mund_13_l/stufe_00.png
+./mund_keyframes/mund_13_l/stufe_04.png
+./mund_keyframes/mund_13_l/stufe_01.png
+./mund_keyframes/mund_13_l/stufe_03.png
+./mund_keyframes/mund_17_kg__stufe_01.png
+./mund_keyframes/mund_35_gasp/stufe_02.png
+./mund_keyframes/mund_35_gasp/stufe_00.png
+./mund_keyframes/mund_35_gasp/stufe_04.png
+./mund_keyframes/mund_35_gasp/stufe_01.png
+./mund_keyframes/mund_35_gasp/stufe_03.png
+./mund_keyframes/mund_03_a_small__stufe_03.png
+./mund_keyframes/mund_29_whistle_small.png
+./mund_keyframes/mund_25_tongue_tip__stufe_01.png
+./mund_keyframes/mund_21_grin_teeth__stufe_03.png
+./mund_keyframes/mund_33_pout.png
+./mund_keyframes/mund_28_tongue_right__stufe_02.png
+./mund_keyframes/mund_09_o_medium.png
+./mund_keyframes/mund_05_a_wide__stufe_03.png
+./mund_keyframes/mund_26_tongue_out__stufe_04.png
+./mund_keyframes/mund_11_u__stufe_04.png
+./mund_keyframes/mund_12_fv/stufe_02.png
+./mund_keyframes/mund_12_fv/stufe_00.png
+./mund_keyframes/mund_12_fv/stufe_04.png
+./mund_keyframes/mund_12_fv/stufe_01.png
+./mund_keyframes/mund_12_fv/stufe_03.png
+./mund_keyframes/mund_00_rest/stufe_02.png
+./mund_keyframes/mund_00_rest/stufe_00.png
+./mund_keyframes/mund_00_rest/stufe_04.png
+./mund_keyframes/mund_00_rest/stufe_01.png
+./mund_keyframes/mund_00_rest/stufe_03.png
+./mund_keyframes/mund_25_tongue_tip__stufe_04.png
+./mund_keyframes/mund_10_o_wide/stufe_02.png
+./mund_keyframes/mund_10_o_wide/stufe_00.png
+./mund_keyframes/mund_10_o_wide/stufe_04.png
+./mund_keyframes/mund_10_o_wide/stufe_01.png
+./mund_keyframes/mund_10_o_wide/stufe_03.png
+./mund_keyframes/mund_25_tongue_tip/stufe_02.png
+./mund_keyframes/mund_25_tongue_tip/stufe_00.png
+./mund_keyframes/mund_25_tongue_tip/stufe_04.png
+./mund_keyframes/mund_25_tongue_tip/stufe_01.png
+./mund_keyframes/mund_25_tongue_tip/stufe_03.png
+./mund_keyframes/mund_31_smirk_left__stufe_02.png
+./mund_keyframes/mund_07_i__stufe_02.png
+./mund_keyframes/mund_14_th__stufe_03.png
+./mund_keyframes/mund_11_u.png
+./mund_keyframes/mund_35_gasp__stufe_02.png
+./mund_keyframes/mund_04_a_medium__stufe_04.png
+./mund_keyframes/mund_03_a_small.png
+./mund_keyframes/mund_08_o_small/stufe_02.png
+./mund_keyframes/mund_08_o_small/stufe_00.png
+./mund_keyframes/mund_08_o_small/stufe_04.png
+./mund_keyframes/mund_08_o_small/stufe_01.png
+./mund_keyframes/mund_08_o_small/stufe_03.png
+./mund_keyframes/mund_12_fv__stufe_04.png
+./mund_keyframes/mund_15_sz__stufe_04.png
+./mund_keyframes/mund_06_e__stufe_04.png
+./mund_keyframes/mund_10_o_wide.png
+./mund_keyframes/mund_08_o_small__stufe_00.png
+./mund_keyframes/mund_03_a_small__stufe_04.png
+./mund_keyframes/mund_06_e__stufe_01.png
+./mund_keyframes/mund_16_rch__stufe_04.png
+./mund_keyframes/mund_02_breath__stufe_02.png
+./mund_keyframes/mund_14_th__stufe_02.png
+./mund_keyframes/mund_24_bare_teeth/stufe_02.png
+./mund_keyframes/mund_24_bare_teeth/stufe_00.png
+./mund_keyframes/mund_24_bare_teeth/stufe_04.png
+./mund_keyframes/mund_24_bare_teeth/stufe_01.png
+./mund_keyframes/mund_24_bare_teeth/stufe_03.png
+./mund_keyframes/mund_18_wq__stufe_01.png
+./mund_keyframes/mund_19_shch__stufe_01.png
+./mund_keyframes/mund_24_bare_teeth__stufe_04.png
+./mund_keyframes/mund_01_closed_mbp__stufe_04.png
+./mund_keyframes/mund_31_smirk_left__stufe_00.png
+./mund_keyframes/mund_23_snarl_right.png
+./mund_keyframes/mund_32_smirk_right__stufe_03.png
+./mund_keyframes/mund_29_whistle_small/stufe_02.png
+./mund_keyframes/mund_29_whistle_small/stufe_00.png
+./mund_keyframes/mund_29_whistle_small/stufe_04.png
+./mund_keyframes/mund_29_whistle_small/stufe_01.png
+./mund_keyframes/mund_29_whistle_small/stufe_03.png
+./mund_keyframes/mund_29_whistle_small__stufe_00.png
+./mund_keyframes/mund_02_breath__stufe_04.png
+./mund_keyframes/mund_29_whistle_small__stufe_03.png
+./mund_keyframes/mund_28_tongue_right.png
+./mund_keyframes/mund_21_grin_teeth__stufe_02.png
+./mund_keyframes/mund_12_fv__stufe_00.png
+./mund_keyframes/mund_19_shch__stufe_02.png
+./mund_keyframes/mund_07_i__stufe_04.png
+./mund_keyframes/mund_21_grin_teeth__stufe_04.png
+./mund_keyframes/mund_01_closed_mbp__stufe_01.png
+./mund_keyframes/mund_20_grin_closed/stufe_02.png
+./mund_keyframes/mund_20_grin_closed/stufe_00.png
+./mund_keyframes/mund_20_grin_closed/stufe_04.png
+./mund_keyframes/mund_20_grin_closed/stufe_01.png
+./mund_keyframes/mund_20_grin_closed/stufe_03.png
+./mund_keyframes/mund_23_snarl_right__stufe_00.png
+./mund_keyframes/mund_11_u__stufe_01.png
+./mund_keyframes/mund_05_a_wide__stufe_04.png
+./mund_keyframes/mund_01_closed_mbp.png
+./mund_keyframes/mund_08_o_small__stufe_04.png
+./mund_keyframes/trans_stufe_02.png
+./mund_keyframes/mund_34_jaw_clench/stufe_02.png
+./mund_keyframes/mund_34_jaw_clench/stufe_00.png
+./mund_keyframes/mund_34_jaw_clench/stufe_04.png
+./mund_keyframes/mund_34_jaw_clench/stufe_01.png
+./mund_keyframes/mund_34_jaw_clench/stufe_03.png
+./mund_keyframes/mund_16_rch.png
+./mund_keyframes/mund_19_shch__stufe_03.png
+./mund_keyframes/mund_09_o_medium__stufe_01.png
+./mund_keyframes/mund_06_e__stufe_03.png
+./mund_keyframes/mund_22_snarl_left__stufe_02.png
+./mund_keyframes/mund_34_jaw_clench__stufe_03.png
+./mund_keyframes/mund_11_u/stufe_02.png
+./mund_keyframes/mund_11_u/stufe_00.png
+./mund_keyframes/mund_11_u/stufe_04.png
+./mund_keyframes/mund_11_u/stufe_01.png
+./mund_keyframes/mund_11_u/stufe_03.png
+./mund_keyframes/mund_16_rch__stufe_02.png
+./mund_keyframes/mund_05_a_wide/stufe_02.png
+./mund_keyframes/mund_05_a_wide/stufe_00.png
+./mund_keyframes/mund_05_a_wide/stufe_04.png
+./mund_keyframes/mund_05_a_wide/stufe_01.png
+./mund_keyframes/mund_05_a_wide/stufe_03.png
+=== LIVE PAGE SINGLETON ===
+Window 12591419
+  Position: 1746,40 (screen: 0)
+  Geometry: 958x560
+Window 10485764
+  Position: 1746,114 (screen: 0)
+  Geometry: 958x523
+=== CHROME URL PROCS ===
+3033100 /opt/google/chrome/chrome --app=http://127.0.0.1:8788/ --window-position=565,0 --window-size=746,449 --user-data-dir=/home/ai-core-node/.claude/star/visual/chrome-profile --no-first-run --no-default-browser-check --disable-extensions --disable-sync --disable-background-networking --disable-features=Translate,TranslateUI --disable-translate
+3845382 bash -lc set -eu; f=buehne.html; echo '=== HASH ==='; sha256sum "$f"; echo '=== KEY SYMBOLS ==='; grep -nE 'KATEGORIE_SONDERAUSDRUCK|sonderausdruckZeigen|_sonderLaeuft|function schleife|serverBlick|chatHolen|broadcast|zustand|emotion|state|spricht|sprechen|mund|zunge|nase|blink|blinz' "$f" | tail -n 180; echo '=== ASSET NAMES ==='; find . -maxdepth 3 -type f | grep -Ei '(mund|mouth|zunge|tongue|nase|nose|grim|smirk|lip|jaw|augen|blink|ausdruck|expression)' | head -n 220; echo '=== LIVE PAGE SINGLETON ==='; DISPLAY=:0 xdotool search --name 'FranKenstein -- live' getwindowgeometry %@ 2>/dev/null || true; echo '=== CHROME URL PROCS ==='; pgrep -a -f 'chrome.*127.0.0.1:8788|chromium.*127.0.0.1:8788' || true

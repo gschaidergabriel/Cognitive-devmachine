@@ -383,12 +383,9 @@ def call_tool(name: str, arguments: dict[str, Any], *, rpc_id: Any = None) -> di
     return _decorate_result(result, attempts, "github_local_bridge")
 
 
-# Patch only the MCP adapter module's extension points; the canonical relay and
-# underlying Local Bridge remain untouched.
-base.TOOLS = TOOLS
-base.call_tool = call_tool
-
-
+# No import-time mutation of the base MCP module. The fallback wrapper may be
+# imported by tests/diagnostics without changing the original tool contract.
+# Production installs the two extension points only when main() starts.
 class Handler(base.Handler):
     def do_GET(self) -> None:  # noqa: N802
         if self.path.rstrip("/") == "/health":
@@ -410,6 +407,10 @@ class Handler(base.Handler):
 def main() -> int:
     if not base._token():
         raise SystemExit("OMEGA_MCP_TOKEN is required; refusing to start unauthenticated")
+    # Install fallback extensions only for the production server process.
+    # Importing this module must never alter the base MCP contract.
+    base.TOOLS = TOOLS
+    base.call_tool = call_tool
     # Unlike the original single-transport server, do not require GitHub at
     # process start. Direct/local read paths stay useful during a GitHub outage.
     server = ThreadingHTTPServer((base.BIND, base.PORT), Handler)

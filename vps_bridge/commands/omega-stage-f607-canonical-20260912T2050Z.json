@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-stage-f607-canonical-20260912T2050Z",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; H=f60746ffc5d1170e146609036d667bb26ac1d56f; C=/workspace/omega_runtime/carrier_repo; R=/workspace/omega_runtime/releases; git -C \"$C\" fetch origin omega-vps-deploy; git -C \"$C\" checkout -B omega-vps-deploy origin/omega-vps-deploy >/dev/null; test -d \"$C/omega_deploy/$H\"; if [ ! -d \"$R/$H\" ]; then cp -a \"$C/omega_deploy/$H\" \"$R/$H\"; fi; PYTHONPATH=\"$R/$H\" python3 -m compileall -q \"$R/$H/omega\"; printf 'GRID_BLOB='; git hash-object \"$R/$H/omega/grid_runtime_v3.py\"; printf 'OUTER_BLOB='; git hash-object \"$R/$H/omega/outer_bridge_worker.py\"; if python3 -m pytest --version >/dev/null 2>&1; then cd \"$R/$H\"; PYTHONPATH=\"$R/$H\" python3 -m pytest -q; else echo PYTEST_NOT_INSTALLED; fi; echo F607_STAGE_PASS"
+}

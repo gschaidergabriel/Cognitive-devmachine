@@ -20,7 +20,7 @@ class FreeAdmissionAuthorityTests(unittest.TestCase):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
         rel = Path("research_entity/claycode/autonomous/STEERING.json")
-        rel.parent.mkdir(parents=True, exist_ok=True)
+        (root / rel).parent.mkdir(parents=True, exist_ok=True)
         steering = {"schema_version": "9.13"}
         steering.update(steering_extra or {})
         (root / rel).write_text(json.dumps(steering), encoding="utf-8")

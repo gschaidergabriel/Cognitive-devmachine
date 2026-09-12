@@ -1,0 +1,52 @@
+=== ACTIVE FRANKENSTEIN UNITS IN CONTAINER ===
+Failed to connect to system scope bus via machine transport: Keine Berechtigung
+=== UNIT PIDS/EXECS/ENV ===
+=== OPEN DB HOLDERS WITH CGROUP ===
+DB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/consciousness.db
+PID=1351332 CMD=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-puls.service
+PID=3795508 CMD=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-denker.service
+PID=4034911 CMD=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/grid_autonomie.py 300 dauer 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-grid-autonomie.service
+DB:/var/lib/entityos/rootfs-run/root/.local/share/agentzero/unified.db
+DB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/amygdala.db
+DB:/var/lib/entityos/rootfs-run/root/.local/share/frank/db/world_experience.db
+PID=1351332 CMD=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-puls.service
+PID=3795508 CMD=/opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/denker.py 
+0::/machine.slice/entityos.scope/payload/system.slice/frankenstein-denker.service
+=== SOURCE DEFAULTS ===
+/var/lib/entityos/voice/charakter.py:9:  ~/repo/database/world_experience.db, Tabelle personality_state, letzte
+/var/lib/entityos/voice/charakter.py:58:SEED_HERKUNFT = "world_experience.db personality_state 2026-03-07T21:55:53 " \
+/var/lib/entityos/voice/welt/dienst.py:13:  - kein Schreiben nach unified.db oder consciousness.db. Beide werden von
+/var/lib/entityos/voice/welt/wirkung.py:17:2) consciousness.db, Tabelle predictions (Nachtrag des Koordinators,
+/var/lib/entityos/voice/welt/wirkung.py:37:WAS DIESES MODUL NICHT TUT: es schreibt NICHTS nach consciousness.db oder
+/var/lib/entityos/voice/welt/wirkung.py:39:verlangt -- consciousness.db ist Laufzeitzustand des laufenden Systems).
+/var/lib/entityos/voice/welt/wirkung.py:55:    "FRANKENSTEIN_CONSCIOUSNESS_DB",
+/var/lib/entityos/voice/welt/wirkung.py:56:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/welt/wirkung.py:126:    consciousness.db (nur lesend, chronologisch) durch ein Beta-Bernoulli-
+/var/lib/entityos/voice/welt/wirkung.py:179:    print("\n--- 2) consciousness.db.predictions: konstante vs. online "
+/var/lib/entityos/voice/welt/wirkung.py:221:          "NICHTS an der laufenden consciousness.db, die bleibt nur "
+/var/lib/entityos/voice/buehne.py:77:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/buehne.py:78:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/regie.py:69:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/regie.py:70:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/ziele.py:9:⭐ DIE LUECKE, DIE HIER GESCHLOSSEN WIRD: `goals` in der consciousness.db
+/var/lib/entityos/voice/ziele.py:47:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/ziele.py:48:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/erleben.py:78:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/erleben.py:79:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/umschlag.py:112:     (consciousness.db, ueber `_iconn()`), nicht in der Unified-DB. Der
+/var/lib/entityos/voice/umschlag.py:157:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/umschlag.py:158:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/umschlag.py:475:    # INNENWELT-DB (consciousness.db / _iconn()), nicht in der Unified-DB.
+/var/lib/entityos/voice/innenwelt/workspace_broadcast.py:38:   `consciousness.db` (Tabelle `workspace_broadcast`). Der Kern liest ihn
+/var/lib/entityos/voice/innenwelt/e_pq.py:23:Database: world_experience.db (personality_state table)
+/var/lib/entityos/voice/innenwelt/e_pq.py:46:    DB_PATH = _data / "db" / "world_experience.db"
+/var/lib/entityos/voice/innenwelt/amygdala.py:49:    DB_PATH = Path.home() / ".local" / "share" / "frank" / "db" / "amygdala.db"
+/var/lib/entityos/voice/denker.py:60:    "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/denker.py:61:    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/selbstauskunft.py:316:        "FRANKENSTEIN_INNENWELT_DB",
+/var/lib/entityos/voice/selbstauskunft.py:317:        os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+/var/lib/entityos/voice/puls.py:188:    # consciousness.db) existierte schon lange, wurde aber von NIEMANDEM

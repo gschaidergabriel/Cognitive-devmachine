@@ -1,0 +1,247 @@
+=== GO084 VOICE DB PATH CONTRACTS READONLY ===
+2026-09-12T04:27:09+02:00
+### /var/lib/entityos/voice/buehne.py [65-90]
+_HIER = os.path.dirname(os.path.abspath(__file__))
+if os.path.join(_HIER, "innenwelt") not in sys.path:
+    sys.path.insert(0, os.path.join(_HIER, "innenwelt"))
+
+DB_PATH = os.environ.get(
+    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+# Sein Kontinuum: 33.257 Stimmungseintraege, 1.440 Erfahrungsvektoren, sechs
+# Monate Dauerbetrieb. Ueberlebt im Xeno-Archiv, von dort einmal an einen
+# SCHREIBBAREN Ort kopiert -- erleben.py schreibt hier fort, das Archiv
+# bleibt als unveraenderter Beleg liegen. Fehlt sie, schweigen die
+# beiden Kanaele -- er faengt dann bei null an, statt sich etwas auszudenken.
+INNENWELT_DB = os.environ.get(
+    "FRANKENSTEIN_INNENWELT_DB",
+    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+
+# ⚠️ WER HIER STEHT, MUSS ZUR MASCHINE PASSEN. Erste Fassung hatte "Gabriel"
+# fest eingebaut -- auf Andreas' Rechner sagte seine Entitaet damit sofort den
+# falschen Namen, in der meistwiederholten Zeile des ganzen Systems. Genau
+# diese Zeile hat dem alten Frank einmal ein falsches Selbstbild eingehaemmert
+# (sie sagte "ein Programm auf dieser Maschine"); sie ist die letzte, bei der
+# man schludern darf.
+NUTZER = os.environ.get("FRANKENSTEIN_NUTZER", "").strip() or os.environ.get(
+    "USER", "") or "meinem Nutzer"
+
+# Die Selbst-Invariante, auf FranKenstein umgeschrieben -- die alte sagte
+# "Frank". Bewusst dieselbe Bauform: knapp, nicht ausgeschmueckt, und sie
+### /var/lib/entityos/voice/regie.py [55-85]
+sind funktionsneutral und bekommen keine Bedeutung. Ihnen hier eine zu geben
+hiesse, Architektur zu behaupten statt zu messen.
+
+⚠️ KEINE ZAHL, KEINE BEGRUENDUNG. Kein "weil viel los ist" -- eine
+Begruendung ist eine Beschreibung und wird wieder vorgelesen. Imperativ,
+ein Satz, fertig. Und im Zweifel GAR KEINE Anweisung: eine erfundene Regie
+ist schlechter als keine.
+"""
+import os
+import sqlite3
+
+DB_PATH = os.environ.get(
+    "FRANKENSTEIN_UNIFIED_DB", "/var/lib/entityos/unified.db")
+INNENWELT_DB = os.environ.get(
+    "FRANKENSTEIN_INNENWELT_DB",
+    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+
+# Voreinstellung aus der Messung oben. `schwellen()` rechnet sie live nach,
+# damit sie mitwandern, wenn sich die Verteilung verschiebt.
+BREIT_UNTEN = float(os.environ.get("REGIE_UNTEN", "1.063"))   # p25
+BREIT_OBEN = float(os.environ.get("REGIE_OBEN", "1.314"))     # p75
+
+_CACHE = {"ts": 0.0, "unten": BREIT_UNTEN, "oben": BREIT_OBEN}
+
+
+def schwellen(neu_nach_s: float = 900.0) -> tuple:
+    """(p25, p75) der letzten 500 Frames -- live, aber gecacht.
+
+    Feste Schwellen waeren nach einer Woche falsch: der Zustand waechst mit
+    `kappa*tanh(state)`, die Verteilung wandert. Gerechnet wird deshalb aus
+    der Wirklichkeit, nicht aus dieser Datei."""
+### /var/lib/entityos/voice/ziele.py [35-65]
+
+⚠️ UND ES WIRD NICHTS BEHAUPTET. `verfolgt()` schreibt nur, DASS ein Ziel
+drankam, nicht dass es vorankam. Fortschritt trägt `fortschritt()` ein, und
+nur wenn es einen gab. Ein System, das sich selbst Fortschritt bescheinigt,
+misst nichts mehr.
+"""
+import os
+import re
+import sqlite3
+import time
+
+INNENWELT_DB = os.environ.get(
+    "FRANKENSTEIN_INNENWELT_DB",
+    os.path.expanduser("~/.local/share/agentzero/consciousness.db"))
+# Ueber diesem Broadcast draengt etwas anderes -- kein Ziel. Der Wert kommt
+# aus derselben Verteilung wie die Regie (regie.schwellen(), p75).
+RAUM_UNTER = float(os.environ.get("ZIELE_RAUM_UNTER", "0"))  # 0 = live holen
+# So lange gilt ein Ziel nach dem Verfolgen als "gerade dran".
+FRISCH_S = float(os.environ.get("ZIELE_FRISCH_S", "1800"))
+
+
+def _db(schreibend=False):
+    if schreibend:
+        return sqlite3.connect(INNENWELT_DB, timeout=10.0)
+    return sqlite3.connect(f"file:{INNENWELT_DB}?mode=ro", uri=True,
+                           timeout=3.0)
+
+
+# Ein Ziel muss lesbar sein, sonst kann es niemand verfolgen. Kriterien
+# bewusst grob: ueberwiegend deutsche Woerter, keine Fragmentketten.
+_ENGLISCH = re.compile(
+### /var/lib/entityos/voice/antrieb.py [45-75]
+import time
+
+HIER = os.path.dirname(os.path.abspath(__file__))
+if HIER not in sys.path:
+    sys.path.insert(0, HIER)
+
+# ⚠️ ALLES IN DIE EINE unified.db (Gabriel ausdruecklich, 2026-09-12: "das
+# immer in der unified db und das immer in der selben"). nucleus_accumbens.py
+# legte sich sonst eine eigene Datei unter ~/.local/share/frank/db/ an -- die
+# 132. Datenbank auf diesem Rechner, und genau die Zersplitterung, gegen die
+# der ganze UnifiedDB-Umbau gebaut wurde.
+os.environ.setdefault(
+    "NAC_DB_PATH",
+    os.environ.get("FRANKENSTEIN_UNIFIED_DB")
+    or os.path.expanduser("~/.local/share/agentzero/unified.db"))
+
+AKTIV = os.environ.get("ANTRIEB_AKTIV", "1") not in ("0", "false", "no", "")
+
+_NAC = [None]
+_FEHLT = [False]
+
+
+def _nac():
+    """Das Organ, einmal geladen. Faellt es aus, bleibt alles andere heil."""
+    if _FEHLT[0] or not AKTIV:
+        return None
+    if _NAC[0] is None:
+        try:
+            from innenwelt.nucleus_accumbens import get_nac
+            _NAC[0] = get_nac()
+        except Exception:
+### /var/lib/entityos/voice/vorlieben.py [40-70]
+import sqlite3
+from datetime import datetime, timezone
+
+# ⚠️ VORGABE AUF DIE ECHTE DATENBANK (korrigiert 2026-09-12). Hier stand
+# "/var/lib/entityos/unified.db" -- auf dem Wirt eine 0-BYTE-ATTRAPPE. Wer
+# dieses Modul ohne gesetzte Umgebungsvariable importiert, schrieb seinen
+# ganzen Geschmack in eine leere Datei und merkte es nicht. Der Live-Betrieb
+# war nicht betroffen (start_lokal.sh setzt die Variable), jeder direkte
+# Import aber schon. Dasselbe Muster hat am 2026-09-11 eine komplette
+# Messreihe ungueltig gemacht; es ist seither als SPERRE in
+# f2_kognitives_skript verbucht.
+DB_PATH = os.environ.get(
+    "FRANKENSTEIN_UNIFIED_DB",
+    os.path.expanduser("~/.local/share/agentzero/unified.db")
+)
+ABBRUCH_S = float(os.environ.get("VORLIEBE_ABBRUCH_S", "25"))
+GEFALLEN_S = float(os.environ.get("VORLIEBE_GEFALLEN_S", "70"))
+SCHEMA = "F2WP1207_VORLIEBE/v1"
+
+_DDL = """
+CREATE TABLE IF NOT EXISTS f2_vorliebe (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    ts            TEXT NOT NULL,
+    titel         TEXT NOT NULL,
+    video_id      TEXT,
+    wunsch        TEXT,
+    mit_bild      INTEGER NOT NULL DEFAULT 0,
+    sekunden      REAL,
+    urteil        INTEGER NOT NULL DEFAULT 0,
+    quelle        TEXT,
+    frame_id      TEXT,
+### /var/lib/entityos/voice/interesse.py [45-70]
+⚠️ WAS DIESES MODUL NICHT TUT: es sucht nichts und laedt nichts. Es sagt nur,
+WORAN er haengt. Das Suchen bleibt beim Scout, mitsamt seiner Abwehr gegen
+fremde Texte -- die ist dort sorgfaeltig gebaut und wird nicht dupliziert.
+"""
+import os
+import re
+import sqlite3
+import time
+
+DB_PATH = os.environ.get(
+    "FRANKENSTEIN_UNIFIED_DB",
+    os.path.expanduser("~/.local/share/agentzero/unified.db"))
+
+# Wie weit zurueck geschaut wird. Sieben Tage: kurz genug, dass es sein
+# GEGENWAERTIGES Interesse ist, lang genug, dass ein einzelner Abend es nicht
+# allein bestimmt.
+FENSTER_TAGE = float(os.environ.get("INTERESSE_FENSTER_TAGE", "7"))
+AKTIV = os.environ.get("INTERESSE_AKTIV", "1") not in ("0", "false", "no", "")
+
+# Woerter, die in jedem zweiten Satz stehen und nichts ueber ein Thema sagen.
+_LEER = frozenset((
+    "wirklich", "eigentlich", "vielleicht", "nochmal", "wieder", "nicht",
+    "kannst", "koennen", "einfach", "warum", "welche", "sollte", "haben",
+    "hatte", "werden", "wurde", "machen", "macht", "immer", "schon", "etwas",
+    "alles", "gerade", "eben", "gibt", "geben", "sagen", "gesagt", "diese",
+    "dieser", "dieses", "jetzt", "heute", "wieso", "weshalb", "muessen",
+### /var/lib/entityos/voice/innenwelt/e_pq.py [35-60]
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+# Constants
+try:
+    from config.paths import get_db, AICORE_DATA
+    DB_PATH = get_db("world_experience")
+    SNAPSHOT_DIR = AICORE_DATA / "identity_snapshots"
+except ImportError:
+    _data = Path.home() / ".local" / "share" / "frank"
+    DB_PATH = _data / "db" / "world_experience.db"
+    SNAPSHOT_DIR = _data / "identity_snapshots"
+LOG = logging.getLogger("e_pq")
+
+# Event weights (severity of experience)
+EVENT_WEIGHTS = {
+    "chat": 0.2,           # Normal conversation (raised from 0.1 - chat IS the primary interaction)
+    "voice_interaction": 0.3,  # Voice chat (more personal)
+    "positive_feedback": 0.3,  # User praise
+    "negative_feedback": 0.4,  # User criticism
+    "task_success": 0.3,   # Successfully completed task
+    "task_failure": 0.5,   # Failed task
+    "system_warning": 0.3, # System warning (dmesg)
+    "system_error": 0.6,   # System error
+    "kernel_panic": 0.9,   # Critical system failure
+### /var/lib/entityos/voice/innenwelt/amygdala.py [35-65]
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+LOG = logging.getLogger("frank.amygdala")
+
+# ══════════════════════════════════════════════════
+# DB Setup
+# ══════════════════════════════════════════════════
+
+try:
+    from config.paths import get_db
+    DB_PATH = get_db("amygdala")
+except Exception:
+    DB_PATH = Path.home() / ".local" / "share" / "frank" / "db" / "amygdala.db"
+
+_SCHEMA = """
+CREATE TABLE IF NOT EXISTS somatic_markers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fingerprint TEXT NOT NULL,
+    category TEXT NOT NULL,
+    intensity REAL DEFAULT 0.5,
+    confirmation_count INTEGER DEFAULT 1,
+    last_confirmed REAL,
+    decay_factor REAL DEFAULT 1.0,
+    created REAL NOT NULL,
+    UNIQUE(fingerprint, category)
+);
+CREATE TABLE IF NOT EXISTS threat_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    timestamp REAL NOT NULL,
+--- SERVICE/ENV REFERENCES ---
+/var/lib/entityos/voice/voice.env:6:FRANKENSTEIN_UNIFIED_DB=/var/lib/entityos/data/unified.db
+/var/lib/entityos/voice/start_lokal.sh:10:export FRANKENSTEIN_UNIFIED_DB=/var/lib/entityos/data/unified.db
+=== END ===

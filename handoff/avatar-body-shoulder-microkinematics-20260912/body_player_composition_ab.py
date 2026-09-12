@@ -4,6 +4,8 @@
 Read-only with respect to the live avatar. It reuses the exact current body assets,
 models the existing two-layer crossfade as two textures, applies the residual mesh
 only after image selection, and measures real-wall-clock rAF cadence on real Chrome.
+The first composition candidate is deliberately shoulder-only: photographed frames
+and the existing synchronized body/head scale retain sole breathing authority.
 """
 from __future__ import annotations
 import argparse, json, pathlib, subprocess, tempfile, threading
@@ -25,7 +27,7 @@ function load(u){return new Promise((r,j)=>{let i=new Image;i.onload=()=>r(i);i.
 function sh(gl,t,s){let x=gl.createShader(t);gl.shaderSource(x,s);gl.compileShader(x);if(!gl.getShaderParameter(x,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(x));return x}
 function pct(a,p){let x=[...a].sort((u,v)=>u-v);return x[Math.min(x.length-1,Math.floor((x.length-1)*p))]}
 function stats(a){let m=a.reduce((x,y)=>x+y,0)/a.length;return {n:a.length,mean:m,p50:pct(a,.5),p95:pct(a,.95),p99:pct(a,.99),max:Math.max(...a),over20:a.filter(x=>x>20).length,over25:a.filter(x=>x>25).length,over33:a.filter(x=>x>33).length,fps:1000/m}}
-function env(name){if(name==='schulterzucken'||name==='schulterdrehung')return [0,.10];if(name==='aufrichten'||name==='lehnen'||name==='gewicht')return [.15,.15];return [.35,.15]}
+function env(name){if(name==='schulterzucken'||name==='schulterdrehung')return [0,0];if(name==='aufrichten'||name==='lehnen'||name==='gewicht')return [.15,0];return [.35,0]}
 (async()=>{
  const all={};for(const [k,arr] of Object.entries(SEQS))all[k]=await Promise.all(arr.map(load));
  const gl=cv.getContext('webgl',{alpha:true,antialias:false,preserveDrawingBuffer:true,premultipliedAlpha:false});if(!gl)throw Error('no webgl');
@@ -42,7 +44,7 @@ function env(name){if(name==='schulterzucken'||name==='schulterdrehung')return [
  function metrics(A,B){let ad=0,deep=0,inter=0,uni=0,mae=0,mx=0;for(let i=0;i<620*414;i++){let p=i*4;for(let q=0;q<4;q++){let d=Math.abs(A[p+q]-B[p+q]);mae+=d;mx=Math.max(mx,d)}let a=A[p+3],b=B[p+3];ad+=Math.abs(a-b);if(a>=64&&b<32)deep++;let x=a>=16,y=b>=16;if(x&&y)inter++;if(x||y)uni++}return {rgba_mae:mae/(620*414*4),rgba_max:mx,alpha_mae:ad/(620*414),deep_hole_px:deep,jaccard:inter/Math.max(1,uni)}}
  let composition={};for(const [name,arr] of Object.entries(all)){let rows=[];for(let i=0;i<arr.length-1;i++){for(const m of [0,.5,1]){draw(name,i,i+1,m,3.675,false);gl.finish();let z=pix();draw(name,i,i+1,m,3.675,true);gl.finish();let w=pix();rows.push({i,m,...metrics(z,w)})}}composition[name]={pairs:arr.length-1,tests:rows.length,max_deep_hole_px:Math.max(...rows.map(x=>x.deep_hole_px)),min_jaccard:Math.min(...rows.map(x=>x.jaccard)),max_alpha_mae:Math.max(...rows.map(x=>x.alpha_mae)),max_rgba_mae:Math.max(...rows.map(x=>x.rgba_mae))}}
  async function cadence(warp){let names=Object.keys(all),ts=[],frame=0,namei=0,ai=0;bound=[null,null];for(let warm=0;warm<45;warm++)await new Promise(r=>requestAnimationFrame(()=>{draw(names[0],0,1,.5,warm/60,warp);r()}));for(let n=0;n<420;n++)await new Promise(r=>requestAnimationFrame(t=>{ts.push(t);let name=names[namei],arr=all[name],hold=name==='schulterzucken'?7:name==='schulterdrehung'?10:18;if(frame%hold===0){ai=(ai+1)%arr.length;if(ai===0)namei=(namei+1)%names.length}draw(name,ai,(ai+1)%arr.length,.5,n/60,warp);frame++;r()}));let d=[];for(let i=1;i<ts.length;i++)d.push(ts[i]-ts[i-1]);return stats(d)}
- let base=await cadence(false),warp=await cadence(true);let R={schema:'BODY_EXISTING_PLAYER_COMPOSITION_AB/v2',renderer,version:gl.getParameter(gl.VERSION),canvas:[620,414],vertices:v.length/2,triangles:ix.length/3,asset_families:Object.fromEntries(Object.entries(all).map(([k,v])=>[k,v.length])),texture_upload_policy:'only_on_selected_image_change',composition,base,warp,gl_error:gl.getError(),live_mutation:false};out.textContent=JSON.stringify(R);await fetch('/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(R)});
+ let base=await cadence(false),warp=await cadence(true);let R={schema:'BODY_EXISTING_PLAYER_COMPOSITION_AB/v3',renderer,version:gl.getParameter(gl.VERSION),canvas:[620,414],vertices:v.length/2,triangles:ix.length/3,asset_families:Object.fromEntries(Object.entries(all).map(([k,v])=>[k,v.length])),texture_upload_policy:'only_on_selected_image_change',residual_policy:'shoulder_only_chest_zero',composition,base,warp,gl_error:gl.getError(),live_mutation:false};out.textContent=JSON.stringify(R);await fetch('/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(R)});
 })().catch(async e=>{out.textContent='ERROR '+e.stack;try{await fetch('/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({error:String(e),stack:e.stack})})}catch(_){}})</script>'''
 
 class State:

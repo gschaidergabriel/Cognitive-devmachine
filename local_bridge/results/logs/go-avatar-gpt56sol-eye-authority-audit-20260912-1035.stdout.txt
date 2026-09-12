@@ -1,0 +1,48 @@
+SUBJECT buehne.html True 113616 18770d8e333af1bc49a818da4dbd5c2e482b859e0142d0213df6c956184c931e
+SUBJECT buehne_daemon.py True 62024 5527a1510e4101bcd97a9f57317580638757485d929a9b8e68c3d0ea9d91fcd2
+SUBJECT filmlook.js True 8383 179f49a31514c02048891ba7f49a1cc7c241c691eaf9a684a4f40094f487d66b
+SUBJECT augen_blink_relief2/blink_000.png True 99367 8ab1a11c6f8a738e34c516bbf65c00e0f48de70c7341bfa970f236e002c94fc9
+TREE augen_blink_relief2 exists True files 12 first blink_000.png last blink_011.png
+TREE augen_gaze_relief2 exists True files 22 first blick_center.png last rotglow_tracking_master.png
+ASSET augen_gaze_relief2 blick_center.png 2566 d9f5464876197a9cfeaeb64b38ce6c2e3e7a29aa413d450e8bb8b5322d6aa24c
+ASSET augen_gaze_relief2 blick_down.png 2589 fc67bed4a84e5ebd2c96e721497a00dc87701d9d300e3aebdcaba533f71729a9
+ASSET augen_gaze_relief2 blick_left.png 2592 999707d684de644eeaff4f5ff9df585f666bf6a1a0e4f75704fd635865096b3d
+ASSET augen_gaze_relief2 blick_left_down.png 2596 2d85adccfa08dc86e670d620e6ddeca1fb8238db8c5bcdc16ed11a97576b2f34
+ASSET augen_gaze_relief2 blick_left_up.png 2607 6656f535075f8054fd5d079542b7173418ff89a79c6a0f4cca2b630b0258d804
+ASSET augen_gaze_relief2 blick_right.png 2573 b97ab770a947fc7425f895fbd6bdd0b17c344a70c115ad621e2d11e8b2a3f296
+ASSET augen_gaze_relief2 blick_right_down.png 2592 e9fef84b6911987771250d40a2ca818ce2fdbde1871482d1bb032fba3f9e431f
+ASSET augen_gaze_relief2 blick_right_up.png 2580 249342052f452be53d272b319aa1e535ea4ea24079ec35272435b7fa50ecbea3
+TREE kopf_rgba_relief2 exists True files 63 first experimental_2d_proxy/combined/gier_+00_nick_+00_roll_+00.png last roll/gier_+00_nick_+00_roll_-25.png
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+00_nick_+00_roll_+00.png 419915 bcf5856ae8c0a67564657531f8ba74a43e32fc5bc25554293cc28c05dcf3b4f3
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+00_nick_+10_roll_+00.png 405545 fe2821f0eec4337796414cca7c08dbfaac9c7cf45da98923c7c99738750665a1
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+00_nick_-10_roll_+00.png 437305 d77a47565b3196252b6b587f5d7a1a087144c59e2073c75358fe2849131b2102
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+20_nick_+00_roll_+00.png 409996 2abf5dcf331e0bd954946eae4399c455b220f957cd89d0440e067630c2cf4f2c
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+20_nick_+10_roll_+00.png 393042 bf5fdd2493946fd2aa0101fa8d3dc87ae5347a6c777ac7828674c850671f3e13
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+20_nick_-10_roll_+00.png 424851 b8137bd57c24d5cd0c3256b5ad5e9fdd6a0e10fd9fb8ac04ec1508e1e00ad06d
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+40_nick_+00_roll_+00.png 370868 04aa33fab9a2e0fa0df7589fb51f05f26e87f5a3724896fa55ef16c893591fee
+ASSET kopf_rgba_relief2 experimental_2d_proxy/combined/gier_+40_nick_+10_roll_+00.png 358756 8368afb066a29c8c7a5137f5b3ceea92cb1b79d53acb312600bdac2a33a26ce5
+TREE ausdruck_erweitert_relief2 exists True files 396 first anime_90s/anime_augenrollen/frontal/stufe_00.png last serious_dystopian/verachtung/yaw_proxy/gier_-20_stufe_06.png
+EXPR_TREE_DIGEST 56f51a0f11a952cbd6c0dbf4be9b45a09a5a8fa7cd8e7962f34a0634cd114839 stufe_files 308
+DAEMON KOPF_DIR = os.path.join(VISUAL_DIR, "kopf_zugeschnitten")
+DAEMON GAZE_DIR = os.path.join(VISUAL_DIR, "augen_gaze")
+DAEMON BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+DAEMON # KOPF_DIR als HAUPT-Kopfebene -- jene alten Ordner bleiben nur fuer
+DAEMON KOPF_RGBA_DIR = os.path.join(VISUAL_DIR, "kopf_rgba")
+DAEMON AUSDRUCK_ERWEITERT_DIR = os.path.join(VISUAL_DIR, "ausdruck_erweitert")
+DAEMON def _vielleicht_ai(pfad: str) -> str:
+DAEMON KOPF_RGBA_DIR = _vielleicht_ai(KOPF_RGBA_DIR)
+DAEMON KOERPER_RGBA_DIR = _vielleicht_ai(KOERPER_RGBA_DIR)
+DAEMON GAZE_DIR = _vielleicht_ai(GAZE_DIR)
+DAEMON BLINK_DIR = _vielleicht_ai(BLINK_DIR)
+DAEMON MUND_DIR = _vielleicht_ai(MUND_DIR)
+DAEMON AUSDRUCK_ERWEITERT_DIR = _vielleicht_ai(AUSDRUCK_ERWEITERT_DIR)
+DAEMON         for verz in (AUSDRUCK_DIR, AUGEN_DIR, KOPF_DIR, GAZE_DIR, MUND_DIR,
+DAEMON                      KOPF_RGBA_DIR, KOERPER_RGBA_DIR):
+DAEMON         for wurzel, _verz, dateien in os.walk(AUSDRUCK_ERWEITERT_DIR):
+DAEMON                     verzeichnis = GAZE_DIR
+DAEMON                     verzeichnis = BLINK_DIR
+DAEMON                     verzeichnis = KOPF_RGBA_DIR
+DAEMON                     verzeichnis = KOPF_DIR
+DAEMON                 # ausserhalb von AUSDRUCK_ERWEITERT_DIR aufgeloest, weil
+DAEMON                             AUSDRUCK_ERWEITERT_DIR, register, ausdruck, unterordner, name)
+SHADOW False None None

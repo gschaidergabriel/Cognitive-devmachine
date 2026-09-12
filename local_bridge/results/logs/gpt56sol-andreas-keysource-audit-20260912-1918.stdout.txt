@@ -1,0 +1,26 @@
+=== _api_key_laden ===
+def _api_key_laden(modell_id):
+    """Liest den echten Schluessel aus KEYS_DATEI, oder None wenn keiner da
+    ist. NIE geloggt/geprintet -- nur der interne Wert."""
+    if modell_id not in MODELL_MAP:
+        return None
+    keys_env_quelle = MODELL_MAP[modell_id]["keys_env_quelle"]
+    try:
+        with open(KEYS_DATEI, "r") as f:
+            for zeile in f:
+                zeile = zeile.strip()
+                if not zeile or zeile.startswith("#") or "=" not in zeile:
+                    continue
+                key, value = zeile.split("=", 1)
+                if key == keys_env_quelle and value.strip():
+                    return value.strip()
+    except FileNotFoundError:
+        return None
+    return None
+
+=== _schluessel_aus_datei ===
+MISSING
+groq-gptoss {'env_var': 'GROQ_API_KEY', 'berechtigung': 'voll'}
+nvidia-nemotron {'env_var': 'NVIDIA_NIM_API_KEY', 'berechtigung': 'voll'}
+mistral-small {'env_var': 'MISTRAL_API_KEY', 'berechtigung': 'eingeschraenkt'}
+openrouter-deepseek {'env_var': 'OPENROUTER_API_KEY', 'berechtigung': 'voll'}

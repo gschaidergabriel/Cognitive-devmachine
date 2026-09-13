@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-chatgpt-starter-audit-20260913T1226Z",
+  "command_sha256": "cde0c830956ae459d49e1d40611b747f5b6d1bd8c09c4727caf711d24bc29b41",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T12:20:36.650553+00:00",
+  "finished_at": "2026-09-13T12:20:36.669761+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "4027c405e7e632ba6d6fcf16976439e9828dac8293304754eae3f1b09b17353b",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/bin/bash\n\"\"\"ChatGPT-Session-Starter: 10x neue Tabs im Projekt \u00f6ffnen.\n\nKorrekte URL: https://chatgpt.com/g/p-6a7644f542508191b3246591e34fb593b/project\n\"go\" ist schon da - Nutzer muss es nur noch best\u00e4tigen.\n\"\"\"\n\nURL=\"https://chatgpt.com/g/p-6a764f542508191b3246591e34fb593b/project\"\n\necho \"\ud83d\ude80 ChatGPT-Session-Starter: 10x neue Tabs im Projekt \u00f6ffnen...\"\necho \"URL: $URL\"\necho \"\"\necho \"Hinweis: 'go' ist schon da - nur noch Enter/Best\u00e4tigen n\u00f6tig!\"\necho \"\"\n\nSESSIONS_OPENED=0\nMAX_SESSIONS=10\n\nfor i in $(seq 1 $MAX_SESSIONS); do\n    echo \"Session $i/$MAX_SESSIONS: \u00d6ffne Tab...\"\n\n    # \u00d6ffne neuen Tab im bestehenden Firefox\n    xdg-open \"$URL\" > /dev/null 2>&1 &\n\n    # Kurze Pause\n    sleep 1\n\n    ((SESSIONS_OPENED++))\n\n    echo \"Session $i: \u2705 Tab ge\u00f6ffnet\"\ndone\n\necho \"\"\necho \"==================================================\"\necho \"\u2705 Fertig: $SESSIONS_OPENED/$MAX_SESSIONS Tabs ge\u00f6ffnet!\"\necho \"==================================================\"\necho \"\"\necho \"\ud83c\udfaf In jedem Tab: 'go' ist schon da - nur noch Enter/Best\u00e4tigen!\"\necho \"   Danach Tabs manuell schlie\u00dfen oder Button erneut dr\u00fccken f\u00fcr neue Sessions.\"\necho \"\"\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

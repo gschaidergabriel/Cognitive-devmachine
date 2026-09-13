@@ -1,0 +1,40 @@
+#!/bin/bash
+"""ChatGPT-Session-Starter: 10x neue Tabs im Projekt öffnen.
+
+Korrekte URL: https://chatgpt.com/g/p-6a7644f542508191b3246591e34fb593b/project
+"go" ist schon da - Nutzer muss es nur noch bestätigen.
+"""
+
+URL="https://chatgpt.com/g/p-6a764f542508191b3246591e34fb593b/project"
+
+echo "🚀 ChatGPT-Session-Starter: 10x neue Tabs im Projekt öffnen..."
+echo "URL: $URL"
+echo ""
+echo "Hinweis: 'go' ist schon da - nur noch Enter/Bestätigen nötig!"
+echo ""
+
+SESSIONS_OPENED=0
+MAX_SESSIONS=10
+
+for i in $(seq 1 $MAX_SESSIONS); do
+    echo "Session $i/$MAX_SESSIONS: Öffne Tab..."
+
+    # Öffne neuen Tab im bestehenden Firefox
+    xdg-open "$URL" > /dev/null 2>&1 &
+
+    # Kurze Pause
+    sleep 1
+
+    ((SESSIONS_OPENED++))
+
+    echo "Session $i: ✅ Tab geöffnet"
+done
+
+echo ""
+echo "=================================================="
+echo "✅ Fertig: $SESSIONS_OPENED/$MAX_SESSIONS Tabs geöffnet!"
+echo "=================================================="
+echo ""
+echo "🎯 In jedem Tab: 'go' ist schon da - nur noch Enter/Bestätigen!"
+echo "   Danach Tabs manuell schließen oder Button erneut drücken für neue Sessions."
+echo ""

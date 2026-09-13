@@ -3,6 +3,6 @@
   "command_id": "omega-crush-test-audit-20260913-003",
   "op": "exec",
   "cwd": "/workspace/entityos-crush-omega",
-  "command": "set -eu; GO=/workspace/.toolchains/go1.27.1/bin/go; echo '=== GO ==='; $GO version; echo '=== OMEGA TESTS ==='; $GO test ./internal/omega/...; echo '=== OMEGA INTEGRATION REFERENCES ==='; grep -RInE 'omega\\.|omega\.Runtime|Compile\\(|Reenter\\(|RenderSystemContext' internal --include='*.go' | head -220 || true; echo '=== OMEGA COMMIT DIFFS ==='; git show --stat --oneline 725b7b6; git show --stat --oneline 229a5e5; git show --stat --oneline bc221e9; echo '=== BUILD ROOT ==='; $GO build -o /tmp/entityos-crush-audit .; echo BUILD_ROOT_PASS; echo '=== STATUS ==='; git status --short --branch; echo '=== DONE ==='",
+  "command": "set -eu; GO=/workspace/.toolchains/go1.27.1/bin/go; echo '=== GO ==='; $GO version; echo '=== OMEGA TESTS ==='; $GO test ./internal/omega/...; echo '=== OMEGA INTEGRATION REFERENCES ==='; grep -RInE 'omega|Compile|Reenter|RenderSystemContext' internal --include='*.go' | head -220 || true; echo '=== OMEGA COMMIT DIFFS ==='; git show --stat --oneline 725b7b6; git show --stat --oneline 229a5e5; git show --stat --oneline bc221e9; echo '=== BUILD ROOT ==='; $GO build -o /tmp/entityos-crush-audit .; echo BUILD_ROOT_PASS; echo '=== STATUS ==='; git status --short --branch; echo '=== DONE ==='",
   "timeout_seconds": 600
 }

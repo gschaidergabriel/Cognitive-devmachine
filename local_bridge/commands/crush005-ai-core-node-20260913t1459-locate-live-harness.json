@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "crush005-ai-core-node-20260913t1459-locate-live-harness",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\nprintf 'CRUSH005_LOCATOR_BOUNDARY=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED\\n'\nfor name in harness_crush_knopf.sh harness_crush_knopf.py harness_crush.py CRUSH.md; do\n  printf -- '--- %s ---\\n' \"$name\"\n  find \"$HOME\" -xdev -maxdepth 8 -type f -name \"$name\" -print 2>/dev/null | while IFS= read -r p; do sha256sum \"$p\"; done\ndone"
+}

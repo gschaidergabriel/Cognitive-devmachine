@@ -1,0 +1,49 @@
+=== _chatgpt_login_sicherstellen ===
+def _chatgpt_login_sicherstellen() -> dict:
+    """Login-Gate mit automatischem Selbstheilungsversuch: prueft Status,
+    versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+    (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+    scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+    chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+    fruehes Scheitern zu melden."""
+    lage = chatgpt_login_status()
+    if lage.get("eingeloggt"):
+        return lage
+    if _chatgpt_cookie_backup_wiederherstellen():
+        lage = chatgpt_login_status()
+    return lage
+
+=== _chatgpt_senden ===
+MISSING
+=== _chatgpt_harness_fallback ===
+def _chatgpt_harness_fallback(auftrag: str, grund: str, *, kandidaten: str = "nvidia-nemotron,mistral-small",
+                               timeout_s: float = 240.0) -> dict:
+    """Ruft `harness_aider.py fallback-start` auf -- schaltet dort SELBST das
+    aktive Modell um (programmatisch, kein UI-Klick), laeuft im
+    Forschungsmodus (echtes Repo, allowlist+audit-gated, siehe dortigen
+    Docstring). Gibt IMMER ein dict zurueck, nie eine Ausnahme nach aussen."""
+    if not _HARNESS_AIDER_PY.exists():
+        return {"ok": False, "grund": f"harness_aider.py fehlt: {_HARNESS_AIDER_PY}"}
+    try:
+        p = subprocess.run(
+            ["python3", str(_HARNESS_AIDER_PY), "fallback-start",
+             "--auftrag", auftrag, "--kandidaten", kandidaten, "--grund", grund],
+            capture_output=True, text=True, timeout=timeout_s,
+        )
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "grund": f"harness-Fallback ueberschritt {timeout_s}s"}
+    except Exception as e:
+        return {"ok": False, "grund": f"harness-Fallback-Ausnahme: {e}"}
+    # letzte NICHT-leere Zeile ist das Ergebnis-JSON (Aider-Live-Ausgabe
+    # geht ueber print() waehrend des Laufs davor)
+    zeilen = [z for z in (p.stdout or "").splitlines() if z.strip()]
+    if not zeilen:
+        return {"ok": False, "grund": f"harness-Fallback ohne Ausgabe (rc={p.returncode}), "
+                f"stderr={(p.stderr or '')[-300:]}"}
+    try:
+        ergebnis = json.loads(zeilen[-1])
+    except Exception:
+        return {"ok": False, "grund": f"harness-Fallback-Ausgabe nicht als JSON lesbar: {zeilen[-1][:300]}"}
+    ergebnis.setdefault("ok", p.returncode == 0)
+    return ergebnis
+

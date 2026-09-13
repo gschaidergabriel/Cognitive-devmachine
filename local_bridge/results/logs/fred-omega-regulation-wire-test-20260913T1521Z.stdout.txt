@@ -1,0 +1,39 @@
+SOURCE_HEAD=ed3cdb0a9a3840ba884c24003f6831111db46192
+..................F..................................................... [ 84%]
+.............                                                            [100%]
+=================================== FAILURES ===================================
+________ test_manifest_names_one_self_and_single_world_brain_organ_set _________
+
+    def test_manifest_names_one_self_and_single_world_brain_organ_set():
+        data = omega.manifest()
+        assert data["self"] == "OMEGA"
+        assert data["body"] == "FranKenstein 2.0"
+>       assert set(data["organs"]) == {
+            "identity",
+            "state",
+            "grid",
+            "world_state",
+            "world_manifold",
+            "world_bridge",
+            "world_hybrid",
+            "grf_field",
+            "world_turn",
+            "grf_brain",
+            "titan",
+            "arm_bus",
+            "presentation_floor",
+            "terminal",
+            "voice",
+            "omni",
+        }
+E       AssertionError: assert {'arm_bus', '..., 'grid', ...} == {'arm_bus', '..., 'omni', ...}
+E         
+E         Extra items in the left set:
+E         'cognitive_regulation'
+E         'externalized_cognition'
+E         Use -v to get more diff
+
+tests/test_omega_runtime.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_runtime.py::test_manifest_names_one_self_and_single_world_brain_organ_set
+1 failed, 84 passed in 3.43s

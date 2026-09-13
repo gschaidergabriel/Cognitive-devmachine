@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-omega-regulation-wire-test-20260913T1521Z",
+  "command_sha256": "90d4f16b5d23ef7d0ee445842a95d07c41cf8eddfc15b1dd8aa5c37ec16ad7f8",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T08:10:44.192667+00:00",
+  "finished_at": "2026-09-13T08:10:53.220800+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "a2f9e9c93a8a3213b1227e0211668280c680ab1d8165f17f978e5d047e9a3879",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "SOURCE_HEAD=ed3cdb0a9a3840ba884c24003f6831111db46192\n..................F..................................................... [ 84%]\n.............                                                            [100%]\n=================================== FAILURES ===================================\n________ test_manifest_names_one_self_and_single_world_brain_organ_set _________\n\n    def test_manifest_names_one_self_and_single_world_brain_organ_set():\n        data = omega.manifest()\n        assert data[\"self\"] == \"OMEGA\"\n        assert data[\"body\"] == \"FranKenstein 2.0\"\n>       assert set(data[\"organs\"]) == {\n            \"identity\",\n            \"state\",\n            \"grid\",\n            \"world_state\",\n            \"world_manifold\",\n            \"world_bridge\",\n            \"world_hybrid\",\n            \"grf_field\",\n            \"world_turn\",\n            \"grf_brain\",\n            \"titan\",\n            \"arm_bus\",\n            \"presentation_floor\",\n            \"terminal\",\n            \"voice\",\n            \"omni\",\n        }\nE       AssertionError: assert {'arm_bus', '..., 'grid', ...} == {'arm_bus', '..., 'omni', ...}\nE         \nE         Extra items in the left set:\nE         'cognitive_regulation'\nE         'externalized_cognition'\nE         Use -v to get more diff\n\ntests/test_omega_runtime.py:21: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_omega_runtime.py::test_manifest_names_one_self_and_single_world_brain_organ_set\n1 failed, 84 passed in 3.43s\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

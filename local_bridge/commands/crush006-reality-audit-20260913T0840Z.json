@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "crush006-reality-audit-20260913T0840Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; echo '===IDENTITY==='; printf 'user='; whoami; printf 'host='; hostname; printf 'time='; date -Iseconds; echo '===OMEGA_CLONES==='; while IFS= read -r gd; do d=${gd%/.git}; r=$(git -C \"$d\" remote get-url origin 2>/dev/null || true); case \"$r\" in *oMEGAcV1*|*crush*|*Crush*) echo \"REPO=$d\"; echo \"REMOTE=$r\"; echo \"HEAD=$(git -C \"$d\" rev-parse HEAD 2>/dev/null || true)\"; echo \"BRANCH=$(git -C \"$d\" branch --show-current 2>/dev/null || true)\"; git -C \"$d\" status --short --branch || true; [ -f \"$d/scripts/ai-core-node-test-platform.sh\" ] && { stat -c 'HARNESS_MODE=%a HARNESS=%n' \"$d/scripts/ai-core-node-test-platform.sh\"; sha256sum \"$d/scripts/ai-core-node-test-platform.sh\"; }; esac; done < <(find /home/ai-core-node -maxdepth 5 -type d -name .git -print 2>/dev/null | sort); echo '===CRUSH_PROCESSES==='; ps -eo pid,ppid,lstart,cmd --sort=pid | grep -Ei '[c]rush|oMEGAcV1' || true; echo '===CRUSH_USER_UNITS==='; systemctl --user list-unit-files --no-pager 2>/dev/null | grep -Ei 'crush|omega' || true; systemctl --user list-units --all --no-pager 2>/dev/null | grep -Ei 'crush|omega' || true"
+}

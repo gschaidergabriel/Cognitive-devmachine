@@ -1,0 +1,428 @@
+#!/usr/bin/env python3
+"""Canonical OMEGA assembly/launcher over the existing FranKenstein runtime.
+
+This module creates no second brain, database, daemon, GRID loop, memory
+authority or effect authority.  It exposes one owner-facing assembly and a
+fail-closed source-composition self-test for the organs that are already part
+of the same OMEGA/FranKenstein body.
+
+SELF is OMEGA. FranKenstein 2.0 is OMEGA's persistent runtime/body. ChatGPT,
+OpenAI Realtime, terminal, voice, GRID/GWT, TITAN/UnifiedDB, perception,
+recurrent W_t, WorldManifold and GRF are organs of that same SELF when their
+exact runtime binding is verified.
+"""
+from __future__ import annotations
+
+import argparse
+import ast
+import hashlib
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+SCHEMA = "OMEGA_FINAL_ASSEMBLY/v1"
+SELF_ID = "OMEGA"
+BODY_ID = "FranKenstein 2.0"
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parent
+DEFAULT_STERN = Path.home() / ".claude" / "star" / "stern.py"
+
+# References to existing organs, never copied implementations.
+ORGANS: dict[str, dict[str, str]] = {
+    "identity": {
+        "path": "scripts/frankenstein_identity_assembly.py",
+        "role": "canonical SELF/person/host projection",
+    },
+    "state": {
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "role": "canonical UnifiedDB/runtime/effect integration source",
+    },
+    "grid": {
+        "path": "scripts/f2wp1207_grid10_turn_loop.py",
+        "role": "canonical GRID10 transaction/reentry/competition lifecycle",
+    },
+    "externalized_cognition": {
+        "path": "scripts/omega_externalized_cognition.py", "role": "typed cognition",
+    },
+    "externalized_learning": {
+        "path": "scripts/omega_externalized_learning.py", "role": "measured learning",
+    },
+    "cognitive_regulation": {
+        "path": "scripts/omega_cognitive_regulation.py", "role": "cognitive regulation",
+    },
+    "fred_selftest": {
+        "path": "scripts/omega_fred_selftest.py",
+        "role": "read-only FRED self-falsifier; evidence only, never promotion authority",
+    },
+    "world_state": {
+        "path": "scripts/omega_world_model.py",
+        "role": "recurrent native W_t with explicit alternatives and uncertainty",
+    },
+    "world_manifold": {
+        "path": "scripts/omega_world_manifold.py",
+        "role": "proof-safe relation/facet/topology/firebreak projection",
+    },
+    "world_bridge": {
+        "path": "scripts/omega_world_brain_bridge.py",
+        "role": "single-state W_t to WorldManifold binding",
+    },
+    "world_hybrid": {
+        "path": "scripts/omega_world_hybrid_fusion.py",
+        "role": "single compositional donor/W_t/manifold/GRF-field ingress",
+    },
+    "grf_field": {
+        "path": "scripts/omega_grf_field.py",
+        "role": "bounded recurrent R0..R6 micro-field inside the same GRF cognition path",
+    },
+    "world_turn": {
+        "path": "scripts/omega_world_turn.py",
+        "role": "typed live-world ingress delegating to the canonical GRID10 turn",
+    },
+    "grf_brain": {
+        "path": "scripts/omega_grf_brain.py",
+        "role": "typed epistemic/world-model projection into canonical GRID10 J-Space signals",
+    },
+    "titan": {
+        "path": "scripts/f2wp1207_titan_mc.py",
+        "role": "person-scoped TITAN/UnifiedDB retrieval",
+    },
+    "arm_bus": {
+        "path": "scripts/omega_arm_bus.py",
+        "role": "same-SELF multi-arm projection + acoustic lease",
+    },
+    "presentation_floor": {
+        "path": "scripts/omega_organ_activity.py",
+        "role": "ephemeral presentation arbitration",
+    },
+    "terminal": {
+        "path": "scripts/frank_terminal_777.py",
+        "role": "OMEGA terminal organ",
+    },
+    "voice": {
+        "path": "scripts/voice_777_runtime.py",
+        "role": "OMEGA Realtime compatibility entrypoint",
+    },
+    "omni": {
+        "path": "scripts/voice_host_777_live_client.py",
+        "role": "persistent ChatGPT/OMNI host-client organ",
+    },
+}
+
+PURE_COGNITION_ORGANS = (
+    "externalized_cognition",
+    "externalized_learning",
+    "cognitive_regulation",
+    "world_state",
+    "world_manifold",
+    "world_bridge",
+    "world_hybrid",
+    "grf_field",
+    "grf_brain",
+)
+
+
+def _repo_path(rel: str) -> Path:
+    return (ROOT / rel).resolve()
+
+
+def _sha256(path: Path) -> str | None:
+    try:
+        h = hashlib.sha256()
+        with path.open("rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        return h.hexdigest()
+    except OSError:
+        return None
+
+
+def _installed_stern() -> Path:
+    return Path(os.environ.get("FRANK_STERN", str(DEFAULT_STERN))).expanduser().resolve()
+
+
+def manifest() -> dict[str, Any]:
+    organs: dict[str, Any] = {}
+    for name, spec in ORGANS.items():
+        path = _repo_path(spec["path"])
+        organs[name] = {
+            "role": spec["role"],
+            "source_path": spec["path"],
+            "present": path.is_file(),
+            "sha256": _sha256(path),
+        }
+    stern = _installed_stern()
+    return {
+        "schema": SCHEMA,
+        "self": SELF_ID,
+        "body": BODY_ID,
+        "repo_root": str(ROOT),
+        "installed_runtime": {
+            "stern_path": str(stern),
+            "present": stern.is_file(),
+            "sha256": _sha256(stern),
+            "note": "live authority requires current host/owner binding and receipts; file presence is not runtime credit",
+        },
+        "organs": organs,
+        "world_brain_path": [
+            "world_state",
+            "externalized_cognition",
+            "cognitive_regulation",
+            "world_manifold",
+            "grf_field",
+            "grf_brain",
+            "grid",
+        ],
+        "invariants": [
+            "one SELF: OMEGA",
+            "FranKenstein 2.0 is runtime/body, not a competing SELF",
+            "one recurrent W_t; WorldManifold is derived from that same state",
+            "no new database or memory authority",
+            "no second GRID/GWT turn loop",
+            "GRF field/projection is cognition input, never canonical truth or effect authority",
+            "user report and retrieved memory are context, not automatically truth",
+            "no second productive watcher",
+            "no host effect authority inferred from identity or memory",
+            "Gabriel/ai-core-node and Andreas/andreas-maco provenance stays separate",
+            "VM/avatar lifecycle boundaries remain independently gated",
+        ],
+    }
+
+
+def _check(name: str, ok: bool, detail: str) -> dict[str, Any]:
+    return {"name": name, "ok": bool(ok), "detail": detail}
+
+
+def _launcher_structure(source: str) -> tuple[bool, bool, str]:
+    """Return (has_sqlite_import, has_resident_loop, parse_detail)."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError as exc:
+        return True, True, f"parse failed: {exc}"
+
+    has_db_import = False
+    has_resident_loop = False
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import) and any(alias.name == "sqlite3" for alias in node.names):
+            has_db_import = True
+        elif isinstance(node, ast.ImportFrom) and node.module == "sqlite3":
+            has_db_import = True
+        elif isinstance(node, ast.While) and isinstance(node.test, ast.Constant) and node.test.value is True:
+            has_resident_loop = True
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "serve_forever":
+            has_resident_loop = True
+    return has_db_import, has_resident_loop, "AST parsed"
+
+
+def _sql_mutation_literals(source: str) -> list[str]:
+    """Find literal SQL mutation statements without flagging SELECT-only DB access."""
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return ["<parse-failed>"]
+    prefixes = ("INSERT ", "UPDATE ", "DELETE ", "CREATE ", "DROP ", "ALTER ", "REPLACE ")
+    found: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Constant) and isinstance(node.value, str):
+            text = " ".join(node.value.upper().split())
+            for prefix in prefixes:
+                if text.startswith(prefix):
+                    found.add(prefix.strip())
+    return sorted(found)
+
+
+def selftest() -> dict[str, Any]:
+    checks: list[dict[str, Any]] = []
+    m = manifest()
+    missing = [name for name, data in m["organs"].items() if not data["present"]]
+    checks.append(_check(
+        "all_required_organs_present",
+        not missing,
+        "missing=" + ",".join(missing) if missing else "all present",
+    ))
+
+    identity_path = _repo_path(ORGANS["identity"]["path"])
+    voice_integration_path = HERE / "voice_full_integration.py"
+    terminal_path = HERE / "frank_terminal.py"
+    this_path = Path(__file__).resolve()
+
+    def read(path: Path) -> str:
+        try:
+            return path.read_text(encoding="utf-8")
+        except OSError:
+            return ""
+
+    identity_src = read(identity_path)
+    voice_src = read(voice_integration_path)
+    terminal_src = read(terminal_path)
+    launcher_src = read(this_path)
+    has_db_import, has_resident_loop, structure_detail = _launcher_structure(launcher_src)
+
+    checks.append(_check(
+        "identity_default_is_omega",
+        'SELF_ID = "OMEGA"' in identity_src,
+        "frankenstein_identity_assembly.py must default to OMEGA",
+    ))
+    checks.append(_check(
+        "voice_self_is_omega",
+        'VOICE_SELF_ID = "OMEGA"' in voice_src,
+        "voice_full_integration.py must project OMEGA",
+    ))
+    checks.append(_check(
+        "terminal_self_contract_is_omega",
+        "Preserve SELF=OMEGA" in terminal_src and "Preserve SELF=FranKenstein" not in terminal_src,
+        "terminal inference transport must not contradict the active OMEGA identity block",
+    ))
+    checks.append(_check(
+        "launcher_has_no_db_writer",
+        not has_db_import,
+        "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; " + structure_detail,
+    ))
+    checks.append(_check(
+        "launcher_has_no_daemon_loop",
+        not has_resident_loop,
+        "omega_runtime defines no resident infinite/server loop; " + structure_detail,
+    ))
+
+    for organ in PURE_COGNITION_ORGANS:
+        src = read(_repo_path(ORGANS[organ]["path"]))
+        has_sqlite, has_loop, detail = _launcher_structure(src)
+        checks.append(_check(
+            f"{organ}_is_pure_nonresident_cognition",
+            bool(src) and not has_sqlite and not has_loop,
+            f"sqlite_import={has_sqlite}; resident_loop={has_loop}; {detail}",
+        ))
+
+    grf_src = read(_repo_path(ORGANS["grf_brain"]["path"]))
+    checks.append(_check(
+        "grf_brain_preserves_epistemic_fences",
+        all(token in grf_src for token in (
+            "GRF_HYPOTHESIS != EVIDENCE",
+            "UNKNOWN != ZERO != ERROR != MEASURED",
+            "world_collapse",
+            "canonical_truth_credit",
+            "signal_overrides",
+        )),
+        "GRF must preserve UNKNOWN/hypothesis/world-collapse fences and emit the existing GRID signal contract",
+    ))
+
+    field_src = read(_repo_path(ORGANS["grf_field"]["path"]))
+    checks.append(_check(
+        "grf_field_verify_is_readiness_not_truth",
+        all(token in field_src for token in (
+            '"R6": "VERIFY"',
+            "verification_is_readiness_not_truth",
+            "canonical_truth_credit",
+            "effect_authority",
+        )),
+        "R6 may encode verification readiness only and must carry no truth/effect authority",
+    ))
+
+    world_turn_src = read(_repo_path(ORGANS["world_turn"]["path"]))
+    world_turn_sql_mutations = _sql_mutation_literals(world_turn_src)
+    checks.append(_check(
+        "world_turn_delegates_without_own_persistence",
+        bool(world_turn_src)
+        and "turn_loop.run_canonical_turn(" in world_turn_src
+        and "grf_input=prepared[\"grf_input\"]" in world_turn_src
+        and not world_turn_sql_mutations,
+        "world_turn must be SELECT/read composition plus one delegation; sql_mutations="
+        + repr(world_turn_sql_mutations),
+    ))
+    checks.append(_check(
+        "world_turn_preserves_report_memory_fences",
+        all(token in world_turn_src for token in (
+            "reported_content_not_fact",
+            "memory_is_context_not_truth",
+            "canonical_truth_credit",
+            "effect_authority",
+        )),
+        "live user report/retrieval context must not be promoted to truth/effect authority",
+    ))
+
+    hybrid_src = read(_repo_path(ORGANS["world_hybrid"]["path"]))
+    checks.append(_check(
+        "hybrid_world_has_one_state_one_field_path",
+        all(token in hybrid_src for token in (
+            "single_world_state",
+            "native_world_manifold",
+            "recurrent_grf_field",
+            "predecessor_field_bound",
+        )),
+        "hybrid ingress must carry one W_t-derived manifold and one bounded recurrent field",
+    ))
+
+    ok = all(c["ok"] for c in checks)
+    return {
+        "schema": SCHEMA,
+        "ok": ok,
+        "scope": "source-composition-only",
+        "self": SELF_ID,
+        "body": BODY_ID,
+        "checks": checks,
+        "runtime_credit": False,
+        "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.",
+    }
+
+
+def _exec_script(path: Path, argv: list[str]) -> int:
+    if not path.is_file():
+        print(f"OMEGA: organ missing: {path}", file=sys.stderr)
+        return 2
+    os.execv(sys.executable, [sys.executable, str(path), *argv])
+    return 127
+
+
+def _organ_status() -> int:
+    path = HERE / "omega_organ_activity.py"
+    return subprocess.call([sys.executable, str(path), "status"])
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(
+        prog="omega",
+        description="OMEGA: canonical entry point over the existing FranKenstein 2.0 organs",
+    )
+    sub = ap.add_subparsers(dest="command")
+    sub.add_parser("status", help="read-only source/runtime binding manifest")
+    sub.add_parser("selftest", help="fail-closed source-composition self-test")
+    p_fred = sub.add_parser("fred-selftest", help="read-only OMEGA self-as-test-object FRED probe")
+    p_fred.add_argument("--owner", required=True)
+    p_fred.add_argument("--machine-id", required=True)
+    p_fred.add_argument("--host", action="store_true")
+    sub.add_parser("organ-status", help="read ephemeral presentation-floor state")
+    p_terminal = sub.add_parser("terminal", help="enter the existing OMEGA terminal organ")
+    p_terminal.add_argument("args", nargs=argparse.REMAINDER)
+    p_voice = sub.add_parser("voice", help="enter the existing OMEGA Realtime voice organ")
+    p_voice.add_argument("args", nargs=argparse.REMAINDER)
+    p_grf = sub.add_parser("grf", help="compile/project GRF state for the canonical GRID10 J-Space")
+    p_grf.add_argument("args", nargs=argparse.REMAINDER)
+    ns = ap.parse_args(argv)
+
+    if ns.command in (None, "status"):
+        print(json.dumps(manifest(), ensure_ascii=False, indent=2))
+        return 0
+    if ns.command == "selftest":
+        result = selftest()
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+        return 0 if result["ok"] else 1
+    if ns.command == "fred-selftest":
+        args = ["--owner", ns.owner, "--machine-id", ns.machine_id]
+        if ns.host:
+            args.append("--host")
+        return subprocess.call([sys.executable, str(HERE / "omega_fred_selftest.py"), *args])
+    if ns.command == "organ-status":
+        return _organ_status()
+    if ns.command == "terminal":
+        return _exec_script(HERE / "frank_terminal_777.py", list(ns.args))
+    if ns.command == "voice":
+        return _exec_script(HERE / "voice_777_runtime.py", list(ns.args))
+    if ns.command == "grf":
+        return _exec_script(HERE / "omega_grf_brain.py", list(ns.args))
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

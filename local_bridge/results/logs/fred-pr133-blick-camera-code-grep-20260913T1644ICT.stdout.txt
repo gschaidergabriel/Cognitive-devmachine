@@ -1,0 +1,30 @@
+22:⚠️ KAMERAEXKLUSIVITAET -- EINGRIFF IN EINEN LAUFENDEN DIENST. sehen.py haelt
+27:(finally-Pfad in stoppen()). Gabriels Bedingung woertlich: "bau es so, dass
+31:(kamera.lock, enthaelt die PID dieses Prozesses) und ein UNABHAENGIGER
+43:sondern legt eine dokumentierte ANNAHME fest: cv2.VideoCapture liefert das
+44:Rohbild ungespiegelt (wie eine Ueberwachungskamera, nicht wie ein
+71:# ⭐ OPENCL AUS, BEVOR cv2 GELADEN WIRD (2026-09-11).
+84:# 8 geteilten GB.
+93:    import cv2
+95:        cv2.ocl.setUseOpenCL(False)   # Guertel und Hosentraeger
+99:    cv2 = None
+103:KAMERA_INDEX = int(os.environ.get("BLICK_KAMERA", "1"))       # /dev/video1 gemessen vorhanden
+110:LOCK_PFAD = os.path.join(_HIER, "kamera.lock")
+117:# (KAMERAEXKLUSIVITAET oben ist eine Hartregel), sondern denselben Frame
+174:    """Ein Prozess-weites Singleton (siehe instanz()). starten()/stoppen()
+189:        self.verfuegbar = cv2 is not None
+191:    def _kamera_oeffnen(self):
+192:        for idx in (KAMERA_INDEX, 0, 1, 2, 3, 4):
+194:                cap = cv2.VideoCapture(idx, cv2.CAP_V4L2)
+198:                cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+199:                cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+204:    def starten(self) -> bool:
+218:                self._kaskade = cv2.CascadeClassifier(
+219:                    cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+222:            self._cap = self._kamera_oeffnen() if self._kaskade is not None else None
+242:    def stoppen(self):
+283:        grau = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+338:        serializable"): bh/h aus cv2.detectMultiScale sind numpy-Typen: die
+395:    if not b.starten():
+403:            b.stoppen()
+e73d539d8cf7d331be8ade3390168c41679a6374a9d2059311c8de3859fd434f  /home/ai-core-node/.claude/star/visual/blick.py

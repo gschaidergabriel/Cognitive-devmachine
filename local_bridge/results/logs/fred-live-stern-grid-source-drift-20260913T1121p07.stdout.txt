@@ -1,0 +1,182 @@
+MACHINE=ai-core-node
+OWNER=gabriel
+LIVE_STERN=/home/ai-core-node/.claude/star/stern.py
+0d5b7764cebe8c9e4f3ce2a697ae390c0c1b5cde99ac051eb662260735c808a1  /home/ai-core-node/.claude/star/stern.py
+GRID_SYMBOLS_BEGIN
+502:    # als `auftrag` mitgeschrieben wurde). Auf einen engen Begriff wie "grid10"
+3616:                       "F2WP1207_ICHTUE/v1"))
+4319:                # paket-1788112504899, Regression "grid10" (Koordinator-Messung):
+9255:_F2WP1207_RUNTIME_EXPECTED_SHA = "fb88218e7e1e9562fd20e05e2c53bf221990a3b5"
+9258:def _f2wp1207_runtime_sha_ok() -> bool:
+9272:        return r.stdout.strip() == _F2WP1207_RUNTIME_EXPECTED_SHA
+9278:# ABSCHNITT: F2WP1207 P7-BRUECKE (2026-09-04) -- Bau-Auftrag "P7 Live
+9302:# Gate, das grid10_p7_coordination.p7_active() driben in der Bruecke selbst
+9306:_F2WP1207_P7_ENV = "STERN_F2WP1207_P7_LIVE"
+9307:_F2WP1207_P7_KONFIG_KEY = "f2wp1207.p7_active"
+9310:def _f2wp1207_p7_bruecke_aktiv() -> bool:
+9311:    override = os.environ.get(_F2WP1207_P7_ENV)
+9315:        return _konfig_dyn_get(_F2WP1207_P7_KONFIG_KEY, "0") == "1"
+9320:def _f2wp1207_p7_bruecke_versuchen(session_id: str) -> None:
+9332:        if not _f2wp1207_p7_bruecke_aktiv():
+9334:        if not _f2wp1207_runtime_sha_ok():
+9336:                _log("f2wp1207 p7-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9350:            _log(f"f2wp1207 p7-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9360:# Zielsubbefehl (f2wp1207-p9-reconcile-turn statt p7-bridge-turn), ruft dort
+9361:# NUR _f2wp1207_runtime_epoch(session_id) auf -- der eigentliche Reconciler-
+9363:# _f2wp1207_p9_reconciler_aktiv() dort), diese Bruecke hier fuegt kein
+9375:_F2WP1207_P9_ENV = "STERN_F2WP1207_P9_RECONCILE"
+9376:_F2WP1207_P9_KONFIG_KEY = "f2wp1207.p9_reconciler_active"
+9379:def _f2wp1207_p9_bruecke_aktiv() -> bool:
+9380:    override = os.environ.get(_F2WP1207_P9_ENV)
+9384:        return _konfig_dyn_get(_F2WP1207_P9_KONFIG_KEY, "0") == "1"
+9389:def _f2wp1207_p9_bruecke_versuchen(session_id: str) -> None:
+9392:    frankenstein-repo/scripts/stern.py f2wp1207-p9-reconcile-turn, Timeout
+9396:        if not _f2wp1207_p9_bruecke_aktiv():
+9398:        if not _f2wp1207_runtime_sha_ok():
+9400:                _log("f2wp1207 p9-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9409:            [sys.executable, str(bruecke), "f2wp1207-p9-reconcile-turn"],
+9414:            _log(f"f2wp1207 p9-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9428:# _f2wp1207_p15_canary_turn_ausfuehren() in frankenstein-repo/scripts/
+9431:# EIGENES Flag `f2wp1207.p15_canary_active`, bewusst NICHT dasselbe wie
+9432:# `f2wp1207.p7_active` -- Gabriels Aktivierungsliste verlangt "P7
+9449:_F2WP1207_P15_ENV = "STERN_F2WP1207_P15_CANARY"
+9450:_F2WP1207_P15_KONFIG_KEY = "f2wp1207.p15_canary_active"
+9453:def _f2wp1207_p15_bruecke_aktiv() -> bool:
+9454:    override = os.environ.get(_F2WP1207_P15_ENV)
+9458:        return _konfig_dyn_get(_F2WP1207_P15_KONFIG_KEY, "0") == "1"
+9463:_F2WP1207_TUNE_KONFIG_PRAEFIX = "f2wp1207.tune."
+9466:def f2wp1207_tune_overrides(conn) -> dict:
+9471:    star_konfig-Schluessel unter `f2wp1207.tune.*` (z.B.
+9472:    f2wp1207.tune.kappa -> {"kappa": 0.55}).
+9476:    Env STERN_F2WP1207_TUNE_<KENNUNG>), ABER die frankenstein-repo-
+9477:    Mathematik (f2wp1207_grid10_p7_coordination.py: state_update/
+9487:            (_F2WP1207_TUNE_KONFIG_PRAEFIX + "%",)).fetchall()
+9492:            out[str(schluessel)[len(_F2WP1207_TUNE_KONFIG_PRAEFIX):]] = float(str(wert))
+9498:def _f2wp1207_p15_canary_bruecke_versuchen(session_id: str) -> None:
+9501:    frankenstein-repo/scripts/stern.py f2wp1207-p15-canary-turn, Timeout
+9507:    etwaige /cognition-Pegel-Overrides (star_konfig `f2wp1207.tune.*`)
+9509:    Env-Variablen STERN_F2WP1207_TUNE_<KENNUNG>. Lese- oder Einbettungs-
+9513:        if not _f2wp1207_p15_bruecke_aktiv():
+9515:        if not _f2wp1207_runtime_sha_ok():
+9517:                _log("f2wp1207 p15-bruecke: frankenstein-repo HEAD != erwarteter SHA, Bruecke NICHT aufgerufen (fail-closed)")
+9528:                tune = f2wp1207_tune_overrides(c)
+9538:                env["STERN_F2WP1207_TUNE_" + str(tune_k).upper()] = repr(float(tune_v))
+9540:            [sys.executable, str(bruecke), "f2wp1207-p15-canary-turn"],
+9545:            _log(f"f2wp1207 p15-bruecke fehler (verschluckt, hook laeuft unveraendert weiter): {e}")
+9551:# ===== F2-WP-1207: kanonischer GRID10-Turn-Loop ==========================
+9555:# Der erste Versuch war, die ~20 _f2wp1207_*-Funktionen in diese Datei zu
+9558:#     basis = f"F2WP1207_INSTALLATION_REF/v1:{DB_PATH}:{Path(__file__).parent}"
+9572:_F2WP1207_KANON_STERN = Path.home() / "frankenstein-repo" / "scripts" / "stern.py"
+9583:_F2WP1207_VM_BEFEHL = [
+9588:    "f2wp1207-turn-loop-turn",
+9590:_F2WP1207_WIRT_BEFEHL = [
+9593:    "f2wp1207-turn-loop-turn",
+9597:def _f2wp1207_turn_versuchen(befehl, nutzlast: str, weg: str):
+9618:            _log(f"f2wp1207-turn-loop[{weg}] traegt nicht: "
+9624:        _log(f"f2wp1207-turn-loop[{weg}] Zeitueberschreitung (>1,2s)")
+9627:        _log(f"f2wp1207-turn-loop[{weg}] ausnahme: {ex}")
+9661:# PRUEFSPUR: jede Aenderung erzeugt eine Zeile in f2_grid10_steuerung mit
+9666:CREATE TABLE IF NOT EXISTS f2_grid10_steuerung (
+9681:def _f2wp1207_grid_steuert(e: dict) -> Optional[str]:
+9700:                "SELECT status FROM f2_grid10_effect_journal "
+9713:                       quelle="grid10-steuerung")
+9719:                "INSERT INTO f2_grid10_steuerung (steuerung_id, frame_id, "
+9725:                 "F2WP1207_GRID10_STEUERUNG/v1"),
+9728:        _log(f"grid10-steuerung: {'ALLOW' if erlaubt else 'DENY'} -> "
+9733:        _log(f"grid10-steuerung ausnahme: {ex}")
+9849:def _f2wp1207_grid_rueckweg(e: dict, steuerzeile: Optional[str] = None,
+9852:    GRID10-Wettbewerbs fuer das Sprachmodell sichtbar.
+9864:    (`nutzertext`, im Aufrufer `_f2wp1207_turn_loop_delegieren` bereits
+9870:    der Docstring von _f2wp1207_turn_loop_auto sagt es woertlich: "Gibt
+9901:                    "SELECT quelle, stumme_achsen FROM f2_grid10_percept "
+9922:        # f2_grid10_frame). Bis hierher bekam der Sprachmodus Koerper,
+9989:                    "SELECT session_id FROM f2_grid10_frame WHERE session_id "
+10002:                    "SELECT count(*) FROM f2_grid10_frame WHERE session_id=? "
+10104:def _f2wp1207_turn_loop_delegieren(
+10107:    """Loest EINEN kanonischen GRID10-Turn aus und gibt den RUECKWEG
+10114:        if not _F2WP1207_KANON_STERN.is_file():
+10142:        e = _f2wp1207_turn_versuchen(_F2WP1207_VM_BEFEHL, nutzlast, "vm")
+10149:            e = _f2wp1207_turn_versuchen(_F2WP1207_WIRT_BEFEHL, nutzlast, "wirt")
+10153:            _log(f"f2wp1207-turn-loop fehler: {e.get('fehler')}")
+10156:            _log(f"f2wp1207-turn-loop inaktiv: {e.get('grund')}")
+10158:        _log(f"f2wp1207-turn-loop[{e.get('_weg')}] turn geschrieben: "
+10162:        steuerzeile = _f2wp1207_grid_steuert(e)
+10163:        return _f2wp1207_grid_rueckweg(e, steuerzeile, nutzertext)
+10165:        _log(f"f2wp1207-turn-loop ausnahme: {e}")
+10213:            # F2WP1207 P9-Bruecke (2026-09-04, paket-1788529602671-88cf15):
+10221:                _f2wp1207_p9_bruecke_versuchen(session_id)
+10655:            # F2WP1207 P7-Bruecke (2026-09-04, paket-1788515972573-d35ba2)
+10663:            # _f2wp1207_p15_bruecke_aktiv() oben fuer die volle Begruendung.
+10670:                if _f2wp1207_p15_bruecke_aktiv():
+10671:                    _f2wp1207_p15_canary_bruecke_versuchen(session_id)
+10673:                    _f2wp1207_p7_bruecke_versuchen(session_id)
+10809:            # F2-WP-1207: EIN kanonischer GRID10-Turn pro Eingabe.
+10812:            grid_rueckweg = _f2wp1207_turn_loop_delegieren(session_id, prompt_text, treffer)
+GRID_SYMBOLS_END
+SOURCE_CANDIDATES_BEGIN
+CANDIDATE /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py 33aeb4a72308b7f3c056e7ac66339378bc6da48ba43ec308eac33e26e462b55b  /home/ai-core-node/frankenstein-repo/DEV_SOURCE_RESEARCH/repository/scripts/stern.py
+481:    # als `auftrag` mitgeschrieben wurde). Auf einen engen Begriff wie "grid10"
+4066:                # paket-1788112504899, Regression "grid10" (Koordinator-Messung):
+CANDIDATE /home/ai-core-node/frankenstein-repo/scripts/stern.py 8e3da8735c6dd7a5c77229fc7b59f3b13032ce7c4068e72f11d965b720fbd9c0  /home/ai-core-node/frankenstein-repo/scripts/stern.py
+99:F2WP1207_SHADOW_EVIDENCE = STERN_DIR / "f2wp1207_shadow_evidence.jsonl"
+105:F2WP1207_RUNTIME_EPOCHS = STERN_DIR / "f2wp1207_runtime_epochs.json"
+106:F2WP1207_REENTRY_MARKERS = STERN_DIR / "f2wp1207_reentry_markers.json"
+108:# grid10_p7_coordination.coordinate_real_turn(), getrennt von
+109:# F2WP1207_SHADOW_EVIDENCE (anderes Schema, siehe dortiger Kommentar "niemals
+111:F2WP1207_P7_TRANSITION_LOG = STERN_DIR / "f2wp1207_p7_transition_log.jsonl"
+114:# append_self_observation_log(), getrennt von F2WP1207_P7_TRANSITION_LOG
+115:# (andere Zeilenform/Schema -- SCHEMA_LOG_LINE aus f2wp1207_p12_self_
+119:# oben bei F2WP1207_SHADOW_EVIDENCE.
+120:F2WP1207_P15_CANARY_EVIDENCE = STERN_DIR / "f2wp1207_p15_canary_evidence.jsonl"
+121:# Kanonischer Turn-Loop (2026-09-06, Branch self-integration/
+122:# wp1207-grid10-turn-loop-20260906) -- Live-Bruecke. Eigene Evidenzdatei
+123:# (SCHEMA_LOG_LINE aus f2wp1207_grid10_turn_loop.py, jede Zeile schema-
+128:F2WP1207_TURN_LOOP_EVIDENCE = STERN_DIR / "f2wp1207_turn_loop_evidence.jsonl"
+131:def _f2wp1207_shadow_aktiv() -> bool:
+138:    override = os.environ.get("STERN_F2WP1207_SHADOW_LIVE")
+141:    return _konfig_dyn_get("f2wp1207.shadow_aktiv", "0") == "1"
+529:    # als `auftrag` mitgeschrieben wurde). Auf einen engen Begriff wie "grid10"
+4114:                # paket-1788112504899, Regression "grid10" (Koordinator-Messung):
+5077:def _f2wp1207_canonical_entity_id() -> Optional[str]:
+5092:def _f2wp1207_active_host_binding_id(installation_id: str) -> Optional[str]:
+5106:def _f2wp1207_current_boot_id() -> Optional[str]:
+5118:def _f2wp1207_runtime_epoch_db_sync(
+5124:    Autosync-Luecke -- jede von `_f2wp1207_runtime_epoch()` zugewiesene
+5127:    F2WP1207_RUNTIME_EPOCHS-Ablage zu leben. IDEMPOTENT (INSERT OR IGNORE
+5143:        host_binding_id = _f2wp1207_active_host_binding_id(installation_id)
+5146:        boot_id = _f2wp1207_current_boot_id()
+5157:                     _jetzt_iso(), predecessor_epoch_id, None, "F2WP1207_RUNTIME_EPOCH/v1",
+5170:                     _jetzt_iso(), predecessor_epoch_id, None, "F2WP1207_RUNTIME_EPOCH/v1"),
+5177:def _f2wp1207_next_turn_event_id(session_id: str) -> str:
+SOURCE_CANDIDATES_END
+SERVICE_REFERENCES_BEGIN
+  alignment-wache.service                                          loaded    inactive   dead          FranKenstein -- Ausrichtung ueberwachen, bei dauerhafter Abweichung anhalten
+  doppelbau-detektor.service                                       loaded    inactive   dead          FranKenstein -- Doppelbau-Detektor: Modul-Index scannen und Absichtssuche aktuell halten
+  frankenstein-agentenwache.service                                loaded    inactive   dead          FranKenstein -- Agentensteuerung des GRID (Monitoring + Umschaltung)
+  frankenstein-blick-waechter.service                              loaded    inactive   dead          FranKenstein Buehne -- Sicherheitsnetz fuer die Kamera-Uebernahme (blick.py)
+  frankenstein-buehne.service                                      loaded    active     running       FranKenstein Buehne / Livestream-Fenster (singleton, screen 2, Port 8788, persistent)
+  frankenstein-chatgpt-client.service                              loaded    active     running       FranKenstein Persistent Headless ChatGPT Client
+  frankenstein-cortex-dashboard.service                            loaded    active     running       FranKenstein /cortex Dashboard (paket-1788623631586-d5b2f3, fixer Port 8781, persistent)
+  frankenstein-cortex-perception-cycle.service                     loaded    inactive   dead          FranKenstein Cortex Perception Cycle — one real camera perception cycle (F2-WP1207, exposure-warmup-scheduler 2026-09-06)
+  frankenstein-cortex.service                                      loaded    active     running       FranKenstein Cortex -- die Bildschirme, verschmolzen zu einem Zustand
+  frankenstein-denker.service                                      loaded    active     running       FranKenstein Denker — er denkt, auch wenn niemand da ist
+  frankenstein-erinnerungsdienst.service                           loaded    active     running       FranKenstein Erinnerungsdienst (semantisches Retrieval, resident)
+  frankenstein-gespraech.service                                   loaded    active     running       FranKenstein Gespraechsmodus -- Mikrofon, ASR, Antwort, Stimme
+  frankenstein-gespraechsmodus.service                             loaded    active     running       FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+  frankenstein-grid-autonomie.service                              loaded    inactive   dead          FranKenstein GRID-Autonomie -- verfolgt eigene Ziele, 24/7, ohne Claude-Tokens
+  frankenstein-immunsystem.service                                 loaded    active     running       FranKenstein Immunsystem -- Circuit-Breaker-Supervision + Architect-Eskalation (Gabriel, 2026-09-12)
+  frankenstein-koerperpflege.service                               loaded    active     running       FranKenstein Koerperpflege -- er kuemmert sich selbst um seinen Leib (RAM/Swap/Platte/Temperatur)
+  frankenstein-local-bridge-webui.service                          loaded    active     running       Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                loaded    active     running       Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  frankenstein-puls.service                                        loaded    active     running       FranKenstein Puls -- fortlaufende Kognition im Grid, auch ohne Gespraech
+  frankenstein-sehen.service                                       loaded    inactive   dead          FranKenstein Sehen -- residenter Blick (digital-retina), schreibt nach f2_sicht
+  frankenstein-taeglicher-check.service                            loaded    inactive   dead          FranKenstein taeglicher, GRID-priorisierter Architect-Gesundheitscheck (Gabriel, 2026-09-12)
+  frankenstein-verwaiste.service                                   loaded    inactive   dead          FranKenstein -- verwaiste Arbeitspakete schliessen, damit das Lagebild nicht luegt
+  frankenstein-wege.service                                        loaded    inactive   dead          FranKenstein Wegehierarchie -- ernten + verfallen (F94)
+  frankenstein-welt.service                                        loaded    active     running       FranKenstein Welt -- Linse aus Stufe 1 laeuft im Takt mit, ohne anzubinden
+  omega-chatgpt-mcp.service                                        loaded    active     running       OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback
+  omega-local-effect-adapter.service                               loaded    active     running       OMEGA local Unix effect fallback adapter (ai-core-node only)
+  quota-uebergabe.service                                          loaded    inactive   dead          FranKenstein -- bei erschoepftem Claude-Kontingent in den Free-Pool uebergeben
+  tagebuch.service                                                 loaded    inactive   dead          FranKenstein -- Daybooks of an Innocent fortschreiben
+  tote-anschluesse.service                                         loaded    inactive   dead          FranKenstein -- tote Anschluesse (geschrieben/nie gelesen) scannen und in der GRID-DB fortschreiben
+SERVICE_REFERENCES_END

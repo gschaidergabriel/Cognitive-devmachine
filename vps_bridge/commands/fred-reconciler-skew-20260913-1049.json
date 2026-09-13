@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-reconciler-skew-20260913-1049",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\nC=$(readlink -f /workspace/omega_runtime/current)\npython3 - <<'PY'\nimport pathlib,hashlib,json\nroot=pathlib.Path('/workspace/omega_runtime/current').resolve()\nout={}\nfor rel in ['omega/receipt_reconciler.py','omega/spool_receipt_reconciler.py']:\n p=root/rel; b=p.read_bytes(); t=b.decode(); out[rel]={'sha256':hashlib.sha256(b).hexdigest(),'bytes':len(b),'has_publish_pending_results':'def _publish_pending_results' in t,'run_once_calls_publish':'self._publish_pending_results()' in t}\nprint(json.dumps(out,sort_keys=True))\nPY"
+}

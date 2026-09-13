@@ -48,12 +48,20 @@ new = '''\tsystemPrompt := a.systemPrompt.Get()
 \tpromptPrefix := a.systemPromptPrefix.Get()
 
 \t// EntityOS seam: compile the bounded current cognitive field before this
-\t// model organ is invoked. NoopRuntime renders an empty frame, preserving
-\t// upstream Crush behavior byte-for-byte at this boundary.
+\t// model organ is invoked. The selected Crush provider/model is observed as
+\t// causal route evidence; OMEGA does not dispatch or override it here.
+\t// NoopRuntime renders an empty frame, preserving upstream Crush behavior.
 \tframe, frameErr := a.cognitiveRuntime.Compile(ctx, omega.TurnInput{
 \t\tSessionID: call.SessionID,
 \t\tRunID:     call.RunID,
 \t\tPrompt:    call.Prompt,
+\t\tRoute: omega.OrganRoute{
+\t\t\tKind:       "provider",
+\t\t\tOrganID:    "crush-model",
+\t\t\tAdapterID:  "crush-native",
+\t\t\tProviderID: largeModel.ModelCfg.Provider,
+\t\t\tModelID:    largeModel.ModelCfg.Model,
+\t\t},
 \t})
 \tif frameErr != nil {
 \t\treturn nil, fmt.Errorf("omega cognitive compile failed: %w", frameErr)

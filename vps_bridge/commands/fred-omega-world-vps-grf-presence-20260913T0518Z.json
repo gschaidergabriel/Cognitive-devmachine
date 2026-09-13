@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-omega-world-vps-grf-presence-20260913T0518Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu; echo '--- omega grf brain ---'; find /workspace -type f -name omega_grf_brain.py -print 2>/dev/null | sort | head -50; echo '--- canonical turn loop ---'; find /workspace -type f -name f2wp1207_grid10_turn_loop.py -print 2>/dev/null | sort | head -50; echo '--- p7/p10/p11 ---'; for N in f2wp1207_grid10_p7_coordination.py f2wp1207_p10_workspace_reentry.py f2wp1207_grid10_p11_effects.py; do find /workspace -type f -name \"$N\" -print 2>/dev/null | sort | head -20; done"
+}

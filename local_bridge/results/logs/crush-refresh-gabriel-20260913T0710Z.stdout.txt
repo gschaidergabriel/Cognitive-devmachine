@@ -1,0 +1,28 @@
+===IDENTITY===
+ai-core-node-projekt-frankenstein
+ai-core-node
+2026-09-13T07:13:13Z
+===HARNESS_HASHES===
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99  /home/ai-core-node/frankenstein-repo/CRUSH.md
+===CRUSH_BINARY===
+bash: line 1: crush: command not found
+===FRANKENSTEIN_REPO===
+dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+main
+ M scripts/__pycache__/stern.cpython-312.pyc
+?? scripts/openai_api_key.local
+===HARNESS_PROCS===
+195733 bash -lc set -eu; echo '===IDENTITY==='; hostname; whoami; date -u +%Y-%m-%dT%H:%M:%SZ; echo '===HARNESS_HASHES==='; sha256sum /home/ai-core-node/.claude/star/harness_crush_knopf.sh /home/ai-core-node/.claude/star/harness_crush_knopf.py /home/ai-core-node/.claude/star/harness_crush.py /home/ai-core-node/frankenstein-repo/CRUSH.md; echo '===CRUSH_BINARY==='; command -v crush || true; crush --version 2>&1 || true; echo '===FRANKENSTEIN_REPO==='; cd /home/ai-core-node/frankenstein-repo; git rev-parse HEAD; git branch --show-current; git status --short; echo '===HARNESS_PROCS==='; pgrep -af 'crush|harness_crush' || true; echo '===CRUSH_MD_HEAD==='; sed -n '1,160p' CRUSH.md
+1663824 /usr/bin/cool-retro-term -T Free Frank -e /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+1664051 /bin/bash /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+1664052 python3 harness_crush_knopf.py
+1664553 node /home/ai-core-node/.local/npm-global/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue
+1664626 /home/ai-core-node/.local/npm-global/lib/node_modules/@charmland/crush/bin/crush --cwd /home/ai-core-node/frankenstein-repo --continue
+===CRUSH_MD_HEAD===
+# frankenstein-repo
+
+Sandbox-Repo fuer den Free-Pool-Terminal-Harness (aider/Crush). Bereits
+dokumentiert -- kein automatischer Repo-Scan noetig.

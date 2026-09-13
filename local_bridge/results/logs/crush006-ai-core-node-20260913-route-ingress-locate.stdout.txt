@@ -1,0 +1,1093 @@
+===BOUNDARY===
+machine_id=ai-core-node
+owner=gabriel
+execution_boundary=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED
+===REPO===
+HEAD=dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+BRANCH=main
+STATUS:
+ M .gitignore
+ M scripts/__pycache__/stern.cpython-312.pyc
+?? scripts/openai_api_key.local
+===TARGETED_INGRESS_MATCHES===
+--- scripts/f2wp1207_percept_passthrough_test.py:7 ---
+000004: die tatsaechlich laeuft -- ohne den kanonischen Default zu veraendern.
+000005: 
+000006: BEFUND, DER DAZU GEFUEHRT HAT (gemessen, nicht behauptet):
+000007: ``signal_overrides`` wurde am 2026-09-07 in
+000008: ``p7mod.run_coordination_cycle`` eingebaut und dort als "erste Stelle in
+000009: GRID10, an der eine echte Messung mitkonkurrieren kann" dokumentiert. Der
+000010: kanonische Turn-Loop ruft diese Funktion aber NIE auf -- er baut denselben
+000011: Wettbewerb in ``fill_jspace`` ein zweites Mal nach. Vor diesem Paket gab es
+--- scripts/f2wp1207_percept_passthrough_test.py:12 ---
+000009: GRID10, an der eine echte Messung mitkonkurrieren kann" dokumentiert. Der
+000010: kanonische Turn-Loop ruft diese Funktion aber NIE auf -- er baut denselben
+000011: Wettbewerb in ``fill_jspace`` ein zweites Mal nach. Vor diesem Paket gab es
+000012: in ``f2wp1207_grid10_turn_loop.py`` null Vorkommen von ``signal_overrides``.
+000013: Der Haken existierte also, war aber von der einzigen laufenden Bahn aus
+000014: unerreichbar: 208 Frames auf andreas-MACO, 100% der Signale sha256-Rauschen.
+000015: 
+000016: Zwei Teile:
+--- scripts/f2wp1207_percept_passthrough_test.py:24 ---
+000021:           Leck zwischen Aufrufen (A4), unbekannte Zellen werden ignoriert
+000022:           statt zu werfen (A5), Teil-Override laesst die anderen neun
+000023:           Zellen unveraendert (A6).
+000024:   Teil B  Ende-zu-Ende durch ``run_canonical_turn`` gegen eine KOPIE der
+000025:           echten UnifiedDB -- der Percept erreicht die Bahn, die wirklich
+000026:           laeuft, und landet im persistierten Frame (B1-B3). Das ist der
+000027:           eigentliche Beweis: Teil A wuerde auch gruen sein, wenn die
+000028:           Aufrufstelle den Parameter weiterhin verschluckt.
+--- scripts/f2wp1207_percept_passthrough_test.py:65 ---
+000062:     seed = {c: 0.0 for c in p7mod.CELLS}
+000063: 
+000064:     basis = tl.fill_jspace(tev, seed)
+000065:     ohne = tl.fill_jspace(tev, seed, signal_overrides=None)
+000066:     leer = tl.fill_jspace(tev, seed, signal_overrides={})
+000067: 
+000068:     def fingerprint(js) -> tuple:
+000069:         return (js.winner_cell_id, js.broadcast_value,
+--- scripts/f2wp1207_percept_passthrough_test.py:66 ---
+000063: 
+000064:     basis = tl.fill_jspace(tev, seed)
+000065:     ohne = tl.fill_jspace(tev, seed, signal_overrides=None)
+000066:     leer = tl.fill_jspace(tev, seed, signal_overrides={})
+000067: 
+000068:     def fingerprint(js) -> tuple:
+000069:         return (js.winner_cell_id, js.broadcast_value,
+000070:                 tuple((c.cell_id, c.signal, c.proposal_score) for c in js.candidates))
+--- scripts/f2wp1207_percept_passthrough_test.py:84 ---
+000081:     #       gezogen; haette man nur eine Stelle gepatcht, waere signal=1.0
+000082:     #       angezeigt und trotzdem mit dem Rauschwert gerechnet worden.
+000083:     ziel = "G3"
+000084:     js2 = tl.fill_jspace(tev, seed, signal_overrides={ziel: 0.99})
+000085:     cand = {c.cell_id: c for c in js2.candidates}[ziel]
+000086:     erwartet_score = p7mod.proposal_score(0.99, 0.0)
+000087:     check("A2-override-wirkt-auf-beides",
+000088:           cand.signal == 0.99 and abs(cand.proposal_score - erwartet_score) < 1e-12,
+--- scripts/f2wp1207_percept_passthrough_test.py:95 ---
+000092:     # A3 -- der Percept kann den Wettbewerb tatsaechlich entscheiden.
+000093:     #       Ohne diesen Punkt waere der Parameter dekorativ.
+000094:     verlierer = min(basis.candidates, key=lambda c: c.proposal_score).cell_id
+000095:     js3 = tl.fill_jspace(tev, seed, signal_overrides={verlierer: 0.999999})
+000096:     check("A3-override-dreht-gewinner",
+000097:           js3.winner_cell_id == verlierer and basis.winner_cell_id != verlierer,
+000098:           f"schwaechste Zelle {verlierer} gewinnt mit Percept 0.999999 "
+000099:           f"(ohne Percept gewann {basis.winner_cell_id})")
+--- scripts/f2wp1207_percept_passthrough_test.py:109 ---
+000106:     # A5 -- unbekannte Zellen werden ignoriert, nicht geworfen (gleiche
+000107:     #       Toleranz wie p7mod bei partiellem prior_state).
+000108:     try:
+000109:         js5 = tl.fill_jspace(tev, seed, signal_overrides={"G99": 0.5, "nonsense": 1.0})
+000110:         ok5 = fingerprint(js5) == fingerprint(basis)
+000111:         detail5 = "unbekannte Keys ignoriert, Ergebnis == Default"
+000112:     except Exception as exc:  # pragma: no cover
+000113:         ok5, detail5 = False, f"hat geworfen: {exc!r}"
+--- scripts/f2wp1207_percept_passthrough_test.py:126 ---
+000123: 
+000124: 
+000125: # ---------------------------------------------------------------------------
+000126: # Teil B -- Ende-zu-Ende durch run_canonical_turn (Kopie der echten DB)
+000127: # ---------------------------------------------------------------------------
+000128: 
+000129: def teil_b(tmp: Path) -> None:
+000130:     print("\n=== Teil B: Ende-zu-Ende durch run_canonical_turn ===")
+--- scripts/f2wp1207_percept_passthrough_test.py:130 ---
+000127: # ---------------------------------------------------------------------------
+000128: 
+000129: def teil_b(tmp: Path) -> None:
+000130:     print("\n=== Teil B: Ende-zu-Ende durch run_canonical_turn ===")
+000131:     db = tmp / "unified.db"
+000132:     shutil.copy2(REAL_DB, db)
+000133:     conn = gold.connect(db)
+000134:     tl.ensure_schema(conn)
+--- scripts/f2wp1207_percept_passthrough_test.py:146 ---
+000143: 
+000144:     def turn(overrides):
+000145:         tev = gold.next_turn_event(conn, session_id)
+000146:         te = gold.typed_entry(session_id, epoch_id, tev)
+000147:         return tl.run_canonical_turn(
+000148:             conn, te, evidence_path=tmp / "evidence.jsonl",
+000149:             signal_overrides=overrides,
+000150:         )
+--- scripts/f2wp1207_percept_passthrough_test.py:147 ---
+000144:     def turn(overrides):
+000145:         tev = gold.next_turn_event(conn, session_id)
+000146:         te = gold.typed_entry(session_id, epoch_id, tev)
+000147:         return tl.run_canonical_turn(
+000148:             conn, te, evidence_path=tmp / "evidence.jsonl",
+000149:             signal_overrides=overrides,
+000150:         )
+000151: 
+--- scripts/f2wp1207_percept_passthrough_test.py:149 ---
+000146:         te = gold.typed_entry(session_id, epoch_id, tev)
+000147:         return tl.run_canonical_turn(
+000148:             conn, te, evidence_path=tmp / "evidence.jsonl",
+000149:             signal_overrides=overrides,
+000150:         )
+000151: 
+000152:     # B1 -- ein Turn OHNE Percept laeuft unveraendert durch.
+000153:     r1 = turn(None)
+--- scripts/f2wp1207_grid10_turn_loop.py:35 ---
+000032:     GRID10 wird damit Besitzer des kognitiven Turn-Lifecycles.
+000033:     Nicht nur ein Beobachter, nicht ein zusaetzlicher Coordinator.
+000034: 
+000035: Dieses Modul implementiert genau diese Kette als ``run_canonical_turn``.
+000036: Es ist KOMPOSITION aus der bestehenden P-Serie, kein Ersatz:
+000037: 
+000038: - Wettbewerbsmechanik: P7-Formeln (``derive_signal``, ``proposal_score``,
+000039:   ``state_update``) werden IMPORTIERT und unveraendert benutzt --
+--- scripts/f2wp1207_grid10_turn_loop.py:76 ---
+000073: 
+000074: Gate: ``f2wp1207.canonical_turn_loop`` in ``star_konfig``, default AUS,
+000075: ENV-Override ``STERN_F2WP1207_TURN_LOOP`` (gleiches Muster wie P7's Gate).
+000076: Bei AUS: ``run_canonical_turn`` gibt None zurueck, BEVOR irgendein I/O
+000077: geschieht -- Null-Verhaltensdelta gegenueber dem heutigen Weg.
+000078: 
+000079: Zustandslane: ``f2_grid10_p6d_state``, condition_key
+000080: ``f2wp1207_canonical_turn_loop`` (eigene Lane, keine Mischung mit P7-Smoke
+--- scripts/f2wp1207_grid10_turn_loop.py:399 ---
+000396: 
+000397: def resolve_reentry(
+000398:     conn: sqlite3.Connection,
+000399:     typed_entry: TypedEntry,
+000400:     installation_id: str,
+000401:     state_root_id: str,
+000402:     *,
+000403:     declared: Optional[str] = None,
+--- scripts/f2wp1207_grid10_turn_loop.py:417 ---
+000414:     pointer = _read_pointer(conn, installation_id, state_root_id)
+000415:     reentry_rows = conn.execute(
+000416:         "SELECT COUNT(*) FROM f2_reentry_record WHERE successor_epoch_id=?",
+000417:         (typed_entry.runtime_epoch_id,),
+000418:     ).fetchone()[0]
+000419: 
+000420:     plan: Optional[ReentryPlan] = None
+000421: 
+--- scripts/f2wp1207_grid10_turn_loop.py:474 ---
+000471:         if reentry_rows == 0:
+000472:             raise _no(
+000473:                 "previous_epoch",
+000474:                 f"kein f2_reentry_record fuer epoch={typed_entry.runtime_epoch_id}",
+000475:             )
+000476:         workspace = p10mod.reconstruct_workspace(conn, typed_entry.runtime_epoch_id)
+000477:         if workspace is None or not workspace.valid:
+000478:             reason = workspace.invalid_reason if workspace is not None else \
+--- scripts/f2wp1207_grid10_turn_loop.py:476 ---
+000473:                 "previous_epoch",
+000474:                 f"kein f2_reentry_record fuer epoch={typed_entry.runtime_epoch_id}",
+000475:             )
+000476:         workspace = p10mod.reconstruct_workspace(conn, typed_entry.runtime_epoch_id)
+000477:         if workspace is None or not workspace.valid:
+000478:             reason = workspace.invalid_reason if workspace is not None else \
+000479:                 "kein f2_reentry_record aufloesbar (reconstruct_workspace=None)"
+000480:             raise _no("previous_epoch", reason)
+--- scripts/f2wp1207_grid10_turn_loop.py:542 ---
+000539: 
+000540:     # 2) previous epoch -- P9-Record existiert fuer diese Epoche
+000541:     if plan is None and reentry_rows > 0:
+000542:         workspace = p10mod.reconstruct_workspace(conn, typed_entry.runtime_epoch_id)
+000543:         if workspace is None or not workspace.valid:
+000544:             reason = workspace.invalid_reason if workspace is not None else \
+000545:                 "kein f2_reentry_record aufloesbar (reconstruct_workspace=None)"
+000546:             raise ReentryError(
+--- scripts/f2wp1207_grid10_turn_loop.py:547 ---
+000544:             reason = workspace.invalid_reason if workspace is not None else \
+000545:                 "kein f2_reentry_record aufloesbar (reconstruct_workspace=None)"
+000546:             raise ReentryError(
+000547:                 f"previous_epoch nicht aufloesbar fuer epoch={typed_entry.runtime_epoch_id}: "
+000548:                 f"{reason} -- KEIN stiller Genesis-Fallback"
+000549:             )
+000550:         plan = ReentryPlan(
+000551:             kind="previous_epoch",
+--- scripts/f2wp1207_grid10_turn_loop.py:924 ---
+000921:     return tuple(werte[:k])
+000922: 
+000923: 
+000924: def percept_axes(typed_entry: "TypedEntry", ts: str, vorher_ts: Optional[str] = None) -> tuple:
+000925:     """Weltvektor aus dem TypedEntry. Reine Funktion, kein I/O.
+000926: 
+000927:     Fehlende Felder werden zu 0.0 -- nicht geraten, nicht interpoliert.
+000928:     log1p auf die Laengen, weil deren Verteilung ueber Groessenordnungen
+--- scripts/f2wp1207_grid10_turn_loop.py:931 ---
+000928:     log1p auf die Laengen, weil deren Verteilung ueber Groessenordnungen
+000929:     laeuft; die Tageszeit als sin/cos, weil 23:59 und 00:01 benachbart sind
+000930:     und eine lineare Stunde diesen Sprung erfinden wuerde."""
+000931:     plen = float(typed_entry.prompt_len or 0)
+000932:     rpresent = 1.0 if typed_entry.retrieval_present else 0.0
+000933:     rlen = float(typed_entry.retrieval_len or 0)
+000934:     # Zeitstempel ROBUST lesen. Die erste Fassung nahm strikt
+000935:     # "%Y-%m-%dT%H:%M:%SZ" und fiel sonst still auf Stunde 0 zurueck.
+--- scripts/f2wp1207_grid10_turn_loop.py:932 ---
+000929:     laeuft; die Tageszeit als sin/cos, weil 23:59 und 00:01 benachbart sind
+000930:     und eine lineare Stunde diesen Sprung erfinden wuerde."""
+000931:     plen = float(typed_entry.prompt_len or 0)
+000932:     rpresent = 1.0 if typed_entry.retrieval_present else 0.0
+000933:     rlen = float(typed_entry.retrieval_len or 0)
+000934:     # Zeitstempel ROBUST lesen. Die erste Fassung nahm strikt
+000935:     # "%Y-%m-%dT%H:%M:%SZ" und fiel sonst still auf Stunde 0 zurueck.
+000936:     # Gemessen: die echten Transkript-Zeitstempel dieser Maschine tragen
+--- scripts/f2wp1207_grid10_turn_loop.py:933 ---
+000930:     und eine lineare Stunde diesen Sprung erfinden wuerde."""
+000931:     plen = float(typed_entry.prompt_len or 0)
+000932:     rpresent = 1.0 if typed_entry.retrieval_present else 0.0
+000933:     rlen = float(typed_entry.retrieval_len or 0)
+000934:     # Zeitstempel ROBUST lesen. Die erste Fassung nahm strikt
+000935:     # "%Y-%m-%dT%H:%M:%SZ" und fiel sonst still auf Stunde 0 zurueck.
+000936:     # Gemessen: die echten Transkript-Zeitstempel dieser Maschine tragen
+000937:     # Millisekunden ("2026-08-30T07:37:50.407Z"). Beide Stundenachsen waren
+--- scripts/f2wp1207_grid10_turn_loop.py:986 ---
+000983:     # gegen sie -- und weil die Sprachspur auf dieser Maschine inzwischen
+000984:     # die groessere ist (gemessen 2026-09-08: 193 Sprach-Frames gegen 64
+000985:     # aus Hook-Sitzungen), traegt die Achse echte Varianz statt Rauschen.
+000986:     m_ueb = float(getattr(typed_entry, "modell_ueberraschung", None) or 0.0)
+000987:     m_ent = float(getattr(typed_entry, "modell_entropie", None) or 0.0)
+000988:     m_str = float(getattr(typed_entry, "modell_streuung", None) or 0.0)
+000989:     # Welt-Ueberraschung (welt/dienst.py): nur angehaengt, wenn der Schalter
+000990:     # steht -- die Laenge dieses Zusatzes muss exakt zu PERCEPT_AXES passen,
+--- scripts/f2wp1207_grid10_turn_loop.py:987 ---
+000984:     # die groessere ist (gemessen 2026-09-08: 193 Sprach-Frames gegen 64
+000985:     # aus Hook-Sitzungen), traegt die Achse echte Varianz statt Rauschen.
+000986:     m_ueb = float(getattr(typed_entry, "modell_ueberraschung", None) or 0.0)
+000987:     m_ent = float(getattr(typed_entry, "modell_entropie", None) or 0.0)
+000988:     m_str = float(getattr(typed_entry, "modell_streuung", None) or 0.0)
+000989:     # Welt-Ueberraschung (welt/dienst.py): nur angehaengt, wenn der Schalter
+000990:     # steht -- die Laenge dieses Zusatzes muss exakt zu PERCEPT_AXES passen,
+000991:     # das mit demselben Schalter gebaut wird (siehe dort).
+--- scripts/f2wp1207_grid10_turn_loop.py:988 ---
+000985:     # aus Hook-Sitzungen), traegt die Achse echte Varianz statt Rauschen.
+000986:     m_ueb = float(getattr(typed_entry, "modell_ueberraschung", None) or 0.0)
+000987:     m_ent = float(getattr(typed_entry, "modell_entropie", None) or 0.0)
+000988:     m_str = float(getattr(typed_entry, "modell_streuung", None) or 0.0)
+000989:     # Welt-Ueberraschung (welt/dienst.py): nur angehaengt, wenn der Schalter
+000990:     # steht -- die Laenge dieses Zusatzes muss exakt zu PERCEPT_AXES passen,
+000991:     # das mit demselben Schalter gebaut wird (siehe dort).
+000992:     _welt_zusatz = (
+--- scripts/f2wp1207_grid10_turn_loop.py:993 ---
+000990:     # steht -- die Laenge dieses Zusatzes muss exakt zu PERCEPT_AXES passen,
+000991:     # das mit demselben Schalter gebaut wird (siehe dort).
+000992:     _welt_zusatz = (
+000993:         (float(getattr(typed_entry, "welt_ueberraschung", None) or 0.0),)
+000994:         if WELT_ANBINDUNG_AKTIV else ())
+000995: 
+000996:     # Abstraktion (abstraktion.py, organ.arbeiten Task "abstraktion_fluid"):
+000997:     # fuenf gebundene Zahlen aus einem festen Schema, None -> 0.0 wie jede
+--- scripts/f2wp1207_grid10_turn_loop.py:1002 ---
+000999:     # PERCEPT_AXES passen (Bindung ueber Tupel-Position, nicht ueber Namen,
+001000:     # wie der Rest dieser Funktion es ohnehin schon so haelt).
+001001:     _abstrakt_zusatz = (
+001002:         (float(getattr(typed_entry, "abstrakt_abstraktionsgrad", None) or 0.0),
+001003:          float(getattr(typed_entry, "abstrakt_valenz", None) or 0.0),
+001004:          float(getattr(typed_entry, "abstrakt_intensitaet", None) or 0.0),
+001005:          float(getattr(typed_entry, "abstrakt_bindung", None) or 0.0),
+001006:          float(getattr(typed_entry, "abstrakt_endgueltigkeit", None) or 0.0))
+--- scripts/f2wp1207_grid10_turn_loop.py:1003 ---
+001000:     # wie der Rest dieser Funktion es ohnehin schon so haelt).
+001001:     _abstrakt_zusatz = (
+001002:         (float(getattr(typed_entry, "abstrakt_abstraktionsgrad", None) or 0.0),
+001003:          float(getattr(typed_entry, "abstrakt_valenz", None) or 0.0),
+001004:          float(getattr(typed_entry, "abstrakt_intensitaet", None) or 0.0),
+001005:          float(getattr(typed_entry, "abstrakt_bindung", None) or 0.0),
+001006:          float(getattr(typed_entry, "abstrakt_endgueltigkeit", None) or 0.0))
+001007:         if ABSTRAKTION_ANBINDUNG_AKTIV else ())
+--- scripts/f2wp1207_grid10_turn_loop.py:1004 ---
+001001:     _abstrakt_zusatz = (
+001002:         (float(getattr(typed_entry, "abstrakt_abstraktionsgrad", None) or 0.0),
+001003:          float(getattr(typed_entry, "abstrakt_valenz", None) or 0.0),
+001004:          float(getattr(typed_entry, "abstrakt_intensitaet", None) or 0.0),
+001005:          float(getattr(typed_entry, "abstrakt_bindung", None) or 0.0),
+001006:          float(getattr(typed_entry, "abstrakt_endgueltigkeit", None) or 0.0))
+001007:         if ABSTRAKTION_ANBINDUNG_AKTIV else ())
+001008: 
+--- scripts/f2wp1207_grid10_turn_loop.py:1005 ---
+001002:         (float(getattr(typed_entry, "abstrakt_abstraktionsgrad", None) or 0.0),
+001003:          float(getattr(typed_entry, "abstrakt_valenz", None) or 0.0),
+001004:          float(getattr(typed_entry, "abstrakt_intensitaet", None) or 0.0),
+001005:          float(getattr(typed_entry, "abstrakt_bindung", None) or 0.0),
+001006:          float(getattr(typed_entry, "abstrakt_endgueltigkeit", None) or 0.0))
+001007:         if ABSTRAKTION_ANBINDUNG_AKTIV else ())
+001008: 
+001009:     if stunde is None:
+--- scripts/f2wp1207_grid10_turn_loop.py:1006 ---
+001003:          float(getattr(typed_entry, "abstrakt_valenz", None) or 0.0),
+001004:          float(getattr(typed_entry, "abstrakt_intensitaet", None) or 0.0),
+001005:          float(getattr(typed_entry, "abstrakt_bindung", None) or 0.0),
+001006:          float(getattr(typed_entry, "abstrakt_endgueltigkeit", None) or 0.0))
+001007:         if ABSTRAKTION_ANBINDUNG_AKTIV else ())
+001008: 
+001009:     if stunde is None:
+001010:         # Kein stiller Nullwert: unparsbar heisst "keine Information".
+--- scripts/f2wp1207_grid10_turn_loop.py:1240 ---
+001237:     seed_state: Mapping[str, float],
+001238:     *,
+001239:     kappa: float = p7mod.KAPPA,
+001240:     signal_overrides: Mapping[str, float] | None = None,
+001241: ) -> JSpace:
+001242:     """J-Space befuellen: 10 GRID-Zellen erzeugen ihre Kandidaten
+001243:     (P7-Signal + P7-Proposal-Score), Competition = max, Selection = Winner,
+001244:     Broadcast = Winner-Score. Reine Funktion, kein I/O.
+--- scripts/f2wp1207_grid10_turn_loop.py:1250 ---
+001247:     default is p7mod's own module constant -- omitting it is byte-identical
+001248:     to before.
+001249: 
+001250:     ``signal_overrides`` (2026-09-07, percept passthrough): keyword-only,
+001251:     exactly the same shape and semantics as
+001252:     ``p7mod.run_coordination_cycle``'s parameter of the same name -- maps a
+001253:     subset of ``p7mod.CELLS`` to a signal in [0,1) that REPLACES
+001254:     ``derive_signal()``'s hash-noise for that cell, for this one call.
+--- scripts/f2wp1207_grid10_turn_loop.py:1273 ---
+001270:     one-value-computed-in-two-places shape as the opened_at ordering bug of
+001271:     2026-09-07."""
+001272:     signals = {cell: p7mod.derive_signal(turn_event_id, cell) for cell in p7mod.CELLS}
+001273:     if signal_overrides:
+001274:         for cell, value in signal_overrides.items():
+001275:             if cell in signals:
+001276:                 signals[cell] = float(value)
+001277:     candidates = tuple(
+--- scripts/f2wp1207_grid10_turn_loop.py:1274 ---
+001271:     2026-09-07."""
+001272:     signals = {cell: p7mod.derive_signal(turn_event_id, cell) for cell in p7mod.CELLS}
+001273:     if signal_overrides:
+001274:         for cell, value in signal_overrides.items():
+001275:             if cell in signals:
+001276:                 signals[cell] = float(value)
+001277:     candidates = tuple(
+001278:         Candidate(
+--- scripts/f2wp1207_grid10_turn_loop.py:1454 ---
+001451:     self_observation: Optional[dict]
+001452: 
+001453: 
+001454: def run_canonical_turn(
+001455:     conn: sqlite3.Connection,
+001456:     typed_entry: TypedEntry | Mapping,
+001457:     *,
+001458:     declared_reentry: Optional[str] = None,
+--- scripts/f2wp1207_grid10_turn_loop.py:1456 ---
+001453: 
+001454: def run_canonical_turn(
+001455:     conn: sqlite3.Connection,
+001456:     typed_entry: TypedEntry | Mapping,
+001457:     *,
+001458:     declared_reentry: Optional[str] = None,
+001459:     effect_policy: Optional["p11mod.EffectGatePolicy"] = None,
+001460:     include_self_observation: bool = False,
+--- scripts/f2wp1207_grid10_turn_loop.py:1465 ---
+001462:     env: Mapping[str, str] | None = None,
+001463:     crash_hook: Optional[Callable[[str], None]] = None,
+001464:     tune: Optional[Mapping[str, float]] = None,
+001465:     signal_overrides: Optional[Mapping[str, float]] = None,
+001466: ) -> Optional[CanonicalTurnResult]:
+001467:     """Gabriels Kette, 1:1, alles in EINER Transaktion.
+001468: 
+001469:     Gate AUS -> None, BEVOR irgendein I/O geschieht (Null-Verhaltensdelta).
+--- scripts/f2wp1207_grid10_turn_loop.py:1482 ---
+001479:     read once per call -- no module constant is ever mutated, so there is
+001480:     no leakage into the next call in the same process.
+001481: 
+001482:     ``signal_overrides`` (2026-09-07, percept passthrough): optional mapping
+001483:     cell -> signal in [0,1), forwarded into ``fill_jspace``. ``None``/``{}``
+001484:     is byte-identical to before. Deliberately NOT a key inside ``tune``:
+001485:     ``tune`` carries competition *constants* and is written to
+001486:     f2_grid10_tune_audit as a tuning change; a percept is a measured *input*
+--- scripts/f2wp1207_grid10_turn_loop.py:1489 ---
+001486:     f2_grid10_tune_audit as a tuning change; a percept is a measured *input*
+001487:     and would be mislabelled there. Tune says how the competition weighs;
+001488:     a percept says what it weighs."""
+001489:     if isinstance(typed_entry, Mapping):
+001490:         typed_entry = TypedEntry.from_mapping(typed_entry)
+001491:     if declared_reentry is not None and declared_reentry not in _REENTRY_KINDS:
+001492:         raise CanonicalTurnLoopError(
+001493:             f"declared_reentry={declared_reentry!r} ungueltig, erlaubt: {_REENTRY_KINDS}"
+--- scripts/f2wp1207_grid10_turn_loop.py:1490 ---
+001487:     and would be mislabelled there. Tune says how the competition weighs;
+001488:     a percept says what it weighs."""
+001489:     if isinstance(typed_entry, Mapping):
+001490:         typed_entry = TypedEntry.from_mapping(typed_entry)
+001491:     if declared_reentry is not None and declared_reentry not in _REENTRY_KINDS:
+001492:         raise CanonicalTurnLoopError(
+001493:             f"declared_reentry={declared_reentry!r} ungueltig, erlaubt: {_REENTRY_KINDS}"
+001494:         )
+--- scripts/f2wp1207_grid10_turn_loop.py:1526 ---
+001523:         # --- Identitaet: die Epoche des TypedEntry traegt Installation/   -
+001524:         # StateRoot (f2_runtime_epoch) -- kein Kreuzprodukt ueber die
+001525:         # Identity-Tabellen, damit mehrere Installationen je DB korrekt sind.
+001526:         runtime_epoch_id = typed_entry.runtime_epoch_id
+001527:         epoch = conn.execute(
+001528:             "SELECT installation_id, state_root_id FROM f2_runtime_epoch "
+001529:             "WHERE runtime_epoch_id=?",
+001530:             (runtime_epoch_id,),
+--- scripts/f2wp1207_grid10_turn_loop.py:1547 ---
+001544:             )
+001545:         entity_id = entity_row[0]
+001546: 
+001547:         turn_event_id = typed_entry.turn_event_id or _mint_turn_event_id(
+001548:             conn, typed_entry.session_id
+001549:         )
+001550:         frame_id = hashlib.sha256(
+001551:             f"{runtime_epoch_id}:{turn_event_id}".encode()
+--- scripts/f2wp1207_grid10_turn_loop.py:1548 ---
+001545:         entity_id = entity_row[0]
+001546: 
+001547:         turn_event_id = typed_entry.turn_event_id or _mint_turn_event_id(
+001548:             conn, typed_entry.session_id
+001549:         )
+001550:         frame_id = hashlib.sha256(
+001551:             f"{runtime_epoch_id}:{turn_event_id}".encode()
+001552:         ).hexdigest()
+--- scripts/f2wp1207_grid10_turn_loop.py:1557 ---
+001554:             frame_id=frame_id,
+001555:             turn_event_id=turn_event_id,
+001556:             runtime_epoch_id=runtime_epoch_id,
+001557:             session_id=typed_entry.session_id,
+001558:         )
+001559:         ts = typed_entry.ts or _jetzt_iso()
+001560: 
+001561:         # --- zwingender Reentry -----------------------------------------
+--- scripts/f2wp1207_grid10_turn_loop.py:1559 ---
+001556:             runtime_epoch_id=runtime_epoch_id,
+001557:             session_id=typed_entry.session_id,
+001558:         )
+001559:         ts = typed_entry.ts or _jetzt_iso()
+001560: 
+001561:         # --- zwingender Reentry -----------------------------------------
+001562:         reentry = resolve_reentry(
+001563:             conn, typed_entry, installation_id, state_root_id,
+--- scripts/f2wp1207_grid10_turn_loop.py:1563 ---
+001560: 
+001561:         # --- zwingender Reentry -----------------------------------------
+001562:         reentry = resolve_reentry(
+001563:             conn, typed_entry, installation_id, state_root_id,
+001564:             declared=declared_reentry,
+001565:         )
+001566: 
+001567:         # --- optional P12 (kein Kettenglied, default AUS) ----------------
+--- scripts/f2wp1207_grid10_turn_loop.py:1582 ---
+001579:             }
+001580: 
+001581:         # --- Perzepte: echte Messung statt sha256-Rauschen ---------------
+001582:         # Ein ausdruecklich uebergebenes signal_overrides gewinnt IMMER --
+001583:         # der Parameter behaelt seine Bedeutung, Perzepte draengen sich
+001584:         # keinem Aufrufer auf. Waehrend des Warmlaufs liefert
+001585:         # derive_percept_signals() None: dann laeuft exakt der bisherige
+001586:         # Hash-Wettbewerb, und nur die Kalibrierung lernt mit.
+--- scripts/f2wp1207_grid10_turn_loop.py:1591 ---
+001588:         _percept_signale = None
+001589:         _percept_quelle = None
+001590:         _percept_stumm = []
+001591:         if _percept_an and not signal_overrides:
+001592:             _percept_achsen = percept_axes(
+001593:                 typed_entry, ts,
+001594:                 vorher_ts=(reentry.evidence or {}).get("pointer_created_at"),
+001595:             )
+--- scripts/f2wp1207_grid10_turn_loop.py:1593 ---
+001590:         _percept_stumm = []
+001591:         if _percept_an and not signal_overrides:
+001592:             _percept_achsen = percept_axes(
+001593:                 typed_entry, ts,
+001594:                 vorher_ts=(reentry.evidence or {}).get("pointer_created_at"),
+001595:             )
+001596:             _percept_signale, _percept_quelle, _percept_stumm = (
+001597:                 derive_percept_signals(
+--- scripts/f2wp1207_grid10_turn_loop.py:1605 ---
+001602:         # --- J-Space befuellen -> 10 Kandidaten --------------------------
+001603:         _tune = tune or {}
+001604:         _jspace_kwargs = {k: _tune[k] for k in ("kappa",) if k in _tune}
+001605:         if signal_overrides:
+001606:             _jspace_kwargs["signal_overrides"] = signal_overrides
+001607:         elif _percept_signale:
+001608:             _jspace_kwargs["signal_overrides"] = _percept_signale
+001609:         jspace = fill_jspace(turn_event_id, seed_state, **_jspace_kwargs)
+--- scripts/f2wp1207_grid10_turn_loop.py:1606 ---
+001603:         _tune = tune or {}
+001604:         _jspace_kwargs = {k: _tune[k] for k in ("kappa",) if k in _tune}
+001605:         if signal_overrides:
+001606:             _jspace_kwargs["signal_overrides"] = signal_overrides
+001607:         elif _percept_signale:
+001608:             _jspace_kwargs["signal_overrides"] = _percept_signale
+001609:         jspace = fill_jspace(turn_event_id, seed_state, **_jspace_kwargs)
+001610: 
+--- scripts/f2wp1207_grid10_turn_loop.py:1608 ---
+001605:         if signal_overrides:
+001606:             _jspace_kwargs["signal_overrides"] = signal_overrides
+001607:         elif _percept_signale:
+001608:             _jspace_kwargs["signal_overrides"] = _percept_signale
+001609:         jspace = fill_jspace(turn_event_id, seed_state, **_jspace_kwargs)
+001610: 
+001611:         # --- Uptake durch alle 10 + neuer rekurrenter State --------------
+001612:         _uptake_kwargs = {k: _tune[k] for k in ("lam", "alpha", "beta", "gamma") if k in _tune}
+--- scripts/f2wp1207_grid10_turn_loop.py:1625 ---
+001622:             "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+001623:             (
+001624:                 frame_id, entity_id, installation_id, state_root_id, runtime_epoch_id,
+001625:                 typed_entry.session_id, turn_event_id, ts, None, "OPEN", SCHEMA_FRAME,
+001626:                 COHORT, CONDITION_KEY, 1.0,
+001627:             ),
+001628:         )
+001629:         # Perzept-Protokoll: WAS gemessen wurde und WELCHES Signal daraus
+--- scripts/f2wp1207_grid10_turn_loop.py:1725 ---
+001722:         pointer_id = uuid.uuid4().hex
+001723:         evidence = dict(reentry.evidence)
+001724:         evidence["resolved_kind"] = reentry.kind
+001725:         evidence["typed_entry"] = typed_entry.to_payload()
+001726:         if effect is not None:
+001727:             evidence["effect_journal_id"] = effect["journal_id"]
+001728:         conn.execute(
+001729:             "INSERT INTO f2_grid10_turn_pointer (pointer_id, installation_id, state_root_id, "
+--- scripts/f2wp1207_grid10_turn_loop.py:1744 ---
+001741:             "persist_schema=excluded.persist_schema, created_at=excluded.created_at",
+001742:             (
+001743:                 pointer_id, installation_id, state_root_id, runtime_epoch_id,
+001744:                 typed_entry.session_id, frame_id, turn_event_id, reentry.kind,
+001745:                 _canonical_json(evidence), jspace.winner_cell_id, jspace.broadcast_value,
+001746:                 _canonical_json({c: new_state[c] for c in p7mod.CELLS}),
+001747:                 SCHEMA_POINTER_ROW, _jetzt_iso(),
+001748:             ),
+--- scripts/f2wp1207_grid10_turn_loop.py:1768 ---
+001765:             "frame_id": frame_id,
+001766:             "turn_event_id": turn_event_id,
+001767:             "runtime_epoch_id": runtime_epoch_id,
+001768:             "session_id": typed_entry.session_id,
+001769:             "reentry_kind": reentry.kind,
+001770:             "reentry_evidence": dict(reentry.evidence),
+001771:             "winner_cell_id": jspace.winner_cell_id,
+001772:             "broadcast_value": jspace.broadcast_value,
+--- scripts/f2wp1207_grid10_turn_loop.py:1783 ---
+001780:         frame_id=frame_id,
+001781:         turn_event_id=turn_event_id,
+001782:         runtime_epoch_id=runtime_epoch_id,
+001783:         session_id=typed_entry.session_id,
+001784:         reentry=reentry,
+001785:         jspace=jspace,
+001786:         transitions=transitions,
+001787:         new_state=new_state,
+--- scripts/f2wp1207_turn_loop_gold_test.py:15 ---
+000012:       Genesis-Fallback (4 Teilfaelle)
+000013:   G5  Kill mitten im Turn (echtes SIGKILL) -> kein Halbzustand; naechster
+000014:       Turn startet exakt am letzten gueltigen Persist-Punkt
+000015:   G6  Flag AUS (default) -> run_canonical_turn liefert None, DB-Bytes
+000016:       unveraendert (sha256-Beweis), P15-Canary-Pfad unberuehrt
+000017:   G7  Kein-Drift-Beweis: git diff auf BASE_COMMIT beruehrt KEINE bestehende
+000018:       P7-P12-Datei (nur die neuen Dateien der jeweiligen Phase)
+000019: 
+--- scripts/f2wp1207_turn_loop_gold_test.py:162 ---
+000159:     return epoch_id
+000160: 
+000161: 
+000162: def typed_entry(session_id: str, epoch_id: str, turn_event_id: str) -> tl.TypedEntry:
+000163:     return tl.TypedEntry(
+000164:         session_id=session_id,
+000165:         runtime_epoch_id=epoch_id,
+000166:         event_type="UserPromptSubmit",
+--- scripts/f2wp1207_turn_loop_gold_test.py:192 ---
+000189:     # Echter Kill, BEVOR der COMMIT der Turn-Transaktion stattfindet.
+000190:     os.kill(os.getpid(), signal.SIGKILL)
+000191: 
+000192: res = tl.run_canonical_turn(
+000193:     conn,
+000194:     tl.TypedEntry(session_id={session!r}, runtime_epoch_id={epoch!r},
+000195:                   turn_event_id={turn!r}, ts="2026-09-06T00:00:00Z",
+000196:                   prompt_len=1, retrieval_present=False, retrieval_len=0),
+--- scripts/f2wp1207_turn_loop_gold_test.py:274 ---
+000271:     print("\n--- G1: genesis-Reentry (erster Turn ueberhaupt) ---")
+000272:     session_g1 = "gold-session-genesis"
+000273:     epoch_g1 = make_epoch(conn, installation_id, state_root_id, session_g1)
+000274:     te1 = typed_entry(session_g1, epoch_g1, f"{session_g1}:1")
+000275:     ev = tmp / "turnloop_evidence.jsonl"
+000276:     r1 = tl.run_canonical_turn(conn, te1, env=ENV_ON, evidence_path=ev)
+000277:     check("G1a", r1 is not None and r1.reentry.kind == "genesis",
+000278:           f"Turn 1 liefert kind={r1.reentry.kind if r1 else None}")
+--- scripts/f2wp1207_turn_loop_gold_test.py:276 ---
+000273:     epoch_g1 = make_epoch(conn, installation_id, state_root_id, session_g1)
+000274:     te1 = typed_entry(session_g1, epoch_g1, f"{session_g1}:1")
+000275:     ev = tmp / "turnloop_evidence.jsonl"
+000276:     r1 = tl.run_canonical_turn(conn, te1, env=ENV_ON, evidence_path=ev)
+000277:     check("G1a", r1 is not None and r1.reentry.kind == "genesis",
+000278:           f"Turn 1 liefert kind={r1.reentry.kind if r1 else None}")
+000279:     check("G1b", r1 is not None and all(v == 0.0 for v in r1.reentry.seed_state.values()),
+000280:           "Genesis-Seed: alle 10 Zellen 0.0")
+--- scripts/f2wp1207_turn_loop_gold_test.py:308 ---
+000305:     # G2: previous_frame (und Unterscheidbarkeit von previous_epoch)
+000306:     # ------------------------------------------------------------------
+000307:     print("\n--- G2: previous-frame-Reentry ---")
+000308:     te2 = typed_entry(session_g1, epoch_g1, f"{session_g1}:2")
+000309:     jr_before = conn.execute("SELECT COUNT(*) FROM f2_grid10_effect_journal").fetchone()[0]
+000310:     # GEAENDERT 2026-09-07: auch die kanonischen Zeilen als DIFFERENZ messen.
+000311:     # Der Kommentar unten sagte das Prinzip bereits ("massgeblich ist die
+000312:     # Differenz, nicht die Absolutzahl"), wandte es aber nur auf die Gesamtzahl
+--- scripts/f2wp1207_turn_loop_gold_test.py:320 ---
+000317:         "SELECT COUNT(*) FROM f2_grid10_effect_journal WHERE condition_key=?",
+000318:         (tl.CONDITION_KEY,),
+000319:     ).fetchone()[0]
+000320:     r2 = tl.run_canonical_turn(conn, te2, env=ENV_ON,
+000321:                                effect_policy=tl.p11mod.EffectGatePolicy(
+000322:                                    policy_id="gold-canonical", min_broadcast_value=0.5),
+000323:                                include_self_observation=True, evidence_path=ev)
+000324:     check("G2a", r2 is not None and r2.reentry.kind == "previous_frame"
+--- scripts/f2wp1207_turn_loop_gold_test.py:400 ---
+000397:     if epoch_g3 is None:
+000398:         return _finish(tmp)
+000399:     session_g3 = f"gold-session-prev-epoch-{epoch_g3[:8]}"
+000400:     te3 = typed_entry(session_g3, epoch_g3, f"{session_g3}:1")
+000401:     r3 = tl.run_canonical_turn(conn, te3, env=ENV_ON, declared_reentry="previous_epoch")
+000402:     check("G3b", r3 is not None and r3.reentry.kind == "previous_epoch"
+000403:           and r3.reentry.evidence["reentry_id"] == workspace_g3.reentry_id,
+000404:           f"kind={r3.reentry.kind}, reentry_id={r3.reentry.evidence['reentry_id'][:12]}..., "
+--- scripts/f2wp1207_turn_loop_gold_test.py:401 ---
+000398:         return _finish(tmp)
+000399:     session_g3 = f"gold-session-prev-epoch-{epoch_g3[:8]}"
+000400:     te3 = typed_entry(session_g3, epoch_g3, f"{session_g3}:1")
+000401:     r3 = tl.run_canonical_turn(conn, te3, env=ENV_ON, declared_reentry="previous_epoch")
+000402:     check("G3b", r3 is not None and r3.reentry.kind == "previous_epoch"
+000403:           and r3.reentry.evidence["reentry_id"] == workspace_g3.reentry_id,
+000404:           f"kind={r3.reentry.kind}, reentry_id={r3.reentry.evidence['reentry_id'][:12]}..., "
+000405:           f"termination={r3.reentry.evidence['predecessor_termination_reason']}")
+--- scripts/f2wp1207_turn_loop_gold_test.py:428 ---
+000425:     conn.execute("DELETE FROM f2_grid10_turn_pointer WHERE installation_id=? AND state_root_id=?",
+000426:                  (installation_id, state_root_id))
+000427:     conn.commit()
+000428:     te4a = typed_entry(session_g1, epoch_g1, f"{session_g1}:4a")
+000429:     try:
+000430:         tl.run_canonical_turn(conn, te4a, env=ENV_ON)
+000431:         check("G4a", False, "fehlender Reentry wurde NICHT abgelehnt (Turn lief)")
+000432:     except tl.ReentryError as exc:
+--- scripts/f2wp1207_turn_loop_gold_test.py:430 ---
+000427:     conn.commit()
+000428:     te4a = typed_entry(session_g1, epoch_g1, f"{session_g1}:4a")
+000429:     try:
+000430:         tl.run_canonical_turn(conn, te4a, env=ENV_ON)
+000431:         check("G4a", False, "fehlender Reentry wurde NICHT abgelehnt (Turn lief)")
+000432:     except tl.ReentryError as exc:
+000433:         check("G4a", True, f"ReentryError: {str(exc)[:90]}...")
+000434:     # G4b: deklarierter previous_frame ohne Zeiger -> ablehnen
+--- scripts/f2wp1207_turn_loop_gold_test.py:435 ---
+000432:     except tl.ReentryError as exc:
+000433:         check("G4a", True, f"ReentryError: {str(exc)[:90]}...")
+000434:     # G4b: deklarierter previous_frame ohne Zeiger -> ablehnen
+000435:     te4b = typed_entry(session_g1, epoch_g1, f"{session_g1}:4b")
+000436:     try:
+000437:         tl.run_canonical_turn(conn, te4b, env=ENV_ON, declared_reentry="previous_frame")
+000438:         check("G4b", False, "deklarierter previous_frame ohne Zeiger lief trotzdem")
+000439:     except tl.ReentryError as exc:
+--- scripts/f2wp1207_turn_loop_gold_test.py:437 ---
+000434:     # G4b: deklarierter previous_frame ohne Zeiger -> ablehnen
+000435:     te4b = typed_entry(session_g1, epoch_g1, f"{session_g1}:4b")
+000436:     try:
+000437:         tl.run_canonical_turn(conn, te4b, env=ENV_ON, declared_reentry="previous_frame")
+000438:         check("G4b", False, "deklarierter previous_frame ohne Zeiger lief trotzdem")
+000439:     except tl.ReentryError as exc:
+000440:         check("G4b", True, f"ReentryError: {str(exc)[:90]}...")
+000441:     # G4c: deklarierter genesis in NICHT-leerer Welt -> ablehnen
+--- scripts/f2wp1207_turn_loop_gold_test.py:442 ---
+000439:     except tl.ReentryError as exc:
+000440:         check("G4b", True, f"ReentryError: {str(exc)[:90]}...")
+000441:     # G4c: deklarierter genesis in NICHT-leerer Welt -> ablehnen
+000442:     te4c = typed_entry(session_g1, epoch_g1, f"{session_g1}:4c")
+000443:     try:
+000444:         tl.run_canonical_turn(conn, te4c, env=ENV_ON, declared_reentry="genesis")
+000445:         check("G4c", False, "deklarierter genesis in nicht-leerer Welt lief trotzdem")
+000446:     except tl.ReentryError as exc:
+--- scripts/f2wp1207_turn_loop_gold_test.py:444 ---
+000441:     # G4c: deklarierter genesis in NICHT-leerer Welt -> ablehnen
+000442:     te4c = typed_entry(session_g1, epoch_g1, f"{session_g1}:4c")
+000443:     try:
+000444:         tl.run_canonical_turn(conn, te4c, env=ENV_ON, declared_reentry="genesis")
+000445:         check("G4c", False, "deklarierter genesis in nicht-leerer Welt lief trotzdem")
+000446:     except tl.ReentryError as exc:
+000447:         check("G4c", True, f"ReentryError: {str(exc)[:90]}...")
+000448:     # G4d: previous_epoch deklariert, aber P10 invalid (Real-Bestand:
+--- scripts/f2wp1207_turn_loop_gold_test.py:464 ---
+000461:         session_g4 = "gold-session-invalid-epoch"
+000462:         epoch_g4 = make_epoch(conn, installation_id, state_root_id, session_g4,
+000463:                               predecessor=bad["successor_epoch_id"])
+000464:         te4d = typed_entry(session_g4, epoch_g4, f"{session_g4}:1")
+000465:         try:
+000466:             tl.run_canonical_turn(conn, te4d, env=ENV_ON, declared_reentry="previous_epoch")
+000467:             check("G4d", False, "P10-invalider previous_epoch lief trotzdem (stiller Fallback)")
+000468:         except tl.ReentryError as exc:
+--- scripts/f2wp1207_turn_loop_gold_test.py:466 ---
+000463:                               predecessor=bad["successor_epoch_id"])
+000464:         te4d = typed_entry(session_g4, epoch_g4, f"{session_g4}:1")
+000465:         try:
+000466:             tl.run_canonical_turn(conn, te4d, env=ENV_ON, declared_reentry="previous_epoch")
+000467:             check("G4d", False, "P10-invalider previous_epoch lief trotzdem (stiller Fallback)")
+000468:         except tl.ReentryError as exc:
+000469:             check("G4d", invalid_confirmed,
+000470:                   f"P10 invalid ({'valid=False: ' + str(ws_bad.invalid_reason)[:40] if ws_bad else 'None'}) "
+--- scripts/f2wp1207_turn_loop_gold_test.py:479 ---
+000476:         "UPDATE f2_grid10_turn_pointer SET frame_id='gold-frame-does-not-exist' "
+000477:         "WHERE installation_id=? AND state_root_id=?", (installation_id, state_root_id))
+000478:     conn.commit()
+000479:     te4e = typed_entry(session_g1, epoch_g1, f"{session_g1}:4e")
+000480:     try:
+000481:         tl.run_canonical_turn(conn, te4e, env=ENV_ON)
+000482:         check("G4e", False, "inkonsistenter Zeiger wurde akzeptiert")
+000483:     except tl.ReentryError as exc:
+--- scripts/f2wp1207_turn_loop_gold_test.py:481 ---
+000478:     conn.commit()
+000479:     te4e = typed_entry(session_g1, epoch_g1, f"{session_g1}:4e")
+000480:     try:
+000481:         tl.run_canonical_turn(conn, te4e, env=ENV_ON)
+000482:         check("G4e", False, "inkonsistenter Zeiger wurde akzeptiert")
+000483:     except tl.ReentryError as exc:
+000484:         check("G4e", True, f"ReentryError: {str(exc)[:90]}...")
+000485:     # Ablehnungen duerfen KEINE Spuren hinterlassen
+--- scripts/f2wp1207_turn_loop_gold_test.py:542 ---
+000539:     ).fetchone()[0]
+000540:     check("G5e", obs_kill == 0, f"Zell-Beobachtungen des gekillten Turns: {obs_kill} (0)")
+000541:     # naechster Turn startet EXAKT am letzten gueltigen Persist-Punkt
+000542:     te5 = typed_entry(session_g1, epoch_g1, f"{session_g1}:5")
+000543:     r5 = tl.run_canonical_turn(conn2, te5, env=ENV_ON)
+000544:     check("G5f", r5 is not None and r5.reentry.kind == "previous_frame"
+000545:           and r5.reentry.evidence["pointer_frame_id"] == ptr_before["frame_id"],
+000546:           f"naechster Turn nach Kill: kind={r5.reentry.kind if r5 else None}, Einstieg "
+--- scripts/f2wp1207_turn_loop_gold_test.py:543 ---
+000540:     check("G5e", obs_kill == 0, f"Zell-Beobachtungen des gekillten Turns: {obs_kill} (0)")
+000541:     # naechster Turn startet EXAKT am letzten gueltigen Persist-Punkt
+000542:     te5 = typed_entry(session_g1, epoch_g1, f"{session_g1}:5")
+000543:     r5 = tl.run_canonical_turn(conn2, te5, env=ENV_ON)
+000544:     check("G5f", r5 is not None and r5.reentry.kind == "previous_frame"
+000545:           and r5.reentry.evidence["pointer_frame_id"] == ptr_before["frame_id"],
+000546:           f"naechster Turn nach Kill: kind={r5.reentry.kind if r5 else None}, Einstieg "
+000547:           f"exakt am Persist-Punkt {r5.reentry.evidence['pointer_frame_id'][:12]}... "
+--- scripts/f2wp1207_turn_loop_gold_test.py:580 ---
+000577:     # before ERST NACH dem Entfernen nehmen -- das Entfernen selbst ist ein
+000578:     # Schreibvorgang und wuerde G6c sonst faelschlich rot machen.
+000579:     before = sha256_file(db)
+000580:     n1 = tl.run_canonical_turn(conn3, typed_entry("gold-env-off", epoch_g1, "gold-env-off:1"),
+000581:                                env={k: v for k, v in os.environ.items()
+000582:                                     if k != "STERN_F2WP1207_TURN_LOOP"})
+000583:     n2 = tl.run_canonical_turn(conn3, typed_entry("gold-env-off", epoch_g1, "gold-env-off:2"),
+000584:                                env=ENV_OFF)
+--- scripts/f2wp1207_turn_loop_gold_test.py:583 ---
+000580:     n1 = tl.run_canonical_turn(conn3, typed_entry("gold-env-off", epoch_g1, "gold-env-off:1"),
+000581:                                env={k: v for k, v in os.environ.items()
+000582:                                     if k != "STERN_F2WP1207_TURN_LOOP"})
+000583:     n2 = tl.run_canonical_turn(conn3, typed_entry("gold-env-off", epoch_g1, "gold-env-off:2"),
+000584:                                env=ENV_OFF)
+000585:     after = sha256_file(db)
+000586:     check("G6b", n1 is None and n2 is None,
+000587:           "Flag AUS (weder env noch konfig) -> run_canonical_turn=None, 2x")
+--- scripts/f2wp1207_turn_loop_gold_test.py:587 ---
+000584:                                env=ENV_OFF)
+000585:     after = sha256_file(db)
+000586:     check("G6b", n1 is None and n2 is None,
+000587:           "Flag AUS (weder env noch konfig) -> run_canonical_turn=None, 2x")
+000588:     check("G6c", before == after,
+000589:           f"DB-Bytes unveraendert: sha256 {before[:16]}... == {after[:16]}...")
+000590:     # ENV "0" schlaegt auch einen gesetzten persistenten Flag
+000591:     tl.set_turn_loop_active(conn3, True, quelle="goldtest-temp")
+--- scripts/f2wp1207_turn_loop_gold_test.py:593 ---
+000590:     # ENV "0" schlaegt auch einen gesetzten persistenten Flag
+000591:     tl.set_turn_loop_active(conn3, True, quelle="goldtest-temp")
+000592:     before2 = sha256_file(db)
+000593:     n3 = tl.run_canonical_turn(conn3, typed_entry("gold-env-off", epoch_g1, "gold-env-off:3"),
+000594:                                env=ENV_OFF)
+000595:     after2 = sha256_file(db)
+000596:     check("G6d", n3 is None and before2 == after2,
+000597:           "ENV-Override '0' gewinnt gegen persistenten Flag '1' -> None + byte-identisch")
+--- scripts/f2wp1207_turn_loop_gold_test.py:671 ---
+000668:     ok_g8, kinds_g8 = True, []
+000669:     try:
+000670:         for i in range(4):
+000671:             te = typed_entry(sess8, ep8, f"{sess8}:{i + 1}")
+000672:             res = tl.run_canonical_turn(conn_g8, te, env=ENV_ON)
+000673:             kinds_g8.append(res.reentry.kind if res else None)
+000674:     except Exception as e:  # noqa: BLE001
+000675:         ok_g8 = False
+--- scripts/f2wp1207_turn_loop_gold_test.py:672 ---
+000669:     try:
+000670:         for i in range(4):
+000671:             te = typed_entry(sess8, ep8, f"{sess8}:{i + 1}")
+000672:             res = tl.run_canonical_turn(conn_g8, te, env=ENV_ON)
+000673:             kinds_g8.append(res.reentry.kind if res else None)
+000674:     except Exception as e:  # noqa: BLE001
+000675:         ok_g8 = False
+000676:         kinds_g8.append(f"EXCEPTION:{type(e).__name__}: {e}")
+--- scripts/stern.py:5535 ---
+005532:         return
+005533:     try:
+005534:         ts = _jetzt_iso()
+005535:         typed_entry = {
+005536:             "schema": "F2WP1207_TYPED_ENTRY/v1",
+005537:             "session_id": session_id,
+005538:             "ts": ts,
+005539:             "event_type": "UserPromptSubmit",
+--- scripts/stern.py:5588 ---
+005585:             "schema": "F2WP1207_SHADOW_EVIDENCE/v1",
+005586:             "ts": ts,
+005587:             "session_id": session_id,
+005588:             "typed_entry": typed_entry,
+005589:             "state_root_ref_sha256": state_root_ref_sha256,
+005590:             "installation_id": installation_id,
+005591:             "state_root_id": state_root_id,
+005592:             "runtime_epoch_id": runtime_epoch_id,
+--- scripts/stern.py:6070 ---
+006067: # aber NUR Testaufrufer. Flag-Flip allein waere inert (P15-Lehre: ein Gate
+006068: # ohne Aufrufer aendert nichts). Dieser Subcommand ist der erste LIVE-
+006069: # Aufrufer: er nimmt EIN TypedEntry-Payload von stdin, ruft
+006070: # run_canonical_turn() und gibt strukturiert zurueck.
+006071: #
+006072: #     stern.py f2wp1207-turn-loop-turn \
+006073: #         [--force-new-epoch] [--declared-reentry {previous_frame,previous_epoch,genesis}] \
+006074: #         [--evidence-path PFAD]   < payload.json
+--- scripts/stern.py:6288 ---
+006285:                     min_broadcast_value=tune_validiert["p11_gate_threshold"],
+006286:                 )
+006287: 
+006288:             ergebnis = tlmod.run_canonical_turn(
+006289:                 c,
+006290:                 payload,
+006291:                 declared_reentry=declared_reentry,
+006292:                 effect_policy=effect_policy,
+--- scripts/stern.py:6309 ---
+006306:                     "canonical_loop_owns_turn": False,
+006307:                     "grund": (
+006308:                         "Gate wurde waehrend des Turns AUSgeschaltet -- "
+006309:                         "run_canonical_turn hat nichts geschrieben"
+006310:                     ),
+006311:                 }
+006312: 
+006313:             # --- Pointer-State zuruecklesen (Beleg, nicht Behauptung) ---
+--- scripts/stern.py:6366 ---
+006363:         return {"ok": False, "active": False, "fehler": str(e)}
+006364: 
+006365: 
+006366: def _f2wp1207_turn_loop_auto(
+006367:     session_id: str, nutzertext: str, retrieval_treffer: Optional[str]
+006368: ) -> None:
+006369:     """UserPromptSubmit -- DER LESER fuer den kanonischen Turn-Loop
+006370:     (Gabriel-Auftrag 2026-09-07, `f2wp1207.canonical_turn_loop` war bis
+--- scripts/stern.py:6371 ---
+006368: ) -> None:
+006369:     """UserPromptSubmit -- DER LESER fuer den kanonischen Turn-Loop
+006370:     (Gabriel-Auftrag 2026-09-07, `f2wp1207.canonical_turn_loop` war bis
+006371:     hierher ein Gate ohne Leser: run_canonical_turn()/die Bruecke oben
+006372:     existierten nur als Testaufrufer + CLI-Subcommand
+006373:     `f2wp1207-turn-loop-turn`, nichts rief sie bei einem echten Prompt
+006374:     automatisch auf). Diese Funktion schliesst genau diese Luecke.
+006375: 
+--- scripts/stern.py:10678 ---
+010675:             _f2wp1207_shadow_beobachtung(session_id, prompt_text, treffer)
+010676:             # Gabriel-Auftrag 2026-09-07 -- DER LESER fuer den kanonischen
+010677:             # Turn-Loop. Bis hierher war f2wp1207.canonical_turn_loop ein
+010678:             # Gate ohne Leser: run_canonical_turn() lief nur unter Test
+010679:             # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie
+010680:             # automatisch bei einem echten Prompt. Diese eine Zeile ist der
+010681:             # fehlende Aufrufer -- fail-closed komplett in
+010682:             # _f2wp1207_turn_loop_auto() (Gate-Check + Failure-Isolation
+--- scripts/stern.py:10682 ---
+010679:             # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie
+010680:             # automatisch bei einem echten Prompt. Diese eine Zeile ist der
+010681:             # fehlende Aufrufer -- fail-closed komplett in
+010682:             # _f2wp1207_turn_loop_auto() (Gate-Check + Failure-Isolation
+010683:             # siehe dort), reiner Seiteneffekt in unified.db, kein Einfluss
+010684:             # auf additionalContext/teile.
+010685:             _f2wp1207_turn_loop_auto(session_id, prompt_text, treffer)
+010686:             # PHASE 19 Punkt 5 -- falls die DB erst WAEHREND dieser Sitzung
+--- scripts/stern.py:10685 ---
+010682:             # _f2wp1207_turn_loop_auto() (Gate-Check + Failure-Isolation
+010683:             # siehe dort), reiner Seiteneffekt in unified.db, kein Einfluss
+010684:             # auf additionalContext/teile.
+010685:             _f2wp1207_turn_loop_auto(session_id, prompt_text, treffer)
+010686:             # PHASE 19 Punkt 5 -- falls die DB erst WAEHREND dieser Sitzung
+010687:             # verschwand (SessionStart lief noch gegen eine intakte Datei),
+010688:             # ist UserPromptSubmit der naechste Punkt mit additionalContext,
+010689:             # an dem die Selbstheilungsnachricht ueberhaupt sichtbar werden
+--- scripts/stern.py:13547 ---
+013544:     einen Anfrager (Mensch im Chat, ein anderer Agent, irgendein
+013545:     Aufrufer) OFFENGELEGT/ANGEZEIGT, ohne dass die ECHTE Tresor-Passphrase
+013546:     mitgegeben wurde -- unabhaengig davon, dass die interne Nutzung
+013547:     (vault_eintrag_lesen, chatgpt_senden usw.) seit heute passwortfrei
+013548:     laeuft. Die Pruefung ist FUNKTIONAL (die angegebene Passphrase muss den
+013549:     Tresor tatsaechlich entschluesseln), nicht ein String-Vergleich gegen
+013550:     einen fest einprogrammierten Wert -- das echte Tresor-Passwort steht
+013551:     dadurch NIRGENDS als Konstante im Code."""
+--- scripts/stern.py:14595 ---
+014592: 
+014593: 
+014594: # --- Gabriel-Auftrag 2026-08-26 ("repariere chatgpt ein fuer alle mal"):
+014595: # ECHTER Dateilock + Absturz-Erkennung/Wiederherstellung um chatgpt_senden()/
+014596: # chatgpt_ernten(). Zwei reale, heute in Logs beobachtete Probleme:
+014597: #   1. Daemon stuerzt mitten im Lauf ab / haengt ("running but not
+014598: #      responding", 0 Tabs) -- bisher KEIN automatisches Recovery-Skript
+014599: #      (ausdruecklich in chatgpt_automation_dos_donts.md verifiziert).
+--- scripts/stern.py:14596 ---
+014593: 
+014594: # --- Gabriel-Auftrag 2026-08-26 ("repariere chatgpt ein fuer alle mal"):
+014595: # ECHTER Dateilock + Absturz-Erkennung/Wiederherstellung um chatgpt_senden()/
+014596: # chatgpt_ernten(). Zwei reale, heute in Logs beobachtete Probleme:
+014597: #   1. Daemon stuerzt mitten im Lauf ab / haengt ("running but not
+014598: #      responding", 0 Tabs) -- bisher KEIN automatisches Recovery-Skript
+014599: #      (ausdruecklich in chatgpt_automation_dos_donts.md verifiziert).
+014600: #   2. Zwei GLEICHZEITIGE Aufrufer (zwei Subagenten, PHASE-29-Lehre im
+--- scripts/stern.py:14946 ---
+014943:     geschuetzte Backup-Datei, gruppiert nach exakter Domain (chatgpt.com/
+014944:     openai.com/auth.openai.com brauchen je einen eigenen `goto` davor --
+014945:     $B cookie-import lehnt Domain-Mismatches ab), importiert je Gruppe.
+014946:     Wird automatisch versucht, BEVOR chatgpt_senden()/chatgpt_ernten() eine
+014947:     verlorene Sitzung an Gabriel eskalieren -- kein Mensch-Login noetig,
+014948:     wenn eine kuerzliche echte Sitzung schon gesichert wurde. Real
+014949:     verifiziertes Verfahren (2026-08-27, zweimal live erfolgreich
+014950:     angewendet, bevor es hier fest eingebaut wurde)."""
+--- scripts/stern.py:14994 ---
+014991:     """Login-Gate mit automatischem Selbstheilungsversuch: prueft Status,
+014992:     versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+014993:     (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+014994:     scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+014995:     chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+014996:     fruehes Scheitern zu melden."""
+014997:     lage = chatgpt_login_status()
+014998:     if lage.get("eingeloggt"):
+--- scripts/stern.py:14995 ---
+014992:     versucht bei Bedarf EINMAL die Wiederherstellung aus dem Cookie-Backup
+014993:     (kein Mensch involviert), prueft danach erneut. Erst wenn auch das
+014994:     scheitert, ist ein echter Mensch-Login noetig. chatgpt_senden() und
+014995:     chatgpt_ernten() rufen das jetzt beide auf, statt je ihr eigenes,
+014996:     fruehes Scheitern zu melden."""
+014997:     lage = chatgpt_login_status()
+014998:     if lage.get("eingeloggt"):
+014999:         return lage
+--- scripts/stern.py:15052 ---
+015049: # Gabriel-Auftrag 2026-08-27) -- wenn die ChatGPT-Browser-Bruecke NACH dem
+015050: # automatischen Cookie-Wiederherstellungsversuch (_chatgpt_login_sicherstellen())
+015051: # immer noch nicht eingeloggt ist, soll ein Mensch das nicht mehr jedes Mal
+015052: # von Hand nachlogin muessen. chatgpt_senden()/chatgpt_ernten() schalten
+015053: # stattdessen automatisch auf harness_aider.py um (siehe dort: 'fallback-start',
+015054: # Forschungsmodus) -- NVIDIA Nemotron oder Mistral Small, was zuerst
+015055: # aktivierbar ist, meldet sich als eigener, GERINGER gewichteter Akteur
+015056: # (`freepool-fallback-secondary`, decision_weight 0.5,
+--- scripts/stern.py:15102 ---
+015099: 
+015100: def _chatgpt_fallback_ergebnis_queuen(auftrag: str, antwort: Optional[dict]) -> None:
+015101:     """Haengt ein Fallback-Ergebnis an die lokale JSONL-Warteschlange an --
+015102:     damit chatgpt_ernten() (die eigentlich fuer ASYNCHRONES Abholen gedacht
+015103:     ist) auch ein per Fallback SOFORT beantwortetes Ergebnis noch findet,
+015104:     falls ein Aufrufer wie gewohnt sendet-dann-erntet statt die Direktantwort
+015105:     von chatgpt_senden() selbst zu lesen. Fail-silent (best effort)."""
+015106:     try:
+--- scripts/stern.py:15105 ---
+015102:     damit chatgpt_ernten() (die eigentlich fuer ASYNCHRONES Abholen gedacht
+015103:     ist) auch ein per Fallback SOFORT beantwortetes Ergebnis noch findet,
+015104:     falls ein Aufrufer wie gewohnt sendet-dann-erntet statt die Direktantwort
+015105:     von chatgpt_senden() selbst zu lesen. Fail-silent (best effort)."""
+015106:     try:
+015107:         zeile = {
+015108:             "ts": _jetzt(), "auftrag": _kurz(auftrag, 500),
+015109:             "ok": bool(antwort and antwort.get("ok")),
+--- scripts/stern.py:15200 ---
+015197:          zeigt ein bekanntes 403/Cloudflare-Muster.
+015198: 
+015199:     Reine Werte-Funktion, kein eigener ChatGPT-Aufruf -- darum isoliert
+015200:     testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+015201:     zweiter Fallback-Ausloeser genutzt (gleicher harness_aider.py-Pfad wie
+015202:     PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+015203:     laut ihrem eigenen Docstring bewusst KEINEN neuen Fallback-Lauf aus --
+015204:     es gibt dort keinen neuen Prompt-Text zu beantworten). Rueckgabe immer
+--- scripts/stern.py:15202 ---
+015199:     Reine Werte-Funktion, kein eigener ChatGPT-Aufruf -- darum isoliert
+015200:     testbar mit echten Logdateien als Fixture. Von chatgpt_senden() als
+015201:     zweiter Fallback-Ausloeser genutzt (gleicher harness_aider.py-Pfad wie
+015202:     PHASE 46b), von chatgpt_ernten() als Diagnose (die Ernte-Phase loest
+015203:     laut ihrem eigenen Docstring bewusst KEINEN neuen Fallback-Lauf aus --
+015204:     es gibt dort keinen neuen Prompt-Text zu beantworten). Rueckgabe immer
+015205:     {'ausfall': bool, 'grund': str, 'muster': str|None}."""
+015206:     if not zusammenfassung:
+--- scripts/stern.py:15252 ---
+015249:             "muster": None}
+015250: 
+015251: 
+015252: def chatgpt_senden(prompts: list, *, num_workers: Optional[int] = None,
+015253:                     sleep_between: Optional[float] = None, ram_schwelle_mb: Optional[int] = None,
+015254:                     tab_recycle_alle: Optional[int] = None, tab_hardlimit: Optional[int] = None,
+015255:                     dry_run: bool = False, lock_timeout_s: float = 1200.0) -> dict:
+015256:     """Duenner Wrapper um chatgpt_burst_worker_v2.sh (Sende-Phase). Ruft
+--- scripts/stern.py:15399 ---
+015396:                                 f"trigger={_kurz(text or 'triggerwort2', 60)} ausloeser=403_cloudflare "
+015397:                                 f"ok={fb.get('ok')} modell={fb.get('gewonnen_mit')}")
+015398:         laeufe.append(eintrag)
+015399:         _log(f"chatgpt_senden: trigger='{(text or 'triggerwort2')[:40]}' rc={r.get('rc')} zusammenfassung={neu} "
+015400:              f"ausfall_403_erkannt={ausfall.get('ausfall')}")
+015401:         _raum_ruf_schreiben("manuell", "CHATGPTSENDEN",
+015402:                             f"trigger={_kurz(text or 'triggerwort2', 60)} rc={r.get('rc')}")
+015403: 
+--- scripts/stern.py:15423 ---
+015420:     return ergebnis
+015421: 
+015422: 
+015423: def chatgpt_ernten(*, timeout_s: float = 900.0, lock_timeout_s: float = 1200.0) -> dict:
+015424:     """Wrapper um `chatgpt_burst_worker_v2.sh --harvest` -- liest bereits
+015425:     gesendete Konversationen (sent_urls_v2.txt), rein lesend gegenueber
+015426:     ChatGPT (keine neue Nachricht), gefahrlos wiederholbar. Laeuft wie
+015427:     chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+--- scripts/stern.py:15427 ---
+015424:     """Wrapper um `chatgpt_burst_worker_v2.sh --harvest` -- liest bereits
+015425:     gesendete Konversationen (sent_urls_v2.txt), rein lesend gegenueber
+015426:     ChatGPT (keine neue Nachricht), gefahrlos wiederholbar. Laeuft wie
+015427:     chatgpt_senden() unter `_chatgpt_lock()` (wartet auf gleichzeitige
+015428:     Sende-Laeufe statt zu kollidieren) und `_chatgpt_lauf_mit_recovery()`
+015429:     (automatische Absturz-Erkennung + Prozess-Neustart, nie Login-Eingabe)."""
+015430:     dos_donts = _chatgpt_dos_donts_einmalig()  # PHASE 30-Nachtrag, s.o.
+015431:     if not _CHATGPT_SCRIPT.exists():
+--- scripts/stern.py:15437 ---
+015434:             ergebnis["dos_donts_hinweis"] = dos_donts
+015435:         return ergebnis
+015436:     # Selbstheilungsversuch VOR dem Ernten (Nachtrag 2026-08-27, wie bei
+015437:     # chatgpt_senden()) -- eine zwischenzeitlich verlorene Sitzung soll
+015438:     # nicht erst nach einem 800s-Timeout auffallen, wenn ein stiller
+015439:     # Cookie-Restore sie retten koennte.
+015440:     lage = _chatgpt_login_sicherstellen()
+015441:     if not lage.get("eingeloggt"):
+--- scripts/stern.py:15444 ---
+015441:     if not lage.get("eingeloggt"):
+015442:         # PHASE 46b (Gabriel-Auftrag 2026-08-27): Login weiterhin down --
+015443:         # statt 900s auf ein Skript zu warten, das ohnehin nicht eingeloggt
+015444:         # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+015445:         # (Warteschlange, siehe _chatgpt_fallback_warteschlange_abholen()).
+015446:         # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+015447:         # es gibt hier keine neuen Prompts zu beantworten, nur das
+015448:         # send-dann-ernten-Bild fuer Aufrufer intakt zu halten, die
+--- scripts/stern.py:15446 ---
+015443:         # statt 900s auf ein Skript zu warten, das ohnehin nicht eingeloggt
+015444:         # ist, liefere was per chatgpt_senden()-Fallback ggf. schon bereitsteht
+015445:         # (Warteschlange, siehe _chatgpt_fallback_warteschlange_abholen()).
+015446:         # 'chatgpt_ernten' selbst loest KEINEN neuen Fallback-Lauf aus --
+015447:         # es gibt hier keine neuen Prompts zu beantworten, nur das
+015448:         # send-dann-ernten-Bild fuer Aufrufer intakt zu halten, die
+015449:         # gewohnheitsmaessig ernten() statt der Direktantwort von
+015450:         # chatgpt_senden() abfragen.
+--- scripts/stern.py:15450 ---
+015447:         # es gibt hier keine neuen Prompts zu beantworten, nur das
+015448:         # send-dann-ernten-Bild fuer Aufrufer intakt zu halten, die
+015449:         # gewohnheitsmaessig ernten() statt der Direktantwort von
+015450:         # chatgpt_senden() abfragen.
+015451:         wartend = _chatgpt_fallback_warteschlange_abholen()
+015452:         ergebnis = {"ok": bool(wartend), "fallback_verwendet": True, "lage": lage,
+015453:                     "fallback_ergebnisse": wartend,
+015454:                     "grund": None if wartend else "nicht eingeloggt (auch nach automatischem "
+--- scripts/stern.py:15456 ---
+015453:                     "fallback_ergebnisse": wartend,
+015454:                     "grund": None if wartend else "nicht eingeloggt (auch nach automatischem "
+015455:                              "Wiederherstellungsversuch) und keine wartenden Fallback-Ergebnisse -- "
+015456:                              "chatgpt_senden() zuerst aufrufen (loest bei ausgefallener Bruecke "
+015457:                              "selbst den Fallback aus) oder Mensch loggt manuell ein"}
+015458:         if dos_donts:
+015459:             ergebnis["dos_donts_hinweis"] = dos_donts
+015460:         return ergebnis
+--- scripts/stern.py:15487 ---
+015484:     m = re.search(r"HARVEST summary: done=(\d+) pending=(\d+) lost=(\d+)", ausgabe)
+015485:     if m:
+015486:         zusammenfassung = {"done": int(m.group(1)), "pending": int(m.group(2)), "lost": int(m.group(3))}
+015487:     _log(f"chatgpt_ernten: rc={r.get('rc')} zusammenfassung={zusammenfassung}")
+015488:     if zusammenfassung:
+015489:         _raum_ruf_schreiben("manuell", "CHATGPTERNTEN",
+015490:                             f"done={zusammenfassung['done']} pending={zusammenfassung['pending']} "
+015491:                             f"lost={zusammenfassung['lost']}")
+--- scripts/stern.py:15497 ---
+015494:     # PHASE 46c (Gabriel-Auftrag 2026-08-27): reine Diagnose, KEIN neuer
+015495:     # Fallback-Lauf hier -- Ernte-Phase hat keinen neuen Prompt-Text zu
+015496:     # beantworten (siehe Docstring oben). Nur der Verdacht wird sichtbar
+015497:     # gemacht, damit ein Aufrufer (der z.B. chatgpt_senden() erneut
+015498:     # anstossen koennte) den 403/Cloudflare-Befund nicht selbst suchen muss.
+015499:     ausfall = _chatgpt_ausfall_erkannt(zusammenfassung, log_pfad=_chatgpt_neuestes_burst_log_pfad())
+015500:     if ausfall.get("ausfall"):
+015501:         _log(f"chatgpt_ernten: 403/Cloudflare-Verdacht trotz bestaetigtem Login: {ausfall.get('grund')}")
+MATCH_COUNT=162 PRINTED=120

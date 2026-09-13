@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-omega-world-vps-repo-map-20260913T0510Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu; for R in /workspace/frankenstein-deployment/repo /workspace/frankenstein-deployment/state/bugfix_repo /workspace/omega_runtime/carrier_repo /workspace/t4-grid10-vps-a1 /workspace/t4-grid10-vps-a2 /workspace/t4-grid10-vps-a3 /workspace/clay-global-research-entity; do if [ -e \"$R/.git\" ]; then echo ===$R===; echo HEAD=$(git -C \"$R\" rev-parse HEAD 2>/dev/null || true); U=$(git -C \"$R\" config --get remote.origin.url 2>/dev/null || true); printf '%s\\n' \"$U\" | sed -E 's#(https://)[^/@]+:[^/@]+@#\\1***@#; s#(https://)[^/@]+@#\\1***@#'; fi; done"
+}

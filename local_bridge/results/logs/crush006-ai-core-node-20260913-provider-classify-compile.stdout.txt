@@ -1,0 +1,28 @@
+===BOUNDARY===
+machine_id=ai-core-node
+owner=gabriel
+execution_boundary=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED
+===LIVE_HARNESS_BEFORE===
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99  /home/ai-core-node/frankenstein-repo/CRUSH.md
+===GO_TOOLCHAIN===
+go version go1.27.1 linux/amd64
+===EXACT_SUBJECTS===
+donor=d333e04385f9e1d1523cea7b417cb5e8798a713a
+seed=90f3193e74026344d0e0ed8c368e0251d8f3e6a5
+===PATCH_BINDING===
+ObserveCrushProviderRoute_count=1
+===OMEGA_TESTS===
+ok  	github.com/charmbracelet/crush/internal/omega	0.010s
+===AGENT_COMPILE===
+ok  	github.com/charmbracelet/crush/internal/agent	0.033s [no tests to run]
+===LIVE_HARNESS_AFTER===
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99  /home/ai-core-node/frankenstein-repo/CRUSH.md
+CRUSH006_PROVIDER_CLASSIFICATION_GO_TEST_PASS
+CRUSH006_AGENT_BINDING_COMPILE_PASS
+CRUSH006_LIVE_HARNESS_BYTE_INVARIANT_PASS

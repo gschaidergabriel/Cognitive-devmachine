@@ -1,0 +1,42 @@
+===VIDEO_NODES===
+crw-rw----+ 1 root video 81, 1 Sep 13 16:28 /dev/video0
+crw-rw----+ 1 root video 81, 2 Sep 13 16:28 /dev/video1
+crw-rw----+ 1 root video 81, 0 Sep 13 16:28 /dev/video2
+===FUSER_VIDEO0===
+                     USER        PID ACCESS COMMAND
+/dev/video0:         ai-core-node   2532 F...m python3
+===LSOF_VIDEO0===
+COMMAND  PID         USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+python3 2532 ai-core-node  mem    CHR   81,1          1078 /dev/video0
+python3 2532 ai-core-node    4u   CHR   81,1      0t0 1078 /dev/video0
+===PROCESSES===
+   2097       1 SNs      645 /usr/bin/python3 /opt/entityos/cognition/titan_mx/f2wp1207_titan_mx.py --db /home/ai-core-node/.local/share/agentzero/unified.db --state-db /home/ai-core-node/.local/share/agentzero/titan_mx.db --follow --interval 0.5 --max-frames 100
+   2434       1 Ssl      643 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+   2527    2441 Ss       643 /home/ai-core-node/aicore/opt/venv-ingestd/bin/python3 -m uvicorn router.app:app --host 127.0.0.1 --port 8091 --log-level info --lifespan off
+   2528    2441 Ssl      643 /home/ai-core-node/aicore/opt/venv/bin/python3 /home/ai-core-node/aicore/opt/aicore/core/app.py
+   2529    2441 Ssl      643 /usr/bin/python3 -m services.nerd_physics.main
+   2530    2441 Ss       643 /usr/bin/python3 /home/ai-core-node/.claude/star/claude_cli_shim.py
+   2531    2441 Ssl      643 /usr/bin/python3 -m uvicorn api.main:app --host 127.0.0.1 --port 8000
+   2532    2441 Ssl      643 /usr/bin/python3 /home/ai-core-node/.claude/star/visual/buehne_singleton_entry.py
+   2533    2441 Ssl      643 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+   2534    2441 Ss       643 /usr/bin/python3 /home/ai-core-node/.claude/star/cortex_dashboard.py
+   2543    2441 Ss       643 /usr/bin/python3 /home/ai-core-node/.claude/star/immunsystem.py
+   2545    2441 Ss       643 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py
+   2546    2441 Ss       643 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+   2549    2441 Ssl      643 /usr/bin/python3 /usr/bin/websockify --web /usr/share/novnc 127.0.0.1:8114 127.0.0.1:5998
+   2552    2441 Ss       643 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_local_effect_adapter.py
+   2555    2441 Ss       643 python3 /home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py
+   2564    2441 SNsl     643 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+   2565    2441 SNs      643 /var/lib/entityos/voice/venv/bin/python3 /var/lib/entityos/voice/denker.py
+   2566    2441 SNs      643 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/puls.py
+   2567    2441 SNsl     643 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/gespraech_loop.py
+   2568    2441 SNsl     643 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/welt/dienst.py
+   2575    2441 SNs      643 /usr/bin/python3 /home/ai-core-node/aicore/opt/aicore/tools/chronik/wache.py
+   2580    2441 SNs      643 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/koerperpflege.py
+   2581    2441 SNsl     643 /usr/bin/python3 /home/ai-core-node/.claude/star/erinnerungsdienst.py
+   4422       1 Ss       638 /usr/bin/python3 /home/ai-core-node/.claude/glm-fallback/proxy.py
+   4832       1 SNs      637 python3 /usr/local/sbin/clay-flugschreiber
+  10843    2441 SNs      608 /usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py
+  12369    2567 SNl      601 /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/hoeren.py
+  33808    2441 Ssl      451 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+FRED_PR133_CAMERA_OWNERSHIP_READBACK_DONE

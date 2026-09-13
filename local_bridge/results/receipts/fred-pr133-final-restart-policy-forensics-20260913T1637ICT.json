@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-pr133-final-restart-policy-forensics-20260913T1637ICT",
+  "command_sha256": "6ed3f5f2e22b7d6737c358fc8c8527b799a4c182d43aee43c3cdcd49a019cc18",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T09:37:02.804632+00:00",
+  "finished_at": "2026-09-13T09:37:02.846479+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "87d425248faca3d08ef28a521e04306f6419805a40aec59f4ed945db02c3b5a9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===SHOW===\nRestart=on-failure\nRestartUSec=30s\nMainPID=33808\nResult=success\nNRestarts=0\nExecMainStartTimestamp=Sun 2026-09-13 16:32:06 +07\nExecMainExitTimestamp=\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 16:32:06 +07] ; stop_time=[n/a] ; pid=33808 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n===CAT===\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service\n[Unit]\nDescription=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)\nAfter=network-online.target\nWants=network-online.target\nStartLimitIntervalSec=600\nStartLimitBurst=5\n\n[Service]\nType=simple\nExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener\nRestart=on-failure\nRestartSec=30\n\n[Install]\nWantedBy=default.target\n\n# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\nEnvironment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node\nEnvironment=LOCAL_BRIDGE_OWNER=gabriel\nEnvironment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel\n===JOURNAL_WINDOW===\n2026-09-13T16:32:06+07:00 ai-core-node-projekt-frankenstein systemd[2441]: Started frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] gespraechsmodus: gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] gespraechsmodus: cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] perception_l0: cortex.aktiv=1 -- L0Orchestrator startet (/dev/video0, tick_hz=1.0)\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] perception_l0: Dauerschleife beendet, Kamera freigegeben\n2026-09-13T16:32:07+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:07] gespraechsmodus: Cortex-Dauerschleife mit Fehler beendet (nicht kritisch fuer den Gespraechsmodus): RuntimeError: cv2.VideoCapture konnte /dev/video0 nicht oeffnen\n2026-09-13T16:32:17+07:00 ai-core-node-projekt-frankenstein env[33808]: [2026-09-13 16:32:17] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)\nFRED_PR133_FINAL_RESTART_POLICY_FORENSICS_DONE\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

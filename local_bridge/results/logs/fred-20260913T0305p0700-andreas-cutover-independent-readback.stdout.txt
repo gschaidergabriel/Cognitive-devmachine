@@ -1,0 +1,15 @@
+IDENTITY_HOST=andreas-MACO
+IDENTITY_USER=andreas
+CHECKOUT_HEAD=2f9fa1004ab140eb312302f799bf2e6165c4aff6
+SERVICE_BEGIN
+ActiveState=active
+SubState=running
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=Sat 2026-09-12 21:46:09 CEST
+MainPID=964118
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:04 CEST] ; stop_time=[Sat 2026-09-12 21:46:04 CEST] ; pid=963032 ; code=exited ; status=0 }
+ExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:04 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=963053 ; code=exited ; status=0 }
+ExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964099 ; code=exited ; status=0 }
+ExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; } ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964113 ; code=exited ; status=0 }
+ExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c mkdir -p "$ENTITYOS_ROOTFS_RUN/root/.local/share/agentzero" "$ENTITYOS_ROOTFS_RUN/root/.local/share/frank" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964115 ; code=exited ; status=0 }
+SERVICE_END

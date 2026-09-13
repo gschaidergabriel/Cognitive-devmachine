@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0300p0700-andreas-cutover-start-readback",
+  "command_sha256": "2c64855d71836628450a6ee784b677b0d44011a4092ad21beb9ffe2593258d48",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:46:03.910756+00:00",
+  "finished_at": "2026-09-12T19:46:10.203245+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "0c70c35db5cb9c83c020b0998cfb245358aba085c3534d85825ddf3598bf2bbc",
+  "stderr_sha256": "47436ae2e8eb1bed4b648ae5ffd578c1015cf2467f9a33fd2148e6807002f58c",
+  "stdout_tail": "{\"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\", \"ok\": true, \"reason\": \"manifest_and_binds_verified\"}\nSTART FREI -- durable_cutover_verified\nPRE_START state=inactive manifest_sha=fe7cd20eb0574799d84ac4dd15d089948490fd1fb113a1cbec5aafefd950c916\nPOST_START state=active pid=964118 epoch=Sat 2026-09-12 21:46:09 CEST\n{\"schema\": \"ENTITYOS_SEMANTIC_CUTOVER/v1\", \"ok\": true, \"reason\": \"manifest_and_binds_verified\"}\nSTART FREI -- durable_cutover_verified\nMACHINECTL_BEGIN\nentityos container systemd-nspawn ubuntu 24.04 -\nMACHINECTL_END\nCONTAINER machine=entityos leader=964122\nBIND_AGENT host=66306:9866152 container=66306:9866152\nBIND_FRANK host=66306:9866158 container=66306:9866158\n",
+  "stderr_tail": "Error: unable to open database \"file:/proc/964122/root/root/.local/share/agentzero/consciousness.db?mode=ro\": unable to open database file\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

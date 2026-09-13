@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T0305p0700-andreas-cutover-independent-readback",
+  "command_sha256": "2a941d5ceb9679cf545e72e9fda19b7901599c9874c8d1e88f33270ca81c7a0d",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-12T19:46:10.298012+00:00",
+  "finished_at": "2026-09-12T19:46:10.381276+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "33cf8b80a8837336f0cb61fb2c071e58fa3ec0ce52bb5a368273c9611b5c4259",
+  "stderr_sha256": "be86c1162f852c7b70253c44134462cac94bb7288cf63be4a25cd83b8ae34f8e",
+  "stdout_tail": "IDENTITY_HOST=andreas-MACO\nIDENTITY_USER=andreas\nCHECKOUT_HEAD=2f9fa1004ab140eb312302f799bf2e6165c4aff6\nSERVICE_BEGIN\nActiveState=active\nSubState=running\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nActiveEnterTimestamp=Sat 2026-09-12 21:46:09 CEST\nMainPID=964118\nExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:04 CEST] ; stop_time=[Sat 2026-09-12 21:46:04 CEST] ; pid=963032 ; code=exited ; status=0 }\nExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c rm -rf \"$ENTITYOS_ROOTFS_RUN\"; mkdir -p \"$(dirname \"$ENTITYOS_ROOTFS_RUN\")\"; cp -a --reflink=auto \"$ENTITYOS_ROOTFS_BASE\" \"$ENTITYOS_ROOTFS_RUN\" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:04 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=963053 ; code=exited ; status=0 }\nExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c mkdir -p \"$ENTITYOS_DATA_DIR\" \"$ENTITYOS_VOICE_DIR\" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964099 ; code=exited ; status=0 }\nExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c test -d \"$ENTITYOS_VOICE_DIR\" || { echo \"voice dir missing: $ENTITYOS_VOICE_DIR\" >&2; exit 1; } ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964113 ; code=exited ; status=0 }\nExecStartPre={ path=/bin/sh ; argv[]=/bin/sh -c mkdir -p \"$ENTITYOS_ROOTFS_RUN/root/.local/share/agentzero\" \"$ENTITYOS_ROOTFS_RUN/root/.local/share/frank\" ; ignore_errors=no ; start_time=[Sat 2026-09-12 21:46:09 CEST] ; stop_time=[Sat 2026-09-12 21:46:09 CEST] ; pid=964115 ; code=exited ; status=0 }\nSERVICE_END\n",
+  "stderr_tail": "SERVICE_NOT_INACTIVE\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

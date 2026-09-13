@@ -1,0 +1,20 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"fred-20260913-0411-grf-wire-and-test","machine_id":"ai-core-node","owner":"gabriel","op":"exec","timeout_seconds":240,"command":"set -euo pipefail; d=/tmp/fred-grf-wire-20260913-0411-$RANDOM; mkdir -p \"$d\"; gh repo clone gschaidergabriel/frankenstein \"$d/repo\" -- --quiet; cd \"$d/repo\"; git fetch origin chatgpt-gpt56sol-omega-research-final-20260913 --quiet; git checkout -q chatgpt-gpt56sol-omega-research-final-20260913; echo START_HEAD=$(git rev-parse HEAD); test \"$(git rev-parse HEAD)\" = \"ec97ec044d459122e1aee650f3a86d039961020c\"; python3 - <<'PY'
+from pathlib import Path
+p=Path('scripts/install_voice_777_omega.sh')
+s=p.read_text()
+old='  omega_organ_activity.py\n  omega_research_organs.py\n'
+new='  omega_organ_activity.py\n  omega_grf_field.py\n  omega_research_organs.py\n'
+assert old in s and '  omega_grf_field.py\n' not in s
+p.write_text(s.replace(old,new,1))
+p=Path('scripts/omega_runtime.py')
+s=p.read_text()
+needle='    \"grid\": {\n        \"path\": \"scripts/f2wp1207_grid10_turn_loop.py\",\n        \"role\": \"canonical GRID10 turn-loop lineage\",\n    },\n'
+insert=needle+'    \"grf_field\": {\n        \"path\": \"scripts/omega_grf_field.py\",\n        \"role\": \"typed GRF R0..R6 projection over the canonical turn; no authority\",\n    },\n'
+assert needle in s and '\"grf_field\"' not in s
+s=s.replace(needle,insert,1)
+inv='            \"no second GRID/GWT turn loop\",\n'
+assert inv in s
+s=s.replace(inv,inv+'            \"GRF R6 is claim-scoped; GRF/model output grants no semantic or effect authority\",\n',1)
+p.write_text(s)
+PY
+python3 -m py_compile scripts/omega_grf_field.py scripts/voice_host_777_live_client.py scripts/omega_research_organs.py scripts/omega_runtime.py; python3 tests/test_omega_grf_field.py; python3 tests/test_omega_research_organs.py; python3 tests/test_omega_runtime.py; python3 scripts/omega_runtime.py selftest; git diff --check; git config user.name 'OMEGA FRED'; git config user.email 'structured.thinking.gschaider@gmail.com'; git add scripts/install_voice_777_omega.sh scripts/omega_runtime.py; git commit -m 'FRED: wire GRF field into OMEGA final assembly'; new=$(git rev-parse HEAD); git push origin HEAD:chatgpt-gpt56sol-omega-research-final-20260913; echo PUSHED_HEAD=$new"}

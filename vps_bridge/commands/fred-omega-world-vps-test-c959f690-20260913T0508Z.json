@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-omega-world-vps-test-c959f690-20260913T0508Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; REPO=/workspace/frankenstein-deployment/repo; SHA=c959f6907a51aba9e8c468b4124aca3f52f1bb3d; WT=/workspace/omega_runtime/state/worldmodel_verify_c959f690; test -d \"$REPO/.git\"; echo DEPLOYMENT_HEAD=$(git -C \"$REPO\" rev-parse HEAD); git -C \"$REPO\" fetch --quiet origin \"$SHA\"; ACTUAL=$(git -C \"$REPO\" rev-parse \"$SHA^{commit}\"); test \"$ACTUAL\" = \"$SHA\"; if [ ! -e \"$WT/.git\" ]; then git -C \"$REPO\" worktree add --detach \"$WT\" \"$SHA\" >/dev/null; fi; test \"$(git -C \"$WT\" rev-parse HEAD)\" = \"$SHA\"; echo TEST_HEAD=$(git -C \"$WT\" rev-parse HEAD); cd \"$WT\"; python3 -m py_compile scripts/omega_world_model.py scripts/omega_world_reentry.py scripts/omega_world_coupling.py; python3 -m pytest -q tests/test_omega_world_model.py tests/test_omega_world_reentry_coupling.py; echo WORLD_MODEL_VPS_GATE=PASS"
+}

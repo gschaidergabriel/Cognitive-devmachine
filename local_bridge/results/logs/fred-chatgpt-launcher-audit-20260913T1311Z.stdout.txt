@@ -1,0 +1,44 @@
+--- launcher ---
+/usr/lib/chatgpt/codex-launcher: POSIX shell script, ASCII text executable
+/usr/lib/chatgpt/ChatGPT:        ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=a94d775832150267c05abac22e82f73df4a27f15, stripped
+--- processes ---
+pid=1506165 ppid=2441 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT 
+
+pid=1506173 ppid=2441 exe=/usr/lib/chatgpt/browser_crashpad_handler cmd=/usr/lib/chatgpt/browser_crashpad_handler --monitor-self --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/Codex/Crash Reports --annotation=lsb-release=Ubuntu 24.04.5 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=152.0.7977.83 --initial-client-fd=5 --shared-client-connection 
+
+pid=1506175 ppid=2441 exe=/usr/lib/chatgpt/browser_crashpad_handler cmd=/usr/lib/chatgpt/browser_crashpad_handler --no-periodic-tasks --monitor-self-annotation=ptype=crashpad-handler --database=/home/ai-core-node/.config/Codex/Crash Reports --annotation=lsb-release=Ubuntu 24.04.5 LTS --annotation=plat=Linux --annotation=prod=Chrome_Linux --annotation=ver=152.0.7977.83 --initial-client-fd=4 --shared-client-connection 
+
+pid=1506179 ppid=1506165 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=zygote --no-zygote-sandbox --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable 
+
+pid=1506180 ppid=1506165 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=zygote --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable 
+
+pid=1506185 ppid=1506180 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=zygote --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --change-stack-guard-on-fork=enable 
+
+pid=1506221 ppid=1506179 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=gpu-process --ozone-platform=x11 --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --change-stack-guard-on-fork=enable --gpu-preferences=YAAAAAAAAAAgAQAEAAAAAAAAAAAAAGAASAAAAAAAAAABAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAwAAAAAAAAAAEAAAAAAAAACAAAAAAAAAAMAAAAAQAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA== --shared-files --metrics-shmem-handle=4,i,11524054788808520952,3020188500540230012,262144 
+
+pid=1506223 ppid=1506165 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user-agent-prefix=CodexBrowser --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes
+
+pid=1506238 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=utility --utility-sub-type=storage.mojom.StorageService --lang=en-US --service-sandbox-type=utility --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --change-stack-guard-
+
+pid=1506517 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1506518 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1506582 ppid=1506165 exe=/usr/lib/chatgpt/resources/codex cmd=/usr/lib/chatgpt/resources/codex -c features.code_mode_host=true app-server --analytics-default-enabled -c plugins.codex-app-tools@openai-bundled.mcp_servers.codex_app.enabled=true 
+
+pid=1508917 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1510280 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1510298 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1510716 ppid=1506185 exe=/usr/lib/chatgpt/ChatGPT cmd=/usr/lib/chatgpt/ChatGPT --type=renderer --crashpad-handler-pid=1506173 --enable-crash-reporter=, --user-data-dir=/home/ai-core-node/.config/Codex --owl-electron-scheme-replay --standard-schemes=app,codex-sandbox --service-worker-schemes=codex-sandbox --secure-schemes=app,codex-sandbox --fetch-schemes=app,codex-sandbox --cors-schemes=codex-sandbox --streaming-schemes=app,codex-sandbox --owl-scoped-user-agent-additional-hosts=openai.com,chatgpt.com,chatgpt.site,chatgpt-team.site --owl-scoped-user
+
+pid=1510901 ppid=1506582 exe=/usr/lib/chatgpt/resources/cua_node/bin/node_repl cmd=/usr/lib/chatgpt/resources/cua_node/bin/node_repl 
+
+pid=1512229 ppid=1506582 exe=/usr/lib/chatgpt/resources/codex-code-mode-host cmd=/usr/lib/chatgpt/resources/codex-code-mode-host 
+
+pid=499724 ppid=459995 exe=/home/ai-core-node/.codex/packages/standalone/releases/0.154.0-x86_64-unknown-linux-musl/bin/codex cmd=codex 
+
+--- launcher strings ---
+exec "$(dirname "$(readlink -f "$0")")/ChatGPT" "$@"

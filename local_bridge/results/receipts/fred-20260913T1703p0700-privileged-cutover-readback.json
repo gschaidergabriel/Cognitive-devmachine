@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913T1703p0700-privileged-cutover-readback",
+  "command_sha256": "ed1fd6edb3c83793b3c0b685baa9ff4665db5500c9e6cc3d530787a61b316670",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-13T10:06:11.153047+00:00",
+  "finished_at": "2026-09-13T10:06:11.501213+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "f98cd2a561eea930643b3f26b1924d558d4daac81aa9d68d25eb407b33f3a2a9",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===IDENTITY===\nandreas-MACO\nroot\n===SERVICE_STATE===\nfailed\nDropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf\nActiveEnterTimestamp=\nMainPID=0\nExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[Sun 2026-09-13 07:33:25 CEST] ; stop_time=[Sun 2026-09-13 07:33:26 CEST] ; pid=1916 ; code=exited ; status=0 }\n===MANIFEST===\nfe7cd20eb0574799d84ac4dd15d089948490fd1fb113a1cbec5aafefd950c916  /var/lib/entityos/data/semantic-state/CUTOVER.json\nroot:root 600 4686 2026-09-12 21:39:48.813761311 +0200 /var/lib/entityos/data/semantic-state/CUTOVER.json\n===CONFIG_BINDS===\n40:ENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix --bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero --bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n===CUTOVER_CONDITION===\nSTART FREI -- durable_cutover_verified\nCUTOVER_CONDITION_RC=0\n===DONE===\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

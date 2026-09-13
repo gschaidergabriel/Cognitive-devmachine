@@ -1,0 +1,18 @@
+===IDENTITY===
+andreas-MACO
+root
+===SERVICE_STATE===
+failed
+DropInPaths=/etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf /etc/systemd/system/entityos-vm.service.d/20-semantic-state-cutover.conf
+ActiveEnterTimestamp=
+MainPID=0
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[Sun 2026-09-13 07:33:25 CEST] ; stop_time=[Sun 2026-09-13 07:33:26 CEST] ; pid=1916 ; code=exited ; status=0 }
+===MANIFEST===
+fe7cd20eb0574799d84ac4dd15d089948490fd1fb113a1cbec5aafefd950c916  /var/lib/entityos/data/semantic-state/CUTOVER.json
+root:root 600 4686 2026-09-12 21:39:48.813761311 +0200 /var/lib/entityos/data/semantic-state/CUTOVER.json
+===CONFIG_BINDS===
+40:ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix --bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero --bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank"
+===CUTOVER_CONDITION===
+START FREI -- durable_cutover_verified
+CUTOVER_CONDITION_RC=0
+===DONE===

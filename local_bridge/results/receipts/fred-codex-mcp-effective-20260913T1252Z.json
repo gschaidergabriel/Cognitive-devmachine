@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-codex-mcp-effective-20260913T1252Z",
+  "command_sha256": "0d53588279a5acd3a872f58fa02267a14dfea07c5a72286f7254472b84965aee",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T12:28:14.988783+00:00",
+  "finished_at": "2026-09-13T12:28:15.294279+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "fb98c5f9686814c4064a62c341491c06a01d13f6a8950523834642567490e7b7",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "--- config section ---\n[mcp_servers.omega-frankenstein]\nurl = \"http://127.0.0.1:8789/mcp\"\nhttp_headers_helper = \"/home/ai-core-node/.local/bin/omega-mcp-headers\"\nrequired = true\nstartup_timeout_sec = 3.0\ntool_timeout_sec = 30.0\n--- list ---\n[\n  {\n    \"name\": \"omega-frankenstein\",\n    \"enabled\": true,\n    \"disabled_reason\": null,\n    \"transport\": {\n      \"type\": \"streamable_http\",\n      \"url\": \"http://127.0.0.1:8789/mcp\",\n      \"bearer_token_env_var\": null,\n      \"http_headers\": null,\n      \"env_http_headers\": null\n    },\n    \"startup_timeout_sec\": 3.0,\n    \"tool_timeout_sec\": 30.0,\n    \"auth_status\": \"unsupported\"\n  }\n]\n--- authenticated MCP handshake ---\n{\"initialize\":\"PASS\",\"serverInfo\":{\"name\":\"omega-frankenstein-bridge\",\"version\":\"1.0.0\"},\"tool_count\":7,\"tools\":[\"omega_status\",\"omega_read\",\"omega_execute\",\"omega_write_text\",\"omega_screenshot\",\"omega_receipt\",\"omega_transport_status\"],\"credential\":\"REDACTED\"}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

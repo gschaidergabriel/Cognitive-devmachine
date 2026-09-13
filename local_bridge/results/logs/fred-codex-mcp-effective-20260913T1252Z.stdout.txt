@@ -1,0 +1,27 @@
+--- config section ---
+[mcp_servers.omega-frankenstein]
+url = "http://127.0.0.1:8789/mcp"
+http_headers_helper = "/home/ai-core-node/.local/bin/omega-mcp-headers"
+required = true
+startup_timeout_sec = 3.0
+tool_timeout_sec = 30.0
+--- list ---
+[
+  {
+    "name": "omega-frankenstein",
+    "enabled": true,
+    "disabled_reason": null,
+    "transport": {
+      "type": "streamable_http",
+      "url": "http://127.0.0.1:8789/mcp",
+      "bearer_token_env_var": null,
+      "http_headers": null,
+      "env_http_headers": null
+    },
+    "startup_timeout_sec": 3.0,
+    "tool_timeout_sec": 30.0,
+    "auth_status": "unsupported"
+  }
+]
+--- authenticated MCP handshake ---
+{"initialize":"PASS","serverInfo":{"name":"omega-frankenstein-bridge","version":"1.0.0"},"tool_count":7,"tools":["omega_status","omega_read","omega_execute","omega_write_text","omega_screenshot","omega_receipt","omega_transport_status"],"credential":"REDACTED"}

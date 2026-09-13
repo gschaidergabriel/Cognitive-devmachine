@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TARGET_ROOT="${OMEGACV1_TEST_ROOT:-$HOME/.local/share/omegacv1-test-platform}"
+RELEASES="$TARGET_ROOT/releases"
+STATE_PATH="${OMEGACV1_STATE_PATH:-$TARGET_ROOT/state/state.json}"
+
+usage() {
+  echo "usage: $0 <inspect|stage|verify-stage>" >&2
+}
+
+assert_ai_core_node() {
+  local host
+  host="$(hostname 2>/dev/null || true)"
+  if [[ "${OMEGACV1_ALLOW_OTHER_HOST:-0}" == "1" ]]; then
+    return 0
+  fi
+  case "$host" in
+    ai-core-node|ai-core-node-*) ;;
+    *)
+      echo "error: expected Gabriel ai-core-node host, got '$host'" >&2
+      exit 41
+      ;;
+  esac
+}
+
+inspect() {
+  assert_ai_core_node
+  echo "owner=gabriel"
+  echo "machine_id=ai-core-node"
+  echo "host=$(hostname 2>/dev/null || true)"
+  echo "user=$(id -un 2>/dev/null || true)"
+  echo "repo_root=$ROOT"
+  echo "repo_head=$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
+  echo "state_path=$STATE_PATH"
+  echo "processes_begin"
+  pgrep -af '(^|/)(crush|omegacv1)( |$)|node .*crush' 2>/dev/null || true
+  echo "processes_end"
+  echo "command_crush=$(command -v crush 2>/dev/null || true)"
+  echo "command_omegacv1=$(command -v omegacv1 2>/dev/null || true)"
+}
+
+stage() {
+  assert_ai_core_node
+  "$ROOT/scripts/build-release.sh"
+
+  local repo_head release_dir src_bin sha
+  repo_head="$(git -C "$ROOT" rev-parse HEAD)"
+  release_dir="$RELEASES/$repo_head"
+  src_bin="$ROOT/dist/omegacv1"
+
+  mkdir -p "$release_dir" "$TARGET_ROOT/state"
+  install -m 0755 "$src_bin" "$release_dir/omegacv1"
+  sha="$(sha256sum "$release_dir/omegacv1" | awk '{print $1}')"
+
+  cat > "$release_dir/PROVENANCE.env" <<META
+schema=OMEGACV1_AI_CORE_NODE_STAGE_V1
+owner=gabriel
+machine_id=ai-core-node
+repo_head=$repo_head
+binary_sha256=$sha
+state_path=$STATE_PATH
+META
+
+  echo "staged_release=$release_dir"
+  echo "binary_sha256=$sha"
+  echo "state_path=$STATE_PATH"
+}
+
+verify_stage() {
+  assert_ai_core_node
+
+  local repo_head release_dir binary expected actual
+  repo_head="$(git -C "$ROOT" rev-parse HEAD)"
+  release_dir="$RELEASES/$repo_head"
+  binary="$release_dir/omegacv1"
+
+  [[ -x "$binary" ]] || { echo "error: current repo head is not staged" >&2; exit 42; }
+  [[ -f "$release_dir/PROVENANCE.env" ]] || { echo "error: provenance missing" >&2; exit 43; }
+
+  expected="$(awk -F= '$1=="binary_sha256" {print $2}' "$release_dir/PROVENANCE.env")"
+  actual="$(sha256sum "$binary" | awk '{print $1}')"
+  [[ -n "$expected" && "$expected" == "$actual" ]] || { echo "error: staged binary hash mismatch" >&2; exit 44; }
+
+  echo "verify_stage=PASS"
+  echo "repo_head=$repo_head"
+  echo "binary=$binary"
+  echo "binary_sha256=$actual"
+  echo "state_path=$STATE_PATH"
+}
+
+case "${1:-}" in
+  inspect) inspect ;;
+  stage) stage ;;
+  verify-stage) verify_stage ;;
+  *) usage; exit 2 ;;
+esac

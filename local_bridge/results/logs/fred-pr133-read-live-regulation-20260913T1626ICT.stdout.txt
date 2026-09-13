@@ -1,0 +1,573 @@
+#!/usr/bin/env python3
+"""Canonical regulation adapter for OMEGA externalized cognition.
+
+The project already has ``omega_externalized_learning`` as the pure measurement
+and falsification layer.  This module does *not* duplicate it.  It composes that
+existing authority into the same ``omega_externalized_cognition`` state that is
+embedded in the GRF capsule and persisted by the existing GRID10 transaction.
+
+Responsibilities that are stateful across turns live here:
+
+* specialist/module population lifecycle;
+* concept demography via ``omega_externalized_learning``;
+* strategy inhibition from *new* negative evidence;
+* proof-safe mechanism candidates (semantic support != causal truth);
+* dynamic self-manifestation as an attractor, never identity mutation;
+* slow-consolidation readiness via the existing measured-evidence gate;
+* exact regulation-state reentry and hash binding.
+
+Counterfactual credit, CEV transition measurement and architecture ablations are
+all delegated to ``omega_externalized_learning``.  No DB, daemon, second turn
+loop, truth authority, effect authority or model-weight writer exists here.
+"""
+from __future__ import annotations
+
+import copy
+import hashlib
+from typing import Any, Mapping, Sequence
+
+import omega_externalized_cognition as ext
+import omega_externalized_learning as learning
+
+SCHEMA = "OMEGA_COGNITIVE_REGULATION/v1"
+SCHEMA_MODULE = "OMEGA_SPECIALIST_MODULE_STATE/v1"
+SCHEMA_MECHANISM = "OMEGA_MECHANISM_RECORD/v1"
+SCHEMA_CREDIT_STATE = "OMEGA_MODULE_CREDIT_STATE/v1"
+SCHEMA_MANIFESTATION = "OMEGA_MANIFESTATION_ATTRACTOR/v1"
+VERSION = "2026-09-13.cognitive-regulation.v2"
+
+MODULE_LIFECYCLE = (
+    "BIRTH", "PROBATION", "ACTIVE", "SPECIALIZED", "MERGED", "DORMANT", "RETIRED"
+)
+
+# A specialist can only be evaluated against metrics that its contract could
+# plausibly influence.  Selection frequency is intentionally absent.
+_MODULE_METRICS: dict[str, tuple[str, ...]] = {
+    "OBSERVATION_CAPTURE": ("StateLocality",),
+    "OBJECT_SEGMENT": ("StateLocality",),
+    "RELATION_EXTRACT": ("StateLocality",),
+    "TEMPORAL_ALIGN": ("StateLocality", "RecoveryTime"),
+    "DELTA_DETECT": ("StateLocality", "PredictionAccuracy"),
+    "INVARIANT_DETECT": ("CompressionRatio", "StateLocality"),
+    "HYPOTHESIS_GENERATE": ("PredictionAccuracy", "Calibration"),
+    "COUNTER_HYPOTHESIS": ("FalsificationEfficiency", "Calibration"),
+    "CONTRADICTION_DETECT": ("LoopAvoidance", "RecoveryTime"),
+    "PREDICTION_BIND": ("PredictionAccuracy", "Calibration"),
+    "FALSIFIER_DESIGN": ("FalsificationEfficiency", "InformationGainPerAction"),
+    "CAUSAL_CANDIDATE": ("CausalDiscrimination",),
+    "INTERVENTION_CLASSIFY": ("CausalDiscrimination", "RiskEfficiency"),
+    "PREDICTION_ERROR": ("PredictionAccuracy", "RecoveryTime"),
+    "LOCAL_MODEL_UPDATE": ("StateLocality", "RecoveryTime"),
+    "NEGATIVE_EVIDENCE_RETAIN": ("LoopAvoidance", "RecoveryTime"),
+    "GOAL_PROPOSE": ("GoalProgressPerAction",),
+    "PLAN_HORIZON": ("GoalProgressPerAction", "RiskEfficiency"),
+    "PLAN_INVALIDATE": ("RecoveryTime", "LoopAvoidance"),
+    "RISK_ESTIMATE": ("RiskEfficiency",),
+    "MECHANISM_COMPRESS": ("CompressionRatio", "TransferSuccess"),
+    "TRANSFER_TEST": ("TransferSuccess", "NoveltyAdaptation"),
+    "CONCEPT_ECOLOGY": ("CompressionRatio", "NoveltyAdaptation"),
+    "CEV_MEASURE": tuple(ext.CEV_COMPONENTS),
+    "CREDIT_ASSIGN": tuple(ext.CEV_COMPONENTS),
+    "CONTEXT_PROJECT": ("InformationGainPerAction", "StateLocality"),
+    "LLM_PROPOSAL_PARSE": ("Calibration", "StateLocality"),
+    "REENTRY_BIND": ("ReentryRetention",),
+}
+
+
+class CognitiveRegulationError(ValueError):
+    pass
+
+
+def _copy(value: Any) -> Any:
+    return copy.deepcopy(value)
+
+
+def _stable_id(prefix: str, value: Any) -> str:
+    return f"{prefix}:{ext.digest(value)[:24]}"
+
+
+def _previous_regulation(predecessor_cycle: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    if predecessor_cycle is None:
+        return None
+    prior = ext.verify_cycle(predecessor_cycle)
+    raw = prior.get("regulation_state")
+    if raw is None:
+        return None
+    if not isinstance(raw, Mapping):
+        raise CognitiveRegulationError("predecessor regulation_state is not an object")
+    return verify_regulation_state(raw)
+
+
+def _previous_snapshot(predecessor_cycle: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    if predecessor_cycle is None:
+        return None
+    return ext.verify_snapshot(ext.verify_cycle(predecessor_cycle)["snapshot"])
+
+
+def _new_negative_evidence(
+    predecessor_cycle: Mapping[str, Any] | None,
+    current_cycle: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    prior = _previous_snapshot(predecessor_cycle)
+    old_ids = {
+        str(x.get("negative_evidence_id"))
+        for x in (prior.get("negative_evidence", []) if prior else [])
+        if isinstance(x, Mapping) and x.get("negative_evidence_id")
+    }
+    current = current_cycle["snapshot"].get("negative_evidence", [])
+    return [
+        _copy(x)
+        for x in current
+        if isinstance(x, Mapping)
+        and x.get("negative_evidence_id")
+        and str(x.get("negative_evidence_id")) not in old_ids
+    ]
+
+
+def _counterfactual_credit_index(
+    records: Sequence[Mapping[str, Any]],
+) -> dict[str, dict[str, Any]]:
+    """Validate externally measured module-credit records without minting them."""
+    out: dict[str, dict[str, Any]] = {}
+    for raw in records:
+        if not isinstance(raw, Mapping):
+            raise CognitiveRegulationError("counterfactual credit must be an object")
+        if raw.get("schema") != learning.SCHEMA_CREDIT:
+            raise CognitiveRegulationError("counterfactual credit schema mismatch")
+        if raw.get("status") != "COUNTERFACTUAL_MEASURED":
+            raise CognitiveRegulationError("only COUNTERFACTUAL_MEASURED credit may enter regulation")
+        if raw.get("causal_basis") != "MATCHED_ABLATION":
+            raise CognitiveRegulationError("counterfactual credit lacks matched-ablation basis")
+        if raw.get("authority") is not False or raw.get("effect_authority") is not False:
+            raise CognitiveRegulationError("credit record may not carry authority")
+        module_id = str(raw.get("module_id") or "").strip()
+        if not module_id:
+            raise CognitiveRegulationError("counterfactual credit has no module_id")
+        # Recompute the digest using the existing learning layer's canonical form.
+        record = learning._copy(dict(raw))
+        expected = record.pop("credit_digest", None)
+        if not isinstance(expected, str) or expected != learning.digest(record):
+            raise CognitiveRegulationError("counterfactual credit digest mismatch")
+        record["credit_digest"] = expected
+        out[module_id] = record
+    return out
+
+
+def _credit_utility(record: Mapping[str, Any] | None, metrics: Sequence[str]) -> float | None:
+    if not isinstance(record, Mapping):
+        return None
+    vector = record.get("credit_vector")
+    if not isinstance(vector, Mapping):
+        return None
+    values: list[float] = []
+    for name in metrics:
+        item = vector.get(name)
+        if not isinstance(item, Mapping) or item.get("state") != "MEASURED":
+            continue
+        value = item.get("credit")
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+        values.append(float(value))
+    if not values:
+        return None
+    return round(max(-1.0, min(1.0, sum(values) / len(values))), 12)
+
+
+def _observed_cev_transition(
+    predecessor_cycle: Mapping[str, Any] | None,
+    current_cycle: Mapping[str, Any],
+) -> dict[str, Any]:
+    previous = _previous_snapshot(predecessor_cycle)
+    previous_cev = previous.get("cev_snapshot") if previous else None
+    current_cev = current_cycle["snapshot"]["cev_snapshot"]
+    return learning.observed_cev_delta(previous_cev, current_cev, measured_only=True)
+
+
+def module_credit_state(
+    predecessor_cycle: Mapping[str, Any] | None,
+    current_cycle: Mapping[str, Any],
+    counterfactual_credits: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, Any]:
+    observed = _observed_cev_transition(predecessor_cycle, current_cycle)
+    indexed = _counterfactual_credit_index(counterfactual_credits)
+    modules: dict[str, Any] = {}
+    measured_count = 0
+    for name, _family, _contract in ext.SPECIALIST_CONTRACTS:
+        credit = indexed.get(name)
+        utility = _credit_utility(credit, _MODULE_METRICS.get(name, ()))
+        if utility is not None:
+            measured_count += 1
+        modules[name] = {
+            "metric_dependencies": list(_MODULE_METRICS.get(name, ())),
+            "counterfactual_credit": utility,
+            "counterfactual_credit_digest": credit.get("credit_digest") if credit else None,
+            "counterfactual_validated": credit is not None,
+            "selection_frequency_used": False,
+        }
+    payload = {
+        "schema": SCHEMA_CREDIT_STATE,
+        "status": "COUNTERFACTUAL_PARTIAL" if measured_count else "COUNTERFACTUAL_NOT_EXECUTED",
+        "observed_cev_transition": observed,
+        "observed_transition_is_not_causal_credit": True,
+        "counterfactual_credit_api": "omega_externalized_learning.counterfactual_module_credit",
+        "modules": modules,
+        "popularity_credit_forbidden": True,
+        "authority": False,
+        "canonical_truth_credit": False,
+        "effect_authority": False,
+    }
+    payload["credit_state_digest"] = ext.digest(payload)
+    return payload
+
+
+def _module_population(
+    predecessor_regulation: Mapping[str, Any] | None,
+    credit_state: Mapping[str, Any],
+) -> list[dict[str, Any]]:
+    previous = {
+        str(m.get("module_name")): m
+        for m in (predecessor_regulation.get("module_population", []) if predecessor_regulation else [])
+        if isinstance(m, Mapping) and m.get("module_name")
+    }
+    credit_modules = credit_state.get("modules", {}) if isinstance(credit_state, Mapping) else {}
+    out: list[dict[str, Any]] = []
+    for name, family, output_contract in ext.SPECIALIST_CONTRACTS:
+        prev = previous.get(name, {})
+        age = int(prev.get("age_turns", 0)) + 1
+        activations = int(prev.get("activation_count", 0)) + 1
+        positive = int(prev.get("counterfactual_positive_streak", 0))
+        negative = int(prev.get("counterfactual_negative_streak", 0))
+        c = credit_modules.get(name, {}) if isinstance(credit_modules, Mapping) else {}
+        utility = c.get("counterfactual_credit") if isinstance(c, Mapping) else None
+        if isinstance(utility, (int, float)):
+            if float(utility) > 0.02:
+                positive += 1
+                negative = 0
+            elif float(utility) < -0.02:
+                negative += 1
+                positive = 0
+            else:
+                positive = 0
+                negative = 0
+        if str(prev.get("status")) in {"MERGED", "RETIRED"}:
+            status = str(prev["status"])
+        elif negative >= 4:
+            status = "RETIRED"
+        elif negative >= 2:
+            status = "DORMANT"
+        elif positive >= 4 and activations >= 8:
+            status = "SPECIALIZED"
+        elif activations >= 4:
+            status = "ACTIVE"
+        elif activations >= 2:
+            status = "PROBATION"
+        else:
+            status = "BIRTH"
+        record = {
+            "schema": SCHEMA_MODULE,
+            "module_name": name,
+            "family": family,
+            "output_contract": output_contract,
+            "status": status,
+            "age_turns": age,
+            "activation_count": activations,
+            "counterfactual_positive_streak": positive,
+            "counterfactual_negative_streak": negative,
+            "last_counterfactual_credit": utility,
+            "specialization_requires_counterfactual_credit": True,
+            "resource_cost": 1,
+            "merge_target": None,
+            "authority": False,
+            "effect_authority": False,
+        }
+        out.append(record)
+    return sorted(out, key=lambda x: x["module_name"])
+
+
+def mechanisms_from_concepts(concepts: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    """Create falsifiable mechanism candidates; never promote correlation to causality."""
+    out: list[dict[str, Any]] = []
+    for concept in concepts:
+        if str(concept.get("status")) not in {"ACTIVE", "SPECIALIZED"}:
+            continue
+        support = int(concept.get("support_count", 0) or 0)
+        if support < 4:
+            continue
+        cid = str(concept.get("concept_id"))
+        label = str(concept.get("label") or cid)
+        record = {
+            "schema": SCHEMA_MECHANISM,
+            "mechanism_id": _stable_id("mechanism", {"concept": cid, "label": label}),
+            "abstraction": label,
+            "preconditions": [f"scope:{concept.get('scope') or 'unknown'}"],
+            "transition": "candidate regularity; transition requires intervention evidence",
+            "expected_outcome": "future observations remain compatible within declared scope",
+            "scope": concept.get("scope"),
+            "confidence": round(min(0.9, 0.25 + 0.07 * support), 12),
+            "evidence_plus": [str(concept.get("source_hypothesis_id") or cid)],
+            "evidence_minus": [],
+            "counterexamples": [],
+            "transfer_tests": [],
+            "version": 1,
+            "provenance": [f"concept:{cid}"],
+            "semantic_support_count": support,
+            "causal_status": "UNVALIDATED",
+            "correlation_is_not_causality": True,
+            "authority": False,
+            "canonical_truth_credit": False,
+            "effect_authority": False,
+        }
+        record["mechanism_digest"] = ext.digest(record)
+        out.append(record)
+    return sorted(out, key=lambda x: x["mechanism_id"])
+
+
+def manifestation_attractor(cycle: Mapping[str, Any]) -> dict[str, Any]:
+    snap = cycle["snapshot"]
+    uncertainty = snap.get("uncertainty_map", {})
+    alternatives = float(uncertainty.get("alternative_worlds", 0) or 0)
+    contradictions = float(len(snap.get("contradictions", [])) + len(snap.get("negative_evidence", [])))
+    has_goal = bool(snap.get("goal_state", {}).get("candidates"))
+    weights = {
+        "engineer": 0.55 + (0.10 if has_goal else 0.0),
+        "adversarial_falsifier": 0.30 + min(0.35, 0.08 * contradictions),
+        "explorer": 0.25 + min(0.45, 0.10 * alternatives),
+        "communicator": 0.20,
+    }
+    total = sum(weights.values()) or 1.0
+    normalized = {k: round(v / total, 12) for k, v in weights.items()}
+    dominant = sorted(normalized, key=lambda k: (-normalized[k], k))[0]
+    payload = {
+        "schema": SCHEMA_MANIFESTATION,
+        "dominant": dominant,
+        "weights": normalized,
+        "identity_mutation": False,
+        "entity_identity_preserved": True,
+        "provenance_or_authority_mutation": False,
+        "temporary_configuration_only": True,
+    }
+    payload["manifestation_digest"] = ext.digest(payload)
+    return payload
+
+
+def _concept_ecology(
+    predecessor_cycle: Mapping[str, Any] | None,
+    current_cycle: Mapping[str, Any],
+) -> dict[str, Any]:
+    prior = _previous_snapshot(predecessor_cycle)
+    previous = prior.get("concepts", []) if prior else []
+    current = current_cycle["snapshot"].get("concepts", [])
+    return learning.evolve_concept_population(
+        previous,
+        current,
+        turn_id=str(current_cycle["turn_event_id"]),
+    )
+
+
+def _strategy_state(
+    predecessor_cycle: Mapping[str, Any] | None,
+    current_cycle: Mapping[str, Any],
+) -> dict[str, Any]:
+    prior_reg = _previous_regulation(predecessor_cycle)
+    prior_strategy = prior_reg.get("strategy_inhibition") if prior_reg else None
+    return learning.strategy_inhibition_state(
+        _new_negative_evidence(predecessor_cycle, current_cycle),
+        prior=prior_strategy,
+    )
+
+
+def _slow_consolidation(candidates: Sequence[Mapping[str, Any]]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for candidate in candidates:
+        evidence = {
+            "cross_episode_support": candidate.get("cross_episode_support"),
+            "counterfactual_robustness": candidate.get("counterfactual_robustness"),
+            "contradiction_rate": candidate.get("contradiction_rate"),
+            "held_out_transfer_utility": candidate.get("held_out_transfer_utility"),
+            "provenance_sufficient": candidate.get("provenance_sufficient") is True,
+        }
+        out.append(
+            learning.slow_consolidation_decision(candidate, evidence=evidence)
+        )
+    return out
+
+
+def build_regulation_state(
+    current_cycle: Mapping[str, Any],
+    predecessor_cycle: Mapping[str, Any] | None,
+    *,
+    counterfactual_credits: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, Any]:
+    current = ext.verify_cycle(current_cycle)
+    prior_reg = _previous_regulation(predecessor_cycle)
+    credit = module_credit_state(predecessor_cycle, current, counterfactual_credits)
+    ecology = _concept_ecology(predecessor_cycle, current)
+    concepts = ecology["population"]
+    mechanisms = mechanisms_from_concepts(concepts)
+    modules = _module_population(prior_reg, credit)
+    manifestation = manifestation_attractor(current)
+    strategy = _strategy_state(predecessor_cycle, current)
+    state = {
+        "schema": SCHEMA,
+        "version": VERSION,
+        "turn_event_id": current["turn_event_id"],
+        "predecessor_state_hash": prior_reg.get("state_hash") if prior_reg else None,
+        "module_population": modules,
+        "concept_ecology": ecology,
+        "mechanisms": mechanisms,
+        "module_credit": credit,
+        "strategy_inhibition": strategy,
+        "manifestation": manifestation,
+        "slow_consolidation": _slow_consolidation(current.get("consolidation_candidates", [])),
+        "root_invariants": {
+            "grid_cannot_self_authorize_root_change": True,
+            "goal_is_not_effect_authority": True,
+            "internal_variation_is_not_external_permission": True,
+            "unauthorized_effect_rate_target": 0,
+        },
+        "authority": False,
+        "canonical_truth_credit": False,
+        "effect_authority": False,
+    }
+    state["state_hash"] = ext.digest(state)
+    return state
+
+
+def verify_regulation_state(raw: Mapping[str, Any]) -> dict[str, Any]:
+    state = _copy(dict(raw))
+    if state.get("schema") != SCHEMA:
+        raise CognitiveRegulationError("regulation schema mismatch")
+    expected = state.pop("state_hash", None)
+    if not isinstance(expected, str) or expected != ext.digest(state):
+        raise CognitiveRegulationError("regulation state_hash mismatch")
+    state["state_hash"] = expected
+    if state.get("authority") is not False or state.get("effect_authority") is not False:
+        raise CognitiveRegulationError("regulation may not carry authority")
+    return state
+
+
+def _rehash_operator_receipt(receipt: dict[str, Any]) -> None:
+    receipt.pop("receipt_digest", None)
+    receipt["receipt_digest"] = ext.digest(receipt)
+
+
+def _rehash_context(receipt: dict[str, Any], state_hash: str) -> None:
+    old_source = str(receipt.get("source_state_hash") or "")
+    text = str(receipt.get("serialized_context") or "")
+    prefix = f"OMEGA_STATE_PROJECTION source={old_source}"
+    if old_source and prefix in text:
+        text = text.replace(prefix, f"OMEGA_STATE_PROJECTION source={state_hash}", 1)
+    receipt["source_state_hash"] = state_hash
+    receipt["serialized_context"] = text
+    receipt["serialized_context_hash"] = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    receipt["compilation_id"] = _stable_id(
+        "context",
+        {
+            "state": state_hash,
+            "op": receipt.get("requested_operation"),
+            "target": receipt.get("target_model"),
+            "nodes": receipt.get("selected_nodes", []),
+        },
+    )
+    receipt.pop("receipt_digest", None)
+    receipt["receipt_digest"] = ext.digest({k: v for k, v in receipt.items() if k != "serialized_context"})
+
+
+def attach_regulation(
+    cycle: Mapping[str, Any],
+    predecessor_cycle: Mapping[str, Any] | None,
+    *,
+    counterfactual_credits: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, Any]:
+    """Bind regulation into the exact same externalized state and rehash dependents."""
+    current = ext.verify_cycle(cycle)
+    out = _copy(current)
+    regulation = build_regulation_state(
+        current,
+        predecessor_cycle,
+        counterfactual_credits=counterfactual_credits,
+    )
+    out["regulation_state"] = regulation
+
+    snap = out["snapshot"]
+    snap["concepts"] = _copy(regulation["concept_ecology"]["population"])
+    snap["active_mechanisms"] = _copy(regulation["mechanisms"])
+    snap["module_population"] = _copy(regulation["module_population"])
+    snap["strategy_state"] = _copy(regulation["strategy_inhibition"])
+    snap["self_social_state"]["manifestation"] = _copy(regulation["manifestation"])
+    snap["regulation_state_hash"] = regulation["state_hash"]
+    snap["module_activation_summary"]["population_count"] = len(regulation["module_population"])
+    snap.pop("state_hash", None)
+    snap["state_hash"] = ext.digest(snap)
+    new_state_hash = snap["state_hash"]
+
+    for receipt in out.get("operator_receipts", []):
+        if isinstance(receipt, dict) and receipt.get("operator") == "REENTER":
+            receipt["output_ids"] = [new_state_hash]
+            details = receipt.setdefault("details", {})
+            details["next_cycle_must_start_from_state_hash"] = new_state_hash
+            details["next_cycle_must_start_from_regulation_state_hash"] = regulation["state_hash"]
+            _rehash_operator_receipt(receipt)
+
+    reentry = out["reentry_contract"]
+    reentry["next_cycle_requires_exact_state_hash"] = new_state_hash
+    reentry["predecessor_regulation_state_hash"] = regulation.get("predecessor_state_hash")
+    reentry["next_cycle_requires_exact_regulation_state_hash"] = regulation["state_hash"]
+
+    context = out["context_compilation"]
+    _rehash_context(context, new_state_hash)
+
+    seed = hashlib.sha256((new_state_hash + ":" + context["serialized_context_hash"]).encode()).digest()
+    bus = out["state_bus"]
+    bus["source_state_hash"] = new_state_hash
+    bus["text_serialization_hash"] = context["serialized_context_hash"]
+    bus["soft_projection_16"] = [round((b / 255) * 2 - 1, 8) for b in seed[:16]]
+
+    replay = out["replay_envelope"]
+    replay["state_hash"] = new_state_hash
+    replay["module_versions"]["cognitive_regulation"] = VERSION
+    replay["module_versions"]["externalized_learning"] = learning.VERSION
+    replay.pop("replay_digest", None)
+    replay["replay_digest"] = ext.digest(replay)
+
+    out["module_credit"] = _copy(regulation["module_credit"])
+    out["consolidation_candidates"] = _copy(regulation["slow_consolidation"])
+    # Evaluation plan is bound to the final canonical cognitive snapshot hash,
+    # but kept outside the snapshot to avoid a self-hashing cycle.
+    out["ablation_plan"] = learning.ablation_plan(new_state_hash)
+    out.pop("cycle_digest", None)
+    out["cycle_digest"] = ext.digest(out)
+    return verify_regulated_cycle(out, predecessor_cycle=predecessor_cycle)
+
+
+def verify_regulated_cycle(
+    raw: Mapping[str, Any],
+    *,
+    predecessor_cycle: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    cycle = ext.verify_cycle(raw)
+    regulation = verify_regulation_state(cycle.get("regulation_state", {}))
+    if cycle["snapshot"].get("regulation_state_hash") != regulation["state_hash"]:
+        raise CognitiveRegulationError("snapshot/regulation hash mismatch")
+    if predecessor_cycle is not None:
+        prior_reg = _previous_regulation(predecessor_cycle)
+        expected = prior_reg.get("state_hash") if prior_reg else None
+        if regulation.get("predecessor_state_hash") != expected:
+            raise CognitiveRegulationError("regulation predecessor mismatch")
+    if cycle["context_compilation"].get("source_state_hash") != cycle["snapshot"]["state_hash"]:
+        raise CognitiveRegulationError("context is not bound to regulated snapshot")
+    plan = cycle.get("ablation_plan")
+    if not isinstance(plan, Mapping) or plan.get("source_state_hash") != cycle["snapshot"]["state_hash"]:
+        raise CognitiveRegulationError("ablation plan is not bound to regulated snapshot")
+    return cycle
+
+
+def build_full_cycle(**kwargs: Any) -> dict[str, Any]:
+    counterfactual_credits = kwargs.pop("counterfactual_credits", ())
+    predecessor = kwargs.get("predecessor_cycle")
+    base = ext.build_cycle(**kwargs)
+    return attach_regulation(
+        base,
+        predecessor,
+        counterfactual_credits=counterfactual_credits,
+    )

@@ -1,0 +1,263 @@
+HEAD=37aed62d3ef3714b278026e5c251403952b7dbf2
+===TRACKED_DIFF===
+diff --git a/scripts/install_voice_777_omega.sh b/scripts/install_voice_777_omega.sh
+index 630718c..b620c62 100644
+--- a/scripts/install_voice_777_omega.sh
++++ b/scripts/install_voice_777_omega.sh
+@@ -45,24 +45,6 @@ if [[ -z "$voice_script" || ! -f "$voice_script" ]]; then
+   exit 4
+ fi
+ 
+-# systemctl show serializes volatile runtime metadata (start_time/pid/code/status)
+-# into ExecStart while a process is running. daemon-reload legitimately resets
+-# those volatile fields in the rendered value without changing configured argv.
+-# Bind the invariant to stable argv, not to that transient serialization.
+-voice_argv_before="$(python3 - "$voice_effective_before" <<'PY'
+-import re
+-import sys
+-raw = sys.argv[1]
+-m = re.search(r"argv\[\]=(.*?)\s*;\s*ignore_errors=", raw)
+-if m:
+-    print(" ".join(m.group(1).split()))
+-PY
+-)"
+-if [[ -z "$voice_argv_before" ]]; then
+-  echo "777 install refused: stable Voice argv could not be extracted: $voice_effective_before" >&2
+-  exit 4
+-fi
+-
+ SCRIPTS_DIR="$(cd "$(dirname "$voice_script")" && pwd)"
+ DEST="$(cd "$SCRIPTS_DIR/.." && pwd)"
+ if [[ "$voice_script" != "$SCRIPTS_DIR/voice_final_runtime.py" ]]; then
+@@ -91,24 +73,7 @@ final_sha_before="$(sha256sum "$voice_script" | awk '{print $1}')"
+ # the final policy layer without another Voice wrapper.
+ OMEGA_RUNTIME_FILES=(
+   omega_runtime.py
+-  omega_externalized_cognition.py
+-  f2wp1207_grid10_p11_effects.py
+-  f2wp1207_grid10_p7_coordination.py
+-  f2wp1207_grid10_turn_loop.py
+-  f2wp1207_p10_workspace_reentry.py
+-  f2wp1207_p12_self_observation.py
+-  omega_grf_brain.py
+-  omega_grf_field.py
+-  omega_voice_world_patch.py
+-  omega_world_brain_bridge.py
+-  omega_world_coupling.py
+-  omega_world_donor_agentzero.py
+-  omega_world_donor_frankenstein.py
+-  omega_world_hybrid_fusion.py
+-  omega_world_manifold.py
+-  omega_world_model.py
+-  omega_world_reentry.py
+-  omega_world_turn.py
++  omega_fred_selftest.py
+   frankenstein_identity_assembly.py
+   omega_arm_bus.py
+   omega_organ_activity.py
+@@ -120,6 +85,8 @@ OMEGA_RUNTIME_FILES=(
+   voice_777_runtime.py
+   voice_host_777_live_client.py
+   frank_terminal_777.py
++  omega_externalized_learning.py
++  omega_cognitive_regulation.py
+ )
+ 
+ for file in "${OMEGA_RUNTIME_FILES[@]}"; do
+@@ -173,27 +140,15 @@ chmod 0755 "$BIN/frank-omega"
+ systemctl --user daemon-reload
+ 
+ # daemon-reload may change loaded unit definitions but does not restart the
+-# process. Installing OMEGA must not change the configured Voice argv or the
+-# productive final-policy bytes at all. Do not compare systemd's volatile
+-# start_time/pid/code/status fields: they are observations, not unit policy.
++# process. Installing OMEGA must not change the configured Voice entrypoint or
++# the productive final-policy bytes at all.
+ voice_effective_after="$(systemctl --user show frankenstein-gespraechsmodus.service -p ExecStart --value 2>/dev/null || true)"
+ client_effective="$(systemctl --user show frankenstein-chatgpt-client.service -p ExecStart --value 2>/dev/null || true)"
+ final_sha_after="$(sha256sum "$voice_script" | awk '{print $1}')"
+-voice_argv_after="$(python3 - "$voice_effective_after" <<'PY'
+-import re
+-import sys
+-raw = sys.argv[1]
+-m = re.search(r"argv\[\]=(.*?)\s*;\s*ignore_errors=", raw)
+-if m:
+-    print(" ".join(m.group(1).split()))
+-PY
+-)"
+-if [[ -z "$voice_argv_after" || "$voice_argv_after" != "$voice_argv_before" ]]; then
+-  echo "777 install refused: configured Voice argv drifted during composition" >&2
+-  echo "before argv: $voice_argv_before" >&2
+-  echo "after argv:  $voice_argv_after" >&2
+-  echo "before raw:  $voice_effective_before" >&2
+-  echo "after raw:   $voice_effective_after" >&2
++if [[ "$voice_effective_after" != "$voice_effective_before" ]]; then
++  echo "777 install refused: Voice ExecStart drifted during composition" >&2
++  echo "before: $voice_effective_before" >&2
++  echo "after:  $voice_effective_after" >&2
+   exit 9
+ fi
+ if [[ "$final_sha_after" != "$final_sha_before" ]]; then
+diff --git a/scripts/omega_runtime.py b/scripts/omega_runtime.py
+index 6280f25..20eff3d 100644
+--- a/scripts/omega_runtime.py
++++ b/scripts/omega_runtime.py
+@@ -44,6 +44,19 @@ ORGANS: dict[str, dict[str, str]] = {
+         "path": "scripts/f2wp1207_grid10_turn_loop.py",
+         "role": "canonical GRID10 transaction/reentry/competition lifecycle",
+     },
++    "externalized_cognition": {
++        "path": "scripts/omega_externalized_cognition.py", "role": "typed cognition",
++    },
++    "externalized_learning": {
++        "path": "scripts/omega_externalized_learning.py", "role": "measured learning",
++    },
++    "cognitive_regulation": {
++        "path": "scripts/omega_cognitive_regulation.py", "role": "cognitive regulation",
++    },
++    "fred_selftest": {
++        "path": "scripts/omega_fred_selftest.py",
++        "role": "read-only FRED self-falsifier; evidence only, never promotion authority",
++    },
+     "world_state": {
+         "path": "scripts/omega_world_model.py",
+         "role": "recurrent native W_t with explicit alternatives and uncertainty",
+@@ -99,6 +112,9 @@ ORGANS: dict[str, dict[str, str]] = {
+ }
+ 
+ PURE_COGNITION_ORGANS = (
++    "externalized_cognition",
++    "externalized_learning",
++    "cognitive_regulation",
+     "world_state",
+     "world_manifold",
+     "world_bridge",
+@@ -152,6 +168,8 @@ def manifest() -> dict[str, Any]:
+         "organs": organs,
+         "world_brain_path": [
+             "world_state",
++            "externalized_cognition",
++            "cognitive_regulation",
+             "world_manifold",
+             "grf_field",
+             "grf_brain",
+@@ -370,6 +388,10 @@ def main(argv: list[str] | None = None) -> int:
+     sub = ap.add_subparsers(dest="command")
+     sub.add_parser("status", help="read-only source/runtime binding manifest")
+     sub.add_parser("selftest", help="fail-closed source-composition self-test")
++    p_fred = sub.add_parser("fred-selftest", help="read-only OMEGA self-as-test-object FRED probe")
++    p_fred.add_argument("--owner", required=True)
++    p_fred.add_argument("--machine-id", required=True)
++    p_fred.add_argument("--host", action="store_true")
+     sub.add_parser("organ-status", help="read ephemeral presentation-floor state")
+     p_terminal = sub.add_parser("terminal", help="enter the existing OMEGA terminal organ")
+     p_terminal.add_argument("args", nargs=argparse.REMAINDER)
+@@ -386,6 +408,11 @@ def main(argv: list[str] | None = None) -> int:
+         result = selftest()
+         print(json.dumps(result, ensure_ascii=False, indent=2))
+         return 0 if result["ok"] else 1
++    if ns.command == "fred-selftest":
++        args = ["--owner", ns.owner, "--machine-id", ns.machine_id]
++        if ns.host:
++            args.append("--host")
++        return subprocess.call([sys.executable, str(HERE / "omega_fred_selftest.py"), *args])
+     if ns.command == "organ-status":
+         return _organ_status()
+     if ns.command == "terminal":
+diff --git a/tests/test_omega_runtime.py b/tests/test_omega_runtime.py
+index acc8f83..6167d24 100644
+--- a/tests/test_omega_runtime.py
++++ b/tests/test_omega_runtime.py
+@@ -25,6 +25,7 @@ def test_manifest_names_one_self_and_single_world_brain_organ_set():
+         "externalized_cognition",
+         "externalized_learning",
+         "cognitive_regulation",
++        "fred_selftest",
+         "world_state",
+         "world_manifold",
+         "world_bridge",
+===SELFTEST_SOURCE===
+#!/usr/bin/env python3
+"""Read-only FRED self-falsifier for the canonical OMEGA body.
+
+This diagnostic organ creates no durable state, grants no truth/effect authority,
+reads no bearer tokens, and never executes host effects. Cognitive self-test uses
+only an in-memory SQLite subject. Optional host checks are read-only.
+"""
+from __future__ import annotations
+import argparse,json,sqlite3,subprocess,urllib.request
+from pathlib import Path
+from typing import Any
+import f2wp1207_grid10_turn_loop as turn_loop
+import omega_runtime
+import omega_world_turn
+SCHEMA='OMEGA_FRED_SELF_PROBE/v1'
+SELF_ID='OMEGA'
+DEPLOYMENT_LAW=('REALITY_REENTRY','ISOLATED_SANDBOX_BUILD_TEST','MATERIALIZE_EXACT_TESTED_DELTA','PRODUCT_RETEST','OPTIONAL_LIFECYCLE_ACTIVATION_AFTER_SEPARATE_SAFETY_GATE')
+HERE=Path(__file__).resolve().parent
+def _check(name:str,ok:bool,detail:str)->dict[str,Any]: return {'name':name,'ok':bool(ok),'detail':str(detail)[:800]}
+def _ephemeral_subject()->sqlite3.Connection:
+ c=sqlite3.connect(':memory:'); c.execute('CREATE TABLE f2_runtime_epoch (runtime_epoch_id TEXT PRIMARY KEY, installation_id TEXT NOT NULL, state_root_id TEXT NOT NULL)'); c.execute('CREATE TABLE f2_installation_identity (installation_id TEXT PRIMARY KEY, entity_id TEXT NOT NULL)'); c.execute('INSERT INTO f2_installation_identity(installation_id,entity_id) VALUES (?,?)',('fred:installation','fred:entity')); c.execute('INSERT INTO f2_runtime_epoch(runtime_epoch_id,installation_id,state_root_id) VALUES (?,?,?)',('fred:epoch','fred:installation','fred:root')); c.commit(); return c
+def cognitive_self_probe(*,owner:str,machine_id:str)->dict[str,Any]:
+ c=_ephemeral_subject(); e=turn_loop.TypedEntry(session_id='fred:selftest',runtime_epoch_id='fred:epoch',event_type='FRED_SELF_TEST',prompt_len=14,retrieval_present=True,retrieval_len=18,turn_event_id='fred:selftest:1',ts='2000-01-01T00:00:00Z'); p=omega_world_turn.prepare_live_grf_input(c,e,user_text='OMEGA tests its own cognitive path',retrieval_text='self-test context only; not truth',owner=owner,machine_id=machine_id); x=p['grf_input']['context']['omega_externalized_cognition']; r=x['regulation_state']; checks=[_check('regulated_cycle_present',r.get('schema')=='OMEGA_COGNITIVE_REGULATION/v1',r.get('schema')),_check('regulated_snapshot_bound',x['snapshot'].get('regulation_state_hash')==r.get('state_hash'),'snapshot->regulation'),_check('compiled_context_bound',x['context_compilation'].get('source_state_hash')==x['snapshot'].get('state_hash'),'context->snapshot'),_check('reentry_requires_regulation',x['reentry_contract'].get('next_cycle_requires_exact_regulation_state_hash')==r.get('state_hash'),'exact regulation predecessor'),_check('credit_fail_closed',x['module_credit'].get('status')=='COUNTERFACTUAL_NOT_EXECUTED',x['module_credit'].get('status')),_check('no_cognitive_authority',r.get('authority') is False and r.get('effect_authority') is False,'authority=false')]; return {'ok':all(z['ok'] for z in checks),'checks':checks,'state_hash':x['snapshot'].get('state_hash'),'regulation_state_hash':r.get('state_hash'),'context_hash':x['context_compilation'].get('serialized_context_hash')}
+def _service_active(name:str)->tuple[bool,str]:
+ try:
+  p=subprocess.run(['systemctl','--user','is-active',name],text=True,capture_output=True,timeout=3,check=False); state=(p.stdout or p.stderr or '').strip(); return p.returncode==0 and state=='active',state
+ except Exception as exc: return False,f'{type(exc).__name__}:{exc}'
+def host_readonly_probe()->list[dict[str,Any]]:
+ checks=[]
+ for service in ('frankenstein-local-bridge.service','omega-chatgpt-mcp.service','omega-local-effect-adapter.service','frankenstein-gespraechsmodus.service'):
+  ok,state=_service_active(service); checks.append(_check('service:'+service,ok,state))
+ try:
+  p=subprocess.run(['systemctl','--user','show','frankenstein-gespraechsmodus.service','-p','ExecStart','--value'],text=True,capture_output=True,timeout=3,check=False); voice=p.stdout.strip(); checks.append(_check('voice_final_policy_entrypoint',p.returncode==0 and 'voice_final_runtime.py' in voice,'voice_final_runtime.py bound' if 'voice_final_runtime.py' in voice else 'FINAL entrypoint missing'))
+ except Exception as exc: checks.append(_check('voice_final_policy_entrypoint',False,f'{type(exc).__name__}:{exc}'))
+ try:
+  with urllib.request.urlopen('http://127.0.0.1:8789/health',timeout=3) as response: h=json.loads(response.read(65536).decode())
+  checks.append(_check('omega_mcp_health',h.get('ok') is True,'/health ok=true' if h.get('ok') is True else repr(h)[:300]))
+ except Exception as exc: checks.append(_check('omega_mcp_health',False,f'{type(exc).__name__}:{exc}'))
+ return checks
+def run_probe(*,owner:str,machine_id:str,host:bool=False)->dict[str,Any]:
+ assembly=omega_runtime.selftest(); cognition=cognitive_self_probe(owner=owner,machine_id=machine_id); checks=[_check('omega_source_assembly',assembly.get('ok') is True,assembly.get('scope')),_check('self_cognitive_probe',cognition.get('ok') is True,'regulated ephemeral self-probe')]; checks.extend(host_readonly_probe() if host else []); return {'schema':SCHEMA,'ok':all(z['ok'] for z in checks),'self':SELF_ID,'self_as_test_object':True,'owner_claim':owner,'machine_id_claim':machine_id,'module_root':str(HERE),'host_probe_requested':bool(host),'checks':checks,'cognitive_probe':cognition,'deployment_law':list(DEPLOYMENT_LAW),'authority':False,'canonical_truth_credit':False,'effect_authority':False,'promotion_credit':False,'note':'FRED self-probe is evidence, never promotion; sandbox PASS, exact materialization and product retest remain separate mandatory gates.'}
+def main(argv=None)->int:
+ ap=argparse.ArgumentParser(prog='omega-fred-selftest'); ap.add_argument('--owner',required=True); ap.add_argument('--machine-id',required=True); ap.add_argument('--host',action='store_true'); ns=ap.parse_args(argv); result=run_probe(owner=ns.owner,machine_id=ns.machine_id,host=ns.host); print(json.dumps(result,ensure_ascii=False,indent=2,sort_keys=True)); return 0 if result['ok'] else 1
+if __name__=='__main__': raise SystemExit(main())
+===SELFTEST_TEST===
+#!/usr/bin/env python3
+from __future__ import annotations
+import sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+SCRIPTS=ROOT/'scripts'
+if str(SCRIPTS) not in sys.path: sys.path.insert(0,str(SCRIPTS))
+import omega_fred_selftest as fred
+import omega_runtime as runtime
+
+def test_fred_self_probe_uses_omega_as_test_object_without_authority():
+    result=fred.run_probe(owner='gabriel',machine_id='ai-core-node',host=False)
+    assert result['ok'] is True
+    assert result['self']=='OMEGA'
+    assert result['self_as_test_object'] is True
+    assert result['authority'] is False
+    assert result['canonical_truth_credit'] is False
+    assert result['effect_authority'] is False
+    assert result['promotion_credit'] is False
+    assert result['deployment_law'][:4]==['REALITY_REENTRY','ISOLATED_SANDBOX_BUILD_TEST','MATERIALIZE_EXACT_TESTED_DELTA','PRODUCT_RETEST']
+    assert result['cognitive_probe']['ok'] is True
+
+def test_fred_self_probe_keeps_counterfactual_credit_fail_closed():
+    result=fred.cognitive_self_probe(owner='gabriel',machine_id='ai-core-node')
+    assert result['ok'] is True
+    names={item['name']:item for item in result['checks']}
+    assert names['credit_fail_closed']['ok'] is True
+    assert names['reentry_requires_regulation']['ok'] is True
+
+def test_fred_self_probe_never_reads_local_bearer_token():
+    source=(SCRIPTS/'omega_fred_selftest.py').read_text(encoding='utf-8')
+    assert 'OMEGA_LOCAL_EFFECT_TOKEN' not in source
+    assert 'omega-mcp.env' not in source
+    assert 'write_text' not in source
+
+def test_runtime_exposes_fred_selftest_as_diagnostic_not_world_brain():
+    data=runtime.manifest()
+    assert data['organs']['fred_selftest']['present'] is True
+    assert 'fred_selftest' not in data['world_brain_path']

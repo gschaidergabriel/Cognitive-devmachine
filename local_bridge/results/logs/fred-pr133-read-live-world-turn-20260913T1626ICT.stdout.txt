@@ -1,0 +1,572 @@
+#!/usr/bin/env python3
+"""Typed live ingress from a real OMEGA turn into the existing canonical GRID10 turn.
+
+This module does not own a second lifecycle. It composes one hybrid world-brain
+GRF input and delegates exactly once to
+``f2wp1207_grid10_turn_loop.run_canonical_turn``. GRID10 remains the sole
+persistence/reentry/effect owner.
+
+For live callers that do not yet have a canonical ``turn_event_id``, the atomic
+entrypoint adopts the *same* SQLite transaction: it performs the existing
+schema preflight, opens ``BEGIN IMMEDIATE``, mints the canonical ID with the
+existing GRID helper while the write lock is held, builds W_t/WorldManifold/
+R0..R6 from that exact snapshot, then lets ``run_canonical_turn`` finish and
+commit that already-open transaction. No ID prediction, second turn or second
+persistence path is introduced.
+
+The user text is represented as a reported utterance, never promoted to fact.
+Retrieval is represented as retrieved memory context, never truth authority.
+The predecessor W_t/WorldManifold/R0..R6 field is read only from the exact prior
+GRF capsule persisted by the existing canonical turn table.
+"""
+from __future__ import annotations
+
+import dataclasses
+import json
+import os
+import sqlite3
+from typing import Any, Mapping
+
+import f2wp1207_grid10_turn_loop as turn_loop
+import omega_grf_brain as grf
+import omega_externalized_cognition as externalized
+import omega_cognitive_regulation as regulation
+import omega_world_hybrid_fusion as hybrid
+import omega_world_model as wm
+
+SCHEMA = "OMEGA_WORLD_CANONICAL_TURN_INGRESS/v1"
+MAX_REPORT_CHARS = 1600
+MAX_RETRIEVAL_CHARS = 2200
+
+
+class WorldTurnError(RuntimeError):
+    """Fail-closed live world-turn composition error."""
+
+
+class _AdoptedTurnConnection:
+    """Duck-typed SQLite proxy for one already-open canonical transaction.
+
+    ``run_canonical_turn`` has deliberate schema commits before its own
+    ``BEGIN IMMEDIATE``. The atomic world ingress performs those schema steps
+    before opening the lock. During delegation the repeated pre-BEGIN commits
+    must therefore be no-ops, while the canonical final commit/rollback must
+    still hit the real connection. The first canonical BEGIN is also a no-op
+    because the exact same connection already owns that transaction.
+    """
+
+    def __init__(self, conn: sqlite3.Connection):
+        object.__setattr__(self, "_conn", conn)
+        object.__setattr__(self, "_canonical_begin_seen", False)
+        object.__setattr__(self, "_prebegin_commit_suppressed", 0)
+
+    @property
+    def canonical_begin_seen(self) -> bool:
+        return bool(object.__getattribute__(self, "_canonical_begin_seen"))
+
+    @property
+    def prebegin_commit_suppressed(self) -> int:
+        return int(object.__getattribute__(self, "_prebegin_commit_suppressed"))
+
+    def execute(self, sql: str, parameters: Any = ()):
+        normalized = " ".join(str(sql).strip().upper().split())
+        if normalized == "BEGIN IMMEDIATE":
+            if self.canonical_begin_seen:
+                raise WorldTurnError("canonical turn attempted a second BEGIN IMMEDIATE")
+            object.__setattr__(self, "_canonical_begin_seen", True)
+            return None
+        return self._conn.execute(sql, parameters)
+
+    def executemany(self, sql: str, seq_of_parameters: Any):
+        return self._conn.executemany(sql, seq_of_parameters)
+
+    def executescript(self, script: str):
+        return self._conn.executescript(script)
+
+    def commit(self) -> None:
+        if not self.canonical_begin_seen:
+            object.__setattr__(
+                self,
+                "_prebegin_commit_suppressed",
+                self.prebegin_commit_suppressed + 1,
+            )
+            return None
+        self._conn.commit()
+        return None
+
+    def rollback(self) -> None:
+        self._conn.rollback()
+        return None
+
+    def __getattr__(self, name: str):
+        return getattr(self._conn, name)
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name.startswith("_"):
+            object.__setattr__(self, name, value)
+        else:
+            setattr(self._conn, name, value)
+
+
+def _bounded_text(value: Any, limit: int) -> str:
+    text = " ".join(str(value or "").replace("\x00", " ").split())
+    if len(text) > limit:
+        text = text[: limit - 1] + "…"
+    return text
+
+
+def _typed_entry(value: turn_loop.TypedEntry | Mapping[str, Any]) -> turn_loop.TypedEntry:
+    if isinstance(value, turn_loop.TypedEntry):
+        return value
+    try:
+        return turn_loop.TypedEntry.from_mapping(value)
+    except Exception as exc:
+        raise WorldTurnError(f"typed entry rejected: {exc}") from exc
+
+
+def _subject_binding(conn: sqlite3.Connection, runtime_epoch_id: str) -> dict[str, str]:
+    row = conn.execute(
+        "SELECT installation_id, state_root_id FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
+        (runtime_epoch_id,),
+    ).fetchone()
+    if row is None:
+        raise WorldTurnError(f"runtime_epoch_id={runtime_epoch_id!r} is not persisted")
+    installation_id, state_root_id = str(row[0]), str(row[1])
+    entity = conn.execute(
+        "SELECT entity_id FROM f2_installation_identity WHERE installation_id=?",
+        (installation_id,),
+    ).fetchone()
+    if entity is None or not str(entity[0]).strip():
+        raise WorldTurnError(f"installation_id={installation_id!r} has no entity binding")
+    return {
+        "entity_id": str(entity[0]),
+        "installation_id": installation_id,
+        "state_root_id": state_root_id,
+    }
+
+
+def _prior_world_capsule(
+    conn: sqlite3.Connection, *, installation_id: str, state_root_id: str
+) -> dict[str, Any] | None:
+    """Return only a prior capsule that actually carries native W_t state."""
+    try:
+        row = conn.execute(
+            "SELECT p.capsule_json "
+            "FROM f2_grid10_grf_projection AS p "
+            "JOIN f2_grid10_frame AS f ON f.frame_id=p.frame_id "
+            "WHERE f.installation_id=? AND f.state_root_id=? AND f.status='CLOSED' "
+            "ORDER BY f.opened_at DESC, f.rowid DESC LIMIT 1",
+            (installation_id, state_root_id),
+        ).fetchone()
+    except sqlite3.Error:
+        return None
+    if row is None:
+        return None
+    try:
+        capsule = json.loads(str(row[0]))
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return None
+    if not isinstance(capsule, Mapping):
+        return None
+    context = capsule.get("context")
+    if not isinstance(context, Mapping) or not isinstance(context.get("omega_world_model"), Mapping):
+        return None
+    return json.loads(wm.canonical_json(dict(capsule)))
+
+
+def build_live_world_input(
+    typed_entry: turn_loop.TypedEntry | Mapping[str, Any],
+    *,
+    user_text: str,
+    retrieval_text: str | None,
+    entity_generation: str,
+    physical_topology_id: str,
+) -> dict[str, Any]:
+    entry = _typed_entry(typed_entry)
+    if not entry.turn_event_id:
+        raise WorldTurnError("live world brain requires an explicit canonical turn_event_id")
+    report = _bounded_text(user_text, MAX_REPORT_CHARS) or "<empty-user-report>"
+    retrieval = _bounded_text(retrieval_text, MAX_RETRIEVAL_CHARS)
+
+    views: list[dict[str, Any]] = [
+        {
+            "id": "live-user-report",
+            "kind": "semantic",
+            "statements": [f"USER_REPORTED: {report}"],
+            "confidence": 0.60,
+            "uncertainty": 0.40,
+            "timescale": "instant",
+            "provenance_refs": [f"session:{entry.session_id}", f"turn:{entry.turn_event_id}"],
+            "payload": {
+                "epistemic_state": "KNOWN",
+                "temporal_state": "CURRENT",
+                "reported_content_not_fact": True,
+            },
+        },
+        {
+            "id": "live-turn-state",
+            "kind": "state",
+            "statements": [
+                f"canonical input event={entry.event_type} prompt_len={entry.prompt_len} "
+                f"retrieval_present={bool(entry.retrieval_present)}"
+            ],
+            "confidence": 1.0,
+            "uncertainty": 0.0,
+            "timescale": "working",
+            "provenance_refs": [f"runtime-epoch:{entry.runtime_epoch_id}"],
+            "payload": {
+                "epistemic_state": "OBSERVED_EVIDENCE",
+                "temporal_state": "CURRENT",
+                "typed_entry_measurement": True,
+            },
+        },
+        {
+            "id": "live-temporal",
+            "kind": "temporal",
+            "statements": [f"turn {entry.turn_event_id} belongs to runtime epoch {entry.runtime_epoch_id}"],
+            "confidence": 1.0,
+            "uncertainty": 0.0,
+            "timescale": "working",
+            "provenance_refs": [f"runtime-epoch:{entry.runtime_epoch_id}"],
+            "payload": {
+                "epistemic_state": "OBSERVED_EVIDENCE",
+                "temporal_state": "CURRENT",
+            },
+        },
+    ]
+    if retrieval:
+        views.append(
+            {
+                "id": "live-retrieval",
+                "kind": "memory",
+                "statements": [f"RETRIEVED_CONTEXT: {retrieval}"],
+                "confidence": 0.50,
+                "uncertainty": 0.50,
+                "timescale": "episodic",
+                "provenance_refs": [f"session:{entry.session_id}:retrieval"],
+                "payload": {
+                    "epistemic_state": "RETRIEVED",
+                    "temporal_state": "STALE",
+                    "memory_is_context_not_truth": True,
+                },
+            }
+        )
+
+    relations: list[dict[str, Any]] = [
+        {
+            "id": "report-state-binding",
+            "kind": "couple",
+            "members": ["live-user-report", "live-turn-state", "live-temporal"],
+            "gain": 0.75,
+            "delay": 0.0,
+            "timescale": "working",
+            "provenance_refs": [f"turn:{entry.turn_event_id}"],
+            "payload": {"same_turn_binding": True, "coupling_is_not_truth": True},
+        }
+    ]
+    if retrieval:
+        relations.append(
+            {
+                "id": "report-retrieval-resonance",
+                "kind": "couple",
+                "members": ["live-user-report", "live-retrieval", "live-turn-state"],
+                "gain": 0.60,
+                "delay": 0.0,
+                "timescale": "working",
+                "provenance_refs": [f"session:{entry.session_id}:retrieval"],
+                "payload": {"retrieval_relevance_is_hypothesis": True},
+            }
+        )
+
+    all_views = [v["id"] for v in views]
+    worlds: list[dict[str, Any]] = [
+        {
+            "id": "live-context-with-admitted-memory",
+            "label": "current reported turn with admitted retrieval context",
+            "view_ids": all_views,
+            "status": "ACTIVE",
+            "provenance_refs": [f"turn:{entry.turn_event_id}"],
+        }
+    ]
+    if retrieval:
+        worlds.append(
+            {
+                "id": "live-context-without-retrieval-relevance",
+                "label": "retrieved memory may be irrelevant to the current report",
+                "view_ids": ["live-user-report", "live-turn-state", "live-temporal"],
+                "status": "UNKNOWN",
+                "provenance_refs": [f"turn:{entry.turn_event_id}"],
+            }
+        )
+
+    return {
+        "schema": wm.SCHEMA_INPUT,
+        "entity_generation": entity_generation,
+        "causal_turn_id": entry.turn_event_id,
+        "views": views,
+        "relations": relations,
+        "worlds": worlds,
+        "provenance_refs": [
+            f"session:{entry.session_id}",
+            f"runtime-epoch:{entry.runtime_epoch_id}",
+            f"turn:{entry.turn_event_id}",
+        ],
+        "physical_topology_id": physical_topology_id,
+        "context": {
+            "live_ingress_schema": SCHEMA,
+            "user_content_is_report_not_truth": True,
+            "retrieval_is_context_not_truth": True,
+        },
+    }
+
+
+def prepare_live_grf_input(
+    conn: sqlite3.Connection,
+    typed_entry: turn_loop.TypedEntry | Mapping[str, Any],
+    *,
+    user_text: str,
+    retrieval_text: str | None,
+    owner: str,
+    machine_id: str,
+) -> dict[str, Any]:
+    """Read predecessor cognition and prepare one same-turn hybrid GRF input."""
+    entry = _typed_entry(typed_entry)
+    if not entry.turn_event_id:
+        raise WorldTurnError("prepare_live_grf_input requires explicit turn_event_id")
+    subject = _subject_binding(conn, entry.runtime_epoch_id)
+    predecessor = _prior_world_capsule(
+        conn,
+        installation_id=subject["installation_id"],
+        state_root_id=subject["state_root_id"],
+    )
+    generation = f"entity:{subject['entity_id']}"
+    world_input = build_live_world_input(
+        entry,
+        user_text=user_text,
+        retrieval_text=retrieval_text,
+        entity_generation=generation,
+        physical_topology_id=f"installation:{subject['installation_id']}",
+    )
+    base_grf = {
+        "schema": grf.SCHEMA_INPUT,
+        "entity_generation": generation,
+        "causal_turn_id": entry.turn_event_id,
+        "primitives": [
+            {
+                "id": "live-turn-admission",
+                "kind": "evidence",
+                "statement": "current canonical user-turn input exists",
+                "truth_state": "MEASURED",
+                "confidence": 1.0,
+                "provenance_refs": [f"turn:{entry.turn_event_id}"],
+                "targets": [],
+                "payload": {"user_content_truth_not_claimed": True},
+            }
+        ],
+        "worlds": [],
+        "provenance_refs": [f"turn:{entry.turn_event_id}"],
+        "context": {
+            "live_world_ingress": SCHEMA,
+            "installation_id": subject["installation_id"],
+            "state_root_id": subject["state_root_id"],
+        },
+    }
+    try:
+        fusion = hybrid.build_hybrid_grf_input(
+            base_grf,
+            world_input,
+            owner=owner,
+            machine_id=machine_id,
+            predecessor_capsule=predecessor,
+        )
+    except hybrid.HybridWorldFusionError as exc:
+        raise WorldTurnError(str(exc)) from exc
+    try:
+        predecessor_cognition = externalized.extract_cycle_from_capsule(predecessor)
+        cognition = regulation.build_full_cycle(
+            turn_event_id=entry.turn_event_id,
+            entity_generation=generation,
+            user_text=user_text,
+            retrieval_text=retrieval_text,
+            world_state=fusion["world_state"],
+            world_manifold=fusion["world_manifold"],
+            grf_field=fusion["grf_field"],
+            predecessor_cycle=predecessor_cognition,
+        )
+    except externalized.ExternalizedCognitionError as exc:
+        raise WorldTurnError(f"externalized cognition rejected: {exc}") from exc
+
+    # This state is persisted inside the already-canonical GRF capsule.
+    # GRID10 remains the only persistence/reentry/effect lifecycle owner.
+    grf_input = json.loads(wm.canonical_json(fusion["grf_input"]))
+    context = grf_input.setdefault("context", {})
+    if not isinstance(context, dict):
+        raise WorldTurnError("GRF context must be an object")
+    if "omega_externalized_cognition" in context:
+        raise WorldTurnError("GRF context already contains omega_externalized_cognition")
+    context["omega_externalized_cognition"] = cognition
+
+    primitives = grf_input.setdefault("primitives", [])
+    if not isinstance(primitives, list):
+        raise WorldTurnError("GRF primitives must be a list")
+    existing_ids = {str(p.get("id")) for p in primitives if isinstance(p, Mapping)}
+    for primitive in externalized.grf_primitives(cognition):
+        if str(primitive["id"]) in existing_ids:
+            raise WorldTurnError(f"externalized GRF primitive id collision: {primitive['id']}")
+        primitives.append(primitive)
+        existing_ids.add(str(primitive["id"]))
+
+    return {
+        "schema": SCHEMA,
+        "grf_input": grf_input,
+        "world_state_digest": fusion["world_state_digest"],
+        "world_manifold_digest": fusion["world_manifold_digest"],
+        "grf_field_digest": fusion["grf_field_digest"],
+        "externalized_cycle_digest": cognition["cycle_digest"],
+        "externalized_state_hash": cognition["snapshot"]["state_hash"],
+        "context_compilation_hash": cognition["context_compilation"]["serialized_context_hash"],
+        "predecessor_capsule_digest": fusion["hybrid_fusion"]["predecessor_capsule_digest"],
+        "subject": subject,
+        "authority": False,
+        "canonical_truth_credit": False,
+        "effect_authority": False,
+    }
+
+
+def run_canonical_world_turn(
+    conn: sqlite3.Connection,
+    typed_entry: turn_loop.TypedEntry | Mapping[str, Any],
+    *,
+    user_text: str,
+    retrieval_text: str | None,
+    owner: str,
+    machine_id: str,
+    **turn_kwargs: Any,
+):
+    """Explicit-ID path: prepare cognition then delegate exactly once."""
+    if "grf_input" in turn_kwargs:
+        raise WorldTurnError("caller must not supply a second grf_input")
+    entry = _typed_entry(typed_entry)
+    if not entry.turn_event_id:
+        raise WorldTurnError(
+            "run_canonical_world_turn requires explicit turn_event_id; "
+            "use run_atomic_canonical_world_turn for a live unbound turn"
+        )
+    prepared = prepare_live_grf_input(
+        conn,
+        entry,
+        user_text=user_text,
+        retrieval_text=retrieval_text,
+        owner=owner,
+        machine_id=machine_id,
+    )
+    return turn_loop.run_canonical_turn(
+        conn,
+        entry,
+        grf_input=prepared["grf_input"],
+        **turn_kwargs,
+    )
+
+
+def _preflight_canonical_schema(
+    conn: sqlite3.Connection,
+    *,
+    env: Mapping[str, str] | None,
+) -> bool:
+    """Mirror only canonical pre-BEGIN schema/gate preparation, no turn logic."""
+    if not turn_loop.turn_loop_active(conn, env=env):
+        return False
+    turn_loop.ensure_schema(conn)
+    percept_on = turn_loop.percept_active(conn, env=env)
+    if percept_on:
+        turn_loop.ensure_percept_schema(conn)
+        conn.commit()
+    turn_loop.ensure_grf_schema(conn)
+    conn.commit()
+    return True
+
+
+def run_atomic_canonical_world_turn(
+    conn: sqlite3.Connection,
+    typed_entry: turn_loop.TypedEntry | Mapping[str, Any],
+    *,
+    user_text: str,
+    retrieval_text: str | None,
+    owner: str,
+    machine_id: str,
+    **turn_kwargs: Any,
+):
+    """Live path: mint ID + build world brain + canonical GRID in one transaction.
+
+    If ``typed_entry`` already carries a turn ID, this collapses to the normal
+    explicit-ID path. Otherwise it adopts exactly one ``BEGIN IMMEDIATE`` on
+    the same SQLite connection, calls the existing private canonical mint
+    helper under that lock, and delegates the rest to ``run_canonical_turn``.
+    The proxy suppresses only the canonical function's repeated pre-BEGIN
+    schema commits and its now-redundant BEGIN. The canonical final commit or
+    rollback still acts on the real connection.
+    """
+    if "grf_input" in turn_kwargs:
+        raise WorldTurnError("caller must not supply a second grf_input")
+    if turn_kwargs.get("signal_overrides") is not None:
+        raise WorldTurnError("world brain and opaque signal_overrides are mutually exclusive")
+    entry = _typed_entry(typed_entry)
+    if entry.turn_event_id:
+        return run_canonical_world_turn(
+            conn,
+            entry,
+            user_text=user_text,
+            retrieval_text=retrieval_text,
+            owner=owner,
+            machine_id=machine_id,
+            **turn_kwargs,
+        )
+    if conn.in_transaction:
+        raise WorldTurnError("atomic world turn requires a connection with no active transaction")
+
+    env = turn_kwargs.get("env")
+    if env is not None and not isinstance(env, Mapping):
+        raise WorldTurnError("env must be a mapping when supplied")
+    canonical_env = env if env is not None else os.environ
+    if not _preflight_canonical_schema(conn, env=canonical_env):
+        return None
+
+    proxy = _AdoptedTurnConnection(conn)
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        turn_event_id = turn_loop._mint_turn_event_id(conn, entry.session_id)
+        bound_entry = dataclasses.replace(entry, turn_event_id=turn_event_id)
+        prepared = prepare_live_grf_input(
+            conn,
+            bound_entry,
+            user_text=user_text,
+            retrieval_text=retrieval_text,
+            owner=owner,
+            machine_id=machine_id,
+        )
+        result = turn_loop.run_canonical_turn(
+            proxy,
+            bound_entry,
+            grf_input=prepared["grf_input"],
+            **turn_kwargs,
+        )
+        if result is None:
+            if conn.in_transaction:
+                conn.rollback()
+            return None
+        if not proxy.canonical_begin_seen:
+            if conn.in_transaction:
+                conn.rollback()
+            raise WorldTurnError("canonical turn never adopted the open transaction")
+        if conn.in_transaction:
+            conn.rollback()
+            raise WorldTurnError("canonical turn returned with transaction still open")
+        if result.turn_event_id != turn_event_id:
+            raise WorldTurnError("canonical turn_event_id drifted after atomic binding")
+        return result
+    except Exception:
+        try:
+            if conn.in_transaction:
+                conn.rollback()
+        except Exception:
+            pass
+        raise

@@ -421,8 +421,21 @@ def validate(trace: Mapping[str, Any], *, allow_open: bool = True) -> dict[str, 
         for dep in node["depends_on"]:
             _need(dep in by_id, "DEPENDENCY_MUST_PRECEDE_NODE")
             _need(STAGE_INDEX[by_id[dep]["stage"]] <= stage_idx, "DEPENDENCY_FROM_FUTURE_FORBIDDEN")
+        if stage_idx > 0:
+            _need(bool(node["depends_on"]), "NON_R0_REQUIRES_DEPENDENCY")
+            _need(
+                any(STAGE_INDEX[by_id[dep]["stage"]] == stage_idx - 1 for dep in node["depends_on"]),
+                "IMMEDIATE_PREDECESSOR_DEPENDENCY_REQUIRED",
+            )
         if node["factual_parent"] is not None:
             _need(node["factual_parent"] in by_id, "FACTUAL_PARENT_MUST_PRECEDE_NODE")
+            if node["reality_class"] == "COUNTERFACTUAL":
+                parent = by_id[node["factual_parent"]]
+                _need(
+                    parent["stage"] == "R0_OBSERVED"
+                    and parent["reality_class"] in {"OBSERVED", "RETRIEVED"},
+                    "COUNTERFACTUAL_FACTUAL_PARENT_NOT_FACTUAL",
+                )
 
         if node["reality_class"] == "OBSERVED" and node["kind"] == "OBSERVATION_CONFIRMATION":
             _need(bool(node["evidence_refs"]), "OBSERVATION_CONFIRMATION_REQUIRES_INDEPENDENT_EVIDENCE")

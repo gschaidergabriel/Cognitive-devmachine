@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-worldmodel-consolidated-test-20260913-001",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "command": "set -euo pipefail; d=$(mktemp -d); trap 'rm -rf \"$d\"' EXIT; gh repo clone gschaidergabriel/frankenstein \"$d/frankenstein\" -- --branch chatgpt/omega-worldmodel-consolidated-20260913 --single-branch; cd \"$d/frankenstein\"; python -m pytest -q tests/test_omega_world_model.py tests/test_omega_world_reentry_coupling.py tests/test_omega_world_donor_frankenstein.py tests/test_omega_world_agentzero_hybrid.py tests/test_omega_worldmodel_consolidated.py tests/test_omega_grf_brain.py",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 900
+}

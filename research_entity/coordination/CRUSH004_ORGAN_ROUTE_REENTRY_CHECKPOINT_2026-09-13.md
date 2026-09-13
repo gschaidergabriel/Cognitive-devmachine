@@ -1,6 +1,6 @@
 # CRUSH004 — ORGAN ROUTE / REENTRY CHECKPOINT — 2026-09-13
 
-Status: **BOUNDED SOURCE + EXACT-DONOR STRUCTURAL PASS; FULL GO-1.27 AGENT COMPILE RECEIPT PENDING**
+Status: **FULL BOUNDED EXACT-DONOR COMPILE PASS**
 
 This checkpoint is scoped. It does not activate production, reopen provider authority, promote whole HCU/GRID/GWT credit, or mutate Gabriel's live Free-Frank harness.
 
@@ -22,7 +22,7 @@ Current authority remained fail-closed for new external ClayCode provider execut
 
 CRUSH003 already established one shared persistent OMEGA runtime in the top-level Crush coordinator while subagents receive `omega.NoopRuntime{}`.
 
-CRUSH004 adds a portable `omega.OrganRoute` observation:
+CRUSH004 adds a portable `omega.OrganRoute` observation with:
 
 - `kind`
 - `organ_id`
@@ -56,9 +56,9 @@ The Crush agent seam observes the already-selected native model as:
 
 No provider call was made by this CRUSH cycle.
 
-## New executable discriminators
+## Executable discriminators
 
-Added tests prove:
+Tests prove:
 
 1. Route digest is deterministic after whitespace normalization.
 2. Provider/model swap changes route evidence.
@@ -68,7 +68,7 @@ Added tests prove:
 6. Route metadata does not leak into model system context by itself.
 7. Both route digests persist in causal turn history.
 
-## Exact-donor evidence
+## Exact-donor structural evidence
 
 The private branch was fetched into the authenticated VPS carrier and applied to an isolated checkout of the exact locked Crush donor.
 
@@ -90,45 +90,54 @@ The scratch subject showed only the intended donor modifications:
 - `internal/agent/coordinator.go`
 - new `internal/omega/`
 
+## Full Go 1.27 closure
+
+`crush004-full-go-validate-20260913T0740Z` = **PASS / exit 0** on `ai-core-node`, inside an isolated validation cache.
+
+The validator did not install Go system-wide. It resolved the official Go 1.27.1 linux/amd64 archive metadata from `go.dev/dl`, verified SHA-256:
+
+`63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445`
+
+and used:
+
+`go version go1.27.1 linux/amd64`
+
+Exact build subjects:
+
+- donor: `d333e04385f9e1d1523cea7b417cb5e8798a713a`
+- CRUSH004 seed: `8006983dfbc92eae0ccae142c78709916a9ed074`
+
+Results:
+
+- `go test ./internal/omega -count=1` -> PASS
+- `go test ./internal/agent -run '^$' -count=1` -> PASS / compile closure
+- live Gabriel harness hashes before and after -> byte-identical
+- final marker: `CRUSH004_FULL_GO_VALIDATION_PASS`
+
+The four invariant live hashes remained:
+
+- `harness_crush_knopf.sh` = `95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3`
+- `harness_crush_knopf.py` = `db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61`
+- `harness_crush.py` = `59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613`
+- `frankenstein-repo/CRUSH.md` = `1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99`
+
 ## Preserved negative / infrastructure evidence
 
-Do not repaint these failures as product negatives or passes:
+Do not repaint these earlier failures:
 
 - First VPS validator: exact public donor checkout succeeded; private HTTPS clone lacked credential forwarding.
 - Second VPS validator: authenticated carrier fetched exact CRUSH004 head and patches applied; build stopped because the VPS sandbox has no `go/gofmt` executable.
 - First ai-core scratch validator: exact public donor checkout succeeded; private SSH clone failed because this execution context has no SSH key.
-- ai-core toolchain probe: host PATH has no `go` executable.
-- VPS toolchain probe: no Go executable/common install/preexisting Go builder was found.
+- ai-core normal PATH had no `go` executable.
+- VPS probe found no normal Go executable/common install/preexisting Go builder.
 
-These are build-surface/toolchain findings, not CRUSH004 semantic negatives.
-
-## Full compile closure command
-
-A final isolated ai-core validation was queued under:
-
-`crush004-full-go-validate-20260913T0740Z`
-
-Its contract is deliberately non-installing:
-
-- hash live Gabriel harness before;
-- resolve official Go 1.27.1 linux-amd64 artifact + SHA-256 from `go.dev/dl`;
-- download/extract only under the CRUSH validation cache;
-- keep `GOCACHE` and `GOMODCACHE` inside scratch;
-- checkout exact donor `d333e043...`;
-- fetch exact CRUSH branch through existing `gh` auth;
-- apply both patches;
-- `gofmt`, `git diff --check`;
-- `go test ./internal/omega -count=1`;
-- `go test ./internal/agent -run '^$' -count=1`;
-- re-hash live harness and require byte-identical pre/post hashes.
-
-At checkpoint creation, no receipt for that command existed yet. Therefore **full exact-donor Go-1.27 compile credit remains pending** and must not be inferred from the structural PASS.
+These are build-surface/toolchain findings, not CRUSH004 semantic negatives. The later isolated Go-1.27.1 validator closes the component compile boundary without rewriting this history.
 
 ## Promotion fence
 
 Promoted now:
 
-**CRUSH004 portable route-observation + identity-separation design and exact-donor structural integration.**
+**CRUSH004 portable route-observation + provider-swap identity separation + persistent reentry + exact-donor Go-1.27 component compile closure.**
 
 Not promoted now:
 
@@ -143,6 +152,4 @@ Not promoted now:
 
 ## Next nonduplicate boundary
 
-First consume the exact `crush004-full-go-validate-20260913T0740Z` receipt if it exists. Only on a valid PASS may CRUSH004 gain full exact-donor component compile closure.
-
-After that, the next architectural boundary is **bridge-route adaptation without router duplication**: map existing external ChatGPT / Claude Code / Free-Pool execution paths into the same portable `OrganRoute` observation contract while preserving their current dispatch/authority surfaces.
+The next architectural boundary is **bridge-route adaptation without router duplication**: map existing external ChatGPT / Claude Code / Free-Pool execution paths into the same portable `OrganRoute` observation contract while preserving their current dispatch/authority surfaces and current provider hard-off constraints.

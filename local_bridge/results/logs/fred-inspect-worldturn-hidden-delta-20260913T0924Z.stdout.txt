@@ -1,0 +1,28 @@
+===WORLD_TURN_DIFF===
+diff --git a/scripts/omega_world_turn.py b/scripts/omega_world_turn.py
+index e808241..69d674c 100644
+--- a/scripts/omega_world_turn.py
++++ b/scripts/omega_world_turn.py
+@@ -30,6 +30,7 @@ from typing import Any, Mapping
+ import f2wp1207_grid10_turn_loop as turn_loop
+ import omega_grf_brain as grf
+ import omega_externalized_cognition as externalized
++import omega_cognitive_regulation as regulation
+ import omega_world_hybrid_fusion as hybrid
+ import omega_world_model as wm
+ 
+@@ -381,7 +382,7 @@ def prepare_live_grf_input(
+         raise WorldTurnError(str(exc)) from exc
+     try:
+         predecessor_cognition = externalized.extract_cycle_from_capsule(predecessor)
+-        cognition = externalized.build_cycle(
++        cognition = regulation.build_full_cycle(
+             turn_event_id=entry.turn_event_id,
+             entity_generation=generation,
+             user_text=user_text,
+===WORLD_TURN_STATUS===
+ M scripts/omega_world_turn.py
+===BASE_HEAD===
+37aed62d3ef3714b278026e5c251403952b7dbf2
+===LOCAL_HASH===
+c5630344fabc0a00da6a0cb34877b499d643b7881b3b3d619f9ddf137e322e47  scripts/omega_world_turn.py

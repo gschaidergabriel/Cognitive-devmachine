@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-inspect-worldturn-hidden-delta-20260913T0924Z",
+  "command_sha256": "e68fdb20806f6df3760fcdf14b153620ed52d086300b91ce092563d11cb32a01",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T09:18:03.919150+00:00",
+  "finished_at": "2026-09-13T09:18:03.951694+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "5e146c8eae0e1b3b1deb8db57e49235a0bf1563018530b6d40aa6f0326b83628",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "===WORLD_TURN_DIFF===\ndiff --git a/scripts/omega_world_turn.py b/scripts/omega_world_turn.py\nindex e808241..69d674c 100644\n--- a/scripts/omega_world_turn.py\n+++ b/scripts/omega_world_turn.py\n@@ -30,6 +30,7 @@ from typing import Any, Mapping\n import f2wp1207_grid10_turn_loop as turn_loop\n import omega_grf_brain as grf\n import omega_externalized_cognition as externalized\n+import omega_cognitive_regulation as regulation\n import omega_world_hybrid_fusion as hybrid\n import omega_world_model as wm\n \n@@ -381,7 +382,7 @@ def prepare_live_grf_input(\n         raise WorldTurnError(str(exc)) from exc\n     try:\n         predecessor_cognition = externalized.extract_cycle_from_capsule(predecessor)\n-        cognition = externalized.build_cycle(\n+        cognition = regulation.build_full_cycle(\n             turn_event_id=entry.turn_event_id,\n             entity_generation=generation,\n             user_text=user_text,\n===WORLD_TURN_STATUS===\n M scripts/omega_world_turn.py\n===BASE_HEAD===\n37aed62d3ef3714b278026e5c251403952b7dbf2\n===LOCAL_HASH===\nc5630344fabc0a00da6a0cb34877b499d643b7881b3b3d619f9ddf137e322e47  scripts/omega_world_turn.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

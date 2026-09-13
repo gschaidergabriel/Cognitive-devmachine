@@ -1,0 +1,112 @@
+ok  	github.com/charmbracelet/crush/internal/omega	(cached)
+ok  	github.com/charmbracelet/crush/internal/agent	2.331s
+?   	github.com/charmbracelet/crush/internal/agent/agenttest	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/hyper	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/notify	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/prompt	[no test files]
+ok  	github.com/charmbracelet/crush/internal/agent/tools	(cached)
+ok  	github.com/charmbracelet/crush/internal/agent/tools/mcp	(cached)
+ internal/agent/agent.go | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+diff --git a/internal/agent/agent.go b/internal/agent/agent.go
+index 92d289b..1df7b9a 100644
+--- a/internal/agent/agent.go
++++ b/internal/agent/agent.go
+@@ -42,6 +42,7 @@ import (
+ 	"github.com/charmbracelet/crush/internal/config"
+ 	"github.com/charmbracelet/crush/internal/csync"
+ 	"github.com/charmbracelet/crush/internal/message"
++	"github.com/charmbracelet/crush/internal/omega"
+ 	"github.com/charmbracelet/crush/internal/pubsub"
+ 	"github.com/charmbracelet/crush/internal/session"
+ 	"github.com/charmbracelet/crush/internal/stringext"
+@@ -172,6 +173,7 @@ type sessionAgent struct {
+ 	systemPromptPrefix *csync.Value[string]
+ 	systemPrompt       *csync.Value[string]
+ 	tools              *csync.Slice[fantasy.AgentTool]
++	cognitiveRuntime   omega.Runtime
+ 
+ 	isSubAgent           bool
+ 	sessions             session.Service
+@@ -233,6 +235,7 @@ type SessionAgentOptions struct {
+ 	Sessions             session.Service
+ 	Messages             message.Service
+ 	Tools                []fantasy.AgentTool
++	CognitiveRuntime     omega.Runtime
+ 	Notify               pubsub.Publisher[notify.Notification]
+ 	RunComplete          pubsub.Publisher[notify.RunComplete]
+ }
+@@ -240,6 +243,10 @@ type SessionAgentOptions struct {
+ func NewSessionAgent(
+ 	opts SessionAgentOptions,
+ ) SessionAgent {
++	cognitiveRuntime := opts.CognitiveRuntime
++	if cognitiveRuntime == nil {
++		cognitiveRuntime = omega.NoopRuntime{}
++	}
+ 	return &sessionAgent{
+ 		largeModel:           csync.NewValue(opts.LargeModel),
+ 		smallModel:           csync.NewValue(opts.SmallModel),
+@@ -250,6 +257,7 @@ func NewSessionAgent(
+ 		messages:             opts.Messages,
+ 		disableAutoSummarize: opts.DisableAutoSummarize,
+ 		tools:                csync.NewSliceFrom(opts.Tools),
++		cognitiveRuntime:     cognitiveRuntime,
+ 		isYolo:               opts.IsYolo,
+ 		notify:               opts.Notify,
+ 		runComplete:          opts.RunComplete,
+@@ -661,6 +669,25 @@ func (a *sessionAgent) Run(ctx context.Context, call SessionAgentCall) (result *
+ 	largeModel := a.largeModel.Get()
+ 	systemPrompt := a.systemPrompt.Get()
+ 	promptPrefix := a.systemPromptPrefix.Get()
++
++	// EntityOS seam: compile the bounded current cognitive field before this
++	// model organ is invoked. NoopRuntime renders an empty frame, preserving
++	// upstream Crush behavior byte-for-byte at this boundary.
++	frame, frameErr := a.cognitiveRuntime.Compile(ctx, omega.TurnInput{
++		SessionID: call.SessionID,
++		RunID:     call.RunID,
++		Prompt:    call.Prompt,
++	})
++	if frameErr != nil {
++		return nil, fmt.Errorf("omega cognitive compile failed: %w", frameErr)
++	}
++	if cognitiveContext := frame.RenderSystemContext(); cognitiveContext != "" {
++		if systemPrompt != "" {
++			systemPrompt += "\n\n"
++		}
++		systemPrompt += cognitiveContext
++	}
++
+ 	var instructions strings.Builder
+ 
+ 	for _, server := range mcp.GetStates() {
+@@ -780,6 +807,28 @@ func (a *sessionAgent) Run(ctx context.Context, call SessionAgentCall) (result *
+ 		a.publishRunComplete(ctx, call, complete)
+ 	}()
+ 
++	// Reentry is deliberately registered after RunComplete's defer so it runs
++	// first (LIFO). A reentry failure therefore becomes the terminal turn error
++	// observed by the existing Crush completion path instead of being hidden.
++	defer func() {
++		reentryCtx, reentryCancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
++		defer reentryCancel()
++		outcome := omega.TurnOutcome{
++			SessionID: call.SessionID,
++			RunID:     call.RunID,
++			Cancelled: errors.Is(retErr, context.Canceled) || ctx.Err() != nil,
++		}
++		if currentAssistant != nil {
++			outcome.Text = currentAssistant.Content().String()
++		}
++		if retErr != nil {
++			outcome.Err = retErr.Error()
++		}
++		if reentryErr := a.cognitiveRuntime.Reenter(reentryCtx, frame, outcome); reentryErr != nil && retErr == nil {
++			retErr = fmt.Errorf("omega cognitive reentry failed: %w", reentryErr)
++		}
++	}()
++
+ 	history, files := a.preparePrompt(msgs, largeModel.CatwalkCfg.SupportsImages, call.Attachments...)
+ 
+ 	startTime := time.Now()

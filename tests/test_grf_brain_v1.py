@@ -166,6 +166,26 @@ class GRFBrainV1Tests(unittest.TestCase):
         with self.assertRaisesRegex(grf.GRFError, "OPEN_TRACE_CANNOT_HAVE_GRF_DIGEST"):
             grf.validate(t, allow_open=True)
 
+    def test_non_r0_requires_immediate_predecessor_dependency(self):
+        t = grf.new_trace(entity_generation=1, causal_turn_id="t", question="q",
+                          authority_digest=d("a"), source_state_digest=d("s"))
+        t = grf.append_node(t, n("r0", "R0_OBSERVED", "OBSERVATION", "OBSERVED", "EVIDENCE", "o", evidence_refs=["e"]))
+        r1 = n("r1", "R1_INFERRED", "HYPOTHESIS", "INFERRED", "CANDIDATE", "h")
+        with self.assertRaisesRegex(grf.GRFError, "NON_R0_REQUIRES_DEPENDENCY"):
+            grf.append_node(t, r1)
+
+    def test_counterfactual_parent_must_be_factual_r0(self):
+        t = grf.new_trace(entity_generation=1, causal_turn_id="t", question="q",
+                          authority_digest=d("a"), source_state_digest=d("s"))
+        t = grf.append_node(t, n("r0", "R0_OBSERVED", "OBSERVATION", "OBSERVED", "EVIDENCE", "o", evidence_refs=["e"]))
+        t = grf.append_node(t, n("r1", "R1_INFERRED", "HYPOTHESIS", "INFERRED", "CANDIDATE", "h", depends_on=["r0"]))
+        t = grf.append_node(t, n("r2", "R2_GENERATED", "POSSIBLE_WORLD", "HYPOTHETICAL", "CANDIDATE", "g", depends_on=["r1"]))
+        cf = n("cf", "R3_COUNTER_REALITY", "POSSIBLE_WORLD", "COUNTERFACTUAL", "CANDIDATE", "cf",
+               depends_on=["r2"], factual_parent="r1", interventions=["do:x"],
+               causal_assumptions=["scm:v1"], shared_factual_context=["fact:1"])
+        with self.assertRaisesRegex(grf.GRFError, "COUNTERFACTUAL_FACTUAL_PARENT_NOT_FACTUAL"):
+            grf.append_node(t, cf)
+
     def test_seal_requires_all_stages(self):
         t = grf.new_trace(entity_generation=1, causal_turn_id="t", question="q",
                           authority_digest=d("a"), source_state_digest=d("s"))

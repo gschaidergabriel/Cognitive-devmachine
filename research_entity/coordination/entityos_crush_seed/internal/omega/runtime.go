@@ -39,12 +39,19 @@ type TurnInput struct {
 
 // Frame is the bounded cognitive state presented to the current model organ.
 // StateDigest binds the frame to the persistent state it was compiled from.
+// The causal metadata is intentionally separate from SystemContext: state can
+// become real and persistent before we earn the right to inject semantic
+// content into the model prompt.
 type Frame struct {
-	Version       string
-	TurnID        string
-	StateDigest   string
-	Candidates    []Candidate
-	SystemContext string
+	Version           string
+	TurnID            string
+	StateDigest       string
+	EntityID          string
+	Revision          uint64
+	InputDigest       string
+	PredecessorTurnID string
+	Candidates        []Candidate
+	SystemContext     string
 }
 
 // TurnOutcome is the terminal observation fed back into OMEGA for reentry.

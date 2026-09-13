@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-omega-world-vps-frankenstein-access-20260913T0512Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -u; if command -v gh >/dev/null 2>&1; then echo GH_PRESENT=1; if gh auth status >/dev/null 2>&1; then echo GH_AUTH=1; else echo GH_AUTH=0; fi; else echo GH_PRESENT=0; fi; if git ls-remote git@github.com:gschaidergabriel/frankenstein.git HEAD >/tmp/omega_world_lsremote.out 2>/tmp/omega_world_lsremote.err; then echo SSH_FRANKENSTEIN_ACCESS=1; cat /tmp/omega_world_lsremote.out; else echo SSH_FRANKENSTEIN_ACCESS=0; tail -20 /tmp/omega_world_lsremote.err; fi"
+}

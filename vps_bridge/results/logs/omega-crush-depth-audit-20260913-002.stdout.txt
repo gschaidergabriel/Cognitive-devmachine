@@ -1,0 +1,310 @@
+=== INTERNAL OMEGA FILES ===
+internal/omega/runtime.go
+internal/omega/runtime_test.go
+=== PHASE1 TOPOLOGY ===
+# EntityOS / OMEGA Phase-1 Organ Topology
+
+OMEGA Phase 1 reuses the proven Frankenstein 2.0 external cognition topology.
+
+Active model organs:
+- ChatGPT through the existing ChatGPT bridge path.
+- Claude Code through the existing Claude/CLI path.
+- Free Pool through the existing quota-aware Crush provider harness.
+
+Keep the existing Local Bridge and VPS Bridge transport/receipt paths, Crush provider/model switching, native session continuation, GRID/context ingress, UnifiedDB knowledge ingress/session synchronization, and current effect authority/provenance gates.
+
+These are organs and adapters behind OMEGA. OMEGA is the persistent cognitive runtime: GRID10, TITAN MX, Unified state, LCME/dynamic cognitive compilation, GWT/reentry, identity, hypotheses/goals/world-model state, module competition and effect gating.
+
+Native internal/omega code replaces wrapper mechanisms only after equivalent behavior is covered by tests and receipts. No duplicate bridge, no second canonical turn loop, no second provider router, and no second persistent truth store.
+=== PORTABLE CORE ===
+# EntityOS powered by Crush — portable OMEGA core
+
+The product boundary is the Crush runtime, not a VM. Crush remains the stable portable shell for UI, CLI, tools, MCP, permissions, providers and session presentation. OMEGA lives below that surface and above model/tool execution.
+
+Phase 1 intentionally keeps the working Frankenstein 2.0 execution topology: ChatGPT through the existing ChatGPT bridge, Claude Code through the existing Claude/CLI path, Free Pool through the existing Crush provider harness, plus the currently proven Local/VPS bridge and receipt mechanisms.
+
+Portable cognitive core: GRID10 competition and broadcast, TITAN MX state dynamics, Unified persistent state, LCME/dynamic cognitive compilation, GWT/reentry, identity, goals/hypotheses/world-model state, module competition and effect gating.
+
+Host-specific bridges and launchers are adapters around the core. The core must not hard-code Gabriel- or Andreas-specific paths, machine IDs, display devices, or one provider.
+
+Current integration seam: internal/omega.Runtime.Compile() executes before model inference and produces a bounded deterministic cognitive frame; Reenter() receives the terminal outcome before Crush publishes run completion. A nil runtime maps to NoopRuntime, preserving upstream behavior.
+
+Migration law: keep existing bridge/provider/state-sync behavior authoritative until an equivalent native internal/omega path has executable tests and readback/receipt evidence. Replace mechanisms incrementally, never by creating parallel authorities.
+
+Development law: on every explicit CRUSH trigger refresh current OMEGA/EntityOS architecture, Gabriel's working Crush harness, current ChatGPT/Claude/Free-Pool bridge/provider state, and this project before porting the strongest nonduplicate semantic delta.
+=== DONOR LOCK ===
+{
+  "schema": "ENTITYOS_CRUSH_DONOR_LOCK/v1",
+  "generated_at": "2026-09-13",
+  "refresh_trigger": "CRUSH",
+  "crush_upstream": {
+    "repo": "charmbracelet/crush",
+    "commit": "d333e04385f9e1d1523cea7b417cb5e8798a713a"
+  },
+  "gabriel_harness": {
+    "machine_id": "ai-core-node",
+    "owner": "gabriel",
+    "runtime": {
+      "terminal": "cool-retro-term",
+      "launcher": "/home/ai-core-node/.claude/star/harness_crush_knopf.sh",
+      "controller": "/home/ai-core-node/.claude/star/harness_crush_knopf.py",
+      "integration": "/home/ai-core-node/.claude/star/harness_crush.py",
+      "cwd": "/home/ai-core-node/frankenstein-repo",
+      "command": "crush --cwd /home/ai-core-node/frankenstein-repo --continue"
+    },
+    "sha256": {
+      "harness_crush_knopf.sh": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+      "harness_crush_knopf.py": "db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61",
+      "harness_crush.py": "59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613",
+      "frankenstein-repo/CRUSH.md": "1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99"
+    },
+    "observed_semantics": [
+      "native Crush session reentry via --continue",
+      "provider/model switching inside one running harness",
+      "GRID state materialized into Crush context",
+      "relevant UnifiedDB knowledge injected before a session",
+      "completed Crush session synchronized back into UnifiedDB",
+      "ChatGPT bridge shown as an external organ rather than duplicated"
+    ]
+  },
+  "omega_vps_runtime": {
+    "release": "093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001",
+    "path": "/workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001",
+    "live_processes_observed": [
+      "omega.supervisor",
+      "omega.assembly",
+      "omega.grid_runtime_v3",
+      "omega.bridge_relay",
+      "omega.master_bridge_carrier",
+      "omega.telemetry_daemon"
+    ],
+    "sha256": {
+      "omega/grid_runtime_v3.py": "bc063027de487cb255e93402789b7166f706044a9e797bbb85a4af3a7b863600",
+      "omega/unified_store.py": "63e3d4cafb599d2da90d3afec80ad9dce741c2e3e2c626b37ab8f877c4bcf446",
+      "omega/policy_kernel.py": "e20c279bbaa23974b75c73b6e41d74e5fb39a26e595650422904e663a613566f",
+      "omega/alignment.py": "9980977597fe560eb1f01ff68b1d73d9ea7f0ca8a13acb4e2fcb64a7737ad61d",
+      "omega/router.py": "5fe471dbb370eedc1e48f7954206c91f367fd855b0b75c60e75e52cac35f7f0e",
+      "omega/assembly.py": "48da618be782cdb750efc0ed63d4697dd2c0a180887ef99de022cbff655eb93d"
+    }
+  },
+  "ui_target": {
+    "selected_by_owner": true,
+    "description": "native orange/amber Charm CRUSH TUI viewed through the Gabriel Free Frank cool-retro-term surface",
+    "law": "preserve native Crush interaction and layout during OMEGA integration; do not make the portable cognitive core depend on cool-retro-term"
+  },
+  "assimilation_law": "On every CRUSH trigger refresh exact current donors first; port semantic deltas into the portable core, never copy live host/VM/service assumptions into the runtime."
+}
+=== OMEGA SOURCE ===
+FILE:internal/omega/runtime.go
+// Package omega defines the portable cognitive runtime seam used by EntityOS.
+//
+// It intentionally depends only on the Go standard library. The Crush shell
+// remains responsible for UI, providers, tools, MCP, permissions, and session
+// presentation. OMEGA owns cognitive state formation and reentry.
+package omega
+
+import (
+	"context"
+	"fmt"
+	"sort"
+	"strings"
+)
+
+// Version identifies the first portable EntityOS/OMEGA frame contract.
+const Version = "ENTITYOS_OMEGA_FRAME/v1"
+
+// Candidate is one contribution competing for inclusion in the current
+// cognitive frame. Scores are deliberately explicit rather than hidden in
+// prompt prose so GRID can later replace the baseline ordering without
+// changing the Crush-facing seam.
+type Candidate struct {
+	ID         string
+	Kind       string
+	Source     string
+	Payload    string
+	Salience   float64
+	Confidence float64
+	Urgency    float64
+}
+
+// TurnInput is the minimal observation OMEGA receives from the harness.
+// It contains no host-specific paths, services, or provider assumptions.
+type TurnInput struct {
+	SessionID string
+	RunID     string
+	Prompt    string
+}
+
+// Frame is the bounded cognitive state presented to the current model organ.
+// StateDigest binds the frame to the persistent state it was compiled from.
+type Frame struct {
+	Version       string
+	TurnID        string
+	StateDigest   string
+	Candidates    []Candidate
+	SystemContext string
+}
+
+// TurnOutcome is the terminal observation fed back into OMEGA for reentry.
+type TurnOutcome struct {
+	SessionID string
+	RunID     string
+	Text      string
+	Err       string
+	Cancelled bool
+}
+
+// Runtime is the only cognitive contract the Crush agent loop needs.
+//
+// Compile runs before model inference. Reenter runs once at terminal turn
+// completion. Implementations may persist state, run GRID competition, TITAN
+// consolidation, LCME transforms, or future cognitive modules behind this
+// interface without leaking those concerns into Crush UI/provider/tool code.
+type Runtime interface {
+	Compile(context.Context, TurnInput) (Frame, error)
+	Reenter(context.Context, Frame, TurnOutcome) error
+}
+
+// NoopRuntime preserves upstream Crush behavior exactly when no EntityOS
+// cognitive runtime has been configured.
+type NoopRuntime struct{}
+
+func (NoopRuntime) Compile(context.Context, TurnInput) (Frame, error) {
+	return Frame{Version: Version}, nil
+}
+
+func (NoopRuntime) Reenter(context.Context, Frame, TurnOutcome) error {
+	return nil
+}
+
+// RenderSystemContext deterministically serializes the bounded winning
+// coalition for model injection. It never serializes the entire persistent
+// state. Stable sorting makes identical state/input produce identical frame
+// text, independent of candidate production order.
+func (f Frame) RenderSystemContext() string {
+	if strings.TrimSpace(f.SystemContext) == "" && len(f.Candidates) == 0 {
+		return ""
+	}
+
+	candidates := append([]Candidate(nil), f.Candidates...)
+	sort.SliceStable(candidates, func(i, j int) bool {
+		li := candidateUtility(candidates[i])
+		lj := candidateUtility(candidates[j])
+		if li != lj {
+			return li > lj
+		}
+		return candidates[i].ID < candidates[j].ID
+	})
+
+	var b strings.Builder
+	b.WriteString("<omega-cognitive-frame version=\"")
+	if f.Version == "" {
+		b.WriteString(Version)
+	} else {
+		b.WriteString(escapeAttr(f.Version))
+	}
+	b.WriteString("\"")
+	if f.TurnID != "" {
+		fmt.Fprintf(&b, " turn=\"%s\"", escapeAttr(f.TurnID))
+	}
+	if f.StateDigest != "" {
+		fmt.Fprintf(&b, " state=\"%s\"", escapeAttr(f.StateDigest))
+	}
+	b.WriteString(">\n")
+
+	if s := strings.TrimSpace(f.SystemContext); s != "" {
+		b.WriteString("<broadcast>\n")
+		b.WriteString(s)
+		b.WriteString("\n</broadcast>\n")
+	}
+	for _, c := range candidates {
+		if strings.TrimSpace(c.Payload) == "" {
+			continue
+		}
+		fmt.Fprintf(
+			&b,
+			"<candidate id=\"%s\" kind=\"%s\" source=\"%s\" salience=\"%.6f\" confidence=\"%.6f\" urgency=\"%.6f\">%s</candidate>\n",
+			escapeAttr(c.ID),
+			escapeAttr(c.Kind),
+			escapeAttr(c.Source),
+			c.Salience,
+			c.Confidence,
+			c.Urgency,
+			strings.TrimSpace(c.Payload),
+		)
+	}
+	b.WriteString("</omega-cognitive-frame>")
+	return b.String()
+}
+
+func candidateUtility(c Candidate) float64 {
+	// Baseline only. GRID will own competition in the real runtime.
+	return c.Salience * c.Confidence * (1 + c.Urgency)
+}
+
+func escapeAttr(s string) string {
+	r := strings.NewReplacer(
+		"&", "&amp;",
+		"\"", "&quot;",
+		"<", "&lt;",
+		">", "&gt;",
+	)
+	return r.Replace(s)
+}
+FILE:internal/omega/runtime_test.go
+package omega
+
+import (
+	"context"
+	"strings"
+	"testing"
+)
+
+func TestNoopRuntimePreservesUpstreamPrompt(t *testing.T) {
+	rt := NoopRuntime{}
+	frame, err := rt.Compile(context.Background(), TurnInput{
+		SessionID: "s1",
+		RunID:     "r1",
+		Prompt:    "hello",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := frame.RenderSystemContext(); got != "" {
+		t.Fatalf("noop runtime injected context: %q", got)
+	}
+	if err := rt.Reenter(context.Background(), frame, TurnOutcome{}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestFrameRenderIsDeterministicAcrossProductionOrder(t *testing.T) {
+	a := Candidate{ID: "a", Kind: "hypothesis", Source: "grid", Payload: "A", Salience: .8, Confidence: .9, Urgency: .1}
+	b := Candidate{ID: "b", Kind: "goal", Source: "titan", Payload: "B", Salience: .4, Confidence: .9, Urgency: .2}
+
+	f1 := Frame{Version: Version, TurnID: "t1", StateDigest: "deadbeef", Candidates: []Candidate{a, b}}
+	f2 := Frame{Version: Version, TurnID: "t1", StateDigest: "deadbeef", Candidates: []Candidate{b, a}}
+
+	got1 := f1.RenderSystemContext()
+	got2 := f2.RenderSystemContext()
+	if got1 != got2 {
+		t.Fatalf("render depends on candidate order:\n%s\n---\n%s", got1, got2)
+	}
+	if strings.Index(got1, `id="a"`) > strings.Index(got1, `id="b"`) {
+		t.Fatalf("higher-utility candidate did not win ordering:\n%s", got1)
+	}
+}
+
+func TestFrameDoesNotDumpAbsentState(t *testing.T) {
+	got := (Frame{
+		Version:       Version,
+		SystemContext: "only-current-broadcast",
+	}).RenderSystemContext()
+	if !strings.Contains(got, "only-current-broadcast") {
+		t.Fatalf("missing current broadcast: %s", got)
+	}
+	if strings.Contains(got, "memory") || strings.Contains(got, "history") {
+		t.Fatalf("unexpected implicit memory/history dump: %s", got)
+	}
+}
+=== TARGETED TESTS ===

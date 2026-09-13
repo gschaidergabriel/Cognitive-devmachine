@@ -1,0 +1,11 @@
+#!/bin/bash
+# harness_crush_knopf.sh -- Desktop-Knopf-Ziel "Free Frank" (PHASE 52,
+# Werkzeugwechsel aider->Crush, Gabriel-Auftrag 2026-09-12). Startet den
+# FranKenstein-Banner + Modellwahl + Crush-Start (harness_crush_knopf.py) in
+# einem gruen-auf-schwarz eingefaerbten Terminal (Matrix-Optik-Auftrag).
+# `exec bash` am Ende -- gleiches Muster wie star-start/harness_aider_knopf.sh:
+# das Fenster bleibt nach Programmende offen, Fehlermeldungen bleiben lesbar.
+export PATH="$HOME/.local/npm-global/bin:$PATH"
+cd "$HOME/.claude/star" || exit 1
+python3 harness_crush_knopf.py
+exec bash

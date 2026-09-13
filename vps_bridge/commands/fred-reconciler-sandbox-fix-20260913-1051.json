@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-reconciler-sandbox-fix-20260913-1051",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail\nR=/workspace/omega_runtime\nC=$(readlink -f $R/current)\nT=$R/releases/fred-reconciler-sandbox-1051\nrm -rf $T\ncp -a $C $T\nCR=$R/carrier_repo\nP=omega_deploy/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1/omega/receipt_reconciler.py\nif git -C $CR cat-file -e omega-vps-deploy:$P 2>/dev/null; then REF=omega-vps-deploy; elif git -C $CR cat-file -e origin/omega-vps-deploy:$P 2>/dev/null; then REF=origin/omega-vps-deploy; else echo CARRIER_REF_MISSING; exit 21; fi\ngit -C $CR show $REF:$P > $T/omega/receipt_reconciler.py\npython3 -m py_compile $T/omega/receipt_reconciler.py $T/omega/spool_receipt_reconciler.py\nS=$(mktemp -d)\ntrap 'rm -rf $S $T' EXIT\ncp $R/data/omega_unified.db $S/omega.db\nmkdir -p $S/state/outer_bridge/outbox $S/state/outer_bridge/inbox $S/state/relay_results\nPYTHONPATH=$T OMEGA_RUNTIME_ROOT=$S/state OMEGA_REPO_ROOT=$T OMEGA_UNIFIED_DB=$S/omega.db OMEGA_ROUTER_CONFIG=$T/config/organ_router.json OMEGA_OUTER_SPOOL=$S/state/outer_bridge python3 -m omega.spool_receipt_reconciler --once > $S/out.json\npython3 - <<PY\nimport hashlib,json,pathlib\nt=pathlib.Path('$T')\np=t/'omega/receipt_reconciler.py'; s=(t/'omega/spool_receipt_reconciler.py')\nout={'result':'PASS','base_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'spool_sha256':hashlib.sha256(s.read_bytes()).hexdigest(),'base_has_method':'def _publish_pending_results' in p.read_text(),'once_output':json.loads(pathlib.Path('$S/out.json').read_text())}\nprint(json.dumps(out,sort_keys=True))\nPY"
+}

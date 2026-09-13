@@ -1,0 +1,58 @@
+  omega_grf_field.py
+  $BIN/omega voice-status
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v2",
+  "ok": false,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_direct_voice_start",
+      "ok": false,
+      "detail": "owner-facing omega may inspect managed Voice but must not spawn a parallel Voice subject"
+    },
+    {
+      "name": "grf_is_projection_only",
+      "ok": true,
+      "detail": "omega_grf_field must remain a nonresident, non-DB, non-effect projection; AST parsed"
+    },
+    {
+      "name": "grf_is_wired_into_canonical_omni_turn",
+      "ok": true,
+      "detail": "persistent OMNI wrapper must project GRF after the existing canonical turn"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}

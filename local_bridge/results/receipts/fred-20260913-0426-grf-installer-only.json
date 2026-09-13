@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913-0426-grf-installer-only",
+  "command_sha256": "a59583808909a6525a0002b03c8254d1f6b623123752992efc82ce44386343eb",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T03:59:19.933500+00:00",
+  "finished_at": "2026-09-13T03:59:24.353984+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "7f3770053885515b27e67b5c376c8adffda35c321ee825543be8ed59efbc95db",
+  "stderr_sha256": "c6b9b1f09add0403cc07e90bfdf272129b1ddfa2f8f7675ea8218862f2516371",
+  "stdout_tail": "  omega_grf_field.py\n  $BIN/omega voice-status\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v2\",\n  \"ok\": false,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime defines no resident infinite/server loop; AST parsed\"\n    },\n    {\n      \"name\": \"launcher_has_no_direct_voice_start\",\n      \"ok\": false,\n      \"detail\": \"owner-facing omega may inspect managed Voice but must not spawn a parallel Voice subject\"\n    },\n    {\n      \"name\": \"grf_is_projection_only\",\n      \"ok\": true,\n      \"detail\": \"omega_grf_field must remain a nonresident, non-DB, non-effect projection; AST parsed\"\n    },\n    {\n      \"name\": \"grf_is_wired_into_canonical_omni_turn\",\n      \"ok\": true,\n      \"detail\": \"persistent OMNI wrapper must project GRF after the existing canonical turn\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

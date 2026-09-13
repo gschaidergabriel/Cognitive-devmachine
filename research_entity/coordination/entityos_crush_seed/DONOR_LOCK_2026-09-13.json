@@ -1,0 +1,61 @@
+{
+  "schema": "ENTITYOS_CRUSH_DONOR_LOCK/v1",
+  "generated_at": "2026-09-13",
+  "refresh_trigger": "CRUSH",
+  "crush_upstream": {
+    "repo": "charmbracelet/crush",
+    "commit": "d333e04385f9e1d1523cea7b417cb5e8798a713a"
+  },
+  "gabriel_harness": {
+    "machine_id": "ai-core-node",
+    "owner": "gabriel",
+    "runtime": {
+      "terminal": "cool-retro-term",
+      "launcher": "/home/ai-core-node/.claude/star/harness_crush_knopf.sh",
+      "controller": "/home/ai-core-node/.claude/star/harness_crush_knopf.py",
+      "integration": "/home/ai-core-node/.claude/star/harness_crush.py",
+      "cwd": "/home/ai-core-node/frankenstein-repo",
+      "command": "crush --cwd /home/ai-core-node/frankenstein-repo --continue"
+    },
+    "sha256": {
+      "harness_crush_knopf.sh": "95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3",
+      "harness_crush_knopf.py": "db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61",
+      "harness_crush.py": "59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613",
+      "frankenstein-repo/CRUSH.md": "1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99"
+    },
+    "observed_semantics": [
+      "native Crush session reentry via --continue",
+      "provider/model switching inside one running harness",
+      "GRID state materialized into Crush context",
+      "relevant UnifiedDB knowledge injected before a session",
+      "completed Crush session synchronized back into UnifiedDB",
+      "ChatGPT bridge shown as an external organ rather than duplicated"
+    ]
+  },
+  "omega_vps_runtime": {
+    "release": "093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001",
+    "path": "/workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001",
+    "live_processes_observed": [
+      "omega.supervisor",
+      "omega.assembly",
+      "omega.grid_runtime_v3",
+      "omega.bridge_relay",
+      "omega.master_bridge_carrier",
+      "omega.telemetry_daemon"
+    ],
+    "sha256": {
+      "omega/grid_runtime_v3.py": "bc063027de487cb255e93402789b7166f706044a9e797bbb85a4af3a7b863600",
+      "omega/unified_store.py": "63e3d4cafb599d2da90d3afec80ad9dce741c2e3e2c626b37ab8f877c4bcf446",
+      "omega/policy_kernel.py": "e20c279bbaa23974b75c73b6e41d74e5fb39a26e595650422904e663a613566f",
+      "omega/alignment.py": "9980977597fe560eb1f01ff68b1d73d9ea7f0ca8a13acb4e2fcb64a7737ad61d",
+      "omega/router.py": "5fe471dbb370eedc1e48f7954206c91f367fd855b0b75c60e75e52cac35f7f0e",
+      "omega/assembly.py": "48da618be782cdb750efc0ed63d4697dd2c0a180887ef99de022cbff655eb93d"
+    }
+  },
+  "ui_target": {
+    "selected_by_owner": true,
+    "description": "native orange/amber Charm CRUSH TUI viewed through the Gabriel Free Frank cool-retro-term surface",
+    "law": "preserve native Crush interaction and layout during OMEGA integration; do not make the portable cognitive core depend on cool-retro-term"
+  },
+  "assimilation_law": "On every CRUSH trigger refresh exact current donors first; port semantic deltas into the portable core, never copy live host/VM/service assumptions into the runtime."
+}

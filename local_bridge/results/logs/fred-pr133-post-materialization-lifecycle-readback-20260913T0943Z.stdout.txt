@@ -1,0 +1,78 @@
+HOST=ai-core-node-projekt-frankenstein
+OWNER=ai-core-node
+MainPID=0
+ExecMainStartTimestampMonotonic=25678053
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 16:28:54 +07] ; stop_time=[Sun 2026-09-13 16:31:29 +07] ; pid=2541 ; code=exited ; status=0 }
+ActiveState=inactive
+SubState=dead
+56e47d00b23a63ab832dfa08bf12df3e9e5233f9f3a758e160ff3f875b5b43ee  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+f6de5de3d631775cf7be8ed98f4d072d680da602cc09012d4e526914b03c021e  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_runtime.py
+85b9cac6b20cff5480dd4c2d578817bdf7fdd5533454dd85ddde763207df6cf8  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_world_turn.py
+8d390eb0559437517dc97e17c06c4261e343d46d15bb75d29f82bb0282673d0e  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_cognitive_regulation.py
+4d27c892b394aef18baf2c11375a904cd76835bbc23c49ac6d4aa3a31aea0780  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_externalized_cognition.py
+3451cd367843c4bf62b36227cb54b1d3c3c07903059e4437e827b5a48705f2e3  /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/omega_externalized_learning.py
+---VOICE_JOURNAL_TAIL---
+Sep 13 16:27:02 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:02] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:27:12 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:12] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:27:22 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:22] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:27:32 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:32] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:27:42 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:42] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:27:52 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:27:52] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:28:02 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:28:02] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:28:08 ai-core-node-projekt-frankenstein systemd[2339]: Stopping frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)...
+Sep 13 16:28:08 ai-core-node-projekt-frankenstein env[2720334]: [2026-09-13 16:28:08] gespraechsmodus: Signal 15 erhalten -- verlasse 'Den Raum' (session=48a0a43e-989f-4398-94c5-981b737b5028) und beende
+Sep 13 16:28:09 ai-core-node-projekt-frankenstein systemd[2339]: Stopped frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 16:28:09 ai-core-node-projekt-frankenstein systemd[2339]: frankenstein-gespraechsmodus.service: Consumed 46.704s CPU time, 38.5M memory peak, 27.1M memory swap peak.
+-- Boot e5c2c05e27924c86bc66dd1ed46aef84 --
+Sep 13 16:28:54 ai-core-node-projekt-frankenstein systemd[2441]: Started frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 16:28:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:56] gespraechsmodus: gestartet -- warte auf gespraech.aktiv=1 (Modelle/Mikrofon werden erst dann geladen)
+Sep 13 16:28:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:56] gespraechsmodus: cortex.aktiv=1 erkannt -- lade Visual-Cortex-Stack (cv2/numpy/perception_l0) jetzt
+Sep 13 16:28:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:56] perception_l0: cortex.aktiv=1 -- L0Orchestrator startet (/dev/video0, tick_hz=1.0)
+Sep 13 16:28:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:56] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:28:58 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:58] capture_worker: gestartet: /dev/video0 (Rapoo Camera: Rapoo Camera) ziel_fps=5.0 puffer=10
+Sep 13 16:28:58 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:58] capture_worker: geteilter worker /dev/video0 neu gestartet (refcount=1)
+Sep 13 16:28:59 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:28:59] capture_worker: geteilter worker /dev/video0 wiederverwendet (refcount=2)
+Sep 13 16:29:00 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:00] visual_cortex: capture auto: frame_1789291739964_auto.jpg mean_brightness=16.02 (via geteiltem CaptureWorker, seq=5)
+Sep 13 16:29:00 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:00] capture_worker: geteilter worker /dev/video0 freigegeben (verbleibender refcount=1)
+Sep 13 16:29:00 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:00] visual_cortex: vision_beschreibung_holen BLOCKIERT (vision.cloud_escalation status=NOT_COMPUTED, reason=compute_off) -- KEIN externer Vision-API-Aufruf, kein Bild verlaesst das System. Freigabe: perception_control.grant_cloud_vision_once(grund=...)
+Sep 13 16:29:01 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:01] perception_l0: L0_ESCALATED -- visueller_zyklus() decision=WAIT reason=None
+Sep 13 16:29:06 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:06] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:29:16 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:16] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:29:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:23] capture_worker: geteilter worker /dev/video0 wiederverwendet (refcount=2)
+Sep 13 16:29:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:23] visual_cortex: capture auto: frame_1789291763295_auto.jpg mean_brightness=92.88 (via geteiltem CaptureWorker, seq=122)
+Sep 13 16:29:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:23] capture_worker: geteilter worker /dev/video0 freigegeben (verbleibender refcount=1)
+Sep 13 16:29:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:23] visual_cortex: vision_beschreibung_holen BLOCKIERT (vision.cloud_escalation status=NOT_COMPUTED, reason=compute_off) -- KEIN externer Vision-API-Aufruf, kein Bild verlaesst das System. Freigabe: perception_control.grant_cloud_vision_once(grund=...)
+Sep 13 16:29:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:23] perception_l0: L0_ESCALATED -- visueller_zyklus() decision=WAIT reason=None
+Sep 13 16:29:26 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:26] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:29:36 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:36] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:29:46 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:46] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:29:52 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:52] capture_worker: geteilter worker /dev/video0 wiederverwendet (refcount=2)
+Sep 13 16:29:52 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:52] visual_cortex: capture auto: frame_1789291792186_auto.jpg mean_brightness=86.31 (via geteiltem CaptureWorker, seq=266)
+Sep 13 16:29:52 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:52] capture_worker: geteilter worker /dev/video0 freigegeben (verbleibender refcount=1)
+Sep 13 16:29:52 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:52] visual_cortex: vision_beschreibung_holen BLOCKIERT (vision.cloud_escalation status=NOT_COMPUTED, reason=compute_off) -- KEIN externer Vision-API-Aufruf, kein Bild verlaesst das System. Freigabe: perception_control.grant_cloud_vision_once(grund=...)
+Sep 13 16:29:52 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:52] perception_l0: L0_ESCALATED -- visueller_zyklus() decision=WAIT reason=None
+Sep 13 16:29:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:29:56] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:06 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:06] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:16 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:16] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:23] capture_worker: geteilter worker /dev/video0 wiederverwendet (refcount=2)
+Sep 13 16:30:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:23] visual_cortex: capture auto: frame_1789291823218_auto.jpg mean_brightness=76.78 (via geteiltem CaptureWorker, seq=422)
+Sep 13 16:30:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:23] capture_worker: geteilter worker /dev/video0 freigegeben (verbleibender refcount=1)
+Sep 13 16:30:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:23] visual_cortex: vision_beschreibung_holen BLOCKIERT (vision.cloud_escalation status=NOT_COMPUTED, reason=compute_off) -- KEIN externer Vision-API-Aufruf, kein Bild verlaesst das System. Freigabe: perception_control.grant_cloud_vision_once(grund=...)
+Sep 13 16:30:23 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:23] perception_l0: L0_ESCALATED -- visueller_zyklus() decision=WAIT reason=None
+Sep 13 16:30:26 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:26] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:36 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:36] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:46 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:46] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:30:56 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:30:56] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:31:06 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:06] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:31:09 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:09] capture_worker: geteilter worker /dev/video0 wiederverwendet (refcount=2)
+Sep 13 16:31:09 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:09] visual_cortex: capture auto: frame_1789291869327_auto.jpg mean_brightness=94.04 (via geteiltem CaptureWorker, seq=651)
+Sep 13 16:31:10 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:10] capture_worker: geteilter worker /dev/video0 freigegeben (verbleibender refcount=1)
+Sep 13 16:31:10 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:10] visual_cortex: vision_beschreibung_holen BLOCKIERT (vision.cloud_escalation status=NOT_COMPUTED, reason=compute_off) -- KEIN externer Vision-API-Aufruf, kein Bild verlaesst das System. Freigabe: perception_control.grant_cloud_vision_once(grund=...)
+Sep 13 16:31:10 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:10] perception_l0: L0_ESCALATED -- visueller_zyklus() decision=WAIT reason=None
+Sep 13 16:31:16 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:16] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:31:26 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:26] gespraechsmodus: gespraech.aktiv=0 -- pausiert (10s)
+Sep 13 16:31:29 ai-core-node-projekt-frankenstein env[2541]: [2026-09-13 16:31:29] gespraechsmodus: Signal 15 erhalten -- verlasse 'Den Raum' (session=e0f72aa3-30cd-44bc-a4fb-795c8d239442) und beende
+Sep 13 16:31:29 ai-core-node-projekt-frankenstein systemd[2441]: Stopping frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)...
+Sep 13 16:31:29 ai-core-node-projekt-frankenstein systemd[2441]: Stopped frankenstein-gespraechsmodus.service - FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word).
+Sep 13 16:31:29 ai-core-node-projekt-frankenstein systemd[2441]: frankenstein-gespraechsmodus.service: Consumed 1min 21.422s CPU time.
+FRED_PR133_POST_MATERIALIZATION_READBACK_DONE

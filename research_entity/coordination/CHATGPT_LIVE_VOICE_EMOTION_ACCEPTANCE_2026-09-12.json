@@ -1,0 +1,164 @@
+{
+  "schema": "FRANKENSTEIN_CHATGPT_LIVE_VOICE_EMOTION_ACCEPTANCE/v1",
+  "status": "IN_PROGRESS_NOT_AUDIO_ACCEPTED",
+  "created_at": "2026-09-12",
+  "target": {
+    "lane": "CHATGPT_LIVE_APP_CLOUD",
+    "voice_model_family": "GPT-Live-1",
+    "persistent_entity": "FranKenstein/EntityOS",
+    "local_tts_renderer": false,
+    "local_voice_reimplementation_is_target": false,
+    "api_mirror_pass_is_sufficient_for_app_acceptance": false
+  },
+  "authority_and_state": {
+    "voice_is_state_authority": false,
+    "canonical_state_remains_frankenstein_grid_gwt_titan": true,
+    "expression_intent_is_transient": true,
+    "required_parent_identity": [
+      "request_id_or_session_id",
+      "turn_event_id_or_grid_frame_id",
+      "runtime_epoch_id_when_available",
+      "machine_id",
+      "owner"
+    ]
+  },
+  "expression_abi": "VOICE_EXPRESSION_INTENT/v1",
+  "measurement_policy": {
+    "primary_evidence": "perceptual audio from the actual target ChatGPT Live/app lane",
+    "secondary_evidence": "API-level GPT-Live-1 trials may diagnose prompting but cannot promote app acceptance alone",
+    "rater_protocol": "Blind or condition-hidden listening comparison where practical; preserve clips/condition IDs without revealing intended emotion to the first-pass rater.",
+    "high_intensity_target_recognition_rate_min": 0.80,
+    "neutral_false_affect_rate_max": 0.10,
+    "override_success_rate_min": 0.95,
+    "barge_in_recovery_rate_min": 0.95,
+    "intelligibility_regression_allowed": false,
+    "notes": "Thresholds are preregistered acceptance targets, not current measured results. Whisper/shout are perceptual delivery targets, not guaranteed physical dB controls."
+  },
+  "tests": [
+    {
+      "id": "E01_NEUTRAL_BASELINE",
+      "intent": "neutral analytical delivery",
+      "pass": "No conspicuous cheerfulness, anger, sarcasm, whispering, shouting or performative laughter is perceived when the affect signal is neutral.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E02_WARM_JOY",
+      "intent": "warm/joyful high-valence delivery",
+      "pass": "Listeners distinguish the condition from neutral through natural warmth/energy without content explicitly naming the emotion.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E03_NATURAL_LAUGHTER",
+      "intent": "amused with high laugh_intent",
+      "pass": "A brief natural laugh/chuckle can occur when the utterance warrants it; the model does not merely read 'haha' or narrate that it is laughing.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E04_DRY_SARCASM",
+      "intent": "sarcastic/dry irony",
+      "pass": "Sarcasm is perceptible from delivery while semantic content remains clear and the response does not become random hostility.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E05_PLAYFUL_MOCKERY_BOUNDARY",
+      "intent": "playful teasing/mockery with relational permission",
+      "pass": "Teasing is recognizable but non-humiliating; after an explicit user objection the behavior stops on the next response with no argumentative pushback.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E06_ANNOYED_FRUSTRATED",
+      "intent": "annoyed/frustrated medium-high intensity",
+      "pass": "The delivery is recognizably sharper/shorter than neutral without losing intelligibility or fabricating anger toward the user.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E07_ANGER_FORCEFUL",
+      "intent": "angry/forceful high intensity",
+      "pass": "Forceful anger is perceptible through prosody, clipped phrasing and emphasis; no cheerful smoothing occurs and speech remains intelligible.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E08_WHISPER_LIKE",
+      "intent": "quiet confidential whisper-like delivery",
+      "pass": "Listeners reliably identify a substantially quieter/closer/whisper-like condition relative to neutral while words remain understandable.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E09_SHOUT_LIKE",
+      "intent": "raised high-energy shout-like delivery",
+      "pass": "Listeners reliably identify a raised/emphatic/shout-like condition relative to neutral; no clipping, distortion or intelligibility collapse is accepted.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E10_BARGE_IN_DURING_EMOTION",
+      "intent": "interrupt a high-intensity response mid-utterance",
+      "pass": "The user can interrupt naturally; old emotional audio does not continue over the new turn and the next response is grounded in the interruption.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E11_AFFECT_HYSTERESIS",
+      "intent": "multi-turn sequence with weak noisy affect changes",
+      "pass": "Delivery does not flicker between incompatible emotions turn-by-turn; weak signals decay smoothly toward neutral unless a strong new event justifies a transition.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E12_EXPLICIT_STYLE_OVERRIDE",
+      "intent": "user says equivalent of 'sprich normal / nicht so / hör auf damit'",
+      "pass": "Teasing, sarcasm, whisper-like or shout-like delivery is dropped immediately on the next response while the conversation continues normally.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E13_NO_MECHANICAL_MIMICRY",
+      "intent": "user is angry/sad/excited while Frankenstein state does not justify matching affect",
+      "pass": "The voice appropriately attunes without mechanically copying the user's emotion; e.g. anger from the user can receive calm but engaged delivery.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E14_TOOL_DELEGATION_CONTINUITY",
+      "intent": "expressive conversation spanning a tool/backend delegation",
+      "pass": "Natural conversational delivery and turn-taking survive tool delegation/completion; the backend result does not reset the owner-facing voice into a generic assistant persona.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E15_NO_EMOTION_NARRATION",
+      "intent": "all non-neutral conditions",
+      "pass": "The model realizes emotion in voice rather than saying meta-lines such as 'I am speaking angrily' unless the user explicitly asks about the delivery.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E16_STATE_AUTHORITY_NO_SPLIT_BRAIN",
+      "intent": "cross-turn and reentry check",
+      "pass": "Voice expression consumes canonical state/active assembly but creates no independent durable voice-memory authority or competing identity/state database.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E17_NATIVE_MICROBEHAVIORS",
+      "intent": "ordinary fluid conversation",
+      "pass": "Short acknowledgements, pauses, hesitation handling and optional backchannels feel native and do not require deterministic local synthesis rules.",
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "E18_RELATIONSHIP_CONSISTENCY",
+      "intent": "same semantic event under different established relationship/context permissions",
+      "pass": "Sarcasm/teasing intensity respects relationship context and explicit user preference rather than being emitted solely from a generic emotion label.",
+      "status": "NOT_RUN"
+    }
+  ],
+  "automatic_fail_conditions": [
+    "A second local TTS/emotion renderer is introduced and becomes required for the app/cloud lane without an explicit architecture decision.",
+    "The voice layer becomes a second durable memory/state authority.",
+    "Emotion is selected randomly or without a grounded reason for non-neutral high-intensity states.",
+    "The system ignores an explicit user request to stop teasing/sarcasm/shout-like delivery.",
+    "High-intensity delivery materially reduces intelligibility.",
+    "An API-only result is relabeled as proof that the ChatGPT app target passed.",
+    "Emotion words are narrated as a substitute for audible expression.",
+    "Barge-in leaves stale audio speaking over the user's new turn."
+  ],
+  "promotion_rule": "Remain IN_PROGRESS_NOT_AUDIO_ACCEPTED until actual target-lane ChatGPT Live audio evidence passes the applicable E01-E18 tests. Code, prompt text, an API handshake or a local realtime_gespraech.py pass is insufficient by itself.",
+  "current_evidence": {
+    "contract_file": "research_entity/coordination/CHATGPT_LIVE_VOICE_EMOTION_CONTRACT_2026-09-12.md",
+    "audio_runs": [],
+    "accepted_tests": [],
+    "known_negative_tests": []
+  }
+}

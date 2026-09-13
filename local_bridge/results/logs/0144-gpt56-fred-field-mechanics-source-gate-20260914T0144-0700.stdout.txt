@@ -1,0 +1,18 @@
+OWNER=andreas
+MACHINE_ID=andreas-maco
+HEAD=786b1b00f813983bb1f4db079a9537164b2b41d6
+=== COMPILE ===
+=== FOCUSED TESTS ===
+..........                                                               [100%]
+10 passed in 0.11s
+=== DIFF CHECK ===
+=== AUTHORITY FENCES ===
+173:        "lyapunov_claim": False,
+251:            "runtime_mutation_authority": False,
+255:            "physical_separation_requires_causal_channel": True,
+257:            "telepathy_claim": False,
+273:        "runtime_mutation_authority": False,
+288:    for key in ("authority", "canonical_truth_credit", "effect_authority", "runtime_mutation_authority"):
+292:    if not isinstance(coherence, Mapping) or coherence.get("telepathy_claim") is not False:
+SOURCE_GATE_SCOPE=ANDREAS_MACO_NONCANONICAL_RUNTIME
+FRED_FIELD_MECHANICS_SOURCE_GATE=PASS

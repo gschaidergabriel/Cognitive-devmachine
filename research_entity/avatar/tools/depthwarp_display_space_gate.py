@@ -28,8 +28,10 @@ def build(root,r,eye,amp):
  a=base[:,:,3].astype(np.float32)/255; gx=cv2.Sobel(a,cv2.CV_32F,1,0,ksize=3);gy=cv2.Sobel(a,cv2.CV_32F,0,1,ksize=3); grad=np.sqrt(gx*gx+gy*gy)
  yy,xx=np.mgrid[0:a.shape[0],0:a.shape[1]].astype(np.float32); ell=((xx-eye[0])/220)**2+((yy-eye[1])/125)**2
  gate=ss(.70,.97,a)*(1-ss(.015,.10,grad))*ss(1.,1.55,ell)
- dx=amp*depth*gate
- mapx=xx-dx; mapy=yy
+ dx=(amp*depth*gate).astype(np.float32,copy=False)
+ # OpenCV 4.13 requires split remap maps to be CV_32FC1. Eye-anchor math can
+ # otherwise promote the gate/map to float64 even though xx/yy start float32.
+ mapx=(xx-dx).astype(np.float32,copy=False); mapy=yy.astype(np.float32,copy=False)
  rgb=cv2.remap(base[:,:,:3],mapx,mapy,cv2.INTER_LINEAR,borderMode=cv2.BORDER_REFLECT_101)
  out=np.dstack([rgb,base[:,:,3]])
  return base,out,gate,dx

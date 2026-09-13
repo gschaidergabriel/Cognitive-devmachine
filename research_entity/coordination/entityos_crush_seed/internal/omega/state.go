@@ -25,6 +25,7 @@ type TurnRecord struct {
 	RunID             string `json:"run_id,omitempty"`
 	InputDigest       string `json:"input_digest"`
 	OutputDigest      string `json:"output_digest,omitempty"`
+	RouteDigest       string `json:"route_digest,omitempty"`
 	Status            string `json:"status"`
 	PredecessorDigest string `json:"predecessor_digest"`
 	AppliedToDigest   string `json:"applied_to_digest"`
@@ -41,8 +42,9 @@ type PersistentState struct {
 
 // PersistentRuntime is the first native state substrate below Crush sessions.
 // It deliberately stores no raw prompt or model output. Until TITAN/GRID are
-// ported, it records only causal lineage and content digests, so enabling state
-// persistence cannot silently turn into transcript injection.
+// ported, it records only causal lineage and content/route digests, so enabling
+// state persistence cannot silently turn into transcript injection or a second
+// provider router.
 type PersistentRuntime struct {
 	mu   sync.Mutex
 	path string
@@ -79,6 +81,7 @@ func (r *PersistentRuntime) Compile(_ context.Context, in TurnInput) (Frame, err
 		return Frame{}, err
 	}
 	inputDigest := digestText(in.Prompt)
+	routeDigest := in.Route.Digest()
 	turnID := digestText(strings.Join([]string{
 		state.EntityID,
 		stateDigest,
@@ -86,6 +89,7 @@ func (r *PersistentRuntime) Compile(_ context.Context, in TurnInput) (Frame, err
 		in.SessionID,
 		in.RunID,
 		inputDigest,
+		routeDigest,
 	}, "\x00"))
 
 	return Frame{
@@ -95,6 +99,7 @@ func (r *PersistentRuntime) Compile(_ context.Context, in TurnInput) (Frame, err
 		EntityID:          state.EntityID,
 		Revision:          state.Revision,
 		InputDigest:       inputDigest,
+		RouteDigest:       routeDigest,
 		PredecessorTurnID: state.LastTurnID,
 	}, nil
 }
@@ -126,6 +131,7 @@ func (r *PersistentRuntime) Reenter(_ context.Context, frame Frame, outcome Turn
 		RunID:             outcome.RunID,
 		InputDigest:       frame.InputDigest,
 		OutputDigest:      digestText(outcome.Text),
+		RouteDigest:       frame.RouteDigest,
 		Status:            status,
 		PredecessorDigest: frame.StateDigest,
 		AppliedToDigest:   appliedToDigest,

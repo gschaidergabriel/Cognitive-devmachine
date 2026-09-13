@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-crush-depth-audit-20260913-002",
+  "op": "exec",
+  "cwd": "/workspace/entityos-crush-omega",
+  "command": "set -eu; echo '=== INTERNAL OMEGA FILES ==='; find internal/omega -maxdepth 4 -type f -print | sort || true; echo '=== PHASE1 TOPOLOGY ==='; sed -n '1,260p' docs/entityos/PHASE1_ORGAN_TOPOLOGY.md 2>/dev/null || true; echo '=== PORTABLE CORE ==='; sed -n '1,260p' docs/entityos/PORTABLE_CORE.md 2>/dev/null || true; echo '=== DONOR LOCK ==='; cat docs/entityos/DONOR_LOCK.json 2>/dev/null || true; echo '=== OMEGA SOURCE ==='; for f in internal/omega/*.go internal/omega/**/*.go; do [ -f \"$f\" ] || continue; echo FILE:$f; sed -n '1,260p' \"$f\"; done; echo '=== TARGETED TESTS ==='; go test ./internal/omega/...; echo '=== BUILD ==='; go build -o /tmp/entityos-crush-audit ./... >/tmp/entityos-crush-build.out 2>/tmp/entityos-crush-build.err || { cat /tmp/entityos-crush-build.err; exit 7; }; echo BUILD_PASS; echo '=== GIT STATUS ==='; git status --short --branch; echo '=== DONE ==='",
+  "timeout_seconds": 600
+}

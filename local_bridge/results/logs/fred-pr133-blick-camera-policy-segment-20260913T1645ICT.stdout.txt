@@ -1,0 +1,237 @@
+#!/usr/bin/env python3
+"""blick.py -- WO ist ein Kopf, nicht WER. Leichte Ergaenzung der Buehne
+(Erweiterung der Praesenz-Vorgabe, Gabriel woertlich 2026-09-11: "er hat ja
+Gesichtserkennung -- wenn er ein Gesicht erkennt, das nah genug ist und auf
+den Bildschirm schaut, soll er auf das Gesicht LOCKEN, das am naechsten ist,
+und sein Blick soll dem Kopf der Person folgen. Generell soll sein Blick
+immer der am naechsten stehenden Person folgen.")
+
+⭐ TRENNUNG DER ZWEI FRAGEN (drei vorab gemessene Befunde, die diese Datei
+ueberhaupt erst ermoeglichen -- nicht selbst nachgemessen, sondern von der
+Koordination uebergeben):
+  1. Position wird in gesicht.py BERECHNET und WEGGEWORFEN -- f.bbox landet
+     nie in einer Spalte, f2_gesicht hat keine Positionsspalte.
+  2. Der Sichtdienst (sehen.py, InsightFace, "WER ist da?") laeuft alle 20s
+     -- fuer Blickfuehrung braucht es 5-10 Hz. Die Kamera ist exklusiv
+     (Auge-Klasse in sehen.py haelt sie dauerhaft offen).
+  3. Loesung: "WER ist da?" (Identitaet, schwer, 20s reicht) bleibt in
+     sehen.py/gesicht.py, UNANGETASTET. "WO ist der Kopf?" (Position, leicht,
+     10Hz, keine Identitaet noetig) ist DIESE Datei -- eine Haar-Kaskade
+     (in OpenCV bereits enthalten, kein Modell-Download).
+
+⚠️ KAMERAEXKLUSIVITAET -- EINGRIFF IN EINEN LAUFENDEN DIENST. sehen.py haelt
+/dev/videoN dauerhaft offen; zwei Prozesse koennen dasselbe Geraet nicht
+gleichzeitig oeffnen. Diese Datei uebernimmt die Kamera deshalb NUR, waehrend
+das Buehnenfenster offen ist: `systemctl --user stop frankenstein-sehen`
+davor, `... start frankenstein-sehen` danach -- IMMER, auch im Fehlerfall
+(finally-Pfad in stoppen()). Gabriels Bedingung woertlich: "bau es so, dass
+frankenstein-sehen in jedem Fall wieder hochkommt, auch wenn das Fenster
+abstuerzt. Ein Sinn, der nach einem Fensterabsturz dauerhaft weg ist, waere
+schlimmer als gar keine Blickverfolgung." Deshalb zusaetzlich eine LOCKDATEI
+(kamera.lock, enthaelt die PID dieses Prozesses) und ein UNABHAENGIGER
+Waechter (blick_waechter.py + Systemd-Timer, alle 60s): findet er die
+Lockdatei ohne lebende PID UND frankenstein-sehen nicht aktiv, startet er den
+Sichtdienst von aussen neu. Schlimmster Fall bei hartem Absturz (SIGKILL):
+bis zu ~60s ohne Sichtdienst, dann automatische Wiederkehr -- kein Dauerausfall.
+
+⚠️⭐ SPIEGELUNG -- NICHT EMPIRISCH GEPRUEFT, EHRLICH ALS SOLCHE MARKIERT.
+Gabriels Auftrag verlangt woertlich einen Test: "Kopf nach links, nachsehen
+wohin die Box wandert, festhalten. Und schreib das Ergebnis in den
+Docstring." Das erfordert einen echten Menschen vor einer echten laufenden
+Kamera -- ein Agent ohne Kamerazugriff auf eine anwesende Person kann diesen
+Test NICHT durchfuehren. Diese Datei behauptet deshalb KEINE Messung,
+sondern legt eine dokumentierte ANNAHME fest: cv2.VideoCapture liefert das
+Rohbild ungespiegelt (wie eine Ueberwachungskamera, nicht wie ein
+Selfie-Spiegelmodus). Bewegt eine Person ihren Kopf zu IHRER eigenen linken
+Seite, wandert die Box im Rohbild -> zu HOEHEREN x-Werten (nach rechts im
+Bild). MIRROR_KORREKTUR unten ist der einzige Schalter, der nach dem
+echten Test ggf. umgelegt werden muss -- solange steht hier UNGEPRUEFT, nicht
+irgendein falsches "verifiziert".
+
+⚠️ "AUF DEN BILDSCHIRM SCHAUT" -- Annaeherung, nicht Messung. Diese Datei hat
+keine Blickrichtungs-/Kopfpose-Schaetzung (waere ein weiteres Modell). Die
+Frontal-Haar-Kaskade (haarcascade_frontalface_default) schlaegt nur auf
+weitgehend FRONTAL zur Kamera gerichtete Gesichter an -- das ist der
+vorhandene, ehrliche Ersatz fuer "schaut auf den Bildschirm", kein Vorwand.
+
+⚠️ IDENTITAET ZWISCHEN FRAMES -- ebenfalls eine Annaeherung. Die Kaskade
+liefert keine Wiedererkennung. "Dieselbe Person" heisst hier: die bisher
+gelockte Position wird pro Frame durch die jeweils groesste erkannte Box
+ersetzt, AUSSER eine deutlich (>15%, mehrere Frames in Folge) groessere Box
+taucht auf -- dann erst wird umgeschaltet (Hysterese gegen Geflacker bei
+zwei aehnlich grossen Gesichtern). Bei echten Positionssprüngen einer
+einzelnen Person (schnelle Kopfbewegung) folgt der Blick sofort mit.
+"""
+import os
+import subprocess
+import sys
+import threading
+import time
+
+# ⭐ OPENCL AUS, BEVOR cv2 GELADEN WIRD (2026-09-11).
+#
+# Gemessen: jeder Start der Buehne riss binnen Sekunden den ganzen Dienst
+# mit -- `python3[...]: Memory access fault by GPU node-1`, danach
+# `code=dumped`. Der Bauagent hielt es fuer den bekannten
+# amdgpu-Kernelfehler und fuer einen Chrome-Absturz; beides war falsch.
+# Der Absturz liegt im DAEMON selbst, und die Meldung "GPU node-1" ist die
+# typische Form eines ROCm/HIP-Fehlers.
+#
+# OpenCV nutzt fuer Bildoperationen von sich aus OpenCL, und OpenCL laeuft
+# auf dieser AMD-Karte ueber genau das HIP, das hier seit laengerem als
+# kaputt vermerkt ist (Notiz "GPU-Beschleunigung: Vulkan+FA +22-52%, HIP
+# kaputt"). Dazu haelt `llama-server` mit `-ngl 99` bereits rund 5 der
+# 8 geteilten GB.
+#
+# Die Blickverfolgung braucht davon nichts: eine Haar-Kaskade auf einem
+# kleinen Graustufenbild ist reine CPU-Arithmetik. Die Umgebungsvariable
+# muss VOR dem Import gesetzt sein -- danach ist die Laufzeit schon gewaehlt.
+os.environ.setdefault("OPENCV_OPENCL_RUNTIME", "disabled")
+os.environ.setdefault("OPENCV_OPENCL_DEVICE", "disabled")
+
+try:
+    import cv2
+    try:
+        cv2.ocl.setUseOpenCL(False)   # Guertel und Hosentraeger
+    except Exception:
+        pass
+except Exception:
+    cv2 = None
+
+_HIER = os.path.dirname(os.path.abspath(__file__))
+
+KAMERA_INDEX = int(os.environ.get("BLICK_KAMERA", "1"))       # /dev/video1 gemessen vorhanden
+TAKT_S = float(os.environ.get("BLICK_TAKT_S", "0.1"))          # ~10 Hz, siehe Docstring Punkt 2
+NAH_ANTEIL = float(os.environ.get("BLICK_NAH_ANTEIL", "0.22"))  # Boxhoehe/Framehoehe -- "nah genug"
+HYSTERESE_FAKTOR = 1.15
+HYSTERESE_FRAMES = 5
+GNADENFRIST_S = 1.0   # kein neues Gesicht seit > 1s (bei 10Hz: 10 verpasste Takte) -> "niemand da"
+
+LOCK_PFAD = os.path.join(_HIER, "kamera.lock")
+
+# ── FER+ Emotionsklassifikation auf DEMSELBEN Frame (2026-09-11, ARBEITSPAKET
+# paket-1789136046066-71d02b) ─────────────────────────────────────────────
+# Gabriel woertlich: FranKenstein soll ueber Webcam auch IHN sehen und live
+# reflektieren, was sein Ausdruck bei Gabriel AUSLOEST. Das braucht eine
+# echte Emotion aus dem Kamerabild -- NICHT eine zweite Kameraoeffnung
+# (KAMERAEXKLUSIVITAET oben ist eine Hartregel), sondern denselben Frame
+# und dieselbe Haar-Bbox, die diese Datei fuer die Blickfuehrung schon pro
+# Takt (10Hz) berechnet. classify_faces() ist mit ~17ms/Face gemessen
+# (RETINA_VISION_MODELS zeigt auf ein lokal abgelegtes ONNX, siehe unten) --
+# passt in den bestehenden 100ms-Takt, ohne ihn zu verdoppeln.
+#
+# Modell lag urspruenglich NICHT vor (/var/lib/digital-retina/models/vision/
+# emotion_ferplus.onnx existierte nicht, Verzeichnis root-only beschreibbar)
+# -- deshalb ein lokaler, user-beschreibbarer Modellordner statt sudo/Eingriff
+# in den System-Modellordner.
+os.environ.setdefault("RETINA_VISION_MODELS", os.path.join(_HIER, "models", "vision"))
+
+_RETINA_DIR = "/home/ai-core-node/digital-retina"
+if _RETINA_DIR not in sys.path:
+    sys.path.insert(0, _RETINA_DIR)
+
+try:
+    from retina.vision import face_emotion as _fer
+    _FER_VERFUEGBAR = _fer.is_available()
+except Exception:
+    _fer = None
+    _FER_VERFUEGBAR = False
+
+# EMPIRISCH GEPRUEFT am 2026-09-11 12:13 mit Gabriel live vor der Kamera.
+===CAMERA_METHODS===
+    return zuordnung.get((sx, sy), "geradeaus")
+
+
+class Blickfuehrung:
+    """Ein Prozess-weites Singleton (siehe instanz()). starten()/stoppen()
+    sind idempotent und duerfen von der Fensterverwaltung direkt an
+    oeffnen()/schliessen() gehaengt werden."""
+
+    def __init__(self):
+        self._cap = None
+        self._kaskade = None
+        self._thread = None
+        self._lauf = False
+        self._lock = threading.Lock()
+        self._ziel = None          # (cx, cy, anteil) normiert 0..1
+        self._kandidat_seit = 0
+        self._letzte_erkennung_ts = 0.0
+        self._letzte_emotion = None       # letztes face_emotion.classify_faces()-dict
+        self._letzte_emotion_ts = 0.0
+        self.verfuegbar = cv2 is not None
+
+    def _kamera_oeffnen(self):
+        for idx in (KAMERA_INDEX, 0, 1, 2, 3, 4):
+            try:
+                cap = cv2.VideoCapture(idx, cv2.CAP_V4L2)
+            except Exception:
+                continue
+            if cap.isOpened():
+                cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+                cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+                return cap
+            cap.release()
+        return None
+
+    def starten(self) -> bool:
+        """Kameraexklusivitaet: stoppt frankenstein-sehen, oeffnet selbst,
+        startet den Erkennungs-Thread. Gibt False zurueck (und macht den
+        Sichtdienst sofort wieder an), wenn kein Kamerazugriff moeglich war
+        -- kein Vortaeuschen einer Blickfuehrung ohne echtes Bild."""
+        if not self.verfuegbar:
+            return False
+        with self._lock:
+            if self._lauf:
+                return True
+            subprocess.run(["systemctl", "--user", "stop", "frankenstein-sehen"],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            time.sleep(0.6)  # Geraet muss wirklich frei werden, siehe Docstring
+            try:
+                self._kaskade = cv2.CascadeClassifier(
+                    cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            except Exception:
+                self._kaskade = None
+            self._cap = self._kamera_oeffnen() if self._kaskade is not None else None
+            if self._cap is None:
+                # Kein sicherer Weg -- Sichtdienst SOFORT wieder hochfahren,
+                # ehrlich aufgeben statt eine kaputte Blickfuehrung zu bauen.
+                subprocess.run(["systemctl", "--user", "start", "frankenstein-sehen"],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                return False
+            try:
+                with open(LOCK_PFAD, "w") as f:
+                    f.write(str(os.getpid()))
+            except Exception:
+                pass
+            self._ziel = None
+            self._kandidat_seit = 0
+            self._lauf = True
+            self._thread = threading.Thread(target=self._schleife, daemon=True)
+            self._thread.start()
+            print("[blick] Kamera uebernommen, frankenstein-sehen angehalten")
+            return True
+
+    def stoppen(self):
+        """IMMER (auch im Fehlerfall) wird frankenstein-sehen am Ende neu
+        gestartet -- das ist Gabriels harte Bedingung, siehe Docstring."""
+        with self._lock:
+            war_aktiv = self._lauf
+            self._lauf = False
+        if self._thread:
+            self._thread.join(timeout=2.0)
+            self._thread = None
+        if self._cap is not None:
+            try:
+                self._cap.release()
+            except Exception:
+                pass
+            self._cap = None
+        try:
+            os.remove(LOCK_PFAD)
+        except Exception:
+            pass
+        subprocess.run(["systemctl", "--user", "start", "frankenstein-sehen"],
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        if war_aktiv:
+            print("[blick] Kamera freigegeben, frankenstein-sehen wieder gestartet")
+

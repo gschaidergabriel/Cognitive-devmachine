@@ -1,0 +1,45 @@
+SANDBOX=/tmp/fred-omega-sandbox.4977lK/repo
+HEAD=37aed62d3ef3714b278026e5c251403952b7dbf2
+=== OMEGA PYTEST ===
+F....................................................................... [ 87%]
+..........                                                               [100%]
+=================================== FAILURES ===================================
+________ test_manifest_names_one_self_and_single_world_brain_organ_set _________
+
+    def test_manifest_names_one_self_and_single_world_brain_organ_set():
+        data = omega.manifest()
+        assert data["self"] == "OMEGA"
+        assert data["body"] == "FranKenstein 2.0"
+>       assert set(data["organs"]) == {
+            "identity",
+            "state",
+            "grid",
+            "externalized_cognition",
+            "externalized_learning",
+            "cognitive_regulation",
+            "world_state",
+            "world_manifold",
+            "world_bridge",
+            "world_hybrid",
+            "grf_field",
+            "world_turn",
+            "grf_brain",
+            "titan",
+            "arm_bus",
+            "presentation_floor",
+            "terminal",
+            "voice",
+            "omni",
+        }
+E       AssertionError: assert {'arm_bus', '..., 'omni', ...} == {'arm_bus', '...f_field', ...}
+E         
+E         Extra items in the right set:
+E         'externalized_cognition'
+E         'cognitive_regulation'
+E         'externalized_learning'
+E         Use -v to get more diff
+
+tests/test_omega_runtime.py:21: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_runtime.py::test_manifest_names_one_self_and_single_world_brain_organ_set
+1 failed, 81 passed in 1.94s

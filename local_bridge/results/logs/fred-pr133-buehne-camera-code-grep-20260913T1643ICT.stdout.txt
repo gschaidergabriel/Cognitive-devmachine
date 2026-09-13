@@ -1,0 +1,24 @@
+513:#   5. wach_aufmerksam      -- ein Gesicht ist gerade erkannt (blick.py, "WO
+523:    import blick as _blick_modul
+525:    _blick_modul = None
+593:    ausdruck (welches Portraet, siehe oben) und blick (Gesichtsposition,
+594:    siehe blick.py). Fehlt eine Quelle, wird ehrlich None/Standard geliefert
+599:           "blick": {"anwesend": False, "richtung": None, "nah": False,
+638:    if _blick_modul is not None:
+640:            b = _blick_modul.instanz()
+642:            aus["blick"] = {"anwesend": anwesend, "richtung": richtung, "nah": nah,
+650:                aus["blick"]["cx"], aus["blick"]["cy"], aus["blick"]["anteil"] = roh
+653:            # Gabriel-Beobachtung: FER+ auf demselben Blick-Frame (blick.py,
+1054:        if _blick_modul is not None:
+1056:                _blick_modul.instanz().starten()
+1143:                                    capture_output=True, text=True, env=env, timeout=2)
+1150:                                         capture_output=True, text=True, env=env, timeout=2)
+1181:        if _blick_modul is not None:
+1183:                _blick_modul.instanz().stoppen()
+1246:            if _blick_modul is not None:
+1248:                    _blick_modul.instanz().stoppen()
+===BLICK_FILES===
+-rwxrwxr-x 1 ai-core-node ai-core-node  18479 Sep 11 21:22 /home/ai-core-node/.claude/star/visual/blick.py
+-rwxrwxr-x 1 ai-core-node ai-core-node   3137 Sep 11 04:03 /home/ai-core-node/.claude/star/visual/blick_waechter.py
+-rw-rw-r-- 1 ai-core-node ai-core-node 333536 Sep 11 22:55 /home/ai-core-node/.claude/star/visual/liveblick_10.png
+-rw-rw-r-- 1 ai-core-node ai-core-node 335277 Sep 11 22:55 /home/ai-core-node/.claude/star/visual/liveblick_11.png

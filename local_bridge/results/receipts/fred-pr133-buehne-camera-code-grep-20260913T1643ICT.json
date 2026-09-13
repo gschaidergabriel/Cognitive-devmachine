@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-pr133-buehne-camera-code-grep-20260913T1643ICT",
+  "command_sha256": "d428f312959e37afb3e6d5d904746c494018783fbfa725ca6645cf5393c591c2",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T09:43:19.395259+00:00",
+  "finished_at": "2026-09-13T09:43:19.417338+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "8b4d046e69ec3dac0259c03546d210ff09fa152dbb0364dddbcbdfb1cc6f5b69",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "513:#   5. wach_aufmerksam      -- ein Gesicht ist gerade erkannt (blick.py, \"WO\n523:    import blick as _blick_modul\n525:    _blick_modul = None\n593:    ausdruck (welches Portraet, siehe oben) und blick (Gesichtsposition,\n594:    siehe blick.py). Fehlt eine Quelle, wird ehrlich None/Standard geliefert\n599:           \"blick\": {\"anwesend\": False, \"richtung\": None, \"nah\": False,\n638:    if _blick_modul is not None:\n640:            b = _blick_modul.instanz()\n642:            aus[\"blick\"] = {\"anwesend\": anwesend, \"richtung\": richtung, \"nah\": nah,\n650:                aus[\"blick\"][\"cx\"], aus[\"blick\"][\"cy\"], aus[\"blick\"][\"anteil\"] = roh\n653:            # Gabriel-Beobachtung: FER+ auf demselben Blick-Frame (blick.py,\n1054:        if _blick_modul is not None:\n1056:                _blick_modul.instanz().starten()\n1143:                                    capture_output=True, text=True, env=env, timeout=2)\n1150:                                         capture_output=True, text=True, env=env, timeout=2)\n1181:        if _blick_modul is not None:\n1183:                _blick_modul.instanz().stoppen()\n1246:            if _blick_modul is not None:\n1248:                    _blick_modul.instanz().stoppen()\n===BLICK_FILES===\n-rwxrwxr-x 1 ai-core-node ai-core-node  18479 Sep 11 21:22 /home/ai-core-node/.claude/star/visual/blick.py\n-rwxrwxr-x 1 ai-core-node ai-core-node   3137 Sep 11 04:03 /home/ai-core-node/.claude/star/visual/blick_waechter.py\n-rw-rw-r-- 1 ai-core-node ai-core-node 333536 Sep 11 22:55 /home/ai-core-node/.claude/star/visual/liveblick_10.png\n-rw-rw-r-- 1 ai-core-node ai-core-node 335277 Sep 11 22:55 /home/ai-core-node/.claude/star/visual/liveblick_11.png\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

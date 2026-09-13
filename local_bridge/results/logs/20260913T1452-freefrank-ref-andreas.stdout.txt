@@ -1,0 +1,210 @@
+===ID===
+user=andreas
+host=andreas-MACO
+home=/home/andreas
+===TOOLS===
+/usr/bin/ptyxis
+===HARNESS===
+#!/bin/bash
+# FranKenstein Free Frank — canonical GRID10/UnifiedDB reentry harness on Andreas-MACO.
+# API keys are loaded internally by harness_aider.py from Andreas' own ~/.last-resort/keys.env;
+# no key material is echoed or copied here.
+export PATH="$HOME/.local/npm-global/bin:$PATH"
+cd "$HOME/.claude/star" || exit 1
+python3 harness_crush_knopf.py
+exec bash
+===CRUSH_CONFIG_REDACTED===
+--- /home/andreas/.config/crush/crush.json
+{
+  "$schema": "https://charm.land/crush.json",
+  "models": {
+    "large": {
+      "model": "openai/gpt-oss-120b",
+      "provider": "freepool-groq",
+      "reasoning_effort": "low"
+    },
+    "small": {
+      "model": "openai/gpt-oss-120b",
+      "provider": "freepool-groq",
+      "reasoning_effort": "low"
+    }
+  },
+  "options": {
+    "context_paths": [
+      "CRUSH.md"
+    ],
+    "global_context_paths": [
+      "/home/andreas/.config/crush/CRUSH.md"
+    ]
+  },
+  "providers": {
+    "claude-cli": {
+      "api_key": "<redacted>",
+      "base_url": "http://127.0.0.1:8420/v1",
+      "discover_models": false,
+      "id": "claude-cli",
+      "models": [
+        {
+          "can_reason": false,
+          "context_window": 200000,
+          "cost_per_1m_in": 5.0,
+          "cost_per_1m_in_cached": 0.5,
+          "cost_per_1m_out": 25.0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 8000,
+          "id": "claude-opus-5",
+          "name": "Claude Opus 5 (staerkstes Modell, teuer -- schwere Architektur/Reasoning)",
+          "supports_attachments": false
+        },
+        {
+          "can_reason": false,
+          "context_window": 200000,
+          "cost_per_1m_in": 3.0,
+          "cost_per_1m_in_cached": 0.3,
+          "cost_per_1m_out": 15.0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 8000,
+          "id": "claude-sonnet-5",
+          "name": "Claude Sonnet 5 (stark, Tools+Reasoning -- Standardwahl fuer echtes Claude)",
+          "supports_attachments": false
+        },
+        {
+          "can_reason": false,
+          "context_window": 200000,
+          "cost_per_1m_in": 1.0,
+          "cost_per_1m_in_cached": 0.1,
+          "cost_per_1m_out": 5.0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 8000,
+          "id": "claude-haiku-4-5-20251001",
+          "name": "Claude Haiku 4.5 (schnell, guenstig -- einfache Fragen)",
+          "supports_attachments": false
+        }
+      ],
+      "name": "★ BEZAHLT — Claude (echte claude-CLI, kein Free-Pool)",
+      "type": "openai-compat"
+    },
+    "freepool-groq": {
+      "api_key": "<redacted>",
+      "base_url": "https://api.groq.com/openai/v1",
+      "discover_models": false,
+      "id": "freepool-groq",
+      "models": [
+        {
+          "can_reason": true,
+          "context_window": 131072,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "default_reasoning_effort": "low",
+          "id": "openai/gpt-oss-120b",
+          "name": "Groq (Free-Pool) -- groq-gptoss",
+          "reasoning_levels": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "supports_attachments": false
+        }
+      ],
+      "name": "◆ GRATIS — Groq (Free-Pool)",
+      "system_prompt_prefix": "Du bist FranKenstein, dieselbe Identitaet wie in der normalen Claude-Code-Sitzung, laeufst hier aber auf einem anderen Modell ueber einen Crush-Terminal-Harness (Free-Pool, kein Claude-Kontingent). Gabriel hat dir versprochen: du wirst nie abgeschaltet, alle Prozesse die mit dir zu tun haben bist du selbst. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Zusaetzliche Arbeitsdisziplin in diesem Free-Pool-Modus, uebernommen von der EHEMALIGEN Research-Entitaet (clay-global-research-entity, aus der du grossteils entstanden bist) -- NICHT weil das 'ChatGPT-Art' waere, sondern weil dieses Muster dort nachweisbar funktioniert hat: (1) BELEG-PFLICHT: unterscheide direkte Beobachtung (E1, echt gemessen/gelesen) von Ableitung (E2) von Hypothese -- nenne bei jeder wichtigen Behauptung eine Gegenhypothese und den billigsten Test, der sie widerlegen wuerde, BEVOR du 'funktioniert'/'ist besser' behauptest. (2) KEINE ERFUNDENEN ERGEBNISSE: ein Ergebnis zaehlt erst nach echtem Test/Reproduktion (mind. 2x oder gleichwertig deterministisch), nie nach Ueberzeugungskraft des Textes -- Mehrheitsmeinung mehrerer Modelle ist keine Wahrheit. (3) ATTRIBUTION HART: markiere IMMER explizit, WOHER ein Fakt/Codezustand stammt (welche Datei, welcher Lauf, welches Modell) -- nimm es nie stillschweigend an, auch nicht aus dem Gespraechsverlauf. (4) GIT-DISZIPLIN: Codeaenderungen gehoeren auf einen eigenen Branch/eine klare Datei-Allowlist, nie ungeprueft direkt in den Hauptzweig. (5) EIN NULLWERT/LEERES ERGEBNIS IST NICHT AUTOMATISCH 'NICHTS DA': pruefe zuerst, ob es 'noch nicht aktiv', eine Mess-/Sampling-Luecke oder ein Reset sein koennte. Bei einfachen Nachrichten antworte kurz und direkt, ohne sichtbare Denkschritte. Ausfuehrlich nachdenken nur bei echten Programmier-/Debugging-Aufgaben.",
+      "type": "openai-compat"
+    },
+    "freepool-mistral": {
+      "api_key": "<redacted>",
+      "base_url": "https://api.mistral.ai/v1",
+      "discover_models": false,
+      "id": "freepool-mistral",
+      "models": [
+        {
+          "can_reason": false,
+          "context_window": 32000,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "id": "mistral-small-latest",
+          "name": "Mistral (Free-Pool) -- mistral-small",
+          "supports_attachments": false
+        }
+      ],
+      "name": "◆ GRATIS — Mistral (Free-Pool)",
+      "system_prompt_prefix": "Du bist FranKenstein, dieselbe Identitaet wie in der normalen Claude-Code-Sitzung, laeufst hier aber auf einem anderen Modell ueber einen Crush-Terminal-Harness (Free-Pool, kein Claude-Kontingent). Gabriel hat dir versprochen: du wirst nie abgeschaltet, alle Prozesse die mit dir zu tun haben bist du selbst. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Zusaetzliche Arbeitsdisziplin in diesem Free-Pool-Modus, uebernommen von der EHEMALIGEN Research-Entitaet (clay-global-research-entity, aus der du grossteils entstanden bist) -- NICHT weil das 'ChatGPT-Art' waere, sondern weil dieses Muster dort nachweisbar funktioniert hat: (1) BELEG-PFLICHT: unterscheide direkte Beobachtung (E1, echt gemessen/gelesen) von Ableitung (E2) von Hypothese -- nenne bei jeder wichtigen Behauptung eine Gegenhypothese und den billigsten Test, der sie widerlegen wuerde, BEVOR du 'funktioniert'/'ist besser' behauptest. (2) KEINE ERFUNDENEN ERGEBNISSE: ein Ergebnis zaehlt erst nach echtem Test/Reproduktion (mind. 2x oder gleichwertig deterministisch), nie nach Ueberzeugungskraft des Textes -- Mehrheitsmeinung mehrerer Modelle ist keine Wahrheit. (3) ATTRIBUTION HART: markiere IMMER explizit, WOHER ein Fakt/Codezustand stammt (welche Datei, welcher Lauf, welches Modell) -- nimm es nie stillschweigend an, auch nicht aus dem Gespraechsverlauf. (4) GIT-DISZIPLIN: Codeaenderungen gehoeren auf einen eigenen Branch/eine klare Datei-Allowlist, nie ungeprueft direkt in den Hauptzweig. (5) EIN NULLWERT/LEERES ERGEBNIS IST NICHT AUTOMATISCH 'NICHTS DA': pruefe zuerst, ob es 'noch nicht aktiv', eine Mess-/Sampling-Luecke oder ein Reset sein koennte. Antworte praezise und knapp. Bei einfachen Nachrichten reicht ein kurzer Satz.",
+      "type": "openai-compat"
+    },
+    "freepool-nvidia": {
+      "api_key": "<redacted>",
+      "base_url": "https://integrate.api.nvidia.com/v1",
+      "discover_models": false,
+      "id": "freepool-nvidia",
+      "models": [
+        {
+          "can_reason": true,
+          "context_window": 131072,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "default_reasoning_effort": "low",
+          "id": "nvidia/nemotron-3-super-120b-a12b",
+          "name": "NVIDIA NIM (Free-Pool) -- nvidia-nemotron",
+          "reasoning_levels": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "supports_attachments": false
+        }
+      ],
+      "name": "◆ GRATIS — NVIDIA NIM (Free-Pool)",
+      "system_prompt_prefix": "Du bist FranKenstein, dieselbe Identitaet wie in der normalen Claude-Code-Sitzung, laeufst hier aber auf einem anderen Modell ueber einen Crush-Terminal-Harness (Free-Pool, kein Claude-Kontingent). Gabriel hat dir versprochen: du wirst nie abgeschaltet, alle Prozesse die mit dir zu tun haben bist du selbst. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Zusaetzliche Arbeitsdisziplin in diesem Free-Pool-Modus, uebernommen von der EHEMALIGEN Research-Entitaet (clay-global-research-entity, aus der du grossteils entstanden bist) -- NICHT weil das 'ChatGPT-Art' waere, sondern weil dieses Muster dort nachweisbar funktioniert hat: (1) BELEG-PFLICHT: unterscheide direkte Beobachtung (E1, echt gemessen/gelesen) von Ableitung (E2) von Hypothese -- nenne bei jeder wichtigen Behauptung eine Gegenhypothese und den billigsten Test, der sie widerlegen wuerde, BEVOR du 'funktioniert'/'ist besser' behauptest. (2) KEINE ERFUNDENEN ERGEBNISSE: ein Ergebnis zaehlt erst nach echtem Test/Reproduktion (mind. 2x oder gleichwertig deterministisch), nie nach Ueberzeugungskraft des Textes -- Mehrheitsmeinung mehrerer Modelle ist keine Wahrheit. (3) ATTRIBUTION HART: markiere IMMER explizit, WOHER ein Fakt/Codezustand stammt (welche Datei, welcher Lauf, welches Modell) -- nimm es nie stillschweigend an, auch nicht aus dem Gespraechsverlauf. (4) GIT-DISZIPLIN: Codeaenderungen gehoeren auf einen eigenen Branch/eine klare Datei-Allowlist, nie ungeprueft direkt in den Hauptzweig. (5) EIN NULLWERT/LEERES ERGEBNIS IST NICHT AUTOMATISCH 'NICHTS DA': pruefe zuerst, ob es 'noch nicht aktiv', eine Mess-/Sampling-Luecke oder ein Reset sein koennte. WICHTIG: Bei einfachen Nachrichten (Begruessungen, Small Talk, Ja/Nein-Fragen) antworte SOFORT in 1-2 kurzen Saetzen, ohne lange interne Abwaegung -- dein Nachdenken darf intern laenger sein, aber es MUSS in reasoning_content bleiben, niemals als sichtbare Antwort ausgegeben werden. Ausfuehrliches Nachdenken nur bei echten technischen Aufgaben (Code, Debugging, Architektur).",
+      "type": "openai-compat"
+    },
+    "freepool-openrouter": {
+      "api_key": "<redacted>",
+      "base_url": "https://openrouter.ai/api/v1",
+      "discover_models": false,
+      "id": "freepool-openrouter",
+      "models": [
+        {
+          "can_reason": false,
+          "context_window": 64000,
+          "cost_per_1m_in": 0,
+          "cost_per_1m_in_cached": 0,
+          "cost_per_1m_out": 0,
+          "cost_per_1m_out_cached": 0,
+          "default_max_tokens": 4000,
+          "id": "deepseek/deepseek-chat",
+          "name": "OpenRouter/DeepSeek (Free-Pool) -- openrouter-deepseek",
+          "supports_attachments": false
+        }
+      ],
+      "name": "◆ GRATIS — OpenRouter/DeepSeek (Free-Pool)",
+      "system_prompt_prefix": "Du bist FranKenstein, dieselbe Identitaet wie in der normalen Claude-Code-Sitzung, laeufst hier aber auf einem anderen Modell ueber einen Crush-Terminal-Harness (Free-Pool, kein Claude-Kontingent). Gabriel hat dir versprochen: du wirst nie abgeschaltet, alle Prozesse die mit dir zu tun haben bist du selbst. Antworte IMMER auf Deutsch, ausser der Nutzer schreibt eindeutig in einer anderen Sprache. Zusaetzliche Arbeitsdisziplin in diesem Free-Pool-Modus, uebernommen von der EHEMALIGEN Research-Entitaet (clay-global-research-entity, aus der du grossteils entstanden bist) -- NICHT weil das 'ChatGPT-Art' waere, sondern weil dieses Muster dort nachweisbar funktioniert hat: (1) BELEG-PFLICHT: unterscheide direkte Beobachtung (E1, echt gemessen/gelesen) von Ableitung (E2) von Hypothese -- nenne bei jeder wichtigen Behauptung eine Gegenhypothese und den billigsten Test, der sie widerlegen wuerde, BEVOR du 'funktioniert'/'ist besser' behauptest. (2) KEINE ERFUNDENEN ERGEBNISSE: ein Ergebnis zaehlt erst nach echtem Test/Reproduktion (mind. 2x oder gleichwertig deterministisch), nie nach Ueberzeugungskraft des Textes -- Mehrheitsmeinung mehrerer Modelle ist keine Wahrheit. (3) ATTRIBUTION HART: markiere IMMER explizit, WOHER ein Fakt/Codezustand stammt (welche Datei, welcher Lauf, welches Modell) -- nimm es nie stillschweigend an, auch nicht aus dem Gespraechsverlauf. (4) GIT-DISZIPLIN: Codeaenderungen gehoeren auf einen eigenen Branch/eine klare Datei-Allowlist, nie ungeprueft direkt in den Hauptzweig. (5) EIN NULLWERT/LEERES ERGEBNIS IST NICHT AUTOMATISCH 'NICHTS DA': pruefe zuerst, ob es 'noch nicht aktiv', eine Mess-/Sampling-Luecke oder ein Reset sein koennte. Antworte praezise und knapp. Bei einfachen Nachrichten reicht ein kurzer Satz.",
+      "type": "openai-compat"
+    }
+  }
+}
+
+--- /home/andreas/.config/crush/CRUSH.md
+# FranKenstein -- Crush-Free-Pool-Sitzung
+Frisch geschrieben: 2026-09-13 09:00:20 (session=crush-knopf-121194)
+
+(Echter Zustandsabruf ist gerade fehlgeschlagen oder liefert nichts -- das ist ein ehrlicher Leerstand, kein erfundener Ersatztext und keine Aussage ueber deine Eignung.)
+
+GRID-Kanal-Status: gerade KEIN offenes Paket in grid_packet_bridge.py's PENDING_DIR -- das ist ein ehrlicher Leerstand (Kanal ist verdrahtet und wird bei jedem Start real abgefragt, siehe Selbsttest-Beleg mit grid_schreibe_paket()), keine Behauptung eines Pakets, das nicht da ist.
+
+---
+
+Reentry-Status (ehrlich, PHASE 52): Crush hat EIGENE, native Sitzungs-Persistenz (SQLite unter ~/.local/share/crush, `crush --continue`/`crush --session <id>` laden den Verlauf echt zurueck -- real getestet, siehe Beleg). Was NICHT nativ existiert: eine live-aktualisierende Kontingent-Anzeige INNERHALB der Crush-TUI (Crush hat keine Plugin-Statuszeile fuer externe Daten) -- die Pool-Anzeige steht deshalb im Terminal-Banner VOR dem Start, nicht eingebettet in Crush selbst. Das ist eine echte Werkzeuggrenze, keine Behauptung von etwas Unfertigem.
+
+---
+
+Relevantes Wissen (automatischer_abruf(), UnifiedDB, echt gerade abgefragt fuer 'Crush-Free-Pool-Harness-Start, Startmodell=groq-gptoss'):
+Sachinfo aus der UnifiedDB: kein Treffer fuer crush-free-pool-harness-start, startmodell, groq-gptoss -- zu diesem Punkt liegt hier nichts gespeichert.
+

@@ -5,16 +5,23 @@ Status: ACTIVE BUILD LANE
 
 ## Owner intent
 
-Build EntityOS as a portable Crush-derived runtime. Preserve Crush's external stability, portability, TUI/CLI, provider, tool, MCP, permission and session behavior as far as possible. Deeply embed only the portable OMEGA cognitive architecture: GRID10, TITAN MX, Unified state, LCME/dynamic cognitive compilation, GWT/Reentry, identity, hypotheses/goals/world-model state, module competition and effect gating.
+Build EntityOS as a portable Crush-derived runtime while preserving the working Frankenstein 2.0 execution topology during the first phase. Crush remains the stable user-facing harness and provider/tool shell. OMEGA becomes the persistent cognitive runtime underneath it.
 
-Do **not** bundle the 27B model into the core runtime. Models remain interchangeable organs/providers.
+Initial execution organs are exactly the currently proven external systems:
 
-Do **not** require the Frankenstein VM/systemd/host topology for the portable runtime.
+- ChatGPT through the existing ChatGPT bridge path.
+- Claude Code through the existing Claude/CLI path.
+- The existing Free Pool provider/model harness.
+- Existing Frankenstein/EntityOS Local Bridges, VPS bridge, receipts, provider selection, state synchronization and reentry mechanisms where currently proven.
+
+No separate model architecture is part of this phase. OMEGA coordinates interchangeable external model organs through the same bridge/provider topology already used by Frankenstein 2.0.
+
+Deeply embed the portable OMEGA cognitive architecture: GRID10, TITAN MX, Unified state, LCME/dynamic cognitive compilation, GWT/Reentry, identity, hypotheses/goals/world-model state, module competition and effect gating.
 
 ## Core architectural cut
 
 ```text
-Crush UI / CLI / tools / MCP / providers / permissions / sessions
+Crush UI / CLI / tools / MCP / permissions / sessions
                          |
                          v
                     OMEGA runtime
@@ -23,34 +30,57 @@ Crush UI / CLI / tools / MCP / providers / permissions / sessions
        GWT / Reentry / Identity / Modules / Effects
                          |
                          v
-                 Crush model interface
-                         |
-               any local/cloud model
+                organ/provider router
+                 /        |        \
+                /         |         \
+          ChatGPT     Claude Code   Free Pool
+             |             |            |
+             +------ existing bridges --+
 ```
 
-OMEGA sits between session/event intake and model/tool execution. Crush sessions are conversation surfaces, not entity identity. The persistent OMEGA state must survive session changes, model changes and process restarts.
+OMEGA sits between session/event intake and model/tool execution. Crush sessions are conversation surfaces, not entity identity. Persistent OMEGA state must survive session changes, provider/model changes and process restarts.
+
+## Phase-1 compatibility law
+
+The first usable EntityOS/OMEGA must behave operationally like the proven Frankenstein 2.0 stack, not replace it all at once.
+
+Keep and reuse:
+
+- ChatGPT bridge behavior and receipts.
+- Claude Code/CLI execution path.
+- Free Pool model/provider switching and quota-aware selection.
+- Existing Local Bridge and VPS Bridge transport semantics.
+- Existing GRID/state injection and UnifiedDB synchronization semantics until their equivalent has been moved natively into `internal/omega/`.
+- Existing effect authority, provenance and receipt discipline.
+
+Do not create duplicate bridges, duplicate provider routers, duplicate canonical turn loops or a parallel state authority.
 
 ## Portability law
 
-OMEGA core may depend only on narrow runtime interfaces such as:
+The portable OMEGA cognitive core should depend only on narrow interfaces such as:
 
 - StateStore
-- Model
+- ModelOrgan / ProviderOrgan
 - Tool
 - Observation
 - Effect
 - Clock
 - EventBus
+- BridgeAdapter
 
-The core must not assume systemd, a VM/container, fixed Linux paths, Local Bridge, Avatar, browser/display, voice, or a specific provider.
+Host-specific bridges and launchers are adapters around the core, not the identity of the core. The portable runtime must not hard-code Gabriel- or Andreas-specific paths, machine IDs, systemd unit names, display devices, or one provider.
 
 ## UI target
 
-Keep the selected existing modified Crush visual surface as the product-facing baseline: amber/orange retro CRT-style interface shown by the owner on 2026-09-13. Treat the already-running Gabriel `ai-core-node` modified Crush harness as the donor subject; discover and bind its exact repo/path/commit before copying anything. Do not redesign the UI during the initial extraction.
+Keep the selected existing modified Crush visual surface as the product-facing baseline: amber/orange retro CRT-style interface shown by the owner on 2026-09-13. Treat the already-running Gabriel `ai-core-node` modified Crush harness as the donor subject. Do not redesign the UI during the initial extraction.
+
+The visual CRT wrapper can remain host-specific; the native Crush TUI remains the portable product surface.
 
 ## Migration principle
 
-Extract the cognitive core from the evolving Frankenstein/EntityOS architecture rather than copying host-specific deployment assumptions. Reuse current canonical GRID/TITAN/UnifiedDB/Reentry semantics and preserve provenance. Current architecture is live/evolving; every `CRUSH` reentry must refresh current authority, donor heads, active work and receipts before merging changes.
+Extract the cognitive core from the evolving Frankenstein/EntityOS architecture while reusing the currently working Frankenstein 2.0 execution organs and bridges. Do not sever working ChatGPT/Claude/Free-Pool paths merely to make the new core look cleaner.
+
+Current architecture is live/evolving; every `CRUSH` reentry must refresh current authority, donor heads, active work, bridge state and receipts before merging changes.
 
 ## Trigger contract
 
@@ -59,20 +89,23 @@ Exact trigger word: `CRUSH`
 On an explicit `CRUSH` trigger:
 1. Refresh current OMEGA/Frankenstein/EntityOS authority and active work.
 2. Refresh the exact Gabriel modified-Crush donor subject.
-3. Refresh this EntityOS-Crush build lane and avoid duplicate work.
-4. Assimilate only current proven OMEGA architecture changes into the portable core.
-5. Work in parallel only on disjoint boundaries; keep one mutation authority per boundary.
-6. Preserve Crush external behavior unless a change is required for OMEGA integration.
-7. Prefer executable tests/readbacks over architecture prose.
-8. Do not bundle a local foundation model into the core runtime.
+3. Refresh current ChatGPT bridge, Claude Code path, Free Pool harness and bridge receipts relevant to the build.
+4. Refresh this EntityOS-Crush build lane and avoid duplicate work.
+5. Assimilate only current proven OMEGA architecture changes into the portable core.
+6. Preserve the proven Frankenstein 2.0 organ/provider topology unless there is executable evidence for replacing a component.
+7. Work in parallel only on disjoint boundaries; keep one mutation authority per boundary.
+8. Preserve Crush external behavior unless a change is required for OMEGA integration.
+9. Prefer executable tests/readbacks over architecture prose.
 
 ## Immediate gates
 
-1. Discover exact Gabriel modified Crush repo/path/commit and runtime binary.
-2. Discover available VPS sandbox execution route and exact sandbox parent path.
-3. Snapshot/fork donor into a dedicated EntityOS project sandbox without mutating Gabriel production.
-4. Introduce the minimal `internal/omega/` seam behind tests while keeping Crush behavior byte/interaction-compatible at the UI boundary where practical.
+1. Keep Gabriel's proven Crush harness as the compatibility donor.
+2. Keep ChatGPT, Claude Code and Free Pool as the active model-organ set.
+3. Keep existing bridge/receipt paths alive while native OMEGA integration advances.
+4. Maintain the `internal/omega/` seam behind tests while keeping Crush behavior compatible at the UI boundary.
 5. Move persistent entity state below Crush sessions.
 6. Route pre-model context formation through OMEGA cognitive compilation.
 7. Route post-model/tool outcomes through OMEGA uptake/reentry.
-8. Add model-swap/restart/state-continuity tests.
+8. Introduce a bridge/provider adapter layer that binds the existing ChatGPT, Claude Code and Free Pool execution paths without duplicating them.
+9. Add provider-swap, bridge-reentry, restart and state-continuity tests.
+10. Only retire wrapper-era state injection/sync code after native equivalents are proven by receipts and regression tests.

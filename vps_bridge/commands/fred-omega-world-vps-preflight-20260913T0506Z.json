@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-omega-world-vps-preflight-20260913T0506Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu; echo 'BOUNDARY=VPS_SANDBOX'; hostname; pwd; python3 --version; echo '--- git checkouts ---'; find /workspace -maxdepth 4 -type d -name .git -print 2>/dev/null | sort | head -80; echo '--- omega runtime ---'; if [ -d /workspace/omega_runtime/state ]; then ls -la /workspace/omega_runtime/state | head -80; fi"
+}

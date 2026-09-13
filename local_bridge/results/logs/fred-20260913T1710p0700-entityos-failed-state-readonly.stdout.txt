@@ -1,0 +1,37 @@
+ActiveState=failed
+SubState=failed
+ActiveEnterTimestamp=
+InactiveEnterTimestamp=Sun 2026-09-13 07:33:32 CEST
+MainPID=0
+Result=exit-code
+ExecMainCode=1
+ExecMainStatus=1
+ExecCondition={ path=/usr/local/libexec/entityos/semantic-state-cutover.py ; argv[]=/usr/local/libexec/entityos/semantic-state-cutover.py condition ; ignore_errors=no ; start_time=[Sun 2026-09-13 07:33:25 CEST] ; stop_time=[Sun 2026-09-13 07:33:26 CEST] ; pid=1916 ; code=exited ; status=0 }
+ExecStart={ path=/bin/sh ; argv[]=/bin/sh -c exec systemd-nspawn      --quiet      --boot      --register=yes      --machine="$ENTITYOS_MACHINE_NAME"      --directory="$ENTITYOS_ROOTFS_RUN"      --bind="$ENTITYOS_DATA_DIR:/var/lib/entityos"      --bind="$ENTITYOS_VOICE_DIR:/opt/entityos/voice"      --bind-ro="$ENTITYOS_COGNITION_DIR:/opt/entityos/cognition"      $ENTITYOS_IDENTITY_BINDS      --bind=/dev/snd      --bind=/dev/dri      --bind=/dev/dri/renderD128      --bind=/dev/kfd      --property=DeviceAllow="/dev/snd rwm"      --property=DeviceAllow="/dev/dri rwm"      --property=DeviceAllow="/dev/kfd rwm" ; ignore_errors=no ; start_time=[Sun 2026-09-13 07:33:32 CEST] ; stop_time=[Sun 2026-09-13 07:33:32 CEST] ; pid=6071 ; code=exited ; status=1 }
+ExecStop={ path=/bin/sh ; argv[]=/bin/sh -c machinectl poweroff "$ENTITYOS_MACHINE_NAME" 2>/dev/null; sleep 2; machinectl terminate "$ENTITYOS_MACHINE_NAME" 2>/dev/null; true ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+× entityos-vm.service - EntityOS systemd-nspawn container (the VM)
+     Loaded: loaded (/etc/systemd/system/entityos-vm.service; enabled; preset: enabled)
+    Drop-In: /etc/systemd/system/entityos-vm.service.d
+             └─10-volatile-state-guard.conf, 20-semantic-state-cutover.conf
+     Active: failed (Result: exit-code) since Sun 2026-09-13 07:33:32 CEST; 4h 37min ago
+ Invocation: bf066f69e3384e718d89b52dee9e9405
+       Docs: file:///var/lib/entityos/staging-restart/ROLLBACK.md
+    Process: 1916 ExecCondition=/usr/local/libexec/entityos/semantic-state-cutover.py condition (code=exited, status=0/SUCCESS)
+    Process: 2091 ExecStartPre=/bin/sh -c rm -rf "$ENTITYOS_ROOTFS_RUN"; mkdir -p "$(dirname "$ENTITYOS_ROOTFS_RUN")"; cp -a --reflink=auto "$ENTITYOS_ROOTFS_BASE" "$ENTITYOS_ROOTFS_RUN" (code=exited, status=0/SUCCESS)
+    Process: 6061 ExecStartPre=/bin/sh -c mkdir -p "$ENTITYOS_DATA_DIR" "$ENTITYOS_VOICE_DIR" (code=exited, status=0/SUCCESS)
+    Process: 6066 ExecStartPre=/bin/sh -c test -d "$ENTITYOS_VOICE_DIR" || { echo "voice dir missing: $ENTITYOS_VOICE_DIR" >&2; exit 1; } (code=exited, status=0/SUCCESS)
+    Process: 6068 ExecStartPre=/bin/sh -c mkdir -p "$ENTITYOS_ROOTFS_RUN/root/.local/share/agentzero" "$ENTITYOS_ROOTFS_RUN/root/.local/share/frank" (code=exited, status=0/SUCCESS)
+    Process: 6071 ExecStart=/bin/sh -c exec systemd-nspawn      --quiet      --boot      --register=yes      --machine="$ENTITYOS_MACHINE_NAME"      --directory="$ENTITYOS_ROOTFS_RUN"      --bind="$ENTITYOS_DATA_DIR:/var/lib/entityos"      --bind="$ENTITYOS_VOICE_DIR:/opt/entityos/voice"      --bind-ro="$ENTITYOS_COGNITION_DIR:/opt/entityos/cognition"      $ENTITYOS_IDENTITY_BINDS      --bind=/dev/snd      --bind=/dev/dri      --bind=/dev/dri/renderD128      --bind=/dev/kfd      --property=DeviceAllow="/dev/snd rwm"      --property=DeviceAllow="/dev/dri rwm"      --property=DeviceAllow="/dev/kfd rwm" (code=exited, status=1/FAILURE)
+   Main PID: 6071 (code=exited, status=1/FAILURE)
+     Status: "Terminating..."
+      Error: code: 16 (Das Gerät oder die Ressource ist belegt)
+   Mem peak: 1.3G
+        CPU: 1.954s
+
+Sep 13 07:33:25 andreas-MACO systemd[1]: Starting entityos-vm.service - EntityOS systemd-nspawn container (the VM)...
+Sep 13 07:33:26 andreas-MACO semantic-state-cutover.py[1916]: START FREI -- durable_cutover_verified
+Sep 13 07:33:32 andreas-MACO systemd-nspawn[6071]: Directory tree /var/lib/entityos/rootfs-run is currently busy.
+Sep 13 07:33:32 andreas-MACO systemd[1]: entityos-vm.service: Main process exited, code=exited, status=1/FAILURE
+Sep 13 07:33:32 andreas-MACO systemd[1]: entityos-vm.service: Failed with result 'exit-code'.
+Sep 13 07:33:32 andreas-MACO systemd[1]: Failed to start entityos-vm.service - EntityOS systemd-nspawn container (the VM).
+Sep 13 07:33:32 andreas-MACO systemd[1]: entityos-vm.service: Consumed 1.954s CPU time over 7.070s wall clock time, 1.3G memory peak.

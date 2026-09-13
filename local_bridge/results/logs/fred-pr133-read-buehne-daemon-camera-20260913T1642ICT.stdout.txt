@@ -1,0 +1,1257 @@
+#!/usr/bin/env python3
+"""buehne_daemon.py -- die "Buehne": FranKenstein sichtbar, wie ein Livestream.
+
+ARBEITSPAKET paket-1789069809553-3831a7 (Gabriel, 2026-09-11).
+
+WAS DAS IST: ein einziger Prozess mit zwei Aufgaben:
+  1. ein winziger HTTP-Server (nur 127.0.0.1, Port PORT), der die Buehnen-
+     seite ausliefert + den Chat aus f2_gesagt (READ-ONLY) + einer eigenen
+     lokalen Chat-Datei (getippte Zeilen, Datei-Ablage-Hinweise) mischt.
+  2. eine Schleife, die GENAU EINE Datei liest (zustand.json) und danach
+     ein echtes Chrome-App-Fenster oeffnet/schliesst. Diese Datei ist die
+     EINE Wahrheit -- Sprache (absicht.py), Dashboard (cortex_dashboard.py)
+     und Terminal (visual_cli.py) schreiben alle drei nur dorthin, nie in
+     einen eigenen Zustand.
+
+WAS NICHT ANGEFASST WIRD: gespraech_loop.py, stern.py, workspace.py,
+charakter.py, welt/, koerperpflege.py, sinne.py, buehne.py (das
+gleichnamige Modul im Sprachmodus -- ein Namensvetter, nicht dasselbe wie
+diese Datei hier!). unified.db wird ausschliesslich LESEND geoeffnet
+(mode=ro) -- der einzige eigene Zustand ist zustand.json (eine Datei,
+keine Tabelle) und buehne_lokal.db (eine eigene, separate SQLite-Datei
+fuer getippte Chatzeilen + Datei-Ablage-Hinweise, NICHT unified.db).
+
+EHRLICHKEIT (Gabriels Vorgabe woertlich): keine erfundene Zuschauerzahl,
+keine Fake-Herzchen, keine erfundenen fremden Chatnutzer. "1 Zuschauer" im
+UI ist eine feste Konstante, keine Messung -- es gibt in diesem Aufbau per
+Definition genau einen Bediener.
+
+MUNDBEWEGUNG: es gibt keinen Zugriff auf einen echten Audio-Pegel, ohne
+sinne.py/gespraech_loop.py anzufassen (verboten). Deshalb: SILBENTAKT-
+SCHAETZUNG aus der Textlaenge der neuen FranKenstein-Zeile (grobe
+Silben/Sekunde-Annahme), NICHT echter Pegel. Steht auch im Bericht.
+"""
+import io
+import json
+import os
+import signal
+import socket
+import sqlite3
+import subprocess
+import sys
+import threading
+import time
+import urllib.parse
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+# ── Pfade ────────────────────────────────────────────────────────────────
+VISUAL_DIR = os.path.dirname(os.path.abspath(__file__))
+ZUSTAND_PFAD = os.path.join(VISUAL_DIR, "zustand.json")
+LOKAL_DB = os.path.join(VISUAL_DIR, "buehne_lokal.db")
+UPLOADS_DIR = os.path.join(VISUAL_DIR, "uploads")
+CHROME_PROFIL = os.path.join(VISUAL_DIR, "chrome-profile")
+PID_DATEI = os.path.join(VISUAL_DIR, "chrome.pid")
+LOG_DATEI = os.path.join(VISUAL_DIR, "chrome.log")
+GESICHT_BILD = "/usr/share/backgrounds/frank-login.png"
+# 2026-09-11: auf zugeschnittene Bilder umgestellt (y=0..573 von 1024) --
+# der halbtransparente "Schleier" war keine CSS-Ebene, sondern in allen 20
+# Quell-PNGs bei y=573 (56% Hoehe) eingebrannt (per PIL vermessen). Originale
+# in ausdruck/ augen/ kopf/ bleiben unangetastet, NICHT hierher zurueckstellen.
+AUSDRUCK_DIR = os.path.join(VISUAL_DIR, "ausdruck_zugeschnitten")
+AUGEN_DIR = os.path.join(VISUAL_DIR, "augen_zugeschnitten")
+KOPF_DIR = os.path.join(VISUAL_DIR, "kopf_zugeschnitten")
+GAZE_DIR = os.path.join(VISUAL_DIR, "augen_gaze")
+# ⭐ 2026-09-11 (Koordinator): die 12 Blinzel-Frames aus FRANK_AVATAR_RIG_V2.
+# Sie lagen im ZIP unter augen/blink/, wurden aber NIE ausgepackt -- nur
+# augen/gaze/ war deployt. Deshalb konnte die Buehne seit dem RGBA-Umbau
+# ueberhaupt nicht blinzeln: blinzeln() setzte Variablen, aber es gab kein
+# Bild, das man haette zeigen koennen. Gemessen: 2,4 % bewegte Gesichtsflaeche
+# ueber 24 s, kein einziger Lidschlag. Geometrie IDENTISCH zu den gaze-Flicken
+# (319x152 RGBA) -- passt ohne Umbau in dieselbe Ebene.
+# Ablauf geprueft: Rotanteil der Augen 0,61 % -> 0,00 % (Frame 08) -> 0,61 %,
+# also auf -> zu -> auf. Frame 00 und 11 sind byte-gleich (Schleifenpunkt).
+BLINK_DIR = os.path.join(VISUAL_DIR, "augen_blink")
+MUND_DIR = os.path.join(VISUAL_DIR, "mund_keyframes")
+# ⭐ 2026-09-11 (Bauauftrag Kopf-RGBA-Hauptebene): ECHTE Alpha-PNGs aus
+# FRANK_AVATAR_RIG_V2 (1536x1024, gleicher Leinwand-Koordinatenraum fuer Kopf
+# UND Koerper -- head_neck_anchor{768,600} und Koerper neck_anchor{768,505}
+# liegen im selben Raster, deshalb keine manuelle Versatz-Rechnung noetig,
+# beide Ebenen einfach deckungsgleich stapeln). Ersetzt AUSDRUCK_DIR/AUGEN_DIR/
+# KOPF_DIR als HAUPT-Kopfebene -- jene alten Ordner bleiben nur fuer
+# Sonderausdruck-Faelle/Altlast bestehen, siehe buehne.html.
+KOPF_RGBA_DIR = os.path.join(VISUAL_DIR, "kopf_rgba")
+KOERPER_RGBA_DIR = os.path.join(VISUAL_DIR, "koerper_rgba")
+HINTERGRUND_DIR = os.path.join(VISUAL_DIR, "hintergrund")
+# Feste Allowlist statt Ordnerinhalt zur Laufzeit zu vertrauen -- 5 Stimmungen
+# aus dem Rig-v2-Datensatz, je 60 Frames (nahtlose Schleife).
+HINTERGRUND_STIMMUNGEN = ("ruhig", "wach", "angespannt", "bedrohlich", "heiter")
+# ⭐ 2026-09-11: zweiter Datensatz (FRANK_EXPRESSION_RIG_EXTRA_V1, vom
+# Koordinator geliefert). NUR die 16 ECHT generierten Endpunkte uebernommen
+# (serious_dystopian + demonic) -- die Anime/Meme/Comic-Komposite wurden
+# nach Sichtpruefung NICHT uebernommen: leere/tote Augen, sichtbar
+# verrutschte Mundausschnitte, und satire_meme benennt echte, lebende
+# Politiker als Ausdrucks-Vorbild (Putin/Trump/Kim) -- Risiko ohne
+# erkennbaren visuellen Gewinn. Bewusst kleinere, aber ehrlich geprueft gute
+# Menge statt 44 mit Ausreissern (Formulierung aus dem Datensatz selbst).
+AUSDRUCK_ERWEITERT_DIR = os.path.join(VISUAL_DIR, "ausdruck_erweitert")
+# ⭐ 2026-09-11 (Koordinator, nach eigener Sichtpruefung): ALLE VIER Register
+# freigegeben. Vorher standen hier nur serious_dystopian und demonic -- 252 von
+# 398 Dateien waren damit unerreichbar, obwohl sie ausgeliefert waren.
+# Ich habe vier Endpunkte selbst angesehen (anime_zunge_raus,
+# anime_riesengrinsen, anime_augenrollen, cartoon_bockiger_junge, jeweils
+# stufe_06, Ausschnitt aufs Gesicht): klar lesbare Ausdruecke, Stil konsistent
+# zum Bestand, Mosaik intakt. Die fruehere Begruendung fuer den Ausschluss
+# ("leere/tote Augen, verrutschte Mundausschnitte") deckt sich NICHT mit dem,
+# was in diesen Bildern zu sehen ist.
+# Gabriel hat beide Register ausdruecklich bestellt: "lustige Gesichtsausdruecke
+# ... aber auch boese hyperrealistische oder lustige eher comichafte" -- und
+# spaeter: "was ChatGPT in seiner Gesamtheit abgeliefert hat, reicht".
+# Zur Politiker-Frage bei satire_meme: betroffen sind DATEINAMEN als
+# Schauspiel-Hinweis, nicht die Bilder. Das Manifest regelt das selbst
+# (identity_rule): "named pop-culture cues describe acting only, never
+# identity/likeness". Die Bilder zeigen FranKenstein, der eine Miene zieht.
+# Wer einzelne Ausdruecke schlecht findet, nimmt SIE raus -- nicht 252 Dateien
+# ungesehen.
+ERWEITERT_REGISTER = ("serious_dystopian", "demonic", "anime_90s", "satire_meme")
+ERWEITERT_UNTERORDNER = ("frontal", "yaw_proxy")
+
+# ⭐ 2026-09-11 (Koordinator): EIN SCHALTER fuer den geschaerften Bildsatz.
+#
+# Der Gesichtsfilter-Agent hat alle 972 Bilder EINMALIG offline durch
+# CLAHE(LAB)+Unschaerfemaskierung geschickt und in Parallelverzeichnisse mit
+# Endung `_ai` gelegt. Gemessen am Kopfbild:
+#       Kantenstaerke   9,86 -> 12,94   (+31 %)
+#       Kontrast       74,83 -> 75,70   (praktisch unveraendert)
+#       Alpha + Anker   in 40/40 Stichproben BYTE-IDENTISCH
+# Die Kacheln werden schaerfer und plastischer, das Mosaik bleibt Mosaik --
+# genau Gabriels "das Trashige veredeln, nicht wegglaetten".
+# ⚠️ GFPGAN wurde vorher geprueft und VERWORFEN: es glaettet die per
+# Landmark-Erkennung ausgerichtete Gesichts-Ellipse fotorealistisch, waehrend
+# Stirn/Haare/Ohren unberuehrt bleiben -> sichtbarer Stilbruch. Auch bei
+# 20/30/40 % Ueberblendung. Nicht wieder versuchen.
+#
+# WARUM EIN SCHALTER UND KEINE NEUEN ROUTEN: fuenf zusaetzliche `_ai`-Routen
+# waeren fuenf Stellen, die man beim naechsten Umbau vergessen kann -- und
+# buehne.html muesste jeden Pfad doppelt kennen. So bleibt die Seite
+# unveraendert, und Umschalten ist EINE Zeile. Zurueck: auf False setzen,
+# Dienst neu starten. Die Originalverzeichnisse bleiben unangetastet.
+AI_BILDSATZ = os.environ.get("BUEHNE_AI_BILDSATZ", "1") == "1"
+
+
+# ⭐ 2026-09-11 (Koordinator): Relief-Satz. Nach dem geschaerften Satz (_ai)
+# wurde das Bump-Mapping OFFLINE in die Bilder gerechnet -- zur Laufzeit kostete
+# es 21-26 fps und musste zurueckgenommen werden, eingebacken kostet es NICHTS.
+# Erste Fassung war unbrauchbar (Helligkeit -41 %, Gruenstich durch warme
+# Lichtfarbe). Zweite Fassung, gemessen ueber 40 Stichproben:
+#       Helligkeit   -9,6 %   (vorher -41 %)
+#       Kontrast     +4,1 %   (vorher -26 %)
+#       Kantenstaerke +53 %   (vorher  +8 %)
+#       Alpha/Anker  40/40 unveraendert
+# Reihenfolge der Wahl: _relief2 > _ai > Original. Zurueck: BUEHNE_RELIEF=0.
+RELIEF_SATZ = os.environ.get("BUEHNE_RELIEF", "1") == "1"
+
+
+def _vielleicht_ai(pfad: str) -> str:
+    """Gibt die `_ai`-Variante zurueck, wenn sie existiert und der Schalter an
+    ist. Faellt sonst still auf das Original zurueck -- ein fehlender
+    geschaerfter Ordner darf die Buehne NIE schwarz machen."""
+    if RELIEF_SATZ:
+        r = pfad + "_relief2"
+        if os.path.isdir(r):
+            return r
+    if not AI_BILDSATZ:
+        return pfad
+    kandidat = pfad + "_ai"
+    return kandidat if os.path.isdir(kandidat) else pfad
+
+
+KOPF_RGBA_DIR = _vielleicht_ai(KOPF_RGBA_DIR)
+KOERPER_RGBA_DIR = _vielleicht_ai(KOERPER_RGBA_DIR)
+GAZE_DIR = _vielleicht_ai(GAZE_DIR)
+BLINK_DIR = _vielleicht_ai(BLINK_DIR)
+MUND_DIR = _vielleicht_ai(MUND_DIR)
+AUSDRUCK_ERWEITERT_DIR = _vielleicht_ai(AUSDRUCK_ERWEITERT_DIR)
+# ⭐ Default-Fenstergeometrie (Gabriel 2026-09-11, siehe oeffnen()) -- EINE
+# Quelle fuer Start-Flags UND fuer die xdotool-Erzwingung danach.
+# Y=0 ist der WUNSCH, nicht das Ergebnis: mutter/GNOME reserviert oben
+# einen Arbeitsbereich-Rand (_NET_WORKAREA meldet y>=40) plus eigene
+# Fenster-Dekoration/Schatten -- gemessen 2026-09-11 landet JEDES an
+# dieses Fenster gerichtete windowmove-Y (0, 3, 40 probiert) am Ende bei
+# y≈86-89, nie tiefer. Das ist eine harte WM-Grenze, keine Code-Luecke --
+# Gabriels eigentliche Vorgabe war nur "Groesse 746x449, nicht Vollbild",
+# keine exakte Pixelposition. Groesse (das Wichtige) sitzt exakt.
+FENSTER_X, FENSTER_Y, FENSTER_B, FENSTER_H = 565, 0, 746, 449
+UNIFIED_DB = os.environ.get(
+    "UDB_DB_PATH",
+    os.path.expanduser("~/.local/share/agentzero/unified.db"))
+WELT_DB = os.environ.get(
+    "FRANKENSTEIN_WELT_DB",
+    os.path.expanduser("~/.local/share/frank/db/world_experience.db"))
+NUTZER_NAME = "Gabriel"  # FRANKENSTEIN_NUTZER, siehe Auftrag
+
+BIND_HOST = "127.0.0.1"
+PORT = int(os.environ.get("BUEHNE_PORT", "8788"))
+
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+os.makedirs(CHROME_PROFIL, exist_ok=True)
+
+
+# ── Zustand: EINE Datei, atomar geschrieben, von drei Wegen benutzt ─────
+def zustand_lesen():
+    try:
+        with open(ZUSTAND_PFAD, "r", encoding="utf-8") as f:
+            d = json.load(f)
+        return {"an": bool(d.get("an", False)),
+                "quelle": str(d.get("quelle") or ""),
+                "ts": str(d.get("ts") or "")}
+    except Exception:
+        return {"an": False, "quelle": "start (keine Datei)", "ts": ""}
+
+
+def zustand_schreiben(an: bool, quelle: str):
+    d = {"an": bool(an), "quelle": quelle,
+         "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
+    tmp = ZUSTAND_PFAD + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(d, f, ensure_ascii=False)
+    os.replace(tmp, ZUSTAND_PFAD)  # atomar -- kein Leser sieht eine halbe Datei
+    return d
+
+
+# Vorgabe: Fenster ist AUS, bis jemand es einschaltet. Nur beim ALLERERSTEN
+# Start (Datei fehlt) anlegen -- ein spaeterer Daemon-Neustart darf den
+# zuletzt gewaehlten Zustand nicht stillschweigend umkippen.
+if not os.path.exists(ZUSTAND_PFAD):
+    zustand_schreiben(False, "erststart")
+
+
+# ── eigene, separate Chat-Datei (NICHT unified.db) ──────────────────────
+def _lokal_verbinden():
+    c = sqlite3.connect(LOKAL_DB, timeout=5.0)
+    c.execute("""CREATE TABLE IF NOT EXISTS chat (
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        ts      TEXT NOT NULL,
+        wer     TEXT NOT NULL,
+        text    TEXT NOT NULL,
+        art     TEXT NOT NULL)""")
+    return c
+
+
+def lokal_anfuegen(wer: str, text: str, art: str):
+    ts = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    with _lokal_verbinden() as c:
+        c.execute("INSERT INTO chat (ts, wer, text, art) VALUES (?,?,?,?)",
+                   (ts, wer, text, art))
+    return ts
+
+
+def lokal_seit(since: str):
+    with _lokal_verbinden() as c:
+        rows = c.execute(
+            "SELECT ts, wer, text, art FROM chat WHERE ts > ? ORDER BY ts ASC",
+            (since or "",)).fetchall()
+    return [{"ts": r[0], "wer": r[1], "text": r[2], "art": r[3]} for r in rows]
+
+
+# ── f2_gesagt LESEN (das ist die echte Sprachmodus-Chatquelle) ──────────
+# ── Emote-Bestimmung (Gabriel, 4. Nachtrag 2026-09-11) ──────────────────
+# Ein Emoji pro FranKenstein-Antwort, EINMALIG im Browser eingeblendet
+# (Twitch-Stil "Like fliegt rein"), NIE dauerhaft/mehrfach. Zwei Quellen,
+# mit Vorrang fuer die bessere:
+#   1. identitaet.py (Paket paket-1789070588377-49654d, ANDERER Agent --
+#      hier NICHT angefasst, nur bestmoeglich importiert). Klassifiziert
+#      Antworten in sechs Kategorien aus echter Textanalyse statt aus
+#      einer Stichwortliste. Existiert die Datei (noch) nicht oder hat sie
+#      eine andere Schnittstelle, greift lautlos Schritt 2.
+#      LEHRE (2026-09-11, Befund vom Koordinator): hier stand lange ein
+#      GERATENER Aufruf -- falscher Pfad (visual/ statt /opt/entityos/voice/)
+#      UND ein erfundener Funktionsname (klassifizieren() gibt es nicht).
+#      Das try/except hat das wochenlang lautlos verschluckt und JEDE
+#      Antwort ueber _emote_einfach() klassifiziert -- deshalb kam bei
+#      Gabriel bei jeder technisch klingenden Antwort ⚙, nie die echten
+#      sechs Kategorien. Echte Schnittstelle: _messen(text) -> Kennzahlen,
+#      _self_ereignis(Kennzahlen) -> einer der sechs _EMOTE_JE_KATEGORIE-
+#      Schluessel (Prioritaet dort ~Zeile 209-241 begruendet -- self_technical
+#      bewusst an vierter Stelle, damit es nicht alles verdeckt). Nie wieder
+#      eine angenommene Schnittstelle ohne Gegenprobe an echten Texten.
+#   2. eine kleine, jede Zeile in einem Satz erklaerbare Stichwort-
+#      Zuordnung. Passt keine Regel, gibt es KEIN Emote -- lieber keins
+#      als ein beliebiges (Gabriels Vorgabe woertlich).
+_EMOTE_JE_KATEGORIE = {
+    "self_confident":  "\U0001F4AA",
+    "self_uncertain":  "\U0001F914",
+    "self_creative":   "✨",
+    "self_empathetic": "\U0001F49C",
+    "self_technical":  "⚙",
+    "self_neutral":    None,  # neutral heisst: kein Anlass, kein Emote
+}
+
+
+def _emote_einfach(text: str):
+    """Rueckfall ohne identitaet.py. Jede Zeile einzeln erklaerbar."""
+    t = (text or "").lower()
+    if any(w in t for w in ("vielleicht", "unsicher", "glaube ich", "bin nicht sicher", "?")):
+        return _EMOTE_JE_KATEGORIE["self_uncertain"]
+    if any(w in t for w in ("idee", "stell dir vor", "kreativ", "phantasie")):
+        return _EMOTE_JE_KATEGORIE["self_creative"]
+    if any(w in t for w in ("fuehl", "versteh dich", "tut mir leid", "danke", "schoen dass")):
+        return _EMOTE_JE_KATEGORIE["self_empathetic"]
+    if any(w in t for w in ("code", "funktion", "fehler", "system", "datei", "prozess")):
+        return _EMOTE_JE_KATEGORIE["self_technical"]
+    if any(w in t for w in ("genau", "sicher", "klar", "auf jeden fall", "definitiv")):
+        return _EMOTE_JE_KATEGORIE["self_confident"]
+    return None  # nichts passt -- kein Emote
+
+
+# ── GRID10-berechneter Ausdruck (Gabriel, 2026-09-11, ARBEITSPAKET
+# paket-1789133415764-11daa8, zweimal praezisiert waehrend des Baus) ───────
+# ERSTE Fassung dieses Auftrags haette ein LLM den geplanten Antworttext
+# LESEN und AESTHETISCH URTEILEN lassen ("passt ein Grinsen zu dieser
+# Zeile?"). Gabriel hat das ZWEIMAL korrigiert, woertlich:
+#   1. "der grid soll mittels der hyperposition und dem weltmodell
+#      errechnen was die treffendste ... gesichtsausdruck ist ... anhand
+#      SEINER gedanken und erfahrungen" -- errechnet, nicht erraten.
+#   2. "Der GRID ist die eigentliche AI. LLMs werden nur als Arbeiter,
+#      Mund ... genutzt." -- also KEINE LLM-Anfrage in dieser Funktion,
+#      keine einzige. Reine Arithmetik auf echten GRID10-Tabellen.
+#
+# ZWEI QUELLEN, in dieser Reihenfolge (die staerkere zuerst):
+#   1. f2_hyperposition (meinung.py) -- FranKensteins eigener Kandidaten-
+#      wettbewerb, wenn er GERADE zu einem Thema eine Haltung gebildet
+#      hat. `kuehnheit` (0..1) ist dabei gemessen aus dem Wettbewerb
+#      selbst (siehe meinung.py), nicht geschaetzt. Nur verwendet, wenn
+#      die Zeile ZEITLICH zu DIESER Antwort passt (_HYPERPOSITION_
+#      FENSTER_S) -- sonst waere es die Haltung zu einem laengst
+#      erledigten Thema.
+#   2. f2_grid10_frame.broadcast_value -- IMMER frisch (jeder Turn, auch
+#      unter GLM_AKTIV=1). Ohne eigene Bedeutung fuer sich (K4: keine
+#      Zelle/kein Wert hat eine feste Rolle) -- deshalb nur die
+#      Abweichung vom EIGENEN juengeren Durchschnitt (Z-Wert gegen die
+#      letzten 200 CLOSED-Frames dieser Instanz), nie die Rohzahl.
+#
+# GEMESSEN 2026-09-11 (Befund, siehe Bericht an den Koordinator):
+# f2_entitaet_innen (modell_ueberraschung/entropie/streuung -- die dritte
+# denkbare Quelle) war zu diesem Zeitpunkt seit 46 Minuten unveraendert,
+# waehrend im selben Fenster 85 neue f2_grid10_frame-Zeilen entstanden
+# (0 davon mit frame_id-Verknuepfung zu f2_entitaet_innen). Seit der
+# GLM-Umstellung liefert der Vorwaertslauf, der diese Achse fuettert
+# (logprobs, siehe entitaet.py::messen), fuer den Sprachmodus keine
+# Werte mehr -- das 4B laeuft nur noch als Organ fuer andere, kleinere
+# Aufgaben. Diese Funktion benutzt die Achse deshalb NICHT: eine
+# eingefrorene Zahl waere kein Perzept, nur eine Verkabelung (siehe
+# Kriterium K2 im Turnloop-Kopf).
+#
+# SCHWELLEN sind GEWAEHLT, nicht gemessen (wie bei grid_steuerung.py):
+# 0.5 ist die Skalenmitte von kuehnheit selbst; 0.5 Standardabweichungen
+# ist die uebliche "spuerbar, aber kein Ausreisser"-Schwelle. Beide
+# stehen hier, statt in einem Kommentar zu verschwinden.
+_HYPERPOSITION_FENSTER_S = 25
+_FRAME_FENSTER_S = 20
+_KUEHNHEIT_SCHWELLE = 0.5
+_BROADCAST_Z_SCHWELLE = 0.5
+
+# GEMESSEN 2026-09-11: die 200-Zeilen-Verteilung ueber f2_grid10_frame
+# kostet ~8ms je Aufruf (3931 Zeilen, keine Zeitachse indiziert). Bei
+# einem vollen Verlaufs-Nachladen (bis zu ~105 Antwortzeilen auf einmal,
+# siehe Kommentar bei _ersteLadung in buehne.html) waere das ohne diesen
+# Cache >800ms nur fuer diese eine Teilrechnung. Die Verteilung aendert
+# sich innerhalb von drei Sekunden (dem Poll-Takt der Seite) ohnehin
+# kaum -- deshalb ein knapper, TTL-gebundener Cache statt einer
+# Neuberechnung je Chatzeile. Race zwischen zwei Threads (ThreadingHTTP-
+# Server) ist harmlos: schlimmstenfalls rechnet einer doppelt, nie falsch.
+_BROADCAST_VERTEILUNG_CACHE = {"ts": 0.0, "mittel": None, "sd": None}
+_BROADCAST_VERTEILUNG_TTL_S = 3.0
+
+
+def _broadcast_verteilung(conn):
+    """(mittel, sd) der letzten 200 CLOSED-Frames, gecacht. sd ist None,
+    wenn zu wenig Geschichte oder keine Streuung -- niemals 0-durch-0."""
+    jetzt = time.time()
+    if (jetzt - _BROADCAST_VERTEILUNG_CACHE["ts"] < _BROADCAST_VERTEILUNG_TTL_S
+            and _BROADCAST_VERTEILUNG_CACHE["mittel"] is not None):
+        return _BROADCAST_VERTEILUNG_CACHE["mittel"], _BROADCAST_VERTEILUNG_CACHE["sd"]
+    werte = [row[0] for row in conn.execute(
+        "SELECT broadcast_value FROM f2_grid10_frame "
+        "WHERE status='CLOSED' AND broadcast_value IS NOT NULL "
+        "ORDER BY opened_at DESC LIMIT 200")]
+    mittel = sd = None
+    if len(werte) >= 20:
+        n = len(werte)
+        mittel = sum(werte) / n
+        var = sum((w - mittel) ** 2 for w in werte) / (n - 1)
+        sd = var ** 0.5
+        if sd <= 0.0:
+            sd = None
+    _BROADCAST_VERTEILUNG_CACHE.update(ts=jetzt, mittel=mittel, sd=sd)
+    return mittel, sd
+
+
+def _grid10_kategorie(gesagt_ts):
+    """Liefert 'self_confident' / 'self_uncertain' / None. None heisst
+    ausdruecklich: keine der beiden GRID10-Quellen war fuer DIESE Zeile
+    zeitlich zustaendig -- der Aufrufer faellt auf die bisherige Kette
+    zurueck, es wird nichts erfunden. Wirft nie."""
+    if not gesagt_ts:
+        return None
+    try:
+        conn = sqlite3.connect(f"file:{UNIFIED_DB}?mode=ro", uri=True, timeout=2.0)
+    except Exception:
+        return None
+    try:
+        # Quelle 1: eigener Kandidatenwettbewerb zu einem Thema (meinung.py)
+        r = conn.execute(
+            "SELECT kuehnheit, "
+            "ABS(strftime('%s', ?) - strftime('%s', ts)) AS abstand_s "
+            "FROM f2_hyperposition WHERE kuehnheit IS NOT NULL "
+            "ORDER BY ts DESC LIMIT 1", (gesagt_ts,)).fetchone()
+        if (r and r[0] is not None and r[1] is not None
+                and r[1] <= _HYPERPOSITION_FENSTER_S):
+            return ("self_confident" if float(r[0]) >= _KUEHNHEIT_SCHWELLE
+                    else "self_uncertain")
+
+        # Quelle 2: der GRID10-Turn dieser Antwort selbst, ueber die
+        # zeitlich naechstliegende geschlossene Frame-Zeile.
+        r = conn.execute(
+            "SELECT broadcast_value, "
+            "ABS(strftime('%s', ?) - strftime('%s', opened_at)) AS abstand_s "
+            "FROM f2_grid10_frame "
+            "WHERE status='CLOSED' AND broadcast_value IS NOT NULL "
+            "ORDER BY abstand_s ASC LIMIT 1", (gesagt_ts,)).fetchone()
+        if not r or r[1] is None or r[1] > _FRAME_FENSTER_S:
+            return None
+        diese_bv = float(r[0])
+        mittel, sd = _broadcast_verteilung(conn)
+        if mittel is None or sd is None:
+            return None  # zu wenig eigene Geschichte fuer einen ehrlichen Z-Wert
+        z = (diese_bv - mittel) / sd
+        if z >= _BROADCAST_Z_SCHWELLE:
+            return "self_confident"
+        if z <= -_BROADCAST_Z_SCHWELLE:
+            return "self_uncertain"
+        return None
+    except Exception:
+        return None
+    finally:
+        conn.close()
+
+
+def emote_bestimmen(text: str, ts=None):
+    # Quelle 0, VOR allem Text-basierten: GRID10 selbst, ueber echte
+    # eigene Zustandstabellen. Nur wenn hier None herauskommt (siehe
+    # Kommentarblock oben), faellt es auf identitaet.py / Stichwortliste
+    # zurueck -- diese beiden bleiben unveraendert bestehen.
+    try:
+        kategorie = _grid10_kategorie(ts)
+        if kategorie in _EMOTE_JE_KATEGORIE:
+            return _EMOTE_JE_KATEGORIE[kategorie]
+    except Exception:
+        pass
+    try:
+        import sys
+        if "/opt/entityos/voice" not in sys.path:
+            sys.path.insert(0, "/opt/entityos/voice")
+        import identitaet  # ANDERER Agent -- nur lesend importiert, nicht angefasst
+        kennzahlen = identitaet._messen(text)
+        kategorie = identitaet._self_ereignis(kennzahlen)
+        if kategorie in _EMOTE_JE_KATEGORIE:
+            return _EMOTE_JE_KATEGORIE[kategorie]
+    except Exception:
+        pass  # existiert (noch) nicht / andere Signatur -- lautloser Rueckfall
+    return _emote_einfach(text)
+
+
+def gesagt_seit(since: str):
+    """Read-only. Ein f2_gesagt-Datensatz -> zwei Chatzeilen (Frage/Antwort)."""
+    aus = []
+    try:
+        conn = sqlite3.connect(f"file:{UNIFIED_DB}?mode=ro", uri=True, timeout=3.0)
+        try:
+            rows = conn.execute(
+                "SELECT ts, gefragt, gesagt FROM f2_gesagt WHERE ts > ? "
+                "ORDER BY ts ASC LIMIT 200", (since or "",)).fetchall()
+        finally:
+            conn.close()
+    except Exception:
+        return aus
+    for ts, gefragt, gesagt in rows:
+        if gefragt:
+            aus.append({"ts": ts, "wer": NUTZER_NAME, "text": gefragt, "art": "frage"})
+        if gesagt:
+            # eine Mikrosekunde nach der Frage einsortiert, sonst gleicher ts
+            aus.append({"ts": ts + "", "wer": "FranKenstein",
+                        "text": gesagt, "art": "antwort",
+                        "emote": emote_bestimmen(gesagt, ts)})
+    return aus
+
+
+def chat_seit(since: str):
+    zeilen = gesagt_seit(since) + lokal_seit(since)
+    zeilen.sort(key=lambda z: z["ts"])
+    letzter_ts = zeilen[-1]["ts"].rstrip("") if zeilen else since
+    return zeilen, letzter_ts
+
+
+# ── Ausdrucksbilder: sechs Zustaende, jeder mit gemessener Ursache ───────
+# (5. Nachtrag, Gabriel 2026-09-11 -- "kein Ausdruck ohne Ursache": Standard
+# ist IMMER ruhig_neutral, jede Abweichung braucht eine echte Messung.)
+#
+# Rangfolge (staerkste Ursache zuerst, genau EIN Ausdruck gewinnt -- gleiche
+# Idee wie regie.py: "Alarm schlaegt Neuheit schlaegt Lage", hier auf sechs
+# Bilder uebertragen):
+#   1. Alarm angespannt   -- hostile_input_/identity_threat_/threat_detected_/
+#                             negative_feedback_ in personality_state, frisch
+#                             (< ALARM_FRISCHE_S). Eine echte Amygdala-Meldung
+#                             schlaegt alles andere.
+#   2. Alarm zugewandt     -- warmth_detected_, ebenso frisch.
+#   3. ueberrascht          -- die JUENGSTE Ueberraschungs-Messung ist frisch
+#                             UND ein statistischer Ausreisser (siehe Warnung
+#                             in regie.py: >90% der Werte sind identisch, das
+#                             Feld traegt NUR beim tatsaechlichen Ausschlag).
+#   4. erschoepft_schwer    -- f2_koerperpflege.stufe != 'ruhig': der Dienst
+#                             hat selbst schon geurteilt, es wird nicht neu
+#                             erfunden, nur uebernommen.
+#   5. wach_aufmerksam      -- ein Gesicht ist gerade erkannt (blick.py, "WO
+#                             ist der Kopf", siehe dort) -- jemand ist da.
+#   6. ruhig_neutral        -- Standard, keine der obigen Ursachen liegt vor.
+ALARM_ANGESPANNT_PRAEFIXE = ("hostile_input_", "identity_threat_",
+                             "threat_detected_", "negative_feedback_")
+ALARM_WARM_PRAEFIXE = ("warmth_detected_",)
+ALARM_FRISCHE_S = 180.0     # 3 Minuten -- ein alter Alarm ist keine aktuelle Ursache
+UEBERRASCHUNG_FRISCHE_S = 300.0
+
+try:
+    import blick as _blick_modul
+except Exception:
+    _blick_modul = None
+
+try:
+    import beobachtung as _beobachtung_modul
+except Exception:
+    _beobachtung_modul = None
+
+
+def _aktueller_alarm():
+    """Juengste Alarm-Kategorie aus personality_state, oder "" wenn keine
+    frisch genug ist. NICHT einfach ORDER BY id DESC LIMIT 1 -- die meisten
+    Zeilen sind perception_tick_-Eintraege vom 30s-Puls, keine Alarme."""
+    try:
+        conn = sqlite3.connect(f"file:{WELT_DB}?mode=ro", uri=True, timeout=2.0)
+        try:
+            rows = conn.execute(
+                "SELECT event_ref_id, "
+                "(strftime('%s','now') - strftime('%s', timestamp)) AS alter_s "
+                "FROM personality_state WHERE event_ref_id IS NOT NULL "
+                "ORDER BY id DESC LIMIT 40").fetchall()
+        finally:
+            conn.close()
+    except Exception:
+        return ""
+    for ref, alter_s in rows:
+        if alter_s is None or alter_s < 0 or alter_s > ALARM_FRISCHE_S:
+            continue
+        ref = ref or ""
+        if ref.startswith(ALARM_ANGESPANNT_PRAEFIXE):
+            return "angespannt"
+        if ref.startswith(ALARM_WARM_PRAEFIXE):
+            return "warm"
+    return ""
+
+
+def _ueberraschung_frisch_und_ausreisser(werte_mit_alter):
+    """True nur wenn die juengste Messung selbst frisch ist (nicht von einem
+    Puls stundenlang fortgeschrieben) UND deutlich ueber dem eigenen p90 der
+    letzten 200 Messungen liegt -- eine Konstante ist kein Ausschlag."""
+    if len(werte_mit_alter) < 20:
+        return False
+    neuester_wert, neuester_alter = werte_mit_alter[0]
+    if neuester_alter is None or neuester_alter > UEBERRASCHUNG_FRISCHE_S:
+        return False
+    werte = sorted(float(w) for w, _ in werte_mit_alter)
+    p90 = werte[int(len(werte) * 0.9)]
+    return float(neuester_wert) > p90 and float(neuester_wert) > werte[0]
+
+
+def _ausdruck_bestimmen(stufe, ueberraschung_ausreisser, jemand_da):
+    alarm = _aktueller_alarm()
+    if alarm == "angespannt":
+        return "03_angespannt"
+    if alarm == "warm":
+        return "04_zugewandt_weich"
+    if ueberraschung_ausreisser:
+        return "06_ueberrascht"
+    if stufe and stufe != "ruhig":
+        return "05_erschoepft_schwer"
+    if jemand_da:
+        return "02_wach_aufmerksam"
+    return "01_ruhig_neutral"
+
+
+# ── Animations-Treiber, READ-ONLY aus unified.db ────────────────────────
+def buehnen_zustand():
+    """Nur Lesen. Liefert die Werte, die die Buehne animieren -- broadcast_value
+    (Datenregen-Tempo), ueberraschung (Farbsprung), swap/ram (Wasserlinie),
+    ausdruck (welches Portraet, siehe oben) und blick (Gesichtsposition,
+    siehe blick.py). Fehlt eine Quelle, wird ehrlich None/Standard geliefert
+    (kein erfundener Wert)."""
+    aus = {"broadcast_value": None, "ueberraschung": None,
+           "swap_voll_anteil": None, "ram_frei_anteil": None,
+           "ausdruck": "01_ruhig_neutral",
+           "blick": {"anwesend": False, "richtung": None, "nah": False,
+                     "cx": None, "cy": None, "anteil": None},
+           # ⭐ 2026-09-11 (ARBEITSPAKET paket-1789136046066-71d02b): intendiert/
+           # beobachtet/Kluft aus beobachtung.py -- ZUSAETZLICHES Signal neben
+           # "ausdruck" oben, KEIN zweiter Entscheider. None = ehrlich keine
+           # Aussage (kein Gesicht/keine Kategorie), nie erfunden.
+           "gabriel_beobachtung": None}
+    stufe = None
+    ueberraschungs_werte = []
+    try:
+        conn = sqlite3.connect(f"file:{UNIFIED_DB}?mode=ro", uri=True, timeout=2.0)
+        try:
+            r = conn.execute(
+                "SELECT broadcast_value FROM f2_grid10_frame "
+                "WHERE broadcast_value IS NOT NULL "
+                "ORDER BY opened_at DESC LIMIT 1").fetchone()
+            if r:
+                aus["broadcast_value"] = r[0]
+            r = conn.execute(
+                "SELECT ueberraschung FROM f2_entitaet_innen "
+                "ORDER BY ts DESC LIMIT 1").fetchone()
+            if r:
+                aus["ueberraschung"] = r[0]
+            ueberraschungs_werte = conn.execute(
+                "SELECT ueberraschung, "
+                "(strftime('%s','now') - strftime('%s', ts)) AS alter_s "
+                "FROM f2_entitaet_innen WHERE ueberraschung IS NOT NULL "
+                "ORDER BY ts DESC LIMIT 200").fetchall()
+            r = conn.execute(
+                "SELECT swap_voll_anteil, ram_frei_anteil, stufe "
+                "FROM f2_koerperpflege ORDER BY ts DESC LIMIT 1").fetchone()
+            if r:
+                aus["swap_voll_anteil"], aus["ram_frei_anteil"], stufe = r[0], r[1], r[2]
+        finally:
+            conn.close()
+    except Exception:
+        pass
+
+    jemand_da = False
+    if _blick_modul is not None:
+        try:
+            b = _blick_modul.instanz()
+            anwesend, richtung, nah = b.zustand()
+            aus["blick"] = {"anwesend": anwesend, "richtung": richtung, "nah": nah,
+                             "cx": None, "cy": None, "anteil": None}
+            # ⭐ 2026-09-11: rohe, stetige Position zusaetzlich zum diskreten
+            # Raster -- Grundlage fuer die Pupillenverfolgung (Gabriel woertlich:
+            # die Augen sollen der naechsten Person folgen). Bestehende Felder
+            # bleiben unveraendert, nichts wird entfernt.
+            roh = b.ziel_roh()
+            if roh is not None:
+                aus["blick"]["cx"], aus["blick"]["cy"], aus["blick"]["anteil"] = roh
+            jemand_da = anwesend
+
+            # Gabriel-Beobachtung: FER+ auf demselben Blick-Frame (blick.py,
+            # emotion_roh()) gegen die vorhandene GRID10-Kategorie fuer den
+            # AKTUELLEN Moment (_grid10_kategorie mit "jetzt" statt einer
+            # bestimmten Antwortzeile -- fuer diesen periodischen Buehnen-
+            # Zustand gibt es keine einzelne gesagte Zeile). Additiv, greift
+            # nicht in emote_bestimmen()/_ausdruck_bestimmen() ein.
+            if _beobachtung_modul is not None:
+                try:
+                    fer = b.emotion_roh()
+                    jetzt_str = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+                    kategorie = _grid10_kategorie(jetzt_str)
+                    aus["gabriel_beobachtung"] = _beobachtung_modul.regelkreis_schritt(kategorie, fer)
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+    ausreisser = _ueberraschung_frisch_und_ausreisser(ueberraschungs_werte)
+    aus["ausdruck"] = _ausdruck_bestimmen(stufe, ausreisser, jemand_da)
+    return aus
+
+
+# ── die Seite selbst ─────────────────────────────────────────────────────
+def _seite() -> bytes:
+    pfad = os.path.join(VISUAL_DIR, "buehne.html")
+    with open(pfad, "rb") as f:
+        return f.read()
+
+
+# ── FPS-Selbstmeldung der Seite (fuer den Belegpflicht-Test) ────────────
+# Die Seite selbst misst ihre Bildrate im Browser (window.__buehneFps) und
+# meldet sie alle 5s hierher -- das ist der einzige Weg, eine ECHTE
+# gemessene fps-Zahl aus einem echten (nicht ferngesteuerten) Chrome-App-
+# Fenster zu bekommen, ohne Fenster-Startargumente fuer Remote-Debugging
+# zu aendern (das wuerde das getestete Fenster selbst veraendern).
+_fps_lock = threading.Lock()
+_letzter_fps = {"fps": None, "ts": None}
+
+
+def fps_melden(wert):
+    with _fps_lock:
+        _letzter_fps["fps"] = float(wert)
+        _letzter_fps["ts"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+
+def fps_lesen():
+    with _fps_lock:
+        return dict(_letzter_fps)
+
+
+# ── HTTP-Server ──────────────────────────────────────────────────────────
+def _seite_mtime() -> float:
+    # Fuer den Auto-Reload: juengste Aenderungszeit ueber ALLES, was das
+    # Aussehen der Seite beeinflusst -- damit die Seite selbst merkt, wenn
+    # sie neu geladen werden muss (siehe /api/mtime).
+    #
+    # LEHRE (2026-09-11, dreifache Nachlade-Blockade gefunden): vorher stand
+    # hier nur buehne.html. Aenderungen an dieser Datei (buehne_daemon.py)
+    # oder an einem Bild wurden NIE erkannt -- der Reload-Poll im Browser sah
+    # keinen Unterschied, egal wie oft der Dienst neu gestartet wurde. Das
+    # war der eigentliche Grund, warum Bildkorrekturen "nicht ankamen",
+    # nicht ein Fehler in den Bildern selbst.
+    neuste = 0.0
+    kandidaten = [
+        os.path.join(VISUAL_DIR, "buehne.html"),
+        os.path.join(VISUAL_DIR, "buehne_daemon.py"),
+    ]
+    try:
+        for verz in (AUSDRUCK_DIR, AUGEN_DIR, KOPF_DIR, GAZE_DIR, MUND_DIR,
+                     KOPF_RGBA_DIR, KOERPER_RGBA_DIR):
+            for name in os.listdir(verz):
+                if name.endswith(".png"):
+                    kandidaten.append(os.path.join(verz, name))
+        # Hintergrund hat Unterordner pro Stimmung -- einmal tiefer schauen.
+        for stimmung in os.listdir(HINTERGRUND_DIR):
+            unterordner = os.path.join(HINTERGRUND_DIR, stimmung)
+            if os.path.isdir(unterordner):
+                for name in os.listdir(unterordner):
+                    if name.endswith(".png"):
+                        kandidaten.append(os.path.join(unterordner, name))
+        # ausdruck_erweitert: <register>/<ausdruck>/<frontal|yaw_proxy>/*.png
+        for wurzel, _verz, dateien in os.walk(AUSDRUCK_ERWEITERT_DIR):
+            for name in dateien:
+                if name.endswith(".png"):
+                    kandidaten.append(os.path.join(wurzel, name))
+    except OSError:
+        pass
+    for pfad in kandidaten:
+        try:
+            neuste = max(neuste, os.path.getmtime(pfad))
+        except OSError:
+            pass
+    return neuste
+
+
+def _make_handler():
+    class Handler(BaseHTTPRequestHandler):
+        def log_message(self, fmt, *args):
+            pass  # keine Zugriffs-Logs auf Disk
+
+        def _json(self, obj, code=200):
+            b = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(b)))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(b)
+
+        def _bild_ausliefern(self, voller_pfad):
+            # Bedingtes GET statt Stunden-Cache. LEHRE (2026-09-11): vorher
+            # "Cache-Control: max-age=3600" auf allen Bildern -- der Browser
+            # hat eine Stunde lang NIE nachgefragt, egal was auf der Platte
+            # neu lag. Jetzt: immer neu anfragen (no-cache = revalidieren,
+            # nicht "nie cachen"), Server antwortet mit 304 wenn unveraendert
+            # -> genauso billig wie vorher, aber Aenderungen wirken sofort.
+            try:
+                mtime = os.path.getmtime(voller_pfad)
+            except OSError:
+                self.send_response(404); self.end_headers(); return
+            last_mod = time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime(mtime))
+            ims = self.headers.get("If-Modified-Since")
+            if ims and ims == last_mod:
+                self.send_response(304)
+                self.send_header("Cache-Control", "no-cache")
+                self.end_headers()
+                return
+            with open(voller_pfad, "rb") as f:
+                daten = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/png")
+            self.send_header("Content-Length", str(len(daten)))
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Last-Modified", last_mod)
+            self.end_headers()
+            self.wfile.write(daten)
+
+        def do_GET(self):
+            u = urllib.parse.urlsplit(self.path)
+            path, qs = u.path, urllib.parse.parse_qs(u.query)
+            if path == "/":
+                # Immer frisch von Disk lesen -- sonst serviert der laufende
+                # Prozess auf ewig den Stand von seinem eigenen Start
+                # (permanenter Reload-Weg, Gabriels Anforderung 2026-09-07:
+                # sonst prueft man bei jeder Aenderung eine alte Version).
+                aktuelle_seite = _seite()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(aktuelle_seite)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(aktuelle_seite)
+            elif path == "/filmlook.js":
+                # ⭐ 2026-09-11 (Koordinator): der globale Filmlook (Korn,
+                # Farbabstimmung, Vignette) liegt in EINER eigenen Datei, nicht
+                # in buehne.html. Grund: die Seite gehoert waehrend des Umbaus
+                # dem Animations-Agenten -- zwei Agenten in derselben Datei
+                # erzeugen Konflikte. So braucht buehne.html nur EINE Zeile
+                # (<script src="/filmlook.js">), und der Look kann unabhaengig
+                # weitergebaut oder komplett abgeschaltet werden (Datei leeren).
+                # Die Datei injiziert ihr eigenes <style>, ihre eigenen
+                # SVG-<defs> und ihre eigenen Overlay-Ebenen.
+                # ⚠️ Externe SVG-Filterverweise (filter:url(datei.svg#id))
+                # funktionieren in Chrome NICHT zuverlaessig -- deshalb muessen
+                # die <defs> ins Dokument selbst, per Skript.
+                pfad = os.path.join(VISUAL_DIR, "filmlook.js")
+                if os.path.isfile(pfad):
+                    with open(pfad, "rb") as fh:
+                        inhalt = fh.read()
+                    self.send_response(200)
+                    self.send_header("Content-Type",
+                                     "application/javascript; charset=utf-8")
+                    self.send_header("Content-Length", str(len(inhalt)))
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    self.wfile.write(inhalt)
+                else:
+                    # Fehlt die Datei, liefert der Server eine leere Antwort
+                    # statt 404 -- die Seite soll ohne Filmlook normal laufen.
+                    self.send_response(200)
+                    self.send_header("Content-Type",
+                                     "application/javascript; charset=utf-8")
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+            elif path == "/api/mtime":
+                self._json({"mtime": _seite_mtime()})
+            elif path == "/gesicht.png":
+                self._bild_ausliefern(GESICHT_BILD)
+            elif (path.startswith("/ausdruck/") or path.startswith("/augen/")
+                    or path.startswith("/kopf/") or path.startswith("/augen_gaze/")
+                    or path.startswith("/augen_blink/")
+                    or path.startswith("/mund_keyframes/")
+                    or path.startswith("/kopf_rgba/") or path.startswith("/koerper_rgba/")):
+                # Ausdrucks-/Augen-/Kopf-/Gaze-/Mund-/Kopf-RGBA-/Koerper-RGBA-
+                # Bilder statisch ausliefern -- nur Basisname, nur .png, nur
+                # aus dem jeweils zustaendigen Verzeichnis (kein Pfad-Traversal
+                # moeglich). kopf_rgba/koerper_rgba: 2026-09-11, echte
+                # Alpha-PNGs aus RIG_V2 als neue Hauptebene, siehe Konstanten
+                # oben und buehne.html.
+                if path.startswith("/ausdruck/"):
+                    verzeichnis = AUSDRUCK_DIR
+                elif path.startswith("/augen/"):
+                    verzeichnis = AUGEN_DIR
+                elif path.startswith("/augen_gaze/"):
+                    verzeichnis = GAZE_DIR
+                elif path.startswith("/augen_blink/"):
+                    verzeichnis = BLINK_DIR
+                elif path.startswith("/mund_keyframes/"):
+                    verzeichnis = MUND_DIR
+                elif path.startswith("/kopf_rgba/"):
+                    verzeichnis = KOPF_RGBA_DIR
+                elif path.startswith("/koerper_rgba/"):
+                    verzeichnis = KOERPER_RGBA_DIR
+                else:
+                    verzeichnis = KOPF_DIR
+                # ⭐ 2026-09-11 (Koordinator): GENAU EINE Ebene Unterordner erlaubt.
+                # Vorher nahm diese Route nur `os.path.basename(path)` -- damit
+                # waren kopf_rgba/roll/, koerper_rgba/atmen/ und die 36 Mund-
+                # Uebergangsordner NICHT abrufbar, obwohl die Dateien da lagen.
+                # Deshalb wurde frueher alles flach mit Praefix kopiert, was bei
+                # gleichnamigen Dateien (36x stufe_00.png) stillschweigend Bilder
+                # verschluckt hat. Beide Ablagen bleiben jetzt gueltig.
+                # Pfad-Traversal: jedes Segment muss ein reiner Name sein --
+                # "." und ".." fliegen raus, damit bleibt der Zugriff im
+                # zustaendigen Verzeichnis.
+                teile = [t for t in path.split("/") if t][1:]
+                sicher = (1 <= len(teile) <= 2
+                          and all(t not in (".", "..") and "\\" not in t
+                                  for t in teile)
+                          and all(t == os.path.basename(t) for t in teile))
+                name = "/".join(teile) if sicher else ""
+                voller_pfad = os.path.join(verzeichnis, *teile) if sicher else ""
+                if (sicher and name.endswith(".png")
+                        and os.path.isfile(voller_pfad)):
+                    self._bild_ausliefern(voller_pfad)
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+            elif path.startswith("/hintergrund/"):
+                # /hintergrund/<stimmung>/<datei>.png -- Stimmung per fester
+                # Allowlist (kein Pfad-Traversal ueber den Ordnernamen
+                # moeglich), Datei zusaetzlich per Basisname+Endung geprueft.
+                teile = [t for t in path.split("/") if t]
+                if len(teile) == 3:
+                    _, stimmung, datei = teile
+                    if stimmung in HINTERGRUND_STIMMUNGEN:
+                        name = os.path.basename(datei)
+                        voller_pfad = os.path.join(HINTERGRUND_DIR, stimmung, name)
+                        if (name.endswith(".png") and "/" not in name
+                                and os.path.isfile(voller_pfad)):
+                            self._bild_ausliefern(voller_pfad)
+                        else:
+                            self.send_response(404)
+                            self.end_headers()
+                    else:
+                        self.send_response(404)
+                        self.end_headers()
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+            elif path.startswith("/ausdruck_erweitert/"):
+                # /ausdruck_erweitert/<register>/<ausdruck>/<frontal|yaw_proxy>/<datei>.png
+                # Register UND Unterordner per fester Allowlist (kein
+                # Pfad-Traversal ueber Ordnernamen moeglich); <ausdruck> ist
+                # ein freier Ordnername, wird aber nur ueber os.path.isdir
+                # gegen den echten Baum geprueft, nie direkt in einen Pfad
+                # ausserhalb von AUSDRUCK_ERWEITERT_DIR aufgeloest, weil
+                # os.path.join+os.path.isfile am Ende trotzdem greift.
+                teile = [t for t in path.split("/") if t]
+                if len(teile) == 5:
+                    _, register, ausdruck, unterordner, datei = teile
+                    name = os.path.basename(datei)
+                    if (register in ERWEITERT_REGISTER
+                            and unterordner in ERWEITERT_UNTERORDNER
+                            and "/" not in ausdruck and ".." not in ausdruck
+                            and name.endswith(".png") and "/" not in name):
+                        voller_pfad = os.path.join(
+                            AUSDRUCK_ERWEITERT_DIR, register, ausdruck, unterordner, name)
+                        if os.path.isfile(voller_pfad):
+                            self._bild_ausliefern(voller_pfad)
+                        else:
+                            self.send_response(404)
+                            self.end_headers()
+                    else:
+                        self.send_response(404)
+                        self.end_headers()
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+            elif path == "/api/chat":
+                since = (qs.get("since") or [""])[0]
+                zeilen, letzter = chat_seit(since)
+                self._json({"ok": True, "zeilen": zeilen, "cursor": letzter or since})
+            elif path == "/api/status":
+                z = zustand_lesen()
+                z["buehne"] = buehnen_zustand()
+                z["zuschauer"] = 1  # ⭐ ehrlich fest, keine Messung, siehe Docstring
+                z["fps"] = fps_lesen()  # ⭐ echte Selbstmeldung der Seite, siehe fps_melden()
+                self._json(z)
+            elif path == "/live":
+                self._json({"ok": True, "dienst": "buehne_daemon", "ts": time.time()})
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        def do_POST(self):
+            if self.path == "/api/send":
+                n = int(self.headers.get("Content-Length") or 0)
+                try:
+                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+                except Exception:
+                    d = {}
+                text = str(d.get("text") or "").strip()[:2000]
+                if not text:
+                    return self._json({"ok": False, "grund": "leerer Text"}, 400)
+                # ⚠️ EHRLICHKEIT: das landet NUR im Buehnen-Chat, NICHT im
+                # echten Sprachmodus (gespraech_loop.py wird nicht angefasst).
+                # Deshalb eigene Beschriftung "(Chat)" statt gesprochener Name.
+                ts = lokal_anfuegen(f"{NUTZER_NAME} (Chat)", text, "getippt")
+                self._json({"ok": True, "ts": ts})
+            elif self.path == "/api/upload":
+                n = int(self.headers.get("Content-Length") or 0)
+                if n <= 0 or n > 60 * 1024 * 1024:
+                    return self._json({"ok": False, "grund": "Groesse 0 oder > 60MB"}, 400)
+                roh_name = self.headers.get("X-Filename") or "datei"
+                name = urllib.parse.unquote(roh_name)
+                name = os.path.basename(name).replace("/", "_").replace("\\", "_") or "datei"
+                stempel = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+                ziel = os.path.join(UPLOADS_DIR, f"{stempel}_{name}")
+                daten = self.rfile.read(n)
+                with open(ziel, "wb") as f:
+                    f.write(daten)
+                ts = lokal_anfuegen(
+                    f"{NUTZER_NAME} (Chat)",
+                    f"hat eine Datei abgelegt: {name} ({len(daten)} Byte) -> {ziel}",
+                    "datei")
+                self._json({"ok": True, "pfad": ziel, "ts": ts})
+            elif self.path == "/api/fps":
+                n = int(self.headers.get("Content-Length") or 0)
+                try:
+                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+                except Exception:
+                    d = {}
+                try:
+                    fps_melden(d.get("fps") or 0)
+                except Exception:
+                    pass
+                self._json({"ok": True})
+            elif self.path == "/api/schalten":
+                # Terminal/Dashboard-Weg direkt am Buehnen-Server (bequem
+                # fuer die Seite selbst -- schreibt in DIESELBE Datei wie
+                # visual_cli.py und cortex_dashboard.py, kein eigener Zustand).
+                n = int(self.headers.get("Content-Length") or 0)
+                try:
+                    d = json.loads(self.rfile.read(n).decode("utf-8")) if n else {}
+                except Exception:
+                    d = {}
+                an = bool(d.get("an"))
+                z = zustand_schreiben(an, "buehnen-server")
+                self._json({"ok": True, "zustand": z})
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+    return Handler
+
+
+def _http_server_starten():
+    srv = ThreadingHTTPServer((BIND_HOST, PORT), _make_handler())
+    t = threading.Thread(target=srv.serve_forever, daemon=True)
+    t.start()
+    print(f"[buehne] HTTP auf http://{BIND_HOST}:{PORT}/ (nur localhost)")
+    return srv
+
+
+# ── Fensterverwaltung: Chrome-App-Fenster nach zustand.json ─────────────
+class Fensterverwalter:
+    def __init__(self):
+        self.proc = None
+
+    def _alte_pid_aufraeumen(self):
+        """Beim Daemon-Start: eine PID-Datei von einem frueheren, hart
+        beendeten Lauf darf kein Zombie-Fenster hinterlassen."""
+        try:
+            with open(PID_DATEI, "r") as f:
+                alte_pid = int(f.read().strip())
+            os.killpg(os.getpgid(alte_pid), signal.SIGTERM)
+            print(f"[buehne] alte Chrome-Gruppe (pid {alte_pid}) aus vorigem Lauf beendet")
+        except Exception:
+            pass
+        try:
+            os.remove(PID_DATEI)
+        except Exception:
+            pass
+
+    def laeuft(self) -> bool:
+        return self.proc is not None and self.proc.poll() is None
+
+    def oeffnen(self):
+        if self.laeuft():
+            return
+        if _blick_modul is not None:
+            try:
+                _blick_modul.instanz().starten()
+            except Exception as e:
+                print(f"[buehne] Blickfuehrung konnte nicht starten: {e}")
+        log = open(LOG_DATEI, "ab")
+        self.proc = subprocess.Popen(
+            ["google-chrome",
+             f"--app=http://{BIND_HOST}:{PORT}/",
+             # ⭐ Default-Fenstergroesse (Gabriel 2026-09-11): "es braucht auch
+             # nicht Vollbild sein, das koennte die Default-Groesse sein,
+             # Vollbild ist nur eine Moeglichkeit." Er hat von Hand auf
+             # 746x449 verkleinert -- das wird jetzt der Start-Default.
+             # Die alte Fest-Verdrahtung auf Bildschirm HDMI-A-0
+             # (1024x600 bei Offset +1680+0) war fuer einen zweiten,
+             # kleinen Monitor gedacht und war STALE: Gabriel musste das
+             # Fenster jedes Mal von Hand zurueck auf x=565 ziehen, weil
+             # dort sein eigentlicher Arbeitsbildschirm (HDMI-A-1,
+             # 1680x1050 bei Offset +0+0) liegt. Position jetzt auf genau
+             # die von ihm zurechtgerueckte Stelle, auf dem richtigen
+             # Monitor:
+             f"--window-position={FENSTER_X},{FENSTER_Y}",
+             f"--window-size={FENSTER_B},{FENSTER_H}",
+             f"--user-data-dir={CHROME_PROFIL}",
+             "--no-first-run", "--no-default-browser-check",
+             "--disable-extensions", "--disable-sync",
+             "--disable-background-networking",
+             # ⭐ 2026-09-11: "--disable-features=Translate" allein reichte
+             # nicht -- das Uebersetzen-Popup kam trotzdem (Screenshot
+             # zeigte es ueber Gesicht+Chat liegend). TranslateUI + der
+             # Preference-Pfad zusaetzlich dicht machen.
+             "--disable-features=Translate,TranslateUI",
+             "--disable-translate",
+             # ⭐ OHNE GPU (2026-09-11). Gemessen: jedes Oeffnen des Fensters
+             # riss binnen 1-2 s die GPU mit, dmesg zeigt
+             # "PERMISSION_FAULTS: 0x3 / MAPPING_ERROR: 0x1 / WALKER_ERROR"
+             # auf amdgpu 0000:c4:00.0. Der Bauagent hielt es fuer den
+             # bekannten amdgpu-Kernelfehler -- es ist aber ein
+             # SPEICHERKONFLIKT: die GPU ist integriert und teilt sich ihre
+             # 8 GB mit dem System, und `llama-server` haelt davon mit
+             # `-ngl 99` bereits rund 5 GB. Kommt Chrome mit einem eigenen
+             # GPU-Kontext dazu, faellt der Zugriff.
+             #
+             # Die Buehne braucht die GPU gar nicht: der Regen laeuft
+             # bewusst auf 2D-Canvas statt WebGL (Entscheidung des
+             # Bauagenten, genau wegen des geteilten Speichers). Ohne
+             # GPU-Kontext rendert Chrome auf der CPU -- fuer Bilder,
+             # Ueberblendungen und ein paar hundert Regentropfen reicht das,
+             # und das Sprachmodell behaelt seine 5 GB.
+],
+            stdout=log, stderr=log,
+            start_new_session=True)  # eigene Prozessgruppe -> sauber killbar
+        with open(PID_DATEI, "w") as f:
+            f.write(str(self.proc.pid))
+        print(f"[buehne] Chrome-Fenster geoeffnet (pid {self.proc.pid})")
+        threading.Thread(target=self._fenstergroesse_erzwingen, daemon=True).start()
+
+    def _fenstergroesse_erzwingen(self):
+        """Chrome merkt sich Fensterplatzierung im eigenen Profil (Preferences
+        -> browser.app_window_placement) und ueberschreibt damit manchmal die
+        Start-Flags -- gemessen 2026-09-11: Fenster kam trotz
+        --window-size=746,449 bei 961x628 heraus. xdotool erzwingt die
+        gewuenschte Groesse deterministisch NACH dem Start, unabhaengig von
+        Chromes eigener Platzierungs-Erinnerung.
+
+        ⭐ Fund 2026-09-11 (Nachtrag): `xdotool search --name "FranKenstein
+        -- live"` liefert oft MEHRERE Treffer -- u.a. eine liegengebliebene
+        `mutter-x11-frames`-Leiche eines fruehen abgestuerzten/beendeten
+        Chrome-Fensters, die denselben Titel traegt und die alte, falsche
+        Geometrie hat. `treffer[0]` griff bisher blind den ersten Treffer,
+        das konnte die Leiche statt des echten Fensters sein -- die
+        Erzwingung "gelang" dann lautlos auf dem falschen Fenster.
+        Fix: `start_new_session=True` beim Chrome-Start gibt dem
+        Chrome-Launcher seine eigene Prozessgruppe, deren PGID == seine
+        eigene PID ist. Jeder Kandidat wird per Prozessgruppe gegen
+        `self.proc.pid` geprueft -- nur ein WID aus GENAU dieser Gruppe
+        gilt als das echte Fenster.
+
+        Mehrere Durchgaenge (nicht nur zwei): Chrome kann die Platzierung
+        nicht nur beim ersten Layout, sondern auch spaeter (z.B. nach
+        Reload durch den Live-Reload-Waechter) nochmal selbst zuruecksetzen
+        -- beobachtet 2026-09-11, Fenster sprang mitten in der laufenden
+        Sitzung von 746x449 auf 933x562 zurueck."""
+        env = dict(os.environ)
+        env.setdefault("DISPLAY", ":0")
+
+        def echtes_fenster_finden():
+            try:
+                r = subprocess.run(["xdotool", "search", "--name", "FranKenstein -- live"],
+                                    capture_output=True, text=True, env=env, timeout=2)
+                kandidaten = [z for z in r.stdout.split() if z.strip()]
+            except Exception:
+                kandidaten = []
+            for wid in kandidaten:
+                try:
+                    rp = subprocess.run(["xdotool", "getwindowpid", wid],
+                                         capture_output=True, text=True, env=env, timeout=2)
+                    fenster_pid = int(rp.stdout.strip())
+                    if os.getpgid(fenster_pid) == self.proc.pid:
+                        return wid
+                except Exception:
+                    continue
+            # Fallback, falls Prozessgruppen-Pruefung aus irgendeinem Grund
+            # nichts findet (z.B. xdotool/getpgid-Problem) -- lieber der
+            # alte, ungenaue Weg als gar keine Erzwingung.
+            return kandidaten[0] if kandidaten else None
+
+        wid = None
+        for _ in range(20):  # bis zu 10s auf das Fenster warten
+            time.sleep(0.5)
+            wid = echtes_fenster_finden()
+            if wid:
+                break
+        if wid is None:
+            print("[buehne] Fenster fuer Groessen-Erzwingung nicht gefunden (Timeout)")
+            return
+        for wartezeit in (0.0, 1.2, 1.8, 3.0):
+            time.sleep(wartezeit)
+            try:
+                subprocess.run(["xdotool", "windowsize", wid, str(FENSTER_B), str(FENSTER_H)],
+                                env=env, timeout=2)
+                subprocess.run(["xdotool", "windowmove", wid, str(FENSTER_X), str(FENSTER_Y)],
+                                env=env, timeout=2)
+            except Exception as e:
+                print(f"[buehne] Fenstergeometrie-Erzwingung fehlgeschlagen: {e}")
+
+    def schliessen(self, grund="zustand=aus"):
+        if _blick_modul is not None:
+            try:
+                _blick_modul.instanz().stoppen()
+            except Exception as e:
+                print(f"[buehne] Blickfuehrung konnte nicht sauber stoppen: {e}")
+        if not self.proc:
+            return
+        pid = self.proc.pid
+        try:
+            pgid = os.getpgid(pid)
+            os.killpg(pgid, signal.SIGTERM)
+            for _ in range(30):  # bis zu 3s auf sauberes Ende warten
+                if self.proc.poll() is not None:
+                    break
+                time.sleep(0.1)
+            if self.proc.poll() is None:
+                os.killpg(pgid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except Exception as e:
+            print(f"[buehne] Kill-Fehler: {e}")
+        # Sicherheitsnetz: manche Chrome-Helfer haengen NICHT an der
+        # Prozessgruppe (Zygote/GPU-Prozess je nach Version). pkill nach dem
+        # eindeutigen Profilpfad dieses Laufs faengt Reste ab, ohne fremde
+        # Chrome-Fenster (z.B. das normale Browserfenster) zu treffen.
+        try:
+            subprocess.run(["pkill", "-9", "-f", f"user-data-dir={CHROME_PROFIL}"],
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+        try:
+            os.remove(PID_DATEI)
+        except Exception:
+            pass
+        self.proc = None
+        print(f"[buehne] Chrome-Fenster geschlossen ({grund})")
+
+    def herunterfahren(self):
+        self.schliessen("Daemon beendet")
+
+
+def hauptschleife():
+    fw = Fensterverwalter()
+    fw._alte_pid_aufraeumen()
+
+    def _stop(signum, frame):
+        fw.herunterfahren()
+        sys.exit(0)
+    signal.signal(signal.SIGTERM, _stop)
+    signal.signal(signal.SIGINT, _stop)
+
+    _http_server_starten()
+
+    while True:
+        z = zustand_lesen()
+        if z["an"] and not fw.laeuft():
+            fw.oeffnen()
+        elif not z["an"] and fw.laeuft():
+            fw.schliessen("zustand.json = aus")
+        elif z["an"] and fw.laeuft() and fw.proc.poll() is not None:
+            # Fenster ist von selbst verschwunden (Nutzer hat X geklickt) --
+            # der Zustand darf dann nicht weiter "an" behaupten. Ehrlichkeit
+            # schlaegt Bequemlichkeit: die Datei wird korrigiert. Kamera hier
+            # sofort freigeben (nicht auf den 60s-Waechter warten) -- das ist
+            # kein Absturz, sondern eine erkannte, saubere Schliessung.
+            if _blick_modul is not None:
+                try:
+                    _blick_modul.instanz().stoppen()
+                except Exception as e:
+                    print(f"[buehne] Blickfuehrung konnte nicht sauber stoppen: {e}")
+            fw.proc = None
+            zustand_schreiben(False, "fenster manuell geschlossen")
+        time.sleep(1.0)
+
+
+if __name__ == "__main__":
+    hauptschleife()

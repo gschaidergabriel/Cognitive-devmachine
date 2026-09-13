@@ -1,0 +1,21 @@
+# OMEGA / self-integration semantic-state cutover gate.
+# Install ONLY after the 10-volatile-state holding guard is live and the VM has
+# been stopped safely. `semantic-state-cutover.py stage --execute` must have
+# produced CUTOVER.json + exact durable copies + exact ENTITYOS_IDENTITY_BINDS.
+#
+# This later drop-in replaces the temporary "any volatile DB blocks" condition
+# with a stronger condition: once a cutover manifest exists, durable DBs and
+# exact binds must verify on every future start. The old volatile source may
+# therefore still exist for the first cutover start; ExecStartPre may wipe the
+# disposable clone only because equivalent durable state is already proven.
+
+[Service]
+ExecCondition=
+ExecCondition=/usr/local/libexec/entityos/semantic-state-cutover.py condition
+# Ensure bind destinations exist in the freshly cloned disposable root before
+# systemd-nspawn applies ENTITYOS_IDENTITY_BINDS.
+ExecStartPre=/bin/sh -c 'mkdir -p "$ENTITYOS_ROOTFS_RUN/root/.local/share/agentzero" "$ENTITYOS_ROOTFS_RUN/root/.local/share/frank"'
+# Keep stop-time wiping disabled through first cutover/readback. Remove this
+# drop-in only after an independent post-start proof shows all semantic writers
+# are on the durable bind paths.
+ExecStopPost=

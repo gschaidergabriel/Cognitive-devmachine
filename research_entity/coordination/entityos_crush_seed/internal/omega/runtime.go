@@ -31,14 +31,19 @@ type Candidate struct {
 
 // TurnInput is the minimal observation OMEGA receives from the harness.
 // It contains no host-specific paths, services, or provider assumptions.
+// Route is an observation of the already-selected execution organ; OMEGA does
+// not use it to bypass or duplicate Crush/provider/bridge dispatch.
 type TurnInput struct {
 	SessionID string
 	RunID     string
 	Prompt    string
+	Route     OrganRoute
 }
 
 // Frame is the bounded cognitive state presented to the current model organ.
 // StateDigest binds the frame to the persistent state it was compiled from.
+// RouteDigest binds causal evidence to the selected execution organ while
+// deliberately keeping provider/model identity out of injected prompt text.
 // The causal metadata is intentionally separate from SystemContext: state can
 // become real and persistent before we earn the right to inject semantic
 // content into the model prompt.
@@ -49,6 +54,7 @@ type Frame struct {
 	EntityID          string
 	Revision          uint64
 	InputDigest       string
+	RouteDigest       string
 	PredecessorTurnID string
 	Candidates        []Candidate
 	SystemContext     string

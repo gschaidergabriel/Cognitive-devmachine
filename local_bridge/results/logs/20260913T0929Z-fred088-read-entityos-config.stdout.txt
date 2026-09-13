@@ -1,0 +1,40 @@
+# EntityOS runtime configuration.
+# install.sh copies this to /etc/entityos/entityos.conf (and does not
+# overwrite an existing one). All three unit files below read it via
+# EnvironmentFile=.
+
+# TCP port the dashboard socket listens on. The first inbound connection
+# here is what triggers the VM to start (see entityos-dashboard.socket).
+ENTITYOS_DASHBOARD_PORT=8781
+
+# Where persistent state lives on the HOST, bind-mounted into the VM at
+# /var/lib/entityos inside the container. This directory — and only this
+# directory — must survive VM restarts, reinstalls, and rootfs rebuilds.
+# unified.db (or unified.empty.db copied here on first install) lives here.
+ENTITYOS_DATA_DIR=/var/lib/entityos/data
+
+# Base rootfs built once by vm/build-rootfs.sh.
+ENTITYOS_ROOTFS_BASE=/var/lib/entityos/rootfs-base
+
+# Per-boot writable rootfs clone (copy-on-write where the filesystem
+# supports --reflink=auto, plain copy otherwise). Recreated from
+# ENTITYOS_ROOTFS_BASE on every start; never holds state itself.
+ENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run
+
+# nspawn machine name (visible in `machinectl list`).
+ENTITYOS_MACHINE_NAME=entityos
+
+# Added 2026-09-07 (architect session). Durable content must live OUTSIDE
+# ENTITYOS_ROOTFS_RUN, which is deleted and re-cloned on every start.
+ENTITYOS_VOICE_DIR=/var/lib/entityos/voice
+ENTITYOS_COGNITION_DIR=/opt/entityos/cognition
+
+# Kognition in der VM ohne Identitaetswechsel (2026-09-08). Die
+# installation_id wird aus DB-Pfad + Skriptverzeichnis gebildet -- heissen die
+# drinnen anders als draussen, ist es eine ANDERE Installation und die
+# Kontinuitaet bricht. Deshalb beide Host-Pfade unter DEMSELBEN Namen binden.
+# PipeWire-Socket DAUERHAFT gebunden (2026-09-08). Er war vorher per
+# machinectl bind live eingehaengt, also in der Schicht, die bei jedem
+# VM-Start geloescht wird -- nach einem Neustart war das Mikrofon weg,
+# ohne dass jemand wusste warum. Genau der Schichtfehler aus LAYERING.md.
+ENTITYOS_IDENTITY_BINDS="--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix --bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero --bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank"

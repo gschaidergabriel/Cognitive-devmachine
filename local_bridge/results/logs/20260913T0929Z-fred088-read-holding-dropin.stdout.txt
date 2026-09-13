@@ -1,0 +1,22 @@
+# GO084 — fail-closed holding action for EntityOS volatile semantic state.
+#
+# Install together with fluechtig-vor-start-pruefen.sh at
+# /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh and load this as
+# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf.
+#
+# WHY TWO LINES MATTER:
+# 1) ExecCondition runs before ExecStartPre, so the existing destructive
+#    start-time `rm -rf "$ENTITYOS_ROOTFS_RUN"` cannot run while filled
+#    semantic SQLite state is still present or the guard cannot prove safety.
+# 2) The empty ExecStopPost assignment resets the base unit's unconditional
+#    stop-time wipe. Otherwise `systemctl stop entityos-vm.service` could still
+#    destroy the same state before any future start guard gets a chance.
+#
+# This is intentionally a HOLDING ACTION, not the final persistence migration.
+# It copies/migrates no database and creates no second state authority. Once
+# the volatile semantic stores are migrated/read back under an admitted durable
+# layout, the ordinary disposable-rootfs cleanup policy can be restored.
+
+[Service]
+ExecCondition=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh
+ExecStopPost=

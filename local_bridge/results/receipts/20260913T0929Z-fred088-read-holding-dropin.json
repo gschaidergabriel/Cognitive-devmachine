@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "20260913T0929Z-fred088-read-holding-dropin",
+  "command_sha256": "f472ecc5be6e849df313fed96f9a48afc6f731916c6f73b213efebe3f9b96d5b",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-13T09:27:51.083255+00:00",
+  "finished_at": "2026-09-13T09:27:51.083289+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "# GO084 \u2014 fail-closed holding action for EntityOS volatile semantic state.\n#\n# Install together with fluechtig-vor-start-pruefen.sh at\n# /usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh and load this as\n# /etc/systemd/system/entityos-vm.service.d/10-volatile-state-guard.conf.\n#\n# WHY TWO LINES MATTER:\n# 1) ExecCondition runs before ExecStartPre, so the existing destructive\n#    start-time `rm -rf \"$ENTITYOS_ROOTFS_RUN\"` cannot run while filled\n#    semantic SQLite state is still present or the guard cannot prove safety.\n# 2) The empty ExecStopPost assignment resets the base unit's unconditional\n#    stop-time wipe. Otherwise `systemctl stop entityos-vm.service` could still\n#    destroy the same state before any future start guard gets a chance.\n#\n# This is intentionally a HOLDING ACTION, not the final persistence migration.\n# It copies/migrates no database and creates no second state authority. Once\n# the volatile semantic stores are migrated/read back under an admitted durable\n# layout, the ordinary disposable-rootfs cleanup policy can be restored.\n\n[Service]\nExecCondition=/usr/local/libexec/entityos/fluechtig-vor-start-pruefen.sh\nExecStopPost=\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "8750f098ff8e5a7aaca53b981d58e6fc446ebd64c617f7d9b2b990242b6adc8e",
+    "bytes": 1176,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

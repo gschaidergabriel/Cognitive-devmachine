@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "20260913T0929Z-fred088-read-entityos-config",
+  "command_sha256": "d7df2e06e015317f2b582a34bee92a6ffff2f501c61cd255dce3a41650aab6aa",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-13T09:27:51.076210+00:00",
+  "finished_at": "2026-09-13T09:27:51.076244+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "8975b30df04422a4d411c31a578c664572fc3c87aea329ede26d960d8e46d4e4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "# EntityOS runtime configuration.\n# install.sh copies this to /etc/entityos/entityos.conf (and does not\n# overwrite an existing one). All three unit files below read it via\n# EnvironmentFile=.\n\n# TCP port the dashboard socket listens on. The first inbound connection\n# here is what triggers the VM to start (see entityos-dashboard.socket).\nENTITYOS_DASHBOARD_PORT=8781\n\n# Where persistent state lives on the HOST, bind-mounted into the VM at\n# /var/lib/entityos inside the container. This directory \u2014 and only this\n# directory \u2014 must survive VM restarts, reinstalls, and rootfs rebuilds.\n# unified.db (or unified.empty.db copied here on first install) lives here.\nENTITYOS_DATA_DIR=/var/lib/entityos/data\n\n# Base rootfs built once by vm/build-rootfs.sh.\nENTITYOS_ROOTFS_BASE=/var/lib/entityos/rootfs-base\n\n# Per-boot writable rootfs clone (copy-on-write where the filesystem\n# supports --reflink=auto, plain copy otherwise). Recreated from\n# ENTITYOS_ROOTFS_BASE on every start; never holds state itself.\nENTITYOS_ROOTFS_RUN=/var/lib/entityos/rootfs-run\n\n# nspawn machine name (visible in `machinectl list`).\nENTITYOS_MACHINE_NAME=entityos\n\n# Added 2026-09-07 (architect session). Durable content must live OUTSIDE\n# ENTITYOS_ROOTFS_RUN, which is deleted and re-cloned on every start.\nENTITYOS_VOICE_DIR=/var/lib/entityos/voice\nENTITYOS_COGNITION_DIR=/opt/entityos/cognition\n\n# Kognition in der VM ohne Identitaetswechsel (2026-09-08). Die\n# installation_id wird aus DB-Pfad + Skriptverzeichnis gebildet -- heissen die\n# drinnen anders als draussen, ist es eine ANDERE Installation und die\n# Kontinuitaet bricht. Deshalb beide Host-Pfade unter DEMSELBEN Namen binden.\n# PipeWire-Socket DAUERHAFT gebunden (2026-09-08). Er war vorher per\n# machinectl bind live eingehaengt, also in der Schicht, die bei jedem\n# VM-Start geloescht wird -- nach einem Neustart war das Mikrofon weg,\n# ohne dass jemand wusste warum. Genau der Schichtfehler aus LAYERING.md.\nENTITYOS_IDENTITY_BINDS=\"--bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/run/user/1000:/run/user/1000 --bind=/tmp/.X11-unix:/tmp/.X11-unix --bind=/var/lib/entityos/data/semantic-state/agentzero:/root/.local/share/agentzero --bind=/var/lib/entityos/data/semantic-state/frank:/root/.local/share/frank\"\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "8975b30df04422a4d411c31a578c664572fc3c87aea329ede26d960d8e46d4e4",
+    "bytes": 2357,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

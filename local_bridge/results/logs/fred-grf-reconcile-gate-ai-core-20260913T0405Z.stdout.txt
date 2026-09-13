@@ -1,0 +1,138 @@
+SUBJECT_MACHINE=ai-core-node
+SUBJECT_OWNER=gabriel
+EXPECTED_HEAD=abb7e0dbf3315242603999898ad96fbf6bd16414
+ACTUAL_HEAD=abb7e0dbf3315242603999898ad96fbf6bd16414
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    },
+    {
+      "name": "grf_brain_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_grf_brain is a pure projection organ; durable state stays in canonical runtime; AST parsed"
+    },
+    {
+      "name": "grf_brain_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_grf_brain defines no resident loop; AST parsed"
+    },
+    {
+      "name": "grf_brain_preserves_epistemic_fences",
+      "ok": true,
+      "detail": "GRF must preserve UNKNOWN/hypothesis/world-collapse fences and emit the existing GRID signal contract"
+    },
+    {
+      "name": "grf_discriminator_present",
+      "ok": true,
+      "detail": "OMEGA GRF requires its explicit discriminator planner for hypothesis-separating test selection"
+    },
+    {
+      "name": "grf_discriminator_has_no_db_writer",
+      "ok": true,
+      "detail": "GRF discriminator must remain stateless; AST parsed"
+    },
+    {
+      "name": "grf_discriminator_has_no_daemon_loop",
+      "ok": true,
+      "detail": "GRF discriminator defines no resident loop; AST parsed"
+    },
+    {
+      "name": "grf_discriminator_preserves_truth_fence",
+      "ok": true,
+      "detail": "discriminator may rank/update hypotheses but cannot admit evidence or canonical truth"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+.............................F.                                          [100%]
+=================================== FAILURES ===================================
+_ Voice777InstallerConvergenceTest.test_installer_composes_in_final_product_tree_without_entrypoint_swap_or_restart _
+
+self = <test_voice777_installer_convergence.Voice777InstallerConvergenceTest testMethod=test_installer_composes_in_final_product_tree_without_entrypoint_swap_or_restart>
+
+    def test_installer_composes_in_final_product_tree_without_entrypoint_swap_or_restart(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_raw:
+            tmp = Path(tmp_raw)
+            home = tmp / "home"
+            product = home / ".local" / "lib" / "frankenstein-voice-final"
+            dest = product / "scripts"
+            wrong_parallel_dest = home / ".local" / "lib" / "frankenstein" / "scripts"
+            fakebin = tmp / "bin"
+            log = tmp / "systemctl.log"
+            dest.mkdir(parents=True)
+            fakebin.mkdir(parents=True)
+    
+            final_sentinel = b"# PRODUCTIVE FINAL OWNER/PRIVACY/EFFECT POLICY -- PRESERVE\n"
+            (dest / "voice_final_runtime.py").write_bytes(final_sentinel)
+            for name in ("voice_full_runtime.py", "voice_host_live_client.py", "frank_terminal.py"):
+                (dest / name).write_text("# pre-777 base\n", encoding="utf-8")
+    
+            fake_systemctl = fakebin / "systemctl"
+            fake_systemctl.write_text(
+                "#!/usr/bin/env bash\n"
+                "printf '%s\\n' \"$*\" >> \"$OMEGA777_SYSTEMCTL_LOG\"\n"
+                "if [[ \"$*\" == *\"show frankenstein-gespraechsmodus.service\"* ]]; then\n"
+                "  printf '/usr/bin/env python3 %s/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\\n' \"$HOME\"\n"
+                "elif [[ \"$*\" == *\"show frankenstein-chatgpt-client.service\"* ]]; then\n"
+                "  printf '/usr/bin/env python3 %s/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py\\n' \"$HOME\"\n"
+                "fi\n",
+                encoding="utf-8",
+            )
+            fake_systemctl.chmod(0o755)
+    
+            env = os.environ.copy()
+            env["HOME"] = str(home)
+            env["OMEGA777_SYSTEMCTL_LOG"] = str(log)
+            env["PATH"] = str(fakebin) + os.pathsep + env.get("PATH", "")
+            proc = subprocess.run(
+                ["bash", str(INSTALLER)],
+                cwd=str(ROOT),
+                env=env,
+                text=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=20,
+                check=False,
+            )
+>           self.assertEqual(proc.returncode, 0, msg=f"stdout={proc.stdout}\nstderr={proc.stderr}")
+E           AssertionError: 4 != 0 : stdout=
+E           stderr=777 install refused: stable Voice argv could not be extracted: /usr/bin/env python3 /tmp/tmpk8szsf2i/home/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+
+tests/test_voice777_installer_convergence.py:77: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_voice777_installer_convergence.py::Voice777InstallerConvergenceTest::test_installer_composes_in_final_product_tree_without_entrypoint_swap_or_restart
+1 failed, 30 passed in 0.62s

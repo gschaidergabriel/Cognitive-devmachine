@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-grf-brain-preflight-20260913-1044",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\npython3 - <<'PY'\nimport json, pathlib, os\nroot=pathlib.Path('/workspace/omega_runtime')\ncurrent=root/'current'\nstate=root/'state'\nout={'current_exists':current.exists(),'current_resolved':str(current.resolve()) if current.exists() else None,'cpu_count':os.cpu_count()}\nfor name in ['SUPERVISOR_STATUS.json','STATUS.json','ASSEMBLY_STATUS.json','cortex_state/STATE.json','brain/STATUS.json']:\n p=state/name\n out[name]={'exists':p.exists()}\n if p.exists():\n  try: out[name]['json']=json.loads(p.read_text())\n  except Exception as e: out[name]['error']=type(e).__name__\nfor p in ['/sys/fs/cgroup/cpu.max','/sys/fs/cgroup/cpuset.cpus.effective']:\n q=pathlib.Path(p)\n out[p]=q.read_text().strip() if q.exists() else None\nprint(json.dumps(out,sort_keys=True))\nPY\nps -eo pid,ppid,stat,pcpu,pmem,args | grep -E 'omega\\.(supervisor|grid_runtime_v3|brain_runtime|assembly|relay_entrypoint|spool_receipt_reconciler|telemetry_daemon|master_bridge_carrier)' | grep -v grep || true"
+}

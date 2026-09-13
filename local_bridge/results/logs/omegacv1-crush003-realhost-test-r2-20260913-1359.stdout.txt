@@ -1,0 +1,111 @@
+/tmp/omegacv1-crush003-r2.b2HmLK/go.tgz: OK
+GO=go version go1.27.1 linux/amd64
+=== OMEGA ===
+=== RUN   TestNoopRuntimePreservesUpstreamPrompt
+--- PASS: TestNoopRuntimePreservesUpstreamPrompt (0.00s)
+=== RUN   TestFrameRenderIsDeterministicAcrossProductionOrder
+--- PASS: TestFrameRenderIsDeterministicAcrossProductionOrder (0.00s)
+=== RUN   TestFrameDoesNotDumpAbsentState
+--- PASS: TestFrameDoesNotDumpAbsentState (0.00s)
+=== RUN   TestPersistentRuntimeSurvivesSessionAndProcessReentry
+--- PASS: TestPersistentRuntimeSurvivesSessionAndProcessReentry (0.00s)
+=== RUN   TestPersistentRuntimeStoresDigestsNotRawTranscript
+--- PASS: TestPersistentRuntimeStoresDigestsNotRawTranscript (0.00s)
+=== RUN   TestPersistentRuntimeMarksConcurrentReentryWithoutDroppingTurn
+--- PASS: TestPersistentRuntimeMarksConcurrentReentryWithoutDroppingTurn (0.00s)
+PASS
+ok  	github.com/charmbracelet/crush/internal/omega	0.006s
+=== AGENT ===
+ok  	github.com/charmbracelet/crush/internal/agent	4.717s
+?   	github.com/charmbracelet/crush/internal/agent/agenttest	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/hyper	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/notify	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/prompt	[no test files]
+ok  	github.com/charmbracelet/crush/internal/agent/tools	6.363s
+ok  	github.com/charmbracelet/crush/internal/agent/tools/mcp	5.455s
+=== FULL ===
+?   	github.com/charmbracelet/crush	[no test files]
+ok  	github.com/charmbracelet/crush/internal/agent	(cached)
+?   	github.com/charmbracelet/crush/internal/agent/agenttest	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/hyper	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/notify	[no test files]
+?   	github.com/charmbracelet/crush/internal/agent/prompt	[no test files]
+ok  	github.com/charmbracelet/crush/internal/agent/tools	(cached)
+ok  	github.com/charmbracelet/crush/internal/agent/tools/mcp	(cached)
+?   	github.com/charmbracelet/crush/internal/ansiext	[no test files]
+ok  	github.com/charmbracelet/crush/internal/apigen	0.015s
+ok  	github.com/charmbracelet/crush/internal/app	0.180s
+ok  	github.com/charmbracelet/crush/internal/backend	9.652s
+ok  	github.com/charmbracelet/crush/internal/client	0.196s
+?   	github.com/charmbracelet/crush/internal/clipboard	[no test files]
+ok  	github.com/charmbracelet/crush/internal/cmd	0.132s
+ok  	github.com/charmbracelet/crush/internal/cmd/clientserverrace	43.439s
+ok  	github.com/charmbracelet/crush/internal/commands	0.052s
+ok  	github.com/charmbracelet/crush/internal/config	13.583s
+ok  	github.com/charmbracelet/crush/internal/csync	0.022s
+ok  	github.com/charmbracelet/crush/internal/db	0.613s
+?   	github.com/charmbracelet/crush/internal/diff	[no test files]
+ok  	github.com/charmbracelet/crush/internal/diffdetect	0.016s
+ok  	github.com/charmbracelet/crush/internal/discover	0.063s
+?   	github.com/charmbracelet/crush/internal/dns	[no test files]
+ok  	github.com/charmbracelet/crush/internal/env	0.015s
+ok  	github.com/charmbracelet/crush/internal/event	0.019s
+ok  	github.com/charmbracelet/crush/internal/filepathext	0.016s
+ok  	github.com/charmbracelet/crush/internal/filetracker	0.550s
+?   	github.com/charmbracelet/crush/internal/format	[no test files]
+ok  	github.com/charmbracelet/crush/internal/fsext	0.135s
+ok  	github.com/charmbracelet/crush/internal/herdr	0.055s
+?   	github.com/charmbracelet/crush/internal/history	[no test files]
+ok  	github.com/charmbracelet/crush/internal/home	0.024s
+ok  	github.com/charmbracelet/crush/internal/hooks	3.123s
+ok  	github.com/charmbracelet/crush/internal/lock	0.439s
+ok  	github.com/charmbracelet/crush/internal/log	0.012s
+?   	github.com/charmbracelet/crush/internal/login	[no test files]
+?   	github.com/charmbracelet/crush/internal/logout	[no test files]
+ok  	github.com/charmbracelet/crush/internal/lsp	1.070s
+ok  	github.com/charmbracelet/crush/internal/lsp/util	0.010s
+ok  	github.com/charmbracelet/crush/internal/message	1.048s
+?   	github.com/charmbracelet/crush/internal/oauth	[no test files]
+ok  	github.com/charmbracelet/crush/internal/oauth/callback	0.020s
+ok  	github.com/charmbracelet/crush/internal/oauth/copilot	0.017s
+?   	github.com/charmbracelet/crush/internal/oauth/hyper	[no test files]
+ok  	github.com/charmbracelet/crush/internal/oauth/mcp	0.133s
+ok  	github.com/charmbracelet/crush/internal/oauth/openai	0.062s
+ok  	github.com/charmbracelet/crush/internal/omega	0.025s
+ok  	github.com/charmbracelet/crush/internal/permission	0.083s
+ok  	github.com/charmbracelet/crush/internal/projects	0.077s
+ok  	github.com/charmbracelet/crush/internal/proto	0.051s
+?   	github.com/charmbracelet/crush/internal/pubsub	[no test files]
+?   	github.com/charmbracelet/crush/internal/question	[no test files]
+ok  	github.com/charmbracelet/crush/internal/server	2.524s
+ok  	github.com/charmbracelet/crush/internal/session	0.294s
+ok  	github.com/charmbracelet/crush/internal/shell	13.477s
+ok  	github.com/charmbracelet/crush/internal/shellconfig	0.372s
+ok  	github.com/charmbracelet/crush/internal/skills	0.109s
+ok  	github.com/charmbracelet/crush/internal/stringext	0.009s
+ok  	github.com/charmbracelet/crush/internal/ui/anim	0.024s
+ok  	github.com/charmbracelet/crush/internal/ui/attachments	0.062s
+ok  	github.com/charmbracelet/crush/internal/ui/chat	17.644s
+ok  	github.com/charmbracelet/crush/internal/ui/common	0.078s
+ok  	github.com/charmbracelet/crush/internal/ui/completions	0.078s
+ok  	github.com/charmbracelet/crush/internal/ui/dialog	0.192s
+ok  	github.com/charmbracelet/crush/internal/ui/diffview	1.447s
+ok  	github.com/charmbracelet/crush/internal/ui/exitbanner	0.153s
+ok  	github.com/charmbracelet/crush/internal/ui/image	0.113s
+ok  	github.com/charmbracelet/crush/internal/ui/list	0.105s
+?   	github.com/charmbracelet/crush/internal/ui/logo	[no test files]
+?   	github.com/charmbracelet/crush/internal/ui/logo/example	[no test files]
+ok  	github.com/charmbracelet/crush/internal/ui/model	5.966s
+ok  	github.com/charmbracelet/crush/internal/ui/notification	0.042s
+ok  	github.com/charmbracelet/crush/internal/ui/styles	0.068s
+?   	github.com/charmbracelet/crush/internal/ui/util	[no test files]
+ok  	github.com/charmbracelet/crush/internal/ui/xchroma	0.096s
+ok  	github.com/charmbracelet/crush/internal/update	0.006s
+?   	github.com/charmbracelet/crush/internal/version	[no test files]
+ok  	github.com/charmbracelet/crush/internal/workspace	5.909s
+=== BUILD ===
+a0275ab449e45c0ea495ff5f02cfb9887d72cca0f08216525c1d9de88b5ad154  /tmp/omegacv1-crush003-r2.b2HmLK/omegacv1
+=== DIFFCHECK ===
+ internal/agent/agent.go       |  49 +++++++++++++++++
+ internal/agent/coordinator.go | 125 ++++++++++++++++++++++++++----------------
+ 2 files changed, 126 insertions(+), 48 deletions(-)

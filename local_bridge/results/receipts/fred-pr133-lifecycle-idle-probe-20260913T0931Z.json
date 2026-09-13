@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-pr133-lifecycle-idle-probe-20260913T0931Z",
+  "command_sha256": "af426fd89d26c8a4b48eef1e69acc7099db88c5e556c1d66ceeedd11cdb5bb48",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T09:34:15.340917+00:00",
+  "finished_at": "2026-09-13T09:34:15.502792+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "030b5ea986bb5391f45e951c59d8c2a98f1ff533a30abbf0ebd078478c28cc5c",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "MACHINE=ai-core-node OWNER=gabriel\n===SERVICE===\nMainPID=33808\nExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 16:32:06 +07] ; stop_time=[n/a] ; pid=33808 ; code=(null) ; status=0/0 }\nActiveState=active\nSubState=running\n===OMEGA_ORGAN_STATUS===\n{\"schema\": \"OMEGA_ORGAN_ACTIVITY/v1\", \"active\": null}\n===PROCESS_TREE===\n  33808    2441 Ssl      129 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

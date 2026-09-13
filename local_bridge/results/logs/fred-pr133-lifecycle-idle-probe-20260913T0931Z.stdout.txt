@@ -1,0 +1,10 @@
+MACHINE=ai-core-node OWNER=gabriel
+===SERVICE===
+MainPID=33808
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 16:32:06 +07] ; stop_time=[n/a] ; pid=33808 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+===OMEGA_ORGAN_STATUS===
+{"schema": "OMEGA_ORGAN_ACTIVITY/v1", "active": null}
+===PROCESS_TREE===
+  33808    2441 Ssl      129 python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py

@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-andreas-free-frank-preflight-20260913T1418",
+  "command_sha256": "5ed64ff7bbf75b91453d55f7b0c1a059357734c3db78bd3571c99cb78233de96",
+  "host": "andreas-maco",
+  "owner": "andreas",
+  "machine_id": "andreas-maco",
+  "started_at": "2026-09-13T07:22:19.054334+00:00",
+  "finished_at": "2026-09-13T07:22:19.172169+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "d69f8d83ebef3fb6748d27bb2267ee5c4c150dbe2f8e21d581e500b9b9bef055",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "=== TOOLS ===\ncool-retro-term=ptyxis=/usr/bin/ptyxis\ngtk-launch=/usr/bin/gtk-launch\ndesktop-file-validate=/usr/bin/desktop-file-validate\nupdate-desktop-database=/usr/bin/update-desktop-database\n=== SUDO ===\nYES\n=== FILES ===\nMISSING:/home/andreas/.local/bin/free-frank-open\n-rwxrwxr-x 775 andreas:andreas 479 /home/andreas/.local/share/applications/free-frank.desktop\nMISSING:/home/andreas/.local/share/applications/free-pool-harness.desktop\nMISSING:/home/andreas/.claude/star/daten/free-frank-icon.png\n-rw-rw-r-- 664 andreas:andreas 12783 /home/andreas/.config/crush/crush.json\n=== DESKTOPS ===\n---/home/andreas/.local/share/applications/free-frank.desktop\n[Desktop Entry]\nType=Application\nName=Free Frank\nGenericName=FranKenstein v2.0 Free-Pool-Harness (Crush)\nComment=Crush-Terminal gegen NVIDIA/Groq/Mistral/OpenRouter -- eigene Free-Pool-Schluessel, per-Modell-Prompts, /model wechselt frei\nIcon=/home/andreas/.claude/star/free-frank-icon.png\nExec=ptyxis --title=\"Free Frank\" -- /home/andreas/.claude/star/harness_crush_knopf.sh\nTerminal=false\nCategories=Development;\nKeywords=crush;freepool;frankenstein;modell;\nStartupNotify=true\n=== CRUSH ROUTE ===\nmodels= {'large': {'model': 'openai/gpt-oss-120b', 'provider': 'freepool-groq', 'reasoning_effort': 'low'}, 'small': {'model': 'openai/gpt-oss-120b', 'provider': 'freepool-groq', 'reasoning_effort': 'low'}}\ncontext_paths= ['CRUSH.md']\nglobal_context_paths= ['/home/andreas/.config/crush/CRUSH.md']\nproviders= ['claude-cli', 'freepool-groq', 'freepool-mistral', 'freepool-nvidia', 'freepool-openrouter']\nfreepool-nvidia-nemotron base_url= None models= []\nfreepool-groq-gptoss base_url= None models= []\n=== KEY NAMES ONLY ===\nNVIDIA_NIM_API_KEY=set\nGROQ_API_KEY=set\nMISTRAL_API_KEY=unset\nOPENROUTER_API_KEY=unset\n=== RUNNING ===\n 105771 ptyxis --new-window -- /home/andreas/.local/bin/claude-start\n 105790 /usr/libexec/ptyxis-agent --socket-fd=3 --rlimit-nofile=1024\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_ANDREAS_MACO_NOT_SANDBOXED"
+}

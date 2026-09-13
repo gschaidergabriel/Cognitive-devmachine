@@ -1,0 +1,41 @@
+=== TOOLS ===
+cool-retro-term=ptyxis=/usr/bin/ptyxis
+gtk-launch=/usr/bin/gtk-launch
+desktop-file-validate=/usr/bin/desktop-file-validate
+update-desktop-database=/usr/bin/update-desktop-database
+=== SUDO ===
+YES
+=== FILES ===
+MISSING:/home/andreas/.local/bin/free-frank-open
+-rwxrwxr-x 775 andreas:andreas 479 /home/andreas/.local/share/applications/free-frank.desktop
+MISSING:/home/andreas/.local/share/applications/free-pool-harness.desktop
+MISSING:/home/andreas/.claude/star/daten/free-frank-icon.png
+-rw-rw-r-- 664 andreas:andreas 12783 /home/andreas/.config/crush/crush.json
+=== DESKTOPS ===
+---/home/andreas/.local/share/applications/free-frank.desktop
+[Desktop Entry]
+Type=Application
+Name=Free Frank
+GenericName=FranKenstein v2.0 Free-Pool-Harness (Crush)
+Comment=Crush-Terminal gegen NVIDIA/Groq/Mistral/OpenRouter -- eigene Free-Pool-Schluessel, per-Modell-Prompts, /model wechselt frei
+Icon=/home/andreas/.claude/star/free-frank-icon.png
+Exec=ptyxis --title="Free Frank" -- /home/andreas/.claude/star/harness_crush_knopf.sh
+Terminal=false
+Categories=Development;
+Keywords=crush;freepool;frankenstein;modell;
+StartupNotify=true
+=== CRUSH ROUTE ===
+models= {'large': {'model': 'openai/gpt-oss-120b', 'provider': 'freepool-groq', 'reasoning_effort': 'low'}, 'small': {'model': 'openai/gpt-oss-120b', 'provider': 'freepool-groq', 'reasoning_effort': 'low'}}
+context_paths= ['CRUSH.md']
+global_context_paths= ['/home/andreas/.config/crush/CRUSH.md']
+providers= ['claude-cli', 'freepool-groq', 'freepool-mistral', 'freepool-nvidia', 'freepool-openrouter']
+freepool-nvidia-nemotron base_url= None models= []
+freepool-groq-gptoss base_url= None models= []
+=== KEY NAMES ONLY ===
+NVIDIA_NIM_API_KEY=set
+GROQ_API_KEY=set
+MISTRAL_API_KEY=unset
+OPENROUTER_API_KEY=unset
+=== RUNNING ===
+ 105771 ptyxis --new-window -- /home/andreas/.local/bin/claude-start
+ 105790 /usr/libexec/ptyxis-agent --socket-fd=3 --rlimit-nofile=1024

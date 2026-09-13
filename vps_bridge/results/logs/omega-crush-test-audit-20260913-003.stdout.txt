@@ -1,0 +1,79 @@
+=== GO ===
+go version go1.27.1 linux/amd64
+=== OMEGA TESTS ===
+ok  	github.com/charmbracelet/crush/internal/omega	(cached)
+=== OMEGA INTEGRATION REFERENCES ===
+internal/workspace/app_workspace.go:505:// Compile-time check that AppWorkspace implements Workspace.
+internal/shell/jq.go:145:	opts := []gojq.CompilerOption{
+internal/shell/jq.go:152:	code, err := gojq.Compile(query, opts...)
+internal/cmd/root.go:853:var safeNameRegexp = regexp.MustCompile(`[^a-zA-Z0-9._-]`)
+internal/ui/model/ui.go:5168:var pasteRE = regexp.MustCompile(`paste_(\d+).txt`)
+internal/ui/model/chat_draw_cache_test.go:332:// Compile-time guard: testMessageItem is reused from layout_test.go and
+internal/server/endpoints_test.go:14:var braceParam = regexp.MustCompile(`\{(\w+)\}`)
+internal/config/reload_hooks_test.go:14:// TestReloadFromDisk_CompilesHookMatchers is a regression test for a bug
+internal/config/reload_hooks_test.go:22:func TestReloadFromDisk_CompilesHookMatchers(t *testing.T) {
+internal/config/load.go:1448:			if _, err := regexp.Compile(h.Matcher); err != nil {
+internal/agent/tools/fetch_helpers.go:22:var multipleNewlinesRe = regexp.MustCompile(`\n{3,}`)
+internal/agent/tools/grep_test.go:43:	regex1, err := regexp.Compile(pattern1)
+internal/agent/tools/grep_test.go:179:func BenchmarkRegexCacheVsCompile(b *testing.B) {
+internal/agent/tools/grep_test.go:194:			_, err := regexp.Compile(pattern)
+internal/agent/tools/mcp/channel.go:56:var metaKeyPattern = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
+internal/agent/tools/grep.go:47:	re, err := regexp.Compile(pattern)
+internal/agent/tools/grep.go:66:	globBraceRegex = regexp.MustCompile(`\{([^}]+)\}`)
+internal/agent/agent.go:45:	"github.com/charmbracelet/crush/internal/omega"
+internal/agent/agent.go:73:	thinkTagRegex       = regexp.MustCompile(`(?s)<think>.*?</think>`)
+internal/agent/agent.go:74:	orphanThinkTagRegex = regexp.MustCompile(`</?think>`)
+internal/agent/agent.go:176:	cognitiveRuntime   omega.Runtime
+internal/agent/agent.go:238:	CognitiveRuntime     omega.Runtime
+internal/agent/agent.go:248:		cognitiveRuntime = omega.NoopRuntime{}
+internal/agent/agent.go:676:	frame, frameErr := a.cognitiveRuntime.Compile(ctx, omega.TurnInput{
+internal/agent/agent.go:682:		return nil, fmt.Errorf("omega cognitive compile failed: %w", frameErr)
+internal/agent/agent.go:684:	if cognitiveContext := frame.RenderSystemContext(); cognitiveContext != "" {
+internal/agent/agent.go:816:		outcome := omega.TurnOutcome{
+internal/agent/agent.go:827:		if reentryErr := a.cognitiveRuntime.Reenter(reentryCtx, frame, outcome); reentryErr != nil && retErr == nil {
+internal/agent/agent.go:828:			retErr = fmt.Errorf("omega cognitive reentry failed: %w", reentryErr)
+internal/agent/aws_sso_refresh.go:28:var awsSSOURLRe = regexp.MustCompile(`https://[^\s]+`)
+internal/apigen/endpoint_test.go:95:func TestBuilderCompileContract(t *testing.T) {
+internal/hooks/runner.go:55:			re, err := regexp.Compile(h.Matcher)
+internal/update/update.go:31:var goInstallRegexp = regexp.MustCompile(`^v?\d+\.\d+\.\d+-\d+\.\d{14}-[0-9a-f]{12}$`)
+internal/omega/runtime.go:1:// Package omega defines the portable cognitive runtime seam used by EntityOS.
+internal/omega/runtime.go:6:package omega
+internal/omega/runtime.go:61:// Compile runs before model inference. Reenter runs once at terminal turn
+internal/omega/runtime.go:66:	Compile(context.Context, TurnInput) (Frame, error)
+internal/omega/runtime.go:67:	Reenter(context.Context, Frame, TurnOutcome) error
+internal/omega/runtime.go:74:func (NoopRuntime) Compile(context.Context, TurnInput) (Frame, error) {
+internal/omega/runtime.go:78:func (NoopRuntime) Reenter(context.Context, Frame, TurnOutcome) error {
+internal/omega/runtime.go:82:// RenderSystemContext deterministically serializes the bounded winning
+internal/omega/runtime.go:86:func (f Frame) RenderSystemContext() string {
+internal/omega/runtime.go:102:	b.WriteString("<omega-cognitive-frame version=\"")
+internal/omega/runtime.go:138:	b.WriteString("</omega-cognitive-frame>")
+internal/omega/runtime_test.go:1:package omega
+internal/omega/runtime_test.go:11:	frame, err := rt.Compile(context.Background(), TurnInput{
+internal/omega/runtime_test.go:19:	if got := frame.RenderSystemContext(); got != "" {
+internal/omega/runtime_test.go:22:	if err := rt.Reenter(context.Background(), frame, TurnOutcome{}); err != nil {
+internal/omega/runtime_test.go:34:	got1 := f1.RenderSystemContext()
+internal/omega/runtime_test.go:35:	got2 := f2.RenderSystemContext()
+internal/omega/runtime_test.go:48:	}).RenderSystemContext()
+internal/oauth/copilot/client.go:15:var assistantRolePattern = regexp.MustCompile(`"role"\s*:\s*"assistant"`)
+internal/commands/commands.go:18:var namedArgPattern = regexp.MustCompile(`\$([A-Z][A-Z0-9_]*)`)
+internal/skills/skills.go:30:	namePattern    = regexp.MustCompile(`^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$`)
+=== OMEGA COMMIT DIFFS ===
+725b7b6 entityos: add portable OMEGA cognitive runtime seam
+ internal/agent/agent.go        |  49 +++++++++++++
+ internal/omega/runtime.go      | 155 +++++++++++++++++++++++++++++++++++++++++
+ internal/omega/runtime_test.go |  55 +++++++++++++++
+ 3 files changed, 259 insertions(+)
+229a5e5 entityos: lock live donors and portable core boundary
+ docs/entityos/DONOR_LOCK.json  | 61 ++++++++++++++++++++++++++++++++++++++++++
+ docs/entityos/PORTABLE_CORE.md | 11 ++++++++
+ 2 files changed, 72 insertions(+)
+bc221e9 entityos: keep Frankenstein 2.0 organs and bridges for phase 1
+ docs/entityos/PHASE1_ORGAN_TOPOLOGY.md | 14 ++++++++++++++
+ docs/entityos/PORTABLE_CORE.md         | 12 ++++++++----
+ 2 files changed, 22 insertions(+), 4 deletions(-)
+=== BUILD ROOT ===
+BUILD_ROOT_PASS
+=== STATUS ===
+## entityos/omega-runtime
+?? .entityos-build/
+=== DONE ===

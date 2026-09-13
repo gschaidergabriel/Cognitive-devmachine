@@ -1,0 +1,572 @@
+===BOUNDARY===
+machine_id=ai-core-node
+owner=gabriel
+execution_boundary=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED
+===SUBJECTS===
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+e769eee79cc2de465e43f91a6a300cd911e5e1f0a6715e65ffb361825ae63a51  /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py
+aef16fbcc6225d89324af7b2330d1ff445b928a434969563a766205877572f99  /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py
+===ROUTE_AND_DISPATCH_FORENSIC===
+=== /home/ai-core-node/.claude/star/harness_crush.py lines=838 hits=293 ===
+--- 1-16 ---
+00001: #!/usr/bin/env python3
+00002: """harness_crush.py -- PHASE 52 (Gabriel-Auftrag 2026-09-12, woertliches Urteil
+00003: nach Screenshots: "das soll das tolle free pool harness sein? er kann nicht
+00004: antworten, braucht ewig, und es sieht so scheisse aus das es schmerzt ...
+00005: ausserdem ist er weder am grid angeschlossen noch macht er eine reentry --
+00006: das ist einfach nur beschiss"). Kein Politur-Auftrag an aider, sondern
+00007: Werkzeugwechsel: Crush (github.com/charmbracelet/crush, npm-installiert unter
+00008: ~/.local/npm-global/bin/crush, echtes Go-Binary v0.93.1) ersetzt aider als
+00009: Free-Pool-Terminal-Harness.
+00010: 
+00011: Ursache des "hey"-Fehlschlags real gemessen (nicht geraten), siehe Beleg-
+00012: Transkript: nvidia/nemotron-3-super-120b-a12b liefert `content` UND
+00013: `reasoning_content` -- ohne `reasoning_effort` braucht das Modell oft >100
+00014: Token nur fuers Nachdenken ueber "hey", was bei knappem `max_tokens` (aiders
+00015: Default) dazu fuehrt, dass NUR der unfertige, rohe reasoning-Text als
+00016: `content` zurueckkommt (finish_reason=length, content==reasoning_content
+--- 19-33 ---
+00019: content="Hey there! How can I help you today?", reasoning_content="User
+00020: says hello. Should respond."). Gilt genauso fuer groq/openai/gpt-oss-120b.
+00021: mistral-small-latest und openrouter/deepseek/deepseek-chat sind NICHT
+00022: reasoning-faehig -- kein reasoning_effort noetig, brauchen aber trotzdem ihre
+00023: eigene (kuerzere) Prompt-Variante, weil sie ohne Reasoning-Bremse arbeiten.
+00024: 
+00025: Deterministische Prompt-Zuordnung (Gabriel woertlich: "das muss alles im
+00026: harness integriert sein, robust, unfehlbar, als mechanik", UND "jedes modell
+00027: muss ein extra angepasstes prompt haben"): MODELL_PROMPT_ZUORDNUNG ist ein
+00028: fester Lookup modell_id -> Variantenname. Jede modell_id aus
+00029: harness_aider.MODELL_MAP MUSS hier eingetragen sein (von SELBSTTEST erzwungen).
+00030: Fehlt ein Eintrag fuer eine neue modell_id trotzdem einmal (Tippfehler o.ae.),
+00031: faellt _system_prompt_fuer() ausdruecklich auf die Variante "standard" zurueck
+00032: -- das ist die bereits getestete, sicherste (keine Reasoning-Annahme, kurz,
+00033: Deutsch-zuerst) -- NIE ein stiller Blindflug ohne jede Instruktion.
+--- 38-44 ---
+00038: (je nach Aufrufkonvention) mehrere `--read`-Dateien gleichzeitig offen, sodass
+00039: uralte Handoff-Texte in neue Sitzungen durchsickerten. Hier gibt es
+00040: STRUKTURELL nur EINE einzige Datei (CRUSH_MD_PFAD, global_context_paths[0]
+00041: in crush.json), die bei JEDEM Start ueberschrieben (nicht ergaenzt) wird --
+00042: es gibt keinen Paket-Ordner, der veralten koennte, weil es keinen Paket-
+00043: Ordner gibt.
+00044: """
+--- 51-94 ---
+00051: import time
+00052: 
+00053: STAR_DIR = os.path.expanduser("~/.claude/star")
+00054: sys.path.insert(0, STAR_DIR)
+00055: 
+00056: import harness_aider as _h  # noqa: E402 -- MODELL_MAP, _grid_zustand_block, ANSI-Konstanten
+00057: import pool_wache as _pw  # noqa: E402
+00058: import crush_modell_rechte as _mr  # noqa: E402 -- kanonische GRATIS/BEZAHLT-Kategorie
+00059: # + Rechte pro Modell, passwortgeschuetzt (kern_gate) -- siehe Modul-Docstring
+00060: # von crush_modell_rechte.py. harness_crush.py LIEST hier nur, aendert nie.
+00061: 
+00062: try:
+00063:     import stern as _s  # noqa: E402 -- fuer _grid_zustand_block()-Aufruf (macht _h intern schon)
+00064: except Exception:
+00065:     _s = None
+00066: 
+00067: try:
+00068:     import grid_packet_bridge as _gpb  # noqa: E402
+00069: except Exception:
+00070:     _gpb = None
+00071: 
+00072: CRUSH_CONFIG_DIR = os.path.expanduser("~/.config/crush")
+00073: CRUSH_CONFIG_PFAD = os.path.join(CRUSH_CONFIG_DIR, "crush.json")
+00074: CRUSH_MD_PFAD = os.path.join(CRUSH_CONFIG_DIR, "CRUSH.md")
+00075: CRUSH_BIN_KANDIDATEN = [
+00076:     os.path.expanduser("~/.local/npm-global/bin/crush"),
+00077:     "/usr/local/bin/crush",
+00078:     "crush",
+00079: ]
+00080: SICHTBAR_REPO = os.path.expanduser("~/frankenstein-repo")  # dieselbe Konvention wie harness_aider.py
+00081: 
+00082: # ── Provider-Katalog: modell_id (harness_aider.MODELL_MAP-Schluessel) -> ─────
+00083: #    echte, per curl verifizierte Endpunkt-/Modelldaten (KEINE geratenen
+00084: #    Modell-IDs -- jede hier eingetragene "real_model" ist echt gegen die
+00085: #    jeweilige API getestet, siehe Beleg-Transkript im Handoff/Reconcile).
+00086: CRUSH_PROVIDER_KATALOG = {
+00087:     "nvidia-nemotron": {
+00088:         "provider_id": "freepool-nvidia",
+00089:         "provider_name": "NVIDIA NIM (Free-Pool)",
+00090:         "base_url": "https://integrate.api.nvidia.com/v1",
+00091:         "real_model": "nvidia/nemotron-3-super-120b-a12b",
+00092:         "context_window": 131072,
+00093:         "default_max_tokens": 4000,
+00094:         "can_reason": True,
+--- 97-105 ---
+00097:     },
+00098:     "groq-gptoss": {
+00099:         "provider_id": "freepool-groq",
+00100:         "provider_name": "Groq (Free-Pool)",
+00101:         "base_url": "https://api.groq.com/openai/v1",
+00102:         "real_model": "openai/gpt-oss-120b",
+00103:         "context_window": 131072,
+00104:         "default_max_tokens": 4000,
+00105:         "can_reason": True,
+--- 108-160 ---
+00108:     },
+00109:     "mistral-small": {
+00110:         "provider_id": "freepool-mistral",
+00111:         "provider_name": "Mistral (Free-Pool)",
+00112:         "base_url": "https://api.mistral.ai/v1",
+00113:         "real_model": "mistral-small-latest",
+00114:         "context_window": 32000,
+00115:         "default_max_tokens": 4000,
+00116:         "can_reason": False,
+00117:     },
+00118:     "openrouter-deepseek": {
+00119:         "provider_id": "freepool-openrouter",
+00120:         "provider_name": "OpenRouter/DeepSeek (Free-Pool)",
+00121:         "base_url": "https://openrouter.ai/api/v1",
+00122:         "real_model": "deepseek/deepseek-chat",
+00123:         "context_window": 64000,
+00124:         "default_max_tokens": 4000,
+00125:         "can_reason": False,
+00126:     },
+00127: }
+00128: 
+00129: # ── Claude-CLI-Provider (Gabriel-Auftrag 2026-09-12: "du sollst die claude
+00130: #    code cli die originale da rein leiten so das man die auch verwenden
+00131: #    kann") -- NICHT Teil von CRUSH_PROVIDER_KATALOG/MODELL_MAP, weil dies
+00132: #    kein Free-Pool-Modell ist: kein env_var-API-Key, kein automatischer
+00133: #    Erschoepfungs-Fallback (naechstes_viables_modell()/ist_langzeit_erschoepft()
+00134: #    iterieren weiterhin nur _h.MODELL_MAP -- diese drei Modelle sind davon
+00135: #    unberuehrt, absichtlich, sie kosten echtes Geld und sollen NIE automatisch
+00136: #    "weggewechselt" werden ohne dass ein Mensch das Modell aktiv gewaehlt hat).
+00137: #    Backend: claude_cli_shim.py (systemd --user claude-cli-shim.service),
+00138: #    loopback-only, KEIN echter API-Key noetig -- "not-needed" ist ein Dummy,
+00139: #    Crush braucht das Feld nur syntaktisch.
+00140: #
+00141: #    Modell-IDs real gegen `claude --model <id> -p "test" --output-format json`
+00142: #    verifiziert (siehe Reconcile-Beleg dieses Pakets). Preise recherchiert
+00143: #    (WebSearch, Stand 2026-09-12, offizielle Quelle claude.com/pricing nicht
+00144: #    per Redirect erreichbar in dieser Sitzung -- mehrere Sekundaerquellen
+00145: #    konvergieren NICHT ganz exakt bei Sonnet 5: $2/$10 vs $3/$15 werden beide
+00146: #    genannt. Hier wird der HOEHERE, konservativere Wert eingetragen (lieber
+00147: #    Kosten ueberschaetzen als unterschaetzen) -- das ist eine bewusste
+00148: #    Naeherung, KEINE als sicher behauptete exakte Zahl. Bei Bedarf gegen
+00149: #    https://claude.com/pricing echt nachpruefen und hier korrigieren.
+00150: CRUSH_CLI_PROVIDER_ID = "claude-cli"
+00151: CRUSH_CLI_PROVIDER_NAME = "Claude (echte claude-CLI, kein Free-Pool)"
+00152: CRUSH_CLI_BASE_URL = "http://127.0.0.1:8420/v1"
+00153: CRUSH_CLI_API_KEY_DUMMY = "not-needed"  # Shim ist loopback-only, prueft keinen Key
+00154: CRUSH_CLI_MODELLE = [
+00155:     {
+00156:         "id": "claude-opus-5",
+00157:         "name": "Claude Opus 5 (staerkstes Modell, teuer -- schwere Architektur/Reasoning)",
+00158:         # Naeherung, konservativ (eher zu hoch als zu niedrig geschaetzt).
+00159:         "cost_per_1m_in": 5.0,
+00160:         "cost_per_1m_out": 25.0,
+--- 167-173 ---
+00167:     },
+00168:     {
+00169:         "id": "claude-sonnet-5",
+00170:         "name": "Claude Sonnet 5 (stark, Tools+Reasoning -- Standardwahl fuer echtes Claude)",
+00171:         # Quellen uneins (2/10 vs 3/15) -- hoeherer Wert konservativ uebernommen.
+00172:         "cost_per_1m_in": 3.0,
+00173:         "cost_per_1m_out": 15.0,
+--- 180-186 ---
+00180:     },
+00181:     {
+00182:         "id": "claude-haiku-4-5-20251001",
+00183:         "name": "Claude Haiku 4.5 (schnell, guenstig -- einfache Fragen)",
+00184:         "cost_per_1m_in": 1.0,
+00185:         "cost_per_1m_out": 5.0,
+00186:         "cost_per_1m_in_cached": 0.1,
+--- 194-262 ---
+00194: 
+00195: 
+00196: def _crush_cli_provider_eintrag():
+00197:     """Baut den Claude-CLI-Provider-Block fuer crush.json -- eigene Funktion,
+00198:     damit crush_config_schreiben() ihn einfach dazumergen kann, ohne die
+00199:     MODELL_MAP-Schleife (Free-Pool) anzufassen."""
+00200:     # Alle drei Claude-CLI-Modelle sind BEZAHLT (siehe crush_modell_rechte.py) --
+00201:     # ein Vertreter reicht fuer den Provider-weiten Praefix.
+00202:     praefix = _mr.praefix_fuer("claude-sonnet-5")
+00203:     return {
+00204:         "id": CRUSH_CLI_PROVIDER_ID,
+00205:         "name": f"{praefix} {CRUSH_CLI_PROVIDER_NAME}",
+00206:         "type": "openai-compat",
+00207:         "base_url": CRUSH_CLI_BASE_URL,
+00208:         "api_key": CRUSH_CLI_API_KEY_DUMMY,
+00209:         "discover_models": False,
+00210:         "models": list(CRUSH_CLI_MODELLE),
+00211:     }
+00212: 
+00213: 
+00214: # SELBSTTEST: jede harness_aider.MODELL_MAP-modell_id MUSS im Katalog stehen
+00215: # -- verhindert stillen Drift zwischen den beiden Dateien (z.B. ein neu
+=== /home/ai-core-node/.claude/star/harness_crush_knopf.py lines=143 hits=53 ===
+--- 1-31 ---
+00001: #!/usr/bin/env python3
+00002: """harness_crush_knopf.py -- Desktop-Knopf-Ziel fuer den Crush-Free-Pool-
+00003: Harness (PHASE 52, Werkzeugwechsel weg von aider, siehe harness_crush.py
+00004: Modul-Docstring fuer den vollen Hintergrund). Waehlt ein Startmodell (exakt
+00005: dieselbe Auswahl-Logik wie harness_aider_knopf.py's _waehle_modell() --
+00006: wiederverwendet, nicht dupliziert), schreibt crush.json + CRUSH.md frisch,
+00007: druckt den Kontingent-Banner und startet Crush interaktiv im echten Repo
+00008: (~/frankenstein-repo, dieselbe Sandbox-Konvention wie der aider-Harness)."""
+00009: import os
+00010: import subprocess
+00011: import sys
+00012: 
+00013: STAR_DIR = os.path.expanduser("~/.claude/star")
+00014: sys.path.insert(0, STAR_DIR)
+00015: 
+00016: import harness_aider as _h  # noqa: E402 -- _waehle_modell-Logik direkt importiert unten
+00017: import harness_crush as _hc  # noqa: E402
+00018: from harness_aider_knopf import _waehle_modell  # noqa: E402 -- keine Dopplung der Auswahl-Logik
+00019: 
+00020: _ANSI_GRUEN = "\x1b[38;5;46m"
+00021: _ANSI_RESET = "\x1b[0m"
+00022: 
+00023: 
+00024: def _chatgpt_bridge_status() -> str:
+00025:     """Gabriel-Auftrag 2026-09-12: Free Frank soll IMMER mit sichtbarem
+00026:     ChatGPT-Bridge-Status starten. Die Bridge (frankenstein-local-bridge
+00027:     .service + -webui.service) laeuft bereits systemweit als eigener
+00028:     systemd-user-Dienst, unabhaengig von Free Frank -- hier nur PRUEFEN
+00029:     und ANZEIGEN, nicht neu erfinden/starten (kein zweiter Owner)."""
+00030:     try:
+00031:         out = subprocess.run(
+--- 52-105 ---
+00052:         except Exception:
+00053:             aktiv = False
+00054:     return "ChatGPT-Bridge: AN" if aktiv else "ChatGPT-Bridge: AUS (Start fehlgeschlagen)"
+00055: 
+00056: 
+00057: def _banner_drucken():
+00058:     """PHASE 52 Nachtrag, KORRIGIERT (Gabriel woertlich nach Live-Screenshot
+00059:     des grossen toilet-Banners: 'nein der bildschirm war cooler ich will
+00060:     den' -- gemeint ist Crushs EIGENER nativer Startbildschirm, orange
+00061:     'CHARM CRUSH'-Logo mit Diagonalmuster). Gelesen als: Crushs eigenes
+00062:     Logo bleibt unangetastet und ERSCHEINT ZUERST -- kein grosses eigenes
+00063:     ASCII-Banner mehr davor. Nur noch eine kurze, kleine Textzeile, die VOR
+00064:     Crushs Start gedruckt wird (verschwindet nach oben, sobald Crush den
+00065:     Bildschirm uebernimmt) -- kein Ersatz, keine Verdraengung von Crushs
+00066:     eigenem Logo. Falls diese Lesart falsch ist: billig korrigierbar, siehe
+00067:     Bericht."""
+00068:     print(f"{_ANSI_GRUEN}FranKenstein v2.0 -- Free Pool Harness (Crush){_ANSI_RESET}")
+00069: 
+00070: 
+00071: def main():
+00072:     _banner_drucken()
+00073:     print(f"{_ANSI_GRUEN}{_chatgpt_bridge_status()}{_ANSI_RESET}")
+00074:     modell_id, hinweis = _waehle_modell()
+00075:     if modell_id is None:
+00076:         print(f"Abbruch: {hinweis}", file=sys.stderr)
+00077:         return 1
+00078:     print(hinweis)
+00079: 
+00080:     # Alle Free-Pool-Schluessel in os.environ laden (nicht nur den des
+00081:     # Startmodells) -- exakt dasselbe Argument wie in
+00082:     # harness_aider._alle_api_keys_laden()'s Docstring: Crush erlaubt
+00083:     # Modellwechsel MITTEN in der Sitzung, dafuer muessen alle 4 Provider-
+00084:     # Keys schon beim Start in der Umgebung stehen, nicht erst der eine.
+00085:     _h._alle_api_keys_laden()
+00086: 
+00087:     _hc.crush_config_schreiben(startmodell_id=modell_id)
+00088:     _hc.crush_zustand_schreiben(
+00089:         session_id=f"crush-knopf-{os.getpid()}",
+00090:         auftrag=f"Crush-Free-Pool-Harness-Start, Startmodell={modell_id}")
+00091: 
+00092:     _hc.kontingent_banner_drucken()
+00093: 
+00094:     provider_modell = _hc.provider_modell_string(modell_id)
+00095:     if provider_modell is None:
+00096:         print(f"Abbruch: kein Crush-Katalogeintrag fuer {modell_id}", file=sys.stderr)
+00097:         return 1
+00098: 
+00099:     crush_bin = _hc._crush_bin()
+00100:     if crush_bin is None:
+00101:         print("Abbruch: crush-Binary nicht gefunden "
+00102:               "(erwartet ~/.local/npm-global/bin/crush -- npm install -g @charmland/crush).",
+00103:               file=sys.stderr)
+00104:         return 1
+00105: 
+--- 109-140 ---
+00109:     env["PATH"] = npm_bin + os.pathsep + env.get("PATH", "")
+00110: 
+00111:     # BUGFIX (Screenshot-Beleg erster Live-Launch): interaktives `crush`
+00112:     # (ohne `run`-Unterbefehl) hat KEIN `-m`/`--model` -- nur `crush run`.
+00113:     # Das Startmodell steckt bereits in crush.json (models.large/small,
+00114:     # siehe crush_config_schreiben(startmodell_id=...) oben), kein Flag noetig.
+00115:     # Gabriel-Auftrag 2026-09-12: "voller Reentry" -- Crush setzt die letzte
+00116:     # Sitzung fuer dieses cwd fort statt jedes Mal bei Null anzufangen.
+00117:     # --continue ist ein No-Op-Fallback (startet frisch), wenn es noch
+00118:     # keine vorherige Sitzung gibt -- kein Absturzrisiko beim allerersten Lauf.
+00119:     print(f"Starte Crush mit {provider_modell} in {_hc.SICHTBAR_REPO} (Reentry) ...")
+00120:     lauf = subprocess.run(
+00121:         [crush_bin, "--cwd", _hc.SICHTBAR_REPO, "--continue"],
+00122:         env=env,
+00123:     )
+00124: 
+00125:     # PHASE 54 (Gabriel-Auftrag 2026-09-12, Punkt 2 "Hinrichtung"): NACH
+00126:     # crush-Exit die gerade beendete Sitzung real in die UnifiedDB
+00127:     # zurueckschreiben (durable_memory, siehe crush_sitzung_synchronisieren()-
+00128:     # Docstring) -- fire-and-forget, fail-soft, darf den Exitcode des
+00129:     # eigentlichen Crush-Laufs nie veraendern.
+00130:     try:
+00131:         letzte_sid = _hc.crush_letzte_sitzung_id()
+00132:         if letzte_sid:
+00133:             sync_ergebnis = _hc.crush_sitzung_synchronisieren(letzte_sid)
+00134:             print(f"Sync Crush-Sitzung -> UnifiedDB: {sync_ergebnis.get('stand')} "
+00135:                   f"({str(sync_ergebnis.get('bericht') or sync_ergebnis.get('grund') or '')[:160]})")
+00136:     except Exception as e:
+00137:         print(f"(Sync Crush-Sitzung -> UnifiedDB uebersprungen: {e})", file=sys.stderr)
+00138: 
+00139:     return lauf.returncode
+00140: 
+=== /home/ai-core-node/.claude/star/f2wp1207_chatgpt_organ.py lines=527 hits=89 ===
+--- 1-20 ---
+00001: #!/usr/bin/env python3
+00002: # -*- coding: utf-8 -*-
+00003: """F2-WP-1207 -- ChatGPT as a first-class FranKenstein organ.
+00004: 
+00005: No shadow brain, no side database, no second authority.
+00006: 
+00007: Flow:
+00008:     terminal/user event
+00009:       -> existing canonical GRID10 turn
+00010:       -> read resulting canonical pointer/state through stern.py
+00011:       -> existing ChatGPT browser harness
+00012:       -> persist dispatch/harvest through the same canonical writer
+00013:       -> feed harvested result through the SAME GRID10 turn loop
+00014:       -> next reentry starts from the new canonical frame.
+00015: 
+00016: This module never opens a SQLite file itself. `stern.py` remains the owner of
+00017: connections, GRID10 lifecycle, browser harness and durable authority.
+00018: """
+00019: from __future__ import annotations
+00020: 
+--- 31-56 ---
+00031: from typing import Any, Mapping, Optional
+00032: 
+00033: SCHEMA_RUN = "F2WP1207_CHATGPT_ORGAN_RUN/v1"
+00034: SCHEMA_MESSAGE = "F2WP1207_CHATGPT_ORGAN_MESSAGE/v1"
+00035: SCHEMA_CONTEXT = "F2WP1207_CHATGPT_ORGAN_CONTEXT/v1"
+00036: 
+00037: _RUN_DDL = """
+00038: CREATE TABLE IF NOT EXISTS f2_chatgpt_organ_run (
+00039:     run_id                   TEXT PRIMARY KEY,
+00040:     source_frame_id          TEXT NOT NULL,
+00041:     source_pointer_id        TEXT,
+00042:     source_turn_event_id     TEXT NOT NULL,
+00043:     source_runtime_epoch_id  TEXT NOT NULL,
+00044:     source_session_id        TEXT NOT NULL,
+00045:     source_winner_cell       TEXT,
+00046:     source_broadcast_value   REAL,
+00047:     user_text_sha256         TEXT NOT NULL,
+00048:     worker_budget            INTEGER NOT NULL,
+00049:     status                   TEXT NOT NULL CHECK (
+00050:         status IN ('QUEUED','DISPATCHING','DISPATCHED','HARVESTED','UPTAKEN','FAILED')
+00051:     ),
+00052:     send_json                TEXT,
+00053:     harvest_json             TEXT,
+00054:     response_sha256          TEXT,
+00055:     response_frame_id        TEXT,
+00056:     error_text               TEXT,
+--- 62-70 ---
+00062: 
+00063: _MESSAGE_DDL = """
+00064: CREATE TABLE IF NOT EXISTS f2_chatgpt_organ_message (
+00065:     message_id          TEXT PRIMARY KEY,
+00066:     run_id              TEXT NOT NULL REFERENCES f2_chatgpt_organ_run(run_id),
+00067:     direction           TEXT NOT NULL CHECK (direction IN ('USER','GRID_TO_CHATGPT','CHATGPT_TO_GRID')),
+00068:     role                TEXT NOT NULL,
+00069:     content             TEXT NOT NULL,
+00070:     content_sha256      TEXT NOT NULL,
+--- 76-87 ---
+00076: 
+00077: _IDX = (
+00078:     "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_run_status ON f2_chatgpt_organ_run(status);",
+00079:     "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_run_frame ON f2_chatgpt_organ_run(source_frame_id);",
+00080:     "CREATE INDEX IF NOT EXISTS ix_f2_chatgpt_organ_message_run ON f2_chatgpt_organ_message(run_id, created_at);",
+00081: )
+00082: 
+00083: 
+00084: class ChatGPTOrganError(RuntimeError):
+00085:     pass
+00086: 
+00087: 
+--- 93-98 ---
+00093:     load1: float
+00094:     mem_available_mb: int
+00095:     max_swarm_workers: int
+00096: 
+00097: 
+00098: def _now() -> str:
+--- 118-123 ---
+00118:         for row in conn.execute(
+00119:             "SELECT name FROM sqlite_master WHERE type='table' AND name IN "
+00120:             "('f2_chatgpt_organ_run','f2_chatgpt_organ_message')"
+00121:         )
+00122:     }
+00123:     conn.execute(_RUN_DDL)
+--- 126-131 ---
+00126:         conn.execute(query)
+00127:     conn.commit()
+00128:     target = {"f2_chatgpt_organ_run", "f2_chatgpt_organ_message"}
+00129:     return {"ok": True, "added": sorted(target - before)}
+00130: 
+00131: 
+--- 171-181 ---
+00171:     row = conn.execute(
+00172:         "SELECT pointer_id,installation_id,state_root_id,runtime_epoch_id,session_id,"
+00173:         "frame_id,turn_event_id,reentry_kind_used,reentry_evidence_json,"
+00174:         "broadcast_winner_cell,broadcast_value,cell_states_json,created_at "
+00175:         "FROM f2_grid10_turn_pointer ORDER BY created_at DESC LIMIT 1"
+00176:     ).fetchone()
+00177:     if row is None:
+00178:         raise ChatGPTOrganError("no canonical GRID10 turn pointer")
+00179:     return dict(row)
+00180: 
+00181: 
+--- 206-217 ---
+00206:         states = None
+00207:     recent = []
+00208:     if _table_exists(conn, "f2_chatgpt_organ_run"):
+00209:         conn.row_factory = sqlite3.Row
+00210:         recent = [
+00211:             dict(row)
+00212:             for row in conn.execute(
+00213:                 "SELECT run_id,status,source_frame_id,response_frame_id,updated_at "
+00214:                 "FROM f2_chatgpt_organ_run ORDER BY updated_at DESC LIMIT 4"
+00215:             ).fetchall()
+00216:         ]
+00217:     return {
+--- 221-226 ---
+00221:         "frame_id": pointer.get("frame_id"),
+00222:         "pointer_id": pointer.get("pointer_id"),
+00223:         "turn_event_id": pointer.get("turn_event_id"),
+00224:         "runtime_epoch_id": pointer.get("runtime_epoch_id"),
+00225:         "session_id": pointer.get("session_id"),
+00226:         "reentry_kind": pointer.get("reentry_kind_used"),
+--- 229-234 ---
+00229:         "cell_states": states,
+00230:         "hypermirror": _latest_hypermirror(conn),
+00231:         "recent_chatgpt_runs": recent,
+00232:     }
+00233: 
+00234: 
+--- 237-254 ---
+00237: 
+00238: 
+00239: def build_grid_instruction(user_text: str, capsule: Mapping[str, Any], run_id: str) -> str:
+00240:     compact = _canon(capsule)
+00241:     return _one_line(
+00242:         "FRANKENSTEIN_CHATGPT_ORGAN/v1 "
+00243:         f"run={run_id} GRID_STATE={compact} USER_EVENT={json.dumps(user_text, ensure_ascii=False)} "
+00244:         "ROLE=You are the ChatGPT inference organ inside the existing FranKenstein/EntityOS system. "
+00245:         "GRID10 owns the cognitive turn lifecycle and unified.db is canonical state. Read/inspect connected "
+00246:         "state, repositories, receipts and host evidence when needed; do not invent live facts. Coordinate the "
+00247:         "task as Claude Code would: analyze, use available tools/workers where justified, preserve machine/owner "
+00248:         "attribution, protect existing WIP, and return a concrete result. Your output is a proposal/readout for "
+00249:         "GRID10 uptake, never effect authority. Do not create a parallel memory/state system. Finish with a dense "
+00250:         "machine-readable line: FRANK_ORGAN_RESULT={\"status\":\"DONE|CONTINUE|BLOCKED\",\"summary\":\"...\","
+00251:         "\"next\":\"...\",\"workers_suggested\":0}."
+00252:     )
+00253: 
+00254: 
+--- 287-292 ---
+00287:     message_id = uuid.uuid4().hex
+00288:     conn.execute(
+00289:         "INSERT INTO f2_chatgpt_organ_message "
+00290:         "(message_id,run_id,direction,role,content,content_sha256,source_frame_id,schema,created_at) "
+00291:         "VALUES (?,?,?,?,?,?,?,?,?)",
+00292:         (
+--- 309-317 ---
+00309:         return
+00310:     allowed = {
+00311:         "worker_budget",
+00312:         "status",
+00313:         "send_json",
+00314:         "harvest_json",
+00315:         "response_sha256",
+00316:         "response_frame_id",
+00317:         "error_text",
+--- 320-348 ---
+00320:     unknown = set(fields) - allowed
+00321:     if unknown:
+00322:         raise ChatGPTOrganError(f"invalid run fields: {sorted(unknown)}")
+00323:     fields.setdefault("updated_at", _now())
+00324:     columns = list(fields)
+00325:     conn.execute(
+00326:         "UPDATE f2_chatgpt_organ_run SET "
+00327:         + ",".join(f"{column}=?" for column in columns)
+00328:         + " WHERE run_id=?",
+00329:         tuple(fields[column] for column in columns) + (run_id,),
+00330:     )
+00331: 
+00332: 
+00333: def _suggest_worker_budget(user_text: str, admission: HostAdmission) -> int:
+00334:     if not admission.ok:
+00335:         return 0
+00336:     text = (user_text or "").lower()
+00337:     complexity = 1 + min(5, len(user_text) // 500)
+00338:     for word in ("hardcore", "maximal", "research", "avatar", "debug", "audit", "test", "grid", "swarm"):
+00339:         if word in text:
+00340:             complexity += 1
+00341:     return max(1, min(admission.max_swarm_workers, complexity))
+00342: 
+00343: 
+00344: def execute_terminal_turn(user_text: str, *, session_id: str, stern_module: Any) -> dict:
+00345:     """Run one canonical USER -> GRID -> ChatGPT -> GRID cycle."""
+00346:     text = (user_text or "").strip()
+=== /home/ai-core-node/.claude/star/frank_chatgpt_terminal.py lines=79 hits=14 ===
+--- 1-10 ---
+00001: #!/usr/bin/env python3
+00002: # -*- coding: utf-8 -*-
+00003: """Terminal surface for the canonical FranKenstein ChatGPT organ.
+00004: 
+00005: This is deliberately thin. It owns no memory/database/browser state. Every
+00006: line is handed to f2wp1207_chatgpt_organ.execute_terminal_turn(), which uses
+00007: the existing GRID10 + stern.py harness + unified.db paths.
+00008: """
+00009: from __future__ import annotations
+00010: 
+--- 24-40 ---
+00024: 
+00025: import stern
+00026: from f2wp1207_chatgpt_organ import execute_terminal_turn
+00027: from f2wp1207_chatgpt_exact_backend import ExactChatGPTBackend
+00028: 
+00029: _BACKEND = ExactChatGPTBackend(stern)
+00030: stern.chatgpt_senden = _BACKEND.send
+00031: stern.chatgpt_ernten = _BACKEND.harvest
+00032: 
+00033: 
+00034: def _session_id(explicit: str | None) -> str:
+00035:     if explicit:
+00036:         return explicit
+00037:     return f"terminal-chatgpt-{socket.gethostname()}-{uuid.uuid4().hex[:12]}"
+00038: 
+00039: 
+00040: def run_once(text: str, session_id: str) -> int:
+--- 43-50 ---
+00043:         print(result.get("response") or "")
+00044:         meta = {k: result.get(k) for k in (
+00045:             "run_id", "user_frame_id", "response_frame_id", "runtime_epoch_id", "workers"
+00046:         )}
+00047:         print("\n[FRANK/GRID10 " + json.dumps(meta, ensure_ascii=False, separators=(",", ":")) + "]",
+00048:               file=sys.stderr)
+00049:         return 0
+00050:     print(json.dumps(result, ensure_ascii=False, indent=2, default=str), file=sys.stderr)
+--- 53-58 ---
+00053: 
+00054: def main() -> int:
+00055:     ap = argparse.ArgumentParser(description="FranKenstein terminal -> GRID10 -> ChatGPT organ -> GRID10")
+00056:     ap.add_argument("text", nargs="*", help="single turn; omit for interactive REPL")
+00057:     ap.add_argument("--session-id", default=None)
+00058:     args = ap.parse_args()
+--- 61-67 ---
+00061:         return run_once(" ".join(args.text), sid)
+00062: 
+00063:     print(f"FranKenstein ChatGPT organ | host={socket.gethostname()} | session={sid}")
+00064:     print("GRID10 owns turns. /exit beendet nur dieses Terminal.\n")
+00065:     while True:
+00066:         try:
+00067:             text = input("frank> ").strip()

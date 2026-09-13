@@ -1,0 +1,12 @@
+{"schema":"CLAY_LOCAL_COMMAND/v1","command_id":"fred-20260913-1120-semantic-runtime-preflight","machine_id":"ai-core-node","owner":"gabriel","op":"exec","timeout_seconds":180,"command":"set -euo pipefail; echo PYTHON=$(python3 --version); python3 - <<'PY'
+import importlib.util, pathlib, os
+print('sentence_transformers_spec=', bool(importlib.util.find_spec('sentence_transformers')))
+print('numpy_spec=', bool(importlib.util.find_spec('numpy')))
+roots=[pathlib.Path.home()/'.cache'/'huggingface'/'hub', pathlib.Path.home()/'.cache'/'torch'/'sentence_transformers']
+for root in roots:
+    print('CACHE_ROOT', root, root.exists())
+    if root.exists():
+        for p in sorted(root.glob('*MiniLM*'))[:20]: print('MINILM_CACHE', p)
+        for p in sorted(root.glob('*sentence-transformers*'))[:20]: print('ST_CACHE', p)
+PY
+printf 'PROJECT_CHECKOUTS\n'; for p in \"$HOME/Project-Frankenstein\" \"$HOME/project-frankenstein\" \"$HOME/.local/lib/frankenstein\" \"$HOME/.local/lib/frankenstein-voice-final\"; do [ -e \"$p\" ] && echo EXISTS:$p; done"}

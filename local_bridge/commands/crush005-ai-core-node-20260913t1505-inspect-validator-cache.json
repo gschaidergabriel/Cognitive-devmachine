@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "crush005-ai-core-node-20260913t1505-inspect-validator-cache",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; ROOT=\"$HOME/.cache/entityos-crush-validation/crush004-full-20260913T0740Z\"; test -d \"$ROOT\"; printf 'CACHE=%s\\n' \"$ROOT\"; find \"$ROOT\" -maxdepth 4 -type f -path '*/bin/go' -print; find \"$ROOT\" -maxdepth 2 -type d -print | head -40"
+}

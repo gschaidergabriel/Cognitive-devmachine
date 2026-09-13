@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "fred-reconciler-diagnose-20260913-1047",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\nR=/workspace/omega_runtime\nC=$(readlink -f $R/current)\necho CURRENT=$C\necho '--- receipt_reconciler.log tail ---'\ntail -n 160 $R/state/logs/receipt_reconciler.log 2>/dev/null || true\necho '--- py_compile ---'\nPYTHONPATH=$C python3 -m py_compile $C/omega/spool_receipt_reconciler.py $C/omega/receipt_reconciler.py $C/omega/unified_store.py && echo COMPILE_OK\necho '--- module import ---'\nPYTHONPATH=$C python3 - <<'PY'\nimport omega.spool_receipt_reconciler as m\nprint('IMPORT_OK', m.__file__)\nPY\necho '--- supervisor child snapshot ---'\npython3 - <<'PY'\nimport json,pathlib\np=pathlib.Path('/workspace/omega_runtime/state/SUPERVISOR_STATUS.json')\nd=json.loads(p.read_text())\nprint(json.dumps(d.get('children',{}).get('receipt_reconciler',{}),sort_keys=True))\nPY"
+}

@@ -1,0 +1,62 @@
+===SUBJECT===
+ai-core-node-projekt-frankenstein
+ai-core-node
+dir=/home/ai-core-node/.cache/fred-omega-deep-sandbox2
+===GIT===
+origin	https://github.com/gschaidergabriel/frankenstein.git (fetch)
+origin	https://github.com/gschaidergabriel/frankenstein.git (push)
+chatgpt/fred-omega-world-brain-convergence-20260913
+37aed62d3ef3714b278026e5c251403952b7dbf2
+ M scripts/install_voice_777_omega.sh
+ M scripts/omega_runtime.py
+ M scripts/omega_world_turn.py
+?? scripts/omega_fred_selftest.py
+?? tests/test_omega_fred_selftest.py
+===RUNTIME_MARKERS===
+6:fail-closed source-composition self-test for the organs that are already part
+11:recurrent W_t, WorldManifold and GRF are organs of that same SELF when their
+33:# References to existing organs, never copied implementations.
+34:ORGANS: dict[str, dict[str, str]] = {
+56:    "fred_selftest": {
+57:        "path": "scripts/omega_fred_selftest.py",
+60:    "world_state": {
+114:PURE_COGNITION_ORGANS = (
+118:    "world_state",
+146:def manifest() -> dict[str, Any]:
+147:    organs: dict[str, Any] = {}
+148:    for name, spec in ORGANS.items():
+150:        organs[name] = {
+168:        "organs": organs,
+170:            "world_state",
+236:def selftest() -> dict[str, Any]:
+239:    missing = [name for name, data in m["organs"].items() if not data["present"]]
+241:        "all_required_organs_present",
+246:    identity_path = _repo_path(ORGANS["identity"]["path"])
+289:    for organ in PURE_COGNITION_ORGANS:
+290:        src = read(_repo_path(ORGANS[organ]["path"]))
+298:    grf_src = read(_repo_path(ORGANS["grf_brain"]["path"]))
+311:    field_src = read(_repo_path(ORGANS["grf_field"]["path"]))
+323:    world_turn_src = read(_repo_path(ORGANS["world_turn"]["path"]))
+345:    hybrid_src = read(_repo_path(ORGANS["world_hybrid"]["path"]))
+349:            "single_world_state",
+386:        description="OMEGA: canonical entry point over the existing FranKenstein 2.0 organs",
+390:    sub.add_parser("selftest", help="fail-closed source-composition self-test")
+391:    p_fred = sub.add_parser("fred-selftest", help="read-only OMEGA self-as-test-object FRED probe")
+407:    if ns.command == "selftest":
+408:        result = selftest()
+411:    if ns.command == "fred-selftest":
+415:        return subprocess.call([sys.executable, str(HERE / "omega_fred_selftest.py"), *args])
+===INSTALL_MARKERS===
+55:# These files prove this is the established final-product tree, not a new
+74:OMEGA_RUNTIME_FILES=(
+89:for file in "${OMEGA_RUNTIME_FILES[@]}"; do
+97:python3 - "$ROOT" "${OMEGA_RUNTIME_FILES[@]}" <<'PY'
+109:for file in "${OMEGA_RUNTIME_FILES[@]}"; do
+===TEST_MARKERS===
+27:        "cognitive_regulation",
+28:        "world_state",
+44:        "world_state",
+46:        "cognitive_regulation",
+===SELFTEST_FILE===
+00ef5be08fc8f61e7d77ddef2533be190abba4d70842ef15d880941795847bec  scripts/omega_fred_selftest.py
+f4166f7fef59343edc5db2df241c08c98852073362154736e23256e589c8a1a6  tests/test_omega_fred_selftest.py

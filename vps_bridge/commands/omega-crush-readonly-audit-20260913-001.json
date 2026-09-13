@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-crush-readonly-audit-20260913-001",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -eu; echo '=== HOST/TIME ==='; hostname; date -Is; echo '=== WORKSPACE ==='; find /workspace -mindepth 1 -maxdepth 2 -type d -printf '%p\\n' | sort | sed -n '1,160p'; P=/workspace/entityos-crush-omega; echo '=== TARGET ==='; if [ ! -d \"$P\" ]; then echo TARGET_MISSING:$P; exit 3; fi; cd \"$P\"; pwd; echo '=== GIT ==='; git status --short --branch || true; git rev-parse HEAD || true; git log -12 --date=iso-strict --pretty=format:'%h %ad %s' || true; echo; echo '=== TOP TREE ==='; find . -maxdepth 3 -type f -not -path './.git/*' -printf '%TY-%Tm-%TdT%TH:%TM:%TS %p\\n' | sort -r | sed -n '1,220p'; echo '=== OMEGA/CRUSH REFERENCES ==='; grep -RInE 'OMEGA|CRUSH|GRID|UnifiedDB|free.pool|Free.Pool|provider|reentry|TITAN' --exclude-dir=.git --exclude='*.lock' . 2>/dev/null | sed -n '1,260p' || true; echo '=== TEST/BUILD SURFACES ==='; find . -maxdepth 3 -type f \( -name 'go.mod' -o -name 'package.json' -o -name 'pyproject.toml' -o -name 'Makefile' -o -name 'README*' -o -name '*TEST*' -o -name '*STATUS*' -o -name '*TODO*' \) -print | sort | sed -n '1,160p'; echo '=== RECENT DIFF STAT ==='; git diff --stat || true; git diff --cached --stat || true; echo '=== DONE ==='",
+  "timeout_seconds": 300
+}

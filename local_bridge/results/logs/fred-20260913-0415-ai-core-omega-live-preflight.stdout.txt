@@ -1,0 +1,78 @@
+SUBJECT=ai-core-node/gabriel
+VOICE_SHOW
+MainPID=2720334
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:57:55 +07] ; stop_time=[n/a] ; pid=2720334 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+CLIENT_SHOW
+MainPID=2719881
+ExecStart={ path=/usr/bin/env ; argv[]=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py ; ignore_errors=no ; start_time=[Sun 2026-09-13 00:57:52 +07] ; stop_time=[n/a] ; pid=2719881 ; code=(null) ; status=0/0 }
+ActiveState=active
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+DropInPaths=/home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+VOICE_CAT
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service
+[Unit]
+Description=FranKenstein Gespraechsmodus (PHASE 42b/42c Realtime Voice, Wake-Word)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/ai-core-node/.claude/star/gespraechsmodus.py listener
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-gespraechsmodus.service.d/95-voice-live-final.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_final_runtime.py
+Environment=LOCAL_BRIDGE_MACHINE_ID=ai-core-node
+Environment=LOCAL_BRIDGE_OWNER=gabriel
+Environment=FRANK_VOICE_DEFAULT_INSTALLATION=gabriel
+CLIENT_CAT
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service
+[Unit]
+Description=FranKenstein Persistent Headless ChatGPT Client
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/env python3 %h/.local/lib/frankenstein/scripts/voice_host_live_client.py
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-%h/.config/frankenstein/chatgpt-client.env
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+# This process owns no browser and starts no Chrome. It is the typed,
+# persistent session/context endpoint behind the already-existing ChatGPT
+# bridge. The loader hard-binds canonical runtime authority to the live
+# ~/.claude/star/stern.py used by production; effects remain behind existing
+# Frankenstein authority/effect fences.
+
+[Install]
+WantedBy=default.target
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/95-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein/scripts/voice_host_777_live_client.py
+
+# /home/ai-core-node/.config/systemd/user/frankenstein-chatgpt-client.service.d/99-omega-777-organ-floor.conf
+[Service]
+ExecStart=
+ExecStart=/usr/bin/env python3 /home/ai-core-node/.local/lib/frankenstein-voice-final/scripts/voice_host_777_live_client.py
+FINAL_CANDIDATES
+OMEGA_CANDIDATES

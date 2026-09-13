@@ -99,6 +99,38 @@ def bind_trace_to_prepare(trace: Mapping[str, Any], prepare: Mapping[str, Any]) 
     return receipt
 
 
+def cognition_store_registration(trace: Mapping[str, Any], provenance_refs: list[str]) -> dict[str, Any]:
+    """Compile exact kwargs for MiniUnifiedDB ``register_object`` as native GRF object.
+
+    The store's CANONICAL_JSON digest is computed over the unsigned trace payload
+    (the trace without its self-identifying ``grf_digest`` field). This is exactly
+    the material that ``seal_trace`` hashes, avoiding a circular self-hash while
+    preserving native MiniUnifiedDB object identity.
+    """
+    _need(isinstance(trace, Mapping), "GRF_TRACE_OBJECT_REQUIRED")
+    try:
+        result = grf.validate(trace, allow_open=False)
+    except grf.GRFError as exc:
+        raise GRFZeroBindingError(f"GRF_TRACE_INVALID:{exc}") from exc
+    _need(result.get("state") == "SEALED", "SEALED_GRF_TRACE_REQUIRED")
+    _need(type(provenance_refs) is list, "PROVENANCE_REFS_LIST_REQUIRED")
+    refs = [_text(ref, "provenance_ref") for ref in provenance_refs]
+    _need(bool(refs), "PROVENANCE_REQUIRED")
+    _need(len(refs) == len(set(refs)), "PROVENANCE_DUPLICATE")
+
+    payload = dict(trace)
+    object_digest = _digest(payload.pop("grf_digest"), "trace.grf_digest")
+    _need(grf.sha256_obj(payload) == object_digest, "GRF_STORE_PAYLOAD_DIGEST_MISMATCH")
+    return {
+        "object_kind": "GRF",
+        "object_version": grf.COMPILER_VERSION,
+        "object_digest": object_digest,
+        "digest_basis": "CANONICAL_JSON",
+        "payload": payload,
+        "provenance_refs": refs,
+    }
+
+
 def validate_binding(receipt: Mapping[str, Any]) -> dict[str, Any]:
     _need(isinstance(receipt, Mapping), "BINDING_RECEIPT_OBJECT_REQUIRED")
     doc = dict(receipt)

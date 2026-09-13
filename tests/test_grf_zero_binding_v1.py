@@ -96,6 +96,26 @@ class GRFZeroBindingTests(unittest.TestCase):
         with self.assertRaisesRegex(binding.GRFZeroBindingError, "GRF_CAUSAL_TURN_MISMATCH"):
             binding.bind_trace_to_prepare(trace, prepare)
 
+    def test_native_cognition_store_registration_payload_matches_digest(self):
+        trace = full_trace()
+        reg = binding.cognition_store_registration(trace, ["test:grf-trace"])
+        self.assertEqual(reg["object_kind"], "GRF")
+        self.assertEqual(reg["digest_basis"], "CANONICAL_JSON")
+        self.assertEqual(reg["object_digest"], trace["grf_digest"])
+        self.assertEqual(grf.sha256_obj(reg["payload"]), reg["object_digest"])
+        self.assertNotIn("grf_digest", reg["payload"])
+
+    def test_native_registration_requires_provenance(self):
+        trace = full_trace()
+        with self.assertRaisesRegex(binding.GRFZeroBindingError, "PROVENANCE_REQUIRED"):
+            binding.cognition_store_registration(trace, [])
+
+    def test_native_registration_rejects_tampered_trace(self):
+        trace = full_trace()
+        trace["nodes"][0]["claim"] = "tampered"
+        with self.assertRaisesRegex(binding.GRFZeroBindingError, "GRF_TRACE_INVALID"):
+            binding.cognition_store_registration(trace, ["test:grf-trace"])
+
     def test_binding_tamper_rejected(self):
         trace = full_trace()
         receipt = binding.bind_trace_to_prepare(trace, prepare_for(trace))

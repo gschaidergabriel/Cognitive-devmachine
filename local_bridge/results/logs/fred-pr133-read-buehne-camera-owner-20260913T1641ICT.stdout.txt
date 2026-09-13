@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+import importlib.util, os, subprocess, threading, time
+LIVE='/home/ai-core-node/.claude/star/visual/buehne_daemon.py'
+HELPER='/home/ai-core-node/.claude/star/visual/avatar_singleton_refresh.sh'
+spec=importlib.util.spec_from_file_location('frankenstein_live_buehne', LIVE)
+if spec is None or spec.loader is None: raise RuntimeError(f'cannot load {LIVE}')
+mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+mod.FENSTER_X=1847; mod.FENSTER_Y=168; mod.FENSTER_B=746; mod.FENSTER_H=449
+class _AdoptedProcess:
+    def __init__(self,pid:int): self.pid=pid
+    def poll(self):
+        try: os.kill(self.pid,0); return None
+        except ProcessLookupError: return 0
+        except PermissionError: return None
+def _adopt_previous_chrome(self):
+    try:
+        with open(mod.PID_DATEI,'r',encoding='utf-8') as fh: pid=int(fh.read().strip())
+        adopted=_AdoptedProcess(pid)
+        if adopted.poll() is None:
+            self.proc=adopted
+            print(f'[buehne-singleton] existing Chrome adopted (pid {pid}); no replacement spawned')
+            return
+    except Exception as exc: print(f'[buehne-singleton] no adoptable prior Chrome: {exc}')
+    try: os.remove(mod.PID_DATEI)
+    except FileNotFoundError: pass
+    except Exception as exc: print(f'[buehne-singleton] stale PID cleanup failed: {exc}')
+def _preserve_chrome_on_daemon_exit(self):
+    if getattr(mod,'_blick_modul',None) is not None:
+        try: mod._blick_modul.instanz().stoppen()
+        except Exception as exc: print(f'[buehne-singleton] Blickfuehrung stop warning: {exc}')
+    pid=getattr(getattr(self,'proc',None),'pid',None)
+    print(f'[buehne-singleton] daemon exit preserves Chrome pid={pid}; next daemon adopts it')
+mod.Fensterverwalter._alte_pid_aufraeumen=_adopt_previous_chrome
+mod.Fensterverwalter.herunterfahren=_preserve_chrome_on_daemon_exit
+def _delayed_singleton_reconcile():
+    time.sleep(2.0)
+    try: subprocess.run(['bash',HELPER],check=False,timeout=15)
+    except Exception as exc: print(f'[buehne-singleton] reconcile helper failed: {exc}')
+threading.Thread(target=_delayed_singleton_reconcile,daemon=True).start()
+mod.hauptschleife()

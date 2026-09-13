@@ -1,19 +1,23 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "fred-omegacv1-canonical-stage-4cec74d-20260913T0940Z",
-  "command_sha256": "8d5a3ad1eb6de8695d6b3935794b8dfcc4f572a37b854c89b700e31a5c060136",
+  "command_id": "fred-pr133-read-buehne-camera-owner-20260913T1641ICT",
+  "command_sha256": "85007ecb4f19e210d1aa99fbe45aaacb04b8811365f27d14dbcea455bc2196cb",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-13T09:40:32.919404+00:00",
-  "finished_at": "2026-09-13T09:40:34.818420+00:00",
-  "status": "FAIL",
-  "exit_code": 1,
-  "op": "exec",
-  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "started_at": "2026-09-13T09:41:03.535652+00:00",
+  "finished_at": "2026-09-13T09:41:03.537600+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "b0aca05109211ce96fc0de7bf6aa30e62d7cbf5e61522737a855a066a53d0104",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "",
+  "stdout_tail": "#!/usr/bin/env python3\nfrom __future__ import annotations\nimport importlib.util, os, subprocess, threading, time\nLIVE='/home/ai-core-node/.claude/star/visual/buehne_daemon.py'\nHELPER='/home/ai-core-node/.claude/star/visual/avatar_singleton_refresh.sh'\nspec=importlib.util.spec_from_file_location('frankenstein_live_buehne', LIVE)\nif spec is None or spec.loader is None: raise RuntimeError(f'cannot load {LIVE}')\nmod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)\nmod.FENSTER_X=1847; mod.FENSTER_Y=168; mod.FENSTER_B=746; mod.FENSTER_H=449\nclass _AdoptedProcess:\n    def __init__(self,pid:int): self.pid=pid\n    def poll(self):\n        try: os.kill(self.pid,0); return None\n        except ProcessLookupError: return 0\n        except PermissionError: return None\ndef _adopt_previous_chrome(self):\n    try:\n        with open(mod.PID_DATEI,'r',encoding='utf-8') as fh: pid=int(fh.read().strip())\n        adopted=_AdoptedProcess(pid)\n        if adopted.poll() is None:\n            self.proc=adopted\n            print(f'[buehne-singleton] existing Chrome adopted (pid {pid}); no replacement spawned')\n            return\n    except Exception as exc: print(f'[buehne-singleton] no adoptable prior Chrome: {exc}')\n    try: os.remove(mod.PID_DATEI)\n    except FileNotFoundError: pass\n    except Exception as exc: print(f'[buehne-singleton] stale PID cleanup failed: {exc}')\ndef _preserve_chrome_on_daemon_exit(self):\n    if getattr(mod,'_blick_modul',None) is not None:\n        try: mod._blick_modul.instanz().stoppen()\n        except Exception as exc: print(f'[buehne-singleton] Blickfuehrung stop warning: {exc}')\n    pid=getattr(getattr(self,'proc',None),'pid',None)\n    print(f'[buehne-singleton] daemon exit preserves Chrome pid={pid}; next daemon adopts it')\nmod.Fensterverwalter._alte_pid_aufraeumen=_adopt_previous_chrome\nmod.Fensterverwalter.herunterfahren=_preserve_chrome_on_daemon_exit\ndef _delayed_singleton_reconcile():\n    time.sleep(2.0)\n    try: subprocess.run(['bash',HELPER],check=False,timeout=15)\n    except Exception as exc: print(f'[buehne-singleton] reconcile helper failed: {exc}')\nthreading.Thread(target=_delayed_singleton_reconcile,daemon=True).start()\nmod.hauptschleife()\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "sha256": "b0aca05109211ce96fc0de7bf6aa30e62d7cbf5e61522737a855a066a53d0104",
+    "bytes": 2212,
+    "truncated": false
+  },
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

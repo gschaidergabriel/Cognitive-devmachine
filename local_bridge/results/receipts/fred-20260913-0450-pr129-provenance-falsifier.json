@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913-0450-pr129-provenance-falsifier",
+  "command_sha256": "2145d45b2781e0d39e763e9455b7c3b3c7b99cdfc011ecc53b0a049f431ae861",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T04:09:06.377191+00:00",
+  "finished_at": "2026-09-13T04:09:13.346576+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "4beab82816218ea8807619a1c00a7498533db1a882d18f344cd473d52e1eb6f0",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\n  \"checks\": {\n    \"gabriel_and_andreas_remain_distinct\": true,\n    \"legacy_ref_gets_no_invented_host\": true,\n    \"machine_change_changes_binding_digest\": true,\n    \"machine_change_changes_capsule_digest\": true,\n    \"machine_change_changes_projection\": false,\n    \"no_effect_authority\": true,\n    \"no_runtime_credit\": true\n  },\n  \"ok\": false,\n  \"schema\": \"OMEGA_GRF_PROVENANCE_SELFTEST/v1\",\n  \"scope\": \"structured provenance/source composition only\"\n}\n....F.F                                                                  [100%]\n=================================== FAILURES ===================================\n__________ test_machine_binding_changes_deterministic_grid_projection __________\n\n    def test_machine_binding_changes_deterministic_grid_projection():\n        a = p.compile_bound_capsule(request(\"ai-core-node\"), expected_turn_id=\"turn-1\")\n        b = p.compile_bound_capsule(request(\"different-host\"), expected_turn_id=\"turn-1\")\n        pa = p.project_bound_grid(a, turn_event_id=\"turn-1\")\n        pb = p.project_bound_grid(b, turn_event_id=\"turn-1\")\n>       assert pa[\"grf_projection\"][\"signal_overrides\"] != pb[\"grf_projection\"][\"signal_overrides\"]\nE       AssertionError: assert {'G1': 0.5302869387265319, 'G10': 0.48344026864922734, 'G2': 0.4388404464718394, 'G3': 0.44939740400425543, ...} != {'G1': 0.5302869387265319, 'G10': 0.48344026864922734, 'G2': 0.4388404464718394, 'G3': 0.44939740400425543, ...}\n\ntests/test_omega_grf_provenance.py:140: AssertionError\n__________________ test_builtin_selftest_passes_source_scope ___________________\n\n    def test_builtin_selftest_passes_source_scope():\n        out = p.selftest()\n>       assert out[\"ok\"] is True\nE       assert False is True\n\ntests/test_omega_grf_provenance.py:156: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_omega_grf_provenance.py::test_machine_binding_changes_deterministic_grid_projection\nFAILED tests/test_omega_grf_provenance.py::test_builtin_selftest_passes_source_scope\n2 failed, 5 passed in 0.08s\nSELFTEST_JSON={\"checks\": {\"gabriel_and_andreas_remain_distinct\": true, \"legacy_ref_gets_no_invented_host\": true, \"machine_change_changes_binding_digest\": true, \"machine_change_changes_capsule_digest\": true, \"machine_change_changes_projection\": false, \"no_effect_authority\": true, \"no_runtime_credit\": true}, \"ok\": false, \"schema\": \"OMEGA_GRF_PROVENANCE_SELFTEST/v1\", \"scope\": \"structured provenance/source composition only\"}\nPROJECTION_SENSITIVITY=false\nEXACT_HEAD=8cbdd81a9855d6f852a709882c8934f6b7339410\nREAD_ONLY_GATE_COMPLETE=1\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

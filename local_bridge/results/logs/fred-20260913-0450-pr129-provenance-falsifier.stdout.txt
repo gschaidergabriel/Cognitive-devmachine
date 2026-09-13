@@ -1,0 +1,43 @@
+{
+  "checks": {
+    "gabriel_and_andreas_remain_distinct": true,
+    "legacy_ref_gets_no_invented_host": true,
+    "machine_change_changes_binding_digest": true,
+    "machine_change_changes_capsule_digest": true,
+    "machine_change_changes_projection": false,
+    "no_effect_authority": true,
+    "no_runtime_credit": true
+  },
+  "ok": false,
+  "schema": "OMEGA_GRF_PROVENANCE_SELFTEST/v1",
+  "scope": "structured provenance/source composition only"
+}
+....F.F                                                                  [100%]
+=================================== FAILURES ===================================
+__________ test_machine_binding_changes_deterministic_grid_projection __________
+
+    def test_machine_binding_changes_deterministic_grid_projection():
+        a = p.compile_bound_capsule(request("ai-core-node"), expected_turn_id="turn-1")
+        b = p.compile_bound_capsule(request("different-host"), expected_turn_id="turn-1")
+        pa = p.project_bound_grid(a, turn_event_id="turn-1")
+        pb = p.project_bound_grid(b, turn_event_id="turn-1")
+>       assert pa["grf_projection"]["signal_overrides"] != pb["grf_projection"]["signal_overrides"]
+E       AssertionError: assert {'G1': 0.5302869387265319, 'G10': 0.48344026864922734, 'G2': 0.4388404464718394, 'G3': 0.44939740400425543, ...} != {'G1': 0.5302869387265319, 'G10': 0.48344026864922734, 'G2': 0.4388404464718394, 'G3': 0.44939740400425543, ...}
+
+tests/test_omega_grf_provenance.py:140: AssertionError
+__________________ test_builtin_selftest_passes_source_scope ___________________
+
+    def test_builtin_selftest_passes_source_scope():
+        out = p.selftest()
+>       assert out["ok"] is True
+E       assert False is True
+
+tests/test_omega_grf_provenance.py:156: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_grf_provenance.py::test_machine_binding_changes_deterministic_grid_projection
+FAILED tests/test_omega_grf_provenance.py::test_builtin_selftest_passes_source_scope
+2 failed, 5 passed in 0.08s
+SELFTEST_JSON={"checks": {"gabriel_and_andreas_remain_distinct": true, "legacy_ref_gets_no_invented_host": true, "machine_change_changes_binding_digest": true, "machine_change_changes_capsule_digest": true, "machine_change_changes_projection": false, "no_effect_authority": true, "no_runtime_credit": true}, "ok": false, "schema": "OMEGA_GRF_PROVENANCE_SELFTEST/v1", "scope": "structured provenance/source composition only"}
+PROJECTION_SENSITIVITY=false
+EXACT_HEAD=8cbdd81a9855d6f852a709882c8934f6b7339410
+READ_ONLY_GATE_COMPLETE=1

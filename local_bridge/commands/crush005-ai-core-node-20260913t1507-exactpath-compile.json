@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "crush005-ai-core-node-20260913t1507-exactpath-compile",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 900,
+  "command": "set -euo pipefail\nROOT=$(mktemp -d /tmp/crush005-exactpath.XXXXXX)\ntrap 'rm -rf \"$ROOT\"' EXIT\nLIVE1=\"$HOME/.claude/star/harness_crush_knopf.sh\"\nLIVE2=\"$HOME/.claude/star/harness_crush_knopf.py\"\nLIVE3=\"$HOME/.claude/star/harness_crush.py\"\nLIVE4=\"$HOME/frankenstein-repo/CRUSH.md\"\nprintf 'CRUSH005_BOUNDARY=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED\\n'\nsha256sum \"$LIVE1\" \"$LIVE2\" \"$LIVE3\" \"$LIVE4\" | tee \"$ROOT/before\"\ngh repo clone gschaidergabriel/clay-global-research-entity \"$ROOT/research\" -- --quiet --single-branch --branch chatgpt-work/entityos-crush-omega-bootstrap-20260913\ntest \"$(git -C \"$ROOT/research\" rev-parse HEAD)\" = bbca92180f7d11b38b4679d39a1bb79db8918e60\ngit clone --quiet https://github.com/charmbracelet/crush.git \"$ROOT/donor\"\ngit -C \"$ROOT/donor\" checkout --quiet d333e04385f9e1d1523cea7b417cb5e8798a713a\nrm -rf \"$ROOT/donor/internal/omega\"\ncp -a \"$ROOT/research/research_entity/coordination/entityos_crush_seed/internal/omega\" \"$ROOT/donor/internal/omega\"\nGO=\"$HOME/.cache/entityos-crush-validation/crush004-full-20260913T0740Z/go/bin/go\"\nif [ ! -x \"$GO\" ]; then\n  curl -fsSL https://go.dev/dl/go1.27.1.linux-amd64.tar.gz -o \"$ROOT/go.tgz\"\n  printf '63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445  %s\\n' \"$ROOT/go.tgz\" | sha256sum -c -\n  tar -C \"$ROOT\" -xzf \"$ROOT/go.tgz\"\n  GO=\"$ROOT/go/bin/go\"\nfi\n\"$GO\" version\ncd \"$ROOT/donor\"\n\"$GO\" test ./internal/omega -count=1\nsha256sum \"$LIVE1\" \"$LIVE2\" \"$LIVE3\" \"$LIVE4\" | tee \"$ROOT/after\"\ncmp \"$ROOT/before\" \"$ROOT/after\"\nprintf 'CRUSH005_EXTERNAL_ROUTE_GO_TEST_PASS\\nCRUSH005_LIVE_HARNESS_BYTE_INVARIANT_PASS\\n'"
+}

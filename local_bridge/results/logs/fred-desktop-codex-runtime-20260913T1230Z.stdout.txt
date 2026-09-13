@@ -1,0 +1,14 @@
+--- codex ---
+codex-cli 0.146.0
+--- codex mcp ---
+[]
+--- omega health ---
+{"ok":true,"service":"omega-frankenstein-bridge","version":"1.1.0-fallback","auth_required":true,"effects_enabled":true,"github_control_plane_configured":false,"local_fallback_enabled":true,"local_socket":"/run/user/1000/omega-local-effect.sock"}
+--- services ---
+omega-chatgpt-mcp.service=active
+omega-local-effect-adapter.service=active
+frankenstein-chatgpt-client.service=active
+frankenstein-local-bridge.service=active
+frankenstein-gespraechsmodus.service=active
+--- desktop processes ---
+1420127 bash -lc printf '%s\n' '--- codex ---'; codex --version 2>&1 || true; printf '%s\n' '--- codex mcp ---'; codex mcp list --json 2>&1 || true; printf '%s\n' '--- omega health ---'; python3 -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8789/health',timeout=2).read().decode())" 2>&1 || true; printf '%s\n' '--- services ---'; for s in omega-chatgpt-mcp.service omega-local-effect-adapter.service frankenstein-chatgpt-client.service frankenstein-local-bridge.service frankenstein-gespraechsmodus.service; do printf '%s=' "$s"; systemctl --user is-active "$s" 2>/dev/null || true; done; printf '%s\n' '--- desktop processes ---'; pgrep -a -f '/usr/lib/chatgpt|(^|/)chatgpt( |$)' 2>/dev/null | head -n 20 || true

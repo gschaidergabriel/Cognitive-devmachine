@@ -1,5 +1,7 @@
 package omega
 
+import "strings"
+
 const (
 	// External route kinds are observations only. They do not grant dispatch,
 	// provider, effect, or mutation authority.
@@ -9,6 +11,14 @@ const (
 	ExternalOrganChatGPT    = "chatgpt"
 	ExternalOrganClaudeCode = "claude-code"
 	ExternalOrganFreePool   = "free-pool"
+	ExternalOrganCrushModel = "crush-model"
+
+	// These identifiers are already selected by the existing Free-Frank/Crush
+	// harness. OMEGA only classifies the selected route after the fact; it never
+	// chooses a provider from these constants.
+	CrushNativeAdapter          = "crush-native"
+	CrushClaudeCLIProviderID    = "claude-cli"
+	CrushFreePoolProviderPrefix = "freepool-"
 )
 
 // ObserveChatGPTBridge maps the already-existing Frankenstein ChatGPT bridge
@@ -50,4 +60,36 @@ func ObserveFreePoolProvider(adapterID, providerID, modelID string) OrganRoute {
 		ProviderID: providerID,
 		ModelID:    modelID,
 	}.Normalized()
+}
+
+// ObserveCrushProviderRoute classifies the provider/model that Crush has
+// ALREADY selected for the current inference call. It is deliberately not a
+// router: there is no provider lookup, fallback, credential check, dispatch,
+// retry, or authority decision here.
+//
+// The current Free-Frank harness exposes two semantically important provider
+// families through Crush itself:
+//   - provider id "claude-cli" is the explicit Claude Code/CLI bridge;
+//   - provider ids prefixed "freepool-" are the existing Free-Pool lane.
+// Everything else stays a generic native Crush model route. Exact provider and
+// model ids remain in the evidence so route digests still distinguish concrete
+// executions inside the same organ family.
+func ObserveCrushProviderRoute(providerID, modelID string) OrganRoute {
+	providerID = strings.TrimSpace(providerID)
+	modelID = strings.TrimSpace(modelID)
+
+	switch {
+	case providerID == CrushClaudeCLIProviderID:
+		return ObserveClaudeCodeBridge(CrushNativeAdapter, providerID, modelID)
+	case strings.HasPrefix(providerID, CrushFreePoolProviderPrefix):
+		return ObserveFreePoolProvider(CrushNativeAdapter, providerID, modelID)
+	default:
+		return OrganRoute{
+			Kind:       ExternalRouteKindProvider,
+			OrganID:    ExternalOrganCrushModel,
+			AdapterID:  CrushNativeAdapter,
+			ProviderID: providerID,
+			ModelID:    modelID,
+		}.Normalized()
+	}
 }

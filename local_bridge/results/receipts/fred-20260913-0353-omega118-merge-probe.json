@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "fred-20260913-0353-omega118-merge-probe",
+  "command_sha256": "67d82ff565ddc44dfc87708da9cd1d116344f779de47239ae2bb4042f46cb714",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T03:49:42.045889+00:00",
+  "finished_at": "2026-09-13T03:49:52.129834+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "58bce0c68d38c0fd1828d6086f32a23dc4487c66441eb5d8a322e16516817c3c",
+  "stderr_sha256": "5c892d7a280616d9ef5910eb3ada04422f23d2a837b2e2bc7c6842dfe9395242",
+  "stdout_tail": "SCRATCH=/tmp/fred-omega118-20260913-0353-27134\nPR_HEAD=3b222ee9a9a24a2d49853a87d0f7bd277642ead8\nMAIN=6f14444bbcf59a661793fe4e5ed20a0d4bffe2a4\nAuto-merging scripts/install_voice_777_omega.sh\nMERGE_CLEAN=1\n{\n  \"schema\": \"OMEGA_FINAL_ASSEMBLY/v1\",\n  \"ok\": true,\n  \"scope\": \"source-composition-only\",\n  \"self\": \"OMEGA\",\n  \"body\": \"FranKenstein 2.0\",\n  \"checks\": [\n    {\n      \"name\": \"all_required_organs_present\",\n      \"ok\": true,\n      \"detail\": \"all present\"\n    },\n    {\n      \"name\": \"identity_default_is_omega\",\n      \"ok\": true,\n      \"detail\": \"frankenstein_identity_assembly.py must default to OMEGA\"\n    },\n    {\n      \"name\": \"voice_self_is_omega\",\n      \"ok\": true,\n      \"detail\": \"voice_full_integration.py must project OMEGA\"\n    },\n    {\n      \"name\": \"terminal_self_contract_is_omega\",\n      \"ok\": true,\n      \"detail\": \"terminal inference transport must not contradict the active OMEGA identity block\"\n    },\n    {\n      \"name\": \"launcher_has_no_db_writer\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed\"\n    },\n    {\n      \"name\": \"launcher_has_no_daemon_loop\",\n      \"ok\": true,\n      \"detail\": \"omega_runtime defines no resident infinite/server loop; AST parsed\"\n    }\n  ],\n  \"runtime_credit\": false,\n  \"note\": \"PASS proves source assembly only. Host activation/effects still require exact current host authority and readback.\"\n}\n",
+  "stderr_tail": "Automatic merge went well; stopped before committing as requested\n.....\n----------------------------------------------------------------------\nRan 5 tests in 0.023s\n\nOK\n",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

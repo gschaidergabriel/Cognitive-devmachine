@@ -1,0 +1,28 @@
+===BOUNDARY===
+machine_id=ai-core-node
+owner=gabriel
+execution_boundary=REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED
+===HARNESS_BEFORE===
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99  /home/ai-core-node/frankenstein-repo/CRUSH.md
+===GO_TOOLCHAIN===
+go1.27.1.linux-amd64.tar.gz 63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445
+go1.27.1.linux-amd64.tar.gz: OK
+go version go1.27.1 linux/amd64
+===DONOR_AND_SEED===
+donor=d333e04385f9e1d1523cea7b417cb5e8798a713a
+seed=bbca92180f7d11b38b4679d39a1bb79db8918e60
+===OMEGA_TESTS===
+ok  	github.com/charmbracelet/crush/internal/omega	0.007s
+===AGENT_COMPILE===
+ok  	github.com/charmbracelet/crush/internal/agent	0.034s [no tests to run]
+===HARNESS_AFTER===
+95a9311a4f47457b3c5e100fe9bd8d62253711eb889386e521bc68a3ddf7fce3  /home/ai-core-node/.claude/star/harness_crush_knopf.sh
+db05347f908c891e526bdb47d6497e24aa1defc94b824f502ecd579ab73dbd61  /home/ai-core-node/.claude/star/harness_crush_knopf.py
+59a3a043c0b4b687e998837027f86a8fd982ff4038ca58b8834f3243ae2b0613  /home/ai-core-node/.claude/star/harness_crush.py
+1980f471ff088d3fea923b66f69eb1e0e8d837f546c86a84740111bbbeddbf99  /home/ai-core-node/frankenstein-repo/CRUSH.md
+CRUSH005_EXTERNAL_ROUTE_GO_TEST_PASS
+CRUSH005_AGENT_COMPILE_PASS
+CRUSH005_LIVE_HARNESS_BYTE_INVARIANT_PASS

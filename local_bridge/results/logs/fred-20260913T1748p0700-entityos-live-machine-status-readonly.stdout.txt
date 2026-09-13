@@ -1,0 +1,36 @@
+===MACHINECTL_STATUS===
+entityos(d6ed76a7d0614db39d366551aff2ca09)
+	   Since: Sun 2026-09-13 07:33:25 CEST; 5h 17min ago
+	  Leader: 1995 (systemd)
+	 Superv.: 1901 (systemd-nspawn)
+	 Service: systemd-nspawn; class container
+	    Root: /var/lib/entityos/rootfs-run
+	    Unit: entityos.scope
+		  └─payload
+		    └─init.scope
+		      └─1995 /usr/lib/systemd/systemd
+===MACHINECTL_SHOW===
+Name=entityos
+Id=d6ed76a7d0614db39d366551aff2ca09
+Timestamp=Sun 2026-09-13 07:33:25 CEST
+Service=systemd-nspawn
+Leader=1995
+Class=container
+RootDirectory=/var/lib/entityos/rootfs-run
+State=running
+===NSPAWN_PROCS===
+   1901       1  So Sep 13 07:33:25 2026   19087 root     systemd-nspawn --quiet --boot --register=yes --machine=entityos --directory=/var/lib/entityos/rootfs-run --bind=/var/lib/entityos/data:/var/lib/entityos --bind=/var/lib/entityos/voice:/opt/entityos/voice --bind-ro=/opt/entityos/cognition:/opt/entityos/cognition --bind=/var/lib/entityos/data:/var/lib/entityos/data --bind=/home/andreas/frankenstein-repo/scripts:/home/andreas/frankenstein-repo/scripts --bind=/dev/snd --bind=/dev/dri --bind=/dev/kfd --property=DeviceAllow=/dev/snd rwm --property=DeviceAllow=/dev/dri rwm --property=DeviceAllow=/dev/kfd rwm
+===ENTITYOS_UNITS===
+  entityos.scope                                                                                                                      loaded    active     running         Container entityos
+  entityos-container.service                                                                                                          loaded    active     running         EntityOS-Container (FranKenstein) automatisch starten
+  entityos-dashboard@8730.service                                                                                                     loaded    inactive   dead            EntityOS dashboard (socket-activated, pulls up the VM)
+  entityos-gespraech-waechter.service                                                                                                 loaded    inactive   dead            EntityOS Sprachmodus-Waechter (beobachtet gespraech.aktiv, startet/stoppt die Sprachschleife)
+● entityos-syncthing-autopause.service                                                                                                loaded    failed     failed          EntityOS Syncthing-Ordner automatisch pausieren/entpausieren je nach Handy-Verbindung
+  entityos-syncthing-status.service                                                                                                   loaded    inactive   dead            EntityOS Syncthing-Status in unified.db schreiben (fuer den Grid, kein LLM/Bash-Direktzugriff noetig)
+  entityos-syncthing.service                                                                                                          loaded    inactive   dead            EntityOS Syncthing (Foto-Sync Handy, laeuft in der VM-Namensraum)
+● entityos-vm.service                                                                                                                 loaded    failed     failed          EntityOS systemd-nspawn container (the VM)
+  systemd-machine-id-commit.service                                                                                                   loaded    inactive   dead            Save Transient machine-id to Disk
+  system-entityos\x2ddashboard.slice                                                                                                  loaded    active     active          Slice /system/entityos-dashboard
+  entityos-dashboard@8730.socket                                                                                                      loaded    active     listening       EntityOS dashboard socket (Stage 0 -> Stage 1 trigger)
+  entityos-syncthing-autopause.timer                                                                                                  loaded    active     waiting         Alle 25 Sekunden pruefen, ob der Syncthing-Fotoordner pausiert/entpausiert werden muss
+  entityos-syncthing-status.timer                                                                                                     loaded    active     waiting         Alle 5 Minuten den Syncthing-Status in unified.db aktualisieren

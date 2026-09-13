@@ -1,0 +1,49 @@
+MACHINE=ai-core-node
+OWNER=gabriel
+REPO=/home/ai-core-node/frankenstein-repo
+HEAD=dd755a639b8c2bc406f7ee7221aabe5dcfa7ed46
+BRANCH=main
+STATUS_BEGIN
+ M scripts/__pycache__/stern.cpython-312.pyc
+?? scripts/openai_api_key.local
+STATUS_END
+REMOTE_MAIN=bf5c2552533d44acb18c20ccf4dff29ff773133b
+FILE scripts/stern.py 8e3da8735c6dd7a5c77229fc7b59f3b13032ce7c4068e72f11d965b720fbd9c0  /home/ai-core-node/frankenstein-repo/scripts/stern.py
+6072:#     stern.py f2wp1207-turn-loop-turn \
+6099:    """Kernlogik hinter dem CLI-Unterbefehl `f2wp1207-turn-loop-turn`.
+6224:                         "note": "provisioniert von f2wp1207-turn-loop-turn, "
+6373:    `f2wp1207-turn-loop-turn`, nichts rief sie bei einem echten Prompt
+6416:    """CLI-Einstiegspunkt `stern.py f2wp1207-turn-loop-turn`. Liest EIN
+10679:            # oder manuell per CLI (`f2wp1207-turn-loop-turn`), nie
+17642:    tlb = sub.add_parser("f2wp1207-turn-loop-turn", help="F2WP1207 kanonischer Turn-Loop: EIN Turn ueber run_canonical_turn() (Gate f2wp1207.canonical_turn_loop)")
+18252:    elif a.cmd == "f2wp1207-turn-loop-turn":
+FILE scripts/f2wp1207_grid10_turn_loop.py 43498f942c8387a4e8355f7ad62cb2f370356d6a4e85132bfbfccd0a29d5bc4b  /home/ai-core-node/frankenstein-repo/scripts/f2wp1207_grid10_turn_loop.py
+1240:    signal_overrides: Mapping[str, float] | None = None,
+1250:    ``signal_overrides`` (2026-09-07, percept passthrough): keyword-only,
+1273:    if signal_overrides:
+1274:        for cell, value in signal_overrides.items():
+1465:    signal_overrides: Optional[Mapping[str, float]] = None,
+1482:    ``signal_overrides`` (2026-09-07, percept passthrough): optional mapping
+1582:        # Ein ausdruecklich uebergebenes signal_overrides gewinnt IMMER --
+1591:        if _percept_an and not signal_overrides:
+1605:        if signal_overrides:
+1606:            _jspace_kwargs["signal_overrides"] = signal_overrides
+1608:            _jspace_kwargs["signal_overrides"] = _percept_signale
+MISSING=scripts/omega_grf_brain.py
+MISSING=scripts/omega_grf_causal_discriminator.py
+CLI_HELP_BEGIN
+usage: stern.py f2wp1207-turn-loop-turn [-h] [--force-new-epoch]
+                                        [--declared-reentry {previous_frame,previous_epoch,genesis}]
+                                        [--evidence-path EVIDENCE_PATH]
+
+options:
+  -h, --help            show this help message and exit
+  --force-new-epoch     nur wenn keine runtime_epoch_id im Payload steht: neue
+                        RuntimeEpoch mit predecessor mint
+  --declared-reentry {previous_frame,previous_epoch,genesis}
+                        Reentry bewusst deklarieren (Vorgabe: der Loop loest
+                        selbst auf)
+  --evidence-path EVIDENCE_PATH
+                        abweichender Pfad fuer die JSONL-Evidenz (Vorgabe:
+                        f2wp1207_turn_loop_evidence.jsonl neben dieser Datei)
+CLI_HELP_END

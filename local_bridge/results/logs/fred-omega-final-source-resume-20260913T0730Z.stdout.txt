@@ -1,0 +1,183 @@
+===STATUS_DIFF===
+ M .github/workflows/omega-native-world-model.yml
+ M scripts/install_voice_777_omega.sh
+ M scripts/omega_voice_world_patch.py
+ M scripts/voice_full_runtime.py
+ M tests/test_omega_voice_world_patch_contract.py
+?? tests/test_omega_voice_world_patch_semantics.py
+ .github/workflows/omega-native-world-model.yml |  3 ++
+ scripts/install_voice_777_omega.sh             | 17 +++++++++++
+ scripts/omega_voice_world_patch.py             | 32 ++++++++++++++++++++-
+ scripts/voice_full_runtime.py                  |  5 ++++
+ tests/test_omega_voice_world_patch_contract.py | 39 ++++++++++++++++++++++----
+ 5 files changed, 90 insertions(+), 6 deletions(-)
+===KEY_DIFF===
+diff --git a/scripts/install_voice_777_omega.sh b/scripts/install_voice_777_omega.sh
+index 34b2cdd..3181740 100644
+--- a/scripts/install_voice_777_omega.sh
++++ b/scripts/install_voice_777_omega.sh
+@@ -91,6 +91,23 @@ final_sha_before="$(sha256sum "$voice_script" | awk '{print $1}')"
+ # the final policy layer without another Voice wrapper.
+ OMEGA_RUNTIME_FILES=(
+   omega_runtime.py
++  f2wp1207_grid10_p11_effects.py
++  f2wp1207_grid10_p7_coordination.py
++  f2wp1207_grid10_turn_loop.py
++  f2wp1207_p10_workspace_reentry.py
++  f2wp1207_p12_self_observation.py
++  omega_grf_brain.py
++  omega_grf_field.py
++  omega_voice_world_patch.py
++  omega_world_brain_bridge.py
++  omega_world_coupling.py
++  omega_world_donor_agentzero.py
++  omega_world_donor_frankenstein.py
++  omega_world_hybrid_fusion.py
++  omega_world_manifold.py
++  omega_world_model.py
++  omega_world_reentry.py
++  omega_world_turn.py
+   frankenstein_identity_assembly.py
+   omega_arm_bus.py
+   omega_organ_activity.py
+diff --git a/scripts/omega_voice_world_patch.py b/scripts/omega_voice_world_patch.py
+index 4358190..a1c56de 100644
+--- a/scripts/omega_voice_world_patch.py
++++ b/scripts/omega_voice_world_patch.py
+@@ -30,18 +30,48 @@ class VoiceWorldPreflightError(RuntimeError):
+ 
+ 
+ def _runtime_epoch_or_preflight_error(stern: Any, conn: Any, session_id: str) -> str:
++    """Resolve the existing subject completely before atomic world entry.
++
++    The legacy stern bridge remains the authority that provisions missing
++    identity rows.  Native world cognition therefore enters BEGIN IMMEDIATE
++    only after RuntimeEpoch -> Installation -> Entity/StateRoot is already
++    persisted. Missing legacy provisioning is the one safe reason to execute
++    the old canonical turn once; the following turn can use the world path.
++    """
+     runtime_epoch_id, _predecessor = stern._f2wp1207_runtime_epoch(session_id)
+     runtime_epoch_id = str(runtime_epoch_id or "").strip()
+     if not runtime_epoch_id:
+         raise VoiceWorldPreflightError("stern returned no runtime_epoch_id")
+     row = conn.execute(
+-        "SELECT 1 FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
++        "SELECT installation_id, state_root_id FROM f2_runtime_epoch WHERE runtime_epoch_id=?",
+         (runtime_epoch_id,),
+     ).fetchone()
+     if row is None:
+         raise VoiceWorldPreflightError(
+             f"runtime_epoch_id={runtime_epoch_id!r} is not persisted; legacy identity provisioning required"
+         )
++    installation_id = str(row[0] or "").strip()
++    state_root_id = str(row[1] or "").strip()
++    if not installation_id or not state_root_id:
++        raise VoiceWorldPreflightError(
++            f"runtime_epoch_id={runtime_epoch_id!r} has incomplete installation/state-root binding"
++        )
++    installation = conn.execute(
++        "SELECT entity_id FROM f2_installation_identity WHERE installation_id=?",
++        (installation_id,),
++    ).fetchone()
++    if installation is None or not str(installation[0] or "").strip():
++        raise VoiceWorldPreflightError(
++            f"installation_id={installation_id!r} has no persisted entity binding; legacy identity provisioning required"
++        )
++    state_root = conn.execute(
++        "SELECT 1 FROM f2_state_root_identity WHERE state_root_id=? AND installation_id=?",
++        (state_root_id, installation_id),
++    ).fetchone()
++    if state_root is None:
++        raise VoiceWorldPreflightError(
++            f"state_root_id={state_root_id!r} is not bound to installation_id={installation_id!r}; legacy identity provisioning required"
++        )
+     return runtime_epoch_id
+ 
+ 
+diff --git a/scripts/voice_full_runtime.py b/scripts/voice_full_runtime.py
+index a1f265a..24c6b7f 100644
+--- a/scripts/voice_full_runtime.py
++++ b/scripts/voice_full_runtime.py
+@@ -638,6 +638,11 @@ def patch_runtime() -> None:
+     _patch_tool_gate()
+     _patch_arm_lifecycle()
+     _patch_barge_in_signal()
++    # Native world cognition replaces exactly the existing pre-response GRID
++    # seam. FINAL voice calls this base patch first and then wraps that seam
++    # with its verified-human/private-context gate, so policy remains outside.
++    import omega_voice_world_patch as world_patch
++    world_patch.install(sys.modules[__name__])
+     _PATCHED = True
+ 
+ 
+diff --git a/tests/test_omega_voice_world_patch_contract.py b/tests/test_omega_voice_world_patch_contract.py
+index 0559324..b918276 100644
+--- a/tests/test_omega_voice_world_patch_contract.py
++++ b/tests/test_omega_voice_world_patch_contract.py
+@@ -4,10 +4,39 @@ ROOT = Path(__file__).resolve().parents[1]
+ SCRIPTS = ROOT / "scripts"
+ 
+ 
+-def test_voice_world_patch_exists_and_777_launcher_remains_single_entrypoint():
++def test_shared_voice_base_installs_world_brain_once():
++    base = (SCRIPTS / "voice_full_runtime.py").read_text(encoding="utf-8")
++    assert "omega_voice_world_patch as world_patch" in base
++    assert base.count("world_patch.install(sys.modules[__name__])") == 1
++
++
++def test_final_voice_keeps_verified_private_gate_outside_shared_base():
++    final = (SCRIPTS / "voice_final_runtime.py").read_text(encoding="utf-8")
++    assert "base.patch_runtime()" in final
++    assert "_patch_private_context()" in final
++    assert final.index("base.patch_runtime()") < final.index("_patch_private_context()")
++
++
++def test_installer_materializes_exact_world_patch_import_closure():
++    installer = (SCRIPTS / "install_voice_777_omega.sh").read_text(encoding="utf-8")
++    required = {
++        "f2wp1207_grid10_p11_effects.py",
++        "f2wp1207_grid10_p7_coordination.py",
++        "f2wp1207_grid10_turn_loop.py",
++        "f2wp1207_p10_workspace_reentry.py",
++        "f2wp1207_p12_self_observation.py",
++        "omega_grf_brain.py", "omega_grf_field.py", "omega_voice_world_patch.py",
++        "omega_world_brain_bridge.py", "omega_world_coupling.py",
++        "omega_world_donor_agentzero.py", "omega_world_donor_frankenstein.py",
++        "omega_world_hybrid_fusion.py", "omega_world_manifold.py",
++        "omega_world_model.py", "omega_world_reentry.py", "omega_world_turn.py",
++    }
++    missing = sorted(name for name in required if name not in installer)
++    assert not missing, f"installer missing world-brain closure: {missing}"
++
++
++def test_world_patch_is_in_place_not_a_second_voice_entrypoint():
+     patch = (SCRIPTS / "omega_voice_world_patch.py").read_text(encoding="utf-8")
+-    launcher = (SCRIPTS / "voice_777_runtime.py").read_text(encoding="utf-8")
+     assert "OMEGA_VOICE_WORLD_PATCH/v1" in patch
+-    assert "def install(full" in patch
+-    assert "def patch_777" in launcher
+-    assert "gm.hoeren()" in launcher
++    assert "full._refresh_emergent_grid_context = wrapped" in patch
++    assert "gm.hoeren" not in patch
+===COMPILE===
+COMPILE_AND_SHELL_PASS
+===PYTEST===
+...........................................................F......       [100%]
+=================================== FAILURES ===================================
+_______ test_final_voice_keeps_verified_private_gate_outside_shared_base _______
+
+    def test_final_voice_keeps_verified_private_gate_outside_shared_base():
+        final = (SCRIPTS / "voice_final_runtime.py").read_text(encoding="utf-8")
+        assert "base.patch_runtime()" in final
+        assert "_patch_private_context()" in final
+>       assert final.index("base.patch_runtime()") < final.index("_patch_private_context()")
+E       assert 17530 < 9963
+E        +  where 17530 = <built-in method index of str object at 0x386850d0>('base.patch_runtime()')
+E        +    where <built-in method index of str object at 0x386850d0> = '#!/usr/bin/env python3\n"""Production Voice entrypoint: tested full integration + final action policy.\n\nThis is a t...  patch_final_runtime()\n    gm.hoeren()\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'.index
+E        +  and   9963 = <built-in method index of str object at 0x386850d0>('_patch_private_context()')
+E        +    where <built-in method index of str object at 0x386850d0> = '#!/usr/bin/env python3\n"""Production Voice entrypoint: tested full integration + final action policy.\n\nThis is a t...  patch_final_runtime()\n    gm.hoeren()\n    return 0\n\n\nif __name__ == "__main__":\n    raise SystemExit(main())\n'.index
+
+tests/test_omega_voice_world_patch_contract.py:17: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_voice_world_patch_contract.py::test_final_voice_keeps_verified_private_gate_outside_shared_base
+1 failed, 65 passed in 1.02s

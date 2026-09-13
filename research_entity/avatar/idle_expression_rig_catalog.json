@@ -1,0 +1,38 @@
+{
+  "schema": "FRANK_AVATAR_IDLE_RIG_CATALOG/v1",
+  "source": "/home/ai-core-node/Downloads/FRANK_AVATAR_RIG_V2_2026-09-11/FRANK_AVATAR_RIG_V2",
+  "law": "Reuse owner-designated rig assets; do not infer a brow/nose asset that is not present.",
+  "mouth_idle_candidates": [
+    {"asset":"mund_01_closed_mbp","intent":"lip_press","family":"ponder","salience":"low","default_idle":true},
+    {"asset":"mund_02_breath","intent":"soft_mouth_breath","family":"fatigue","salience":"low","default_idle":true},
+    {"asset":"mund_20_grin_closed","intent":"micro_grin","family":"positive","salience":"low","default_idle":true},
+    {"asset":"mund_21_grin_teeth","intent":"teeth_grin","family":"positive","salience":"medium","default_idle":true},
+    {"asset":"mund_22_snarl_left","intent":"snarl_left","family":"stress","salience":"medium","default_idle":true},
+    {"asset":"mund_23_snarl_right","intent":"snarl_right","family":"stress","salience":"medium","default_idle":true},
+    {"asset":"mund_24_bare_teeth","intent":"bare_teeth_micro","family":"stress","salience":"high","default_idle":false},
+    {"asset":"mund_25_tongue_tip","intent":"tongue_tip","family":"play","salience":"medium","default_idle":true},
+    {"asset":"mund_26_tongue_out","intent":"tongue_out","family":"play","salience":"high","default_idle":true},
+    {"asset":"mund_27_tongue_left","intent":"tongue_left","family":"play","salience":"high","default_idle":true},
+    {"asset":"mund_28_tongue_right","intent":"tongue_right","family":"play","salience":"high","default_idle":true},
+    {"asset":"mund_29_whistle_small","intent":"lip_purse","family":"ponder","salience":"low","default_idle":true},
+    {"asset":"mund_30_whistle_strong","intent":"strong_pucker","family":"ponder","salience":"medium","default_idle":true},
+    {"asset":"mund_31_smirk_left","intent":"smirk_left","family":"social","salience":"low","default_idle":true},
+    {"asset":"mund_32_smirk_right","intent":"smirk_right","family":"social","salience":"low","default_idle":true},
+    {"asset":"mund_33_pout","intent":"pout","family":"ponder","salience":"low","default_idle":true},
+    {"asset":"mund_34_jaw_clench","intent":"jaw_clench","family":"stress","salience":"medium","default_idle":true},
+    {"asset":"mund_35_gasp","intent":"gasp_micro","family":"surprise","salience":"medium","default_idle":true}
+  ],
+  "speech_like_assets_not_default_idle": [
+    "mund_03_a_small","mund_04_a_medium","mund_05_a_wide","mund_06_e","mund_07_i","mund_08_o_small","mund_09_o_medium","mund_10_o_wide","mund_11_u","mund_12_fv","mund_13_l","mund_14_th","mund_15_sz","mund_16_rch","mund_17_kg","mund_18_wq","mund_19_shch"
+  ],
+  "eye_assets": {
+    "blink_frames": 12,
+    "gaze_directions": ["center","down","left_down","left","left_up","right_down","right","right_up","up"],
+    "ownership": "existing blink/gaze controllers; idle face may request intent but must not become a competing eye animator"
+  },
+  "full_expression_reference": [
+    "01_ruhig_neutral","02_wach_aufmerksam","03_angespannt","04_zugewandt_weich","05_erschoepft_schwer","06_ueberrascht"
+  ],
+  "not_proven_as_atomic_rig_assets": ["nose_scrunch","nostril_flare","brow_raise_left","brow_raise_right","brow_pinched","cheek_twitch"],
+  "note": "Actual nose/brow/cheek motion requires a separately validated local mask/warp or a whole-expression blend. Mouth snarl assets must not be mislabeled as proof of anatomical nose motion."
+}

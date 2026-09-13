@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('assert');
+const {fromBuehneStatus}=require('./idle_expression_state_adapter');
+const {IdleStateFilter}=require('./idle_expression_state_filter');
+let s=fromBuehneStatus({an:true,buehne:{ausdruck:'03_angespannt',broadcast_value:2.4,blick:{anwesend:true,nah:true},swap_voll_anteil:.82,ram_frei_anteil:.16}},{speaking:false});
+assert(s.tension>=.9);assert(s.arousal>=.78);assert(s.presence>=.9);assert.strictEqual(s.speaking,false);
+const creative=fromBuehneStatus({an:true,buehne:{ausdruck:'01_ruhig_neutral'}},{selfCategory:'self_creative',selfCategoryAgeMs:1000});
+const stale=fromBuehneStatus({an:true,buehne:{ausdruck:'01_ruhig_neutral'}},{selfCategory:'self_creative',selfCategoryAgeMs:100000});
+assert(creative.playfulness>stale.playfulness+.5);
+const f=new IdleStateFilter({tension:.1,arousal:.2,speaking:false});f.setTarget({tension:.9,arousal:.8,speaking:true});f.tick(0);const a=f.tick(250);assert(a.tension>.1&&a.tension<.9);assert(a.arousal>.2&&a.arousal<.8);assert.strictEqual(a.speaking,true);f.setTarget({tension:.1,arousal:.2,speaking:false});const b=f.tick(500);assert(b.tension>a.tension-.2,'release must be slower than a hard snap');assert.strictEqual(b.speaking,false);
+console.log(JSON.stringify({pass:true,tense:s,creativePlay:creative.playfulness,stalePlay:stale.playfulness,smoothed:a},null,2));

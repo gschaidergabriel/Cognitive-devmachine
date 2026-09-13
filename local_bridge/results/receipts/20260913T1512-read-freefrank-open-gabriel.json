@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "20260913T1512-read-freefrank-open-gabriel",
+  "command_sha256": "b6d15c5edce5d3a7d688c1a78c813ed2973523c8f055584340a2e4d09467be2f",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-09-13T07:49:19.490531+00:00",
+  "finished_at": "2026-09-13T07:49:19.490620+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "read_file",
+  "stdout_sha256": "ea6cd6cb236668e014ba34d6709b5edc71c93184b1ee6192fd3186864b98ed0a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "#!/usr/bin/env bash\nset -u\n\nexport DISPLAY=\"${DISPLAY:-:0}\"\nexport XAUTHORITY=\"${XAUTHORITY:-$HOME/.Xauthority}\"\n\n# Existing visible Free Frank window wins. Never create duplicates.\n# NOTE (2026-09-12, corrected): the desktop/workspace field ($2) is -1 for\n# EVERY window in this environment (gnome-terminal, Firefox, Nautilus all\n# show -1 too) -- it is NOT a staleness signal. An earlier fix wrongly\n# filtered on $2!=\"-1\", which meant a real, live window was never found and\n# got killed+relaunched on every click. Match on window class + title only.\nwid=\"\"\nif command -v wmctrl >/dev/null 2>&1; then\n  wid=\"$(wmctrl -lpGx 2>/dev/null | awk '$8==\"cool-retro-term.cool-retro-term\" && /crush ~\\/frankenstein-repo|Free Frank/ {print $1; exit}')\"\nfi\n\nif [ -z \"$wid\" ] && command -v xdotool >/dev/null 2>&1; then\n  wid=\"$(xdotool search --class 'cool-retro-term' --name 'crush ~/frankenstein-repo|Free Frank' 2>/dev/null | head -n1 || true)\"\nfi\n\nif [ -n \"$wid\" ]; then\n  if command -v wmctrl >/dev/null 2>&1; then\n    wmctrl -ia \"$wid\" 2>/dev/null || true\n  fi\n  if command -v xdotool >/dev/null 2>&1; then\n    xdotool windowmap \"$wid\" 2>/dev/null || true\n    xdotool windowactivate --sync \"$wid\" 2>/dev/null || true\n    xdotool windowraise \"$wid\" 2>/dev/null || true\n  fi\n  exit 0\nfi\n\n# A process without a mapped window is stale/headless for desktop purposes.\n# Terminate only the exact Free Frank launcher chain, never unrelated terminals.\nif pgrep -f '^/usr/bin/cool-retro-term -T Free Frank ' >/dev/null 2>&1; then\n  pkill -TERM -f '^/usr/bin/cool-retro-term -T Free Frank ' 2>/dev/null || true\n  sleep 0.4\nfi\n\n# cool-retro-term's \"-e <single-path>\" form crashes its QML startSession()\n# with \"Could not convert argument 0\" on this build (1.2.0+ds2-2build2) --\n# the window opens but never gets a PTY, so it looks empty/invisible.\n# \"-e /bin/bash <path>\" (two argv tokens) works; verified live 2026-09-12.\nexec /usr/bin/cool-retro-term -T \"Free Frank\" -e /bin/bash \"$HOME/.claude/star/harness_crush_knopf.sh\"\n",
+  "stderr_tail": "",
+  "meta": {
+    "sha256": "ea6cd6cb236668e014ba34d6709b5edc71c93184b1ee6192fd3186864b98ed0a",
+    "bytes": 2012,
+    "truncated": false
+  },
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}

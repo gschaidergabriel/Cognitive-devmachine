@@ -1,19 +1,23 @@
 {
   "schema": "CLAY_LOCAL_RECEIPT/v1",
-  "command_id": "20260913T1503-freefrank-crt-gabriel",
-  "command_sha256": "4c2b3d7f8c5f255f4c0dee163c3c8191228c06b8212147d20f4c16261f8d970f",
+  "command_id": "20260913T1512-read-freefrank-open-gabriel",
+  "command_sha256": "b6d15c5edce5d3a7d688c1a78c813ed2973523c8f055584340a2e4d09467be2f",
   "host": "ai-core-node",
   "owner": "gabriel",
   "machine_id": "ai-core-node",
-  "started_at": "2026-09-13T07:48:23.231232+00:00",
-  "finished_at": "2026-09-13T07:48:23.286738+00:00",
+  "started_at": "2026-09-13T07:49:19.490531+00:00",
+  "finished_at": "2026-09-13T07:49:19.490620+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "20bce6438543638acf49c02d93da372be4bba77191f2505a74717792f89acd4a",
+  "op": "read_file",
+  "stdout_sha256": "ea6cd6cb236668e014ba34d6709b5edc71c93184b1ee6192fd3186864b98ed0a",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "===CRT===\n/usr/bin/cool-retro-term\n 663411 bash -lc echo ===CRT===; command -v cool-retro-term; ps -eo pid,args | grep '[c]ool-retro-term' || true; echo ===CONFIG===; ls -la \"$HOME/.config/Swordfish90\" 2>/dev/null || true; cat \"$HOME/.config/Swordfish90/cool-retro-term.conf\" 2>/dev/null || true; echo ===LOCALBIN===; ls -la \"$HOME/.local/bin\" | grep -Ei 'frank|crush' || true\n===CONFIG===\n===LOCALBIN===\n-rwxr-xr-x 1 ai-core-node ai-core-node      106 Sep 12 14:40 frank\n-rwxrwxr-x 1 ai-core-node ai-core-node     4728 Sep  5 22:56 frank-cortex-fenster\n-rwxrwxr-x 1 ai-core-node ai-core-node     7163 Aug  6 21:47 frank-fenster\n-rwxrwxr-x 1 ai-core-node ai-core-node     1125 Aug 27 15:44 frank-harness-sichtbar\n-rwxrwxr-x 1 ai-core-node ai-core-node     2201 Aug  6 05:53 frank-hub\n-rwxrwxr-x 1 ai-core-node ai-core-node     1387 Aug  6 05:53 frank-hub.vor-appfenster-055313\n-rwxr-xr-x 1 ai-core-node ai-core-node       77 Sep 13 14:22 frank-omega\n-rwxr-xr-x 1 ai-core-node ai-core-node       88 Sep 12 10:54 frank.pre-chatgpt-organ-20260912-035909\n-rwxrwxr-x 1 ai-core-node ai-core-node     4075 Aug  1 02:06 frank-rollback\n-rwxrwxr-x 1 ai-core-node ai-core-node     1815 Aug  1 02:01 frank-snapshot\n-rwxr-xr-x 1 ai-core-node ai-core-node     6369 Aug 27 16:57 frank-stat-fenster\n-rwxr-xr-x 1 ai-core-node ai-core-node      327 Sep 12 10:59 frank-terminal-hilfe\n-rwxr-xr-x 1 ai-core-node ai-core-node      316 Sep 12 10:37 frank-terminal-hilfe.pre-chatgpt-organ-20260912-035909\n-rwxr-xr-x 1 ai-core-node ai-core-node     1532 Sep 12 10:37 frank-terminal-hilfe.pre-chatgpt-organ-20260912-103758\n-rwxr-xr-x 1 ai-core-node ai-core-node     2012 Sep 12 12:12 free-frank-open\n-rwxr-xr-x 1 ai-core-node ai-core-node     1016 Sep 12 10:41 work-on-frank\n-rwxrwxr-x 1 ai-core-node ai-core-node     1865 Sep 12 10:41 work-on-frank.pre-chatgpt-organ-20260912-104121\n",
+  "stdout_tail": "#!/usr/bin/env bash\nset -u\n\nexport DISPLAY=\"${DISPLAY:-:0}\"\nexport XAUTHORITY=\"${XAUTHORITY:-$HOME/.Xauthority}\"\n\n# Existing visible Free Frank window wins. Never create duplicates.\n# NOTE (2026-09-12, corrected): the desktop/workspace field ($2) is -1 for\n# EVERY window in this environment (gnome-terminal, Firefox, Nautilus all\n# show -1 too) -- it is NOT a staleness signal. An earlier fix wrongly\n# filtered on $2!=\"-1\", which meant a real, live window was never found and\n# got killed+relaunched on every click. Match on window class + title only.\nwid=\"\"\nif command -v wmctrl >/dev/null 2>&1; then\n  wid=\"$(wmctrl -lpGx 2>/dev/null | awk '$8==\"cool-retro-term.cool-retro-term\" && /crush ~\\/frankenstein-repo|Free Frank/ {print $1; exit}')\"\nfi\n\nif [ -z \"$wid\" ] && command -v xdotool >/dev/null 2>&1; then\n  wid=\"$(xdotool search --class 'cool-retro-term' --name 'crush ~/frankenstein-repo|Free Frank' 2>/dev/null | head -n1 || true)\"\nfi\n\nif [ -n \"$wid\" ]; then\n  if command -v wmctrl >/dev/null 2>&1; then\n    wmctrl -ia \"$wid\" 2>/dev/null || true\n  fi\n  if command -v xdotool >/dev/null 2>&1; then\n    xdotool windowmap \"$wid\" 2>/dev/null || true\n    xdotool windowactivate --sync \"$wid\" 2>/dev/null || true\n    xdotool windowraise \"$wid\" 2>/dev/null || true\n  fi\n  exit 0\nfi\n\n# A process without a mapped window is stale/headless for desktop purposes.\n# Terminate only the exact Free Frank launcher chain, never unrelated terminals.\nif pgrep -f '^/usr/bin/cool-retro-term -T Free Frank ' >/dev/null 2>&1; then\n  pkill -TERM -f '^/usr/bin/cool-retro-term -T Free Frank ' 2>/dev/null || true\n  sleep 0.4\nfi\n\n# cool-retro-term's \"-e <single-path>\" form crashes its QML startSession()\n# with \"Could not convert argument 0\" on this build (1.2.0+ds2-2build2) --\n# the window opens but never gets a PTY, so it looks empty/invisible.\n# \"-e /bin/bash <path>\" (two argv tokens) works; verified live 2026-09-12.\nexec /usr/bin/cool-retro-term -T \"Free Frank\" -e /bin/bash \"$HOME/.claude/star/harness_crush_knopf.sh\"\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "sha256": "ea6cd6cb236668e014ba34d6709b5edc71c93184b1ee6192fd3186864b98ed0a",
+    "bytes": 2012,
+    "truncated": false
+  },
   "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
 }

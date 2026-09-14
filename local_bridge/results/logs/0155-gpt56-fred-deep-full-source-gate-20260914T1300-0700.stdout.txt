@@ -1,0 +1,121 @@
+OWNER=andreas
+MACHINE_ID=andreas-maco
+HEAD=d9908dae952b307048d864eac5ba20a073293a27
+=== SELFTEST ===
+{
+  "schema": "OMEGA_FINAL_ASSEMBLY/v1",
+  "ok": true,
+  "scope": "source-composition-only",
+  "self": "OMEGA",
+  "body": "FranKenstein 2.0",
+  "checks": [
+    {
+      "name": "all_required_organs_present",
+      "ok": true,
+      "detail": "all present"
+    },
+    {
+      "name": "identity_default_is_omega",
+      "ok": true,
+      "detail": "frankenstein_identity_assembly.py must default to OMEGA"
+    },
+    {
+      "name": "voice_self_is_omega",
+      "ok": true,
+      "detail": "voice_full_integration.py must project OMEGA"
+    },
+    {
+      "name": "terminal_self_contract_is_omega",
+      "ok": true,
+      "detail": "terminal inference transport must not contradict the active OMEGA identity block"
+    },
+    {
+      "name": "launcher_has_no_db_writer",
+      "ok": true,
+      "detail": "omega_runtime imports no SQLite writer; durable state stays in the existing runtime; AST parsed"
+    },
+    {
+      "name": "launcher_has_no_daemon_loop",
+      "ok": true,
+      "detail": "omega_runtime defines no resident infinite/server loop; AST parsed"
+    },
+    {
+      "name": "externalized_cognition_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "externalized_learning_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "cognitive_regulation_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "world_state_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "world_manifold_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "world_bridge_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "world_hybrid_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "grf_field_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "grf_brain_is_pure_nonresident_cognition",
+      "ok": true,
+      "detail": "sqlite_import=False; resident_loop=False; AST parsed"
+    },
+    {
+      "name": "grf_brain_preserves_epistemic_fences",
+      "ok": true,
+      "detail": "GRF must preserve UNKNOWN/hypothesis/world-collapse fences and emit the existing GRID signal contract"
+    },
+    {
+      "name": "grf_field_verify_is_readiness_not_truth",
+      "ok": true,
+      "detail": "R6 may encode verification readiness only and must carry no truth/effect authority"
+    },
+    {
+      "name": "world_turn_delegates_without_own_persistence",
+      "ok": true,
+      "detail": "world_turn must be SELECT/read composition plus one delegation; sql_mutations=[]"
+    },
+    {
+      "name": "world_turn_preserves_report_memory_fences",
+      "ok": true,
+      "detail": "live user report/retrieval context must not be promoted to truth/effect authority"
+    },
+    {
+      "name": "hybrid_world_has_one_state_one_field_path",
+      "ok": true,
+      "detail": "hybrid ingress must carry one W_t-derived manifold and one bounded recurrent field"
+    }
+  ],
+  "runtime_credit": false,
+  "note": "PASS proves source assembly only. Host activation/effects still require exact current host authority and readback."
+}
+=== DEEP SOURCE SUITE ===
+........................................................................ [ 79%]
+...................                                                      [100%]
+91 passed in 1.14s
+KNOWN_BLOCKER=INSTALLER_MISSING_OMEGA_GRF_FIELD_DYNAMICS
+FRED_DEEP_FULL_SOURCE_GATE=PASS

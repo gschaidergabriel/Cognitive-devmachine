@@ -1,0 +1,40 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_externalized_cognition_organs_are_materialized_by_777_installer _____
+
+    def test_externalized_cognition_organs_are_materialized_by_777_installer():
+        """Source-contract organs must cross the source -> installed-product seam."""
+        runtime = (ROOT / "scripts" / "omega_runtime.py").read_text(encoding="utf-8")
+        hybrid = (ROOT / "scripts" / "omega_world_hybrid_fusion.py").read_text(encoding="utf-8")
+        mechanics = (ROOT / "scripts" / "omega_grf_field_mechanics.py").read_text(encoding="utf-8")
+        installer = (ROOT / "scripts" / "install_voice_777_omega.sh").read_text(encoding="utf-8")
+    
+        required = {
+            "externalized_learning": "omega_externalized_learning.py",
+            "cognitive_regulation": "omega_cognitive_regulation.py",
+        }
+        for organ, filename in required.items():
+            assert f'"{organ}"' in runtime, f"OMEGA runtime contract lost organ: {organ}"
+            assert f"  {filename}\n" in installer, (
+                f"777 installer does not materialize required OMEGA organ: {filename}"
+            )
+    
+        # Field mechanics is called through the canonical hybrid world-brain seam rather
+        # than becoming a second runtime/authority. Its complete transitive source closure
+        # must still cross the source -> FINAL-product materialization boundary.
+        assert "import omega_grf_field_mechanics as field_mechanics" in hybrid
+        assert "  omega_grf_field_mechanics.py\n" in installer
+        assert "import omega_grf_field_dynamics as field_dynamics" in mechanics
+>       assert "  omega_grf_field_dynamics.py\n" in installer, (
+            "777 installer does not materialize the field-dynamics dependency imported "
+            "by omega_grf_field_mechanics.py"
+        )
+E       AssertionError: 777 installer does not materialize the field-dynamics dependency imported by omega_grf_field_mechanics.py
+E       assert '  omega_grf_field_dynamics.py\n' in '#!/usr/bin/env bash\nset -euo pipefail\n\n# Final OMEGA-777 convergence layer for an already-installed FINAL Voice pr...nly at an independently admitted,\nhost-safe lifecycle boundary. Do not restart merely to activate this source.\nEOF\n'
+
+tests/test_omega_install_parity.py:30: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_omega_install_parity.py::test_externalized_cognition_organs_are_materialized_by_777_installer
+1 failed in 0.02s
+TEST_EXIT=1
+EXPECTED_INSTALLER_DEPENDENCY_GAP=CONFIRMED

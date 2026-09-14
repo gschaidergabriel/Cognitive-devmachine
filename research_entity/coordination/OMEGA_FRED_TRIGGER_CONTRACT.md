@@ -31,16 +31,23 @@ On an exact `FRED`, first read and execute the current algorithm in:
 
 ## OMEGA / GRF field-mechanics convergence directive
 
-Field mechanics is now an explicit continuing OMEGA target-architecture frontier. It is **not** a second brain or a replacement state authority. The canonical path remains one recurrent body:
+Field mechanics is an explicit continuing OMEGA target-architecture frontier. It is **not** a second brain or a replacement state authority. The canonical path remains one recurrent body:
 
 `W_t -> WorldManifold -> R0..R6 GRF field -> Externalized Cognition -> Cognitive Regulation -> Context Compiler -> GRF/GRID10 -> atomic persist -> exact reentry -> semantic organ`
 
-The field-mechanics layer is initially measurement/discriminator tissue over that path. On every relevant `FRED`, refresh the current canonical OMEGA source line and load, when present, the current versions of:
+The field-mechanics layer begins as measurement/discriminator tissue over that path. On every relevant `FRED`, refresh the current canonical OMEGA source line and load, when present, the current versions of:
 
 - `DEV_SOURCE_RESEARCH/research/36_OMEGA_GRF_FIELD_MECHANICS_TARGET.clay`
 - `DEV_SOURCE_RESEARCH/research/37_OMEGA_FIELD_MECHANICS_HYPOTHESIS_GATE.md`
+- `DEV_SOURCE_RESEARCH/research/38_OMEGA_FIELD_MECHANICS_RESEARCH_SWEEP_2026-09-14.md`
+- `DEV_SOURCE_RESEARCH/research/39_OMEGA_FIELD_MECHANICS_DEEP_FRED_2026-09-14.md`
 - `scripts/omega_grf_field_mechanics.py`
-- the associated field-mechanics falsifier tests and current PR/runtime receipts.
+- `scripts/omega_grf_field_dynamics.py`
+- `scripts/omega_grf_field_discriminator.py`
+- `scripts/omega_grf_field_sweep.py`
+- `scripts/omega_grf_field_reentry_discriminator.py`
+- `scripts/omega_grf_field_causal_gate.py`
+- the associated field-mechanics falsifier tests, installer/materialization parity gates and current PR/runtime receipts.
 
 Do not assume a remembered branch/head is current. Resolve the live canonical source/PR/head first.
 
@@ -52,11 +59,14 @@ When field mechanics is relevant to the highest-information unresolved frontier,
 2. select the smallest nonduplicate discriminator or implementation slice that can change belief or architecture;
 3. implement it on the existing canonical OMEGA source line, not in a parallel architecture;
 4. run deterministic source/unit falsifiers first;
-5. where scientifically required, run matched controls: paired +/- zero-mean probes, shuffle/frozen controls, pairwise/context controls, lesion/sham/edge ablations, equal model/context/compute budgets, and verified outcome readback;
-6. assign no causal credit from correlation, exposure, attractive mathematics or one successful sample;
-7. only after matched causal evidence, propose bounded control influence or architecture mutation;
-8. for self-repair/self-building, require organ/function lineage, baseline, shadow/twin candidate, causal intervention, regression replay, rollback/reconstruction and independent admission before promotion;
-9. after each result, update the hypothesis/evidence frontier and continue if another admitted nonduplicate step is immediately executable.
+5. where scientifically required, run matched controls: paired +/- zero-mean probes, probe-size transfer, source-label shuffle/frozen/linear controls, pairwise/context controls, lesion/sham/edge ablations, equal model/context/compute budgets, and verified outcome readback;
+6. where recurrence is claimed, cross the actual predecessor/reentry source seam and then the genuine admitted runtime seam; do not equate a one-step mathematical check with recurrent evidence;
+7. assign no causal credit from correlation, exposure, attractive mathematics, Hodge/circulation magnitude, sensitivity magnitude, selection popularity or one successful sample;
+8. for causal credit, reuse OMEGA Externalized Learning's matched CEV-ablation law rather than creating a second credit authority;
+9. only after matched causal evidence, propose bounded control influence or architecture mutation;
+10. for self-repair/self-building, require organ/function lineage, baseline, shadow/twin candidate, causal intervention, regression replay, rollback/reconstruction and independent admission before promotion;
+11. verify the complete transitive source -> installer -> existing FINAL-product dependency closure before claiming production materialization;
+12. after each result, update the hypothesis/evidence frontier and continue if another admitted nonduplicate step is immediately executable.
 
 ### Required research sweep
 
@@ -68,13 +78,17 @@ Research is not collected for volume. Each imported idea must map to one of: imp
 
 - The canonical persisted OMEGA/GRID state remains authority. A field/manifold is a derived cognitive projection, not a second truth or database.
 - `E[w]=0` with nonzero covariance and a nonlinear macro residual is admissible emergence evidence; it does not by itself establish usefulness, causality or semantic truth.
-- A finite-difference/local sensitivity readout is **not** called a Lyapunov exponent unless an actual tangent propagator over a measured trajectory is computed. Positive instability never grants long-horizon oracle prediction.
-- Graph circulation/curl proxies are not literal Navier-Stokes vorticity. Fluid equations are transferable mathematics/analogy unless a literal physical-fluid model is being solved.
+- A finite-difference/local sensitivity readout is **not** called a Lyapunov exponent. A finite-time growth claim requires an explicit tangent propagator over a measured trajectory; an asymptotic Lyapunov claim needs stronger convergence evidence. Positive instability never grants long-horizon oracle prediction.
+- Contractive results are first-class negative evidence. Never retell negative finite-time growth as “edge of chaos” or amplification.
+- Graph circulation/curl proxies and graph-Hodge cycle/harmonic components are not literal Navier-Stokes vorticity. Fluid equations are transferable mathematics/analogy unless a literal physical-fluid model is being solved.
+- Hodge/cycle magnitude alone receives zero cognitive-utility or causal credit. FM-H4 requires outcome-labelled traces and matched edge/loop ablation.
 - Semantic Hyperposition is a classical alternative-state/higher-order representation unless real quantum hardware and a quantum state are explicitly in scope. Deterministic selection is not quantum measurement and is never assumed error-free.
 - Physically separate nodes require an explicit causal transport channel. Shared equations, seeds, parameters or manifolds are common causes, not telepathy. No no-signalling violation is claimed.
 - Tensor/higher-order software coupling is not quantum entanglement.
 - Morphogenesis/self-healing may generate architecture proposals but may not self-authorize runtime mutation.
 - Field metrics may influence GRID selection only after matched causal evidence and bounded admission; they can never mint canonical truth or effect authority.
+- Source/unit/reentry-fixture evidence is not a genuine admitted runtime intervention receipt.
+- If a new field-mechanics source dependency is not materialized through the existing FINAL installer/product tree, production promotion remains blocked; never create a parallel installer as a workaround.
 
 ### Field-mechanics hypothesis frontier
 
@@ -82,8 +96,8 @@ Maintain and actively falsify at least these hypotheses until resolved or supers
 
 - **FM-H1 Geometry-first selection:** potential/constraint-based candidate selection improves matched task efficiency versus an imperative baseline.
 - **FM-H2 Zero-mean covariance emergence:** paired zero-mean perturbations produce reproducible nonlinear macro residuals predictable from covariance/interaction structure.
-- **FM-H3 Local sensitivity atlas:** measured local sensitivity predicts where small admitted changes amplify through recurrence/reentry.
-- **FM-H4 Productive circulation:** recurrence/circulation features predict productive versus stalled loops only when matched causal ablation changes downstream utility.
+- **FM-H3 Local/finite-time sensitivity atlas:** measured tangent/reentry response predicts where small admitted changes amplify **or damp** through recurrence/reentry.
+- **FM-H4 Productive circulation:** recurrence/cycle/Hodge features predict productive versus stalled loops only when matched causal ablation changes downstream utility.
 - **FM-H5 Semantic Hyperposition:** irreducible higher-order alternatives beat pairwise and admissible-context controls on held-out cases without context smuggling.
 - **FM-H6 Morphogenetic repair:** lineage-preserving field-guided rerouting recovers function after matched lesion with lower recovery cost.
 - **FM-H7 Shared-manifold coherence:** shared manifold representations reduce serialisation cost while preserving explicit causal transport and provenance.
@@ -92,7 +106,7 @@ Promotion sequence:
 
 `MEASURE -> FALSIFY -> MATCHED ABLATION -> VERIFIED OUTCOME -> CAUSAL CREDIT -> BOUNDED ADMISSION -> REENTRY TEST -> CONTROL INFLUENCE`
 
-A source/unit PASS is not runtime PASS. A component runtime PASS is not whole-OMEGA PASS.
+A source/unit PASS is not runtime PASS. A synthetic source-reentry PASS is not genuine admitted-turn PASS. A component runtime PASS is not whole-OMEGA PASS.
 
 ## Required subject separation
 
@@ -116,7 +130,7 @@ Do not stop/restart `entityos-vm.service` as a convenience while current evidenc
 A `FRED` run is complete only when one of the following is true:
 
 1. the strongest current admitted nonduplicate gate has been driven to verified closure and the re-resolved frontier contains no further immediately executable admitted step; or
-2. execution reaches a concrete blocker: missing authority, missing tool/effect route, missing current host evidence, unresolved subject binding, explicit safety gate, or a required discriminator that cannot presently be executed.
+2. execution reaches a concrete blocker: missing authority, missing tool/effect route, missing current host evidence, unresolved subject binding, explicit safety gate, transitive installer/product dependency gap, or a required discriminator that cannot presently be executed.
 
 Report that exact boundary. Do not substitute another design document for execution.
 

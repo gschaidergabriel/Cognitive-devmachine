@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-omega-ui-plan-read-20260922-0053",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage",
+  "timeout_seconds": 120,
+  "command": "set -o pipefail\nrepo=\"/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage\"\ncd \"$repo\"\necho '=== DIRTY DIFF STAT ==='\ngit diff --stat\necho '=== LOCAL HEAD STAT ==='\ngit show --stat --oneline --decorate --no-renames HEAD | head -120\necho '=== MATERIALIZER RELEVANT ==='\ngrep -nE 'vendor|RESYNC|overlay/internal/ui|patch_landing|UPSTREAM|CRUSH|git clone|cp -a|rsync' scripts/materialize-harness.sh | head -220\necho '=== UI OVERLAY TREE ==='\nfind harness/overlay/internal/ui -maxdepth 3 -type f -print 2>/dev/null | sort\necho '=== UI VENDOR TOP TREE ==='\nfind harness/vendor/internal/ui -maxdepth 2 -type f -print | sed 's#^harness/vendor/##' | sort | head -220\necho '=== PATCHES ==='\nfind harness/patches -maxdepth 1 -type f -printf '%f\\n' | sort\necho '=== OMEGA STATUS UI ==='\nsed -n '1,260p' harness/overlay/internal/ui/model/omega_status.go 2>/dev/null || true\necho '=== LANDING PATCH ==='\nsed -n '1,260p' harness/patches/patch_landing.py 2>/dev/null || true\necho '=== UPDATE PROVIDERS ==='\nsed -n '1,280p' harness/vendor/internal/cmd/update_providers.go 2>/dev/null || true\necho '=== CRUSH SELF UPDATE ==='\nsed -n '1,280p' harness/vendor/internal/update/update.go 2>/dev/null || true\n"
+}

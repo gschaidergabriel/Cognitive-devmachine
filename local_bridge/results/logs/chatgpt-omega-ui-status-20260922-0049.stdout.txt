@@ -1,0 +1,65 @@
+=== HOST ===
+host=ai-core-node-projekt-frankenstein
+user=ai-core-node
+time=2026-09-22T00:50:00+07:00
+=== OMEGA REPO ===
+head=dad42d23459e7bc88221cbb07050c753d960b5e3
+branch=main
+origin_main=510224d6a34d3777da8eaee0dfc4555a7ea83e85
+-- status --
+ M docs/EVIDENCE.md
+ M harness/overlay/internal/omega/omega_effect_journal.go
+ M harness/overlay/internal/omega/omega_effect_journal_test.go
+ M harness/overlay/internal/omega/omega_experience_vector.go
+ M harness/overlay/internal/omega/omega_grid_feedback.go
+ M harness/overlay/internal/omega/omega_monitor.go
+ M harness/overlay/internal/omega/omega_titan_body.go
+ M harness/overlay/internal/omega/omega_titan_body_test.go
+ M harness/overlay/internal/omega/omega_voice_organ.go
+ M harness/overlay/internal/omega/omega_voice_turn.go
+ M harness/vendor/internal/omega/omega_effect_journal.go
+ M harness/vendor/internal/omega/omega_effect_journal_test.go
+ M harness/vendor/internal/omega/omega_experience_vector.go
+ M harness/vendor/internal/omega/omega_grid_feedback.go
+ M harness/vendor/internal/omega/omega_monitor.go
+ M harness/vendor/internal/omega/omega_titan_body.go
+ M harness/vendor/internal/omega/omega_titan_body_test.go
+ M research/EVIDENCE_LEDGER.md
+?? harness/overlay/internal/omega/omega_file_state.go
+?? harness/overlay/internal/omega/omega_sqlite.go
+?? harness/vendor/internal/omega/omega_file_state.go
+?? harness/vendor/internal/omega/omega_sqlite.go
+?? research/runs/2026-09-19-001-central-model-pool/
+-- recent commits --
+dad42d2 2026-09-21T23:56:51+07:00 fix: route OMEGA turns through GRID and live free pool
+a0c9c5a 2026-09-19T19:20:00+07:00 fix: carry canonical frame into streaming tools and isolate discovery unlock
+c8f947a 2026-09-19T19:18:03+07:00 feat: centralize model pool credentials and frame continuity in OMEGA Vault
+510224d 2026-09-19T04:33:51+07:00 Task-complexity-aware capability floor, GRID10-persisted-state as primary decider
+3cb2461 2026-09-19T01:52:53+07:00 docs/EVIDENCE.md: append §57, vendoring standalone-build proof + root-cause bugfix writeup
+37e4dfe 2026-09-19T01:48:20+07:00 materialize-harness.sh: give $OUT its own throwaway git repo unconditionally
+3f35f0a 2026-09-19T01:33:31+07:00 Vendor materialized harness source for standalone builds (no network clone of upstream Crush needed by default)
+66352d7 2026-09-19T01:11:31+07:00 Merge remote-tracking branch 'wt-startscreen/omega-step-startscreen-real-status' into omega-step-five-branch-integration
+=== CANONICAL STATE ===
+path=/home/ai-core-node/.local/share/omegacv1/runtime/omega/state.json
+entity_id=37e95b74-65f6-497b-9bd1-acf2c4036f82
+revision=214823
+active_goal_id=goal-58ff5fdb9aa4cd8554489f30
+last_turn_id=440c3f15aaca8acd5f39b972fb7cb7e3b03ad8804cd3d0f1aa384429edd871af
+concurrent_reentry=None
+turn_count=64
+turn {'status': 'ok', 'goal_ref': 'goal-58ff5fdb9aa4cd8554489f30', 'turn_id': 'f532f86793f287bf9fe90bf1f02078f98bf08bb0df83f22aefbda7ab387562ef'}
+turn {'status': 'ok', 'goal_ref': 'goal-58ff5fdb9aa4cd8554489f30', 'turn_id': 'a127c38ed2a72f7a5394bd3f7b49e432308ea27d663817d17df882193cda32f9'}
+turn {'status': 'ok', 'goal_ref': 'goal-58ff5fdb9aa4cd8554489f30', 'turn_id': 'f05c76e8b0627fe942b585691ce8fa80f383aea6607297e4699f55448540f196'}
+turn {'status': 'ok', 'goal_ref': 'goal-58ff5fdb9aa4cd8554489f30', 'turn_id': 'fdfc0164174c5d4071926f1017410b9c68717c6f61d195872584109deed5fb0b'}
+turn {'status': 'ok', 'goal_ref': 'goal-58ff5fdb9aa4cd8554489f30', 'turn_id': '440c3f15aaca8acd5f39b972fb7cb7e3b03ad8804cd3d0f1aa384429edd871af'}
+grid_cell_state_keys=G1,G10,G2,G3,G4,G5,G6,G7,G8,G9
+top_keys=active_goal_id,entity_id,goals,grid_cell_state,last_turn_id,revision,schema,turns
+=== PROCESSES ===
+517542 script -qefc /home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage/harness/omega-terminal /tmp/omega-terminal-restart-pty.log
+517544 bash /home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage/harness/omega-terminal
+517829 /home/ai-core-node/.local/share/omegacv1-test-platform/current/omegacv1 --cwd /home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage --data-dir /home/ai-core-node/.local/share/omegacv1/runtime --yolo
+579755 bash -lc set -o pipefail echo '=== HOST ===' printf 'host='; hostname printf 'user='; whoami printf 'time='; date -Is  repo="/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage" echo '=== OMEGA REPO ===' if [ -d "$repo/.git" ]; then   printf 'head='; git -C "$repo" rev-parse HEAD   printf 'branch='; git -C "$repo" branch --show-current   printf 'origin_main='; git -C "$repo" rev-parse origin/main 2>/dev/null || true   echo '-- status --'   git -C "$repo" status --short | head -80   echo '-- recent commits --'   git -C "$repo" log -8 --date=iso-strict --pretty=format:'%h %ad %s' else   echo 'repo_missing' fi  state="$HOME/.local/share/omegacv1/runtime/omega/state.json" echo echo '=== CANONICAL STATE ===' python3 - "$state" <<'PY' import json,sys,os p=sys.argv[1] if not os.path.exists(p):     print("state_missing")     raise SystemExit s=json.load(open(p)) print("path="+p) for k in ("entity_id","revision","active_goal_id","last_turn_id","concurrent_reentry"):     print(f"{k}={s.get(k)}") turns=s.get("turns") or [] print("turn_count="+str(len(turns))) for t in turns[-5:]:     print("turn", {k:t.get(k) for k in ("run_id","status","goal_ref","turn_id","predecessor_turn_id") if k in t}) g=s.get("grid_cell_state") if isinstance(g,dict):     print("grid_cell_state_keys="+",".join(sorted(g.keys())[:40]))     for k in ("revision","last_updated","selected_cell","active_cell","state","complexity"):         if k in g: print(f"grid.{k}={g.get(k)}") else:     print("grid_cell_state_type="+type(g).__name__) print("top_keys="+",".join(sorted(s.keys()))) PY  echo '=== PROCESSES ===' pgrep -a -f 'omegacv1|omega-genesis|omega-terminal|crush' | head -40 || true  echo '=== BUILD/RELEASE ===' for p in "$HOME/.local/share/omegacv1-test-platform/releases/f02481f42895e7876948009382c770887f74ac51/omegacv1" "$repo/dist/omegacv1"; do   if [ -e "$p" ]; then stat -c '%n size=%s mtime=%y' "$p"; else echo "missing $p"; fi done
+2086153 python3 /home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage/harness/claude_cli_shim.py
+=== BUILD/RELEASE ===
+/home/ai-core-node/.local/share/omegacv1-test-platform/releases/f02481f42895e7876948009382c770887f74ac51/omegacv1 size=122256561 mtime=2026-09-18 22:43:22.603578356 +0700
+/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage/dist/omegacv1 size=122479577 mtime=2026-09-22 00:01:06.738218087 +0700

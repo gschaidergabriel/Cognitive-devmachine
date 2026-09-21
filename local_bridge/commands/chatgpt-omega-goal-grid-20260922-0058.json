@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-omega-goal-grid-20260922-0058",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120,
+  "command": "python3 - \"$HOME/.local/share/omegacv1/runtime/omega/state.json\" <<'PY'\nimport json,sys\ns=json.load(open(sys.argv[1]))\naid=s.get(\"active_goal_id\")\nprint(\"active_goal_id\",aid)\ng=s.get(\"goals\")\nif isinstance(g,dict):\n    v=g.get(aid)\n    print(\"active_goal\",v)\nelif isinstance(g,list):\n    for x in g:\n        if isinstance(x,dict) and x.get(\"id\")==aid:\n            print(\"active_goal\",x)\n            break\nprint(\"GRID\")\ngc=s.get(\"grid_cell_state\") or {}\nfor k in sorted(gc):\n    v=gc[k]\n    if isinstance(v,dict):\n        keep={kk:v.get(kk) for kk in (\"revision\",\"state\",\"status\",\"summary\",\"label\",\"role\",\"updated_at\",\"last_turn_id\",\"value\",\"score\",\"complexity\") if kk in v}\n        print(k,keep)\n    else:\n        print(k,repr(v)[:400])\nPY"
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-omega-ui-bundle-patches-20260922-0507",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail\nrepo=\"/home/ai-core-node/.cache/omegacv1-main-93a44ca-canonical-stage\"\ncd \"$repo\"\ngit diff --binary origin/main..HEAD > /tmp/omega_local_commits.patch\ngit diff --binary > /tmp/omega_wip.patch\nwc -c /tmp/omega_local_commits.patch /tmp/omega_wip.patch\nsha256sum /tmp/omega_local_commits.patch /tmp/omega_wip.patch\ngit status --short\n"
+}

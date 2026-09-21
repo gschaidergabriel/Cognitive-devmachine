@@ -1,0 +1,688 @@
+=== DIRTY DIFF STAT ===
+ docs/EVIDENCE.md                                   |  14 +
+ .../overlay/internal/omega/omega_effect_journal.go |   2 +-
+ .../internal/omega/omega_effect_journal_test.go    |  36 +++
+ .../internal/omega/omega_experience_vector.go      |   2 +-
+ .../overlay/internal/omega/omega_grid_feedback.go  |   2 +-
+ harness/overlay/internal/omega/omega_monitor.go    |  12 +-
+ harness/overlay/internal/omega/omega_titan_body.go |  12 +-
+ .../internal/omega/omega_titan_body_test.go        |  50 ++++
+ .../overlay/internal/omega/omega_voice_organ.go    |   6 +-
+ harness/overlay/internal/omega/omega_voice_turn.go | 283 ++++++++++++++++-----
+ .../vendor/internal/omega/omega_effect_journal.go  |   2 +-
+ .../internal/omega/omega_effect_journal_test.go    |  36 +++
+ .../internal/omega/omega_experience_vector.go      |   2 +-
+ .../vendor/internal/omega/omega_grid_feedback.go   |   2 +-
+ harness/vendor/internal/omega/omega_monitor.go     |  12 +-
+ harness/vendor/internal/omega/omega_titan_body.go  |  12 +-
+ .../vendor/internal/omega/omega_titan_body_test.go |  50 ++++
+ research/EVIDENCE_LEDGER.md                        |   3 +
+ 18 files changed, 436 insertions(+), 102 deletions(-)
+=== LOCAL HEAD STAT ===
+dad42d2 (HEAD -> main) fix: route OMEGA turns through GRID and live free pool
+ harness/omega-terminal                             |  55 +++---
+ .../internal/omega/omega_capability_registry.go    |  42 +++-
+ .../internal/omega/omega_capability_seed.go        |  22 +--
+ .../internal/omega/omega_capability_seed_test.go   |   4 +-
+ .../internal/omega/omega_chunked_dispatch.go       |  31 ++-
+ .../overlay/internal/omega/omega_live_router.go    |  21 +-
+ .../overlay/internal/omega/omega_model_context.go  |  22 ++-
+ harness/overlay/internal/omega/omega_model_pool.go |  71 ++++++-
+ .../overlay/internal/omega/omega_model_roles.go    |   2 +-
+ .../internal/omega/omega_organ_4b_client.go        |   7 +-
+ .../internal/omega/omega_organ_4b_client_test.go   |   8 +
+ .../internal/omega/omega_organ_runtime_organs.go   |  12 +-
+ .../overlay/internal/omega/omega_provider_http.go  |  62 +++++-
+ .../overlay/internal/omega/omega_provider_types.go |   3 +
+ .../internal/omega/omega_task_complexity.go        |   2 +-
+ .../overlay/internal/omega/omega_turn_selection.go | 136 +++++++++++++
+ .../internal/omega/omega_turn_selection_test.go    | 141 ++++++++++++++
+ harness/vendor/internal/agent/coordinator.go       | 104 +++++++++-
+ .../internal/omega/omega_capability_registry.go    |  42 +++-
+ .../vendor/internal/omega/omega_capability_seed.go |  22 +--
+ .../internal/omega/omega_capability_seed_test.go   |   4 +-
+ .../internal/omega/omega_chunked_dispatch.go       |  31 ++-
+ harness/vendor/internal/omega/omega_live_router.go |  21 +-
+ .../vendor/internal/omega/omega_model_context.go   |  22 ++-
+ harness/vendor/internal/omega/omega_model_pool.go  |  71 ++++++-
+ harness/vendor/internal/omega/omega_model_roles.go |   2 +-
+ .../vendor/internal/omega/omega_organ_4b_client.go |   5 +-
+ .../internal/omega/omega_organ_4b_client_test.go   |   8 +
+ .../internal/omega/omega_organ_runtime_organs.go   |  12 +-
+ .../vendor/internal/omega/omega_provider_http.go   |  44 +++++
+ .../vendor/internal/omega/omega_provider_types.go  |   3 +
+ .../vendor/internal/omega/omega_task_complexity.go |   2 +-
+ .../vendor/internal/omega/omega_turn_selection.go  | 136 +++++++++++++
+ .../internal/omega/omega_turn_selection_test.go    | 141 ++++++++++++++
+ harness/vendor/internal/ui/dialog/models.go        | 214 +++++++++++++++++++++
+ harness/vendor/internal/ui/dialog/models_item.go   |  32 ++-
+ .../ui/dialog/omega_model_inventory_test.go        |  67 +++++++
+ 37 files changed, 1514 insertions(+), 110 deletions(-)
+=== MATERIALIZER RELEVANT ===
+5:UPSTREAM_REPO="https://github.com/charmbracelet/crush.git"
+6:UPSTREAM_COMMIT="d333e04385f9e1d1523cea7b417cb5e8798a713a"
+8:VENDOR_DIR="$ROOT/harness/vendor"
+9:RESYNC="${OMEGACV1_RESYNC_UPSTREAM:-0}"
+12:  # $1 = target tree (already checked out at UPSTREAM_COMMIT, no OMEGA
+29:  if [ -d "$ROOT/harness/overlay/internal/ui" ]; then
+30:      cp -R "$ROOT/harness/overlay/internal/ui/." "$target/internal/ui/"
+42:    python3 "$ROOT/harness/patches/patch_landing.py"
+50:#   materialized snapshot at harness/vendor/ straight into $OUT. That
+53:#   so a bare `git clone` of THIS repo is sufficient to build and test.
+57:#   Resync (OMEGACV1_RESYNC_UPSTREAM=1, needs network + a Go toolchain):
+58:#   the ORIGINAL behavior -- git clone upstream Crush fresh, check out
+59:#   UPSTREAM_COMMIT, apply overlay + patches, gofmt, test. On success the
+60:#   result is synced back into harness/vendor/ (minus .git) so the
+66:if [ "$RESYNC" = "1" ]; then
+67:  echo "[materialize] OMEGACV1_RESYNC_UPSTREAM=1 -- cloning upstream Crush over the network" >&2
+70:  git clone --filter=blob:none --no-checkout "$UPSTREAM_REPO" "$OUT"
+71:  git -C "$OUT" checkout --detach "$UPSTREAM_COMMIT"
+76:    echo "ERROR: harness/vendor/ is missing or empty -- this repo checkout has no" >&2
+78:    echo "       Regenerate it once (needs network): OMEGACV1_RESYNC_UPSTREAM=1 $0" >&2
+81:  echo "[materialize] using committed harness/vendor/ snapshot (no network)" >&2
+94:# nested .git for free (git clone always creates one) so this was always
+96:# harness/vendor/ or a stripped network clone), recreate that property
+135:if [ "$RESYNC" = "1" ]; then
+142:[materialize] harness/vendor/ refreshed from upstream $UPSTREAM_COMMIT.
+143:              Review the diff (git status / git diff -- harness/vendor)
+152:  $UPSTREAM_COMMIT
+154:  $([ "$RESYNC" = "1" ] && echo "network clone (OMEGACV1_RESYNC_UPSTREAM=1)" || echo "committed harness/vendor/ snapshot (no network used)")
+160:  patch_landing.py
+=== UI OVERLAY TREE ===
+harness/overlay/internal/ui/model/omega_status.go
+harness/overlay/internal/ui/model/omega_status_test.go
+=== UI VENDOR TOP TREE ===
+internal/ui/AGENTS.md
+internal/ui/anim/anim.go
+internal/ui/anim/anim_test.go
+internal/ui/attachments/attachments.go
+internal/ui/attachments/attachments_test.go
+internal/ui/chat/agent.go
+internal/ui/chat/applyhighlight_callback_test.go
+internal/ui/chat/assistant.go
+internal/ui/chat/assistant_section_cache_test.go
+internal/ui/chat/assistant_test.go
+internal/ui/chat/assistant_thinking_window_test.go
+internal/ui/chat/bash.go
+internal/ui/chat/bash_test.go
+internal/ui/chat/call_hierarchy.go
+internal/ui/chat/definition.go
+internal/ui/chat/diagnostics.go
+internal/ui/chat/docker_mcp.go
+internal/ui/chat/fetch.go
+internal/ui/chat/file.go
+internal/ui/chat/generic.go
+internal/ui/chat/incremental_glamour_test.go
+internal/ui/chat/lsp_restart.go
+internal/ui/chat/mcp.go
+internal/ui/chat/mcp_test.go
+internal/ui/chat/messages.go
+internal/ui/chat/prefix_cache_test.go
+internal/ui/chat/prism_savings_test.go
+internal/ui/chat/question.go
+internal/ui/chat/references.go
+internal/ui/chat/refusal_render_test.go
+internal/ui/chat/rename.go
+internal/ui/chat/replace_symbol.go
+internal/ui/chat/resize_bench_test.go
+internal/ui/chat/search.go
+internal/ui/chat/shell.go
+internal/ui/chat/shell_test.go
+internal/ui/chat/streaming_markdown.go
+internal/ui/chat/streaming_thinking_bench_test.go
+internal/ui/chat/symbols.go
+internal/ui/chat/todos.go
+internal/ui/chat/tool_result_content.go
+internal/ui/chat/tool_result_content_test.go
+internal/ui/chat/tools.go
+internal/ui/chat/unified_diff.go
+internal/ui/chat/user.go
+internal/ui/chat/user_render_test.go
+internal/ui/chat/version_bump_test.go
+internal/ui/common/ansi16.go
+internal/ui/common/ansi16_test.go
+internal/ui/common/bash.go
+internal/ui/common/button.go
+internal/ui/common/capabilities.go
+internal/ui/common/chromastyle.go
+internal/ui/common/common.go
+internal/ui/common/common_test.go
+internal/ui/common/diff.go
+internal/ui/common/elements.go
+internal/ui/common/elements_test.go
+internal/ui/common/highlight.go
+internal/ui/common/inlinecode_copy_test.go
+internal/ui/common/interface.go
+internal/ui/common/markdown.go
+internal/ui/common/scrollbar.go
+internal/ui/common/timer.go
+internal/ui/completions/completions.go
+internal/ui/completions/completions_test.go
+internal/ui/completions/item.go
+internal/ui/completions/keys.go
+internal/ui/completions/version_bump_test.go
+internal/ui/dialog/actions.go
+internal/ui/dialog/api_key_input.go
+internal/ui/dialog/arguments.go
+internal/ui/dialog/auth_method.go
+internal/ui/dialog/auth_method_test.go
+internal/ui/dialog/aws_sso.go
+internal/ui/dialog/commands.go
+internal/ui/dialog/commands_item.go
+internal/ui/dialog/common.go
+internal/ui/dialog/dialog.go
+internal/ui/dialog/filepicker.go
+internal/ui/dialog/inline_editor.go
+internal/ui/dialog/mcp_auth.go
+internal/ui/dialog/models.go
+internal/ui/dialog/models_item.go
+internal/ui/dialog/models_list.go
+internal/ui/dialog/notifications.go
+internal/ui/dialog/oauth_copilot.go
+internal/ui/dialog/oauth.go
+internal/ui/dialog/oauth_hyper.go
+internal/ui/dialog/oauth_openai.go
+internal/ui/dialog/omega_model_inventory_test.go
+internal/ui/dialog/overlay_test.go
+internal/ui/dialog/permissions.go
+internal/ui/dialog/permissions_test.go
+internal/ui/dialog/question_choice_base.go
+internal/ui/dialog/question_choice_base_test.go
+internal/ui/dialog/question_confirm.go
+internal/ui/dialog/question_editor.go
+internal/ui/dialog/question_form.go
+internal/ui/dialog/question_freetext.go
+internal/ui/dialog/question_multi.go
+internal/ui/dialog/question_single.go
+internal/ui/dialog/question_yesno.go
+internal/ui/dialog/quit.go
+internal/ui/dialog/reasoning.go
+internal/ui/dialog/sessions.go
+internal/ui/dialog/sessions_item.go
+internal/ui/dialog/sessions_mouse_test.go
+internal/ui/dialog/version_bump_test.go
+internal/ui/diffview/diffview.go
+internal/ui/diffview/diffview_test.go
+internal/ui/diffview/split.go
+internal/ui/diffview/style.go
+internal/ui/diffview/Taskfile.yaml
+internal/ui/diffview/udiff_test.go
+internal/ui/diffview/util.go
+internal/ui/diffview/util_test.go
+internal/ui/exitbanner/exitbanner.go
+internal/ui/exitbanner/exitbanner_test.go
+internal/ui/image/image.go
+internal/ui/image/image_test.go
+internal/ui/list/filterable.go
+internal/ui/list/focus.go
+internal/ui/list/highlight.go
+internal/ui/list/highlight_test.go
+internal/ui/list/item.go
+internal/ui/list/list.go
+internal/ui/list/list_test.go
+internal/ui/logo/letterforms.go
+internal/ui/logo/logo.go
+internal/ui/logo/rand.go
+internal/ui/model/anim_clock_test.go
+internal/ui/model/attachments_mouse_test.go
+internal/ui/model/chat_draw_cache_test.go
+internal/ui/model/chat_expand_test.go
+internal/ui/model/chat.go
+internal/ui/model/dialog_mouse_test.go
+internal/ui/model/filter.go
+internal/ui/model/filter_test.go
+internal/ui/model/framecache_bench_test.go
+internal/ui/model/framecache.go
+internal/ui/model/framecache_oracle_test.go
+internal/ui/model/framecache_test.go
+internal/ui/model/header.go
+internal/ui/model/history.go
+internal/ui/model/history_test.go
+internal/ui/model/keys.go
+internal/ui/model/landing.go
+internal/ui/model/layout_test.go
+internal/ui/model/lsp.go
+internal/ui/model/mcp_auth.go
+internal/ui/model/mcp.go
+internal/ui/model/omega_status.go
+internal/ui/model/omega_status_test.go
+internal/ui/model/onboarding.go
+internal/ui/model/permission_test.go
+internal/ui/model/pill_border_test.go
+internal/ui/model/pills.go
+internal/ui/model/prism_info_test.go
+internal/ui/model/renderbench_test.go
+internal/ui/model/scroll_test.go
+internal/ui/model/session_busy_test.go
+internal/ui/model/session.go
+internal/ui/model/session_test.go
+internal/ui/model/sidebar.go
+internal/ui/model/skills.go
+internal/ui/model/skills_test.go
+internal/ui/model/status.go
+internal/ui/model/textarea_selection_test.go
+internal/ui/model/ui.go
+internal/ui/model/ui_test.go
+internal/ui/model/workspace_cache.go
+internal/ui/notification/bell.go
+internal/ui/notification/crush-icon.png
+internal/ui/notification/crush-icon-solo.png
+internal/ui/notification/icon_darwin.go
+internal/ui/notification/icon_other.go
+internal/ui/notification/native_beeep.go
+internal/ui/notification/native.go
+internal/ui/notification/native_stub.go
+internal/ui/notification/noop.go
+internal/ui/notification/notification.go
+internal/ui/notification/notification_test.go
+internal/ui/notification/osc.go
+internal/ui/styles/codespan_padding_test.go
+internal/ui/styles/grad.go
+internal/ui/styles/quickstyle.go
+internal/ui/styles/styles.go
+internal/ui/styles/themes.go
+internal/ui/util/util.go
+internal/ui/xchroma/chroma.go
+internal/ui/xchroma/chroma_test.go
+internal/ui/xchroma/zod_test.go
+=== PATCHES ===
+patch_agent.py
+patch_app.py
+patch_config.py
+patch_coordinator.py
+patch_landing.py
+patch_mcp.py
+patch_native_continuation.py
+patch_server.py
+patch_test_coordinators.py
+=== OMEGA STATUS UI ===
+package model
+
+import (
+	"fmt"
+	"strings"
+
+	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/crush/internal/omega"
+	"github.com/charmbracelet/crush/internal/ui/styles"
+)
+
+// omega_status.go renders the landing screen's live OMEGA status line: organ
+// health and GRID10 state revision/reentry lineage, read directly from the
+// on-disk substrates the real runtime writes -- never a hardcoded or mocked
+// number.
+//
+// It intentionally does NOT go through the Workspace abstraction
+// (internal/workspace/workspace.go) the way the rest of this package's
+// LSP/MCP/skills panels do: that interface has no organ/state plumbing, and
+// adding it would mean threading a new RPC through the client/server HTTP
+// boundary (internal/server/endpoints.go, internal/client/proto.go) for a
+// splash-screen status line. Instead it opens fresh, read-only
+// *omega.PersistentRuntime / *omega.TitanBodyOrgan handles onto the exact
+// same on-disk paths omega.DefaultStatePath / omega.DefaultTitanBodyPath
+// resolve for the coordinator's own live runtime
+// (internal/agent/coordinator.go's NewCoordinator, which is constructed
+// before the TUI is ever shown). That works in both local and client/server
+// deployments as long as they share a filesystem, which is true of OMEGA's
+// local deployment. It is honest, not a shortcut: reads only, no caching,
+// no assumed process-local object graph.
+
+// omegaStatusLine renders a compact, single-line OMEGA status summary for
+// the landing screen: organ health summary plus GRID10 revision/reentry
+// lineage. Returns "" if no data directory is configured (nothing to probe
+// yet, e.g. during early onboarding).
+func (m *UI) omegaStatusLine(width int) string {
+	if m.com == nil {
+		return ""
+	}
+	t := m.com.Styles
+	cfg := m.com.Config()
+	if cfg == nil || cfg.Options == nil {
+		return ""
+	}
+	dataDir := strings.TrimSpace(cfg.Options.DataDirectory)
+	if dataDir == "" {
+		return ""
+	}
+
+	organIcon, organText := omegaOrganSummary(t, dataDir)
+	stateText := omegaStateSummary(dataDir)
+
+	line := fmt.Sprintf("%s %s%s%s",
+		organIcon,
+		t.Resource.CapabilityCount.Render(organText),
+		"  ",
+		t.Resource.AdditionalText.Render(stateText),
+	)
+	return lipgloss.NewStyle().Width(width).Render(line)
+}
+
+// omegaOrganSummary reads TITAN-Body's on-disk organ topology (the same
+// substrate omega_titan_body.go's TitanBodyOrgan.RegisterOrgan/ReportHealth
+// write to during boot -- internal/agent/coordinator.go's NewCoordinator
+// calls omega.RegisterDefaultOrgans then organRuntime.Start synchronously
+// before the coordinator is returned, so by the time the TUI can be showing
+// anything, every default organ has at least a registered topology record,
+// even if its self-reported health hasn't landed yet) and summarizes
+// registered-organ health as "N/M organs healthy".
+//
+// omega.HealthOK is 0 in the HealthStage enum (omega_monitor.go:
+// HealthOK=0 < HealthTight=1 < HealthCritical=2) -- the lowest/healthy
+// value, not a zero-value placeholder. Organs that registered but never
+// self-reported (HealthKnown=false) are counted separately as "unknown"
+// rather than silently folded into either healthy or unhealthy -- an honest
+// "still booting" signal instead of a fabricated number.
+func omegaOrganSummary(t *styles.Styles, dataDir string) (icon, text string) {
+	path := omega.DefaultTitanBodyPath(dataDir)
+	if path == "" {
+		return t.Resource.OfflineIcon.String(), "organs: n/a"
+	}
+	body, err := omega.NewTitanBodyOrgan(path)
+	if err != nil {
+		return t.Resource.OfflineIcon.String(), "organs: n/a"
+	}
+	topo, err := body.Topology()
+	if err != nil {
+		return t.Resource.OfflineIcon.String(), "organs: unavailable"
+	}
+	if len(topo) == 0 {
+		return t.Resource.BusyIcon.String(), "organs: booting…"
+	}
+
+	var healthy, unhealthy, unknown int
+	for _, o := range topo {
+		switch {
+		case !o.HealthKnown:
+			unknown++
+		case o.Health == omega.HealthOK:
+			healthy++
+		default:
+			unhealthy++
+		}
+	}
+
+	total := len(topo)
+	summary := fmt.Sprintf("%d/%d organs healthy", healthy, total)
+	if unknown > 0 {
+		summary += fmt.Sprintf(" (%d unknown)", unknown)
+	}
+
+	switch {
+	case unhealthy > 0:
+		icon = t.Resource.ErrorIcon.String()
+	case unknown > 0:
+		icon = t.Resource.BusyIcon.String()
+	default:
+		icon = t.Resource.OnlineIcon.String()
+	}
+	return icon, summary
+}
+
+// omegaStateSummary reads PersistentRuntime's on-disk state (the same
+// state.json omega_turn_loop.go's Reenter durably advances Revision on) via
+// Peek -- never Snapshot, which would auto-vivify a throwaway entity file
+// as a side effect of merely drawing the splash screen (see Peek's doc
+// comment in state.go) -- and reports the GRID10 state revision plus
+// whether this is a reentry into prior canonical lineage (Revision > 0: at
+// least one prior Reenter transition has been committed to this entity) or
+// a fresh entity that has never completed a turn (no state file yet, or
+// Revision == 0 with no LastTurnID).
+func omegaStateSummary(dataDir string) string {
+	path := omega.DefaultStatePath(dataDir)
+	if path == "" {
+		return "state: n/a"
+	}
+	rt, err := omega.NewPersistentRuntime(path)
+	if err != nil {
+		return "state: n/a"
+	}
+	state, ok, err := rt.Peek()
+	if err != nil {
+		return "state: unavailable"
+	}
+	if !ok {
+		return "fresh entity (no reentry yet)"
+	}
+
+	if state.Revision == 0 && strings.TrimSpace(state.LastTurnID) == "" {
+		return fmt.Sprintf("rev 0 · fresh entity %s", shortOmegaID(state.EntityID))
+	}
+
+	return fmt.Sprintf("rev %d · reentry (last turn %s)", state.Revision, shortOmegaID(state.LastTurnID))
+}
+
+// shortOmegaID truncates a hex id (entity id or turn id digest) to an
+// 8-character prefix for compact display, leaving short strings untouched.
+func shortOmegaID(id string) string {
+	id = strings.TrimSpace(id)
+	if len(id) <= 8 {
+		return id
+	}
+	return id[:8]
+}
+=== LANDING PATCH ===
+from pathlib import Path
+
+path = Path("internal/ui/model/landing.go")
+s = path.read_text()
+
+replacements = [
+    (
+        '\tparts = append(parts, "", m.modelInfo(width))\n'
+        '\tinfoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)',
+        '\tparts = append(parts, "", m.modelInfo(width))\n'
+        '\tif status := m.omegaStatusLine(width); status != "" {\n'
+        '\t\tparts = append(parts, "", status)\n'
+        '\t}\n'
+        '\tinfoSection := lipgloss.JoinVertical(lipgloss.Left, parts...)',
+        "landing.go infoSection seam moved -- omegaStatusLine insertion point",
+    ),
+]
+
+for old, new, error in replacements:
+    assert old in s, error
+    s = s.replace(old, new, 1)
+
+path.write_text(s)
+=== UPDATE PROVIDERS ===
+package cmd
+
+import (
+	"fmt"
+	"log/slog"
+
+	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/crush/internal/config"
+	"github.com/charmbracelet/x/exp/charmtone"
+	"github.com/spf13/cobra"
+)
+
+var updateProvidersSource string
+
+var updateProvidersCmd = &cobra.Command{
+	Use:   "update-providers [path-or-url]",
+	Short: "Update providers",
+	Long:  `Update provider information from a specified local path or remote URL.`,
+	Example: `
+# Update Catwalk providers remotely (default)
+crush update-providers
+
+# Update Catwalk providers from a custom URL
+crush update-providers https://example.com/providers.json
+
+# Update Catwalk providers from a local file
+crush update-providers /path/to/local-providers.json
+
+# Update Catwalk providers from embedded version
+crush update-providers embedded
+
+# Update Hyper provider information
+crush update-providers --source=hyper
+
+# Update Hyper from a custom URL
+crush update-providers --source=hyper https://hyper.example.com
+`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		// NOTE(@andreynering): We want to skip logging output do stdout here.
+		slog.SetDefault(slog.New(slog.DiscardHandler))
+
+		var pathOrURL string
+		if len(args) > 0 {
+			pathOrURL = args[0]
+		}
+
+		var err error
+		switch updateProvidersSource {
+		case "catwalk":
+			err = config.UpdateProviders(pathOrURL)
+		case "hyper":
+			err = config.UpdateHyper(pathOrURL)
+		default:
+			return fmt.Errorf("invalid source %q, must be 'catwalk' or 'hyper'", updateProvidersSource)
+		}
+
+		if err != nil {
+			return err
+		}
+
+		// NOTE(@andreynering): This style is more-or-less copied from Fang's
+		// error message, adapted for success.
+		headerStyle := lipgloss.NewStyle().
+			Foreground(charmtone.Butter).
+			Background(charmtone.Guac).
+			Bold(true).
+			Padding(0, 1).
+			Margin(1).
+			MarginLeft(2).
+			SetString("SUCCESS")
+		textStyle := lipgloss.NewStyle().
+			MarginLeft(2).
+			SetString(fmt.Sprintf("%s provider updated successfully.", updateProvidersSource))
+
+		fmt.Printf("%s\n%s\n\n", headerStyle.Render(), textStyle.Render())
+		return nil
+	},
+}
+
+func init() {
+	updateProvidersCmd.Flags().StringVar(&updateProvidersSource, "source", "catwalk", "Provider source to update (catwalk or hyper)")
+}
+=== CRUSH SELF UPDATE ===
+package update
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"regexp"
+	"strings"
+	"time"
+)
+
+const (
+	githubApiUrl = "https://api.github.com/repos/charmbracelet/crush/releases/latest"
+	userAgent    = "crush/1.0"
+)
+
+// Default is the default [Client].
+var Default Client = &github{}
+
+// Info contains information about an available update.
+type Info struct {
+	Current string
+	Latest  string
+	URL     string
+}
+
+// Matches a version string like:
+// v0.0.0-0.20251231235959-06c807842604
+var goInstallRegexp = regexp.MustCompile(`^v?\d+\.\d+\.\d+-\d+\.\d{14}-[0-9a-f]{12}$`)
+
+func (i Info) IsDevelopment() bool {
+	return i.Current == "devel" || i.Current == "unknown" || strings.Contains(i.Current, "dirty") || goInstallRegexp.MatchString(i.Current)
+}
+
+// Available returns true if there's an update available.
+//
+// If both current and latest are stable versions, returns true if versions are
+// different.
+// If current is a pre-release and latest isn't, returns true.
+// If latest is a pre-release and current isn't, returns false.
+func (i Info) Available() bool {
+	cpr := strings.Contains(i.Current, "-")
+	lpr := strings.Contains(i.Latest, "-")
+	// current is pre release && latest isn't a prerelease
+	if cpr && !lpr {
+		return true
+	}
+	// latest is pre release && current isn't a prerelease
+	if lpr && !cpr {
+		return false
+	}
+	return i.Current != i.Latest
+}
+
+// Check checks if a new version is available.
+func Check(ctx context.Context, current string, client Client) (Info, error) {
+	info := Info{
+		Current: current,
+		Latest:  current,
+	}
+
+	release, err := client.Latest(ctx)
+	if err != nil {
+		return info, fmt.Errorf("failed to fetch latest release: %w", err)
+	}
+
+	info.Latest = strings.TrimPrefix(release.TagName, "v")
+	info.Current = strings.TrimPrefix(info.Current, "v")
+	info.URL = release.HTMLURL
+	return info, nil
+}
+
+// Release represents a GitHub release.
+type Release struct {
+	TagName string `json:"tag_name"`
+	HTMLURL string `json:"html_url"`
+}
+
+// Client is a client that can get the latest release.
+type Client interface {
+	Latest(ctx context.Context) (*Release, error)
+}
+
+type github struct{}
+
+// Latest implements [Client].
+func (c *github) Latest(ctx context.Context) (*Release, error) {
+	client := &http.Client{
+		Timeout: 30 * time.Second,
+	}
+
+	req, err := http.NewRequestWithContext(ctx, "GET", githubApiUrl, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("GitHub API returned status %d: %s", resp.StatusCode, string(body))
+	}
+
+	var release Release
+	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
+		return nil, err
+	}
+
+	return &release, nil
+}

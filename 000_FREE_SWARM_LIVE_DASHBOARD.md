@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-09-30T03:37:17.794697+00:00`
+Aktualisiert: `2026-09-30T03:52:35.279037+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 88,774 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-09-30T03:37:29.204412+00:00`
+Aktualisiert: `2026-09-30T03:52:46.648257+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-09-30T03:37:16.267106+00:00`
+Aktualisiert: `2026-09-30T03:52:33.480821+00:00`
 
 | Kennzahl | Wert |
 |---|---:|

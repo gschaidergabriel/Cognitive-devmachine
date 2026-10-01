@@ -1,0 +1,86 @@
+{
+  "schema": "OMEGA_NEEDLE_G10_RESULT/v1",
+  "task_id": "task-OMEGA-G10-TOOL-VERSION-INDEX-20261001",
+  "goal_id": "G10-tool-version-index",
+  "direction": "omega-needle",
+  "status": "PASS",
+  "worker": "chatgpt-gpt56sol-omega-g10-20261001",
+  "actor": "chatgpt-secondary",
+  "implementation": {
+    "pr": 2185,
+    "branch_head": "605f91f970e8cf490c372d4da3f1970b8ebe742e",
+    "tested_merge_ref": "db76761b75c0abbcfe233ef371dff1d15d7023de",
+    "main_merge_commit": "a04ac4e8fe2a96079660816bb695508cb3cf24dc"
+  },
+  "inventory": {
+    "python_tool_count": 596,
+    "versioned_tool_count": 253,
+    "family_count": 206,
+    "superseded_count": 47,
+    "ambiguous_family_count": 0,
+    "tool_path_inventory_sha256": "552b4da45a3339ce7a1a104ad70a89170df1a21e85aa6de5072dc8c1e9e0b7f5",
+    "generated_index_sha256": "0a0ee4f89eb706ce5a4fccb35eaf8226b1be4f1fd25cc608ed2492825ba49db4"
+  },
+  "acceptance": [
+    {
+      "check": "generate twice",
+      "status": "PASS",
+      "detail": "both runs sha256=0a0ee4f89eb706ce5a4fccb35eaf8226b1be4f1fd25cc608ed2492825ba49db4"
+    },
+    {
+      "check": "committed cache equals regenerated cache byte-for-byte",
+      "status": "PASS"
+    },
+    {
+      "check": "repo lint",
+      "status": "PASS",
+      "detail": "22 exact cross-version references allowed only with non-empty technical reasons; unallowlisted stale references=0"
+    },
+    {
+      "check": "synthetic superseded active reference",
+      "status": "PASS",
+      "detail": "negative fixture is rejected"
+    },
+    {
+      "check": "pytest",
+      "status": "PASS",
+      "detail": "5 passed in 0.15s"
+    }
+  ],
+  "policy": {
+    "classification": "highest numeric _vN within exact filename family",
+    "authority": false,
+    "note": "The version-number index is navigation/lint cache only. It does not prove semantic drop-in compatibility or authorize automatic migration."
+  },
+  "evidence": {
+    "gate_run_id": 36858614026,
+    "gate_job_id": 110357019591,
+    "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+    "main_readback": {
+      "index_blob_sha1": "4f6f8353c655d807659489a834699663ef12a284",
+      "allowlist_blob_sha1": "f2bd2e259aefe254963b3eef2118927a953a392f",
+      "generator_blob_sha1": "a5583d70e2118ad32c1fc1eec787a26d61ccacf5",
+      "lint_blob_sha1": "8ef8668184686836feb62a304dd2cfdae2b34fa1",
+      "tests_blob_sha1": "0bef287b88404af2239778a2b5169efead939ffe"
+    }
+  },
+  "negative_evidence": {
+    "research_entity_verify_run_id": 36858614127,
+    "classification": "HARNESS_REPOSITORY_BASELINE_FAILURE",
+    "failure": "tools/vps_control_sync_refresh_v1.py:204 SyntaxError: invalid syntax at pass=True",
+    "g10_scope": false
+  },
+  "fidelity": "approximate",
+  "credit": {
+    "whole_entityos_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: versioned one-off tools now have a deterministic generated navigation index and executable stale-reference lint.",
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "NO_CHANGE_WITH_REASON: G10 indexes tool lineage only.",
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "NO_CHANGE_WITH_REASON: no model/J-Space/training execution."
+  }
+}

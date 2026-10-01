@@ -1,0 +1,92 @@
+{
+  "schema": "OMEGA_G8_PREFLIGHT_RESULT/v1",
+  "task_id": "task-OMEGA-G8-PREFLIGHT-COMPILE-UNBLOCK-20261001",
+  "parent_goal_id": "G8-test-failure-attribution",
+  "scope": "PRECONDITION_ONLY_NOT_G8_COMPLETION",
+  "status": "PASS",
+  "worker": "chatgpt-gpt56sol-omega-g8-preflight-20261001",
+  "actor": "chatgpt-secondary",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "implementation": {
+    "pr": 2186,
+    "branch_head": "5c75449fa22fbbf8227275ad1a4e06201fc54f78",
+    "tested_merge_ref": "9718fb8e1097454b751dc852577ce2fcb34ad866",
+    "main_merge_commit": "a26dd44191823be79283d379765bc57795242d7b",
+    "change": "Replace invalid reserved-keyword dict.update(pass=True, ...) syntax with receipt[\"pass\"] = True followed by the unchanged update fields."
+  },
+  "acceptance": [
+    {
+      "command": "python3 -m py_compile tools/vps_control_sync_refresh_v1.py",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m pytest -q tests/test_vps_control_sync_refresh_v1.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "output": "9 passed in 1.47s"
+    },
+    {
+      "check": "Research Entity Verify advances past Compile Python entrypoints",
+      "status": "PASS",
+      "detail": "Compile, hook JSON, project triggers, bootstrap refresh, worker preflight, RAE status, strict schema, provenance and claim-view materialization all passed before the next independent failure."
+    }
+  ],
+  "evidence": {
+    "dedicated_run_id": 36859271827,
+    "dedicated_job_id": 110359177808,
+    "general_verify_run_id": 36859271618,
+    "general_verify_job_id": 110359177430,
+    "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+    "main_readback": {
+      "source_blob_sha1": "4a580a6a2630adf7231ed7dd1350c55b1ff8f38b",
+      "workflow_blob_sha1": "d8cfda0e37b257e153ae0cec02615850e14b3249",
+      "repaired_source_contains_receipt_pass_assignment": true,
+      "invalid_pass_keyword_argument_present": false
+    }
+  },
+  "newly_exposed_next_blocker": {
+    "classification": "DATA_OR_MATERIALIZATION_METADATA_BASELINE_FAILURE",
+    "failing_step": "Materialize surgical knowledge micro-packets",
+    "command": "python tools/materialize_micro_packets.py",
+    "exit_code": 2,
+    "missing_rae_meta_count": 66,
+    "namespaces": {
+      "android": 1,
+      "clay": 3,
+      "claycode": 21,
+      "claygraph": 3,
+      "clayresearch": 1,
+      "emergenz": 3,
+      "frank_gwt": 1,
+      "gwt": 5,
+      "hyperposition": 7,
+      "synthetic_clay": 2,
+      "systems_architecture": 1,
+      "unifieddb": 17,
+      "xeno_claycode": 1
+    },
+    "interpretation": "Independent repository baseline/data-quality blocker exposed only after compile repair; not evidence against the control-sync syntax fix."
+  },
+  "forbidden_inference": [
+    "This is not full G8 completion.",
+    "No full tests/ attribution run was executed on the required VPS/self-hosted environment.",
+    "No VPS --apply operation was executed.",
+    "No provider call or runtime/HCU/J-Space/training credit is minted."
+  ],
+  "fidelity": "approximate",
+  "credit": {
+    "g8_full_completion": false,
+    "whole_entityos_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: repository-wide Python compilation blocker removed and control-sync regression suite restored.",
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "NO_CHANGE_WITH_REASON: this is repository/harness precondition repair only.",
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "NO_CHANGE_WITH_REASON: no model, provider or training execution."
+  }
+}

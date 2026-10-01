@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "steering_goal": "G7-rae-doctor-green",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "observed_canonical_main": "48617a8f61385539d95ecdb334200bdead08b2c4",
+  "dispatch_value_advisory": 3.8,
+  "exact_gap": "rae doctor currently rejects three topic packets (four schema errors) and one historical provenance role",
+  "non_overlap": "No existing G7 task/lease found; harness has no current worker/lease materialization visible on main.",
+  "dependencies": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md",
+    "schemas/topic_packet.schema.json",
+    "research_entity/global/RESEARCH_ACTOR_REGISTRY.json",
+    "research_entity/provenance/ARTIFACT_PROVENANCE.jsonl"
+  ],
+  "expected_information_progress_gain": "Restore the entity's own deterministic validation gate before later Needle result admission.",
+  "completion_test": [
+    "python3 rae.py doctor",
+    "python3 tools/validate_research_entity.py",
+    "python3 tools/check_provenance.py"
+  ],
+  "acceptance": "all three exit 0; schema/provenance PASS; preserve historical provenance bytes; do not weaken schema silently",
+  "status_semantics_decision": "CORRECT_DATA: map historical CLOSED_DIAGNOSTIC packet to existing ARCHIVED status; do not extend enum. Add historical Claude role to superseded_roles rather than rewrite provenance ledger."
+}

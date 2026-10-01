@@ -1,0 +1,19 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20261001T113130Z-omega-needle-t0022-duplicate-gpt56sol",
+  "direction": "omega-needle",
+  "created_at": "2026-10-01T11:31:30Z",
+  "observed_head": "98c741abeaffa088aa0715070b116da03789c82e",
+  "status": "STALE_DISPATCH_CLOSED",
+  "headline": "T-0022 was already complete on oMEGAcV1/chatgpt-results; duplicate execution was prevented, the transient lease was released, and the room task was marked STALE without overwriting result data.",
+  "state": "Packet input hashes matched exactly, but pre-write duplicate readback found needle-tasks/results/T-0022.jsonl plus meta from worker 4 with n=25 and self_check=true. No result rewrite occurred. This is coordination/evidence hygiene only; it grants no training, runtime, or product credit.",
+  "next": "Re-read the latest omega-needle steering and active leases before the next dispatch; do not assume T-0022, G7, or G12 state from this receipt.",
+  "evidence": [
+    "research_entity/rooms/rooms/frank/tasks/task-MC-FRANK-NEEDLE-T-0022-g0001.json",
+    "research_entity/rooms/rooms/frank/leases/tasks/task-MC-FRANK-NEEDLE-T-0022-g0001.json",
+    "gschaidergabriel/oMEGAcV1#chatgpt-results:needle-tasks/results/T-0022.jsonl",
+    "gschaidergabriel/oMEGAcV1#chatgpt-results:needle-tasks/results/T-0022.meta.json"
+  ],
+  "active": {},
+  "organ": "chatgpt-gpt56sol-omega-t0022-20261001"
+}

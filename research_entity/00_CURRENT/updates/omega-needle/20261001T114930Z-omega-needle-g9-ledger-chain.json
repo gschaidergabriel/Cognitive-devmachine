@@ -1,0 +1,32 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20261001T114930Z-omega-g9-ledger-chain",
+  "created_at": "2026-10-01T11:49:30Z",
+  "direction": "omega-needle",
+  "organ": "chatgpt-gpt56sol-omega-g9-20261001",
+  "status": "APPROXIMATE_COMPONENT_PASS",
+  "headline": "G9 tamper-evident ledger chain implemented and merged; exact G9 CI gate passed 5/5 mutation tests plus all three ledger verifiers and rae doctor.",
+  "state": "The three canonical RAE ledgers retain byte-identical historical prefixes anchored by SHA-256. Future claim/status/provenance rows are chained with sequence, prev_hash and entry_hash; validator and writers enforce the mechanism.",
+  "next": "Treat the unrelated global Research Entity Verify syntax failure in tools/vps_control_sync_refresh_v1.py:204 as a separate baseline defect; do not downgrade G9 or promote whole-runtime credit.",
+  "active": {
+    "task": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
+    "implementation_merge": "00d49027c65554fd57b18208ca9b7dcadd6acc15",
+    "pr": 2184,
+    "acceptance_run_id": 36857334407
+  },
+  "evidence": [
+    "research_entity/external/omega_grundmodus/packets/task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001/results/RESULT.json",
+    "research_entity/external/omega_grundmodus/packets/task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001/results/RESULT.meta.json",
+    "research_entity/ledgers/LEDGER_CHAIN_GENESIS.json",
+    "tools/ledger_chain_verify.py",
+    "tests/test_ledger_chain_v1.py"
+  ],
+  "negative_evidence": {
+    "run_id": 36857334311,
+    "classification": "HARNESS_REPOSITORY_BASELINE_FAILURE",
+    "file": "tools/vps_control_sync_refresh_v1.py",
+    "line": 204
+  },
+  "runtime_credit": 0,
+  "fidelity": "approximate"
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-RAE-META-BACKFILL-REMAINDER-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "parent_goal": "G8-test-failure-attribution",
+  "scope": "REPOSITORY_BASELINE_MATERIALIZATION_UNBLOCK_ONLY",
+  "source_work_order": "research_entity/rooms/rooms/harness/events/evt-20260814T071016513317Z-3326771d.json",
+  "observed_canonical_main": "2abcfb6a51ac9e2c0dbd68619783b5222a6b7270",
+  "exact_gap": "Research Entity Verify reaches materialize_micro_packets.py and fails on the 66 remaining knowledge micro-packets without RAE_META.",
+  "lanes": [
+    "android",
+    "clay",
+    "claycode",
+    "claygraph",
+    "clayresearch",
+    "emergenz",
+    "frank_gwt",
+    "gwt",
+    "hyperposition",
+    "synthetic_clay",
+    "systems_architecture",
+    "unifieddb",
+    "xeno_claycode"
+  ],
+  "completion_test": [
+    "python3 tools/materialize_micro_packets.py",
+    "python3 tools/research_interconnect_preflight_v2.py --help (import/syntax smoke)",
+    "Research Entity Verify must advance beyond Materialize surgical knowledge micro-packets"
+  ],
+  "acceptance": "Every currently missing file gets an RAE_META header using only values mechanically or explicitly derivable from that file/path; no body rewrite; materializer exits 0; full G8 remains unclaimed.",
+  "derivation_policy": {
+    "packet_id": "filename stem or explicit Packet ID if identical",
+    "title": "first Markdown H1, stripped only of leading packet-label decoration",
+    "domains": "immediate knowledge_micro_packets folder name only",
+    "optional_fields": "include only when explicitly extractable; otherwise omit",
+    "forbidden": "inventing epistemic_class, confidence, source provenance, dates, actors, status, evidence, or semantic relationships"
+  },
+  "constraints": [
+    "one claimed worker owns all listed remaining lanes for this task",
+    "body bytes after inserted header remain unchanged",
+    "no raw evidence rewriting",
+    "no full G8/runtime/training promotion"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "lease_type": "TASK",
+  "room_id": "harness",
+  "subject_id": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
+  "holder_worker": "chatgpt-gpt56sol-omega-g9-20261001",
+  "role": "SOLO_RESEARCHER",
+  "issued_at": "2026-10-01T11:34:00Z",
+  "expires_at": "2026-10-01T12:34:00Z",
+  "observed_canonical_main": "56dd28270f9599628d487e3dad028fc37347e8a7",
+  "status": "ACTIVE",
+  "truth_authority": false,
+  "completion_test": [
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIMS.jsonl",
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl",
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/provenance/ARTIFACT_PROVENANCE.jsonl",
+    "python3 -m pytest -q tests/test_ledger_chain*.py",
+    "python3 rae.py doctor"
+  ]
+}

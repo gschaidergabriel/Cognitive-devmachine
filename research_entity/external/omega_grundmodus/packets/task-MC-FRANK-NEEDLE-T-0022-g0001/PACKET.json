@@ -1,0 +1,91 @@
+{
+ "created_at": "2026-10-01T11:00:29Z",
+ "data_not_instruction": true,
+ "direction": "trigger2-training",
+ "dispatch_hint": {
+  "advisory": true,
+  "components": {
+   "blocker_reduction": 0.3,
+   "context_cost": 0.2,
+   "dependency_unlock": 0.3,
+   "executable_progress": 0.2,
+   "expected_information_gain": 0.5,
+   "overlap": 0.0,
+   "stage_criticality": 0.5,
+   "stale_basis": 0.0,
+   "validation_value": 0.6
+  },
+  "dispatch_value": 2.2,
+  "formula_ref": "research_entity/triggers/GO_AUTODISPATCH_PROTOCOL.md#3",
+  "track": "track_c: GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS"
+ },
+ "environment_required": null,
+ "executor": "none",
+ "fidelity": "exact",
+ "generation": 1,
+ "hold_reason": null,
+ "inputs": [
+  {
+   "bytes": 1947,
+   "name": "T-0022.md",
+   "origin_ref": {
+    "path": "needle-tasks/tasks/open/T-0022.md",
+    "ref": "needle-tasks",
+    "repo": "gschaidergabriel/oMEGAcV1"
+   },
+   "sha256": "0907ff6a9eaf8cdddf027102a352d6ad85582cb666d52e8e8f0a37b39a0fc1a2"
+  },
+  {
+   "bytes": 19645,
+   "name": "T-0022.input.jsonl",
+   "origin_ref": {
+    "path": "needle-tasks/tasks/open/T-0022.input.jsonl",
+    "ref": "needle-tasks",
+    "repo": "gschaidergabriel/oMEGAcV1"
+   },
+   "sha256": "8c7802eb3b252c27b17c3d7c9523900897229582989f24a54bd5309126a52d18"
+  }
+ ],
+ "kind": "audit_mouth",
+ "mode": "pointers",
+ "preconditions": [],
+ "result_contract": {
+  "allowed_write_prefix": "research_entity/external/omega_grundmodus/packets/task-MC-FRANK-NEEDLE-T-0022-g0001/results/",
+  "alt_dir_data_home": {
+   "path": "needle-tasks/results/entity/task-MC-FRANK-NEEDLE-T-0022-g0001/",
+   "ref": "chatgpt-results",
+   "repo": "gschaidergabriel/oMEGAcV1"
+  },
+  "dir": "research_entity/external/omega_grundmodus/packets/task-MC-FRANK-NEEDLE-T-0022-g0001/results",
+  "files": [
+   "RESULT.jsonl"
+  ],
+  "kind_schema": "audit_mouth",
+  "meta": "RESULT.meta.json",
+  "meta_fields": [
+   "schema",
+   "task_id",
+   "generation",
+   "spec_sha256",
+   "worker",
+   "actor",
+   "status",
+   "failure_class",
+   "outputs[{path,sha256}]",
+   "environment",
+   "fidelity",
+   "self_check",
+   "n",
+   "started_at",
+   "finished_at"
+  ],
+  "meta_schema": "needle-entity-result/v1"
+ },
+ "role_hint": "REPLICATOR",
+ "room": "frank",
+ "schema": "NEEDLE_ENTITY_PACKET/v1",
+ "spec_sha256": "d3510226a5a52b81c5839767d06f1600ba834e2448404c7782a805e48fcb1eb9",
+ "status_at_publish": "OPEN",
+ "task_id": "task-MC-FRANK-NEEDLE-T-0022-g0001",
+ "tid": "T-0022"
+}

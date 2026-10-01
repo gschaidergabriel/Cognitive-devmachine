@@ -1,0 +1,35 @@
+{
+  "schema": "OMEGA_PROGRAM_RESULT_META/v1",
+  "task_id": "task-OMEGA-G8-PREFLIGHT-COMPILE-UNBLOCK-20261001",
+  "goal_id": "G8-test-failure-attribution",
+  "result_scope": "PRECONDITION_ONLY_NOT_G8_COMPLETION",
+  "generation": 1,
+  "spec_binding": {
+    "steering_path": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+    "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086"
+  },
+  "worker": "chatgpt-gpt56sol-omega-g8-preflight-20261001",
+  "actor": "chatgpt-secondary",
+  "status": "PASS",
+  "failure_class": null,
+  "outputs": [
+    {
+      "path": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G8-PREFLIGHT-COMPILE-UNBLOCK-20261001/results/RESULT.json",
+      "git_blob_sha1": null
+    }
+  ],
+  "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+  "fidelity": "approximate",
+  "self_check": {
+    "compile_passed": true,
+    "adversarial_refresh_tests_passed": 9,
+    "general_verify_advanced_past_compile": true,
+    "next_independent_blocker_missing_rae_meta_count": 66,
+    "full_g8_completed": false,
+    "runtime_credit": 0
+  },
+  "tested_subject": "9718fb8e1097454b751dc852577ce2fcb34ad866",
+  "main_merge_commit": "a26dd44191823be79283d379765bc57795242d7b",
+  "main_gate_run_id": 36859271827,
+  "finished_at": "2026-10-01T12:05:00Z"
+}

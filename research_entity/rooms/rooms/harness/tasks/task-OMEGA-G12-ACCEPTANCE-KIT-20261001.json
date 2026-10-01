@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-G12-ACCEPTANCE-KIT-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "steering_goal": "G12-acceptance-kit",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "observed_canonical_main": "df3fa01f3092001a5cb8ecc987a322919e9a33fe",
+  "dispatch_value_advisory": 3.6,
+  "exact_gap": "Five deterministic patterns exist but there is no small standalone acceptance kit for Needle/entity worker artifacts.",
+  "non_overlap": "G7 has an active lease but mutates packet/registry/provenance data; this task is restricted to new tools/acceptance_kit/** plus its result receipt.",
+  "completion_test": [
+    "python3 tools/acceptance_kit/run_selftest.py"
+  ],
+  "acceptance": "exit 0; positive+negative tests for each component; Needle JSONL split guard; Draft 2020-12 packet/result schemas + validator CLI; receipt shape with command/exit_code/blob hashes/runtime_credit=0; standalone copy; docs.",
+  "constraints": [
+    "copy/adapt; do not modify original deterministic tools",
+    "standalone from a copy",
+    "passing split guard is not proof of independence",
+    "no writes outside new acceptance-kit/result paths"
+  ]
+}

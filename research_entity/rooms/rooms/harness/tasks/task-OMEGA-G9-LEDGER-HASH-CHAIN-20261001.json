@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "steering_goal": "G9-ledger-hash-chain",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "observed_canonical_main": "56dd28270f9599628d487e3dad028fc37347e8a7",
+  "dispatch_value_advisory": 3,
+  "exact_gap": "CLAIMS.jsonl, CLAIM_STATUS_EVENTS.jsonl and ARTIFACT_PROVENANCE.jsonl are append-by-convention + git history but have no mechanically verified tamper-evident successor chain.",
+  "non_overlap": "G12 has an active lease under tools/acceptance_kit/**. G9 is restricted to new ledger-chain tooling/tests/schemas/chain metadata and minimal writer integration required by the G9 acceptance.",
+  "completion_test": [
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIMS.jsonl",
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl",
+    "python3 tools/ledger_chain_verify.py --ledger research_entity/provenance/ARTIFACT_PROVENANCE.jsonl",
+    "python3 -m pytest -q tests/test_ledger_chain*.py",
+    "python3 rae.py doctor"
+  ],
+  "acceptance": "Untouched chains verify; historical-byte edit, deletion and reorder fail; old rows byte-identical; genesis anchor is the hash of the existing historical tail; new chain fields are schema-valid; doctor remains green.",
+  "constraints": [
+    "do not rewrite historical ledger rows",
+    "genesis starts from recorded hash of the existing ledger bytes/tail",
+    "schema updates must be explicit",
+    "component PASS does not imply runtime or product promotion"
+  ]
+}

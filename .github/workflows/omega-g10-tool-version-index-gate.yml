@@ -1,0 +1,54 @@
+name: OMEGA G10 Tool Version Index Gate
+
+on:
+  pull_request:
+    paths:
+      - 'tools/**'
+      - 'rae_core/**'
+      - 'rae.py'
+      - '.claude/hooks/**'
+      - '.github/workflows/**'
+      - 'research_entity/tooling/TOOL_VERSION_*'
+      - 'tests/test_tool_version_index*.py'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/**'
+      - 'rae_core/**'
+      - 'rae.py'
+      - '.claude/hooks/**'
+      - '.github/workflows/**'
+      - 'research_entity/tooling/TOOL_VERSION_*'
+      - 'tests/test_tool_version_index*.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  g10-tool-index:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install test runtime
+        run: python -m pip install --disable-pip-version-check 'pytest>=8,<9'
+      - name: Compile G10 implementation
+        run: python -m py_compile tools/tool_version_index_generate.py tools/tool_version_index_lint.py tests/test_tool_version_index_v1.py
+      - name: Generate twice and prove byte identity
+        run: |
+          python3 tools/tool_version_index_generate.py --output /tmp/tool-index-1.json
+          python3 tools/tool_version_index_generate.py --output /tmp/tool-index-2.json
+          cmp /tmp/tool-index-1.json /tmp/tool-index-2.json
+          sha256sum /tmp/tool-index-1.json
+      - name: Emit generated index for bootstrap/readback
+        run: |
+          echo '---BEGIN_TOOL_VERSION_INDEX---'
+          cat /tmp/tool-index-1.json
+          echo '---END_TOOL_VERSION_INDEX---'
+      - name: Lint current repo
+        run: python3 tools/tool_version_index_lint.py --index /tmp/tool-index-1.json
+      - name: Synthetic negative/allowlist tests
+        run: python3 -m pytest -q tests/test_tool_version_index*.py

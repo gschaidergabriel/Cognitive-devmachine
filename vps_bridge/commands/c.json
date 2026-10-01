@@ -1,0 +1,8 @@
+{
+ "schema": "CLAY_VPS_COMMAND/v3",
+ "command_id": "claude-route-test-20261001-c-poll",
+ "op": "exec",
+ "cwd": "/workspace",
+ "timeout_seconds": 60,
+ "command": "J=/workspace/jobs/hb-test-20261001\necho \"== poll long job\"; date -u; echo \"tmux:\"; tmux ls 2>&1; echo \"started=$(cat $J/started)\"; echo \"ended=$(cat $J/ended 2>/dev/null || echo running)\"; echo \"exit_code=$(cat $J/exit_code 2>/dev/null || echo none)\"; echo \"DONE=$(cat $J/DONE 2>/dev/null || echo no)\"; echo \"beats=$(wc -l < $J/heartbeat.log)\"; head -2 $J/heartbeat.log; tail -2 $J/heartbeat.log\necho \"== zombies in container view\"; ps -eo stat= | grep -c '^Z' || true; cat /proc/loadavg"
+}

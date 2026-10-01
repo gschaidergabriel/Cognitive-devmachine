@@ -14,6 +14,8 @@ import sys
 import time
 import uuid
 
+from .ledger_chain import canonical_chained_line, prepare_chained_record
+
 ROOT = Path(__file__).resolve().parents[1]
 CANON = ROOT / "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json"
 BOOT = ROOT / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
@@ -197,8 +199,13 @@ def writer_lock(timeout:float=15.0,stale_after:float=180.0):
 
 def append_jsonl(path:Path,obj:dict):
     path.parent.mkdir(parents=True,exist_ok=True)
+    obj=prepare_chained_record(path,obj)
     with path.open('a',encoding='utf-8') as f:
-        f.write(json.dumps(obj,ensure_ascii=False,sort_keys=True)+"\n"); f.flush(); os.fsync(f.fileno())
+        if obj.get("chain_version"):
+            f.write(canonical_chained_line(obj).decode("utf-8"))
+        else:
+            f.write(json.dumps(obj,ensure_ascii=False,sort_keys=True)+"\n")
+        f.flush(); os.fsync(f.fileno())
 
 
 def current_claim_status(claim_id:str):

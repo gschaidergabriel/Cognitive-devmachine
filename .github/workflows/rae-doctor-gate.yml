@@ -1,0 +1,49 @@
+name: RAE Doctor Gate
+
+on:
+  pull_request:
+    paths:
+      - 'rae.py'
+      - 'rae_core/**'
+      - 'tools/session_preflight.py'
+      - 'tools/validate_research_entity.py'
+      - 'tools/check_provenance.py'
+      - 'research_entity/topic_packets/**'
+      - 'research_entity/provenance/**'
+      - 'research_entity/global/RESEARCH_ACTOR_REGISTRY.json'
+      - 'schemas/**'
+      - '.github/workflows/rae-doctor-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'rae.py'
+      - 'rae_core/**'
+      - 'tools/session_preflight.py'
+      - 'tools/validate_research_entity.py'
+      - 'tools/check_provenance.py'
+      - 'research_entity/topic_packets/**'
+      - 'research_entity/provenance/**'
+      - 'research_entity/global/RESEARCH_ACTOR_REGISTRY.json'
+      - 'schemas/**'
+      - '.github/workflows/rae-doctor-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  doctor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation runtime
+        run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5'
+      - name: Exact RAE doctor
+        run: python3 rae.py doctor
+      - name: Exact schema validation
+        run: python3 tools/validate_research_entity.py
+      - name: Exact provenance validation
+        run: python3 tools/check_provenance.py

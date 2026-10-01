@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "task_id": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
-  "status": "CLAIMED",
+  "status": "COMPLETE",
   "room_id": "harness",
   "trigger": "go",
   "selected_role": "SOLO_RESEARCHER",
@@ -28,5 +28,21 @@
     "genesis starts from recorded hash of the existing ledger bytes/tail",
     "schema updates must be explicit",
     "component PASS does not imply runtime or product promotion"
-  ]
+  ],
+  "completed_at": "2026-10-01T11:49:30Z",
+  "result_ref": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001/results/RESULT.json",
+  "result_meta_ref": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001/results/RESULT.meta.json",
+  "fast_result_ref": "research_entity/00_CURRENT/updates/omega-needle/20261001T114930Z-omega-needle-g9-ledger-chain.json",
+  "acceptance_subject": "784289adf6417936ba52142af500507000bfb3d0",
+  "acceptance_run_id": 36857334407,
+  "main_merge_commit": "00d49027c65554fd57b18208ca9b7dcadd6acc15",
+  "completion_class": "PASS_SCOPED_COMPONENT_ONLY",
+  "main_readback": {
+    "claims_blob_sha1": "2ace1713c3fec63fb96fe072cb390a24fb98c707",
+    "claim_status_blob_sha1": "824950433ec2e2f1b6bf2a559dd85ba0ee65762d",
+    "provenance_blob_sha1": "66fef5fb7cb11b4ed47040440df26244bce6a930",
+    "ledger_chain_blob_sha1": "0078fbdcd29653923bfb50a90bd0060cb3d84ec7",
+    "validator_blob_sha1": "cbf32a3a1120112637370b319114be94724cce07"
+  },
+  "unrelated_global_failure": "Research Entity Verify remains red at pre-existing tools/vps_control_sync_refresh_v1.py:204 SyntaxError; not a G9 product negative."
 }

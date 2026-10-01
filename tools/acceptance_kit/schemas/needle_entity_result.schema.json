@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "needle-entity-result/v1",
+  "title": "needle-entity-result/v1",
+  "type": "object",
+  "required": ["schema", "task_id", "spec_sha256", "outputs_sha256", "environment", "fidelity", "status"],
+  "properties": {
+    "schema": {"const": "needle-entity-result/v1"},
+    "task_id": {"type": "string", "minLength": 1},
+    "spec_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "outputs_sha256": {"type": "object", "minProperties": 1, "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "environment": {"type": "object"},
+    "fidelity": {"enum": ["exact", "approximate"]},
+    "status": {"enum": ["PASS", "FAIL", "BLOCKED", "DUPLICATE", "STALE"]}
+  },
+  "additionalProperties": false
+}

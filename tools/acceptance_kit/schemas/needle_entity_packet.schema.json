@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "NEEDLE_ENTITY_PACKET/v1",
+  "title": "NEEDLE_ENTITY_PACKET/v1",
+  "type": "object",
+  "required": ["schema", "task_id", "spec_sha256", "inputs"],
+  "properties": {
+    "schema": {"const": "NEEDLE_ENTITY_PACKET/v1"},
+    "task_id": {"type": "string", "minLength": 1},
+    "spec_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "inputs": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["id"], "properties": {"id": {"type": "string", "minLength": 1}}, "additionalProperties": true}}
+  },
+  "additionalProperties": false
+}

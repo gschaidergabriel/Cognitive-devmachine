@@ -1,0 +1,59 @@
+name: OMEGA G9 Ledger Chain Gate
+
+on:
+  pull_request:
+    paths:
+      - 'rae_core/ledger_chain.py'
+      - 'rae_core/cli.py'
+      - 'tools/ledger_chain_verify.py'
+      - 'tools/register_provenance.py'
+      - 'tools/validate_research_entity.py'
+      - 'research_entity/ledgers/**'
+      - 'research_entity/provenance/ARTIFACT_PROVENANCE.jsonl'
+      - 'schemas/claim.schema.json'
+      - 'schemas/claim_status_event.schema.json'
+      - 'schemas/provenance.schema.json'
+      - 'tests/test_ledger_chain*.py'
+      - '.github/workflows/omega-g9-ledger-chain-gate.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'rae_core/ledger_chain.py'
+      - 'rae_core/cli.py'
+      - 'tools/ledger_chain_verify.py'
+      - 'tools/register_provenance.py'
+      - 'tools/validate_research_entity.py'
+      - 'research_entity/ledgers/**'
+      - 'research_entity/provenance/ARTIFACT_PROVENANCE.jsonl'
+      - 'schemas/claim.schema.json'
+      - 'schemas/claim_status_event.schema.json'
+      - 'schemas/provenance.schema.json'
+      - 'tests/test_ledger_chain*.py'
+      - '.github/workflows/omega-g9-ledger-chain-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  g9-ledger-chain:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deterministic test runtime
+        run: python -m pip install --disable-pip-version-check 'jsonschema>=4.23,<5' 'pytest>=8,<9'
+      - name: Compile changed Python
+        run: python -m py_compile rae_core/ledger_chain.py rae_core/cli.py tools/ledger_chain_verify.py tools/register_provenance.py tools/validate_research_entity.py tests/test_ledger_chain_v1.py
+      - name: Verify claims ledger
+        run: python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIMS.jsonl
+      - name: Verify claim-status ledger
+        run: python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl
+      - name: Verify provenance ledger
+        run: python3 tools/ledger_chain_verify.py --ledger research_entity/provenance/ARTIFACT_PROVENANCE.jsonl
+      - name: Tamper mutation tests
+        run: python3 -m pytest -q tests/test_ledger_chain*.py
+      - name: Exact RAE doctor
+        run: python3 rae.py doctor

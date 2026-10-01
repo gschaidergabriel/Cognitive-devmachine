@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "task_id": "task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001",
-  "status": "CLAIMED",
+  "status": "COMPLETE",
   "room_id": "harness",
   "trigger": "go",
   "selected_role": "SOLO_RESEARCHER",
@@ -28,5 +28,12 @@
     "python3 tools/check_provenance.py"
   ],
   "acceptance": "all three exit 0; schema/provenance PASS; preserve historical provenance bytes; do not weaken schema silently",
-  "status_semantics_decision": "CORRECT_DATA: map historical CLOSED_DIAGNOSTIC packet to existing ARCHIVED status; do not extend enum. Add historical Claude role to superseded_roles rather than rewrite provenance ledger."
+  "status_semantics_decision": "CORRECT_DATA: map historical CLOSED_DIAGNOSTIC packet to existing ARCHIVED status; do not extend enum. Add historical Claude role to superseded_roles rather than rewrite provenance ledger.",
+  "completed_at": "2026-10-01T11:29:30Z",
+  "result_ref": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001/results/RESULT.json",
+  "result_meta_ref": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001/results/RESULT.meta.json",
+  "fast_result_ref": "research_entity/00_CURRENT/updates/omega-needle/20261001T112855Z-omega-needle-4fde1df235.json",
+  "acceptance_subject": "1231f8d0126622b5682844bce4d59804ecc5791a",
+  "acceptance_run_id": 36855327803,
+  "completion_class": "PASS_SCOPED_COMPONENT_ONLY"
 }

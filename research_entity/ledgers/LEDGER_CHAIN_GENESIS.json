@@ -1,0 +1,33 @@
+{
+  "schema": "RAE_LEDGER_CHAIN_GENESIS/v1",
+  "hash_algorithm": "sha256",
+  "chain_version": "RAE_LEDGER_CHAIN/v1",
+  "created_at": "2026-10-01T11:40:00Z",
+  "created_by": "chatgpt-gpt56sol-omega-g9-20261001",
+  "task_id": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "semantics": "historical_sha256 binds the exact immutable byte prefix present at genesis. New JSONL rows start chain_seq=1 with prev_hash=historical_sha256. No historical row is rewritten.",
+  "ledgers": {
+    "research_entity/ledgers/CLAIMS.jsonl": {
+      "historical_blob_sha1": "2ace1713c3fec63fb96fe072cb390a24fb98c707",
+      "historical_line_count": 43,
+      "historical_byte_count": 26902,
+      "historical_sha256": "311a0ac0a75d98689a4fff9769c320965259659684099c196f265d8de1c1d9c9",
+      "tail_line_sha256": "d2b81593edb04dbf754a5d72cd2225e279fbbc76c8c4d480d9520d24f13d2dd7"
+    },
+    "research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl": {
+      "historical_blob_sha1": "824950433ec2e2f1b6bf2a559dd85ba0ee65762d",
+      "historical_line_count": 17,
+      "historical_byte_count": 3199,
+      "historical_sha256": "b1cdd9ac466351363d070d78069bc2a74ab3281753de54bafaf61b8c974561cc",
+      "tail_line_sha256": "4e767b5a9bd329d4fba03e8e35f078c18b1d0ba836f05a5a4d0e06ca6077494e"
+    },
+    "research_entity/provenance/ARTIFACT_PROVENANCE.jsonl": {
+      "historical_blob_sha1": "66fef5fb7cb11b4ed47040440df26244bce6a930",
+      "historical_line_count": 177,
+      "historical_byte_count": 119082,
+      "historical_sha256": "e1bbd2b10f816bb0a70c13a10045eb60d2fc5e55ac7deed5720797b2eee3abd7",
+      "tail_line_sha256": "67e30039a41573cfd91b3f6b3ac3b89bb75d3c26bd0b0b9ffcaf6d97bb09da83"
+    }
+  }
+}

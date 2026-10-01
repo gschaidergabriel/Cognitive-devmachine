@@ -1,0 +1,8 @@
+{
+ "schema": "CLAY_VPS_COMMAND/v3",
+ "command_id": "claude-route-test-20261001-a-basics",
+ "op": "exec",
+ "cwd": "/workspace",
+ "timeout_seconds": 180,
+ "command": "echo \"== date\"; date -u; echo \"== base (task asked)\"; uname -a; nproc; free -m; df -h / /workspace /cache 2>&1; go version 2>&1 || true; python3 --version; gcc --version 2>&1 | head -1 || true; nvidia-smi 2>&1 | head -2 || true\necho \"== whoami\"; id; echo \"== cgroup limits\"; for f in memory.max memory.current cpu.max pids.max pids.current memory.swap.max; do echo \"$f=$(cat /sys/fs/cgroup/$f 2>&1)\"; done\necho \"== tools\"; for t in tmux git curl wget make gcc g++ cmake nice ionice timeout pip3 pip node cargo rustc; do printf \"%s=%s\\n\" $t \"$(command -v $t || echo MISSING)\"; done\necho \"== load\"; cat /proc/loadavg\necho \"== zombies visible in container\"; ps -eo stat= | grep -c '^Z' || true\necho \"== network\"; for u in https://github.com https://pypi.org/simple/ https://huggingface.co https://proxy.golang.org https://go.dev/dl/; do printf \"%s -> \" $u; curl -s -o /dev/null -m 15 -w \"%{http_code} %{time_total}s\\n\" $u || echo FAIL; done\necho \"== omega repo reachability\"; timeout 30 git ls-remote https://github.com/gschaidergabriel/oMEGAcV1.git HEAD 2>&1 | head -2 || true\necho \"== workspace\"; ls /workspace | head -40; du -sh /workspace 2>/dev/null | tail -1"
+}

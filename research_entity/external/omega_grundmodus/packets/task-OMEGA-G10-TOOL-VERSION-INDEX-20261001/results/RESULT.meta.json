@@ -1,0 +1,36 @@
+{
+  "schema": "OMEGA_PROGRAM_RESULT_META/v1",
+  "task_id": "task-OMEGA-G10-TOOL-VERSION-INDEX-20261001",
+  "goal_id": "G10-tool-version-index",
+  "generation": 1,
+  "spec_binding": {
+    "steering_path": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+    "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086"
+  },
+  "worker": "chatgpt-gpt56sol-omega-g10-20261001",
+  "actor": "chatgpt-secondary",
+  "status": "PASS",
+  "failure_class": null,
+  "outputs": [
+    {
+      "path": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G10-TOOL-VERSION-INDEX-20261001/results/RESULT.json",
+      "sha256": "3d592f032e326169e5fc02d4c4ed01ad870cbbbec383e55ca3a0d73cf086155b"
+    }
+  ],
+  "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+  "fidelity": "approximate",
+  "self_check": {
+    "generator_runs_equal": true,
+    "committed_cache_equal": true,
+    "repo_lint_errors": 0,
+    "reasoned_allowlist_entries": 22,
+    "synthetic_negative_passed": true,
+    "pytest_passed": 5,
+    "whole_product_promotion": false
+  },
+  "n": 1,
+  "tested_subject": "db76761b75c0abbcfe233ef371dff1d15d7023de",
+  "main_gate_run_id": 36858614026,
+  "started_at": "2026-10-01T11:51:00Z",
+  "finished_at": "2026-10-01T11:59:00Z"
+}

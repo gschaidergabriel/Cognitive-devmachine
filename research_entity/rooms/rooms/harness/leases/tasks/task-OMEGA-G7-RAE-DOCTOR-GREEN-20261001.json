@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "lease_type": "TASK",
+  "room_id": "harness",
+  "subject_id": "task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001",
+  "holder_worker": "chatgpt-secondary-gpt56sol-omega-g7-20261001",
+  "role": "SOLO_RESEARCHER",
+  "issued_at": "2026-10-01T11:11:00Z",
+  "expires_at": "2026-10-01T12:11:00Z",
+  "observed_canonical_main": "48617a8f61385539d95ecdb334200bdead08b2c4",
+  "status": "ACTIVE",
+  "truth_authority": false,
+  "completion_test": [
+    "python3 rae.py doctor",
+    "python3 tools/validate_research_entity.py",
+    "python3 tools/check_provenance.py"
+  ]
+}

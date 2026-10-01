@@ -9,11 +9,14 @@ The script computes SHA-256 and appends an immutable attribution record. It does
 change scientific claim status and does not make an artifact true merely by registering it.
 """
 from __future__ import annotations
-import argparse, hashlib, json, subprocess
+import argparse, hashlib, json, subprocess, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0,str(ROOT))
+from rae_core.ledger_chain import canonical_chained_line, prepare_chained_record
 REGISTRY=ROOT/'research_entity'/'global'/'RESEARCH_ACTOR_REGISTRY.json'
 LEDGER=ROOT/'research_entity'/'provenance'/'ARTIFACT_PROVENANCE.jsonl'
 
@@ -65,8 +68,9 @@ def main():
       'note':args.note
     }
     LEDGER.parent.mkdir(parents=True,exist_ok=True)
+    record=prepare_chained_record(LEDGER,record)
     with LEDGER.open('a',encoding='utf-8') as f:
-        f.write(json.dumps(record,ensure_ascii=False,separators=(',',':'))+'\n')
+        f.write(canonical_chained_line(record).decode('utf-8'))
     print(json.dumps(record,ensure_ascii=False,indent=2))
 
 if __name__=='__main__': main()

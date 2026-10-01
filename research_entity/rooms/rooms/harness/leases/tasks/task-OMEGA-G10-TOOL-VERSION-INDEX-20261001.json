@@ -8,12 +8,16 @@
   "issued_at": "2026-10-01T11:51:00Z",
   "expires_at": "2026-10-01T12:51:00Z",
   "observed_canonical_main": "22cd6405d11c5a1f560781c23735288f44f3b354",
-  "status": "ACTIVE",
+  "status": "RELEASED",
   "truth_authority": false,
   "completion_test": [
     "python3 tools/tool_version_index_generate.py",
     "run generator twice and require byte-identical output",
     "python3 tools/tool_version_index_lint.py",
     "python3 -m pytest -q tests/test_tool_version_index*.py"
-  ]
+  ],
+  "released_at": "2026-10-01T11:59:00Z",
+  "release_reason": "TASK_COMPLETE",
+  "result_ref": "research_entity/external/omega_grundmodus/packets/task-OMEGA-G10-TOOL-VERSION-INDEX-20261001/results/RESULT.json",
+  "main_merge_commit": "a04ac4e8fe2a96079660816bb695508cb3cf24dc"
 }

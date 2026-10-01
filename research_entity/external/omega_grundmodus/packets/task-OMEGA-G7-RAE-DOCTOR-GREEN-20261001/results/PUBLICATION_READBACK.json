@@ -1,0 +1,26 @@
+{
+  "schema": "OMEGA_RESULT_PUBLICATION_READBACK/v1",
+  "task_id": "task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001",
+  "status": "PARTIAL_PUBLICATION",
+  "fast_result": {
+    "path": "research_entity/00_CURRENT/updates/omega-needle/20261001T112855Z-omega-needle-4fde1df235.json",
+    "schema": "CLAY_FAST_RESULT/v1",
+    "readback": "PASS",
+    "observed_head_present": true
+  },
+  "generated_current_cache": {
+    "status": "BLOCKED",
+    "run_id": 36855659091,
+    "classification": "CACHE_MATERIALIZATION_INPUT_SCHEMA_FAILURE",
+    "blockers": [
+      "research_entity/00_CURRENT/updates/evidence-lineage/20260912T023100Z-evidence-lineage-go084-startguard-real-host-validation.json: missing observed_head",
+      "research_entity/00_CURRENT/updates/evidence-lineage/20260912T022900Z-evidence-lineage-go084-volatile-state-persistence-contract.json: missing observed_head"
+    ],
+    "g7_acceptance_affected": false,
+    "repair_attempted": false,
+    "rationale": "Do not invent historical observed_head values or broaden this run-pinned G7 task into unrelated evidence-lineage migration."
+  },
+  "fidelity": "approximate",
+  "evidence_scope": "GitHub Actions cache refresh readback",
+  "observed_at": "2026-10-01T11:29:31Z"
+}

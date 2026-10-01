@@ -1,0 +1,98 @@
+{
+  "schema": "OMEGA_NEEDLE_G7_RESULT/v1",
+  "task_id": "task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001",
+  "goal_id": "G7-rae-doctor-green",
+  "direction": "omega-needle",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "status": "PASS",
+  "dispatch_value_advisory": 3.8,
+  "worker": "chatgpt-secondary-gpt56sol-omega-g7-20261001",
+  "actor": "chatgpt-secondary",
+  "authority_scope": "DETERMINISTIC_RESEARCH_ENTITY_COMPONENT_REPAIR_ONLY",
+  "steering": {
+    "path": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+    "blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086"
+  },
+  "claim_ref": "research_entity/rooms/rooms/harness/tasks/task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001.json",
+  "lease_ref": "research_entity/rooms/rooms/harness/leases/tasks/task-OMEGA-G7-RAE-DOCTOR-GREEN-20261001.json",
+  "implementation": {
+    "pr": 2183,
+    "merge_commit": "1231f8d0126622b5682844bce4d59804ecc5791a",
+    "changes": [
+      "Added required non-empty summaries to three legacy Topic Packets that violated topic_packet.schema.json.",
+      "Mapped historical packet-local CLOSED_DIAGNOSTIC to existing schema status ARCHIVED; schema enum was not weakened or extended.",
+      "Added LEAD_RESEARCHER_PRIMARY_ADJUDICATOR as a superseded role for claude-code-lead; ARTIFACT_PROVENANCE.jsonl history was not rewritten.",
+      "Refreshed canonical-derived BOOTSTRAP_MINIMAL fields against RESEARCH_ENTITY_CANONICAL.json after doctor exposed stale preflight bindings.",
+      "Added .github/workflows/rae-doctor-gate.yml to execute the exact G7 acceptance commands on relevant PR/push changes."
+    ]
+  },
+  "before": {
+    "assessment_schema_error_lines": 4,
+    "assessment_provenance_error_lines": 1,
+    "newly_observed_preflight_problems": 3,
+    "preflight_problem_kinds": [
+      "entity_version_mismatch",
+      "revision_mismatch",
+      "state_hash_mismatch"
+    ],
+    "unrelated_full_ci_baseline_failure": {
+      "classification": "HARNESS_REPOSITORY_BASELINE_FAILURE",
+      "path": "tools/vps_control_sync_refresh_v1.py",
+      "line": 204,
+      "error": "SyntaxError: invalid syntax",
+      "observed_main_and_branch_blob_sha": "3f8bb915dfdfcf03831ac8a4edf5dc5a30837776",
+      "in_g7_scope": false
+    }
+  },
+  "after": {
+    "schema_error_lines": 0,
+    "provenance_error_lines": 0,
+    "preflight_problems": 0,
+    "source_db_rc": 0,
+    "doctor_ok": true,
+    "provenance_records_validated": 177,
+    "provenance_paths_validated": 172
+  },
+  "acceptance": [
+    {
+      "command": "python3 rae.py doctor",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 tools/validate_research_entity.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "RAE schema validation PASS"
+    },
+    {
+      "command": "python3 tools/check_provenance.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "PROVENANCE CHECK PASS: 177 records, 172 paths"
+    }
+  ],
+  "evidence": {
+    "pr_gate_run_id": 36855198361,
+    "main_gate_run_id": 36855327803,
+    "main_gate_job_id": 110346357373,
+    "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+    "tested_subject": "main merge commit 1231f8d0126622b5682844bce4d59804ecc5791a"
+  },
+  "fidelity": "approximate",
+  "fidelity_reason": "Program law treats sandbox/hosted-runner evidence as approximate; owner performs local recheck before GO/NO-GO.",
+  "credit": {
+    "whole_entityos_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: deterministic RAE acceptance layer repaired at G7 scope.",
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "NO_CHANGE_WITH_REASON: G7 was a run-pinned deterministic RAE integrity repair; no nonduplicate HCU/Typed Entry intervention was required.",
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "NO_CHANGE_WITH_REASON: no model/J-Space/training experiment was needed or authorized by this run-pinned G7 repair."
+  },
+  "started_at": "2026-10-01T11:11:00Z",
+  "finished_at": "2026-10-01T11:26:45Z"
+}

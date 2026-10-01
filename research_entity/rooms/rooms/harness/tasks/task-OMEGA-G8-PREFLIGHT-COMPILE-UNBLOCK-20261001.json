@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-G8-PREFLIGHT-COMPILE-UNBLOCK-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "steering_goal": "G8-test-failure-attribution",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "observed_canonical_main": "7f7a501605fcdf667c89e6c68a885a4c97c10532",
+  "scope": "PRECONDITION_ONLY_NOT_G8_COMPLETION",
+  "exact_gap": "Repository-wide py_compile aborts before G8 attribution because tools/vps_control_sync_refresh_v1.py line 204 uses reserved keyword pass as a keyword argument.",
+  "completion_test": [
+    "python3 -m py_compile tools/vps_control_sync_refresh_v1.py",
+    "python3 -m pytest -q tests/test_vps_control_sync_refresh_v1.py",
+    "Research Entity Verify must advance past Compile Python entrypoints"
+  ],
+  "acceptance": "minimal syntax repair only; dedicated tests pass; global workflow no longer fails at this syntax location; does not claim full G8 test attribution.",
+  "constraints": [
+    "do not run --apply",
+    "no VPS mutation",
+    "no provider call",
+    "no G8 completion credit from this precondition fix"
+  ]
+}

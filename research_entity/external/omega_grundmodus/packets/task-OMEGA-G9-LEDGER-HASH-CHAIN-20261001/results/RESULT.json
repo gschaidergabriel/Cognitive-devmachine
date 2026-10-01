@@ -1,0 +1,122 @@
+{
+  "schema": "OMEGA_NEEDLE_G9_RESULT/v1",
+  "task_id": "task-OMEGA-G9-LEDGER-HASH-CHAIN-20261001",
+  "goal_id": "G9-ledger-hash-chain",
+  "direction": "omega-needle",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "status": "PASS",
+  "dispatch_value_advisory": 3,
+  "worker": "chatgpt-gpt56sol-omega-g9-20261001",
+  "actor": "chatgpt-secondary",
+  "authority_scope": "DETERMINISTIC_RESEARCH_ENTITY_LEDGER_INTEGRITY_ONLY",
+  "steering": {
+    "path": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+    "blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086"
+  },
+  "implementation": {
+    "pr": 2184,
+    "branch_head": "6053612235201751533b70e3c30dd8dd1c91401e",
+    "pr_merge_ref_tested": "784289adf6417936ba52142af500507000bfb3d0",
+    "main_merge_commit": "00d49027c65554fd57b18208ca9b7dcadd6acc15",
+    "changes": [
+      "Anchored the exact byte prefixes of CLAIMS.jsonl, CLAIM_STATUS_EVENTS.jsonl and ARTIFACT_PROVENANCE.jsonl without rewriting historical rows.",
+      "Added RAE_LEDGER_CHAIN/v1 with deterministic canonical JSON serialization, monotonic chain_seq, prev_hash and entry_hash.",
+      "Integrated chained appends into RAE claim/status writers and provenance registration.",
+      "Added explicit chain fields to claim/provenance schemas plus claim_status_event.schema.json.",
+      "Added ledger_chain_verify.py, mutation tests, validator integration and a dedicated G9 acceptance workflow."
+    ]
+  },
+  "genesis": {
+    "research_entity/ledgers/CLAIMS.jsonl": {
+      "historical_blob_sha1": "2ace1713c3fec63fb96fe072cb390a24fb98c707",
+      "historical_line_count": 43,
+      "historical_byte_count": 26902,
+      "historical_sha256": "311a0ac0a75d98689a4fff9769c320965259659684099c196f265d8de1c1d9c9"
+    },
+    "research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl": {
+      "historical_blob_sha1": "824950433ec2e2f1b6bf2a559dd85ba0ee65762d",
+      "historical_line_count": 17,
+      "historical_byte_count": 3199,
+      "historical_sha256": "b1cdd9ac466351363d070d78069bc2a74ab3281753de54bafaf61b8c974561cc"
+    },
+    "research_entity/provenance/ARTIFACT_PROVENANCE.jsonl": {
+      "historical_blob_sha1": "66fef5fb7cb11b4ed47040440df26244bce6a930",
+      "historical_line_count": 177,
+      "historical_byte_count": 119082,
+      "historical_sha256": "e1bbd2b10f816bb0a70c13a10045eb60d2fc5e55ac7deed5720797b2eee3abd7"
+    }
+  },
+  "acceptance": [
+    {
+      "command": "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIMS.jsonl",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 tools/ledger_chain_verify.py --ledger research_entity/ledgers/CLAIM_STATUS_EVENTS.jsonl",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 tools/ledger_chain_verify.py --ledger research_entity/provenance/ARTIFACT_PROVENANCE.jsonl",
+      "exit_code": 0,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m pytest -q tests/test_ledger_chain*.py",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "5 passed in 0.11s"
+    },
+    {
+      "command": "python3 rae.py doctor",
+      "exit_code": 0,
+      "status": "PASS",
+      "output": "preflight=0; schemas=0; provenance=0; source_db=0"
+    }
+  ],
+  "tamper_discriminators": {
+    "historical_byte_edit": "REJECTED_BY_TEST",
+    "historical_line_delete": "REJECTED_BY_TEST",
+    "historical_line_reorder": "REJECTED_BY_TEST",
+    "chained_semantic_edit": "REJECTED_BY_TEST",
+    "chained_noncanonical_byte_serialization": "REJECTED_BY_TEST"
+  },
+  "evidence": {
+    "g9_gate_run_id": 36857334407,
+    "g9_gate_job_id": 110352871194,
+    "rae_doctor_gate_run_id": 36857334247,
+    "rae_doctor_gate_job_id": 110352870592,
+    "environment": "GitHub Actions ubuntu-24.04 / Python 3.12.14",
+    "tested_subject": "PR #2184 synthetic merge ref 784289adf6417936ba52142af500507000bfb3d0",
+    "main_readback": {
+      "merge_commit": "00d49027c65554fd57b18208ca9b7dcadd6acc15",
+      "claims_blob_sha1": "2ace1713c3fec63fb96fe072cb390a24fb98c707",
+      "claim_status_blob_sha1": "824950433ec2e2f1b6bf2a559dd85ba0ee65762d",
+      "provenance_blob_sha1": "66fef5fb7cb11b4ed47040440df26244bce6a930",
+      "ledger_chain_blob_sha1": "0078fbdcd29653923bfb50a90bd0060cb3d84ec7",
+      "validator_blob_sha1": "cbf32a3a1120112637370b319114be94724cce07"
+    }
+  },
+  "negative_evidence": {
+    "research_entity_verify_run_id": 36857334311,
+    "classification": "HARNESS_REPOSITORY_BASELINE_FAILURE",
+    "failure": "tools/vps_control_sync_refresh_v1.py:204 SyntaxError: invalid syntax at pass=True",
+    "g9_scope": false,
+    "note": "The dedicated G9 compile step and RAE Doctor Gate passed; this same unrelated baseline compile defect was already recorded by G7."
+  },
+  "fidelity": "approximate",
+  "fidelity_reason": "Program law treats hosted-runner evidence as approximate; no real-host runtime promotion is claimed.",
+  "credit": {
+    "whole_entityos_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "go_tracks": {
+    "ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: canonical RAE ledgers now have a mechanically verified tamper-evident successor chain with frozen historical prefixes.",
+    "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "NO_CHANGE_WITH_REASON: G9 changes ledger integrity only.",
+    "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "NO_CHANGE_WITH_REASON: G9 performs no model/J-Space/training execution."
+  }
+}

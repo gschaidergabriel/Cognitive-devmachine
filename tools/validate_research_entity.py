@@ -2,10 +2,14 @@
 """Strict runtime validation for RAE canonical JSON, ledgers, Topic Packets and micro-packets."""
 from __future__ import annotations
 import json
+import sys
 from pathlib import Path
 from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from rae_core.ledger_chain import tracked_ledger_keys, verify_ledger
 SCHEMAS = ROOT / "schemas"
 
 
@@ -35,6 +39,7 @@ def main() -> int:
 
     canonical_schema = load_schema("canonical.schema.json")
     claim_schema = load_schema("claim.schema.json")
+    claim_status_schema = load_schema("claim_status_event.schema.json")
     event_schema = load_schema("event.schema.json")
     packet_schema = load_schema("topic_packet.schema.json")
     micro_schema = load_schema("micro_packet.schema.json")
@@ -59,6 +64,20 @@ def main() -> int:
             if cid in ids:
                 errors.append(f"{label}: duplicate claim_id {cid}")
             ids.add(cid)
+
+    claim_status_path = ROOT / "research_entity" / "ledgers" / "CLAIM_STATUS_EVENTS.jsonl"
+    if claim_status_path.exists():
+        event_ids = set()
+        for lineno, item in read_jsonl(claim_status_path):
+            label = f"{claim_status_path.relative_to(ROOT)}:{lineno}"
+            if isinstance(item, Exception):
+                errors.append(f"{label}: invalid JSON: {item}")
+                continue
+            validate_obj(item, claim_status_schema, label, errors)
+            event_id = item.get("event_id")
+            if event_id in event_ids:
+                errors.append(f"{label}: duplicate event_id {event_id}")
+            event_ids.add(event_id)
 
     events_root = ROOT / "research_entity" / "events"
     if events_root.exists():
@@ -107,6 +126,12 @@ def main() -> int:
             if mid in mids:
                 errors.append(f"{label}: duplicate micro packet_id {mid}")
             mids.add(mid)
+
+    for key in tracked_ledger_keys():
+        try:
+            verify_ledger(ROOT / key)
+        except Exception as e:
+            errors.append(f"{key}: ledger chain invalid: {e}")
 
     if errors:
         print("RAE schema validation FAILED")

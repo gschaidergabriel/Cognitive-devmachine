@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "needle-worker-preflight-20261001-e489469a",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail\npython3 - <<'PY'\nimport pathlib, subprocess, json, hashlib, socket, getpass\np=pathlib.Path.home()/'omega-wt-needle-tasks'\nassert getpass.getuser()=='ai-core-node', 'wrong host user'\nassert socket.gethostname().startswith('ai-core-node'), 'wrong hostname'\ndef git(*args): return subprocess.check_output(['git','-C',str(p),*args],text=True).strip()\nout={'hostname':socket.gethostname(),'user':getpass.getuser(),'worktree':str(p),'head':git('rev-parse','HEAD'),'branch':git('branch','--show-current'),'status':git('status','--short'),'task_file_count':len(list((p/'needle-tasks/tasks/open').glob('*')))}\nfor name in ['AGENTS.md','needle-tasks/AGENTS.md','needle-tasks/PROTOCOL.md','needle-tasks/CHATGPT_SETUP_PROMPT.md']:\n f=p/name\n if f.exists():\n  b=f.read_bytes()\n  out[name]={'sha256':hashlib.sha256(b).hexdigest(),'content':b.decode()}\nprint(json.dumps(out,ensure_ascii=False))\nPY"
+}

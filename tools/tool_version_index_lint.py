@@ -7,7 +7,10 @@ import json
 from pathlib import Path
 from typing import Any
 
-from tool_version_index_generate import build_index, serialize
+try:
+    from .tool_version_index_generate import build_index, serialize
+except ImportError:  # direct script execution
+    from tool_version_index_generate import build_index, serialize
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INDEX = ROOT / "research_entity" / "tooling" / "TOOL_VERSION_INDEX.json"

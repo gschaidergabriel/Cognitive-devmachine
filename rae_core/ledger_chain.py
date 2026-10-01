@@ -107,9 +107,10 @@ def verify_ledger(
         raise LedgerChainError(
             f"{key}: historical prefix hash mismatch: {got_prefix} != {expected_prefix}"
         )
-    if prefix.count(b"\n") != prefix_lines:
+    observed_prefix_lines = prefix.count(b"\n")
+    if observed_prefix_lines != prefix_lines:
         raise LedgerChainError(
-            f"{key}: historical line count mismatch: {prefix.count(b'\\n')} != {prefix_lines}"
+            f"{key}: historical line count mismatch: {observed_prefix_lines} != {prefix_lines}"
         )
     if prefix_bytes and not prefix.endswith(b"\n"):
         raise LedgerChainError(f"{key}: historical prefix does not end on a line boundary")

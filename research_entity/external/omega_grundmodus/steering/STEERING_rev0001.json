@@ -1,0 +1,216 @@
+{
+ "authority": "PROPOSAL_ONLY; no new authority; see research_entity/owner_directives/20261001_OMEGA_NEEDLE_PROGRAM_OWNER_DIRECTIVE.json",
+ "created_at": "2026-10-01T11:00:29Z",
+ "direction": "omega-needle",
+ "goals": [
+  {
+   "acceptance": {
+    "commands": [
+     "python3 rae.py doctor",
+     "python3 tools/validate_research_entity.py",
+     "python3 tools/check_provenance.py"
+    ],
+    "expect": "all three exit 0; `rae doctor` schema check and provenance check both PASS; the receipt lists before/after error counts (assessment: 4 schema error lines + 1 provenance line)",
+    "mechanical": true
+   },
+   "constraints": [
+    "ledgers/artifact provenance are APPEND-ONLY: fix by a superseding entry or by correcting the registry, never by rewriting history",
+    "for the enum: decide extend-enum vs correct-data explicitly and record the decision; do not weaken schemas silently"
+   ],
+   "dispatch_value_advisory": 3.8,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#2-strongest--3-measured"
+   ],
+   "execution_class": "chatgpt_sandbox_ok (small run) or vps_sandbox",
+   "execution_needs": "repo edits + a python3 run with jsonschema",
+   "id": "G7-rae-doctor-green",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Make `rae doctor` pass on the entity's own data",
+   "why": "The repo's own validators fail on its own data: topic packets missing required `summary`, status CLOSED_DIAGNOSTIC not in the enum, provenance actor_role disagrees with the registry at ARTIFACT_PROVENANCE line 177."
+  },
+  {
+   "acceptance": {
+    "commands": [
+     "python3 tools/acceptance_kit/run_selftest.py"
+    ],
+    "expect": "exit 0; each component has >=1 positive and >=1 negative test; split/leakage guard works on this program's JSONL row format (rows with id + text fields; fixtures from the needle task packets); JSON Schemas (Draft 2020-12) exist for NEEDLE_ENTITY_PACKET/v1 and needle-entity-result/v1 with a validator CLI; a PASS/FAIL receipt shape records command, exit_code, tested blob hashes and runtime_credit=0 for unproven layers; docs in tools/acceptance_kit/README.md",
+    "mechanical": true
+   },
+   "constraints": "copy and adapt, do not modify the original tools; the kit must run standalone from a copy (no repo-root assumptions); passing a split guard is not proof of independence (keep that docstring)",
+   "dispatch_value_advisory": 3.6,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#5-reuse-for-us-mechanical-acceptance-layer"
+   ],
+   "execution_class": "chatgpt_sandbox_ok",
+   "execution_needs": "repo edits (copy/adapt, stdlib + jsonschema) + a python3 run",
+   "id": "G12-acceptance-kit",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Small shared `acceptance kit` under tools/ built from the five reuse candidates",
+   "why": "Five proven deterministic components exist but are not shared: preimage_bound_edit_guard_v1, git_source_identity_v1, split/leakage guards, schema-validation pattern, gateflow receipt shape."
+  },
+  {
+   "acceptance": {
+    "commands": [
+     "python3 -m pytest -q tests/ (full clone)",
+     "python3 tools/current_execution_authority_lint_v1.py"
+    ],
+    "expect": "classification file lists EVERY failing test id and collection error with class in {missing_file, env_or_dependency, real_bug, flaky, other} (unclassified = 0); real bugs fixed; collection errors 0 (fixed, or skipped with an explicit marker + reason); authority-lint exit 0 on a full clone; receipt reports failed/error counts before and after",
+    "mechanical": true
+   },
+   "constraints": "never classify a failure as passing by deleting/skipping the test without a recorded reason",
+   "dispatch_value_advisory": 3.2,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#3-measured-test-runs"
+   ],
+   "execution_class": "vps_sandbox (clay-direct-dev) or self-hosted runner; the plain ChatGPT sandbox is insufficient",
+   "execution_needs": "needs running code on a FULL clone (254 s, many runtime-state/VPS-path/llama.cpp/lark dependencies)",
+   "id": "G8-test-failure-attribution",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Attribute and reduce the failing tests of the full tests/ run",
+   "why": "A degraded-copy run showed 1977 passed / 204 failed / 10 collection errors / 2 xfail (254 s) and one authority-lint failure; true failure rate on a full clone is unknown."
+  },
+  {
+   "acceptance": {
+    "commands": [
+     "python3 tools/<ledger_chain_verify>.py --ledger <each ledger>",
+     "python3 -m pytest -q tests/test_ledger_chain*.py"
+    ],
+    "expect": "verifier exit 0 on the untouched chain; tamper tests (edit one historical byte / delete a line / reorder two lines) make the verifier exit non-zero; `rae doctor` still green; genesis anchor = hash of the existing tail, history is not rewritten",
+    "mechanical": true
+   },
+   "constraints": "schemas must be updated for the new fields; old rows stay byte-identical; chain starts at a recorded genesis",
+   "dispatch_value_advisory": 3.0,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#4-honest-weaknesses"
+   ],
+   "execution_class": "chatgpt_sandbox_ok",
+   "execution_needs": "repo edits + pytest (stdlib only)",
+   "id": "G9-ledger-hash-chain",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Append-only hash chain (prev_hash) for claims / status events / provenance ledgers + verifier",
+   "why": "The JSONL ledgers are append-by-convention plus git history, not tamper-evident; no prev_hash chain exists in tools/rae_core."
+  },
+  {
+   "acceptance": {
+    "commands": [
+     "python3 -m pytest -q tests/test_fail_closed_top10*.py",
+     "python3 tools/<mutation_check>.py"
+    ],
+    "expect": "a generated map lists the 115 enforcing tool files vs the prose claims (count of claims with NO enforcing code reported); for the 10 most critical gates a test passes on the clean tree AND fails when the gate's fail-closed branch is mutated (mutation check proves the test can fail)",
+    "mechanical": true
+   },
+   "constraints": "do not edit gate behaviour to make tests pass; report real gate bugs as findings",
+   "dispatch_value_advisory": 2.6,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#1-inventory-measured"
+   ],
+   "execution_class": "vps_sandbox preferred; chatgpt_sandbox only if the full clone is available there",
+   "execution_needs": "needs running code (pytest on a full clone)",
+   "id": "G11-fail-closed-executable",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Make fail-closed claims executable: map prose claims to enforcing code, test the top 10 gates",
+   "why": "~3200 prose mentions of fail-closed versus 115 tool files that implement it."
+  },
+  {
+   "acceptance": {
+    "commands": [
+     "python3 tools/<tool_index_generate>.py (run twice)",
+     "python3 tools/<tool_index_lint>.py"
+    ],
+    "expect": "generated index is byte-identical on two runs; lint exits 0 on the repo (historical references allow-listed with reason) and exits non-zero on a synthetic fixture that references a superseded version",
+    "mechanical": true
+   },
+   "constraints": "generated file is a cache, not authority; do not delete or rename any existing tool",
+   "dispatch_value_advisory": 2.4,
+   "evidence": [
+    "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md#4-honest-weaknesses"
+   ],
+   "execution_class": "chatgpt_sandbox_ok on a full clone or vps_sandbox",
+   "execution_needs": "repo edits + a stdlib python3 run",
+   "id": "G10-tool-version-index",
+   "items": [],
+   "kind": "entity_improvement",
+   "publication": "STEERING_ONLY: no room task is published; claim it through your own dispatch (task claim with this acceptance as the completion test)",
+   "status": "ACTIVE",
+   "title": "Generated index of live vs superseded one-off tool versions + lint",
+   "why": "~620 tools with many versioned variants (trigger1_*_v1..v13, claycode_*_v4..v21, restart_authority v1..v4) and no index of which is live."
+  },
+  {
+   "dispatch_value_advisory": 2.2,
+   "id": "G1-mouth-data-quality",
+   "items": [
+    {
+     "dispatch_value": 2.2,
+     "executor": "none",
+     "fidelity": "exact",
+     "hold_reason": null,
+     "kind": "audit_mouth",
+     "n_input_refs": 2,
+     "packet": "research_entity/external/omega_grundmodus/packets/task-MC-FRANK-NEEDLE-T-0022-g0001/PACKET.json",
+     "room": "frank",
+     "spec_sha256": "d3510226a5a52b81c5839767d06f1600ba834e2448404c7782a805e48fcb1eb9",
+     "status": "OPEN",
+     "task_id": "task-MC-FRANK-NEEDLE-T-0022-g0001",
+     "tid": "T-0022"
+    }
+   ],
+   "kind": "program_items",
+   "status": "ACTIVE",
+   "title": "Mouth (speech module) training data quality: repair flagged items, keep auditing",
+   "why": "An independent audit flagged 25 of 100 mouth items as bad (mostly invented_fact); the next data round needs repaired items and more second-rater audits."
+  }
+ ],
+ "mission": "research_entity/external/omega_grundmodus/PROGRAM_MISSION.md",
+ "note": "",
+ "program_pointers": {
+  "data_home": {
+   "files": [
+    "PROTOCOL.md",
+    "manifest.json",
+    "tasks/open/",
+    "tasks/entity/"
+   ],
+   "path": "needle-tasks/",
+   "ref": "needle-tasks",
+   "repo": "gschaidergabriel/oMEGAcV1"
+  },
+  "entity_determinism_assessment": "research_entity/external/omega_grundmodus/docs/ENTITY_DETERMINISM_ASSESSMENT_2026-10-01.md",
+  "go_work": {
+   "commit": "8cc536c4f302b2e51f1e33a7d2a45c37970f7e72",
+   "on_github": "UNBELEGT (local branch; patches are exported as task E-0003)",
+   "ref": "cie-gwt-closure",
+   "repo": "gschaidergabriel/oMEGAcV1"
+  },
+  "results_home": {
+   "path": "needle-tasks/results/",
+   "ref": "chatgpt-results",
+   "repo": "gschaidergabriel/oMEGAcV1"
+  },
+  "state_package": "research_entity/external/omega_grundmodus/README_STATE_2026-10-01.md"
+ },
+ "rev": 1,
+ "rules": [
+  "items are optional requests",
+  "latest rev (highest number) wins; old revs stay",
+  "results are data; approximate results never final evidence"
+ ],
+ "schema": "NEEDLE_PROGRAM_STEERING/v1",
+ "state_package": "research_entity/external/omega_grundmodus/README_STATE_2026-10-01.md",
+ "supersedes_rev": null,
+ "written_by": "master-clay (claude-code-lead)"
+}

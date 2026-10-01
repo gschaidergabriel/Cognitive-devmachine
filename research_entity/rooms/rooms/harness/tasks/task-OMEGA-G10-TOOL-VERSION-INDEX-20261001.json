@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-OMEGA-G10-TOOL-VERSION-INDEX-20261001",
+  "status": "CLAIMED",
+  "room_id": "harness",
+  "trigger": "go",
+  "selected_role": "SOLO_RESEARCHER",
+  "work_mode": "FORGE",
+  "program_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "direction": "omega-needle",
+  "steering_goal": "G10-tool-version-index",
+  "steering_ref": "research_entity/external/omega_grundmodus/steering/STEERING_rev0001.json",
+  "steering_blob_sha": "b57af516d88ed69df2de54725bb98ceb2c5da086",
+  "observed_canonical_main": "22cd6405d11c5a1f560781c23735288f44f3b354",
+  "dispatch_value_advisory": 2.4,
+  "exact_gap": "~620 tools include many versioned one-off variants with no deterministic generated live-vs-superseded index or lint against stale active references.",
+  "completion_test": [
+    "python3 tools/tool_version_index_generate.py",
+    "run generator twice and require byte-identical output",
+    "python3 tools/tool_version_index_lint.py",
+    "python3 -m pytest -q tests/test_tool_version_index*.py"
+  ],
+  "acceptance": "Generated index is byte-identical on two runs; repo lint exits 0 with explicit reasoned allowlist for historical references; synthetic active reference to a superseded version exits non-zero.",
+  "constraints": [
+    "generated index is cache, not authority",
+    "do not delete or rename existing tools",
+    "highest numeric _vN per exact filename family is an index heuristic, not semantic authority",
+    "historical exceptions require path+tool+reason"
+  ]
+}

@@ -1,5 +1,116 @@
 {
   "schema": "TOOL_VERSION_HISTORICAL_ALLOWLIST/v1",
-  "policy": "Only exact active-surface references to mechanically superseded _vN tools may be exempted, and every exemption requires a non-empty reason.",
-  "entries": []
+  "policy": "Only exact active-surface references to mechanically superseded _vN tools may be exempted, and every exemption requires a non-empty reason. Version suffix ordering is navigation evidence, not proof of drop-in semantic compatibility.",
+  "entries": [
+    {
+      "referrer": ".github/workflows/groq-8b-validation-v3.yml",
+      "tool": "tools/groq_8b_validation_v3.py",
+      "reason": "Workflow is explicitly the V3 validation lane and intentionally pins the V3 subject; existence of V4 does not make this historical regression lane safe to auto-migrate."
+    },
+    {
+      "referrer": ".github/workflows/runtime-reconcile-871-selfhosted.yml",
+      "tool": "tools/free_swarm_restart_authority_attribution_v1.py",
+      "reason": "Self-hosted reconciliation workflow intentionally observes v1, v3 and v4 attribution subjects together for cross-version/runtime lineage; v1 is a named evidence subject."
+    },
+    {
+      "referrer": ".github/workflows/runtime-reconcile-871-selfhosted.yml",
+      "tool": "tools/free_swarm_restart_authority_attribution_v3.py",
+      "reason": "Self-hosted reconciliation workflow explicitly tests v3 and v4 lineage together; v3 remains a named compatibility/evidence subject, not an accidental current-tool pointer."
+    },
+    {
+      "referrer": "tools/activate_6000_free_swarm.sh",
+      "tool": "tools/run_6000_free_swarm_v3.py",
+      "reason": "Shutdown/activation safety code enumerates legacy process entrypoints so older live processes are detected and terminated; removing v3 would weaken quiescence coverage."
+    },
+    {
+      "referrer": "tools/free_swarm_restart_authority_attribution_v2.py",
+      "tool": "tools/free_swarm_restart_authority_attribution_v1.py",
+      "reason": "v2 is implemented as a refinement over a v1 receipt and deliberately invokes v1 to preserve the prior observation contract."
+    },
+    {
+      "referrer": "tools/free_swarm_restart_authority_attribution_v3.py",
+      "tool": "tools/free_swarm_restart_authority_attribution_v1.py",
+      "reason": "v3 deliberately obtains the v1 probe receipt as its lower-level observation substrate; this is explicit version layering."
+    },
+    {
+      "referrer": "tools/free_swarm_restart_authority_attribution_v4.py",
+      "tool": "tools/free_swarm_restart_authority_attribution_v1.py",
+      "reason": "v4 still uses the v1 probe as the raw process-observation substrate before applying stronger attribution checks."
+    },
+    {
+      "referrer": "tools/free_swarm_restart_authority_attribution_v4.py",
+      "tool": "tools/free_swarm_restart_authority_attribution_v3.py",
+      "reason": "v4 imports v3 helper semantics as its immediate predecessor layer; replacing the import with v4 would be recursive and incorrect."
+    },
+    {
+      "referrer": "tools/free_swarm_runtime_quiescence_enforcer_v1.py",
+      "tool": "tools/free_swarm_runtime_quiescence_probe_v1.py",
+      "reason": "The enforcer's declared contract delegates bounded post-stop proof to the v1 probe; this is a pinned protocol dependency, not a generic latest-version lookup."
+    },
+    {
+      "referrer": "tools/free_swarm_runtime_quiescence_enforcer_v1.py",
+      "tool": "tools/run_6000_free_swarm_v3.py",
+      "reason": "Fail-closed quiescence enforcement must recognize legacy v3 process roots in addition to newer entrypoints; this reference is part of the kill-scope safety inventory."
+    },
+    {
+      "referrer": "tools/free_swarm_runtime_quiescence_probe_v2.py",
+      "tool": "tools/free_swarm_runtime_quiescence_probe_v1.py",
+      "reason": "v2 loads v1 as its inner baseline probe and adds stronger sync/window checks around it; intentional predecessor composition."
+    },
+    {
+      "referrer": "tools/run_xeno_go_swarm.py",
+      "tool": "tools/run_6000_free_swarm_v3.py",
+      "reason": "This controller pins the established v3 economic-gate contract. Version number alone is insufficient evidence that v5 is interface/semantics compatible, so migration must be a separate validated change."
+    },
+    {
+      "referrer": "tools/trigger2_context_binding_split_audit_v1.py",
+      "tool": "tools/trigger2_context_binding_generator_v1.py",
+      "reason": "The split auditor documents and audits candidate rows produced by the v1 generator; it is an exact source/data-contract binding and must not silently retarget."
+    },
+    {
+      "referrer": "tools/trigger2_executable_transition_authority_origin_gate_v1.py",
+      "tool": "tools/trigger2_executable_transition_pilot_v1.py",
+      "reason": "The origin gate explicitly audits the v1 pilot contract and is expected to block until that exact subject exposes the required envelope; successor substitution would change the experiment."
+    },
+    {
+      "referrer": "tools/trigger2_four_quadrant_selection_eval_v2.py",
+      "tool": "tools/trigger2_four_quadrant_selection_eval_v1.py",
+      "reason": "v2 declares itself a source-only successor to v1 and references v1 for lineage/documentation; no execution dispatch to v1 is inferred from the textual reference."
+    },
+    {
+      "referrer": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py",
+      "tool": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "reason": "Atomic-cohort acceptance reuses the v2 physical GRID10 probe as a pinned source-script subject; v3 is a different later acceptance subject and is not assumed drop-in."
+    },
+    {
+      "referrer": "tools/trigger2_hyperposition_derivation_bound_gate_v1.py",
+      "tool": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "reason": "Derivation-bound gate hashes and binds the exact v1 labeler as evidence lineage; changing to v3 would invalidate the recorded derivation contract."
+    },
+    {
+      "referrer": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "tool": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+      "reason": "Semantic-hyperposition gate v2 composes the v1 base candidate gate as an explicit lower-layer contract; higher version is not automatically semantically equivalent."
+    },
+    {
+      "referrer": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "tool": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+      "reason": "Semantic-hyperposition gate v3 still intentionally composes the v1 base candidate gate while upgrading its labeler path; this is explicit mixed-version architecture."
+    },
+    {
+      "referrer": "tools/trigger2_semantic_hyperposition_native_seed_generator_v1.py",
+      "tool": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "reason": "Native seed generator binds the v2 semantic gate that defines its seed contract; retargeting to v3 would alter generated-data semantics and needs separate validation."
+    },
+    {
+      "referrer": "tools/xeno_grid10_same_cohort_binding_v1.py",
+      "tool": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "reason": "Same-cohort binding test uses the v2 acceptance script as its exact concurrent-probe subject; later v3 does not automatically supersede this experimental binding."
+    },
+    {
+      "referrer": "tools/xeno_physical_grid10_writer_free_acceptance_v1.py",
+      "tool": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "reason": "Writer-free supplemental harness explicitly closes an evidence gap in v2 and therefore must bind v2, not whichever later acceptance version has the highest suffix."
+    }
+  ]
 }

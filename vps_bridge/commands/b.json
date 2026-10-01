@@ -1,0 +1,8 @@
+{
+ "schema": "CLAY_VPS_COMMAND/v3",
+ "command_id": "claude-route-test-20261001-b-longjob-start",
+ "op": "exec",
+ "cwd": "/workspace",
+ "timeout_seconds": 60,
+ "command": "set -u\necho \"== go search\"; ls /usr/local/go/bin/go /root/go /usr/lib/go*/bin/go 2>&1 | head -5; find / -xdev -name go -type f -perm -u+x -not -path \"*/proc/*\" 2>/dev/null | head -5\necho \"== start long job (tmux, nice19, ionice idle, timeout 660s)\"\nJ=/workspace/jobs/hb-test-20261001; mkdir -p $J\ncat > $J/run.sh <<'RUN'\n#!/bin/bash\nJ=/workspace/jobs/hb-test-20261001\necho $$ > $J/pid; date -u +%FT%TZ > $J/started\ni=0\nwhile [ $i -lt 20 ]; do i=$((i+1)); echo \"$(date -u +%FT%TZ) beat=$i load=$(cut -d' ' -f1 /proc/loadavg)\" >> $J/heartbeat.log; sleep 30; done\necho done > $J/DONE\nRUN\nchmod +x $J/run.sh\ntmux kill-session -t job-hb-test 2>/dev/null || true\ntmux new-session -d -s job-hb-test \"nice -n 19 ionice -c3 timeout 660 $J/run.sh; echo \\$? > $J/exit_code; date -u +%FT%TZ > $J/ended\"\nsleep 2; tmux ls; cat $J/pid; cat $J/heartbeat.log\necho \"== pids/zombies before\"; ps -eo stat= | grep -c '^Z'; echo \"== nice of job\"; ps -o pid,ni,args -p $(cat $J/pid) "
+}

@@ -200,8 +200,8 @@ def main(argv: list[str] | None = None) -> int:
         if rsha_after != rsha:
             raise RuntimeError(f"remote_main_moved_during_refresh:{rsha}->{rsha_after}")
 
+        receipt["pass"] = True
         receipt.update(
-            pass=True,
             execution_authority="CONTROL_SYNC_REFRESH_PASS",
             local_head_after=head2,
             tree_after=tree2,

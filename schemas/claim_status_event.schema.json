@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "claim_status_event.schema.json",
+  "type": "object",
+  "required": [
+    "event_id",
+    "claim_id",
+    "timestamp",
+    "from",
+    "to",
+    "reason"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "timestamp": {
+      "type": "string",
+      "minLength": 1
+    },
+    "from": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "to": {
+      "enum": [
+        "CURRENT",
+        "OPEN",
+        "SUPERSEDED",
+        "REFUTED",
+        "NEGATIVE_RESULT",
+        "CONTEXT_ONLY",
+        "NOT_SELECTED"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actor_id": {
+      "type": "string"
+    },
+    "chain_version": {
+      "const": "RAE_LEDGER_CHAIN/v1"
+    },
+    "chain_seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "entry_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": true
+}

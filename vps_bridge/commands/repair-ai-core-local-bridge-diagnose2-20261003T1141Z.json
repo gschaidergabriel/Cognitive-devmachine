@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "repair-ai-core-local-bridge-diagnose2-20261003T1141Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 ai-core-node@100.70.87.28 'bash -s' <<'REMOTE_SCRIPT'\nset -e\necho '=== identity ==='\nhostname\nid -un\ndate -u +%Y-%m-%dT%H:%M:%SZ\necho '=== unit status ==='\nsystemctl --user status frankenstein-local-bridge.service --no-pager -l || true\necho '=== unit cat ==='\nsystemctl --user cat frankenstein-local-bridge.service || true\necho '=== journal ==='\njournalctl --user -u frankenstein-local-bridge.service -n 100 --no-pager || true\necho '=== processes ==='\npgrep -af 'local_bridge_daemon.py|clay-local-bridge/bin/daemon.py' || true\necho '=== bridge files ==='\nls -l ~/.claude/star/local_bridge_daemon.py ~/.local/share/clay-local-bridge/bin/daemon.py 2>/dev/null || true\necho '=== state dirs ==='\nls -ld ~/.claude/star/local_bridge_state ~/.local/share/clay-local-bridge 2>/dev/null || true\necho '=== git state ==='\nfor d in ~/.claude/star/local_bridge_state/repo ~/.local/share/clay-local-bridge/repo; do\n  if [ -d \"$d/.git\" ]; then\n    echo \"--- $d\"\n    git -C \"$d\" remote -v || true\n    git -C \"$d\" branch --show-current || true\n    git -C \"$d\" status --short --branch || true\n  fi\ndone\nREMOTE_SCRIPT"
+}

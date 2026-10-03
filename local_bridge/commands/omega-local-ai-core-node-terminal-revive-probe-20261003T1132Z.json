@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-local-ai-core-node-terminal-revive-probe-20261003T1132Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30,
+  "command": "set -euo pipefail; printf 'OMEGA_LOCAL_BRIDGE_OK\\n'; printf 'host='; hostname; printf 'user='; id -un; printf 'utc='; date -u +%Y-%m-%dT%H:%M:%SZ; systemctl --user is-active frankenstein-local-bridge.service 2>/dev/null || true; pgrep -af 'local_bridge_daemon.py|clay-local-bridge/bin/daemon.py' || true"
+}

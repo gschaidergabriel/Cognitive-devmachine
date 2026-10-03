@@ -1,0 +1,77 @@
+=== current daemon key config ===
+29:import sqlite3
+39:# Deshalb tragen MACHINE_ID/OWNER JEDEN Receipt zusaetzlich explizit, nicht
+40:# nur implizit ueber den Branch. MACHINE_ID/OWNER sind bewusst per Env
+44:MACHINE_ID = os.environ.get("LOCAL_BRIDGE_MACHINE_ID", "ai-core-node")
+45:OWNER = os.environ.get("LOCAL_BRIDGE_OWNER", "gabriel")
+51:DB = STATE_DIR / "bridge.sqlite3"
+53:CONTROL_BRANCH = os.environ.get("LOCAL_BRIDGE_CONTROL_BRANCH", f"chatgpt-local-{MACHINE_ID}-control")
+54:RESULTS_BRANCH = os.environ.get("LOCAL_BRIDGE_RESULTS_BRANCH", f"chatgpt-local-{MACHINE_ID}-results")
+79:def _db() -> sqlite3.Connection:
+81:    c = sqlite3.connect(DB)
+95:    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+103:    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+124:        "host": MACHINE_ID, "owner": OWNER, "time": now(),
+180:    cid = receipt["command_id"]
+187:def execute(path: pathlib.Path) -> bool:
+200:    cid = str(s["command_id"])
+202:    if c.execute("SELECT 1 FROM done WHERE id=?", (cid,)).fetchone():
+223:        "command_id": cid,
+225:        "host": MACHINE_ID,
+226:        "owner": OWNER,
+227:        "machine_id": MACHINE_ID,
+233:        "execution_boundary": f"REAL_LOCAL_HOST_{MACHINE_ID.upper().replace('-', '_')}_NOT_SANDBOXED",
+245:    _git("checkout", "-B", RESULTS_BRANCH, f"origin/{RESULTS_BRANCH}", check=False)
+247:    processed = 0
+250:            ["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{QUEUE}"],
+255:                        f"origin/{CONTROL_BRANCH}"], capture_output=True)
+258:        show = subprocess.run(["git", "-C", str(REPO), "show", f"origin/{CONTROL_BRANCH}:{n}"],
+266:            processed += 1
+268:    if processed:
+269:        sync_and_push_results(f"local bridge: {processed} command(s) executed on {MACHINE_ID}")
+270:    return processed
+277:        print(f"processed={n}")
+=== legacy daemon key config ===
+3:import base64, datetime as dt, hashlib, json, os, pathlib, shlex, signal, sqlite3, subprocess, time, traceback
+12:DB=STATE/'bridge.sqlite3'
+13:CONTROL_BRANCH='chatgpt-local-control'
+14:RESULTS_BRANCH='chatgpt-local-results'
+30:    c=sqlite3.connect(DB)
+39:    git(CONTROL,'fetch','origin',CONTROL_BRANCH,'--prune')
+40:    git(CONTROL,'checkout','-B',CONTROL_BRANCH,f'origin/{CONTROL_BRANCH}')
+41:    git(CONTROL,'reset','--hard',f'origin/{CONTROL_BRANCH}')
+44:    git(RESULTS,'fetch','origin',RESULTS_BRANCH,'--prune')
+45:    git(RESULTS,'checkout','-B',RESULTS_BRANCH,f'origin/{RESULTS_BRANCH}')
+46:    git(RESULTS,'reset','--hard',f'origin/{RESULTS_BRANCH}')
+55:            git(RESULTS,'push','--force-with-lease','origin',f'HEAD:{RESULTS_BRANCH}',timeout=300)
+58:    git(RESULTS,'push','origin',f'HEAD:{RESULTS_BRANCH}',timeout=300)
+78:    job_id=str(s.get('job_id') or s['command_id'])
+124:    if action=='fetch': return run(['git','-C',str(repo),'fetch','--all','--tags','--prune'],timeout=600),{'repo':str(repo)}
+168:    cid=receipt['command_id']; (d/'receipts'/f'{cid}.json').write_text(json.dumps(receipt,indent=2)+'\n'); (d/'logs'/f'{cid}.stdout.txt').write_bytes(stdout[-MAX_LOG:]); (d/'logs'/f'{cid}.stderr.txt').write_bytes(stderr[-MAX_LOG:]); (d/'LATEST.json').write_text(json.dumps(receipt,indent=2)+'\n'); push_results('local receipt: '+cid)
+170:def execute(path):
+173:    cid=str(s['command_id']); c=conn()
+174:    if c.execute('SELECT 1 FROM done WHERE id=?',(cid,)).fetchone(): c.close(); return False
+184:    receipt={'schema':'CLAY_LOCAL_RECEIPT/v1','command_id':cid,'command_sha256':sha(raw),'started_at':started,'finished_at':now(),'status':st,'exit_code':code,'op':s.get('op','exec'),'stdout_sha256':sha(stdout),'stderr_sha256':sha(stderr),'stdout_tail':text(stdout)[-24000:],'stderr_tail':text(stderr)[-24000:],'meta':meta,'execution_boundary':'LOCAL_USER_HOST_SHELL','automatic_root_grant':False}
+195:def main():
+=== current daemon environment ===
+HOME=/home/ai-core-node
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+USER=ai-core-node
+=== legacy daemon environment ===
+HOME=/home/ai-core-node
+PATH=/home/ai-core-node/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+USER=ai-core-node
+XDG_SEAT_PATH=/org/freedesktop/DisplayManager/Seat0
+XDG_SESSION_PATH=/org/freedesktop/DisplayManager/Session0
+=== systemd user units matching bridge ===
+  clay-local-bridge-watchdog.service                                                                                                 loaded    inactive dead      Clay local bridge self-heal check
+  clay-local-bridge.service                                                                                                          loaded    active   running   Clay ChatGPT local development bridge
+  frankenstein-local-bridge-webui.service                                                                                            loaded    active   running   Browser-Terminal fuer die lokale FranKenstein-Git-Bruecke (ai-core-node + andreas-MACO)
+  frankenstein-local-bridge.service                                                                                                  loaded    active   running   Lokale GitHub-Bruecke fuer die Forschungsentitaet (chatgpt-local-control/-results)
+  omega-chatgpt-bridge.service                                                                                                       loaded    active   running   OMEGA ChatGPT bridge fallback router
+  omega-chatgpt-mcp.service                                                                                                          loaded    active   running   OMEGA ChatGPT MCP Bridge Gateway with verified transport fallback
+  clay-local-bridge-watchdog.timer                                                                                                   loaded    active   waiting   Run Clay local bridge self-heal check every minute
+=== user crontab/process parent legacy ===
+    PID    PPID                  STARTED CMD
+   2563    2426 Fri Oct  2 11:02:39 2026 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py
+  10510    2426 Fri Oct  2 11:03:12 2026 /usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py

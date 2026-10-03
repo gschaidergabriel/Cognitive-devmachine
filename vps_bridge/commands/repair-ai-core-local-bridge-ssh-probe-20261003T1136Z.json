@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "repair-ai-core-local-bridge-ssh-probe-20261003T1136Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 30,
+  "command": "set -o pipefail; echo '---tailscale/ssh probe---'; for host in 100.70.87.28 ai-core-node; do echo HOST=$host; timeout 8 ssh -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=accept-new ai-core-node@$host 'printf \"SSH_OK\\\\n\"; hostname; id -un' 2>&1; echo rc=$?; done"
+}

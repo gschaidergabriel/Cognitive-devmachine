@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "repair-ai-core-local-bridge-pushaudit-20261003T1153Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 ai-core-node@100.70.87.28 'bash -s' <<'REMOTE_SCRIPT'\nset -e\necho '=== publish functions ==='\nnl -ba ~/.claude/star/local_bridge_daemon.py | sed -n '85,120p;168,187p'\necho '=== target receipt local ==='\ncat ~/.claude/star/local_bridge_state/repo/local_bridge/results/receipts/omega-local-ai-core-node-terminal-revive-probe-20261003T1132Z.json 2>/dev/null || echo MISSING_LOCAL_RECEIPT\necho '=== git status ==='\ngit -C ~/.claude/star/local_bridge_state/repo status --short --branch\necho '=== recent local commits ==='\ngit -C ~/.claude/star/local_bridge_state/repo log --oneline --decorate -8\necho '=== result remote head ==='\ngit -C ~/.claude/star/local_bridge_state/repo ls-remote origin refs/heads/chatgpt-local-ai-core-node-results || true\necho '=== recent bridge journal errors ==='\njournalctl --user -u frankenstein-local-bridge.service --since '2026-10-03 18:30:00' --no-pager | grep -E 'poll error|push|fatal|error|processed=' | tail -100 || true\necho '=== github auth ==='\ngh auth status 2>&1 || true\nREMOTE_SCRIPT"
+}

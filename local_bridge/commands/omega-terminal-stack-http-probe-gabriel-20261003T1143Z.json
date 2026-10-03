@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-terminal-stack-http-probe-gabriel-20261003T1143Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 45,
+  "command": "set -euo pipefail\necho '=== webui routes ==='\ngrep -nE '8784|do_GET|do_POST|/health|/api|terminal|command' ~/.claude/star/local_bridge_webui.py | head -160 || true\necho '=== mcp routes/config hints ==='\ngrep -RniE '8789|health|/mcp|FastAPI|HTTPServer|serve_forever' ~/.local/lib/omega-chatgpt-mcp 2>/dev/null | head -160 || true\necho '=== HTTP probes ==='\nfor u in http://127.0.0.1:8784/ http://127.0.0.1:8784/health http://127.0.0.1:8789/ http://127.0.0.1:8789/health http://127.0.0.1:8789/mcp; do\n  echo \"--- $u\"\n  curl -sS -m 4 -D - \"$u\" -o /tmp/omega-probe-body || true\n  head -c 700 /tmp/omega-probe-body 2>/dev/null || true\n  echo\ndone"
+}

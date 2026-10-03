@@ -1,0 +1,237 @@
+=== webui routes ===
+44:_PORT = 8784
+72:def submit_command(machine: str, command: str, timeout_seconds: int) -> str:
+77:        cmds = pathlib.Path(td) / "local_bridge" / "commands"
+81:            "command_id": cid,
+83:            "command": command,
+149:  const command = document.getElementById('cmd').value;
+150:  if(!command.trim()) return;
+153:    body: JSON.stringify({machine, command})});
+159:  card.id = 'card-' + j.command_id;
+160:  card.innerHTML = `<span class="tag">${machine}</span><span class="tag">${j.command_id}</span>
+161:    <div><b>&gt; ${command.replace(/</g,'&lt;')}</b></div>
+162:    <div class="status-pending" id="s-${j.command_id}">wartet auf Daemon-Poll (~20s Zyklus) ...</div>`;
+164:  poll(machine, j.command_id, 0);
+193:        def do_GET(self):
+222:        def do_POST(self):
+230:                command = str(req.get("command", ""))
+231:                if machine not in MACHINES or not command.strip():
+232:                    raise ValueError("machine/command fehlt oder ungueltig")
+233:                cid = submit_command(machine, command, 120)
+234:                _HISTORY.append({"machine": machine, "command": command, "command_id": cid, "at": time.time()})
+235:                out = {"command_id": cid}
+=== mcp routes/config hints ===
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:32:from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:46:PORT = int(os.getenv("OMEGA_MCP_PORT") or "8789")
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:413:        # health/reasons). Never touches or renames any pre-existing key above.
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:442:    """titan_body.json digest: per-organ health + the harness's own
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:443:    human-readable health_reason strings, surfaced verbatim (never re-derived)."""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:451:    healthy_ids: list[str] = []
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:456:        if o.get("health") == 0:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:457:            healthy_ids.append(organ_id)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:461:                "health": o.get("health"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:462:                "health_known": o.get("health_known"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:463:                "reason": _truncate(o.get("health_reason") or "", 200),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:472:        "healthy_count": len(healthy_ids),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:493:        "healthy_count": src.get("healthy_count"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:531:    """omega_body tool payload: organ health (titan_body.json) + heartbeat
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:652:    organ health_reason strings, and the journal/mood DBs). There is no
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:686:            reason = o.get("health_reason") or ""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:687:            text = f"organ {organ_id}: health={o.get('health')} — {reason}"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:738:        "scope": ["state.json:goals", "state.json:turns", "titan_body.json:organs.*.health_reason",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:938:        "description": "Search OMEGA's local textual sources (state.json goals/turns, titan_body organ health reasons, and the effect/gate/experience journals) for a substring match. There is no dedicated TITAN episodic/semantic memory store on this host yet -- results are honestly scoped to what actually exists, disclosed in the response's 'note' field.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:949:        "description": "Read-only organ health digest: per-organ health (titan_body.json, verbatim health_reason strings) plus heartbeat freshness (monitor.json, stalest-first). Honest 'no organ runtime data yet' if the harness hasn't written these files on this host yet.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:1126:        if self.path.rstrip("/") == "/health":
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:1132:        if self.path.rstrip("/") not in {"", "/mcp"}:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:1171:    server = ThreadingHTTPServer((BIND, PORT), Handler)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-turnctx-20260917-104713:1174:        server.serve_forever(poll_interval=0.25)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:27:from http.server import ThreadingHTTPServer
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:108:    health = _direct_request(person, "/health", timeout=0.55)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:122:        "health": health,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:239:                health = _local_request({"kind": "health"}, timeout=0.5)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:240:                entry["local_adapter_live"] = bool(health.get("ok"))
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:391:        if self.path.rstrip("/") == "/health":
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:416:    server = ThreadingHTTPServer((base.BIND, base.PORT), Handler)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py.bak-paket-a2b941:419:        server.serve_forever(poll_interval=0.25)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:33:from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:47:PORT = int(os.getenv("OMEGA_MCP_PORT") or "8789")
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:414:        # health/reasons). Never touches or renames any pre-existing key above.
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:443:    """titan_body.json digest: per-organ health + the harness's own
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:444:    human-readable health_reason strings, surfaced verbatim (never re-derived)."""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:452:    healthy_ids: list[str] = []
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:457:        if o.get("health") == 0:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:458:            healthy_ids.append(organ_id)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:462:                "health": o.get("health"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:463:                "health_known": o.get("health_known"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:464:                "reason": _truncate(o.get("health_reason") or "", 200),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:473:        "healthy_count": len(healthy_ids),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:494:        "healthy_count": src.get("healthy_count"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:532:    """omega_body tool payload: organ health (titan_body.json) + heartbeat
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:653:    organ health_reason strings, and the journal/mood DBs). There is no
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:687:            reason = o.get("health_reason") or ""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:688:            text = f"organ {organ_id}: health={o.get('health')} — {reason}"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:739:        "scope": ["state.json:goals", "state.json:turns", "titan_body.json:organs.*.health_reason",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:939:        "description": "Search OMEGA's local textual sources (state.json goals/turns, titan_body organ health reasons, and the effect/gate/experience journals) for a substring match. There is no dedicated TITAN episodic/semantic memory store on this host yet -- results are honestly scoped to what actually exists, disclosed in the response's 'note' field.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:950:        "description": "Read-only organ health digest: per-organ health (titan_body.json, verbatim health_reason strings) plus heartbeat freshness (monitor.json, stalest-first). Honest 'no organ runtime data yet' if the harness hasn't written these files on this host yet.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:1247:        if self.path.rstrip("/") == "/health":
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:1253:        if self.path.rstrip("/") not in {"", "/mcp"}:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:1292:    server = ThreadingHTTPServer((BIND, PORT), Handler)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-lanec-20260927:1295:        server.serve_forever(poll_interval=0.25)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:27:from http.server import ThreadingHTTPServer
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:108:    health = _direct_request(person, "/health", timeout=0.55)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:122:        "health": health,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:239:                health = _local_request({"kind": "health"}, timeout=0.5)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:240:                entry["local_adapter_live"] = bool(health.get("ok"))
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:391:        if self.path.rstrip("/") == "/health":
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:416:    server = ThreadingHTTPServer((base.BIND, base.PORT), Handler)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp_fallback.py:419:        server.serve_forever(poll_interval=0.25)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:33:from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:47:PORT = int(os.getenv("OMEGA_MCP_PORT") or "8789")
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:414:        # health/reasons). Never touches or renames any pre-existing key above.
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:443:    """titan_body.json digest: per-organ health + the harness's own
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:444:    human-readable health_reason strings, surfaced verbatim (never re-derived)."""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:452:    healthy_ids: list[str] = []
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:457:        if o.get("health") == 0:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:458:            healthy_ids.append(organ_id)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:462:                "health": o.get("health"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:463:                "health_known": o.get("health_known"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:464:                "reason": _truncate(o.get("health_reason") or "", 200),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:473:        "healthy_count": len(healthy_ids),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:494:        "healthy_count": src.get("healthy_count"),
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:532:    """omega_body tool payload: organ health (titan_body.json) + heartbeat
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:653:    organ health_reason strings, and the journal/mood DBs). There is no
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:687:            reason = o.get("health_reason") or ""
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:688:            text = f"organ {organ_id}: health={o.get('health')} — {reason}"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:739:        "scope": ["state.json:goals", "state.json:turns", "titan_body.json:organs.*.health_reason",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:939:        "description": "Search OMEGA's local textual sources (state.json goals/turns, titan_body organ health reasons, and the effect/gate/experience journals) for a substring match. There is no dedicated TITAN episodic/semantic memory store on this host yet -- results are honestly scoped to what actually exists, disclosed in the response's 'note' field.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:950:        "description": "Read-only organ health digest: per-organ health (titan_body.json, verbatim health_reason strings) plus heartbeat freshness (monitor.json, stalest-first). Honest 'no organ runtime data yet' if the harness hasn't written these files on this host yet.",
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:1261:        if self.path.rstrip("/") == "/health":
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:1267:        if self.path.rstrip("/") not in {"", "/mcp"}:
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:1306:    server = ThreadingHTTPServer((BIND, PORT), Handler)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/omega_chatgpt_mcp.py.bak-laneb2-20260927:1309:        server.serve_forever(poll_interval=0.25)
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:20:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:21:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:22:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:36:      "health": 1,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:37:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:38:      "health_reason": "vault profile unavailable: chatgpt_bridge (FRANK_VOICE_BROKER_TOKEN; configuration /home/ai-core-node/.config/frankenstein/chatgpt-client.env)"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:55:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:56:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:57:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:71:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:72:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:73:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:90:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:91:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:92:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:106:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:107:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:108:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:122:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:123:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:124:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:141:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:142:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:143:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:157:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:158:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:159:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:176:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:177:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:178:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:195:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:196:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:197:      "health_reason": "providers registered=0 skipped=29 free_live=0/23 (omega-cli-claude: vault profile unavailable: claude_code_oauth; omega-cli-codex: vault profile unavailable: codex_chatgpt_oauth; omega-http-anthropic: vault profile unavailable: anthropic; omega-http-glm-flash: vault profile unavailable: glm5_flash; omega-http-groq: vault profile unavailable: groq; omega-http-nvidia-nim: vault profile unavailable: nvidia; omega-http-mistral: vault profile unavailable: mistral; omega-http-codestral: vault profile unavailable: mistral; omega-http-ministral-3b: vault profile unavailable: mistral; omega-http-openrouter: vault profile unavailable: openrouter; omega-http-nvidia-nemotron-ultra: vault profile unavailable: nvidia; omega-http-nvidia-nemotron-70b: vault profile unavailable: nvidia; omega-http-nvidia-deepseek-v4-flash: vault profile unavailable: nvidia; omega-http-nvidia-kimi-k3: vault profile unavailable: nvidia; omega-http-nvidia-mixtral-8x22b: vault profile unavailable: nvidia; omega-http-nvidia-nemotron-nano-omni: vault profile unavailable: nvidia; omega-http-nvidia-codestral-22b: vault profile unavailable: nvidia; omega-http-mistral-medium: vault profile unavailable: mistral; omega-http-ministral-8b: vault profile unavailable: mistral; omega-http-ministral-14b: vault profile unavailable: mistral; omega-http-groq-oss-20b: vault profile unavailable: groq; omega-http-groq-qwen3-27b: vault profile unavailable: groq; omega-http-openrouter-qwen3-27b: vault profile unavailable: openrouter; omega-http-openrouter-gemma-31b: vault profile unavailable: openrouter; omega-http-openrouter-nex-n25-pro: vault profile unavailable: openrouter; omega-http-openrouter-north-mini-code: vault profile unavailable: openrouter; omega-http-local-micro-llm: OMEGACV1_LOCAL_MICRO_LLM_URL not set (no local micro-llm declared); omega-local-entity: OMEGACV1_LOCAL_ENTITY_LLM_URL not set (no local entity llama-server declared); omega-http-deepseek-direct: vault profile unavailable: deepseek)"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:211:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:212:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:213:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:227:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:228:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:229:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:243:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:244:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:245:      "health_reason": "analyzer: configured (digital-retina at http://127.0.0.1:8000 reachable); capturer: configured via scrot; layout: configured via xdotool (single-screen, own-window fields always false -- this harness spawns no GUI children); observer: not wired (donor's action-announcement ledger not ported, out of scope); gaze: not wired (requires live camera + motion heuristics, out of scope)"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:259:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:260:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:261:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:275:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:276:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:277:      "health_reason": "grid10: configured; alarm: configured (personality_state read; empty table degrades to no-alarm, never fabricated)"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:294:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:295:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:296:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:313:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:314:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:315:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:332:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:333:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:334:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:348:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:349:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:350:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:367:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:368:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:369:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:386:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:387:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:388:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:402:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:403:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:404:      "health_reason": "started"
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:418:      "health": 0,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:419:      "health_known": true,
+/home/ai-core-node/.local/lib/omega-chatgpt-mcp/.crush/omega/titan_body.json:420:      "health_reason": "started"
+=== HTTP probes ===
+--- http://127.0.0.1:8784/
+HTTP/1.0 200 OK
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Sat, 03 Oct 2026 11:37:39 GMT
+Content-Type: text/html; charset=utf-8
+Content-Length: 3697
+
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<title>FranKenstein Local Bridge</title>
+<style>
+body{font-family:ui-monospace,Menlo,Consolas,monospace;background:#0d1117;color:#c9d1d9;max-width:900px;margin:2rem auto;padding:0 1rem}
+h1{color:#58a6ff;font-size:1.3rem}
+select,textarea,input,button{font-family:inherit;font-size:1rem;background:#161b22;color:#c9d1d9;border:1px solid #30363d;border-radius:6px;padding:.5rem}
+textarea{width:100%;height:5rem}
+button{background:#238636;color:#fff;border:none;cursor:pointer;padding:.6rem 1.2rem}
+button:hover{background:#2ea043}
+.row{margin:.8rem 0}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1rem;margin:1r
+--- http://127.0.0.1:8784/health
+HTTP/1.0 404 Not Found
+Server: BaseHTTP/0.6 Python/3.12.3
+Date: Sat, 03 Oct 2026 11:37:39 GMT
+
+
+--- http://127.0.0.1:8789/
+HTTP/1.0 405 Method Not Allowed
+Server: OmegaMCP/1 Python/3.12.3
+Date: Sat, 03 Oct 2026 11:37:39 GMT
+Allow: POST
+MCP-Protocol-Version: 2025-03-26
+Content-Length: 0
+
+
+--- http://127.0.0.1:8789/health
+HTTP/1.0 200 OK
+Server: OmegaMCP/1 Python/3.12.3
+Date: Sat, 03 Oct 2026 11:37:39 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 246
+MCP-Protocol-Version: 2025-03-26
+Cache-Control: no-store
+
+{"ok":true,"service":"omega-frankenstein-bridge","version":"1.1.0-fallback","auth_required":true,"effects_enabled":true,"github_control_plane_configured":false,"local_fallback_enabled":true,"local_socket":"/run/user/1000/omega-local-effect.sock"}
+--- http://127.0.0.1:8789/mcp
+HTTP/1.0 405 Method Not Allowed
+Server: OmegaMCP/1 Python/3.12.3
+Date: Sat, 03 Oct 2026 11:37:39 GMT
+Allow: POST
+MCP-Protocol-Version: 2025-03-26
+Content-Length: 0
+
+

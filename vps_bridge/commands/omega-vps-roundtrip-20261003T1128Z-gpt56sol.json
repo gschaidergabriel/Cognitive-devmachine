@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "omega-vps-roundtrip-20261003T1128Z-gpt56sol",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 30,
+  "command": "printf 'OMEGA_VPS_BRIDGE_OK\\n'; printf 'host='; hostname; printf 'user='; id -un; printf 'utc='; date -u +%Y-%m-%dT%H:%M:%SZ; test -d /workspace && echo 'workspace=present'"
+}

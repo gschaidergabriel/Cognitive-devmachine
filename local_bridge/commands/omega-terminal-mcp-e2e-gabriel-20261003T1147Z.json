@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-terminal-mcp-e2e-gabriel-20261003T1147Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 45,
+  "command": "python3 - <<'PY'\nimport json, os, urllib.request\npid='2574'\nenv={}\nfor item in open(f'/proc/{pid}/environ','rb').read().split(b'\\0'):\n    if b'=' in item:\n        k,v=item.split(b'=',1); env[k.decode(errors='ignore')]=v.decode(errors='ignore')\ntok=env.get('OMEGA_MCP_TOKEN','')\nprint('token_present=', bool(tok))\nassert tok, 'OMEGA_MCP_TOKEN missing'\ndef call(obj):\n    data=json.dumps(obj).encode()\n    req=urllib.request.Request('http://127.0.0.1:8789/mcp',data=data,headers={\n        'Content-Type':'application/json',\n        'Authorization':'Bearer '+tok,\n        'MCP-Protocol-Version':'2025-03-26'\n    },method='POST')\n    with urllib.request.urlopen(req,timeout=5) as r:\n        return r.status, json.loads(r.read().decode())\nst,init=call({\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-03-26\",\"capabilities\":{},\"clientInfo\":{\"name\":\"omega-terminal-repair\",\"version\":\"1.0\"}}})\nprint('initialize_http=',st)\nprint('initialize_protocol=',init.get('result',{}).get('protocolVersion'))\nprint('server_name=',init.get('result',{}).get('serverInfo',{}).get('name'))\nst,tools=call({\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{}})\nnames=[x.get('name') for x in tools.get('result',{}).get('tools',[])]\nprint('tools_http=',st)\nprint('tool_count=',len(names))\nprint('terminal_tools=',[n for n in names if n in {'omega_status','omega_execute','omega_read','omega_write_text','omega_receipt','omega_screenshot'}])\nassert st==200 and 'omega_execute' in names and 'omega_status' in names\nprint('OMEGA_TERMINAL_MCP_E2E_OK')\nPY"
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-terminal-stack-audit-gabriel-20261003T1140Z",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail\necho '=== services ==='\nfor s in frankenstein-local-bridge.service frankenstein-local-bridge-webui.service omega-chatgpt-bridge.service omega-chatgpt-mcp.service clay-local-bridge.service; do\n  printf '%s=' \"$s\"; systemctl --user is-active \"$s\" || true\ndone\necho '=== unit commands ==='\nfor s in frankenstein-local-bridge-webui.service omega-chatgpt-bridge.service omega-chatgpt-mcp.service; do\n  echo \"--- $s\"\n  systemctl --user show \"$s\" -p ExecStart -p Environment --no-pager || true\ndone\necho '=== listening sockets ==='\nss -ltnp 2>/dev/null | grep -E 'python|node|uvicorn|gunicorn|:8[0-9]{3}|:9[0-9]{3}|:3[0-9]{3}' || true\necho '=== recent errors ==='\nfor s in frankenstein-local-bridge-webui.service omega-chatgpt-bridge.service omega-chatgpt-mcp.service; do\n  echo \"--- $s\"\n  journalctl --user -u \"$s\" -n 40 --no-pager | tail -40 || true\ndone"
+}

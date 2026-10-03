@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "repair-ai-core-local-bridge-deepdiag-20261003T1149Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 ai-core-node@100.70.87.28 'bash -s' <<'REMOTE_SCRIPT'\nset -e\necho '=== daemon source 180-285 ==='\nnl -ba ~/.claude/star/local_bridge_daemon.py | sed -n '180,285p'\necho '=== fetch control ==='\ngit -C ~/.claude/star/local_bridge_state/repo fetch origin chatgpt-local-ai-core-node-control --prune\ngit -C ~/.claude/star/local_bridge_state/repo rev-parse origin/chatgpt-local-ai-core-node-control\necho '=== target show ==='\ngit -C ~/.claude/star/local_bridge_state/repo show origin/chatgpt-local-ai-core-node-control:local_bridge/commands/omega-local-ai-core-node-terminal-revive-probe-20261003T1132Z.json || true\necho '=== db target ==='\npython3 - <<'PY'\nimport sqlite3, pathlib\np=pathlib.Path.home()/'.claude/star/local_bridge_state/bridge.sqlite3'\nc=sqlite3.connect(p)\nprint(c.execute(\"select name, sql from sqlite_master where type='table'\").fetchall())\nprint(c.execute(\"select * from done where id=?\", (\"omega-local-ai-core-node-terminal-revive-probe-20261003T1132Z\",)).fetchall())\nPY\necho '=== service status short ==='\nsystemctl --user is-active frankenstein-local-bridge.service\nREMOTE_SCRIPT"
+}

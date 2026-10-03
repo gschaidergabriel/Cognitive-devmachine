@@ -1,0 +1,98 @@
+=== publish functions ===
+    85	
+    86	
+    87	def _git(*args, cwd=REPO, timeout=300, check=True):
+    88	    p = subprocess.run(["git", "-C", str(cwd), *args], capture_output=True, timeout=timeout)
+    89	    if check and p.returncode != 0:
+    90	        raise RuntimeError(f"git {args} failed: {text(p.stderr)}")
+    91	    return p
+    92	
+    93	
+    94	def sync_control():
+    95	    _git("fetch", "origin", f"refs/heads/{CONTROL_BRANCH}:refs/remotes/origin/{CONTROL_BRANCH}", check=False)
+    96	
+    97	
+    98	def sync_and_push_results(message: str):
+    99	    _git("add", "-A")
+   100	    diff = _git("diff", "--cached", "--quiet", check=False)
+   101	    if diff.returncode != 0:
+   102	        _git("commit", "-m", message)
+   103	    _git("push", "-u", "origin", f"HEAD:{RESULTS_BRANCH}", timeout=180)
+   104	
+   105	
+   106	def is_denied(command: str) -> str | None:
+   107	    for pat in DENY_PATTERNS:
+   108	        if re.search(pat, command):
+   109	            return pat
+   110	    return None
+   111	
+   112	
+   113	def op_exec(cmd: str, cwd: str, timeout: int):
+   114	    denied = is_denied(cmd)
+   115	    if denied:
+   116	        raise ValueError(f"DENIED_PATTERN:{denied}")
+   117	    workdir = cwd or str(pathlib.Path.home())
+   118	    return subprocess.run(["bash", "-lc", cmd], cwd=workdir, capture_output=True,
+   119	                           timeout=min(max(timeout, 1), MAX_TIMEOUT))
+   120	
+   168	        return op_read_file(str(s["path"]))
+   169	    if op == "write_text":
+   170	        return op_write_text(str(s["path"]), str(s.get("content", "")))
+   171	    if op == "screenshot":
+   172	        return op_screenshot(s.get("name"))
+   173	    raise ValueError("UNSUPPORTED_OP:" + op)
+   174	
+   175	
+   176	def publish_receipt(receipt: dict, stdout: bytes, stderr: bytes):
+   177	    d = REPO / RESULTS_PATH
+   178	    (d / "receipts").mkdir(parents=True, exist_ok=True)
+   179	    (d / "logs").mkdir(parents=True, exist_ok=True)
+   180	    cid = receipt["command_id"]
+   181	    (d / "receipts" / f"{cid}.json").write_text(json.dumps(receipt, indent=2) + "\n")
+   182	    (d / "logs" / f"{cid}.stdout.txt").write_bytes(stdout[-MAX_LOG:])
+   183	    (d / "logs" / f"{cid}.stderr.txt").write_bytes(stderr[-MAX_LOG:])
+   184	    (d / "LATEST.json").write_text(json.dumps(receipt, indent=2) + "\n")
+   185	
+   186	
+   187	def execute(path: pathlib.Path) -> bool:
+=== target receipt local ===
+{
+  "schema": "CLAY_LOCAL_RECEIPT/v1",
+  "command_id": "omega-local-ai-core-node-terminal-revive-probe-20261003T1132Z",
+  "command_sha256": "9e136d5b857b66a3e76efb5d96fd9eae6cd9c069df7c909769b3e63b8875cd9a",
+  "host": "ai-core-node",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "started_at": "2026-10-03T11:32:52.731688+00:00",
+  "finished_at": "2026-10-03T11:32:52.792727+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "e29debb443f8428fa1c95ae9ade2cc3f8373b4a64164ee841331fccd5b7bdd20",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "OMEGA_LOCAL_BRIDGE_OK\nhost=ai-core-node-projekt-frankenstein\nuser=ai-core-node\nutc=2026-10-03T11:32:52Z\nactive\n2563 /usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_daemon.py\n10510 /usr/bin/python3 /home/ai-core-node/.local/share/clay-local-bridge/bin/daemon.py\n124246 bash -lc set -euo pipefail; printf 'OMEGA_LOCAL_BRIDGE_OK\\n'; printf 'host='; hostname; printf 'user='; id -un; printf 'utc='; date -u +%Y-%m-%dT%H:%M:%SZ; systemctl --user is-active frankenstein-local-bridge.service 2>/dev/null || true; pgrep -af 'local_bridge_daemon.py|clay-local-bridge/bin/daemon.py' || true\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "REAL_LOCAL_HOST_AI_CORE_NODE_NOT_SANDBOXED"
+}
+=== git status ===
+## chatgpt-local-ai-core-node-results...origin/chatgpt-local-ai-core-node-results
+=== recent local commits ===
+4cec023b96 (HEAD -> chatgpt-local-ai-core-node-results, origin/chatgpt-local-ai-core-node-results) local bridge: 1 command(s) executed on ai-core-node
+5158fd62eb local bridge: 1 command(s) executed on ai-core-node
+798179ca97 local bridge: 1 command(s) executed on ai-core-node
+d31ab479ad local bridge: 1 command(s) executed on ai-core-node
+31c35adaed local bridge: 1 command(s) executed on ai-core-node
+16579a663f local bridge: 1 command(s) executed on ai-core-node
+c90fc4a8a5 local bridge: 1 command(s) executed on ai-core-node
+cd73831ed5 local bridge: 3 command(s) executed on ai-core-node
+=== result remote head ===
+4cec023b962068b199b7d7a1e20c2ad7492ae4ea	refs/heads/chatgpt-local-ai-core-node-results
+=== recent bridge journal errors ===
+=== github auth ===
+github.com
+  ✓ Logged in to github.com account gschaidergabriel (keyring)
+  - Active account: true
+  - Git operations protocol: https
+  - Token: gho_************************************
+  - Token scopes: 'gist', 'read:org', 'repo', 'workflow', 'write:packages'

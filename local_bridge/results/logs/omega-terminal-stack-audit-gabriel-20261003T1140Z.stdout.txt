@@ -1,0 +1,43 @@
+=== services ===
+frankenstein-local-bridge.service=active
+frankenstein-local-bridge-webui.service=active
+omega-chatgpt-bridge.service=active
+omega-chatgpt-mcp.service=active
+clay-local-bridge.service=active
+=== unit commands ===
+--- frankenstein-local-bridge-webui.service
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 /home/ai-core-node/.claude/star/local_bridge_webui.py ; ignore_errors=no ; start_time=[Fri 2026-10-02 11:02:39 +07] ; stop_time=[n/a] ; pid=2562 ; code=(null) ; status=0/0 }
+Environment=
+--- omega-chatgpt-bridge.service
+ExecStart={ path=/home/ai-core-node/.local/share/omega-chatgpt-bridge/.venv/bin/omega-chatgpt-bridge-server ; argv[]=/home/ai-core-node/.local/share/omega-chatgpt-bridge/.venv/bin/omega-chatgpt-bridge-server --config /home/ai-core-node/.local/share/omega-chatgpt-bridge/config.toml ; ignore_errors=no ; start_time=[Fri 2026-10-02 11:02:39 +07] ; stop_time=[n/a] ; pid=2571 ; code=(null) ; status=0/0 }
+Environment=
+--- omega-chatgpt-mcp.service
+ExecStart={ path=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; argv[]=/home/ai-core-node/.local/lib/omega-chatgpt-mcp/run.sh ; ignore_errors=no ; start_time=[Fri 2026-10-02 11:02:39 +07] ; stop_time=[n/a] ; pid=2574 ; code=(null) ; status=0/0 }
+Environment=
+=== listening sockets ===
+LISTEN 0      2048                     127.0.0.1:8091       0.0.0.0:*    users:(("python3",pid=2554,fd=7))        
+LISTEN 0      5                        127.0.0.1:8088       0.0.0.0:*    users:(("python3",pid=2555,fd=10))       
+LISTEN 0      100                      127.0.0.1:8114       0.0.0.0:*    users:(("python3",pid=2567,fd=3))        
+LISTEN 0      512                      127.0.0.1:8105       0.0.0.0:*    users:(("llama-server",pid=2553,fd=6))   
+LISTEN 0      5                        127.0.0.1:8100       0.0.0.0:*    users:(("python3",pid=2556,fd=5))        
+LISTEN 0      2048                     127.0.0.1:8000       0.0.0.0:*    users:(("python3",pid=2558,fd=13))       
+LISTEN 0      5                        127.0.0.1:8420       0.0.0.0:*    users:(("python3",pid=2557,fd=3))        
+LISTEN 0      5                        127.0.0.1:8317       0.0.0.0:*    users:(("python3",pid=4977,fd=3))        
+LISTEN 0      5                        127.0.0.1:8306       0.0.0.0:*    users:(("python3",pid=2592,fd=4))        
+LISTEN 0      5                        127.0.0.1:8305       0.0.0.0:*    users:(("python3",pid=2575,fd=3))        
+LISTEN 0      512                      127.0.0.1:8299       0.0.0.0:*    users:(("llama-server",pid=2619,fd=6))   
+LISTEN 0      512                      127.0.0.1:8199       0.0.0.0:*    users:(("llama-server",pid=2618,fd=6))   
+LISTEN 0      4096                     127.0.0.1:9050       0.0.0.0:*                                             
+LISTEN 0      5                        127.0.0.1:8791       0.0.0.0:*    users:(("python3",pid=2576,fd=3))        
+LISTEN 0      5                        127.0.0.1:8788       0.0.0.0:*    users:(("python3",pid=2495553,fd=3))     
+LISTEN 0      5                        127.0.0.1:8789       0.0.0.0:*    users:(("python3",pid=2574,fd=3))        
+LISTEN 0      5                        127.0.0.1:8784       0.0.0.0:*    users:(("python3",pid=2562,fd=3))        
+LISTEN 0      5                        127.0.0.1:8781       0.0.0.0:*    users:(("python3",pid=2560,fd=4))        
+LISTEN 0      4096                             *:8782             *:*                                             
+=== recent errors ===
+--- frankenstein-local-bridge-webui.service
+-- No entries --
+--- omega-chatgpt-bridge.service
+-- No entries --
+--- omega-chatgpt-mcp.service
+-- No entries --

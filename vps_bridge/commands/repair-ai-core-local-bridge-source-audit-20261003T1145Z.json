@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "repair-ai-core-local-bridge-source-audit-20261003T1145Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "ssh -o BatchMode=yes -o ConnectTimeout=8 ai-core-node@100.70.87.28 'bash -s' <<'REMOTE_SCRIPT'\nset -e\necho '=== current daemon key config ==='\ngrep -nE 'CONTROL_BRANCH|RESULTS_BRANCH|MACHINE|OWNER|POLL|def main|def execute|processed|sqlite|command_id|fetch|checkout|reset' ~/.claude/star/local_bridge_daemon.py | head -240 || true\necho '=== legacy daemon key config ==='\ngrep -nE 'CONTROL_BRANCH|RESULTS_BRANCH|MACHINE|OWNER|POLL|def main|def execute|processed|sqlite|command_id|fetch|checkout|reset' ~/.local/share/clay-local-bridge/bin/daemon.py | head -240 || true\necho '=== current daemon environment ==='\ntr '\\0' '\\n' </proc/2563/environ | grep -E 'LOCAL_BRIDGE|HOME|USER|PATH' || true\necho '=== legacy daemon environment ==='\ntr '\\0' '\\n' </proc/10510/environ | grep -E 'LOCAL_BRIDGE|HOME|USER|PATH' || true\necho '=== systemd user units matching bridge ==='\nsystemctl --user list-units --all --no-pager | grep -i bridge || true\necho '=== user crontab/process parent legacy ==='\nps -o pid,ppid,lstart,cmd -p 2563,10510 || true\nREMOTE_SCRIPT"
+}

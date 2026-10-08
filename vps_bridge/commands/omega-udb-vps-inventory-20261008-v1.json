@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-udb-vps-inventory-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "python3 - <<'PY'\nimport sqlite3,os\nfrom pathlib import Path\ncandidates=[\nPath('/workspace/omega_runtime/data/omega_unified.db'),\nPath('/workspace/omega_runtime/state/omega_runtime.sqlite3'),\nPath('/workspace/omega_runtime/state/omega.sqlite3'),\nPath('/workspace/omega_runtime/data/unified.db'),\nPath('/workspace/clay-global-research-entity/agentZero/unified.db'),\nPath('/home/ai-core-node/.local/share/agentzero/unified.db')]\nfor p in candidates:\n print('DB',str(p),'exists',p.is_file(),'size',p.stat().st_size if p.is_file() else None)\n if not p.is_file():continue\n try:\n  c=sqlite3.connect('file:'+str(p)+'?mode=ro',uri=True,timeout=5);c.execute('pragma query_only=on')\n  ts=[r[0] for r in c.execute(\"SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'\")]\n  print('TABLE_COUNT',len(ts),'QUICK',c.execute('pragma quick_check(1)').fetchone()[0])\n  for table in ('observation','source_subject','bridge_message','organ_telemetry','research_artifact','artikel','mem_doc','task','f3_run'):\n   if table in ts:\n    try:print('COUNT',table,c.execute('SELECT count(*) FROM \"'+table+'\"').fetchone()[0])\n    except sqlite3.Error:print('COUNT_ERROR',table)\n  c.close()\n except Exception as e:print('READ_ERROR',type(e).__name__)\nprint('RESEARCH_CHECKOUT',Path('/workspace/clay-global-research-entity/.git').exists())\nPY"
+}

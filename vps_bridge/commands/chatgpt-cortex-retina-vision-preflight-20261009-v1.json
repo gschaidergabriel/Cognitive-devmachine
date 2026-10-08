@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-cortex-retina-vision-preflight-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo BEGIN_CHATGPT_CORTEX_RETINA_PREFLIGHT; date -u +%FT%TZ; echo ROOT_COMPONENTS; find /workspace -maxdepth 3 -type d \\( -iname '*retina*' -o -iname '*cortex*' -o -iname '*screen*' -o -iname '*vision*' \\) 2>/dev/null | head -100; echo COMPONENT_ENTRYPOINTS; find /workspace/frankgrid10-organ /workspace -maxdepth 3 -type f \\( -iname '*retina*.py' -o -iname '*cortex*.py' -o -iname '*screenshot*.py' -o -iname '*capture*.py' \\) 2>/dev/null | head -90; echo CAPTURE_EXECUTABLES; for x in python3 chromium chromium-browser firefox google-chrome xwd grim scrot import ffmpeg playwright wkhtmltoimage; do command -v \"$x\" || true; done; echo DISPLAY; printf 'DISPLAY_SET='; if [ -n \"${DISPLAY:-}\" ]; then echo yes; else echo no; fi; printf 'WAYLAND_DISPLAY_SET='; if [ -n \"${WAYLAND_DISPLAY:-}\" ]; then echo yes; else echo no; fi; echo FRANKGRID_IPC; find /workspace/frankgrid10-organ/ipc -maxdepth 1 -type d -printf '%f\\n' | sort; echo END_PREFLIGHT",
+  "timeout_seconds": 60
+}

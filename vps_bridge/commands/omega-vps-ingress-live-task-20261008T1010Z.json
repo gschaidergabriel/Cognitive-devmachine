@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-ingress-live-task-20261008T1010Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu\npython3 - <<'PY'\nfrom pathlib import Path\nimport urllib.request,json\ntoken=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\npayload={'schema':'OMEGA_INGRESS/v1','owner':'gabriel','machine_id':'omega-vps','request_id':'vps-gateway-smoke-20261008-1010',\n'channel':'text','message':'OMEGA diagnostic only: inspect canonical GRID, GWT, TITAN-MX and UnifiedDB integration evidence and missing gates. Do not perform any host effects, file edits, or external tool actions; report evidence-bound observations.'}\nbody=json.dumps(payload).encode('utf-8')\nreq=urllib.request.Request('http://127.0.0.1:8787/v1/messages',data=body,method='POST',headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})\nwith urllib.request.urlopen(req,timeout=10) as resp:\n print('HTTP_STATUS',resp.status)\n print('INGRESS_RECEIPT',resp.read().decode())\nPY\n"
+}

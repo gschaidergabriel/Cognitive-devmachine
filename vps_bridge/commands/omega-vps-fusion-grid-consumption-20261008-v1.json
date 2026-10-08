@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-fusion-grid-consumption-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nimport sqlite3,json\nfrom pathlib import Path\nroot=Path('/workspace/omega_runtime/state')\ntid='ingress_fusion-e2e-20261008-v1'\nc=sqlite3.connect('file:'+str(root/'omega_runtime.sqlite3')+'?mode=ro',uri=True,timeout=4)\nrow=c.execute('select task_id,state from task where task_id=?',(tid,)).fetchone()\nprint('GRID_TASK',row)\nc.close()\nfor ext in ('.json','.consumed'):\n p=root/'inbox'/(tid+ext)\n print('INBOX',ext,p.exists())\nif (root/'STATUS.json').exists():\n s=json.loads((root/'STATUS.json').read_text())\n print('GRID_HEAD',s.get('frame_id'),s.get('updated_at'))\nPY"
+}

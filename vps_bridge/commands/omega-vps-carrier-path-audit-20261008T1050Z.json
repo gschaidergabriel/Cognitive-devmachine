@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-carrier-path-audit-20261008T1050Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 45,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport json\nbase=Path('/workspace/omega_runtime')\nfor p in [base/'carrier_repo',base/'carrier_repo'/'.git',Path('/workspace/clay-global-research-entity'),Path('/workspace/clay-global-research-entity/.git'),base/'state/master_bridge/carrier_git']:\n print('PATH',str(p),'exists',p.exists(),'is_git',p.name=='.git' and p.exists())\nerrfile=base/'state/master_bridge/LAST_ERROR.json'\ns=str(json.loads(errfile.read_text()).get('error','')).lower() if errfile.exists() else ''\nfor key in ['not a git repository','remote get-url','git -c','git remote','fatal','not a repository','could not read username','no origin']:\n print('MATCH',key, key in s)\nPY"
+}

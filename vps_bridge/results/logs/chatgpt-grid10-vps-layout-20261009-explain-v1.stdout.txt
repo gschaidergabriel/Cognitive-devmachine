@@ -1,0 +1,33 @@
+BASE
+/workspace
+DIRECTORIES
+/workspace/frankgrid10-organ
+/workspace/frankgrid10-organ/code
+/workspace/frankgrid10-organ/code/__pycache__
+/workspace/frankgrid10-organ/code/checkpoints
+/workspace/frankgrid10-organ/identity
+/workspace/frankgrid10-organ/identity/epochs
+/workspace/frankgrid10-organ/ipc
+/workspace/frankgrid10-organ/ipc/deadletter
+/workspace/frankgrid10-organ/ipc/inbox
+/workspace/frankgrid10-organ/ipc/outbox
+/workspace/frankgrid10-organ/ipc/processing
+/workspace/frankgrid10-organ/ipc/receipts
+/workspace/frankgrid10-organ/logs
+/workspace/frankgrid10-organ/receipts
+/workspace/frankgrid10-organ/run
+/workspace/frankgrid10-organ/state
+CORE_FILES
+-rwxr-xr-x 1 root root 36K Sep 12 03:06 /workspace/frankgrid10-organ/code/frankgrid10_v2.py
+-rw-r--r-- 1 root root 11K Sep 12 03:21 /workspace/frankgrid10-organ/code/organ_daemon.py
+-rw-r--r-- 1 root root 124K Oct  8 20:23 /workspace/frankgrid10-organ/state/frankgrid10.sqlite3
+-rw-r--r-- 1 root root 817 Oct  8 21:38 /workspace/frankgrid10-organ/run/heartbeat.json
+DAEMON
+940949 python3 /workspace/frankgrid10-organ/code/organ_daemon.py --poll 0.5
+2920961 bash -lc set -e; echo BASE; pwd; echo DIRECTORIES; find /workspace/frankgrid10-organ -maxdepth 2 -type d -print | sort | head -45; echo CORE_FILES; for f in /workspace/frankgrid10-organ/code/frankgrid10_v2.py /workspace/frankgrid10-organ/code/organ_daemon.py /workspace/frankgrid10-organ/state/frankgrid10.sqlite3 /workspace/frankgrid10-organ/run/heartbeat.json; do if test -f "$f"; then ls -lh "$f"; else echo MISSING "$f"; fi; done; echo DAEMON; pgrep -af '[o]rgan_daemon.py' | head -6 || true; echo HEARTBEAT; python3 -c 'import json; h=json.load(open("/workspace/frankgrid10-organ/run/heartbeat.json")); print({k:h.get(k) for k in ("status","seq","runtime_epoch_id","resource")})'; echo SQLITE; python3 -c 'import sqlite3; c=sqlite3.connect("file:/workspace/frankgrid10-organ/state/frankgrid10.sqlite3?mode=ro",uri=True); print(c.execute("PRAGMA quick_check").fetchone()[0]); print("TABLES",[x[0] for x in c.execute("SELECT name FROM sqlite_master WHERE type=\"table\" ORDER BY name")][:25])'; echo COMPLETE
+HEARTBEAT
+{'status': 'RUNNING', 'seq': 4612084, 'runtime_epoch_id': 'epoch-0779f552-8ab3-4f24-a785-2ff6fe55f239', 'resource': {'cpu_count': 4, 'disk_free': 29345816576, 'load1': 0.32, 'load_per_cpu': 0.08, 'mem_available': 9263677440, 'reasons': [], 'status': 'GREEN', 'thresholds': {'max_load_per_cpu': 2.5, 'min_disk_free': 2147483648, 'min_mem_available': 536870912}}}
+SQLITE
+ok
+TABLES ['assembly', 'assembly_item', 'cell_state', 'checkpoint', 'competition', 'counter_hypothesis', 'global_receipt', 'memory_item', 'meta', 'mirror', 'receipt', 'turn']
+COMPLETE

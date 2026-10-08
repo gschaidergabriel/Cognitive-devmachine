@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "chatgpt-grid-organ-preflight-20261009-0314-v1",
+  "command_sha256": "05696c37b878d30633a2af2dd7dffeb6f2f7227653defdc54dfc2194c574f5a0",
+  "started_at": "2026-10-08T20:19:43.143468+00:00",
+  "finished_at": "2026-10-08T20:19:43.432669+00:00",
+  "status": "FAIL",
+  "exit_code": 2,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "51b96abd0bd94b2bf3dfb9132bf363f2f133dc82f008589c7e0c66e0370a0b3c",
+  "stdout_tail": "",
+  "stderr_tail": "bash: -c: line 1: syntax error near unexpected token `do'\nbash: -c: line 1: `set -e\\necho 'BEGIN_CHATGPT_GRID_READONLY_PREFLIGHT'\\ndate -u +%Y-%m-%dT%H:%M:%SZ\\necho '--- candidate dirs ---'\\nfind /workspace -maxdepth 2 -type d \\( -iname '*grid*' -o -iname '*organ*' -o -iname '*chatgpt*' \\) -print 2>/dev/null | head -70\\necho '--- frankgrid contents ---'\\nfind /workspace/frankgrid10-organ -maxdepth 2 -type f 2>/dev/null | grep -vE '(\\.db$|\\.sqlite|\\.env$|token|secret|credential|key)' | head -55 || true\\necho '--- process status ---'\\npgrep -af 'frankgrid10-organ/code/organ_daemon.py|chatgpt.*grid|grid.*chatgpt' | sed -E 's/(Bearer |token=)[^ ]+/\\1[REDACTED]/g' | head -20 || true\\necho '--- available doc summaries ---'\\nfor f in /workspace/frankgrid10-organ/README.md /workspace/frankgrid10-organ/code/README.md; do if [ -f \"\" ]; then head -55 \"\"; fi; done\\necho 'END_CHATGPT_GRID_READONLY_PREFLIGHT''\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

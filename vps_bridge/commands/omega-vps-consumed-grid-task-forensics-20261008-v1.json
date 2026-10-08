@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-consumed-grid-task-forensics-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nimport json,sqlite3\nfrom pathlib import Path\nroot=Path('/workspace/omega_runtime/state')\ntid='ingress_fusion-e2e-20261008-v1'\np=root/'inbox'/(tid+'.consumed')\nprint('CONSUMED_EXISTS',p.exists())\nif p.exists():\n try:\n  d=json.loads(p.read_text())\n  print('FILE_TASK_ID',d.get('task_id'),'OWNER',d.get('owner_id'),'FUSION_ROUNDS',(d.get('cognitive_fusion') or {}).get('grid_preframe',{}).get('round_count'))\n except Exception as e:print('JSON_ERROR',type(e).__name__)\nfor db in (root/'omega_runtime.sqlite3',root/'omega.sqlite3',Path('/workspace/omega_runtime/data/omega_unified.db')):\n if not db.exists():continue\n con=sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True,timeout=4)\n try:\n  cols=[x[1] for x in con.execute('pragma table_info(task)')]\n  print('DATABASE',db.name,'HAS_TASK_TABLE',bool(cols),'COLUMNS',cols[:12])\n  if cols:\n   for col in ['task_id','id']:\n    if col in cols:\n     print('FOUND',db.name,col,con.execute('select count(*) from task where \"'+col+'\"=?',(tid,)).fetchone()[0])\n   print('TOTAL_TASK_ROWS',db.name,con.execute('select count(*) from task').fetchone()[0])\n except Exception as e:print('QUERY_ERROR',db.name,type(e).__name__)\n finally:con.close()\nPY"
+}

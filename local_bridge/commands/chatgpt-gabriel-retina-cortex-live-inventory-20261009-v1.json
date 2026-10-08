@@ -1,0 +1,7 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-gabriel-retina-cortex-live-inventory-20261009-v1",
+  "op": "exec",
+  "command": "set -e; echo OWNER_MACHINE; hostname; whoami; echo RETINA_CORTEX_PATHS; find \"$HOME\" -maxdepth 4 \\( -iname '*retina*' -o -iname '*cortex*' -o -iname 'frank_eye.py' -o -iname '*percept*' \\) -print 2>/dev/null | head -100; echo RETINA_CORTEX_PROCESSES; ps -eo pid,comm,args | grep -Ei '[d]igital.?retina|[f]rank_eye|[r]etina|[c]ortex|[p]erceptual' | cut -c 1-210 | head -35; echo RETINA_SERVICES; (systemctl --user list-units --type=service --state=running --no-legend --plain 2>/dev/null || true) | grep -Ei 'retina|cortex|frank|vision|perception|bridge' | head -35; echo SENSOR_INTERFACES; find \"$HOME\" -maxdepth 4 -type f \\( -iname 'retina.py' -o -iname 'retina_pipeline.py' -o -iname 'frank_eye.py' -o -iname 'perception_fabric.py' \\) 2>/dev/null | head -35; echo END",
+  "timeout_seconds": 90
+}

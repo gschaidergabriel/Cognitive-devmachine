@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-grid10-current-turn-pre-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "python3 - <<'PY'\nimport json,os,time,uuid\nfrom pathlib import Path\nbase=Path(\"/workspace/frankgrid10-organ/ipc\")\ncid=\"chatgpt-grid10-current-turn-pre-20261009-0314-v1\"\nobj={\"schema\":\"FRANKGRID10_ORGAN_COMMAND/v1\",\"command_id\":cid,\"op\":\"PRE\",\"prompt\":\"du als chat gpt sollstz darünber laufen\\n\\ndas alles hat mit om,ega nichts zu tun du sollstz darüber laufen\"}\ninbox=base/\"inbox\"/(cid+\".json\");receipt=base/\"receipts\"/(cid+\".json\")\nif inbox.exists() or receipt.exists(): raise SystemExit(\"DUPLICATE_ID\")\ntmp=base/\"inbox\"/(\".\"+cid+\".\"+uuid.uuid4().hex+\".tmp\")\ntmp.write_text(json.dumps(obj,ensure_ascii=False,sort_keys=True)+\"\\n\")\nos.replace(tmp,inbox)\nprint(\"PRE_SUBMITTED\",cid,flush=True)\nfor i in range(40):\n    if receipt.is_file(): break\n    time.sleep(0.5)\nif not receipt.is_file(): raise SystemExit(\"PRE_RECEIPT_MISSING\")\nr=json.loads(receipt.read_text());print(\"PRE_STATUS\",r.get(\"status\"));print(\"PRE_RECEIPT\",json.dumps(r,ensure_ascii=False)[:10000])\nif r.get(\"status\")!=\"PASS\": raise SystemExit(\"PRE_FAILED\")\nPY",
+  "timeout_seconds": 65
+}

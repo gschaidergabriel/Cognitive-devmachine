@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-grid-organ-preflight-20261009-0314-v2",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo BEGIN_CHATGPT_GRID_READONLY_PREFLIGHT; date -u +%Y-%m-%dT%H:%M:%SZ; echo CANDIDATE_DIRS; find /workspace -maxdepth 2 -type d -iname '*grid*' -print 2>/dev/null | head -35; find /workspace -maxdepth 2 -type d -iname '*organ*' -print 2>/dev/null | head -35; find /workspace -maxdepth 2 -type d -iname '*chatgpt*' -print 2>/dev/null | head -35; echo FRANKGRID_FILES; find /workspace/frankgrid10-organ -maxdepth 2 -type f 2>/dev/null | grep -vE '(\\.db$|\\.sqlite|\\.env$|token|secret|credential|key)' | head -50 || true; echo ORGAN_PROCESS; ps -eo pid,comm,args | grep -E '[o]rgan_daemon.py' | head -8 || true; echo END_CHATGPT_GRID_READONLY_PREFLIGHT",
+  "timeout_seconds": 60
+}

@@ -1,0 +1,142 @@
+ENV_NONSECRET_PATHS
+/workspace/omega_runtime/current/omega/grid_runtime_v3.py 21435 bytes
+/workspace/omega_runtime/current/omega/unified_store.py 15062 bytes
+/workspace/omega_runtime/current/omega/master_bridge_carrier.py 8931 bytes
+/workspace/omega_runtime/current/schema/omega.sql 5372 bytes
+STATE TOP
+total 496360
+drwxr-xr-x 22 root root      4096 Oct  8 08:54 .
+drwxr-xr-x 10 root root      4096 Sep 13 03:59 ..
+-rw-r--r--  1 root root     14807 Sep 13 03:59 ASSEMBLY_PREFLIGHT.json
+-rw-r--r--  1 root root     14135 Oct  8 08:54 ASSEMBLY_STATUS.json
+-rw-r--r--  1 root root       216 Sep 13 03:59 RELAY_RECOVERY_STATUS.json
+-rw-r--r--  1 root root       363 Sep 12 19:52 RELAY_STATUS.json
+-rw-r--r--  1 root root       692 Oct  8 08:54 STATUS.json
+-rw-r--r--  1 root root      1516 Oct  8 08:54 SUPERVISOR_STATUS.json
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 assembly
+drwxr-xr-x  2 root root      4096 Sep 12 11:26 bridge_git
+drwxr-xr-x  2 root root      4096 Sep 12 10:50 candidates
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 cortex_candidates
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 cortex_feedback
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 cortex_inbox
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 cortex_projections
+drwxr-xr-x  2 root root      4096 Sep 12 19:52 cortex_rejected
+drwxr-xr-x  2 root root      4096 Oct  8 08:54 cortex_state
+drwxr-xr-x  2 root root      4096 Sep 12 13:27 inbox
+drwxr-xr-x  2 root root      4096 Sep 13 03:59 logs
+drwxr-xr-x  5 root root      4096 Oct  8 08:35 master_bridge
+-rw-r--r--  1 root root         7 Sep 13 03:59 omega-supervisor.lock
+-rw-r--r--  1 root root  18460672 Oct  8 05:32 omega.sqlite3
+-rw-r--r--  1 root root     32768 Oct  8 08:54 omega.sqlite3-shm
+-rw-r--r--  1 root root   4148872 Oct  8 08:54 omega.sqlite3-wal
+-rw-r--r--  1 root root 481103872 Oct  8 08:46 omega_runtime.sqlite3
+-rw-r--r--  1 root root     32768 Oct  8 08:54 omega_runtime.sqlite3-shm
+-rw-r--r--  1 root root   4235392 Oct  8 08:54 omega_runtime.sqlite3-wal
+drwxr-xr-x  2 root root     94208 Oct  8 08:35 outbox
+drwxr-xr-x  4 root root      4096 Sep 12 13:43 outer_bridge
+drwxr-xr-x  5 root root      4096 Sep 12 13:29 pr2179_verify2_3ad6898af043794b3ea488403678fba1f6e935dc
+drwxr-xr-x  5 root root      4096 Sep 12 13:26 pr2179_verify_8afce007e6960c6e0b006d9ef0f7ef484725feba
+drwxr-xr-x  2 root root      4096 Sep 12 11:26 receipts
+drwxr-xr-x  2 root root      4096 Sep 12 11:26 relay_results
+drwxr-xr-x  2 root root      4096 Oct  8 08:54 telemetry
+drwxr-xr-x  4 root root      4096 Sep 12 11:26 telemetry_bridge_git
+CURRENT FILES
+DB ENV PATH DEFINITIONS
+13:from .unified_store import UnifiedStore, now
+39:        self.store = UnifiedStore(db_path, repo_root / "schema")
+433:    ap.add_argument("--root", default=os.getenv("OMEGA_RUNTIME_ROOT", "/workspace/omega_runtime/state"))
+434:    ap.add_argument("--interval", type=float, default=float(os.getenv("OMEGA_GRID_INTERVAL", "30")))
+435:    ap.add_argument("--router-config", default=os.getenv("OMEGA_ROUTER_CONFIG", "/workspace/omega_runtime/current/config/organ_router.json"))
+436:    ap.add_argument("--db", default=os.getenv("OMEGA_UNIFIED_DB", "/workspace/omega_runtime/data/omega_unified.db"))
+437:    ap.add_argument("--repo-root", default=os.getenv("OMEGA_REPO_ROOT", "/workspace/omega_runtime/current"))
+438:    ap.add_argument("--once", action="store_true")
+CURRENT_SUPERVISOR config
+
+from .unified_store import now
+
+
+CHILDREN = {
+    "assembly": [sys.executable, "-m", "omega.assembly"],
+    "grid": [sys.executable, "-m", "omega.grid_runtime_v3"],
+    "relay": [sys.executable, "-m", "omega.relay_entrypoint"],
+    "receipt_reconciler": [sys.executable, "-m", "omega.spool_receipt_reconciler"],
+    "telemetry": [sys.executable, "-m", "omega.telemetry_daemon"],
+    "master_bridge": [sys.executable, "-m", "omega.master_bridge_carrier"],
+}
+
+STABLE_UPTIME_SECONDS = 60.0
+MAX_RESTART_BACKOFF_SECONDS = 60.0
+DEFAULT_HOST_RELAY_STALL_SECONDS = 360.0
+STALL_TERM_GRACE_SECONDS = 10.0
+
+
+class Supervisor:
+    """Canonical OMEGA runtime supervisor.
+
+    Startup first proves the static assembly core through the existing read-only
+    assembly monitor.  The long-running central runtime then uses the credential-free
+    OUTER_SPOOL boundary for host effects while preserving crash quarantine,
+    no-automatic-replay semantics, watchdog/backoff behavior and exact late-receipt
+    reconciliation.  Privileged host-side transport remains outside the sandbox.
+    """
+
+    def __init__(self, runtime_root: Path, repo_root: Path) -> None:
+        self.runtime_root = runtime_root
+        self.repo_root = repo_root
+        self.logs = runtime_root / "logs"
+        self.logs.mkdir(parents=True, exist_ok=True)
+        self.status_path = runtime_root / "SUPERVISOR_STATUS.json"
+        self.assembly_preflight_path = runtime_root / "ASSEMBLY_PREFLIGHT.json"
+        self.procs: dict[str, subprocess.Popen[Any]] = {}
+        self.log_handles: dict[str, Any] = {}
+        self.started_at: dict[str, float] = {}
+        self.restart_count: dict[str, int] = {name: 0 for name in CHILDREN}
+        self.restart_after: dict[str, float] = {}
+        self.last_exit_code: dict[str, int | None] = {name: None for name in CHILDREN}
+        self.host_relay_stall_seconds = max(
+            60.0,
+            float(os.getenv("OMEGA_RELAY_HOST_STALL_SECONDS", str(DEFAULT_HOST_RELAY_STALL_SECONDS))),
+        )
+        self.relay_stall_pid: int | None = None
+        self.relay_stall_signal_at: float | None = None
+        self.relay_stall_kill_count = 0
+        self.last_relay_stall: dict[str, Any] | None = None
+        self.stop = False
+
+    @property
+    def db_path(self) -> Path:
+        return self.runtime_root.parent / "data" / "omega_unified.db"
+
+    def child_env(self) -> dict[str, str]:
+        env = os.environ.copy()
+        env.update({
+            "PYTHONPATH": str(self.repo_root),
+            "OMEGA_RUNTIME_ROOT": str(self.runtime_root),
+            "OMEGA_REPO_ROOT": str(self.repo_root),
+            "OMEGA_UNIFIED_DB": str(self.db_path),
+            "OMEGA_ROUTER_CONFIG": str(self.repo_root / "config" / "organ_router.json"),
+            "OMEGA_AUTONOMY_POLICY": str(self.repo_root / "config" / "autonomy_policy.json"),
+            "OMEGA_CARRIER_REPO": str(self.runtime_root.parent / "carrier_repo"),
+            "OMEGA_OUTER_SPOOL": str(self.runtime_root / "outer_bridge"),
+            "OMEGA_RELAY_MODULE": "omega.spool_bridge_relay_parallel",
+        })
+        return env
+
+    def assembly_preflight(self) -> dict[str, Any]:
+        """Validate the canonical composition before any long-running child starts.
+
+        ``omega.assembly --once`` is the existing read-only assembly monitor. Reusing
+        it here avoids a second validator or authority. It may write assembly status and
+        evidence to UnifiedDB, but it starts no donor daemon and performs no host/effect
+        action. Probe-required donor organs may remain DECLARED_UNVERIFIED; the hard
+        requirement for process startup is a valid manifest plus a bound static core.
+        """
+        cmd = [
+MASTER MAILBOX COUNTS
+/workspace/omega_runtime/state/master_bridge/submitted: 0
+/workspace/omega_runtime/state/master_bridge/responses: 0
+PROCESSES omega count
+1964896 python3 -m omega.supervisor --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001
+1964901 /usr/bin/python3 -m omega.grid_runtime_v3
+1964906 /usr/bin/python3 -m omega.master_bridge_carrier
+2022993 bash -lc set -eu cd /workspace/omega_runtime printf 'ENV_NONSECRET_PATHS\n' for p in /workspace/omega_runtime/current/omega/grid_runtime_v3.py /workspace/omega_runtime/current/omega/unified_store.py /workspace/omega_runtime/current/omega/master_bridge_carrier.py /workspace/omega_runtime/current/schema/omega.sql; do stat -c '%n %s bytes' "$p" 2>/dev/null || :; done printf 'STATE TOP\n'; ls -la /workspace/omega_runtime/state | head -65 printf 'CURRENT FILES\n'; find /workspace/omega_runtime/current -maxdepth 2 -type f -iname '*context*' -o -iname '*voice*' | head -30 printf 'DB ENV PATH DEFINITIONS\n'; grep -nE 'OMEGA_(DB|RUNTIME_ROOT|GRID|STATE)|default=|UnifiedStore|add_argument' /workspace/omega_runtime/current/omega/grid_runtime_v3.py | tail -35 printf 'CURRENT_SUPERVISOR config\n'; sed -n '15,95p' /workspace/omega_runtime/current/omega/supervisor.py printf 'MASTER MAILBOX COUNTS\n'; for p in /workspace/omega_runtime/state/master_bridge/{submitted,responses}; do printf '%s: ' "$p"; find "$p" -maxdepth 1 -type f 2>/dev/null | wc -l; done printf 'PROCESSES omega count\n'; pgrep -af 'omega.(grid_runtime|supervisor|master_bridge|relay)' | head -30 || : 

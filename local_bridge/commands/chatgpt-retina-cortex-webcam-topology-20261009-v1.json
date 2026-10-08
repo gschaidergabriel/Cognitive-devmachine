@@ -1,0 +1,7 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "chatgpt-retina-cortex-webcam-topology-20261009-v1",
+  "op": "exec",
+  "command": "set -e; echo HOST_ID; hostname; echo CAPTURE_DEVICES; for p in /dev/video* /dev/media*; do if [ -e \"$p\" ]; then ls -ld \"$p\"; fi; done; echo CAMERA_TOOLS; command -v v4l2-ctl || true; command -v ffmpeg || true; echo SENSOR_PID; ps -eo pid,comm,args | grep -Ei '[d]igital.?retina|[/]opt/entityos/voice/cortex.py|[s]ichtd.py|[w]ebcam' | cut -c 1-230 | head -35; echo SVC_STATE; for s in digital-retina.service frankenstein-cortex.service sichtd.service frankenstein-local-bridge.service; do systemctl --user is-active \"$s\" 2>/dev/null || true; done; echo SVC_META; for s in digital-retina.service frankenstein-cortex.service sichtd.service; do echo \"$s\"; systemctl --user show \"$s\" -p MainPID -p SubState -p FragmentPath --no-pager 2>/dev/null | head -6; done; echo TAILSCALE_AVAILABLE; command -v tailscale || true; echo TAILSCALE_STATE; if command -v tailscale >/dev/null 2>&1; then tailscale status --json 2>/dev/null | python3 -c 'import sys,json; x=json.load(sys.stdin);print({\"BackendState\":x.get(\"BackendState\"),\"SelfDNS\":(x.get(\"Self\") or {}).get(\"DNSName\"),\"Tailnet\":(x.get(\"CurrentTailnet\") or {}).get(\"Name\")})' || true; fi; echo LOCAL_LISTEN; ss -ltn 2>/dev/null | head -22; echo END",
+  "timeout_seconds": 75
+}

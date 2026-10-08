@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-needle4b-checkpoint-audit-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 35,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os\nhub=Path.home()/'.cache/huggingface/hub'\nfor name in ['models--Cactus-Compute--needle','models--huihui-ai--Huihui-Qwen3.5-4B-abliterated','models--huihui-ai--Huihui-Qwen3.5-2B-abliterated']:\n root=hub/name\n print('MODEL',name,'exists',root.is_dir())\n if not root.is_dir():continue\n sizes=[]\n for p in (root/'snapshots').glob('**/*'):\n  if not p.is_file():continue\n  try:\n   st=p.stat()\n   if p.name.lower().endswith(('.safetensors','.gguf','.pkl','.bin','.model','.json')):\n    sizes.append((p.name,st.st_size))\n  except OSError:pass\n print('ARTIFACT_COUNT',len(sizes),'LARGEST_FILES',sorted(sizes,key=lambda t:-t[1])[:8])\nPY"
+}

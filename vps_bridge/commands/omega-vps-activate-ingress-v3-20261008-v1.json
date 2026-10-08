@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-activate-ingress-v3-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu\nBASE=/workspace/omega_runtime/extensions/ingress_v3\nLOG=/workspace/omega_runtime/state/logs/ingress_gateway_v3.log\numask 077\ntmux new-session -d -s omega-ingress-v3-canary \"cd $BASE && PYTHONPATH=. exec python3 -m omega.ingress_gateway serve --owner gabriel --machine omega-vps --port 8788 >>$LOG 2>&1\"\npython3 - <<'PY'\nfrom pathlib import Path\nimport urllib.request,time\ntoken=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\nreq=urllib.request.Request('http://127.0.0.1:8788/v1/health',headers={'Authorization':'Bearer '+token})\nfor _ in range(15):\n try:\n  with urllib.request.urlopen(req,timeout=2) as resp:\n   print('CANARY',resp.status)\n   break\n except Exception:time.sleep(.2)\nelse:raise AssertionError('CANARY_UNAVAILABLE')\nPY\ntmux kill-session -t omega-ingress-v3-canary\ntmux has-session -t omega-ingress\ntmux kill-session -t omega-ingress\ntmux new-session -d -s omega-ingress \"cd $BASE && PYTHONPATH=. exec python3 -m omega.ingress_gateway serve --owner gabriel --machine omega-vps --port 8787 >>$LOG 2>&1\"\npython3 - <<'PY'\nfrom pathlib import Path\nimport urllib.request,time\ntoken=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\nreq=urllib.request.Request('http://127.0.0.1:8787/v1/health',headers={'Authorization':'Bearer '+token})\nfor _ in range(20):\n try:\n  with urllib.request.urlopen(req,timeout=2) as resp:\n   print('ACTIVE_V3',resp.status)\n   break\n except Exception:time.sleep(.25)\nelse:raise AssertionError('V3_NOT_READY_RESTORE_INGRESS_V2')\nPY"
+}

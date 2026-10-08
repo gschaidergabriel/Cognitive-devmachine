@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-carrier-transport-diagnosis-20261008T1100Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nimport json,subprocess,os\nfrom pathlib import Path\np=Path('/workspace/omega_runtime/state/master_bridge/LAST_ERROR.json')\ns=str(json.loads(p.read_text()).get('error','')).lower() if p.exists() else ''\nfor k in ['dubious ownership','safe.directory','not a git repository','git clone','git fetch','git remote','remote get-url','could not read','repository not found','fatal','permission','origin','credential','no such remote','ssh']:\n print('ERR',k.replace(' ','_'),k in s)\nrepo='/workspace/omega_runtime/carrier_repo'\nfor args in [['rev-parse','--is-inside-work-tree'],['remote','get-url','origin']]:\n q=subprocess.run(['git','-C',repo]+args,capture_output=True,timeout=8)\n print('GIT_CHECK',args[0], 'rc',q.returncode,'stdout_nonempty',bool(q.stdout),'stderr_nonempty',bool(q.stderr))\nPY"
+}

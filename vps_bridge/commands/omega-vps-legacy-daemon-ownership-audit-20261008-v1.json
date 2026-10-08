@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-legacy-daemon-ownership-audit-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\np=Path('/workspace/omega_runtime/omega_daemon.py')\ns=p.read_text(encoding='utf-8')\nprint('DAEMON_BYTES',p.stat().st_size,'LINE_COUNT',len(s.splitlines()))\nfor i,line in enumerate(s.splitlines(),1):\n if any(w in line for w in ('omega.sqlite3','inbox','\\.consumed','rename(','def ','while True','outbox','effect','RESULTS','task_id','CREATE TABLE')):\n  print('LINE',i,line.strip()[:190])\nPY"
+}

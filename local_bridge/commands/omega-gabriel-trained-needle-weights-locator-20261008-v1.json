@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-trained-needle-weights-locator-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 95,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os,hashlib\nhome=Path.home()\nroots=[home/'needle',home/'work',home/'omega',home/'aicore',home/'Desktop',home/'Downloads',home/'.local/share']\nseen=set();matches=[]\nfor root in roots:\n if not root.is_dir():continue\n for current,ds,files in os.walk(root):\n  depth=len(Path(current).parts)-len(root.parts)\n  if depth>=5:ds.clear()\n  else:ds[:]=[x for x in ds if x not in ('.git','node_modules','venv','.venv','__pycache__','pip','cache','models')]\n  for name in files:\n   low=name.lower()\n   if low in ('needle.pkl','needle.safetensors','needle.gguf','needle.pt','needle.pth') or (low.startswith('needle_') and low.endswith(('.pkl','.safetensors','.gguf'))):\n    p=Path(current)/name\n    try:\n     q=p.resolve();st=q.stat()\n     if str(q) in seen:continue\n     seen.add(str(q))\n     matches.append((str(p),st.st_size))\n    except OSError:pass\nprint('CANDIDATE_NEEDLE_WEIGHTS',len(matches))\nfor path,size in matches[:25]:\n print('CANDIDATE',path,'BYTES',size)\nPY"
+}

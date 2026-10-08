@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-ingress-v5-switch-failure-audit-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "python3 - <<'PY'\nimport urllib.request,urllib.error,subprocess\nfrom pathlib import Path\nt=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\nfor port in (8787,8788):\n req=urllib.request.Request('http://127.0.0.1:'+str(port)+'/v1/health',headers={'Authorization':'Bearer '+t})\n try:\n  with urllib.request.urlopen(req,timeout=2) as r:print('HTTP',port,r.status)\n except Exception as e:print('HTTP',port,type(e).__name__)\np=subprocess.run(['tmux','ls'],capture_output=True,text=True,timeout=3)\nprint('TMUX_RC',p.returncode,'TMUX_NAMES',[x.split(':')[0] for x in p.stdout.splitlines()])\nfor x in ['/workspace/omega_runtime/extensions/ingress_v4','/workspace/omega_runtime/extensions/ingress_v5']:\n print('CODE_VERSION',x,Path(x).is_dir())\nPY"
+}

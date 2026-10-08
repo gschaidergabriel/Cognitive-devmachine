@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-research-fastforward-incremental-ingest-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 200,
+  "command": "set -eu\nR=/workspace/omega_runtime/imports/research_fresh\ntest -z \"$(git -C \"$R\" status --porcelain)\"\ngit -C \"$R\" merge --ff-only origin/main\nprintf 'RESEARCH_SOURCE_HEAD='; git -C \"$R\" rev-parse HEAD\ncd /workspace/omega_runtime/extensions/ingress_v3\nPYTHONPATH=. python3 -m omega.research_ingest ingest --root \"$R\" --db /workspace/omega_runtime/data/omega_unified.db\npython3 - <<'PY'\nimport sqlite3\np='file:/workspace/omega_runtime/data/omega_unified.db?mode=ro'\nc=sqlite3.connect(p,uri=True,timeout=10)\nprint('INTEGRITY',c.execute('pragma quick_check(1)').fetchone()[0])\nprint('RESEARCH_TOTAL',c.execute('select count(*) from research_artifact').fetchone()[0])\nprint('FTS_TOTAL',c.execute('select count(*) from research_artifact_fts').fetchone()[0])\nfor row in c.execute('select source_commit,count(*) from research_artifact group by source_commit order by count(*) desc limit 4'):\n print('COMMIT_ROWS',row)\nc.close()\nPY"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-expanded-index-canonical-receipt-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "set -eu\ncd /workspace/omega_runtime/current\nPYTHONPATH=. python3 - <<'PY'\nfrom pathlib import Path\nfrom omega.unified_store import UnifiedStore\nroot=Path('/workspace/omega_runtime')\ns=UnifiedStore(root/'data/omega_unified.db',root/'current/schema')\noid=s.record_observation(\n source_id='repo:research',subject_id='omega:research-index',\n owner_id='omega',machine_id='omega-vps',\n observed_at='2026-10-08T09:29:28.203951+00:00',\n evidence_class='RUNTIME_RECEIPT',\n receipt_id='omega-vps-expanded-research-import-live-20261008-v1',\n source_repo='gschaidergabriel/clay-global-research-entity',\n source_commit='a25de5fb0154f5ceafa78594b318515cacfa9fac',\n raw_locator='git:chatgpt-vps-results:vps_bridge/results/receipts/omega-vps-expanded-research-import-live-20261008-v1.json',\n payload={\n 'source_commit':'a25de5fb0154f5ceafa78594b318515cacfa9fac',\n 'total_catalogued':12127,'indexed_fts':12065,\n 'first_wave_indexed':10600,'second_wave_indexed':1465,\n 'withheld_sensitive_total':45,'oversize_metadata_only_total':17,\n 'data_store':'/workspace/omega_runtime/data/omega_unified.db',\n 'backup_before_wave2':'/workspace/omega_runtime/backups/omega_unified_before_expanded_research_20261008_0929.db',\n 'integrity':'ok','merge_kind':'append_only_typed_writer',\n 'full_frankenstein3_donor_migrated':False,\n 'full_research_git_history_imported':False},\n authority_rank=65,confidence=1.0)\nprint('INDEX_RECEIPT_OBSERVATION_ID',oid)\nPY"
+}

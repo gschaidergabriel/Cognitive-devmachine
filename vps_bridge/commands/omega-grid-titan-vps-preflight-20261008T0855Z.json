@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-grid-titan-vps-preflight-20261008T0855Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "set -u\nprintf 'UTC='; date -u +%Y-%m-%dT%H:%M:%SZ\nprintf 'IDENTITY='; id -un; hostname\nprintf 'RUNTIME_LINKS\\n'; for p in /workspace/omega_runtime/current /workspace/omega_runtime/state /workspace/omega_runtime/releases /workspace/clay-global-research-entity; do ls -ld \"$p\" 2>&1 | head -1; done\nprintf 'PROCESSES\\n'; ps -eo pid,etimes,args | grep -E '[o]mega.(supervisor|grid_runtime_v3|master_bridge_carrier|bridge_relay)|[o]mega_daemon.py' | head -25\nprintf 'RELEASES\\n'; find /workspace/omega_runtime/releases -mindepth 1 -maxdepth 1 -type d -printf '%f\\n' 2>/dev/null | tail -12\nprintf 'STATE_FILES\\n'; find /workspace/omega_runtime/state -maxdepth 2 -type f \\( -name '*.db' -o -name 'STATE.json' -o -name 'LATEST.json' -o -name '*.sqlite' \\) -printf '%p %s bytes\\n' 2>/dev/null | head -30\nprintf 'CHECKOUT\\n'; if test -d /workspace/omega_runtime/current/.git; then git -C /workspace/omega_runtime/current rev-parse HEAD; git -C /workspace/omega_runtime/current status --short | head -15; fi\nprintf 'MEMORY_DISK\\n'; free -h | head -3; df -h /workspace | tail -1\n"
+}

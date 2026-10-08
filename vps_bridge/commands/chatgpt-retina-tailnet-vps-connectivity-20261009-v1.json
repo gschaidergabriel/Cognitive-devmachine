@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-retina-tailnet-vps-connectivity-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo ENVIRONMENT; hostname; echo TAILSCALE_BINARY; command -v tailscale || true; echo NET_DEVICES; ls -1 /sys/class/net | head -30; echo CONNECTIVITY; if command -v tailscale >/dev/null 2>&1; then tailscale status --json 2>/dev/null | python3 -c 'import sys,json;x=json.load(sys.stdin);print({\"backend\":x.get(\"BackendState\"),\"self_dns\":(x.get(\"Self\") or {}).get(\"DNSName\")})' || true; else echo NO_TAILSCALE_CLIENT; fi; echo GRID10; test -e /workspace/frankgrid10-organ/run/heartbeat.json && python3 -c 'import json;print({k:v for k,v in json.load(open(\"/workspace/frankgrid10-organ/run/heartbeat.json\")).items() if k in (\"status\",\"runtime_epoch_id\")})'; echo END",
+  "timeout_seconds": 60
+}

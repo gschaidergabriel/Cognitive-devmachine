@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-grid-organ-ipc-contract-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo DAEMON_IPC_SCHEMA; sed -n '1,168p' /workspace/frankgrid10-organ/code/organ_daemon.py; echo ROOT_IPC; find /workspace/frankgrid10-organ/ipc -maxdepth 2 -type d -print | head -35; echo CLI_PRE_POST; sed -n '645,680p' /workspace/frankgrid10-organ/code/frankgrid10_v2.py; echo END",
+  "timeout_seconds": 60
+}

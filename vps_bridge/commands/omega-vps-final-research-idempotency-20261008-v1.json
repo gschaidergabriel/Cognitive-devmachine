@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-final-research-idempotency-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace/omega_runtime/extensions/ingress_v2",
+  "timeout_seconds": 170,
+  "command": "set -eu\ncd /workspace/omega_runtime/extensions/ingress_v2\nPYTHONPATH=. python3 -m omega.research_ingest ingest --root /workspace/omega_runtime/imports/research_fresh --db /workspace/omega_runtime/data/omega_unified.db\npython3 - <<'PY'\nfrom pathlib import Path\nimport sqlite3,json,urllib.request,urllib.error\nfrom omega.ingress_gateway import project\ndb=Path('/workspace/omega_runtime/data/omega_unified.db')\nc=sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True,timeout=10)\nprint('INTEGRITY',c.execute('pragma quick_check(1)').fetchone()[0])\nfor t in ['observation','organ_telemetry','research_artifact','research_artifact_fts']:\n print('COUNT',t,c.execute('select count(*) from '+t).fetchone()[0])\nprint('DONOR_METADATA_PRESENT',c.execute(\"select count(*) from observation where subject_id='frankenstein3:unified_db' and owner_id='gabriel'\").fetchone()[0])\nc.close()\nfor owner,machine in [('gabriel','omega-vps'),('andreas','andreas-maco')]:\n p=project(Path('/workspace/omega_runtime/state'),db,owner,machine,'Frankenstein 3 GRID TITAN',budget=6800)\n print('CONTEXT',owner,'research',len(p['research']),'db_read_ok',p['db_read_success'],'effect_auth',p['effect_authority'])\nt=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\nreq=urllib.request.Request('http://127.0.0.1:8787/v1/health',headers={'Authorization':'Bearer '+t})\nwith urllib.request.urlopen(req,timeout=5) as x: print('LIVE_GATEWAY',x.status)\nPY"
+}

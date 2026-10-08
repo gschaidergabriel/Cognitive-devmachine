@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-four-local-model-inference-smoke-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 105,
+  "command": "python3 - <<'PY'\nimport json,urllib.request,time\nfor p in (8105,8199,8299,8899):\n try:\n  with urllib.request.urlopen('http://127.0.0.1:'+str(p)+'/v1/models',timeout=3) as r:\n   models=json.load(r).get('data',[])\n  if not models:print('MODEL_INFER',p,'NO_MODEL_IDS');continue\n  m=models[0]['id']\n  data=json.dumps({'model':m,'messages':[{'role':'user','content':'Respond with only the word OK.'}],'max_tokens':8,'temperature':0,'stream':False}).encode()\n  req=urllib.request.Request('http://127.0.0.1:'+str(p)+'/v1/chat/completions',data=data,headers={'Content-Type':'application/json'})\n  start=time.monotonic()\n  with urllib.request.urlopen(req,timeout=22) as r:\n   obj=json.load(r)\n   print('MODEL_INFER',p,'HTTP',r.status,'LATENCY_MS',int((time.monotonic()-start)*1000),\n   'CHOICE_COUNT',len(obj.get('choices',[])),'USAGE_TOKENS',obj.get('usage',{}).get('total_tokens'))\n except Exception as e:print('MODEL_INFER',p,'ERROR',type(e).__name__)\nPY"
+}

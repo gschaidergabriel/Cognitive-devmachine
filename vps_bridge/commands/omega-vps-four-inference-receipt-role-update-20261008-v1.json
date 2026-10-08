@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-four-inference-receipt-role-update-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 45,
+  "command": "set -eu\ncd /workspace/omega_runtime/extensions/ingress_v5\nPYTHONPATH=. python3 - <<'PY'\nfrom pathlib import Path\nfrom omega.possibility_fusion import preframe\nfrom omega.model_roles import lookup\ndb=Path('/workspace/omega_runtime/data/omega_unified.db')\np=preframe(db,'Plane GRID JSpace TITAN MX mit abliterated 4B','gabriel','omega-vps')\nm=p['model_route']\nprint('MODEL_HEALTH_RECEIPT',m.get('receipt_id'),'STATE',m['state'])\nprint('LIVE_MODEL_CHOICES',[(x['model_id'],x['model_execution_tested']) for x in m['models']])\nprint('SELECTED_MODEL',m['recommended_model'])\nprint('NO_AUTOMATIC_CROSS_HOST_DISPATCH',not m['invoke_model'],not m.get('dispatchable',False))\nprint('GRID_ROUNDS',p['grid_preframe']['round_count'],'EFFECTS',p['effects_permitted'])\nassert len(m['models'])==4\nassert all(x['model_execution_tested'] for x in m['models'])\nassert m['invoke_model'] is False\nPY"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-live-fusion-ingress-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu\npython3 - <<'PY'\nimport json,urllib.request\nfrom pathlib import Path\nroot=Path('/workspace/omega_runtime/state')\nt=Path('/workspace/omega_runtime/private/ingress-gabriel.token').read_text().strip()\nrid='fusion-e2e-20261008-v1'\npayload={'owner':'gabriel','machine_id':'omega-vps','channel':'text',\n'request_id':rid,\n'message':'OMEGA Diagnose: Verbinde Needle Retrieval mit TITAN MX, J-Space und GWT; prüfe auch Gegenhypothesen. Nur lesen, keine Host-Effekte, keine Dateiänderungen.'}\nr=urllib.request.Request('http://127.0.0.1:8787/v1/messages',\ndata=json.dumps(payload).encode(),method='POST',\nheaders={'Authorization':'Bearer '+t,'Content-Type':'application/json'})\nwith urllib.request.urlopen(r,timeout=12) as resp:\n receipt=json.load(resp)\n print('INGRESS_HTTP',resp.status,'TASK_ID',receipt['task_id'])\np=root/'inbox'/f\"ingress_{rid}.json\"\nif not p.exists():p=p.with_suffix('.consumed')\ntask=json.loads(p.read_text())\nfusion=task['cognitive_fusion']\nprint('LIVE_FUSION_ENVELOPE',{'schema':fusion['schema'],'rounds':fusion['grid_preframe']['round_count'],\n'candidate_count':len(fusion['candidates']),'jspace_schema':fusion['jspace']['schema'],\n'gwt_schema':fusion['gwt']['schema'],'titan_schema':fusion['titan_mx']['schema'],\n'needle_mode':fusion['needle']['retrieval_scoring'],\n'model_call_count':fusion['needle']['model_calls'],\n'effect_authority':task['effect_authority']})\nassert fusion['grid_preframe']['round_count']==3\nassert fusion['needle']['model_calls']==0\nassert len(fusion['candidates'])>=1\nassert not task['effect_authority']\nPY"
+}

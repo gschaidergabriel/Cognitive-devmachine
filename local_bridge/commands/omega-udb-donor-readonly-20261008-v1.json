@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-udb-donor-readonly-20261008-v1",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 45,
+  "command": "python3 - <<'PY'\nimport sqlite3,os,json,hashlib,datetime\nfrom pathlib import Path\np=Path.home()/'.local/share/agentzero/unified.db'\nprint('HOST_ID',os.uname().nodename,'DB_EXISTS',p.is_file())\nif not p.is_file():raise SystemExit(2)\nprint('DB_SIZE_BYTES',p.stat().st_size,'WAL_EXISTS',p.with_name(p.name+'-wal').exists())\nc=sqlite3.connect('file:'+str(p)+'?mode=ro',uri=True,timeout=10)\nc.execute('pragma query_only=on')\nprint('QUICK_CHECK',c.execute('pragma quick_check(1)').fetchone()[0])\ntabs=[x[0] for x in c.execute(\"SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'\")];print('TABLE_COUNT',len(tabs))\nnames=['artikel','artikel_suchtext','durable_memory','mem_doc','mem_edge','omega_wp_package','gw_wettbewerb','f3_grid_v2_log','f3_run','f3_gwt','f3_reflection','omega_observation','observation','source_subject','research_artifact']\nfor t in names:\n if t not in tabs:continue\n try:print('COUNT',t,c.execute('select count(*) from \"'+t+'\"').fetchone()[0])\n except sqlite3.Error as e:print('COUNT_ERROR',t,type(e).__name__)\nprint('SCHEMA_VERSION',c.execute('pragma user_version').fetchone()[0])\nprint('SAMPLE_TABLE_NAMES',' '.join(sorted(tabs)[:35]))\nc.close()\nPY"
+}

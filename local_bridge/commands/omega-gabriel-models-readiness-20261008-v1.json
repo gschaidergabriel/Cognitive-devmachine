@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-models-readiness-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nimport pathlib,subprocess\nroots=[pathlib.Path('/home/ai-core-node/.cache/huggingface/hub'),pathlib.Path('/home/ai-core-node/.local/share/omegacv1'),pathlib.Path('/home/ai-core-node/models')]\nfor root in roots:\n print('ROOT',str(root),'exists',root.is_dir())\n if root.is_dir():\n  entries=[x.name for x in root.iterdir() if any(z in x.name.lower() for z in ['qwen','needle','4b','model','organ'])]\n  print('MATCH_COUNT',len(entries),'MATCH_NAMES',entries[:25])\nfor cmd in [['pgrep','-af','llama-server'],['pgrep','-af','needle']]:\n try:\n  p=subprocess.run(cmd,capture_output=True,text=True,timeout=2)\n  print('PROCESS_FAMILY',cmd[-1],'rc',p.returncode,'matches_count',len(p.stdout.splitlines()))\n except Exception as e:print(type(e).__name__)\nPY"
+}

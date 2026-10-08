@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-grid-organ-interface-read-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo GRID_README; sed -n '1,110p' /workspace/frankgrid10-organ/code/README.md; echo GRID_V2; sed -n '1,120p' /workspace/frankgrid10-organ/code/V2.md; echo GRID_BOOTSTRAP; sed -n '1,110p' /workspace/frankgrid10-organ/code/BOOTSTRAP.md; echo DAEMON_ENTRYPOINTS; grep -nE '^(class |def |async def |if __name__)|add_argument|inbox|outbox|poll|input|output|queue' /workspace/frankgrid10-organ/code/organ_daemon.py | head -110; echo GRID_PY_ENTRYPOINTS; grep -nE '^(class |def |async def |if __name__)|add_argument|inbox|outbox' /workspace/frankgrid10-organ/code/frankgrid10_v2.py | head -110; echo HEARTBEAT; head -c 1200 /workspace/frankgrid10-organ/run/heartbeat.json; echo DONE",
+  "timeout_seconds": 75
+}

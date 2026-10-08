@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-grid-titan-vps-preflight-20261008T0855Z",
+  "command_sha256": "ccbe47c1e3357cbd9c622363904f10de2945c6ed2ce896195df6709755708ee9",
+  "started_at": "2026-10-08T08:54:03.239737+00:00",
+  "finished_at": "2026-10-08T08:54:03.461762+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "f004a31c7613a461253683a5a6fad9651acf0248b84a11bf9413a19bf49ae5c0",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "UTC=2026-10-08T08:54:03Z\nIDENTITY=root\n877d9128ca5a\nRUNTIME_LINKS\nlrwxrwxrwx 1 root root 115 Sep 13 03:59 /workspace/omega_runtime/current -> /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001\ndrwxr-xr-x 22 root root 4096 Oct  8 08:54 /workspace/omega_runtime/state\ndrwxr-xr-x 13 root root 4096 Sep 13 03:59 /workspace/omega_runtime/releases\ndrwxr-xr-x 24 root root 4096 Aug 25 06:46 /workspace/clay-global-research-entity\nPROCESSES\n 947104 2230208 tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n 947105 2230208 bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1\n 947107 2230208 python3 /workspace/omega_runtime/omega_daemon.py\n1964896 2177677 python3 -m omega.supervisor --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001\n1964901 2177677 /usr/bin/python3 -m omega.grid_runtime_v3\n1964902 2177677 /usr/bin/python3 -m omega.bridge_relay\n1964906 2177677 /usr/bin/python3 -m omega.master_bridge_carrier\nRELEASES\n49d9bb023933ee6383433e5206d4148b8082dcae\na676258885b964efc2a80599957dc1c09dc3d43b\na676258885b964efc2a80599957dc1c09dc3d43b-full-777-v1\ne8336eeac4f43f3808b44b5bb5859e010f8a7b26\nf60746ffc5d1170e146609036d667bb26ac1d56f\nc4714d5782a37a17d589c9b2337e59dc4fbcb23a\n093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001\n093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-003\n093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-001\n093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-candidate-002\n572a07d2d6b69b1faeb747faab9b2b3f221b2e69\nSTATE_FILES\n/workspace/omega_runtime/state/cortex_state/STATE.json 187 bytes\nCHECKOUT\nMEMORY_DISK\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.8Gi       585Mi        27Mi       9.6Gi       9.8Gi\nSwap:             0B          0B          0B\n/dev/sda1       193G  122G   72G  64% /workspace\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

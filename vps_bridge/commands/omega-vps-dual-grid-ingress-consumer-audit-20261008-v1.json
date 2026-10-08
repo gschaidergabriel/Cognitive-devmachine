@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-dual-grid-ingress-consumer-audit-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 55,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os\nfor pid in [int(p.name) for p in Path('/proc').iterdir() if p.name.isdigit()]:\n try:\n  raw=(Path('/proc')/str(pid)/'cmdline').read_bytes().replace(b'\\x00',b' ').decode('utf-8','ignore')\n  if any(x in raw for x in ['omega_daemon.py','omega.grid_runtime_v3','omega.supervisor','omega.grid_runtime_v2','omega.grid_runtime ','omega.master_bridge_carrier']):\n   name=raw[:290].replace('\\n',' ')\n   cwd=os.readlink('/proc/'+str(pid)+'/cwd')\n   print('PROCESS',pid,'COMMAND',name,'CWD',cwd)\n except (OSError,PermissionError):continue\nfor p in ['/workspace/omega_daemon.py','/workspace/omega_runtime/omega_daemon.py','/workspace/omega_runtime/current/omega_daemon.py']:\n f=Path(p)\n print('SOURCE',p,'exists',f.exists())\nPY"
+}

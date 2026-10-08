@@ -1,0 +1,10 @@
+PROCESS 947104 COMMAND tmux new-session -d -s omega-grid python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1  CWD /workspace/omega_runtime
+PROCESS 947105 COMMAND bash -c python3 /workspace/omega_runtime/omega_daemon.py >>/workspace/omega_runtime/omega-grid.log 2>&1  CWD /workspace/omega_runtime
+PROCESS 947107 COMMAND python3 /workspace/omega_runtime/omega_daemon.py  CWD /workspace/omega_runtime
+PROCESS 1964896 COMMAND python3 -m omega.supervisor --runtime-root /workspace/omega_runtime/state --repo-root /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001  CWD /workspace
+PROCESS 1964901 COMMAND /usr/bin/python3 -m omega.grid_runtime_v3  CWD /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001
+PROCESS 1964906 COMMAND /usr/bin/python3 -m omega.master_bridge_carrier  CWD /workspace/omega_runtime/releases/093e470c5c06e3568fda535f081be7f1dcd30035-sigma-cortex-retina-v1-reconcilerfix-001
+PROCESS 2099974 COMMAND bash -lc python3 - <<'PY' from pathlib import Path import os for pid in [int(p.name) for p in Path('/proc').iterdir() if p.name.isdigit()]:  try:   raw=(Path('/proc')/str(pid)/'cmdline').read_bytes().replace(b'\x00',b' ').decode('utf-8','ignore')   if any(x in raw for x in ['omega_daemon.p CWD /workspace
+SOURCE /workspace/omega_daemon.py exists False
+SOURCE /workspace/omega_runtime/omega_daemon.py exists True
+SOURCE /workspace/omega_runtime/current/omega_daemon.py exists False

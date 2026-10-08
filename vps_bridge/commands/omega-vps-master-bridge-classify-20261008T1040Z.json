@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-master-bridge-classify-20261008T1040Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nimport json\nfrom pathlib import Path\np=Path('/workspace/omega_runtime/state/master_bridge/LAST_ERROR.json')\nif not p.exists(): print('ERROR_MISSING'); raise SystemExit(0)\ns=str(json.loads(p.read_text()).get('error','')).lower()\nfor key in ['clone','git fetch','git checkout','git push','authentication','permission denied','not found','repository','timeout','no such file','already exists','branch','cannot']:\n print(key.replace(' ','_'),key in s)\nprint('ERROR_LENGTH',len(s))\nprint('ERROR_CLASS',s.split(':',1)[0])\nprint('LAST_AT',json.loads(p.read_text()).get('at'))\nPY"
+}

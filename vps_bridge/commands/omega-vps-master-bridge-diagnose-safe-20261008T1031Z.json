@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-master-bridge-diagnose-safe-20261008T1031Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport json\nroot=Path('/workspace/omega_runtime/state')\np=root/'master_bridge'/'LAST_ERROR.json'\nif p.exists():\n try:\n  e=json.loads(p.read_text()); print('MASTER_ERROR_CLASS',str(e.get('error','')).split(':',1)[0]); print('MASTER_ERROR_AT',e.get('at'))\n except Exception: print('MASTER_ERROR_UNREADABLE')\nelse: print('MASTER_ERROR_NONE')\ncount=0; newest=[]\nfor p in (root/'outbox').glob('*.json'):\n try:\n  o=json.loads(p.read_text())\n  if o.get('kind')=='MASTER_COGNITION_UPDATE':\n   count+=1; newest.append((p.stat().st_mtime,o.get('message_id')))\n except Exception: pass\nprint('MASTER_OUTBOX_COUNT',count)\nprint('RECENT_MESSAGE_IDS',[x[1] for x in sorted(newest)[-4:]])\nprint('SUBMITTED_FILES',len(list((root/'master_bridge'/'submitted').glob('omega_master_*.json'))))\nprint('CARRIER_EXISTS',Path('/workspace/omega_runtime/carrier_repo').exists())\nPY"
+}

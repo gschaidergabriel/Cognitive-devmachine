@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-live4b-port-readiness-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 30,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport socket\nfor p in Path('/proc').iterdir():\n if not p.name.isdigit():continue\n try:\n  args=[a.decode('utf-8','ignore') for a in (p/'cmdline').read_bytes().split(b'\\0') if a]\n  exe=Path(args[0]).name if args else ''\n  if exe not in ('llama-server','llama_server') and not (exe=='python3' and len(args)>1 and 'llama' in Path(args[1]).name):continue\n  model='UNKNOWN';port='UNKNOWN'\n  for i,a in enumerate(args[:-1]):\n   if a in ('-m','--model','--model-path'):\n    model=Path(args[i+1]).name\n   if a in ('--port','-p'):\n    port=args[i+1]\n  print('LOCAL_MODEL_PROCESS',p.name,'model_basename',model,'port',port)\n  if port.isdigit() and 1<=int(port)<65536:\n   s=socket.socket();s.settimeout(.4)\n   try:s.connect(('127.0.0.1',int(port)));print('LOOPBACK_LISTENER',port,'OPEN')\n   except OSError:print('LOOPBACK_LISTENER',port,'UNKNOWN')\n   finally:s.close()\n except (PermissionError,OSError):pass\nPY"
+}

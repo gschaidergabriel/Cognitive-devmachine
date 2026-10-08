@@ -1,0 +1,11 @@
+PID 2102404 CMD bash -lc python3 - <<'PY'
+from pathlib import Path
+import os,subprocess,sqlite3
+for p in Path('/proc').iterdir():
+ if not p.name.isdigit():continue
+ try:
+  raw=(p/'cmdline').read_bytes().replace(b'\x00',b' ').decode(errors='replace')
+  if ' STATE S (sleeping) PPID 0
+LEGACY_TMUX_PRESENT False
+NEW_GATEWAY_TMUX_PRESENT True
+ORIGINAL_CONSUMED_PRESENT True

@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "omega-vps-legacy-grid-poststop-state-20261008-v1",
+  "command_sha256": "565e06ea3e556cd70745e82a31e36c2ad7b8dc63cc3b753eddf51317518258dd",
+  "started_at": "2026-10-08T10:01:31.104167+00:00",
+  "finished_at": "2026-10-08T10:01:31.352293+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "06028e90c6f0ccef30922c51bb2d7108291e0439c55de76dd607c84cb6bc1d71",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PID 2102404 CMD bash -lc python3 - <<'PY'\nfrom pathlib import Path\nimport os,subprocess,sqlite3\nfor p in Path('/proc').iterdir():\n if not p.name.isdigit():continue\n try:\n  raw=(p/'cmdline').read_bytes().replace(b'\\x00',b' ').decode(errors='replace')\n  if ' STATE S (sleeping) PPID 0\nLEGACY_TMUX_PRESENT False\nNEW_GATEWAY_TMUX_PRESENT True\nORIGINAL_CONSUMED_PRESENT True\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

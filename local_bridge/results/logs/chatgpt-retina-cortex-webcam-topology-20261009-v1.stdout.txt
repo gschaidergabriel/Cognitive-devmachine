@@ -1,0 +1,61 @@
+HOST_ID
+ai-core-node-projekt-frankenstein
+CAPTURE_DEVICES
+crw-rw----+ 1 root video 81, 2 Oct  9 03:48 /dev/video1
+crw-rw----+ 1 root video 81, 0 Oct  9 00:00 /dev/video2
+crw-rw----+ 1 root video 81, 3 Oct  9 03:48 /dev/video3
+crw-rw----+ 1 root video 511, 0 Oct  9 03:48 /dev/media0
+CAMERA_TOOLS
+/usr/bin/v4l2-ctl
+/usr/bin/ffmpeg
+SENSOR_PID
+3952142 bash            /bin/bash -c source /home/ai-core-node/.claude/shell-snapshots/snapshot-bash-1791479180840-q5vx3u.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && { \builtin unalias -- 'unsetenv'; \builtin
+3952659 python3         /opt/entityos/voice/venv/bin/python3 /opt/entityos/voice/cortex.py --dienst
+3956822 python3         /opt/entityos/voice/venv/bin/python3 /home/ai-core-node/vision/sichtd.py
+3964390 bash            bash -lc set -e; echo HOST_ID; hostname; echo CAPTURE_DEVICES; for p in /dev/video* /dev/media*; do if [ -e "$p" ]; then ls -ld "$p"; fi; done; echo CAMERA_TOOLS; command -v v4l2-ctl || true; command -v ffm
+SVC_STATE
+active
+active
+active
+active
+SVC_META
+digital-retina.service
+MainPID=2974014
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/digital-retina.service
+frankenstein-cortex.service
+MainPID=3952659
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/frankenstein-cortex.service
+sichtd.service
+MainPID=3956822
+SubState=running
+FragmentPath=/home/ai-core-node/.config/systemd/user/sichtd.service
+TAILSCALE_AVAILABLE
+/usr/bin/tailscale
+TAILSCALE_STATE
+{'BackendState': 'Running', 'SelfDNS': 'ai-core-node-projekt-frankenstein.tail1f2111.ts.net.', 'Tailnet': 'structured.thinking.gschaider@gmail.com'}
+LOCAL_LISTEN
+State  Recv-Q Send-Q                          Local Address:Port  Peer Address:PortProcess
+LISTEN 0      5                                   127.0.0.1:18777      0.0.0.0:*          
+LISTEN 0      128                                 127.0.0.1:18790      0.0.0.0:*          
+LISTEN 0      4096                               127.0.0.54:53         0.0.0.0:*          
+LISTEN 0      4096                                127.0.0.1:631        0.0.0.0:*          
+LISTEN 0      2048                                127.0.0.1:8000       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8088       0.0.0.0:*          
+LISTEN 0      2048                                127.0.0.1:8091       0.0.0.0:*          
+LISTEN 0      100                                 127.0.0.1:8114       0.0.0.0:*          
+LISTEN 0      512                                 127.0.0.1:8105       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8100       0.0.0.0:*          
+LISTEN 0      4096                            127.0.0.53%lo:53         0.0.0.0:*          
+LISTEN 0      4096                                  0.0.0.0:22         0.0.0.0:*          
+LISTEN 0      4096                  100.70.87.28%tailscale0:443        0.0.0.0:*          
+LISTEN 0      32                                  127.0.0.1:5998       0.0.0.0:*          
+LISTEN 0      4096                  100.70.87.28%tailscale0:49084      0.0.0.0:*          
+LISTEN 0      512                                 127.0.0.1:8199       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8317       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8305       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8306       0.0.0.0:*          
+LISTEN 0      512                                 127.0.0.1:8299       0.0.0.0:*          
+LISTEN 0      5                                   127.0.0.1:8420       0.0.0.0:*          
+END

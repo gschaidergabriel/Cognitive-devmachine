@@ -1,0 +1,10 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-gabriel-model-endpoints-http-readiness-20261008-v1",
+  "owner": "gabriel",
+  "machine_id": "ai-core-node",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 35,
+  "command": "python3 - <<'PY'\nimport urllib.request,json\nfor p in (8105,8199,8299,8899):\n for endpoint in ('/health','/v1/models'):\n  try:\n   with urllib.request.urlopen('http://127.0.0.1:'+str(p)+endpoint,timeout=2) as r:\n    body=r.read(100000)\n    if endpoint=='/v1/models':\n     obj=json.loads(body)\n     ids=[str(x.get('id',''))[:130] for x in obj.get('data',[])][:4]\n     print('LOCAL_HTTP',p,endpoint,r.status,'MODEL_IDS',ids)\n    else:\n     print('LOCAL_HTTP',p,endpoint,r.status)\n  except Exception as e:print('LOCAL_HTTP',p,endpoint,'ERROR',type(e).__name__)\nPY"
+}

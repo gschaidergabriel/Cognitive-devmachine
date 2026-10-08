@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-grid-single-consumer-verification-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "python3 - <<'PY'\nimport sqlite3,os,subprocess\nfrom pathlib import Path\nroot=Path('/workspace/omega_runtime/state')\ntid='ingress_fusion-e2e-20261008-v1'\nfor name,col in [('omega_runtime.sqlite3','task_id'),('omega.sqlite3','id')]:\n p=root/name\n c=sqlite3.connect('file:'+str(p)+'?mode=ro',uri=True,timeout=3)\n rows=c.execute('select state from task where \"'+col+'\"=?',(tid,)).fetchall()\n print('STATE',name,rows)\n c.close()\nprint('INBOX_NEW',(root/'inbox'/(tid+'.json')).exists(),'INBOX_CONSUMED',(root/'inbox'/(tid+'.consumed')).exists())\nprint('LEGACY_TMUX_PRESENT',subprocess.run(['tmux','has-session','-t','omega-grid'],capture_output=True).returncode==0)\nfor pid in (1964896,1964901):\n p=Path('/proc')/str(pid)\n print('CANONICAL_PROCESS',pid,p.exists())\nPY"
+}

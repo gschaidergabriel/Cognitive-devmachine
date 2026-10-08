@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-grid-vps-state-audit-20261008T0900Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -eu\ncd /workspace/omega_runtime\nprintf 'ENV_NONSECRET_PATHS\\n'\nfor p in /workspace/omega_runtime/current/omega/grid_runtime_v3.py /workspace/omega_runtime/current/omega/unified_store.py /workspace/omega_runtime/current/omega/master_bridge_carrier.py /workspace/omega_runtime/current/schema/omega.sql; do stat -c '%n %s bytes' \"$p\" 2>/dev/null || :; done\nprintf 'STATE TOP\\n'; ls -la /workspace/omega_runtime/state | head -65\nprintf 'CURRENT FILES\\n'; find /workspace/omega_runtime/current -maxdepth 2 -type f -iname '*context*' -o -iname '*voice*' | head -30\nprintf 'DB ENV PATH DEFINITIONS\\n'; grep -nE 'OMEGA_(DB|RUNTIME_ROOT|GRID|STATE)|default=|UnifiedStore|add_argument' /workspace/omega_runtime/current/omega/grid_runtime_v3.py | tail -35\nprintf 'CURRENT_SUPERVISOR config\\n'; sed -n '15,95p' /workspace/omega_runtime/current/omega/supervisor.py\nprintf 'MASTER MAILBOX COUNTS\\n'; for p in /workspace/omega_runtime/state/master_bridge/{submitted,responses}; do printf '%s: ' \"$p\"; find \"$p\" -maxdepth 1 -type f 2>/dev/null | wc -l; done\nprintf 'PROCESSES omega count\\n'; pgrep -af 'omega.(grid_runtime|supervisor|master_bridge|relay)' | head -30 || :\n"
+}

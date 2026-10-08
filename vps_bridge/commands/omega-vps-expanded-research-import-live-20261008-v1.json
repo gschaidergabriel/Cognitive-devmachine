@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-expanded-research-import-live-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 210,
+  "command": "set -eu\ncd /workspace/omega_runtime/extensions/ingress_v3\numask 077\npython3 - <<'PY'\nfrom pathlib import Path\nimport sqlite3,os\nsrc=Path('/workspace/omega_runtime/data/omega_unified.db')\ndest=Path('/workspace/omega_runtime/backups/omega_unified_before_expanded_research_20261008_0929.db')\nif dest.exists():raise SystemExit('BACKUP_ALREADY_EXISTS_REFUSE_OVERWRITE')\nr=sqlite3.connect('file:'+str(src)+'?mode=ro',uri=True,timeout=30)\nd=sqlite3.connect(str(dest),timeout=30)\ntry:r.backup(d,pages=1000,sleep=.1)\nfinally:d.close();r.close()\nos.chmod(dest,0o600)\nc=sqlite3.connect('file:'+str(dest)+'?mode=ro',uri=True)\nprint('BACKUP_BYTES',dest.stat().st_size,'BACKUP_QUICK_CHECK',c.execute('pragma quick_check(1)').fetchone()[0])\nc.close()\nPY\nPYTHONPATH=. python3 -m omega.research_ingest ingest --root /workspace/omega_runtime/imports/research_fresh --db /workspace/omega_runtime/data/omega_unified.db\nPYTHONPATH=. python3 -m omega.research_ingest search --db /workspace/omega_runtime/data/omega_unified.db --query \"Free Swarm\" --limit 2\npython3 - <<'PY'\nimport sqlite3\nc=sqlite3.connect('file:/workspace/omega_runtime/data/omega_unified.db?mode=ro',uri=True)\nprint('POST_QUICK_CHECK',c.execute('pragma quick_check(1)').fetchone()[0])\nprint('INDEX_TOTAL',c.execute('select count(*) from research_artifact').fetchone()[0])\nprint('FTS_TOTAL',c.execute('select count(*) from research_artifact_fts').fetchone()[0])\nc.close()\nPY"
+}

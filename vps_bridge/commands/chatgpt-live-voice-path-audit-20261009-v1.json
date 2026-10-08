@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-live-voice-path-audit-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo FRANKGRID_IPC; find /workspace/frankgrid10-organ/ipc -maxdepth 1 -type d -printf '%f\\n' | sort; echo VOICE_COMPONENTS; find /workspace -maxdepth 3 -type f \\( -iname '*voice*' -o -iname '*realtime*' -o -iname '*websocket*' \\) 2>/dev/null | head -65; echo GATEWAY_PY; python3 -c 'import importlib.util; print({x:bool(importlib.util.find_spec(x)) for x in (\"fastapi\",\"aiohttp\",\"websockets\",\"uvicorn\")})'; echo LISTENERS; (ss -ltn 2>/dev/null || true) | head -25; echo HEARTBEAT; python3 -c 'import json;h=json.load(open(\"/workspace/frankgrid10-organ/run/heartbeat.json\"));print({k:h.get(k) for k in (\"status\",\"seq\",\"runtime_epoch_id\",\"resource\")})'; echo DONE",
+  "timeout_seconds": 60
+}

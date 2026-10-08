@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-v5-grid-final-path-confirm-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 45,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport sqlite3,subprocess,json\nroot=Path('/workspace/omega_runtime/state')\ntid='ingress_fusion-allmodel-v5-20261008-01'\nfor filename,col in [('omega_runtime.sqlite3','task_id'),('omega.sqlite3','id')]:\n c=sqlite3.connect('file:'+str(root/filename)+'?mode=ro',uri=True,timeout=5)\n print('JOURNAL',filename,c.execute('select state from task where \"'+col+'\"=?',(tid,)).fetchall())\n c.close()\nprint('NEW_INBOX_PENDING',(root/'inbox'/(tid+'.json')).exists())\nprint('NEW_INBOX_CONSUMED',(root/'inbox'/(tid+'.consumed')).exists())\nprint('OLD_TMUX_PRESENT',subprocess.run(['tmux','has-session','-t','omega-grid'],capture_output=True).returncode==0)\nprint('GATEWAY_TMUX_PRESENT',subprocess.run(['tmux','has-session','-t','omega-ingress'],capture_output=True).returncode==0)\nc=sqlite3.connect('file:/workspace/omega_runtime/data/omega_unified.db?mode=ro',uri=True,timeout=4)\nprint('CENTRAL_HEALTH',c.execute('pragma quick_check(1)').fetchone()[0])\nprint('MODEL_ORGANS_HEALTH_OBS',c.execute(\"select count(*) from observation where subject_id='omega:model_pool_health' and owner_id='gabriel'\").fetchone()[0])\nc.close()\nPY"
+}

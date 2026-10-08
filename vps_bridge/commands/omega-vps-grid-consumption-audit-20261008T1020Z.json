@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-grid-consumption-audit-20261008T1020Z",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "set -eu\npython3 - <<'PY'\nfrom pathlib import Path\nimport sqlite3,json,glob\nroot=Path('/workspace/omega_runtime/state')\ntid='ingress_vps-gateway-smoke-20261008-1010'\ndb=root/'omega_runtime.sqlite3'\ncon=sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True,timeout=2)\nprint('TASK',con.execute('SELECT task_id,state,created_at,updated_at FROM task WHERE task_id=?',(tid,)).fetchone())\ncon.close()\nfor ext in ('json','consumed'):\n p=root/'inbox'/f'{tid}.{ext}'\n print('INBOX_'+ext.upper(),p.exists())\nfor loc in (root/'master_bridge'/'submitted',root/'master_bridge'/'responses'):\n files=glob.glob(str(loc/'omega_master_*.json'))\n print('MASTER_MAILBOX',str(loc),len(files),[Path(x).name for x in files[-3:]])\ntry:\n status=json.loads((root/'STATUS.json').read_text())\n print('GRID_LATEST',{'updated_at':status.get('updated_at'),'frame_id':status.get('frame_id'),'cell':(status.get('selected') or {}).get('cell_id')})\nexcept Exception as e: print('GRID_ERROR',type(e).__name__)\nPY\n"
+}

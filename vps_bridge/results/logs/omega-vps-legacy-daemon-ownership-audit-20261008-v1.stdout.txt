@@ -1,0 +1,36 @@
+DAEMON_BYTES 8334 LINE_COUNT 100
+LINE 4 ROOT=Path('/workspace/omega_runtime/state'); DB=ROOT/'omega.sqlite3'; INTERVAL=30
+LINE 11 def now(): return dt.datetime.now(dt.timezone.utc).isoformat()
+LINE 12 def canon(x): return json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':'))
+LINE 13 def sha(x): return hashlib.sha256(canon(x).encode()).hexdigest()
+LINE 14 def con(): c=sqlite3.connect(DB);c.row_factory=sqlite3.Row;return c
+LINE 15 def init():
+LINE 16 for n in ('inbox','outbox','telemetry','candidates'): (ROOT/n).mkdir(parents=True,exist_ok=True)
+LINE 17 with con() as c:c.executescript("""PRAGMA journal_mode=WAL;CREATE TABLE IF NOT EXISTS epoch(id TEXT PRIMARY KEY,started TEXT,prev TEXT,status TEXT);CREATE TABLE IF NOT EXISTS frame(id TEXT P
+LINE 18 def latest(t):
+LINE 20 def out(kind,payload):
+LINE 21 d={'schema':'OMEGA_OUTBOX/v1','message_id':'msg_'+uuid.uuid4().hex,'created_at':now(),'kind':kind,'payload':payload};(ROOT/'outbox'/f"{d['message_id']}.json").write_text(json.dumps(d,indent=
+LINE 22 def telemetry():
+LINE 29 def ingest():
+LINE 30 for p in (ROOT/'inbox').glob('*.json'):
+LINE 32 d=json.loads(p.read_text());tid=str(d.get('task_id') or 'task_'+sha(d)[:20])
+LINE 34 p.rename(p.with_suffix('.consumed'))
+LINE 36 def tasks():
+LINE 39 for r in rows:d=json.loads(r['payload']);d['task_id']=r['id'];a.append(d)
+LINE 41 def free_available():
+LINE 45 def age(s):
+LINE 48 def route(task):
+LINE 49 req=set(task.get('required_capabilities',[]));domains=set(task.get('preferred_data_domains',[]));heavy=bool(task.get('heavy'));risk=bool(task.get('high_risk_effect'));want2=bool(task.get('wa
+LINE 63 def proposals():
+LINE 67 t0=ts[0];executable=isinstance(t0.get('effect'),dict) or isinstance(t0.get('execution'),dict) or str(t0.get('bridge_op') or '') in {'status','read_file','write_text','exec','screenshot'};nee
+LINE 70 task=ts[0] if ts else {'task_id':'background_host_scout','required_capabilities':['local_state'],'max_organs':1};return [{'cell':x,'score':s[x],'task':task,'free':free} for x in CELLS]
+LINE 71 def realize(p,fid):
+LINE 77 e={'schema':'OMEGA_GRID_EFFECT_INTENT/v1','effect_id':'effect_'+uuid.uuid4().hex,'frame_id':fid,'organ_id':oid,'task':p['task'],'route':r,'authority':'NOT_YET_GRANTED'};dig=sha(e)
+LINE 78 with con() as c:c.execute('INSERT INTO effect VALUES(?,?,?,?,?,?,?)',(e['effect_id'],fid,oid,dig,canon(e),'PROPOSED',now()))
+LINE 79 out('GRID_EFFECT_INTENT',{**e,'request_sha256':dig});ids.append(e['effect_id'])
+LINE 80 if ids and p['task'].get('task_id') and p['task'].get('task_id')!='background_host_scout':
+LINE 81 with con() as c:c.execute("UPDATE task SET state='DISPATCHED' WHERE id=? AND state='OPEN'",(str(p['task']['task_id']),))
+LINE 82 return {'route':r,'effects':ids}
+LINE 88 def frame(eid):
+LINE 92 def run(once=False):
+LINE 95 while True:

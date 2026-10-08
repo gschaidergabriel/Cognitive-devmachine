@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-fusion-vps-availability-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os,sqlite3\nroot=Path('/workspace/omega_runtime')\nfor rel in ['imports/research_fresh/rae_core/possibility_preprocessor.py','imports/research_fresh/research_sources/sources.db','imports/research_fresh/agentZero/code/produkt/needle.py','extensions/ingress_v3/omega/ingress_gateway.py','data/omega_unified.db','state/STATUS.json']:\n p=root/rel\n print('PATH',rel,'exists',p.exists(),'size',p.stat().st_size if p.exists() and p.is_file() else 0)\nfor pattern in ['**/*4b*','**/*titan*mx*','**/*needle*']:\n files=[]\n for prefix in [root/'data',root/'state']:\n  if prefix.exists():files.extend([p for p in prefix.glob(pattern) if p.is_file()])\n print('NAME_FILTER',pattern,'count',len(files),'examples',[str(p)[len(str(root))+1:] for p in files[:10]])\nPY"
+}

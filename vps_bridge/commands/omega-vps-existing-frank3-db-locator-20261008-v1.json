@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-existing-frank3-db-locator-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 90,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os\nroots=[Path('/workspace'),Path('/srv/claylab')]\nseen=set()\nfor root in roots:\n if not root.exists():continue\n for path,dirs,files in os.walk(root):\n  level=len(Path(path).parts)-len(root.parts)\n  if level>6:dirs.clear();continue\n  dirs[:]=[d for d in dirs if d not in {'.git','node_modules','.venv','venv','site-packages','cache','huggingface'}]\n  for name in files:\n   if name.lower() in ('unified.db','omega_unified.db','titan.db','titan_mx.db') or (name.endswith('.db') and ('frank3' in name or 'unified' in name)):\n    p=Path(path)/name\n    try: st=p.stat();key=(st.st_dev,st.st_ino)\n    except OSError:continue\n    if key in seen:continue\n    seen.add(key)\n    print('DB_CANDIDATE',str(p),'BYTES',st.st_size)\nprint('TOTAL_CANDIDATES',len(seen))\nPY"
+}

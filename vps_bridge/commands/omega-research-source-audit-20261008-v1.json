@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-research-source-audit-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 80,
+  "command": "python3 - <<'PY'\nimport os,subprocess,collections\nfrom pathlib import Path\nroot=Path('/workspace/clay-global-research-entity')\nsubdirs=['research_entity','agentzeroforschung','research','docs']\nfor d in subdirs:\n base=root/d\n if not base.exists(): print('MISSING',d);continue\n files=[p for p in base.rglob('*') if p.is_file() and '.git' not in p.parts]\n extensions=collections.Counter(p.suffix.lower() for p in files)\n whitelisted=[p for p in files if p.suffix.lower() in ('.json','.md','.txt','.py','.csv','.yaml','.yml','.sql')]\n sizes=sum(p.stat().st_size for p in whitelisted)\n print('SOURCE',d,'files',len(files),'text_candidates',len(whitelisted),'bytes',sizes,'extensions',extensions.most_common(9))\ngit=subprocess.run(['git','-C',str(root),'rev-parse','HEAD'],capture_output=True,text=True)\nprint('SOURCE_HEAD',git.stdout.strip() if git.returncode==0 else 'UNKNOWN')\nfor item in ['/workspace/omega_runtime/data/omega_unified.db','/workspace/omega_runtime/data/omega_unified.db-wal']:\n p=Path(item);print('TARGET_FILE',p.name,p.stat().st_size if p.exists() else 'MISSING')\nPY"
+}

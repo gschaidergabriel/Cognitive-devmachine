@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-retina-cortex-event-interface-audit-20261009-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo RETINA_FILES; find /workspace/t4-grid10-vps-a3 -maxdepth 4 -type f \\( -iname '*retina*' -o -iname '*percept*' -o -iname '*cortex*' \\) 2>/dev/null | head -100; echo ARCHITECTURE; find /workspace/t4-grid10-vps-a3 -maxdepth 3 -type f -name '*VOICE*' -o -name '*RETINA*' -o -name '*PERCEPT*' 2>/dev/null | head -55; echo EVENT_PROCESS; ps -eo pid,comm,args | grep -Ei '[r]etina|[c]ortex|[p]erception|[s]ensor|[c]apture_broker' | head -28; echo PORTS; (ss -ltn 2>/dev/null || true) | head -15; echo CORTEX_RETINA_CANDIDATES; find /workspace/frankgrid10-organ -maxdepth 3 -type f | head -45; echo END",
+  "timeout_seconds": 65
+}

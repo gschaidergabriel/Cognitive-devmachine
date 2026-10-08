@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "chatgpt-grid10-vps-layout-20261009-explain-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -e; echo BASE; pwd; echo DIRECTORIES; find /workspace/frankgrid10-organ -maxdepth 2 -type d -print | sort | head -45; echo CORE_FILES; for f in /workspace/frankgrid10-organ/code/frankgrid10_v2.py /workspace/frankgrid10-organ/code/organ_daemon.py /workspace/frankgrid10-organ/state/frankgrid10.sqlite3 /workspace/frankgrid10-organ/run/heartbeat.json; do if test -f \"$f\"; then ls -lh \"$f\"; else echo MISSING \"$f\"; fi; done; echo DAEMON; pgrep -af '[o]rgan_daemon.py' | head -6 || true; echo HEARTBEAT; python3 -c 'import json; h=json.load(open(\"/workspace/frankgrid10-organ/run/heartbeat.json\")); print({k:h.get(k) for k in (\"status\",\"seq\",\"runtime_epoch_id\",\"resource\")})'; echo SQLITE; python3 -c 'import sqlite3; c=sqlite3.connect(\"file:/workspace/frankgrid10-organ/state/frankgrid10.sqlite3?mode=ro\",uri=True); print(c.execute(\"PRAGMA quick_check\").fetchone()[0]); print(\"TABLES\",[x[0] for x in c.execute(\"SELECT name FROM sqlite_master WHERE type=\\\"table\\\" ORDER BY name\")][:25])'; echo COMPLETE",
+  "timeout_seconds": 45
+}

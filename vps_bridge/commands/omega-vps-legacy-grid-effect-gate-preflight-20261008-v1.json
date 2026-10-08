@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-legacy-grid-effect-gate-preflight-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 40,
+  "command": "python3 - <<'PY'\nimport sqlite3\nfrom pathlib import Path\np=Path('/workspace/omega_runtime/state/omega.sqlite3')\nc=sqlite3.connect('file:'+str(p)+'?mode=ro',uri=True,timeout=3)\nprint('LEGACY_QUICK_CHECK',c.execute('pragma quick_check(1)').fetchone()[0])\nfor t in ['task','effect','epoch','frame']:\n try:\n  cols=[v[1] for v in c.execute('pragma table_info('+t+')')]\n  print('LEGACY_TABLE',t,'columns',cols)\n  if t=='task':print('LEGACY_TASK_STATES',c.execute('select id,state from task order by created desc limit 10').fetchall())\n  if t=='effect':print('LEGACY_EFFECT_STATE_COUNTS',c.execute('select state,count(*) from effect group by state').fetchall())\n except Exception as e:print('ERROR',t,type(e).__name__)\nc.close()\nPY"
+}

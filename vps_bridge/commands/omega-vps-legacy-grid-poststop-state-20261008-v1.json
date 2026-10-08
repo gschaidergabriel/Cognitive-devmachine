@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "omega-vps-legacy-grid-poststop-state-20261008-v1",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 50,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nimport os,subprocess,sqlite3\nfor p in Path('/proc').iterdir():\n if not p.name.isdigit():continue\n try:\n  raw=(p/'cmdline').read_bytes().replace(b'\\x00',b' ').decode(errors='replace')\n  if 'omega_daemon.py' in raw and ('/usr/bin/python' in raw or raw.strip().startswith('python3 ')):\n   lines=(p/'status').read_text().splitlines()\n   d=dict(x.split(':',1) for x in lines if ':' in x)\n   print('PID',p.name,'CMD',raw[:240],'STATE',d.get('State','').strip(),'PPID',d.get('PPid','').strip())\n except Exception:continue\nr=subprocess.run(['tmux','has-session','-t','omega-grid'],capture_output=True)\nprint('LEGACY_TMUX_PRESENT',r.returncode==0)\nr=subprocess.run(['tmux','has-session','-t','omega-ingress'],capture_output=True)\nprint('NEW_GATEWAY_TMUX_PRESENT',r.returncode==0)\np=Path('/workspace/omega_runtime/state/inbox/ingress_fusion-e2e-20261008-v1.consumed')\nprint('ORIGINAL_CONSUMED_PRESENT',p.exists())\nPY"
+}

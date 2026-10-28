@@ -1,0 +1,29 @@
+name: OMEGA External Organ CI
+on:
+  pull_request:
+    paths:
+      - 'grid_exchange/omega_job_bridge.py'
+      - 'grid_exchange/test_omega_job_bridge.py'
+      - '.github/workflows/omega-external-organ.yml'
+  push:
+    branches:
+      - 'omega-grid-external-organ-*'
+    paths:
+      - 'grid_exchange/omega_job_bridge.py'
+      - 'grid_exchange/test_omega_job_bridge.py'
+      - '.github/workflows/omega-external-organ.yml'
+permissions:
+  contents: read
+jobs:
+  offline-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile worker
+        run: python3 -m py_compile grid_exchange/omega_job_bridge.py
+      - name: Offline OMEGA worker regression tests
+        run: python3 -m unittest discover -s grid_exchange -p 'test_omega_job_bridge.py' -v

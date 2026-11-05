@@ -1,0 +1,17 @@
+# Template only. Confirm exact checkout, owner and GRID DB before enabling.
+[Unit]
+Description=OMEGA external task worker
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=simple
+WorkingDirectory=%h/clay-global-research-entity
+ExecStart=/usr/bin/python3 %h/clay-global-research-entity/grid_exchange/omega_job_bridge.py --owner gabriel --db %h/.local/state/omega-job-bridge/ledger.sqlite --artifact-dir %h/.local/state/omega-job-bridge/artifacts loop
+EnvironmentFile=%h/.config/omega/omega-external-worker.env
+Restart=on-failure
+RestartSec=15
+NoNewPrivileges=true
+PrivateTmp=true
+UMask=0077
+[Install]
+WantedBy=default.target

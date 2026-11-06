@@ -2,7 +2,7 @@
 
 <!-- EVIDENCE_FORGE_AUTO:BEGIN -->
 ## AUTO — Evidence Forge / dritter autonomer Swarm
-Aktualisiert: `2026-11-06T13:47:15.501321+00:00`
+Aktualisiert: `2026-11-06T14:02:20.648447+00:00`
 
 Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur-Evidenz**. Der Forge nutzt primär andere Kapazitäten als die LLM-Swarms: OpenAlex, Crossref, Semantic Scholar, Hugging Face Hub, GitHub, lokale Disposable-Clones und — innerhalb eines harten Free-Credit-Budgets — parallele E2B-Sandboxes.
 
@@ -43,7 +43,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-11-06T13:47:15.300725+00:00`
+Aktualisiert: `2026-11-06T14:02:20.415790+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 0 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -92,7 +92,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-11-06T13:47:15.455850+00:00`
+Aktualisiert: `2026-11-06T14:02:20.597791+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -173,7 +173,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-11-06T13:47:14.124106+00:00`
+Aktualisiert: `2026-11-06T14:02:19.370206+00:00`
 
 | Kennzahl | Wert |
 |---|---:|

@@ -1,0 +1,9 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "omega-effect-chatgpt-mcp-reactivate-20261114-a91f3c",
+  "op": "exec",
+  "machine_id": "ai-core-node",
+  "owner": "gabriel",
+  "command": "systemctl --user restart omega-chatgpt-mcp.service && systemctl --user is-active omega-chatgpt-mcp.service && curl --fail --silent --show-error http://127.0.0.1:8789/health",
+  "timeout_seconds": 30
+}

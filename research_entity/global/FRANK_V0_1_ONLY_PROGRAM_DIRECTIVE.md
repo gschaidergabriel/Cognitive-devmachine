@@ -24,7 +24,7 @@ Historical Harness/H1/H2/H3 artifacts remain evidence, tests, archaeological bas
 
 ## 1. One program
 
-The active implementation program is `FRANK_V0_1`.
+The default trigger implementation program is `FRANK_V0_1`. Exact `entityos` is a scoped integration task in the active `ENTITYOS_HCU` program, governed by the owner-requested exception in §0; it does not create a second persistent product or authority.
 
 ClayCode, UnifiedDB, ClayGraph projections, GWT, Hyperposition, Emergenz instrumentation, Digital Retina/MVC, Needle/translator, API, effect authority, proactive agency, reward/memory/goals, model integration, recovery, security and training-data/model work are components/work packages of Frank v0.1.
 
@@ -59,7 +59,7 @@ Harness PASS is not a product milestone. Individual tests/receipts contribute di
 
 ## 3. Trigger targets: Frank v0.1 by default
 
-Every registered trigger is a specialized lens on the same Frank v0.1 target.
+Every registered trigger except exact `entityos` is a specialized lens on the same Frank v0.1 target. Exact `entityos` follows the narrow current owner-requested EntityOS_HCU integration scope in §0.
 
 - `frank`: whole Frank v0.1 architecture/build/integration.
 - `harness`: direct executable validation/falsification/repair of Frank v0.1.

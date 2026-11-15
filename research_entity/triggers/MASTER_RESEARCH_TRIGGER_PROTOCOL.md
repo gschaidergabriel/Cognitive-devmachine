@@ -64,7 +64,7 @@ If current canonical/repo reality cannot be verified, mark the limitation and ne
 - `spawn`: weighted research-field genesis only where it can inform Frank v0.1.
 - `q12`: creator-advisor/coordination role centered on Frank v0.1 when delegated.
 - `dump`: ingest/fuse supplied material into Frank v0.1 knowledge/work where relevant.
-- `entityos`: ClayCode-led maximum-depth Research Center swarm integration of EntityOS/HCU + GRID10 + Frankenstein Standalone into one owner-sandbox app, including typed bidirectional J-Space++; follow `ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
+- `entityos`: ClayCode-led maximum-depth Research Center swarm integration of EntityOS/HCU + GRID10 + Frankenstein Standalone into one owner-sandbox app; include typed bidirectional J-Space++, the versioned Navier–Stokes solver/compiler kit, and falsifiable virtual-particle/effective-dimension research; follow `ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
 
 ## 4. Research cycle
 

@@ -169,7 +169,7 @@
       "protocol": "research_entity/triggers/ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md",
       "program_target": "ENTITYOS_HCU",
       "program_state": "research_entity/rooms/PROGRAM_STATE.json",
-      "purpose": "Use ClayCode-led Research Center swarm research/build work to integrate current EntityOS/HCU, GRID10 and Frankenstein Standalone into one app in the owner's resolved computer sandbox, with measured typed bidirectional J-Space++ and no second identity/state/effect authority.",
+      "purpose": "Use ClayCode-led Research Center swarm work to integrate EntityOS/HCU, GRID10 and Frankenstein Standalone into one sandbox app with bidirectional J-Space++, incorporate the versioned Navier–Stokes/ClayCode/compiler kit as a solver-organ workstream, and investigate virtual-particle/effective-dimension hypotheses without creating a second authority.",
       "requires_live_authority_refresh": true,
       "requires_owner_machine_sandbox_binding": true,
       "requires_collision_check": true,
@@ -179,7 +179,15 @@
       "requires_verified_runtime_receipts": true,
       "no_paid_or_unknown_cost_provider": true,
       "does_not_create_parallel_entity_or_state_authority": true,
-      "preserves_entityos_vm_data_safety": true
+      "preserves_entityos_vm_data_safety": true,
+      "navier_stokes_design_input": {
+        "repository": "gschaidergabriel/frankenstein-2.0",
+        "path": "research/integration_inputs/navier_stokes_claycode_entityos_compiler_kit",
+        "commit": "55385069fbaab54467b1cf93a6dfdd7428724c85",
+        "archive_sha256": "0c3dc50de21564d02c8fa0f2b4ea469b09078dc4c93ebd14e6939256eccf19e6"
+      },
+      "requires_navier_stokes_compiler_and_solver_scope": true,
+      "requires_virtual_particle_dimension_hypothesis_review": true
     }
   },
   "reserved_commands": [
@@ -217,9 +225,11 @@
     "self.root self-Harness authority is proposal-only",
     "negative results survive",
     "current executable evidence outranks architecture prose",
-    "exact entityos trigger is a narrow owner-requested EntityOS_HCU integrated-app exception; all other trigger semantics remain unchanged"
+    "exact entityos trigger is a narrow owner-requested EntityOS_HCU integrated-app exception; all other trigger semantics remain unchanged",
+    "EntityOS solver organs return verified typed artifacts and cannot bypass canonical state/effect policy",
+    "virtual-particle/effective-dimension claims remain hypotheses until primary-source derivation and falsification support them"
   ],
-  "last_updated": "2026-11-16T10:00:00+07:00",
+  "last_updated": "2026-11-16T10:20:00+07:00",
   "trigger_renames": {
     "clay": "clayresearch"
   },

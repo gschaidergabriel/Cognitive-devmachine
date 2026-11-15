@@ -15,6 +15,8 @@ Current body/acceptance target: accepted Hostinger Ubuntu VPS.
 
 There is no separate GitHub Harness, Reference Harness, Clay Harness, H1, H2 or H3 programme.
 
+Narrow owner-requested exception: exact `entityos` runs the active EntityOS_HCU integration task, joining EntityOS/HCU + GRID10 + Frankenstein Standalone into one app with typed bidirectional J-Space++. This remains an integration task within the current research entity and does not mint a second product authority.
+
 ## One programme, many research lenses
 
 ClayCode, Frank architecture, Harness testing, GWT, Emergenz, Hyperposition, ClayGraph, UnifiedDB, q23 multimodal perception, Fusion/Hypofusion and exploratory research remain distinct scientific/engineering lenses.

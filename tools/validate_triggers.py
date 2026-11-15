@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 REG=ROOT/'research_entity/global/RESEARCH_TRIGGER_REGISTRY.json'
 PROJECT=ROOT/'research_entity/global/PROJECT_COMMAND_REGISTRY.json'
-REQUIRED={'666','q12','dump','fusion','hypofusion','clayresearch','gwt','frank','emergenz','claycode','hyperposition','claygraph','unifieddb','harness'}
+REQUIRED={'666','q12','dump','fusion','hypofusion','clayresearch','gwt','frank','emergenz','claycode','hyperposition','claygraph','unifieddb','harness','entityos'}
 
 
 def main():

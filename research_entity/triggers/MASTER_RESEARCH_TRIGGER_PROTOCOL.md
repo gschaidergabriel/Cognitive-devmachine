@@ -1,11 +1,11 @@
-# MASTER RESEARCH TRIGGER PROTOCOL — FRANK v0.1 ONLY
+# MASTER RESEARCH TRIGGER PROTOCOL — FRANK v0.1 DEFAULT + ENTITYOS EXCEPTION
 
 **Status:** CURRENT  
 **Owner directive:** `research_entity/global/FRANK_V0_1_ONLY_PROGRAM_DIRECTIVE.md`
 
 ## 0. Universal target
 
-Every registered research trigger works on the same active product target:
+Every registered research trigger except the exact `entityos` exception works on the same active product target:
 
 ```text
 self.root / human-surface Frank v0.1
@@ -13,7 +13,7 @@ self.root / human-surface Frank v0.1
 
 There is no separate GitHub Harness/H1/H2/H3 programme.
 
-Domain triggers are specialized lenses, not independent projects.
+Domain triggers are specialized lenses, not independent projects. Exact `entityos` is a scoped owner-requested exception routed to the active `ENTITYOS_HCU` program; it integrates EntityOS/HCU, GRID10 and Frankenstein Standalone into one app with typed bidirectional J-Space++ under the dedicated protocol. It must not create a second persistent identity, state or effect authority.
 
 Every material run must produce a direct Frank v0.1 code/test/architecture/work/negative-result delta or an evidence-backed `NO_CHANGE`.
 
@@ -64,6 +64,7 @@ If current canonical/repo reality cannot be verified, mark the limitation and ne
 - `spawn`: weighted research-field genesis only where it can inform Frank v0.1.
 - `q12`: creator-advisor/coordination role centered on Frank v0.1 when delegated.
 - `dump`: ingest/fuse supplied material into Frank v0.1 knowledge/work where relevant.
+- `entityos`: ClayCode-led maximum-depth Research Center swarm integration of EntityOS/HCU + GRID10 + Frankenstein Standalone into one owner-sandbox app, including typed bidirectional J-Space++; follow `ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
 
 ## 4. Research cycle
 
@@ -136,3 +137,7 @@ Do not show `FIRST GITHUB FRANK HARNESS` or H1/H2/H3 as active progress targets.
 ## 10. Completion
 
 The only terminal product gate is the current finished Frank v0.1 acceptance contract on the accepted target VPS.
+
+## 11. Exact `entityos` exception
+
+The exact `entityos` command uses the current `ENTITYOS_HCU` program state rather than the default Frank v0.1 target. Follow `research_entity/triggers/ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`, produce an evidence-bound integration delta or negative result, and preserve one canonical EntityOS identity, UnifiedDB state authority and EffectGate/EffectJournal effect authority. This exception does not alter any other trigger.

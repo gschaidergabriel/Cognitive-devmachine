@@ -16,11 +16,15 @@ TARGET_RELEASE = finished Frank v0.1
 
 No other Harness, reference system, GitHub Harness, Clay Harness, H1, H2 or H3 is an independent product, release target, program stage or progress target.
 
+### Narrow current owner-requested trigger exception — 2026-11-16
+
+Exact trigger `entityos` is authorized to work on the active `ENTITYOS_HCU` program and integrate EntityOS/HCU + GRID10 + Frankenstein Standalone into one app on the owner's resolved computer sandbox, with typed bidirectional J-Space++ interfaces. It is a scoped integration task, not a second persistent entity, truth store, effect authority or independent long-term product programme. This exception does not change any other trigger target. Use `research_entity/triggers/ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
+
 Historical Harness/H1/H2/H3 artifacts remain evidence, tests, archaeological baselines and diagnostic techniques only. They may not block work merely because a legacy staged Harness product has not been completed.
 
 ## 1. One program
 
-The active implementation program is `FRANK_V0_1`.
+The default trigger implementation program is `FRANK_V0_1`. Exact `entityos` is a scoped integration task in the active `ENTITYOS_HCU` program, governed by the owner-requested exception in §0; it does not create a second persistent product or authority.
 
 ClayCode, UnifiedDB, ClayGraph projections, GWT, Hyperposition, Emergenz instrumentation, Digital Retina/MVC, Needle/translator, API, effect authority, proactive agency, reward/memory/goals, model integration, recovery, security and training-data/model work are components/work packages of Frank v0.1.
 
@@ -53,9 +57,9 @@ A test scaffold may exist when technically useful, but it is disposable instrume
 
 Harness PASS is not a product milestone. Individual tests/receipts contribute directly to Frank v0.1 acceptance.
 
-## 3. All trigger words target Frank v0.1
+## 3. Trigger targets: Frank v0.1 by default
 
-Every registered trigger is a specialized lens on the same Frank v0.1 target.
+Every registered trigger except exact `entityos` is a specialized lens on the same Frank v0.1 target. Exact `entityos` follows the narrow current owner-requested EntityOS_HCU integration scope in §0.
 
 - `frank`: whole Frank v0.1 architecture/build/integration.
 - `harness`: direct executable validation/falsification/repair of Frank v0.1.
@@ -73,6 +77,7 @@ Every registered trigger is a specialized lens on the same Frank v0.1 target.
 - `666`: generate/execute high-value research fields whose material output must re-enter Frank v0.1.
 - `atomic`: invent/test radical GWT+ClayCode-consistent candidates only as possible Frank v0.1 improvements.
 - `spawn`: spawn research fields only when they can produce evidence or implementation relevant to Frank v0.1.
+- `entityos`: the narrow 2026-11-16 owner-requested EntityOS_HCU integrated-app exception defined above; use ClayCode-led swarm research/build and integrate typed bidirectional J-Space++ into the single Frankenstein Standalone app surface.
 - `q12`: creator-advisor role remains advisory but all delegated coordination points at Frank v0.1.
 - `dump`: ingest/fuse material into Frank v0.1 research/architecture/work when relevant.
 
@@ -80,7 +85,7 @@ Domain specialization remains useful, but no trigger may optimize an isolated su
 
 ## 4. Mandatory target re-entry
 
-Every material run must end in exactly one of:
+Every Frank v0.1 material run must end in exactly one of the following. The exact `entityos` exception instead emits an EntityOS_HCU integration delta/negative result and re-enters `research_entity/rooms/PROGRAM_STATE.json`:
 
 ```text
 FRANK_V0_1_CODE_DELTA

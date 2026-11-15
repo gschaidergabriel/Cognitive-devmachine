@@ -18,7 +18,7 @@ No other Harness, reference system, GitHub Harness, Clay Harness, H1, H2 or H3 i
 
 ### Narrow current owner-requested trigger exception — 2026-11-16
 
-Exact trigger `entityos` is authorized to work on the active `ENTITYOS_HCU` program and integrate EntityOS/HCU + GRID10 + Frankenstein Standalone into one app on the owner's resolved computer sandbox, with typed bidirectional J-Space++ interfaces. It is a scoped integration task, not a second persistent entity, truth store, effect authority or independent long-term product programme. This exception does not change any other trigger target. Use `research_entity/triggers/ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
+Exact trigger `entityos` is authorized to work on the active `ENTITYOS_HCU` program and integrate EntityOS/HCU + GRID10 + Frankenstein Standalone into one app on the owner's resolved computer sandbox, with typed bidirectional J-Space++ interfaces. It also incorporates the versioned Navier–Stokes/ClayCode/compiler design input and investigates the owner's virtual-particle/effective-dimension question as an open, falsifiable hypothesis. It is a scoped integration task, not a second persistent entity, truth store, effect authority or independent long-term product programme. This exception does not change any other trigger target. Use `research_entity/triggers/ENTITYOS_GRID_FRANK_APP_INTEGRATION_PROTOCOL.md`.
 
 Historical Harness/H1/H2/H3 artifacts remain evidence, tests, archaeological baselines and diagnostic techniques only. They may not block work merely because a legacy staged Harness product has not been completed.
 
@@ -77,7 +77,7 @@ Every registered trigger except exact `entityos` is a specialized lens on the sa
 - `666`: generate/execute high-value research fields whose material output must re-enter Frank v0.1.
 - `atomic`: invent/test radical GWT+ClayCode-consistent candidates only as possible Frank v0.1 improvements.
 - `spawn`: spawn research fields only when they can produce evidence or implementation relevant to Frank v0.1.
-- `entityos`: the narrow 2026-11-16 owner-requested EntityOS_HCU integrated-app exception defined above; use ClayCode-led swarm research/build and integrate typed bidirectional J-Space++ into the single Frankenstein Standalone app surface.
+- `entityos`: the narrow 2026-11-16 owner-requested EntityOS_HCU integrated-app exception defined above; use ClayCode-led swarm research/build, include the versioned Navier–Stokes solver/compiler workstream and the falsifiable virtual-particle/effective-dimension research, and integrate typed bidirectional J-Space++ into the single Frankenstein Standalone app surface.
 - `q12`: creator-advisor role remains advisory but all delegated coordination points at Frank v0.1.
 - `dump`: ingest/fuse material into Frank v0.1 research/architecture/work when relevant.
 

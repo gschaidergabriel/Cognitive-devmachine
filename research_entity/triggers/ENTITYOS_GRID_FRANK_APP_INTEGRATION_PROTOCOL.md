@@ -62,7 +62,25 @@ Implement and document the minimal typed contract supported by current source:
 
 Measure both directions independently for delivery, reconstruction, use, verified outcome, latency, failure/timeout, duplicate/replay rejection and resource cost. A successful round trip alone does not establish causal J-Space benefit. Include no-op/sham, permutation or wrong-context controls where the current experiment requires them. Preserve negative results.
 
-## 5. Build and acceptance loop
+## 5. Navier–Stokes / ClayCode compiler workstream
+
+The owner-provided design input is versioned in the private repository at `gschaidergabriel/frankenstein-2.0@55385069fbaab54467b1cf93a6dfdd7428724c85:research/integration_inputs/navier_stokes_claycode_entityos_compiler_kit`. The original ZIP SHA-256 is `0c3dc50de21564d02c8fa0f2b4ea469b09078dc4c93ebd14e6939256eccf19e6`. Read its README, integration specification, implementation plan, organ-task / solver-receipt / compiler-manifest schemas, numerical example and VM-safety runbook before implementation.
+
+Treat the package as a design/contract input, not as solver code, compiler code, live host evidence or a completed integration. Reconcile its contracts with the current EntityOS/TITAN organ interface, GRID10/HCU, ClayCode compiler/runtime and current safety authority. Reuse the existing dispatcher, task store, verifier, result store and promotion/reentry path; do not add a parallel runtime or state authority.
+
+The initial numerical scope is an incompressible 2D Navier–Stokes CPU reference solver using the specified finite-volume / projection approach. Build and verify the compiler chain with canonical units, typed IR, explicit boundary conditions, stability checks, source/toolchain/input hashes and reproducible manifests. Persist `OrganTask` before dispatch. The solver worker returns a typed receipt and hashed result references; a separate verifier checks schema, residual, divergence, mass balance, stability, reference tolerances and resource bounds. Unsupported configurations fail closed. Numerical divergence is evidence, not an automatic retry signal.
+
+Solver output enters the app and J-Space++ only as typed, provenance-bound candidate evidence. It cannot directly write UnifiedDB, goals, memory, vault or effects. Promotion remains with the existing EntityOS policy/EffectGate paths.
+
+## 6. Virtual-particle / dimensionality research
+
+The owner also asks whether virtual-particle effects could create, imply or be modeled by additional dimensions, including relevant highly abstract dimensional/cosmological equations associated with Stephen Hawking. Treat this as an open hypothesis, not a premise.
+
+Separate physical spacetime dimensions from configuration/state-space dimensions, compactified or internal dimensions, effective dimensions in a model, and dimensions introduced only by a mathematical representation. Identify the exact equations and primary sources; preserve assumptions, units, derivation and domain of validity. State the strongest counterhypothesis and a falsifier. Search for established mechanisms such as dimensional reduction/emergence only where primary evidence supports them.
+
+Do not infer extra physical dimensions merely because virtual particles occur in a calculation. Do not conflate classical Navier–Stokes CFD with quantum field theory or quantum gravity. Use a numerical analogy only if a derivation supports the mapping; otherwise keep the research result separate and record a justified negative result when appropriate.
+
+## 7. Build and acceptance loop
 
 For every cycle: refresh source and work state → state hypotheses/counterhypotheses and falsifiers → select the cheapest decisive discriminator → implement the smallest coherent patch in the exact sandbox → build and run the affected regression/integration checks → capture exact receipts → fuse results → update the next work frontier.
 

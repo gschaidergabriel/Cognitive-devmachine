@@ -1,0 +1,52 @@
+{
+  "schema": "clay.udb_claygraph_colocation_evidence.v1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "machine": "x86_64"
+  },
+  "workload": {
+    "state_rows_seeded": 2000,
+    "graph_nodes_seeded": 800,
+    "coupled_transactions_per_run": 1000,
+    "journal_mode": "WAL",
+    "synchronous": "FULL",
+    "transaction_shape": "one StateLedger row UPDATE + one graph epoch INSERT + one graph edge INSERT with V3 head trigger"
+  },
+  "schema_falsifier": {
+    "naive_colocation_safe": false,
+    "reason": "StateLedger defines meta(k,v) while ClayGraph base schema defines meta(key,value); CREATE TABLE IF NOT EXISTS silently retains the first incompatible table shape.",
+    "candidate_fix": "namespace the ClayGraph generic metadata table as claygraph_meta(key,value); keep graph_* objects and UnifiedDB truth authority unchanged"
+  },
+  "repeat_p50_results_us": [
+    {"single_file": 542.4005, "two_file_attach": 1487.2515, "two_over_single": 2.7419803263},
+    {"single_file": 507.6070, "two_file_attach": 1489.4370, "two_over_single": 2.9342325854},
+    {"single_file": 512.6895, "two_file_attach": 1513.5640, "two_over_single": 2.9522040143}
+  ],
+  "storage_and_tail_sample": {
+    "single_file_p50_us": 452.081,
+    "single_file_p95_us": 1679.224,
+    "single_file_p99_us": 3914.677,
+    "two_file_attach_p50_us": 1381.0695,
+    "two_file_attach_p95_us": 3421.832,
+    "two_file_attach_p99_us": 9185.121,
+    "two_over_single_p50": 3.0549160438,
+    "single_file_bytes_after_checkpoint": 1327104,
+    "two_file_bytes_after_checkpoint": 1359872,
+    "single_over_two_storage_ratio": 0.9759036145
+  },
+  "correctness": {
+    "single_file_rollback_injection_pass": true,
+    "two_file_attach_rollback_injection_pass": true,
+    "graph_edge_counts_equal": true,
+    "graph_head_edge_counts_equal": true,
+    "checkpoint_truncate_pass": true
+  },
+  "interpretation": {
+    "supported": "On this matched local WAL/FULL workload, one physical SQLite commit domain is materially faster than two attached database files while preserving the tested logical state/graph outputs and injected rollback behavior.",
+    "not_supported": "Universal database superiority, target-host performance, or host-power-loss crash behavior.",
+    "promotion": "CANDIDATE_ONLY"
+  }
+}

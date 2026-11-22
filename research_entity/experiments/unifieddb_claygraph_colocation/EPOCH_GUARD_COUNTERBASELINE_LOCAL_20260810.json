@@ -1,0 +1,28 @@
+{
+  "schema": "clay.cross_store_epoch_guard.local.v1",
+  "execution_class": "LOCAL_TOOL_CONTAINER_NOT_TARGET_HOST",
+  "environment": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41"
+  },
+  "adversarial": {
+    "trials": 100,
+    "orchestration": "Reader begins and acquires state epoch 0; writer commits coupled state+graph epoch 1; reader then first-touches graph DB.",
+    "unsafe_first_reads_accepted": 0,
+    "unsafe_first_reads_rejected": 100,
+    "observed_first_epoch_pair": [0, 1],
+    "retries": 100,
+    "retry_accepts": 100,
+    "retry_success_rate": 1.0
+  },
+  "steady_state": {
+    "reads_per_layout": 10000,
+    "two_file_epoch_guard": {"p50_us": 6.475, "p95_us": 6.962},
+    "single_file_same_fields": {"p50_us": 5.462, "p95_us": 5.774},
+    "two_over_single_p50_ratio": 1.1854632003
+  },
+  "interpretation": "Explicit source-epoch pinning is a valid strong counterbaseline: it detects the demonstrated cross-file mixed snapshot and recovers on a fresh transaction. Co-location therefore must beat this guarded design, not an unguarded two-store strawman. In this local warm read microbenchmark the guarded two-file layout still costs about 18.5% more p50 and incurs one retry in every deliberately forced skew trial.",
+  "claim_boundary": "Marker-level mechanism evidence only; the full Clay receipt contract is stronger and must be compared separately.",
+  "promotion": "COUNTERHYPOTHESIS_SUPPORTED"
+}
